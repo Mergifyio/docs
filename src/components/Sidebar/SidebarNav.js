@@ -15,7 +15,7 @@ import {BsChevronContract, BsChevronExpand} from 'react-icons/bs';
 import {FiChevronsLeft} from 'react-icons/fi';
 import {flattenNavItems} from '../../utils';
 
-export function SidebarNav({navItems, onHide, darkBg = 'gray.800', children}) {
+export function SidebarNav({navItems, onHide, darkBg = 'blue.800', children}) {
   const bg = useColorModeValue('white', darkBg);
 
   const navGroups = useMemo(

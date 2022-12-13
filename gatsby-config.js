@@ -91,6 +91,10 @@ const plugins = [
           {
             family: 'Source Code Pro',
             variants: ['400', '600']
+          },
+          {
+            family: 'Poppins',
+            variants: ['400', '600']
           }
         ]
       }
