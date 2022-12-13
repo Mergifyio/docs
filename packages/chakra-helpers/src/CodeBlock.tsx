@@ -310,7 +310,7 @@ export const CodeBlock = ({
                   transform="translate(-50%, -50%)"
                   onClick={() => setHidden(false)}
                   rounded="full"
-                  colorScheme="indigo"
+                  colorScheme="red"
                 >
                   Show code
                 </Button>

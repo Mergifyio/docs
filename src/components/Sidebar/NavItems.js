@@ -27,7 +27,7 @@ const getItemPaths = (items, basePath) =>
 
 function NavButton({isActive, depth, children, ...props}) {
   const [activeBg, activeTextColor] = useTagColors();
-  const activeHoverBg = useColorModeValue('indigo.100', 'indigo.300');
+  const activeHoverBg = useColorModeValue('blue.50', 'blue.500');
 
   const buttonProps = isActive && {
     bg: activeBg,

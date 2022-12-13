@@ -45,7 +45,6 @@ import {
 import {FaDiscourse, FaGithub} from 'react-icons/fa';
 import {FiStar} from 'react-icons/fi';
 import {Link as GatsbyLink} from 'gatsby';
-import {Global} from '@emotion/react';
 import {MDXProvider} from '@mdx-js/react';
 import {MDXRenderer} from 'gatsby-plugin-mdx';
 import {PathContext, useFieldTableStyles} from '../utils';

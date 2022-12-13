@@ -22,8 +22,8 @@ export const flattenNavItems = items =>
   );
 
 export function useTagColors() {
-  const bg = useColorModeValue('indigo.50', 'indigo.400');
-  const textColor = useColorModeValue('indigo.500', 'inherit');
+  const bg = useColorModeValue('blue.100', 'blue.600');
+  const textColor = useColorModeValue('blue.800', 'inherit');
   return [bg, textColor];
 }
 
