@@ -5,9 +5,7 @@ queue_rules:
     allow_inplace_checks: true
     conditions:
       - and: &CheckRuns
-          # List this twice as a hack to have `and` working
-          - check-success=Gatsby Build Service - docs.mergify.com
-          - check-success=Gatsby Build Service - docs.mergify.com
+          - check-success=docs
     speculative_checks: 5
 
   - name: default
