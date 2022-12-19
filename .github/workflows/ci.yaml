@@ -1,0 +1,57 @@
+name: Continuous Integration
+permissions: read-all
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  # yamllint disable-line rule:line-length
+  group: "${{ github.workflow }}-${{ github.head_ref || github.run_id }}"
+  cancel-in-progress: true
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.2.0
+
+      - name: Download actionlint
+        id: get_actionlint
+        # yamllint disable-line rule:line-length
+        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash) 1.6.15
+
+      - name: Check workflow files
+        run: ${{ steps.get_actionlint.outputs.executable }} -color
+
+  docs:
+    timeout-minutes: 20
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3.2.0
+
+      - name: Setup Node 🔧
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Build 🔧
+        run: |
+          npm ci
+          npm run build
+
+      # NOTE(sileht): workflow run on/pull_request doesn't have access to
+      # secrets
+      # So, we upload it as artifact, then another workflow
+      # docs-upload-gcp-temp.yaml will upload it on gcp.
+      - name: Upload ☁️
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs-pr-${{ github.event.pull_request.number }}
+          path: public
+
+      # yamllint disable-line rule:line-length
+      - run: echo "docs=https://docs-preview.mergify.com/${{ github.event.pull_request.number }}/docs" >> "$GITHUB_OUTPUT"
+        shell: bash
