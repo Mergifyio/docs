@@ -1,0 +1,38 @@
+name: Upload production docs to GCP
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs-upload-to-gcp-prod:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3.2.0
+        with:
+          persist-credentials: false
+
+      - name: Setup Node 🔧
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Build 🔧
+        run: |
+          npm ci
+          npm run build
+
+      - name: Setup Google Auth 🔧
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCP_DOCS_CREDENTIAL_JSON }}"
+
+      - name: Deploy 🚀
+        uses: google-github-actions/upload-cloud-storage@v1.0.0
+        with:
+          path: public
+          destination: mergify-docs-staging
+          parent: false
