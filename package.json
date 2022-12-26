@@ -56,7 +56,6 @@
     "graphql-ws": "^5.8.2",
     "https-browserify": "^1.0.0",
     "interweave": "^12.9.0",
-    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "mdast-util-from-markdown": "^0.8.5",
     "path-browserify": "^1.0.1",

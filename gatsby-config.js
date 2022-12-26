@@ -5,8 +5,6 @@ const {
   isWrapped
 } = require('remark-typescript');
 const {query, transformer} = require('./algolia');
-const yaml = require('js-yaml');
-const fs = require('fs');
 
 const gatsbyRemarkPlugins = [
   '@fec/remark-a11y-emoji/gatsby',
