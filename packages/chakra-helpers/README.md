@@ -6,7 +6,6 @@ This package contains Chakra UI theme options that are shared between DX propert
 - [Usage](#usage)
   - [Color palettes](#color-palettes)
   - [Footer configuration](#footer-configuration)
-  - [EmbeddableExplorer](#embeddableexplorer)
 
 ## Installation
 
@@ -122,24 +121,6 @@ const customCategory: Category = {
   links: [customLink]
 }
 ```
-
-### EmbeddableExplorer
-
-You can embed Apollo Studio Explorer in your Chakra sites using this component. It respects the selected color mode in your app.
-
-```js
-import {EmbeddableExplorer} from '@apollo/chakra-helpers';
-
-<EmbeddableExplorer />
-```
-
-The component can be configured using the following props. No props are required to use this component, and it default to serving up the Apollo fullstack demo API with an example query.
-
-| Name        | Type   | Description                                                                           | Default value                                       |
-| ----------- | ------ | ------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| graphRef    | string | The graph ref for the **public** variant you want to use the embedded Explorer with   | Apollo-Fullstack-Demo-o3tsz8@current                |
-| endpointUrl | string | The endpoint URL of the **public** variant you want to use the embedded Explorer with | https://apollo-fullstack-tutorial.herokuapp.com/    |
-| document    | string | A URI-encoded operation to populate in the Explorer's editor on load.                 | See [the source code](./src/EmbeddableExplorer.tsx) |
 
 ## Publishing changes
 

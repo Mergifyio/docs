@@ -37,7 +37,6 @@ import {
   chakra
 } from '@chakra-ui/react';
 import {
-  EmbeddableExplorer,
   MarkdownCodeBlock,
   MultiCodeBlock,
   MultiCodeBlockContext
@@ -160,7 +159,6 @@ const mdxComponents = {
   CodeColumns,
   TypeScriptApiBox,
   TypescriptApiBox: TypeScriptApiBox,
-  EmbeddableExplorer,
   ButtonLink
 };
 
