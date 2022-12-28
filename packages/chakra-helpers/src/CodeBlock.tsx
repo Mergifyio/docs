@@ -293,9 +293,6 @@ export const CodeBlock = ({
                     leftIcon={hasCopied ? <FiCheck /> : <FiClipboard />}
                     onClick={() => {
                       onCopy();
-                      window.gtag?.('event', 'Copy', {
-                        event_category: GA_EVENT_CATEGORY_CODE_BLOCK
-                      });
                     }}
                   >
                     {hasCopied ? 'Copied!' : 'Copy'}

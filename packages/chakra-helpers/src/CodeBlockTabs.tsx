@@ -139,10 +139,6 @@ export const CodeBlockTabs = ({
                 if (setLanguage) {
                   setLanguage(language);
                 }
-                window.gtag?.('event', 'Change language', {
-                  event_category: GA_EVENT_CATEGORY_CODE_BLOCK,
-                  event_label: language
-                });
               }}
               roundedBottom="none"
               bg={
