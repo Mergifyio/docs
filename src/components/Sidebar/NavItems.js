@@ -83,11 +83,6 @@ function NavGroup({group, depth}) {
             ...nav,
             [group.id]: open
           });
-          window.gtag?.('event', 'Toggle category', {
-            event_category: GA_EVENT_CATEGORY_SIDEBAR,
-            event_label: group.title,
-            value: Number(open)
-          });
         }}
         depth={depth}
       >
