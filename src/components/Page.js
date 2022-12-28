@@ -267,20 +267,6 @@ export default function Page({file, pageContext, uri}) {
                   {description}
                 </chakra.h2>
               )}
-              {tags?.length && (
-                <HStack mt={{base: 2, md: 3}}>
-                  {tags.map((tag, index) => (
-                    <Tag
-                      key={index}
-                      as={GatsbyLink}
-                      to={`/technotes/tags/${kebabCase(tag)}`}
-                      size="lg"
-                    >
-                      {tag}
-                    </Tag>
-                  ))}
-                </HStack>
-              )}
             </>
           }
           pagination={<Pagination navItems={navItems} />}

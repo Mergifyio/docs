@@ -100,14 +100,6 @@ const plugins = [
       plugins: gatsbyRemarkPlugins
     }
   },
-  {
-    resolve: '@colliercz/gatsby-transformer-gitinfo',
-    // Will match all .md* files, except README.md
-    options: {
-      include: /\.mdx?$/i,
-      ignore: /README/i
-    }
-  }
 ];
 
 plugins.push(

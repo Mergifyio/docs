@@ -171,15 +171,4 @@ exports.createPages = async ({actions, graphql}) => {
       }
     });
   });
-
-  data.tags.group.forEach(tag => {
-    actions.createPage({
-      path: `/technotes/tags/${kebabCase(tag.name)}`,
-      component: require.resolve('./src/templates/tag'),
-      context: {
-        tag: tag.name,
-        ...configs.technotes
-      }
-    });
-  });
 };
