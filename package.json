@@ -11,9 +11,6 @@
     "./packages/*"
   ],
   "dependencies": {
-    "@algolia/autocomplete-core": "^1.7.4",
-    "@algolia/autocomplete-plugin-algolia-insights": "^1.5.2",
-    "@algolia/autocomplete-preset-algolia": "^1.5.2",
     "@apollo/chakra-helpers": "file:packages/chakra-helpers",
     "@chakra-ui/gatsby-plugin": "^2.0.3",
     "@chakra-ui/react": "^1.8.3",
@@ -29,11 +26,8 @@
     "@svgr/webpack": "^5.5.0",
     "@theowenyoung/gatsby-source-git": "^2.3.1",
     "airtable": "^0.11.2",
-    "algoliasearch": "^4.12.1",
-    "apollo-algolia-transform": "^1.0.38",
     "framer-motion": "^4.1.17",
     "gatsby": "^4.6.1",
-    "gatsby-plugin-algolia": "^0.24.0",
     "gatsby-plugin-apollo": "^4.0.2",
     "gatsby-plugin-env-variables": "^2.2.0",
     "gatsby-plugin-google-gtag": "^4.3.0",
