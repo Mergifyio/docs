@@ -1,10 +1,8 @@
-const {algoliaSettings} = require('apollo-algolia-transform');
 const {
   remarkTypescript,
   highlightPreservation,
   isWrapped
 } = require('remark-typescript');
-const {query, transformer} = require('./algolia');
 
 const gatsbyRemarkPlugins = [
   '@fec/remark-a11y-emoji/gatsby',
@@ -25,29 +23,7 @@ const gatsbyRemarkPlugins = [
 const plugins = [
   'gatsby-plugin-svgr',
   '@chakra-ui/gatsby-plugin',
-  {
-    resolve: 'gatsby-plugin-sitemap',
-    options: {
-      query: `
-        {
-          site {
-            siteMetadata {
-              siteUrl
-            }
-          }
-          allSitePage {
-            nodes {
-              path
-              pageContext
-            }
-          }
-        }
-      `,
-      resolvePages: ({allSitePage}) =>
-        // filter out internal pages
-        allSitePage.nodes.filter(page => !page.pageContext.internal)
-    }
-  },
+  'gatsby-plugin-sitemap',
   'gatsby-plugin-combine-redirects', // local plugin
   {
     resolve: 'gatsby-plugin-manifest',
@@ -122,36 +98,6 @@ const plugins = [
     resolve: 'gatsby-transformer-remark',
     options: {
       plugins: gatsbyRemarkPlugins
-    }
-  },
-  {
-    resolve: 'gatsby-plugin-env-variables',
-    options: {
-      allowList: ['ALGOLIA_APP_ID', 'ALGOLIA_SEARCH_KEY']
-    }
-  },
-  {
-    resolve: 'gatsby-plugin-algolia',
-    options: {
-      appId: process.env.ALGOLIA_APP_ID,
-      apiKey: process.env.ALGOLIA_WRITE_KEY,
-      skipIndexing: process.env.CONTEXT !== 'production',
-      indexName: 'docs',
-      queries: [
-        {
-          query,
-          transformer,
-          settings: {
-            ...algoliaSettings,
-            attributesForFaceting: ['categories', 'docset', 'type'],
-            // put docs for current version at top, then by page views and index
-            customRanking: [
-              'desc(isCurrentVersion)',
-              ...algoliaSettings.customRanking
-            ]
-          }
-        }
-      ]
     }
   },
   {
