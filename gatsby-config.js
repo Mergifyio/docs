@@ -33,13 +33,6 @@ const plugins = [
   },
   'gatsby-plugin-offline',
   {
-    resolve: 'gatsby-plugin-apollo',
-    options: {
-      uri: process.env.API_URL + '/api/graphql',
-      credentials: 'include'
-    }
-  },
-  {
     resolve: 'gatsby-plugin-next-seo',
     options: {
       titleTemplate: '%s - Mergify Docs',
