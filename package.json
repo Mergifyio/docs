@@ -24,7 +24,6 @@
     "@react-icons/all-files": "^4.1.0",
     "@svgr/webpack": "^5.5.0",
     "@theowenyoung/gatsby-source-git": "^2.3.1",
-    "airtable": "^0.11.2",
     "framer-motion": "^4.1.17",
     "gatsby": "^4.6.1",
     "gatsby-plugin-loadable-components-ssr": "^4.2.0",
