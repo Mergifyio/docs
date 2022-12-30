@@ -2,13 +2,12 @@ import Footer from './Footer';
 import Header, {TOTAL_HEADER_HEIGHT} from './Header';
 import MobileNav from './MobileNav';
 import PropTypes from 'prop-types';
-import React, {Fragment, useContext} from 'react';
+import React, {Fragment} from 'react';
 import Sidebar, {
   SIDEBAR_WIDTH_BASE,
   SIDEBAR_WIDTH_XL,
   SidebarNav
 } from './Sidebar';
-import getShareImage from '@jlengstorf/get-share-image';
 import useLocalStorage from 'react-use/lib/useLocalStorage';
 import {
   Box,
@@ -22,9 +21,6 @@ import {
   useToken
 } from '@chakra-ui/react';
 import {FiChevronsRight} from 'react-icons/fi';
-import {GatsbySeo} from 'gatsby-plugin-next-seo';
-import {PathContext} from '../utils';
-import {graphql, useStaticQuery} from 'gatsby';
 
 export function usePageLayoutProps(props) {
   const paddingTop = useToken('space', 10);
@@ -39,7 +35,6 @@ export function usePageLayoutProps(props) {
 export default function Page({
   pageContext,
   title,
-  description,
   children,
   banner,
   subtitle,
@@ -49,57 +44,13 @@ export default function Page({
   paddingBottom,
   contentProps
 }) {
-  const {uri} = useContext(PathContext);
   const [sidebarHidden, setSidebarHidden] = useLocalStorage('sidebar');
 
-  const {
-    site: {
-      siteMetadata: {siteUrl}
-    }
-  } = useStaticQuery(
-    graphql`
-      {
-        site {
-          siteMetadata {
-            siteUrl
-          }
-        }
-      }
-    `
-  );
-
-  const {docset, navItems} = pageContext;
-  const titleFont = encodeURIComponent('Source Sans Pro');
+  const {navItems} = pageContext;
   const bgColor = useColorModeValue('white', 'blue.800');
 
   return (
     <>
-      <GatsbySeo
-        title={title}
-        description={description}
-        canonical={siteUrl + uri}
-        openGraph={{
-          title,
-          description,
-          images: [
-            {
-              url: getShareImage({
-                title,
-                tagline: docset,
-                titleFont,
-                titleFontSize: 80,
-                titleExtraConfig: '_bold',
-                taglineFont: titleFont,
-                textColor: 'FFFFFF',
-                textLeftOffset: 80,
-                textAreaWidth: 1120,
-                cloudName: 'apollographql',
-                imagePublicID: 'apollo-docs-template2_dohzxt'
-              })
-            }
-          ]
-        }}
-      />
       <Header>
         <MobileNav>
           <SidebarNav navItems={navItems} darkBg="gray.700" />

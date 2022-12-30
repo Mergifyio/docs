@@ -33,20 +33,6 @@ const plugins = [
   },
   'gatsby-plugin-offline',
   {
-    resolve: 'gatsby-plugin-next-seo',
-    options: {
-      titleTemplate: '%s - Mergify Docs',
-      openGraph: {
-        type: 'website',
-        site_name: 'Mergify Docs'
-      },
-      twitter: {
-        site: '@apollographql',
-        cardType: 'summary_large_image'
-      }
-    }
-  },
-  {
     resolve: 'gatsby-plugin-webfonts',
     options: {
       fonts: {
