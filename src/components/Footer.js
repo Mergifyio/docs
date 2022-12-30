@@ -1,15 +1,5 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Box,
-  Flex,
-  Heading,
-  Link,
-  List,
-  ListItem,
-  SimpleGrid,
-  Text
-} from '@chakra-ui/react';
+import {Heading, Link, List, ListItem, SimpleGrid} from '@chakra-ui/react';
 import {footerConfig} from '@apollo/chakra-helpers';
 
 export default function Footer() {

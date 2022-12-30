@@ -1,4 +1,4 @@
-import NavItems, {GA_EVENT_CATEGORY_SIDEBAR, NavContext} from './NavItems';
+import NavItems, {NavContext} from './NavItems';
 import PropTypes from 'prop-types';
 import React, {useMemo} from 'react';
 import useLocalStorage from 'react-use/lib/useLocalStorage';

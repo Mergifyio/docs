@@ -17,7 +17,6 @@ import {
   useTagColors
 } from '../../utils';
 
-export const GA_EVENT_CATEGORY_SIDEBAR = 'Sidebar';
 export const NavContext = createContext();
 
 const getItemPaths = (items, basePath) =>

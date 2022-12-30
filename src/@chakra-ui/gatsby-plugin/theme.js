@@ -1,7 +1,4 @@
-import {
-  components,
-  fonts
-} from '@apollo/chakra-helpers';
+import {components, fonts} from '@apollo/chakra-helpers';
 import {extendTheme} from '@chakra-ui/react';
 
 const blue = {
@@ -72,7 +69,7 @@ const theme = extendTheme({
   },
   fonts,
   colors: {
-    blue,
+    blue
   }
 });
 

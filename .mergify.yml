@@ -6,6 +6,7 @@ queue_rules:
     conditions:
       - and: &CheckRuns
           - check-success=docs
+          - check-success=lint
     speculative_checks: 5
 
   - name: default

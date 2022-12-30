@@ -20,13 +20,11 @@ import useLocalStorage from 'react-use/lib/useLocalStorage';
 import {
   Box,
   Button,
-  HStack,
   Heading,
   ListItem,
   OrderedList,
   Stack,
   Table,
-  Tag,
   Tbody,
   Td,
   Text,
@@ -36,21 +34,19 @@ import {
   UnorderedList,
   chakra
 } from '@chakra-ui/react';
+import {FaDiscourse, FaGithub} from 'react-icons/fa';
+import {FiStar} from 'react-icons/fi';
+import {MDXProvider} from '@mdx-js/react';
+import {MDXRenderer} from 'gatsby-plugin-mdx';
 import {
   MarkdownCodeBlock,
   MultiCodeBlock,
   MultiCodeBlockContext
 } from '@apollo/chakra-helpers';
-import {FaDiscourse, FaGithub} from 'react-icons/fa';
-import {FiStar} from 'react-icons/fi';
-import {Link as GatsbyLink} from 'gatsby';
-import {MDXProvider} from '@mdx-js/react';
-import {MDXRenderer} from 'gatsby-plugin-mdx';
 import {PathContext, useFieldTableStyles} from '../utils';
 import {TOTAL_HEADER_HEIGHT} from './Header';
 import {YouTube} from './YouTube';
 import {dirname, join} from 'path';
-import {kebabCase} from 'lodash';
 import {rehype} from 'rehype';
 
 // these must be imported after MarkdownCodeBlock
@@ -189,7 +185,7 @@ export default function Page({file, pageContext, uri}) {
   } = file;
 
   const {frontmatter, headings} = childMdx || childMarkdownRemark;
-  const {title, description, toc, tags} = frontmatter;
+  const {title, description, toc} = frontmatter;
   const {versions, currentVersion, navItems} = pageContext;
 
   const pageProps = usePageLayoutProps({

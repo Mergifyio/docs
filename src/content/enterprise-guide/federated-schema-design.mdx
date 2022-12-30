@@ -109,11 +109,7 @@ As another common example of exposed implementation details, here we can see how
 ```graphql
 extend type Mutation {
   postProduct(name: String!, description: String): Product
-  patchProduct(
-    id: ID!,
-    name: String,
-    description: String
-  ): Product
+  patchProduct(id: ID!, name: String, description: String): Product
 }
 ```
 
@@ -123,10 +119,7 @@ A better approach would look like this:
 extend type Mutation {
   createProduct(name: String!, description: String): Product
   updateProductName(id: ID!, name: String!): Product
-  updateProductDescription(
-    id: ID!,
-    description: String!
-  ): Product
+  updateProductDescription(id: ID!, description: String!): Product
 }
 ```
 
@@ -269,7 +262,7 @@ As a prerequisite to using an abstract type in a subgraph, that subgraph must be
 
 ### Create semantically meaningful interfaces
 
-A common misuse of interfaces is to use them simply to express a contract for shared fields between types. While this is certainly an aspect of their intended use, they should only be used when you need to return an object or a set of objects from a field *and* those objects may represent a variety of different types with some fields in common. For example:
+A common misuse of interfaces is to use them simply to express a contract for shared fields between types. While this is certainly an aspect of their intended use, they should only be used when you need to return an object or a set of objects from a field _and_ those objects may represent a variety of different types with some fields in common. For example:
 
 ```graphql
 interface Pet {
@@ -396,9 +389,7 @@ The `data` key will contain a `null` user and the `errors` key in the response c
   "errors": [
     {
       "type": "NOT_FOUND",
-      "path": [
-        "user"
-      ],
+      "path": ["user"],
       "locations": [
         {
           "line": 7,

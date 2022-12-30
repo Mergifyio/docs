@@ -216,16 +216,7 @@ export default function TypeScriptApiBox({name}) {
       }
     }
 
-    let typeName = _typeName(type);
-    if (!typeName) {
-      console.warn(
-        'unknown type name for',
-        data.name,
-        'using the type name `any`'
-      );
-      // console.trace();
-      typeName = 'any';
-    }
+    const typeName = _typeName(type);
 
     if (type.typeArguments) {
       return (

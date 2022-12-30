@@ -5,6 +5,7 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "develop": "gatsby develop",
+    "eslint": "eslint src",
     "test": "jest"
   },
   "workspaces": [
