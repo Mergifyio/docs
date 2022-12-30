@@ -4,12 +4,10 @@ import React from 'react';
 import {Button, Flex, Heading, Text, chakra} from '@chakra-ui/react';
 import {FiChevronLeft} from 'react-icons/fi';
 import {Link as GatsbyLink} from 'gatsby';
-import {GatsbySeo} from 'gatsby-plugin-next-seo';
 
 export default function NotFound() {
   return (
     <>
-      <GatsbySeo title="Not found" />
       <Header />
       <Flex
         textAlign="center"
