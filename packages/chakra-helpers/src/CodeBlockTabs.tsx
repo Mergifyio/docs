@@ -14,7 +14,6 @@ import {GA_EVENT_CATEGORY_CODE_BLOCK} from './CodeBlock';
 import {MultiCodeBlockContext} from './MultiCodeBlock';
 import {TinyColor} from '@ctrl/tinycolor';
 import {getIconComponent} from './language-util';
-import {usePrismTheme} from './prism';
 
 function getTabButtonProps(
   loc: 'LEFT' | 'RIGHT',
@@ -85,7 +84,6 @@ export const CodeBlockTabs = ({
     });
   };
 
-  const theme = usePrismTheme();
   const bgColor = useToken('colors', 'gray.800');
   const gradientColor = useColorModeValue(
     new TinyColor('white'),
@@ -141,11 +139,6 @@ export const CodeBlockTabs = ({
                 }
               }}
               roundedBottom="none"
-              bg={
-                language !== activeLanguage
-                  ? theme.plain.backgroundColor
-                  : undefined
-              }
               role="tab"
               aria-selected="true"
               mt="1"

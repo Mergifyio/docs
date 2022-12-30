@@ -1,13 +1,8 @@
-import {colors} from '@apollo/space-kit/colors';
 import {
   components,
-  createColorPalette,
-  createGrayPalette,
   fonts
 } from '@apollo/chakra-helpers';
 import {extendTheme} from '@chakra-ui/react';
-
-const {grey, silver, indigo, teal, midnight, yellow} = colors;
 
 const blue = {
   50: '#ddeef8',
@@ -77,11 +72,7 @@ const theme = extendTheme({
   },
   fonts,
   colors: {
-    gray: createGrayPalette(silver, grey, midnight),
-    indigo: createColorPalette(indigo),
-    teal: createColorPalette(teal),
     blue,
-    yellow: createColorPalette(yellow)
   }
 });
 

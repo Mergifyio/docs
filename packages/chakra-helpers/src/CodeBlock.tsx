@@ -17,9 +17,7 @@ import {CodeBlockTabs} from './CodeBlockTabs';
 import {FiCheck} from '@react-icons/all-files/fi/FiCheck';
 import {FiClipboard} from '@react-icons/all-files/fi/FiClipboard';
 import {FiEyeOff} from '@react-icons/all-files/fi/FiEyeOff';
-import {colors} from '@apollo/space-kit/colors';
 import {getNormalizedLanguage} from './language-util';
-import {usePrismTheme} from './prism';
 
 const CODE_BLOCK_SPACING = 4;
 export const GA_EVENT_CATEGORY_CODE_BLOCK = 'Code Block';
@@ -120,11 +118,10 @@ export const CodeBlock = ({
   );
   const [hidden, setHidden] = useState(defaultHidden);
 
-  const theme = usePrismTheme();
   const highlightColor = useColorModeValue('gray.100', 'gray.700');
   const lineNumberColor = useColorModeValue(
     'gray.500',
-    colors.midnight.lighter
+    '#798FBB'
   );
 
   const blockLanguage = getNormalizedLanguage(language);
@@ -141,7 +138,6 @@ export const CodeBlock = ({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         Prism={Prism}
-        theme={theme}
         code={code}
         language={language}
       >

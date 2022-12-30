@@ -9,7 +9,7 @@ This package contains Chakra UI theme options that are shared between DX propert
 
 ## Installation
 
-This package has peer dependencies on `@apollo/space-kit` and `@chakra-ui/react`. Make sure those packages are already installed in your project, and then install this package.
+This package has peer dependencies on `@chakra-ui/react`. Make sure those packages are already installed in your project, and then install this package.
 
 ```bash
 npm i @apollo/chakra-helpers
@@ -39,28 +39,6 @@ const theme = extendTheme({
 });
 
 export default theme;
-```
-
-### Color palettes
-
-This package also provides two functions for creating Chakra UI color palettes from Space Kit ones.
-
-[Space Kit's color palettes](https://github.com/apollographql/space-kit/blob/main/src/colors/colors.ts#L1-L12) use names ranging from `lightest` to `darkest` and contain five colors for monochrome palettes and seven colors for all other colors. Chakra UI, on the other hand, features [palettes with 10 numerical variants](https://github.com/chakra-ui/chakra-ui/blob/main/packages/theme/src/theme.types.ts#L31-L42) ranging from `50` to `900`.
-
-To account for these differences, we need to mix Space Kit colors to fill in the gaps between different numerical keys in their corresponding Chakra palettes.
-
-```js
-import { colors } from "@apollo/space-kit/colors";
-import { createGrayPalette, createColorPalette } from "@apollo/chakra-helpers";
-
-const { silver, grey, midnight, indigo } = colors;
-
-const theme = extendTheme({
-  colors: {
-    gray: createGrayPalette(silver, grey, midnight),
-    indigo: createColorPalette(indigo),
-  },
-});
 ```
 
 ### Footer configuration
