@@ -12,9 +12,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "eslintConfig": {
-    "extends": "@trevorblades/eslint-config/typescript"
-  },
   "scripts": {
     "start": "tsc --watch",
     "prepare": "tsc"

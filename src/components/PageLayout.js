@@ -2,7 +2,7 @@ import Footer from './Footer';
 import Header, {TOTAL_HEADER_HEIGHT} from './Header';
 import MobileNav from './MobileNav';
 import PropTypes from 'prop-types';
-import React, {Fragment} from 'react';
+import React from 'react';
 import Sidebar, {
   SIDEBAR_WIDTH_BASE,
   SIDEBAR_WIDTH_XL,

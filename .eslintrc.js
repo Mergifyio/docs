@@ -1,5 +1,9 @@
 module.exports = {
-  extends: ['@trevorblades/eslint-config/react', 'plugin:mdx/recommended'],
+  extends: ['plugin:mdx/recommended', 'eslint:recommended', 'plugin:import/recommended'],
+  globals: {
+    "window": true,
+    "document": true
+  },
   overrides: [
     {
       files: ['*.mdx'],
@@ -10,7 +14,9 @@ module.exports = {
         YouTube: 'readonly',
       },
       rules: {
-        'react/no-unescaped-entities': 'off'
+        'react/no-unescaped-entities': 'off',
+        'react/jsx-no-undef': 'off',
+        'no-unused-vars': 'off'
       }
     },
     {
