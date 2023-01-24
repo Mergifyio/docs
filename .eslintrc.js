@@ -6,6 +6,12 @@ module.exports = {
       }
     }
   },
+  parserOptions: {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+   },
+  },
   extends: ['plugin:mdx/recommended', 'eslint:recommended', 'plugin:import/recommended'],
   globals: {
     "window": true,
