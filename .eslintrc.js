@@ -1,4 +1,11 @@
 module.exports = {
+  settings: {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   extends: ['plugin:mdx/recommended', 'eslint:recommended', 'plugin:import/recommended'],
   globals: {
     "window": true,
@@ -14,8 +21,6 @@ module.exports = {
         YouTube: 'readonly',
       },
       rules: {
-        'react/no-unescaped-entities': 'off',
-        'react/jsx-no-undef': 'off',
         'no-unused-vars': 'off'
       }
     },
