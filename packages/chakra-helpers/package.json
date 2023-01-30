@@ -23,7 +23,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@types/prismjs": "^1.26.0",
     "prismjs": "^1.29.0",
-    "typescript": "^4.4.4"
+    "typescript": "^4.9.4"
   },
   "dependencies": {
     "@ctrl/tinycolor": "^3.4.1",
