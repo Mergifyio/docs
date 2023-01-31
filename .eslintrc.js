@@ -4,13 +4,14 @@ module.exports = {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
-    }
+    },
+    'import/ignore': ['.esm.js']
   },
   parserOptions: {
     "requireConfigFile": false,
     "babelOptions": {
       "presets": ["@babel/preset-react"]
-   },
+    }
   },
   extends: ['plugin:mdx/recommended', 'eslint:recommended', 'plugin:import/recommended'],
   globals: {
