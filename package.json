@@ -46,8 +46,6 @@
     "rehype": "^12.0.1",
     "rehype-autolink-headings": "^5.1.0",
     "rehype-react": "^7.1.2",
-    "remark": "^14.0.2",
-    "remark-react": "^9.0.1",
     "remark-typescript": "^0.6.1",
     "stream-http": "^3.2.0",
     "uuid": "^9.0.0"
