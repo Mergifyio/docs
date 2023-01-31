@@ -24,7 +24,6 @@ module.exports = {
         Button: 'readonly',
         ExpansionPanel: 'readonly',
         MultiCodeBlock: 'readonly',
-        YouTube: 'readonly',
       },
       rules: {
         'no-unused-vars': 'off'
