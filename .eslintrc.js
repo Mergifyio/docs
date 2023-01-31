@@ -29,12 +29,6 @@ module.exports = {
       rules: {
         'no-unused-vars': 'off'
       }
-    },
-    {
-      files: ['**/__tests__/*.js', '**.test.js'],
-      env: {
-        jest: true
-      }
     }
   ]
 };
