@@ -200,7 +200,7 @@ export const CodeBlock = ({
                   }
                 >
                   <chakra.pre
-                    d="inline-block"
+                    display="inline-block"
                     minW="full"
                     className={className}
                     py={CODE_BLOCK_SPACING}
