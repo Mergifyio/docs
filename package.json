@@ -57,7 +57,6 @@
     "remark": "^14.0.2",
     "remark-react": "^9.0.1",
     "remark-typescript": "^0.6.1",
-    "search-insights": "^2.2.3",
     "stream-http": "^3.2.0",
     "unist-util-visit": "^4.1.2",
     "uuid": "^9.0.0"
