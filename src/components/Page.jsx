@@ -45,7 +45,6 @@ import {
 } from '@apollo/chakra-helpers';
 import {PathContext, useFieldTableStyles} from '../utils';
 import {TOTAL_HEADER_HEIGHT} from './Header';
-import {YouTube} from './YouTube';
 import {dirname, join} from 'path';
 import {rehype} from 'rehype';
 
@@ -151,7 +150,6 @@ const mdxComponents = {
   ExpansionPanelList,
   ExpansionPanelListItem,
   MultiCodeBlock,
-  YouTube,
   CodeColumns,
   TypeScriptApiBox,
   TypescriptApiBox: TypeScriptApiBox,
