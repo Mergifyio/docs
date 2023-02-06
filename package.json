@@ -2,7 +2,7 @@
   "name": "docs",
   "private": true,
   "scripts": {
-    "build": "gatsby build",
+    "build": "gatsby build --prefix-paths",
     "serve": "gatsby serve",
     "develop": "gatsby develop",
     "eslint": "eslint src",
