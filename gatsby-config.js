@@ -94,8 +94,5 @@ plugins.push(
 
 module.exports = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
-  siteMetadata: {
-    siteUrl: 'https://www.apollographql.com'
-  },
   plugins
 };
