@@ -17,7 +17,7 @@ export default function MobileNav({children}) {
     <>
       <IconButton
         ml="-2"
-        d={{base: 'flex', md: 'none'}}
+        display={{base: 'flex', md: 'none'}}
         variant="ghost"
         fontSize="2xl"
         icon={<FiMenu />}

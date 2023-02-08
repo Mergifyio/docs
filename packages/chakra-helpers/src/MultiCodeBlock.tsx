@@ -58,7 +58,7 @@ export const MultiCodeBlock = ({
           key={language}
           role="tabpanel"
           tabIndex={0}
-          display={language === renderedLanguage ? 'block' : 'none'}
+           display={language === renderedLanguage ? 'block' : 'none'}
         >
           {React.cloneElement(codeBlocks[language], {
             isPartOfMultiCode: true

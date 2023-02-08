@@ -20,7 +20,7 @@ export function Sidebar({children, isHidden}) {
   return (
     <chakra.aside
       ref={sidebarRef}
-      d={{base: 'none', md: 'block'}}
+      display={{base: 'none', md: 'block'}}
       h={
         // account for header border
         `calc(100vh - ${TOTAL_HEADER_HEIGHT}px)`

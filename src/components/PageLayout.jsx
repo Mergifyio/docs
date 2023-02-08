@@ -59,7 +59,7 @@ export default function Page({
       <Fade in={sidebarHidden} unmountOnExit delay={0.25}>
         <Tooltip placement="right" label="Show sidebar">
           <IconButton
-            d={{base: 'none', md: 'flex'}}
+            display={{base: 'none', md: 'flex'}}
             pos="fixed"
             mt="2"
             left="2"

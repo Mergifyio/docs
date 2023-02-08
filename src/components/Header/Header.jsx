@@ -32,12 +32,12 @@ export function Header({children}) {
           borderBottomWidth: HEADER_BORDER_WIDTH
         }}
       >
-        <HStack spacing="4" d={{base: 'none', md: 'flex'}}>
+        <HStack spacing="4" display={{base: 'none', md: 'flex'}}>
           <Flex
             as={GatsbyLink}
             to="/"
             align="center"
-            d={{base: 'none', md: 'flex'}}
+            display={{base: 'none', md: 'flex'}}
           >
             <Flex
               ml="1.5"
@@ -53,7 +53,7 @@ export function Header({children}) {
           </Flex>
           {children}
         </HStack>
-        <HStack d={{base: 'flex', md: 'none'}}>{children}</HStack>
+        <HStack  display={{base: 'flex', md: 'none'}}>{children}</HStack>
         <IconButton
           ml="auto"
           mr="2"
