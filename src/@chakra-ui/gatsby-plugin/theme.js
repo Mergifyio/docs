@@ -74,3 +74,6 @@ const theme = extendTheme({
 });
 
 export default theme;
+
+// Shut down a warning, we don't need baseTheme but chakra expect it to be exported
+export const baseTheme = {};

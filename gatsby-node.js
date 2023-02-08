@@ -4,7 +4,8 @@ const {
 } = require('gatsby-source-filesystem');
 const {join} = require('path');
 const {v5} = require('uuid');
-const {kebabCase} = require('lodash');
+const { compileMDXWithCustomOptions } = require(`gatsby-plugin-mdx`)
+const { remarkHeadingsPlugin } = require(`./remark-headings-plugin`)
 
 exports.sourceNodes = ({
   actions: {createNode},
@@ -86,23 +87,21 @@ const getNavItems = items =>
         }
   );
 
+const pageTemplate = require.resolve(`./src/templates/page.jsx`)
+
 exports.createPages = async ({actions, graphql}) => {
   const {data} = await graphql(`
     {
       pages: allFile(filter: {extension: {in: ["md", "mdx"]}}) {
         nodes {
           id
+          absolutePath
           gitRemote {
             full_name
           }
           sourceInstanceName
           children {
             ... on Mdx {
-              fields {
-                slug
-              }
-            }
-            ... on MarkdownRemark {
               fields {
                 slug
               }
@@ -146,7 +145,7 @@ exports.createPages = async ({actions, graphql}) => {
     };
   }, {});
 
-  data.pages.nodes.forEach(({id, gitRemote, sourceInstanceName, children}) => {
+  data.pages.nodes.forEach(({id, gitRemote, sourceInstanceName, children, absolutePath}) => {
     const [{fields}] = children;
     const versions = data.configs.nodes
       .filter(
@@ -163,7 +162,7 @@ exports.createPages = async ({actions, graphql}) => {
 
     actions.createPage({
       path: fields.slug,
-      component: require.resolve('./src/templates/page.jsx'),
+      component: `${pageTemplate}?__contentFilePath=${absolutePath}`,
       context: {
         id,
         versions,
@@ -172,3 +171,60 @@ exports.createPages = async ({actions, graphql}) => {
     });
   });
 };
+
+exports.createSchemaCustomization = async ({ getNode, getNodesByType, pathPrefix, reporter, cache, actions, schema, store }) => {
+  const { createTypes } = actions
+
+  const headingsResolver = schema.buildObjectType({
+    name: `Mdx`,
+    fields: {
+      headings: {
+        type: `[MdxHeading]`,
+        async resolve(mdxNode) {
+          const fileNode = getNode(mdxNode.parent)
+
+          if (!fileNode) {
+            return null
+          }
+
+          const result = await compileMDXWithCustomOptions(
+            {
+              source: mdxNode.body,
+              absolutePath: fileNode.absolutePath,
+            },
+            {
+              pluginOptions: {},
+              customOptions: {
+                mdxOptions: {
+                  remarkPlugins: [remarkHeadingsPlugin],
+                },
+              },
+              getNode,
+              getNodesByType,
+              pathPrefix,
+              reporter,
+              cache,
+              store,
+            }
+          )
+
+          if (!result) {
+            return null
+          }
+
+          return result.metadata.headings
+        }
+      }
+    }
+  })
+
+  createTypes([
+    `
+      type MdxHeading {
+        value: String
+        depth: Int
+      }
+    `,
+    headingsResolver,
+  ])
+}

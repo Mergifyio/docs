@@ -17,7 +17,13 @@ const gatsbyRemarkPlugins = [
     options: {
       icon: false
     }
-  }
+  },
+  {
+    resolve: `gatsby-remark-images`,
+    options: {
+      maxWidth: 1200,
+    },
+  },
 ];
 
 const plugins = [
@@ -56,6 +62,7 @@ const plugins = [
   {
     resolve: 'gatsby-plugin-mdx',
     options: {
+      extensions: ['.mdx', '.md'],
       gatsbyRemarkPlugins,
       remarkPlugins: [
         [
@@ -70,8 +77,8 @@ const plugins = [
           }
         ]
       ],
-      rehypePlugins: [[require('rehype-autolink-headings'), {behavior: 'wrap'}]]
-    }
+      rehypePlugins: [[import('rehype-autolink-headings'), {behavior: 'wrap'}]]
+    },
   },
   {
     resolve: 'gatsby-transformer-remark',

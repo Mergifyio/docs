@@ -37,7 +37,6 @@ import {
 import {FaDiscourse, FaGithub} from 'react-icons/fa';
 import {FiStar} from 'react-icons/fi';
 import {MDXProvider} from '@mdx-js/react';
-import {MDXRenderer} from 'gatsby-plugin-mdx';
 import {
   MarkdownCodeBlock,
   MultiCodeBlock,
@@ -168,7 +167,7 @@ const {processSync} = rehype()
     }
   });
 
-export default function Page({file, pageContext, uri}) {
+export default function Page({file, pageContext, uri, children}) {
   const [language, setLanguage] = useLocalStorage('language');
 
   const fieldTableStyles = useFieldTableStyles();
@@ -266,7 +265,7 @@ export default function Page({file, pageContext, uri}) {
             toc !== false && (
               // hide the table of contents on the home page
               <chakra.aside
-                d={{base: 'none', lg: 'flex'}}
+                display={{base: 'none', lg: 'flex'}}
                 flexDirection="column"
                 ml={{base: 10, xl: 16}}
                 w={250}
@@ -331,7 +330,7 @@ export default function Page({file, pageContext, uri}) {
                   }
                 }
               },
-              'img.screenshot': {
+              'div.screenshot > img': {
                 shadow: 'md',
                 rounded: 'md'
               },
@@ -360,13 +359,13 @@ export default function Page({file, pageContext, uri}) {
           <MultiCodeBlockContext.Provider value={{language, setLanguage}}>
             {childMdx ? (
               <MDXProvider components={mdxComponents}>
-                <MDXRenderer>{childMdx.body}</MDXRenderer>
+                {children}
               </MDXProvider>
             ) : (
               processSync(childMarkdownRemark.html).result
             )}
           </MultiCodeBlockContext.Provider>
-          <Box d={{lg: 'none'}}>{editOnGitHub}</Box>
+          <Box display={{lg: 'none'}}>{editOnGitHub}</Box>
         </PageLayout>
       </PathContext.Provider>
     </>

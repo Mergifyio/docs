@@ -1,4 +1,7 @@
 module.exports = {
+  globals: {
+    __PATH_PREFIX__: true,
+  },
   settings: {
     "import/resolver": {
       "node": {
@@ -7,17 +10,7 @@ module.exports = {
     },
     'import/ignore': ['.esm.js']
   },
-  parserOptions: {
-    "requireConfigFile": false,
-    "babelOptions": {
-      "presets": ["@babel/preset-react"]
-    }
-  },
-  extends: ['plugin:mdx/recommended', 'eslint:recommended', 'plugin:import/recommended'],
-  globals: {
-    "window": true,
-    "document": true
-  },
+  extends: ['react-app', 'plugin:mdx/recommended', 'eslint:recommended', 'plugin:import/recommended'],
   overrides: [
     {
       files: ['*.mdx'],

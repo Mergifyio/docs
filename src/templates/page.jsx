@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {graphql} from 'gatsby';
 
-export default function PageTemplate({data, location, pageContext}) {
+export default function PageTemplate({data, location, pageContext, children}) {
   const page = (
-    <Page file={data.file} uri={location.pathname} pageContext={pageContext} />
+    <Page file={data.file} uri={location.pathname} pageContext={pageContext}>{children}</Page>
   );
   return pageContext.internal ? <></> : page;
 }
@@ -37,18 +37,6 @@ export const pageQuery = graphql`
           description
           toc
           tags
-        }
-      }
-      childMarkdownRemark {
-        html
-        htmlAst
-        headings {
-          depth
-          value
-        }
-        frontmatter {
-          title
-          description
         }
       }
     }
