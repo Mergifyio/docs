@@ -26,7 +26,7 @@ export default function NotFound() {
         >
           404
         </chakra.h1>
-        <Heading mb="2">Houston, something went wrong on our end</Heading>
+        <Heading mb="2">Oops, something went wrong on our end 🤕</Heading>
         <Text mb="6">
           Don&apos;t worry! This is completely on us. Let&apos;s get you back on
           your journey.
@@ -34,7 +34,6 @@ export default function NotFound() {
         <Button
           as={GatsbyLink}
           to="/"
-          colorScheme="indigo"
           leftIcon={<FiChevronLeft />}
         >
           Back to home
