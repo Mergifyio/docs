@@ -64,20 +64,6 @@ const plugins = [
     options: {
       extensions: ['.mdx', '.md'],
       gatsbyRemarkPlugins,
-      remarkPlugins: [
-        [
-          remarkTypescript,
-          {
-            filter: isWrapped({wrapperComponent: 'MultiCodeBlock'}),
-            customTransformations: [highlightPreservation()],
-            prettierOptions: {
-              trailingComma: 'all',
-              singleQuote: true
-            }
-          }
-        ]
-      ],
-      rehypePlugins: [[import('rehype-autolink-headings'), {behavior: 'wrap'}]]
     },
   },
   {
