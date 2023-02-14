@@ -1,6 +1,6 @@
 ---
 title: Mergify Documentation
-description: Explore Mergify
+description: Explore & learn Mergify
 toc: false
 ---
 
@@ -11,79 +11,190 @@ import {
   Docset,
   DocsetGrid,
 } from '../components/HomePage';
-import {SiDiscourse, SiGithub, SiTwitter, SiYoutube} from 'react-icons/si';
+import {SiSlack, SiGithub, SiTwitter, SiYoutube, SiLinkedin} from 'react-icons/si';
 
-Mergify rocks!
+Welcome to Mergify Documentation. Explore our guides and examples on how to integrate Mergify.
 
-## Apollo Client
+## Workflow Automation
 
-Execute GraphQL operations, cache their results, and manage your application's state with one powerful library.
-
-<DocsetGrid>
-  <Docset title="React" path="/react" />
-  <Docset title="iOS" path="/ios" />
-  <Docset title="Kotlin" path="/kotlin" />
-</DocsetGrid>
-
-## Backend
+Automate your GitHub pull requests workflow.
 
 <DocsetGrid>
   <Docset
-    title="Apollo Server"
-    description="Configure a production-ready GraphQL server to fetch and combine data from multiple sources."
-    path="/apollo-server"
+    title="Getting Started"
+    description="Learn how to deploy Mergify on your repositories."
+    path="/getting-started"
   />
   <Docset
-    title="Federation"
-    description="Implement a single unified supergraph across multiple subgraphs."
-    path="/federation"
-    cta={CTA_LEARN}
+    title="Writing your First Rule"
+    description="Write your first automation rule using Mergify workflow automation."
+    path="/workflow/writing-your-first-rule"
   />
   <Docset
-    title="Router"
-    description="A configurable, high-performance graph router for a federated supergraph."
-    path="/router"
+    title="Actions"
+    description="A complete list of actions you can use with Mergify."
+    path="/workflow/actions"
   />
 </DocsetGrid>
 
-## Cloud
+### Workflow Automation Use Cases
+
+Discover a list of use cases that you can leverage with Mergify. Get inspired
+and adapt it to your own needs.
 
 <DocsetGrid>
   <Docset
-    title="Studio"
-    description="Build your supergraph with your team, evolve it safely, and keep it running smoothly."
-    path="/studio"
-    cta={CTA_LEARN}
+    title="Backporting"
+    description="Understand how to backports pull requests from one branch to another."
+    path="/workflow/backports"
   />
   <Docset
-    title="Rover CLI"
-    description="Manage your Studio graphs and schemas from the command line."
-    path="/rover"
+    title="Triggering CI conditionally"
+    description="Optimize your CI cost and run by triggering it only when necessary."
+    path="/workflow/trigger-ci"
+  />
+  <Docset
+    title="Resolving Conflicts Faster"
+    description="Be aware as soon as a pull request is in conflict to reduce merge latency."
+    path="/workflow/pull-requests-conflicts"
+  />
+</DocsetGrid>
+
+<DocsetGrid>
+  <Docset
+    title="Automatic Merge from Bots"
+    description="Merge pull requests created by bots automatically."
+    path="/workflow/auto-merge-bots"
+  />
+  <Docset
+    title="Using Commit Message Template"
+    description="Make sure your Git history is properly formatted with commit message template."
+    path="/workflow/commit-message-template"
+  />
+  <Docset
+    title="Enforce Semantic Pull Requests"
+    description="Make sure your pull requests change format follows your guidelines."
+    path="/workflow/semantic-pull-requests"
+  />
+</DocsetGrid>
+
+## Merge Queue
+
+<DocsetGrid>
+  <Docset
+    title="Getting Started"
+    description="Learn how to deploy Mergify on your repositories."
+    path="/getting-started"
+  />
+  <Docset
+    title="Merge Queues"
+    description="Understand what are merge queues and how to use them."
+    path="/merge-queue/intro"
+  />
+  <Docset
+    title="Setting Up Your First Merge Queue"
+    description="Implement your first merge queue."
+    path="/merge-queue/single"
+  />
+</DocsetGrid>
+
+<DocsetGrid>
+  <Docset
+    title="Pull request lifecycle"
+    description="Understand the lifecycle of a pull request before and once it enters a merge queue."
+    path="/merge-queue/lifecycle"
+  />
+  <Docset
+    title="Using Piorities"
+    description="Learn how to order your pull requests in the queue by priority."
+    path="/merge-queue/priority"
+  />
+  <Docset
+    title="Freeze"
+    description="Learn how to freeze your merge queues during incidents or planned events."
+    path="/merge-queue/freeze"
+  />
+</DocsetGrid>
+
+<DocsetGrid>
+  <Docset
+    title="Using Multiple Queues"
+    description="Learn how to implement multiple merge queues and route your pull requests."
+    path="/merge-queue/multi"
+  />
+  <Docset
+    title="Speculative Checks"
+    description="Increase your merge queue throughput by using speculative checks."
+    path="/merge-queue/speculative-checks"
+  />
+  <Docset
+    title="Batches"
+    description="Increase your merge queue throughput and decrease your CI usage."
+    path="/merge-queue/batch"
+  />
+</DocsetGrid>
+
+## Technical Reference
+
+Detailed documentation about every part of Mergify.
+
+<DocsetGrid>
+  <Docset
+    title="Configuration File Format"
+    description="Details of the configuration file format"
+    path="/configuration/file-format"
+  />
+  <Docset
+    title="Conditions"
+    description="Everything you need to know when writing your conditions."
+    path="/configuration/conditions"
+  />
+  <Docset
+    title="Commands"
+    description="Complete list of commands you can use with Mergify."
+    path="/commands"
+  />
+</DocsetGrid>
+
+<DocsetGrid>
+  <Docset
+    title="API"
+    description="Learn about using Mergify's API."
+    path="/api"
+  />
+  <Docset
+    title="Badge"
+    description="Display your Mergify usage publicly."
+    path="/badge"
   />
 </DocsetGrid>
 
 <VStack pt="4" spacing="4" textAlign="center" maxW="md" mx="auto">
 
-### Join our community 💬
+### Join our Community 💬
 
-We love hearing from you! Here are a few ways you can connect with us and other Apollo community members.
+We love hearing from you! Here are a few ways you can connect with us and other Mergify community members.
 
 <ButtonGroup variant="ghost">
   <CommunityButton
-    href="https://github.com/apollographql"
+    href="https://github.com/Mergifyio/mergify/discussions"
     icon={<SiGithub />}
   />
   <CommunityButton
-    href="https://youtube.com/apollographql"
+    href="https://www.youtube.com/@mergifyio"
     icon={<SiYoutube />}
   />
   <CommunityButton
-    href="https://community.apollographql.com"
-    icon={<SiDiscourse />}
+    href="https://slack.mergify.com"
+    icon={<SiSlack />}
   />
   <CommunityButton
-    href="https://twitter.com/apollographql"
+    href="https://twitter.com/mergifyio"
     icon={<SiTwitter />}
+  />
+  <CommunityButton
+    href="https://www.linkedin.com/company/mergify/"
+    icon={<SiLinkedin />}
   />
 </ButtonGroup>
 

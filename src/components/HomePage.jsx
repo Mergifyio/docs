@@ -23,25 +23,23 @@ export function Docset({
   children,
   description,
   path,
-  icon,
-  cta = 'Explore %s docs'
+  icon
 }) {
   return (
-    <Flex align="flex-start" p="6" rounded="md" borderWidth="1px">
-      <Flex align="flex-start" direction="column" h="full">
-        <Heading as="h3" size="lg" mb="4">
-          <HStack spacing="3">
-            {icon}
-            <span>{title}</span>
-          </HStack>
-        </Heading>
-        {description && <Text mb="4">{description}</Text>}
-        <PrimaryLink mt="auto" fontWeight="semibold" as={GatsbyLink} to={path}>
-          {cta.replace('%s', title)}
-        </PrimaryLink>
+    <PrimaryLink as={GatsbyLink} to={path}>
+      <Flex align="flex-start" p="6" rounded="md" borderWidth="1px">
+        <Flex align="flex-start" direction="column" h="full">
+          <Heading as="h3" size="lg" mb="4">
+            <HStack spacing="3">
+              {icon}
+              <span>{title}</span>
+            </HStack>
+          </Heading>
+          {description && <Text mb="4">{description}</Text>}
+        </Flex>
+        {children}
       </Flex>
-      {children}
-    </Flex>
+    </PrimaryLink>
   );
 }
 
@@ -49,7 +47,6 @@ Docset.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   path: PropTypes.string.isRequired,
-  cta: PropTypes.string,
   icon: PropTypes.element,
   children: PropTypes.node
 };
