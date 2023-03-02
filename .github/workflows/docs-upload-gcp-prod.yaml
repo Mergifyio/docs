@@ -20,6 +20,32 @@ jobs:
         with:
           node-version: 18
 
+      - name: Fetch job check run information
+        id: fetch-check-run
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const { data } = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+            const job = data.jobs.find(
+              (j) => j.name.includes("${{ github.job }}")
+            )
+            core.setOutput("job_url", job.html_url);
+            core.setOutput("job_id", String(job.id));
+
+      - name: Deployment start
+        if: always()
+        uses: Mergifyio/gha-slack-notification@main
+        with:
+          message: "*Starting deployment (${{ steps.fetch-check-run.outputs.job_id }}) of documentation (gatsby)*"
+          job_url: ${{ steps.fetch-check-run.outputs.job_url }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
       - name: Build 🔧
         run: |
           npm ci
@@ -36,3 +62,37 @@ jobs:
           path: public
           destination: mergify-docs-staging
           parent: false
+
+      - name: Prepare report status
+        id: report-status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ] ; then
+            emoji="🦾"
+          elif [ "${{ job.status }}" == "cancelled" ] ; then
+            emoji="✋"
+          else
+            emoji="💥"
+          fi
+
+          SLACK_TEXT_MESSAGE=$(cat <<EOF
+          *Deployment (${{ steps.fetch-check-run.outputs.job_id }}) of documentation (gatsby) finished ${emoji}*
+          Conclusion: ${{ job.status }}
+          \`\`\`
+          $(git log -1)
+          \`\`\`
+          EOF
+          )
+
+          # Replace newline with explicit \n
+          SLACK_TEXT_MESSAGE=$(echo "$SLACK_TEXT_MESSAGE" | awk '{printf "%s\\n", $0}')
+
+          echo "SLACK_TEXT_MESSAGE=${SLACK_TEXT_MESSAGE}" >> "$GITHUB_OUTPUT"
+
+      - name: Report Status
+        if: always()
+        uses: Mergifyio/gha-slack-notification@main
+        with:
+          message: ${{ steps.report-status.outputs.SLACK_TEXT_MESSAGE }}
+          job_url: ${{ steps.fetch-check-run.outputs.job_url }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
