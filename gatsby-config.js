@@ -7,12 +7,6 @@ const {
 const gatsbyRemarkPlugins = [
   '@fec/remark-a11y-emoji/gatsby',
   {
-    resolve: 'gatsby-remark-copy-linked-files',
-    options: {
-      ignoreFileExtensions: []
-    }
-  },
-  {
     resolve: 'gatsby-remark-autolink-headers',
     options: {
       icon: false
