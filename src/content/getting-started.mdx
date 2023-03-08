@@ -1,0 +1,30 @@
+---
+title: Getting started with Mergify
+description: Deploying Mergify on your first repository
+---
+
+import { Screenshot } from "../components/Images"
+import githubAppInstallRepos from "./images/getting-started/github-app-install-repos.png"
+
+# Installation
+
+Mergify is a GitHub Application that operates on your GitHub
+repositories to automate them. You need to install Mergify on your
+GitHub Account to have it working.
+
+1.  Log into the [Mergify dashboard](https://dashboard.mergify.com/);
+
+2.  Click on `Enable Mergify on a new account` or go to
+    [https://github.com/apps/mergify/installations/new](https://github.com/apps/mergify/installations/new);
+
+3.  GitHub asks that you select the repositories you want to give Mergify
+    access to. Select any repository you like, or all if you wish. Be aware
+    that Mergify billing counts users for every repository where it is enabled.
+
+<Screenshot src={githubAppInstallRepos} alt="GitHub select repositories for Mergify" />
+
+4.  You will be redirected to the [dashboard](https://dashboard.mergify.com/).
+    You can start using Mergify, using commands or writing a configuration
+    file.
+
+{/* FIXME: add link to commands above and to config file */}
