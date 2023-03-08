@@ -16,8 +16,6 @@ export const DocsetGrid = props => (
   <SimpleGrid spacing="4" minChildWidth="250px" {...props} />
 );
 
-export const CTA_LEARN = 'Learn about %s';
-
 export function Docset({
   title,
   children,
