@@ -34,7 +34,7 @@ import {
   UnorderedList,
   chakra
 } from '@chakra-ui/react';
-import {FaDiscourse, FaGithub} from 'react-icons/fa';
+import {FaComment, FaGithub} from 'react-icons/fa';
 import {FiStar} from 'react-icons/fi';
 import {MDXProvider} from '@mdx-js/react';
 import {
@@ -202,7 +202,7 @@ export default function Page({file, pageContext, uri, children}) {
   );
 
   const editOnGitHub = useMemo(() => {
-    const repo = gitRemote?.href || 'https://github.com/apollographql/docs';
+    const repo = gitRemote?.href || 'https://github.com/mergifyio/docs';
 
     const repoPath = ['tree', gitRemote?.ref || 'main'];
 
@@ -279,21 +279,13 @@ export default function Page({file, pageContext, uri, children}) {
                 </Heading>
                 <TableOfContents headings={headings} />
                 <Stack align="flex-start" spacing="3" mt="8">
-                  <Button
-                    onClick={() => window.freddyWidget?.show()}
-                    variant="link"
-                    size="lg"
-                    leftIcon={<FiStar />}
-                  >
-                    Rate article
-                  </Button>
                   {editOnGitHub}
                   <Button
                     as="a"
-                    href="https://community.apollographql.com/"
+                    href="https://github.com/Mergifyio/mergify/discussions"
                     variant="link"
                     size="lg"
-                    leftIcon={<FaDiscourse />}
+                    leftIcon={<FaComment />}
                   >
                     Discuss in forums
                   </Button>
