@@ -88,7 +88,7 @@ plugins.push(
 module.exports = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
   siteMetadata: {
-    siteUrl: 'https://www.apollographql.com'
+    siteUrl: 'https://docs.mergify.com'
   },
   plugins
 };
