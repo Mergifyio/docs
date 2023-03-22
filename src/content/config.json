@@ -2,33 +2,12 @@
   "title": "Docs Home",
   "sidebar": {
     "Home": "/",
-    "What is the supergraph?": "/intro/platform",
-    "Why adopt GraphQL?": "/intro/benefits",
-    "Tutorials": {
-      "Lift-off series & certification": "https://www.apollographql.com/tutorials/lift-off-part1/",
-      "Full-stack quickstart": "https://www.apollographql.com/tutorials/fullstack-quickstart/introduction"
+    "Getting Started": "/getting-started",
+    "Workflow": {
+      "Writing Your First Rule": "/workflow/writing-your-first-rule"
     },
-    "Documentation Sets": {
-      "Client (React)": "/react/",
-      "Client (iOS)": "/ios/",
-      "Client (Kotlin)": "/kotlin/",
-      "Server": "/apollo-server/",
-      "Federation": "/federation/",
-      "Router": "/router/",
-      "Studio": "/studio/",
-      "Rover CLI": "/rover/"
-    },
-    "Development Tools": {
-      "Apollo extension for VS Code": "/devtools/editor-plugins",
-      "Configuring Apollo projects": "/devtools/apollo-config",
-      "The Apollo CLI (partially deprecated)": "/devtools/cli"
-    },
-    "Resources": {
-      "Principled GraphQL": "https://principledgraphql.com",
-      "Glossary": "/resources/graphql-glossary",
-      "GraphQL FAQ": "/resources/faq",
-      "Elastic License v2 FAQ": "/resources/elastic-license-v2-faq",
-      "Release lifecycle": "/resources/release-stages"
+    "Merge Queue": {
+      "About Merge Queues": "/merge-queue/intro"
     }
   }
 }
