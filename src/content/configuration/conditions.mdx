@@ -1,0 +1,82 @@
+---
+title: Mergify Conditions
+description: Everything you need to know when writing conditions in Mergify
+---
+
+## Introduction
+
+Conditions are an essential component of Mergify rules, as they define the
+criteria that must be met for a rule to be applied. By utilizing conditions,
+you can create highly customizable and flexible rules tailored to your specific
+workflow requirements. Conditions enable you to target pull requests based on
+various factors such as their status, properties, labels, and associated
+statuses or checks.
+
+In this guide, we will explore the structure, syntax, and usage of conditions
+in Mergify rules. You will learn how to craft effective conditions that help
+you automate and streamline your pull request management process.
+
+## Structure of a Condition
+
+A condition in Mergify rules is composed of three key components: attributes,
+operators, and values, along with optional modifiers. These components work
+together to define the criteria that must be met for the condition to be
+considered true.
+
+The grammar for a condition is as follows:
+
+`[ "-" ] [ "#" ] <attribute> [ <operator> <value> ]`
+
+### Modifiers
+
+- The optional minus (`-`) operator at the beginning of the condition negates
+  the result of the condition, acting as a "not" operator.
+- The optional hash (`#`) operator is used to evaluate the length of a list when
+  the attribute is a list.
+
+### Attributes
+
+Attributes represent the properties or characteristics of a pull request that
+you want to evaluate in your condition. These can include elements such as the
+number of approvals, the presence of specific labels, or the status of CI
+checks.
+
+### Operators
+
+Operators are used to compare the attribute to a specified value. Mergify
+supports various comparison operators (e.g., `=`, `!=`, `<`, `>`).
+
+When the attribute is a list, comparison operators behave as if "any" is used on
+the list, meaning the condition will return true if any element of the list
+matches the given operator and value.
+
+### Values
+
+Values are the reference points used to evaluate the attribute. They can be
+strings, numbers, or booleans, depending on the attribute being evaluated.
+
+For example, consider the following condition:
+
+`#approved-reviews-by>=2`
+
+In this condition:
+
+- The attribute is `approved-reviews-by`, which represents the list of
+  approved reviewers for a pull request.
+- The operator is `>=`, which means "greater than or equal to."
+- The value is `2`, which indicates the minimum number of approved reviews
+  required for the condition to be true.
+- The hash (`#`) operator is used to evaluate the length of the list of
+  approved reviewers.
+
+Understanding the structure of a condition is crucial for creating effective
+Mergify rules that cater to your specific needs and requirements.
+
+
+## Attributes
+
+Attributes are properties of pull requests or events used to filter and evaluate
+the conditions within rules. They can be used to create more specific and
+targeted rules for your repository.
+
+Here is the list of attributes:

@@ -8,6 +8,9 @@
     },
     "Merge Queue": {
       "About Merge Queues": "/merge-queue/intro"
+    },
+    "Technical Reference": {
+      "Conditions": "/configuration/conditions"
     }
   }
 }
