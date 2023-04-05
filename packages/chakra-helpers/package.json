@@ -19,7 +19,7 @@
   "author": "Trevor Blades <tdblades@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@chakra-ui/react": "^2.5.4",
+    "@chakra-ui/react": "^2.5.5",
     "@react-icons/all-files": "^4.1.0",
     "@types/prismjs": "^1.26.0",
     "prismjs": "^1.29.0",
