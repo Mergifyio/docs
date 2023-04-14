@@ -1,0 +1,975 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "MergifyConfig#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "extends": {
+      "type": "string"
+    },
+    "queue_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/QueueRule"
+      }
+    },
+    "pull_request_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/PullRequestRule"
+      }
+    }
+  },
+  "title": "MergifyConfig",
+  "definitions": {
+    "PullRequestAttribute": {
+      "enum": [
+        {
+          "key": "approved-reviews-by",
+          "inputType": "userSingle",
+          "dataType": "list of string",
+          "description": "The list of GitHub user or team login that approved the pull request. Team logins are prefixed with the `@` character and must belong to the repository organization. This only matches reviewers with `admin`, `write` or `maintain` permission on the repository."
+        },
+        {
+          "key": "assignee",
+          "inputType": "userSingle",
+          "dataType": "list of string",
+          "description": "The list of GitHub user or team login that are assigned to the pull request. Team logins are prefixed with the `@` character and must belong to the repository organization."
+        },
+        {
+          "key": "author",
+          "inputType": "userSingle",
+          "dataType": "string",
+          "description": "The GitHub user or team login of the author of the pull request. Team logins are prefixed with the `@` character and must belong to the repository organization."
+        },
+        {
+          "key": "base",
+          "inputType": "branchSingle",
+          "dataType": "string",
+          "description": "The name of the branch the pull request should be pulled into."
+        },
+        {
+          "key": "body",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The content of the pull request description without Markdown/HTML comments."
+        },
+        {
+          "key": "body-raw",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The content of the pull request description."
+        },
+        {
+          "key": "branch-protection-review-decision",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The review decision, could be one of `APPROVED`, `CHANGES_REQUESTED` or `REVIEW_REQUIRED`. This indicates if `CODEOWNERS` have reviewed the pull request when the Require Review from Code Owners branch protection rule is enabled."
+        },
+        {
+          "key": "changes-requested-reviews-by",
+          "inputType": "userSingle",
+          "dataType": "list of string",
+          "description": "The list of GitHub user or team login that have requested changes in a review for the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
+        },
+        {
+          "key": "check-failure",
+          "inputType": "check",
+          "dataType": "list of string",
+          "description": "The list of status checks that failed for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details. Checks that report being cancelled, timed out, and action required are also considered as failures."
+        },
+        {
+          "key": "check-neutral",
+          "inputType": "check",
+          "dataType": "list of string",
+          "description": "The list of status checks that are neutral for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
+        },
+        {
+          "key": "check-pending",
+          "inputType": "check",
+          "dataType": "list of string",
+          "description": "The list of status checks that is pending for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
+        },
+        {
+          "key": "check-skipped",
+          "inputType": "check",
+          "dataType": "list of string",
+          "description": "The list of status checks that was skipped for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
+        },
+        {
+          "key": "check-stale",
+          "inputType": "check",
+          "dataType": "list of string",
+          "description": "The list of status checks that are stale for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
+        },
+        {
+          "key": "check-success",
+          "inputType": "check",
+          "dataType": "list of string",
+          "description": "The list of status checks that successfully passed for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
+        },
+        {
+          "key": "check-timed-out",
+          "inputType": "check",
+          "dataType": "list of string",
+          "description": "The list of status checks that timed out for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
+        },
+        {
+          "key": "closed",
+          "inputType": "boolean",
+          "dataType": "boolean",
+          "description": "Whether the pull request is closed."
+        },
+        {
+          "key": "closed-at",
+          "inputType": "relativeTimestamp",
+          "dataType": "Timestamp or Relative timestamp",
+          "description": "The time the pull request was closed at."
+        },
+        {
+          "key": "commented-reviews-by",
+          "inputType": "userSingle",
+          "dataType": "list of string",
+          "description": "The list of GitHub user or team login that have commented in a review for the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
+        },
+        {
+          "key": "commits",
+          "inputType": "string",
+          "dataType": "list of commits",
+          "description": "The list of commits of the pull request. The index 0 is the first commit of the pull request, while -1 is the last commit of the pull request."
+        },
+        {
+          "key": "commits-behind",
+          "inputType": "string",
+          "dataType": "list of commits",
+          "description": "The list of commits between the head of the base branch and the base of the pull request. This can only be used with the length operator as #commits-behind."
+        },
+        {
+          "key": "commits-unverified",
+          "inputType": "string",
+          "dataType": "list of string",
+          "description": "The list of commit messages that are marked as unverified by GitHub."
+        },
+        {
+          "key": "conflict",
+          "inputType": "boolean",
+          "dataType": "boolean",
+          "description": "Whether the pull request is conflicting with its base branch."
+        },
+        {
+          "key": "created-at",
+          "inputType": "relativeTimestamp",
+          "dataType": "Timestamp or Relative timestamp",
+          "description": "The time the pull request was created at."
+        },
+        {
+          "key": "dependabot-dependency-name",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The dependency-name value included in the Dependabot commit message."
+        },
+        {
+          "key": "dependabot-dependency-type",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The dependency-type value included in the Dependabot commit message."
+        },
+        {
+          "key": "dependabot-update-type",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The update-type value included in the Dependabot commit message."
+        },
+        {
+          "key": "dismissed-reviews-by",
+          "inputType": "userSingle",
+          "dataType": "list of string",
+          "description": "The list of GitHub user or team login that have their review dismissed in the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
+        },
+        {
+          "key": "draft",
+          "inputType": "boolean",
+          "dataType": "boolean",
+          "description": "Whether the pull request is in draft state."
+        },
+        {
+          "key": "files",
+          "inputType": "string",
+          "dataType": "list of string",
+          "description": "The files that are modified, deleted or added by the pull request."
+        },
+        {
+          "key": "head",
+          "inputType": "branchSingle",
+          "dataType": "string",
+          "description": "The name of the branch where the pull request changes are implemented."
+        },
+        {
+          "key": "label",
+          "inputType": "labelSingle",
+          "dataType": "list of string",
+          "description": "The list of labels of the pull request."
+        },
+        {
+          "key": "linear-history",
+          "inputType": "boolean",
+          "dataType": "boolean",
+          "description": "Whether the pull request commits history is linear (no merge commit)."
+        },
+        {
+          "key": "locked",
+          "inputType": "boolean",
+          "dataType": "boolean",
+          "description": "Whether the pull request is locked."
+        },
+        {
+          "key": "merged",
+          "inputType": "boolean",
+          "dataType": "boolean",
+          "description": "Whether the pull request is merged. This attribute doesn't work on pull requests merged before a rule using this attribute is created."
+        },
+        {
+          "key": "merged-at",
+          "inputType": "relativeTimestamp",
+          "dataType": "Timestamp or Relative timestamp",
+          "description": "The time the pull request was merged at."
+        },
+        {
+          "key": "merged-by",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The GitHub user or team login that merged the pull request. Team logins are prefixed with the @ character and must belong to the repository organization."
+        },
+        {
+          "key": "milestone",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The milestone title associated to the pull request."
+        },
+        {
+          "key": "number",
+          "inputType": "string",
+          "dataType": "integer",
+          "description": "The pull request number."
+        },
+        {
+          "key": "queue-partition-name",
+          "inputType": "string",
+          "dataType": "lust of string",
+          "description": "The name of the partitions the pull request is queued in."
+        },
+        {
+          "key": "queue-position",
+          "inputType": "number",
+          "dataType": "integer",
+          "description": "The position of the pull request in its queue if queued.\nThe first pull request in the queue has position 0.\nThe value is set to -1 if the pull request is not queued.\nNB: If you are using partitions, this condition returns the maximum position of the pull request from all the partitions it is queued in."
+        },
+        {
+          "key": "queued-at",
+          "inputType": "relativeTimestamp",
+          "dataType": "Timestamp or Relative timestamp",
+          "description": "The time the pull request was queued at for merge."
+        },
+        {
+          "key": "queue-merge-started-at",
+          "inputType": "relativeTimestamp",
+          "dataType": "Timestamp or Relative timestamp",
+          "description": "The time the pull request mergeability checks have started at. \nNB: This attribute does not work when using Partition Rules."
+        },
+        {
+          "key": "repository-full-name",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The current repository full name (complete version with the organization name)."
+        },
+        {
+          "key": "repository-name",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The current repository name (short version without the organization name)."
+        },
+        {
+          "key": "review-requested",
+          "inputType": "userSingle",
+          "dataType": "list of string",
+          "description": "The list of GitHub user or team login that were requested to review the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
+        },
+        {
+          "key": "review-threads-resolved",
+          "inputType": "string",
+          "dataType": "list of string",
+          "description": "The list of bodies associated to review threads that are marked as resolved by GitHub."
+        },
+        {
+          "key": "review-threads-unresolved",
+          "inputType": "string",
+          "dataType": "list of string",
+          "description": "The list of bodies associated to review threads that are NOT marked as resolved by GitHub."
+        },
+        {
+          "key": "schedule",
+          "inputType": "string",
+          "dataType": "Schedule",
+          "description": "The current time will be compared against this schedule to un/validate this attribute."
+        },
+        {
+          "key": "title",
+          "inputType": "string",
+          "dataType": "string",
+          "description": "The title of the pull request."
+        },
+        {
+          "key": "updated-at",
+          "inputType": "relativeTimestamp",
+          "dataType": "Timestamp or Relative timestamp",
+          "description": "The time the pull request was updated at."
+        }
+      ]
+    },
+    "StringArray": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "LoginArray": {
+      "$id": "#/LoginArray",
+      "default": [
+        ""
+      ],
+      "anyOf": [
+        {
+          "$ref": "#/definitions/StringArray"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "login": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Template": {
+      "$id": "#/Template",
+      "default": "",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Duration": {
+      "$id": "#/Duration",
+      "type": "string",
+      "default": ""
+    },
+    "ConditionString": {
+      "$id": "#/ConditionString",
+      "type": "string",
+      "default": ""
+    },
+    "TemplateArray": {
+      "$id": "#/TemplateArray",
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/definitions/Template"
+      }
+    },
+    "LabelArray": {
+      "$id": "#/LabelArray",
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/definitions/Template"
+      }
+    },
+    "UserArray": {
+      "$id": "#/UserArray",
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/definitions/Template"
+      }
+    },
+    "BranchArray": {
+      "$id": "#/BranchArray",
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    },
+    "PriorityRule": {
+      "$id": "#/PriorityRule",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConditionString"
+          }
+        },
+        "priority": {
+          "$ref": "#/definitions/Priority"
+        }
+      }
+    },
+    "Priority": {
+      "$id": "#/Priority",
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      ]
+    },
+    "MergeMethod": {
+      "$id": "#/MergeMethod",
+      "enum": [
+        "merge",
+        "squash",
+        "rebase",
+        "fast-forward"
+      ]
+    },
+    "PullRequestRule": {
+      "$id": "#/PullRequestRule",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/RuleCondition"
+              },
+              {
+                "$ref": "#/definitions/ConditionString"
+              }
+            ]
+          }
+        },
+        "actions": {
+          "$ref": "#/definitions/Actions"
+        }
+      },
+      "required": [
+        "conditions",
+        "name",
+        "actions"
+      ],
+      "title": "PullRequestRule"
+    },
+    "QueueRule": {
+      "$id": "#/QueueRule",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "allow_checks_interruption": {
+          "type": "boolean",
+          "default": true
+        },
+        "allow_inplace_checks": {
+          "type": "boolean",
+          "default": true
+        },
+        "allow_queue_branch_edit": {
+          "type": "boolean",
+          "default": false
+        },
+        "batch_max_failure_resolution_attempts": {
+          "type": "number"
+        },
+        "batch_max_wait_time": {
+          "$ref": "#/definitions/Duration",
+          "default": "30 s"
+        },
+        "batch_size": {
+          "type": "number",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 20
+        },
+        "checks_timeout": {
+          "$ref": "#/definitions/Duration"
+        },
+        "commit_message_template": {
+          "$ref": "#/definitions/Template"
+        },
+        "disallow_checks_interruption_from_queues": {
+          "$ref": "#/definitions/StringArray"
+        },
+        "draft_bot_account": {
+          "type": "string"
+        },
+        "merge_bot_account": {
+          "$ref": "#/definitions/Template"
+        },
+        "update_bot_account": {
+          "$ref": "#/definitions/Template"
+        },
+        "merge_conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RuleCondition"
+          }
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RuleCondition"
+          }
+        },
+        "merge_method": {
+          "$ref": "#/definitions/MergeMethod"
+        },
+        "priority_rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriorityRule"
+          }
+        },
+        "queue_branch_merge_method": {
+          "type": "string",
+          "default": "none"
+        },
+        "queue_branch_prefix": {
+          "type": "string",
+          "default": "mergify/merge-queue/"
+        },
+        "speculative_checks": {
+          "type": "number",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 20
+        },
+        "update_method": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "rebase"
+          ]
+        }
+      }
+    },
+    "RuleCondition": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/RuleCondition"
+              },
+              {
+                "$ref": "#/definitions/ConditionString"
+              }
+            ]
+          }
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "or",
+              "and",
+              "not"
+            ]
+          },
+          "patternProperties": {
+            "": {
+              "$ref": "#/definitions/RuleCondition"
+            }
+          }
+        }
+      ],
+      "title": "RuleCondition"
+    },
+    "Actions": {
+      "type": "object",
+      "properties": {
+        "assign": {
+          "type": "object",
+          "properties": {
+            "add_users": {
+              "$ref": "#/definitions/UserArray"
+            },
+            "remove_users": {
+              "$ref": "#/definitions/UserArray"
+            }
+          }
+        },
+        "backport": {
+          "type": "object",
+          "properties": {
+            "assignees": {
+              "$ref": "#/definitions/TemplateArray"
+            },
+            "body": {
+              "$ref": "#/definitions/Template"
+            },
+            "bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "branches": {
+              "$ref": "#/definitions/BranchArray"
+            },
+            "ignore_conflicts": {
+              "type": "boolean",
+              "default": true
+            },
+            "labels": {
+              "$ref": "#/definitions/StringArray"
+            },
+            "label_conflicts": {
+              "type": "string"
+            },
+            "regexes": {
+              "$ref": "#/definitions/StringArray"
+            },
+            "title": {
+              "$ref": "#/definitions/Template"
+            }
+          }
+        },
+        "close": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "$ref": "#/definitions/Template"
+            }
+          }
+        },
+        "copy": {
+          "type": "object",
+          "properties": {
+            "assignees": {
+              "$ref": "#/definitions/TemplateArray"
+            },
+            "body": {
+              "$ref": "#/definitions/Template"
+            },
+            "bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "branches": {
+              "$ref": "#/definitions/BranchArray"
+            },
+            "ignore_conflicts": {
+              "type": "boolean"
+            },
+            "labels": {
+              "$ref": "#/definitions/StringArray"
+            },
+            "regexes": {
+              "$ref": "#/definitions/StringArray"
+            },
+            "title": {
+              "$ref": "#/definitions/Template"
+            }
+          }
+        },
+        "comment": {
+          "type": "object",
+          "properties": {
+            "bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "message": {
+              "$ref": "#/definitions/Template"
+            }
+          }
+        },
+        "delete_head_branch": {
+          "type": "object",
+          "properties": {
+            "force": {
+              "type": "boolean"
+            }
+          }
+        },
+        "dismiss_reviews": {
+          "type": "object",
+          "properties": {
+            "approved": {
+              "default": true,
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "changes_requested": {
+              "default": true,
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "message": {
+              "default": "Pull request has been modified.",
+              "$ref": "#/definitions/Template"
+            },
+            "when": {
+              "default": "synchronize",
+              "enum": [
+                "synchronize",
+                "always"
+              ]
+            }
+          }
+        },
+        "edit": {
+          "type": "object",
+          "properties": {
+            "draft": {
+              "type": "boolean"
+            }
+          }
+        },
+        "label": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/LabelArray"
+            },
+            "remove": {
+              "$ref": "#/definitions/LabelArray"
+            },
+            "toggle": {
+              "$ref": "#/definitions/LabelArray"
+            },
+            "remove_all": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "merge": {
+          "type": "object",
+          "properties": {
+            "commit_message_template": {
+              "$ref": "#/definitions/Template"
+            },
+            "merge_bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "method": {
+              "$ref": "#/definitions/MergeMethod",
+              "default": "merge"
+            },
+            "rebase_fallback": {
+              "enum": [
+                "merge",
+                "squash",
+                "none"
+              ],
+              "default": "none"
+            }
+          }
+        },
+        "post_check": {
+          "type": "object",
+          "properties": {
+            "success_conditions": {
+              "type": "array",
+              "default": [
+                ""
+              ],
+              "items": {
+                "$ref": "#/definitions/ConditionString"
+              }
+            },
+            "summary": {
+              "$ref": "#/definitions/Template"
+            },
+            "title": {
+              "$ref": "#/definitions/Template"
+            }
+          }
+        },
+        "queue": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "commit_message_template": {
+              "$ref": "#/definitions/Template"
+            },
+            "merge_bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "method": {
+              "enum": [
+                "merge",
+                "squash",
+                "rebase",
+                "fast-forward"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "default": "default",
+              "description": "The name of the queue in which the pull request should be added."
+            },
+            "priority": {
+              "$ref": "#/definitions/Priority",
+              "default": "medium"
+            },
+            "rebase_fallback": {
+              "enum": [
+                "merge",
+                "squash",
+                "none"
+              ],
+              "default": "none",
+              "description": "Deprecated 😵\n If method is set to rebase, but the pull request cannot be rebased, the method defined in rebase_fallback will be used instead. Possible values are merge, squash, none. none will report an error if rebase is not possible. This option is deprecated and will be removed on March 13th, 2023."
+            },
+            "require_branch_protection": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether branch protections are required for queueing pull requests."
+            },
+            "update_bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "update_method": {
+              "enum": [
+                "merge",
+                "rebase"
+              ]
+            }
+          }
+        },
+        "rebase": {
+          "type": "object",
+          "properties": {
+            "autosquash": {
+              "type": "boolean",
+              "default": true,
+              "description": "When set to True, commits starting with fixup!, squash! and amend! are squashed during the rebase."
+            },
+            "bot_account": {
+              "$ref": "#/definitions/Template",
+              "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. If no bot_account is set, Mergify picks randomly one of the organization users instead. The user account must have already been logged in Mergify dashboard once."
+            }
+          }
+        },
+        "request_reviews": {
+          "type": "object",
+          "properties": {
+            "users": {
+              "$ref": "#/definitions/LoginArray"
+            },
+            "users_from_teams": {
+              "$ref": "#/definitions/LoginArray"
+            },
+            "teams": {
+              "$ref": "#/definitions/LoginArray"
+            },
+            "bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "random_count": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 15
+            }
+          }
+        },
+        "review": {
+          "type": "object",
+          "properties": {
+            "bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "message": {
+              "$ref": "#/definitions/Template"
+            },
+            "type": {
+              "default": "APPROVE",
+              "enum": [
+                "APPROVE",
+                "REQUEST_CHANGES",
+                "COMMENT"
+              ]
+            }
+          }
+        },
+        "update": {
+          "type": "object",
+          "properties": {
+            "bot_account": {
+              "$ref": "#/definitions/Template"
+            }
+          }
+        },
+        "squash": {
+          "type": "object",
+          "properties": {
+            "bot_account": {
+              "$ref": "#/definitions/Template"
+            },
+            "commit_message": {
+              "enum": [
+                "all-commits",
+                "first-commit",
+                "title+body"
+              ],
+              "default": "all-commits"
+            }
+          }
+        }
+      },
+      "title": "Actions"
+    }
+  }
+}
