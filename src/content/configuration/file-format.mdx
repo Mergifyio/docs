@@ -1,0 +1,46 @@
+---
+title: Mergify Configuration File
+description: Everything you need to know about Mergify configuration file
+---
+
+The Mergify configuration file is an essential component of using our platform
+effectively. This document will provide a comprehensive overview of the file,
+including its name, format, and the data structure schema.
+
+## Configuration File Name
+
+Mergify applies the following rule to find and use its configuration:
+
+- It reads the file named `.mergify.yml`, or, as a fallback,
+  `.mergify/config.yml` or `.github/mergify.yml` from the repository root
+  directory.
+
+- It reads the file from the default repository branch configured on GitHub —
+  usually `main`.
+
+{/* FIXME: add link ot extending the configuration file */}
+
+- It can extends the configuration by another configuration using the keyword
+  `extends` — see "extending the configuration file".
+
+
+## File Format
+
+The configuration file uses the [YAML](https://yaml.org/) format, which is both
+human-readable and machine-parsable. YAML is easy to read and edit, making it a
+popular choice for configuration files.
+
+The file main type is a dictionary and each key of the dictionary configures a
+different aspect of Mergify:
+
+{/* FIXME: add link to sections */}
+
+- `pull_request_rules` configures Automation Workflow;
+- `queue_rules` configures the Merge Queue;
+- `partition_rules` configures monorepository support in the merge queue;
+- `commands_restrictions` configures whos is able to run commands;
+- `defaults` allows to configure default options for various actions;
+- `shared` allows to define any YAML payload that can be used using YAML
+  anchors;
+- `extends` allows to extend the configuration file by importing another
+  configuration file.
