@@ -1,0 +1,85 @@
+---
+title: Security
+description: Learn more about Mergify security obsession.
+---
+
+import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+
+At Mergify, security is of utmost importance to us. We understand the crucial
+role we play in the software development process and are fully committed to
+earning and maintaining the trust of our users. Our Security page is dedicated
+to providing transparency regarding our security measures and practices. We
+continually strive to improve the safety and reliability of our platform,
+ensuring that your repositories and code are well-protected.
+
+## Required Permissions
+
+Below is the list of the required Mergify permission on GitHub to
+function.
+
+<Table>
+  <Thead>
+    <Tr>
+      <Th>Permission</Th>
+      <Th>Access</Th>
+      <Th>Usage</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+    <Tr>
+      <Td>Repository: Administration</Td>
+      <Td>Read-only</Td>
+      <Td>Used to access team details.</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Checks</Td>
+      <Td>Read and write</Td>
+      <Td>Used to read and post checks.</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Commit statuses</Td>
+      <Td>Read-only</Td>
+      <Td>Used to read checks status.</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Contents</Td>
+      <Td>Read and write</Td>
+      <Td>Used to read repository content and write (merge).</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Issues</Td>
+      <Td>Read and write</Td>
+      <Td>Used to close issues on merge.</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Metadata</Td>
+      <Td>Read-only</Td>
+      <Td>Access repository metadata.</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Pages</Td>
+      <Td>Read and write</Td>
+      <Td>Write required to trigger page workflow on merge.</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Pull requests</Td>
+      <Td>Read and write</Td>
+      <Td>Used to read and edit pull requests.</Td>
+    </Tr>
+    <Tr>
+      <Td>Repository: Workflows</Td>
+      <Td>Read and write</Td>
+      <Td>Used to read workflows and merge pull requests modifying workflows.</Td>
+    </Tr>
+    <Tr>
+      <Td>Organization: Members</Td>
+      <Td>Read-only</Td>
+      <Td>Used to list organization members.</Td>
+    </Tr>
+    <Tr>
+      <Td>Account: Email addresses</Td>
+      <Td>Read-only</Td>
+      <Td>Used to read user email addresses.</Td>
+    </Tr>
+  </Tbody>
+</Table>
