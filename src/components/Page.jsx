@@ -49,23 +49,11 @@ import {rehype} from 'rehype';
 
 // these must be imported after MarkdownCodeBlock
 import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-graphql';
-import 'prismjs/components/prism-groovy';
-import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-markup-templating'; // needed by django
+import 'prismjs/components/prism-django'; // alias to jinja2
 import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-js-templates';
 import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-kotlin';
-import 'prismjs/components/prism-ruby';
-import 'prismjs/components/prism-rust';
-import 'prismjs/components/prism-swift';
-import 'prismjs/components/prism-tsx';
-import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-yaml';
-
-// use JS syntax highlighting for rhai codeblocks
-Prism.languages.rhai = Prism.languages.javascript;
 
 const LIST_SPACING = 4;
 const HEADINGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
