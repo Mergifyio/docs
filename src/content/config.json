@@ -11,7 +11,8 @@
     },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
-      "Conditions": "/configuration/conditions"
+      "Conditions": "/configuration/conditions",
+      "Data Types": "/configuration/data-types"
     },
     "Security": "/security"
   }

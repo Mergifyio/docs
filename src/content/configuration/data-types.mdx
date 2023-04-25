@@ -1,0 +1,270 @@
+---
+title: Configuration Data Types
+description: The different data types you can find in Mergify configuration file
+---
+
+import { Alert } from '../../components/Alert';
+import { Link } from "gatsby";
+
+When using templates or conditions, data are made of different types. You will
+find below the different data types that are available and exposed in Mergify
+configuration file.
+
+
+## Commit
+
+A commit is an object that embeds several information about a [Git
+commit](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/about-commits)
+
+Example structure of a commit object:
+
+```json
+{
+    "sha": "foo-sha",
+    "parents": ["parent-foo-sha", "another-parent-foo-sha"],
+    "commit_message": "a commit message",
+    "commit_verification_verified": true,
+    "author": "commit-author",
+    "date_author": "2012-04-14T16:00:49Z",
+    "email_author": "user@example.com",
+    "committer": "commit-committer",
+    "date_committer": "2012-04-15T16:00:49Z",
+    "email_committer": "user@example.com"
+}
+```
+
+You can use a commit object in templates:
+
+
+```jinja2
+{% for commit in commits %}
+Co-Authored-By: {{ commit.author }} <{{ commit.email_author }}>
+{% endfor %}
+```
+
+You can also use those objects in conditions:
+
+```yaml
+
+pull_request_rules:
+  - name: check that commits are not too old
+    conditions:
+       - commits[*].date_committer < 365 days ago
+    actions:
+      comment:
+        message: One of the commit is too old!
+```
+
+## Regular Expressions
+
+{/* fix links to "Operators" */}
+
+You can use regular expression with matching operators in your <Link
+to="../conditions">conditions</Link>.
+
+Mergify leverages [Python regular expressions](https://docs.python.org/3/library/re.html) to match rules.
+
+<Alert>
+   You can use [regex101](https://regex101.com),
+   [PyRegex](http://www.pyregex.com) [Pythex](https://pythex.org) to test your
+   regular expressions.
+</Alert>
+
+```yaml
+pull_request_rules:
+  - name: add python label if a Python file is modified
+    conditions:
+      - files~=\.py$
+    actions:
+      label:
+        add:
+          - python
+
+  - name: automatic merge for main when the title does not contain “WIP” (ignoring case)
+    conditions:
+      - base=main
+      - -title~=(?i)wip
+    actions:
+      merge:
+        method: merge
+```
+
+## Schedule
+
+This format represents a schedule. It can contains only days, only times or
+both and can have a timezone specified with the times (for the list of
+available time zones, see [IANA format](https://www.iana.org/time-zones). If no
+timezone is specified, it will default to UTC.
+
+It can be used with the equality operators `=` and `!=`.
+
+```yaml
+  schedule=Mon-Fri
+  schedule=09:00-19:00
+  schedule=09:00-19:00[America/Vancouver]
+  schedule!=Mon-Fri 09:00-19:00[America/Vancouver]
+  schedule!=SAT-SUN
+```
+
+```yaml
+- name: merge on working hour
+  conditions:
+    - schedule=Mon-Fri 09:00-19:00[America/Vancouver]
+  actions:
+    merge:
+```
+
+
+## Timestamp
+
+The timestamp format must follow the [ISO 8601
+standard](https://en.wikipedia.org/wiki/ISO_8601). If the timezone is missing,
+the timestamp is assumed to be in UTC.
+
+```
+2021-04-05
+2012-09-17T22:02:51
+2008-09-22T14:01:54Z
+2013-12-05T07:19:04-08:00
+2013-12-05T07:19:04[Europe/Paris]
+```
+
+```yaml
+- name: end of life version 10.0
+  conditions:
+    - base=stable/10.0
+    - updated-at<=2021-04-05
+  actions:
+    comment:
+      message: |
+        The pull request needs to be rebased after end of life of version 10.0
+```
+
+## Relative Timestamp
+
+Timestamps can be expressed relative to the current date and time. The format
+is `[DD days] [HH:MM] :
+
+* `DD`, the number of days
+* `HH`, the number of hours
+* `MM`, the number of minutes
+
+If the current date is 18th June 2020, `updated-at>=14 days ago` will be
+translated `updated-at>=2020-06-04T00:00:00`.
+
+```yaml
+- name: close stale pull request
+  conditions:
+    - base=main
+    - -closed
+    - updated-at<14 days ago
+  actions:
+    close:
+      message: |
+        This pull request looks stale. Feel free to reopen it if you think it's a mistake.
+```
+
+## Duration
+
+Duration can be expressed as `quantity unit [quantity unit...]` where quantity
+is a number (possibly signed); unit is second, minute, hour, day, week, or
+abbreviations or plurals of these units;
+
+.. code-block::
+
+   1 day 15 hours 6 minutes 42 seconds
+   1 d 15 h 6 m 42 s
+
+## Priority
+
+Priority values can be expressed by using an integer between 1 and 10000.
+You can also use those aliases:
+* `low` (1000)
+* `medium` (2000)
+* `high` (3000)
+
+```yaml
+priority_rules:
+  - name: my hotfix priority rule
+    conditions:
+      - base=main
+      - label=hotfix
+      - check-success=linters
+    priority: high
+
+  - name: my low priority rule
+    conditions:
+      - base=main
+      - label=low
+      - check-success=linters
+    priority: 550
+```
+
+## Template
+
+The template data type is a regular string that is rendered using the [Jinja2
+template language](https://jinja.palletsprojects.com/templates/).
+
+If you don't need any of the power coming with this templating language, you
+can just use this as a regular string.
+
+However, those templates allow to use any of the <Link
+to="../conditions/#attributes-11">pull request attribute</Link> in the final
+string.
+
+For example the template string:
+
+```jinja2
+Thank you @{{author}} for your contribution!
+```
+
+will render to:
+
+```
+Thank you @jd for your contribution!
+```
+
+when used in your configuration file — considering the pull request author
+login is ``jd``.
+
+[Jinja2
+filters](https://jinja.palletsprojects.com/en/3.0.x/templates/#builtin-filters)
+are supported, you can build string from list for example with:
+
+```jinja2
+Approved by: @{{ approved_reviews_by | join(', @') }}
+```
+
+[Jinja2 string
+manipulation](https://jinja.palletsprojects.com/en/3.0.x/templates/#python-methods>)
+are also supported, you can split string for example with:
+
+```jinja2
+{{ body.split('----------')[0] | trim }}
+```
+
+Mergify also provides custom Jinja2 filters:
+
+* `markdownify`: to convert HTML to Markdown:
+
+```jinja2
+{{ body | markdownify }}
+```
+
+* `get_section(<section>, <default>)`: to extract one Markdown section
+
+```jinja2
+{{ body | get_section("## Description") }}
+```
+
+<Alert>
+   You need to replace the `-` character by `_` from the <Link
+   to="../conditions#attributes-1">pull request attribute </Link> names when
+   using templates. The `-` is not a valid character for variable names in
+   Jinja2 template.
+</Alert>
+
+<Alert>
+   By default, the HTML comments are stripped from `body`. To get the full
+   body, you can use the `body_raw` attribute.
+</Alert>
