@@ -4,7 +4,6 @@ description: The different data types you can find in Mergify configuration file
 ---
 
 import { Alert } from '../../components/Alert';
-import { Link } from "gatsby";
 
 When using templates or conditions, data are made of different types. You will
 find below the different data types that are available and exposed in Mergify
@@ -59,8 +58,7 @@ pull_request_rules:
 
 {/* fix links to "Operators" */}
 
-You can use regular expression with matching operators in your <Link
-to="../conditions">conditions</Link>.
+You can use regular expression with matching operators in your [conditions](conditions).
 
 Mergify leverages [Python regular expressions](https://docs.python.org/3/library/re.html) to match rules.
 
@@ -208,8 +206,7 @@ template language](https://jinja.palletsprojects.com/templates/).
 If you don't need any of the power coming with this templating language, you
 can just use this as a regular string.
 
-However, those templates allow to use any of the <Link
-to="../conditions/#attributes-11">pull request attribute</Link> in the final
+However, those templates allow to use any of the [pull request attribute](conditions/#attributes-11) in the final
 string.
 
 For example the template string:
@@ -258,8 +255,7 @@ Mergify also provides custom Jinja2 filters:
 ```
 
 <Alert>
-   You need to replace the `-` character by `_` from the <Link
-   to="../conditions#attributes-1">pull request attribute </Link> names when
+   You need to replace the `-` character by `_` from the [pull request attribute](conditions#attributes-1) names when
    using templates. The `-` is not a valid character for variable names in
    Jinja2 template.
 </Alert>
