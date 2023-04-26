@@ -19,6 +19,9 @@ const gatsbyRemarkPlugins = [
     }
   },
   {
+    resolve: 'gatsby-remark-check-links'
+  },
+  {
     resolve: `gatsby-remark-images`,
     options: {
       maxWidth: 1200,
