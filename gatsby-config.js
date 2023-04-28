@@ -9,7 +9,7 @@ const gatsbyRemarkPlugins = [
   {
     resolve: 'gatsby-remark-copy-linked-files',
     options: {
-      ignoreFileExtensions: []
+      destinationDir: f => `${f.name}`
     }
   },
   {

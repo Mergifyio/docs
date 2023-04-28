@@ -1,6 +1,6 @@
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import React from 'react'
-import configSchema from '../assets/mergify-schema.json';
+import configSchema from '../content/mergify-configuration-openapi.json';
 import ReactMarkdown from 'react-markdown';
 import InlineCode from './InlineCode';
 
