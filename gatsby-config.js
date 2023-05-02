@@ -90,6 +90,7 @@ plugins.push(
 
 module.exports = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
+  trailingSlash: 'ignore',
   siteMetadata: {
     siteUrl: 'https://docs.mergify.com'
   },

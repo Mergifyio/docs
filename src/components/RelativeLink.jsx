@@ -17,7 +17,7 @@ export const PrimaryLink = props => (
   />
 );
 
-function useLinkProps(href) {
+export function useLinkProps(href) {
   const {path} = useContext(PathContext);
   const {site} = useStaticQuery(
     graphql`
