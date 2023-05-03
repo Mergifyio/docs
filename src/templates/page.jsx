@@ -22,10 +22,6 @@ export const pageQuery = graphql`
       name
       basePath: sourceInstanceName
       relativePath
-      gitRemote {
-        href
-        ref
-      }
       childMdx {
         body
         headings {
