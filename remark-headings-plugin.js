@@ -1,9 +1,10 @@
-const visit = require(`unist-util-visit`)
 const toString = require(`mdast-util-to-string`)
 
 exports.remarkHeadingsPlugin = function remarkHeadingsPlugin() {
   return async function transformer(tree, file) {
     let headings = []
+
+    const { default: visit } = await import('unist-util-visit');
 
     visit(tree, `heading`, heading => {
       headings.push({

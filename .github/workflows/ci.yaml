@@ -60,7 +60,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           npm ci
-          npm run build -- --prefix-paths
+          npm run build -- --prefix-paths --verbose
 
       # NOTE(sileht): workflow run on/pull_request doesn't have access to
       # secrets
