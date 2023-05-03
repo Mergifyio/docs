@@ -3,6 +3,9 @@ title: Mergify Configuration File
 description: Everything you need to know about Mergify configuration file
 ---
 
+import { Alert } from '../../components/Alert';
+import DownloadLink from '../../components/DownloadLink';
+
 The Mergify configuration file is an essential component of using our platform
 effectively. This document will provide a comprehensive overview of the file,
 including its name, format, and the data structure schema.
@@ -42,5 +45,63 @@ different aspect of Mergify:
 - `defaults` allows to configure default options for various actions;
 - `shared` allows to define any YAML payload that can be used using YAML
   anchors;
-- `extends` allows to extend the configuration file by importing another
+- `extends` allows to [extend the
+  configuration](.#extending-configuration-files) file by importing another
   configuration file.
+
+
+## Extending Configuration Files
+
+Mergify allows you to extend your configuration file by including the
+configuration from another repository. This feature is particularly useful when
+you want to share and reuse configuration rules across multiple repositories,
+making it easier to maintain consistency and reduce duplication.
+
+To extend a configuration file, use the `extends` keyword at the top level of your
+`.mergify.yml` file. Specify the repository name from which you want to include the
+configuration. The configuration from the specified repository will be loaded and
+applied before the one in the current repository.
+
+<Alert>
+  The Mergify application must also be installed on the source repository
+  that you want to import the configuration from.
+</Alert>
+
+Here's an example of how to use the `extends` keyword:
+
+```yaml
+extends: organization/shared-config
+
+pull_request_rules:
+  - name: additional rule specific to this repository
+    conditions:
+      - base=main
+    actions:
+      label:
+        add: ["repository-specific"]
+```
+
+
+In this example, the configuration from the organization/shared-config
+repository is imported and applied first, followed by the rules defined in the
+current repository's `.mergify.yml` file.
+
+
+
+<Alert>
+   - Values in the ``shared`` key will not be merged and shared between local and
+   remote configurations.
+   - Values in the ``default`` key will be merged and remote default values will
+   apply to local configuration.
+</Alert>
+
+
+## OpenAPI Specification
+
+For those interested in a more detailed and machine-readable description of the
+Mergify configuration file format, an [OpenAPI](https://www.openapis.org/)
+specification is available. This specification can help you understand the
+structure of the configuration file and can be used to generate client
+libraries, server stubs, or API documentation.
+
+You can find <DownloadLink path='/mergify-configuration-openapi.json'>the OpenAPI specification for the Mergify configuration here</DownloadLink>.
