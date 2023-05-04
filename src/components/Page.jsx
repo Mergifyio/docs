@@ -13,7 +13,6 @@ import React, {Fragment, createElement, useMemo} from 'react';
 import RelativeLink, {ButtonLink} from './RelativeLink';
 import TableOfContents from './TableOfContents';
 import TypeScriptApiBox from './TypeScriptApiBox';
-import VersionBanner from './VersionBanner';
 import autolinkHeadings from 'rehype-autolink-headings';
 import rehypeReact from 'rehype-react';
 import useLocalStorage from 'react-use/lib/useLocalStorage';
@@ -165,13 +164,12 @@ export default function Page({file, pageContext, uri, children}) {
     childMdx,
     childMarkdownRemark,
     basePath,
-    gitRemote,
     relativePath
   } = file;
 
   const {frontmatter, headings} = childMdx || childMarkdownRemark;
   const {title, description, toc} = frontmatter;
-  const {versions, currentVersion, navItems} = pageContext;
+  const {navItems} = pageContext;
 
   const pageProps = usePageLayoutProps({
     pageContext,
@@ -184,21 +182,10 @@ export default function Page({file, pageContext, uri, children}) {
     [pageProps.paddingTop]
   );
 
-  const defaultVersion = useMemo(
-    () => versions.find(version => !version.slug.includes('/')),
-    [versions]
-  );
-
   const editOnGitHub = useMemo(() => {
-    const repo = gitRemote?.href || 'https://github.com/mergifyio/docs';
+    const repo = 'https://github.com/mergifyio/docs';
 
-    const repoPath = ['tree', gitRemote?.ref || 'main'];
-
-    if (gitRemote) {
-      repoPath.push('docs', 'source');
-    } else {
-      repoPath.push('src', 'content', basePath === '/' ? 'basics' : basePath);
-    }
+    const repoPath = ['tree', 'main', 'src', 'content'];
 
     repoPath.push(relativePath);
 
@@ -213,7 +200,7 @@ export default function Page({file, pageContext, uri, children}) {
         Edit on GitHub
       </Button>
     );
-  }, [gitRemote, basePath, relativePath]);
+  }, [relativePath]);
 
   return (
     <>
@@ -226,14 +213,6 @@ export default function Page({file, pageContext, uri, children}) {
       >
         <PageLayout
           {...pageProps}
-          banner={
-            defaultVersion && defaultVersion.slug !== basePath ? (
-              <VersionBanner
-                versionLabels={[defaultVersion.label, currentVersion]}
-                to={'/' + defaultVersion.slug}
-              />
-            ) : null
-          }
           subtitle={
             <>
               {description && (

@@ -96,9 +96,6 @@ exports.createPages = async ({actions, graphql}) => {
         nodes {
           id
           absolutePath
-          gitRemote {
-            full_name
-          }
           sourceInstanceName
           children {
             ... on Mdx {
@@ -113,9 +110,6 @@ exports.createPages = async ({actions, graphql}) => {
         nodes {
           fields {
             content
-          }
-          gitRemote {
-            full_name
           }
           sourceInstanceName
         }
@@ -147,25 +141,12 @@ exports.createPages = async ({actions, graphql}) => {
 
   data.pages.nodes.forEach(({id, gitRemote, sourceInstanceName, children, absolutePath}) => {
     const [{fields}] = children;
-    const versions = data.configs.nodes
-      .filter(
-        node => gitRemote && node.gitRemote?.full_name === gitRemote.full_name
-      )
-      .map(node => {
-        const {version} = JSON.parse(node.fields.content);
-        return {
-          label: version,
-          slug: node.sourceInstanceName
-        };
-      })
-      .sort((a, b) => b.label.localeCompare(a.label));
 
     actions.createPage({
       path: fields.slug,
       component: `${pageTemplate}?__contentFilePath=${absolutePath}`,
       context: {
         id,
-        versions,
         ...configs[sourceInstanceName]
       }
     });
