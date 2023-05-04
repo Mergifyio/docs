@@ -23,8 +23,8 @@ export default function PullRequestAttributesTable() {
       <Tbody>
         {attributes.map(attr => (
           <Tr>
-            <Td fontFamily="mono" fontSize='md' sx={{whiteSpace: 'nowrap', color: "#d63384"}}>
-              {attr.key}
+            <Td sx={{whiteSpace: 'nowrap'}}>
+              <code>{attr.key}</code>
             </Td>
             <Td>{attr.dataType}</Td>
             <Td>
