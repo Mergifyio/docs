@@ -5,6 +5,8 @@ description: Everything you need to know about Mergify configuration file
 
 import { Alert } from '../../components/Alert';
 import DownloadLink from '../../components/DownloadLink';
+import { Screenshot } from "../../components/Images"
+import configCheckScreenshot from "../images/configuration/config-check.png"
 
 The Mergify configuration file is an essential component of using our platform
 effectively. This document will provide a comprehensive overview of the file,
@@ -103,4 +105,55 @@ specification is available. This specification can help you understand the
 structure of the configuration file and can be used to generate client
 libraries, server stubs, or API documentation.
 
-You can find <DownloadLink path='/mergify-configuration-openapi.json'>the OpenAPI specification for the Mergify configuration here</DownloadLink>.
+You can find <DownloadLink path='/mergify-configuration-openapi.json'>the
+OpenAPI specification for the Mergify configuration here</DownloadLink>.
+
+## Validation and Troubleshooting
+
+When working with Mergify's configuration file, it's essential to validate and
+troubleshoot any issues that may arise. Ensuring that your configuration file
+is error-free and well-structured can help prevent unexpected behavior and
+maintain a smooth workflow.
+
+### Validation
+
+To validate your Mergify configuration file, you can use Mergify's built-in
+validation tool. Whenever you push a change to the configuration file, Mergify
+will automatically validate the configuration and report any errors or warnings
+in the "Checks" tab of your pull request.
+
+<Screenshot src={configCheckScreenshot} alt="Mergify configuration check" />
+
+If there are any issues with your configuration file, you will receive a
+detailed description of the problem and guidance on how to fix it. Be sure to
+address any errors or warnings to ensure optimal performance and avoid
+potential issues.
+
+### Troubleshooting
+
+If you encounter issues or unexpected behavior with your Mergify configuration
+file, consider the following troubleshooting steps:
+
+1. Double-check the file name and location: ensure that your configuration file
+is correctly named (e.g., `.mergify.yml`) and is located in the right place.
+See [Configuration File Name](.#configuration-file-name) for details.
+
+2. Verify the YAML syntax: confirm that your configuration file follows the
+proper YAML syntax, including correct indentation, spacing, and structure.
+
+3. Review your rules and conditions: Make sure that your rules and conditions
+are correctly defined and accurately reflect your intended workflow.
+
+4. Check for conflicting rules: examine your rules for any conflicts or
+overlapping conditions that could cause unintended behavior.
+
+5. Consult Mergify's documentation: refer to Mergify's documentation for
+guidance on creating and managing your configuration file, as well as
+understanding the various features and options available to you.
+
+6. In the case you'd still be having issues, reach out to [support
+team](mailto:support@mergify.com) for further help.
+
+By following these troubleshooting steps, you can effectively identify and
+resolve any issues with your Mergify configuration file, ensuring a smooth and
+efficient automation process for your repository.
