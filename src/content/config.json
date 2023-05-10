@@ -12,7 +12,12 @@
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
       "Conditions": "/configuration/conditions",
-      "Data Types": "/configuration/data-types"
+      "Data Types": "/configuration/data-types",
+      "Actions": {
+        "Assign": "/actions/assign",
+        "Backport": "/actions/backport",
+        "Close": "/actions/close"
+      }
     },
     "Integration": {
       "GitHub Actions": "/integration/gha",

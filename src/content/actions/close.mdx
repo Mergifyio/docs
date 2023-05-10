@@ -1,0 +1,31 @@
+---
+title: Close
+description: Close a pull request.
+---
+
+import { Alert } from '../../components/Alert';
+
+The `close` action allows Mergify to automatically close pull requests when 
+the specified conditions are met. This can be particularly useful when you 
+want to ensure that certain types of pull requests are not merged.
+
+## Parameters
+
+{/* FIXME: auto generate https://linear.app/mergify/issue/MRGFY-2196/automatically-generate-actions-configuration-parameters-from-schema */}
+
+## Examples
+
+### Automatically close pull request touching a file
+
+If you wanted to automatically close pull request that touches a certain file,
+let's say `do_not_touch.txt`, you could write a rule such as:
+
+```yaml
+pull_request_rules:
+  - name: disallow changing a file
+    conditions:
+      - files=do_not_touch.txt
+    actions:
+      close:
+        message: No PR can touch this file.
+```

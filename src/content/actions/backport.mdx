@@ -1,0 +1,98 @@
+---
+title: Backport
+description: Copy a pull request to another branch once it is merged.
+---
+
+import { Alert } from '../../components/Alert';
+
+The `backport` action enables you to automatically create a backport of a
+merged pull request. When the conditions you specify are met, Mergify will
+create a new pull request to merge the changes into the specified base branch.
+
+The `backport` action is extremely useful for maintaining older versions of 
+your project. It helps automate the process of applying bug fixes or other 
+changes from the main branch to other branches.
+
+Note that in case of a conflict during the backport, Mergify will create a pull
+request with the conflict; you will have to resolve it manually. You can change
+this behaviour using the `ignore_conflicts` option.
+
+{/* FIXME: maybe lower than "alert" */}
+
+<Alert>
+  Please make sure the branches specified in the backport action exist and
+  you have the necessary access permissions. If the branch does not exist or
+  you don't have the required permissions, the action will fail.
+</Alert>
+
+## Parameters
+
+The `backport` action takes a list of branches to which the changes from the
+merged pull request will be backported. The branch names should be specified as
+strings.
+
+{/* FIXME: auto generate https://linear.app/mergify/issue/MRGFY-2196/automatically-generate-actions-configuration-parameters-from-schema */}
+
+As the title and body are templates, you can leverage any pull request
+attributes to use as content, e.g., `{{author}}`. You can also use this
+additional variable:
+
+- `{{ destination_branch }}`: the name of destination branch.
+
+- `{{ cherry_pick_error }}`: the cherry pick error message if any (only available in body).
+
+
+## Examples
+
+### Using Labels to Backport
+
+Below is an example of how to use the `backport` action:
+
+```yaml
+pull_request_rules:
+  - name: backport patches to the release branch and assign to original author
+    conditions:
+      - label=backport
+    actions:
+      backport:
+        branches:
+          - "release-1.0"
+          - "release-1.1"
+        assignees:
+          - "{{ author }}"
+```
+
+
+### Combining Automatic Merge
+
+You can also combine the `backport` action with other actions like `merge`.
+This can be useful in scenarios where you want to automatically backport and
+merge pull requests that fulfill certain conditions.
+
+Here's an example:
+
+```yaml
+pull_request_rules:
+  - name: backport patches to the release branch
+    conditions:
+      - label=backport
+    actions:
+      backport:
+        branches:
+          - "release-1.0"
+          - "release-1.1"
+
+  - name: automatically merge backport if they pass tests
+    conditions:
+      - author=mergify[bot]
+      - base~=^mergify/bp/
+      - head~=^release-1.
+      - check-success=continuous-integration
+    actions:
+      merge:
+        method: merge
+```
+
+In this configuration, when a pull request has at the label backport it is
+backported. Then, when the backport has been created and passes the check named
+`continuous-integration`, it will be automatically merged.
