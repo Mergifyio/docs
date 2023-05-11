@@ -93,6 +93,5 @@ pull_request_rules:
         method: merge
 ```
 
-In this configuration, when a pull request has at the label backport it is
-backported. Then, when the backport has been created and passes the check named
+In this configuration, a pull request is backported when it has the label `backport`. Then, when the backport is created and passes the check named
 `continuous-integration`, it will be automatically merged.
