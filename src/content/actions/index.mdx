@@ -1,0 +1,38 @@
+---
+title: Actions
+description: A complete list of actions you can use with Mergify.
+---
+
+import {
+  Docset,
+  DocsetGrid,
+} from '../../components/HomePage';
+
+Actions are the engine that powers Mergify. They define what Mergify should do
+when a set of conditions is met. This can range from merging a pull request,
+updating it with the latest changes, commenting on the pull request, assigning
+it to a user, adding labels, and so much more.
+
+In essence, actions are the tasks that Mergify performs on your behalf to
+automate your pull request management workflow. By carefully crafting and
+combining actions, you can create a highly efficient and automated process
+that takes care of most of the routine tasks associated with pull request
+management.
+
+<DocsetGrid>
+  <Docset
+    title="Assign"
+    description="Assign a pull request to a user."
+    path="/actions/assign"
+  />
+  <Docset
+    title="Backport"
+    description="Copy a pull request to another branch once it is merged."
+    path="/actions/backport"
+  />
+  <Docset
+    title="Close"
+    description="Close a pull request."
+    path="/actions/close"
+  />
+</DocsetGrid>
