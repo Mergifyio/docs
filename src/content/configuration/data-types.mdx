@@ -3,7 +3,7 @@ title: Configuration Data Types
 description: The different data types you can find in Mergify configuration file
 ---
 
-import { Alert } from '../../components/Alert';
+import { Warning, Info } from '../../components/Alerts';
 
 When using templates or conditions, data are made of different types. You will
 find below the different data types that are available and exposed in Mergify
@@ -62,11 +62,11 @@ You can use regular expressions with matching operators in your [conditions](con
 
 Mergify leverages [Python regular expressions](https://docs.python.org/3/library/re.html) to match rules.
 
-<Alert>
+<Info>
    You can use [regex101](https://regex101.com),
    [PyRegex](http://www.pyregex.com), or [Pythex](https://pythex.org) to test your
    regular expressions.
-</Alert>
+</Info>
 
 ```yaml
 pull_request_rules:
@@ -254,13 +254,13 @@ Mergify also provides custom Jinja2 filters:
 {{ body | get_section("## Description") }}
 ```
 
-<Alert>
+<Warning>
    You need to replace the `-` character by `_` from the [pull request attribute](conditions#attributes-1) names when
    using templates. The `-` is not a valid character for variable names in
    Jinja2 template.
-</Alert>
+</Warning>
 
-<Alert>
+<Info>
    By default, the HTML comments are stripped from `body`. To get the full
    body, you can use the `body_raw` attribute.
-</Alert>
+</Info>

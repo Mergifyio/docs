@@ -3,7 +3,7 @@ title: Assign
 description: Assign a pull request to a user.
 ---
 
-import { Alert } from '../../components/Alert';
+import { Warning } from '../../components/Alerts/Warning';
 
 The `assign` action allows you to assign one or more users to a pull request
 when the conditions you specify are met. This can help automate the process of
@@ -20,13 +20,11 @@ As the list of users in `add_users` or `remove_users` is based on
 [templates](data-type#template), you can use, e.g., `{{author}}` to assign the
 pull request to its author.
 
-{/* FIXME: maybe lower than "alert" */}
-
-<Alert>
+<Warning>
   Make sure the users you specify in the assign action have the necessary
   access to the repository and the pull request. If the specified user does not
   have the necessary permissions, the action will fail.
-</Alert>
+</Warning>
 
 ## Examples
 
