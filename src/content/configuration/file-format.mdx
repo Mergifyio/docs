@@ -3,7 +3,7 @@ title: Mergify Configuration File
 description: Everything you need to know about Mergify configuration file
 ---
 
-import { Alert } from '../../components/Alert';
+import { Warning } from '../../components/Alerts';
 import DownloadLink from '../../components/DownloadLink';
 import { Screenshot } from "../../components/Images"
 import configCheckScreenshot from "../images/configuration/config-check.png"
@@ -63,10 +63,10 @@ To extend a configuration file, use the `extends` keyword at the top level of yo
 configuration. The configuration from the specified repository will be loaded and
 applied before the one in the current repository.
 
-<Alert>
+<Warning>
   The Mergify application must also be installed on the source repository
   that you want to import the configuration from.
-</Alert>
+</Warning>
 
 Here's an example of how to use the `extends` keyword:
 
@@ -89,12 +89,12 @@ current repository's `.mergify.yml` file.
 
 
 
-<Alert>
+<Warning>
    - Values in the ``shared`` key will not be merged and shared between local and
    remote configurations.
    - Values in the ``default`` key will be merged and remote default values will
    apply to local configuration.
-</Alert>
+</Warning>
 
 
 ## OpenAPI Specification

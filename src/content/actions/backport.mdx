@@ -3,7 +3,7 @@ title: Backport
 description: Copy a pull request to another branch once it is merged.
 ---
 
-import { Alert } from '../../components/Alert';
+import { Warning } from '../../components/Alerts';
 
 The `backport` action enables you to automatically create a backport of a
 merged pull request. When the conditions you specify are met, Mergify will
@@ -17,13 +17,11 @@ Note that in case of a conflict during the backport, Mergify will create a pull
 request with the conflict; you will have to resolve it manually. You can change
 this behaviour using the `ignore_conflicts` option.
 
-{/* FIXME: maybe lower than "alert" */}
-
-<Alert>
+<Warning>
   Please make sure the branches specified in the backport action exist and
   you have the necessary access permissions. If the branch does not exist or
   you don't have the required permissions, the action will fail.
-</Alert>
+</Warning>
 
 ## Parameters
 
