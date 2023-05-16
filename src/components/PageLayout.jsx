@@ -21,6 +21,7 @@ import {
   useToken
 } from '@chakra-ui/react';
 import {FiChevronsRight} from 'react-icons/fi';
+import '../main.css'
 
 export function usePageLayoutProps(props) {
   const paddingTop = useToken('space', 10);
