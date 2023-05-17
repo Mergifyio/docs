@@ -1,11 +1,11 @@
-import visit from 'unist-util-visit'
-import toString from 'mdast-util-to-string'
+import {visit} from 'unist-util-visit'
+import {toString} from 'mdast-util-to-string'
 
 export function remarkHeadingsPlugin() {
   return async function transformer(tree, file) {
     let headings = []
 
-    visit.visit(tree, `heading`, heading => {
+    visit(tree, `heading`, heading => {
       headings.push({
         value: toString(heading),
         depth: heading.depth,

@@ -5,7 +5,6 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "develop": "gatsby develop",
-    "clean": "gatsby clean",
     "eslint": "eslint src",
     "test": "jest"
   },
@@ -21,7 +20,7 @@
     "@react-icons/all-files": "^4.1.0",
     "gatsby": "^5.10.0",
     "gatsby-plugin-manifest": "^5.10.0",
-    "gatsby-plugin-mdx": "^5.9.0",
+    "gatsby-plugin-mdx": "^5.10.0",
     "gatsby-plugin-offline": "^6.10.0",
     "gatsby-plugin-sitemap": "^6.10.0",
     "gatsby-plugin-svgr": "^3.0.0-beta.0",
@@ -36,7 +35,7 @@
     "graphql": "^16.6.0",
     "https-browserify": "^1.0.0",
     "lodash": "^4.17.21",
-    "mdast-util-to-string": "^2.0.0",
+    "mdast-util-to-string": "^3.2.0",
     "path-browserify": "^1.0.1",
     "prismjs": "^1.29.0",
     "prop-types": "^15.8.1",
@@ -49,7 +48,7 @@
     "rehype-react": "^7.2.0",
     "remark-typescript": "^0.6.1",
     "stream-http": "^3.2.0",
-    "unist-util-visit": "^2.0.3",
+    "unist-util-visit": "^4.1.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
