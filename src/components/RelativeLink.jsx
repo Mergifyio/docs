@@ -3,7 +3,7 @@ import React, {useContext} from 'react';
 import {Button, Link} from '@chakra-ui/react';
 import {Link as GatsbyLink, graphql, useStaticQuery} from 'gatsby';
 import {PathContext, isUrl} from '../utils';
-import {isAbsolute, resolve} from 'path';
+import {isAbsolute, resolve} from 'path-browserify';
 
 export const PrimaryLink = props => (
   <Link

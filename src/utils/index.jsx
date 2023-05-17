@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import {join, relative} from 'path';
+import {join, relative} from 'path-browserify';
 import {useColorModeValue} from '@chakra-ui/react';
 import {withPrefix} from 'gatsby';
 
