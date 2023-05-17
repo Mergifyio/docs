@@ -115,7 +115,7 @@ exports.createPages = async ({actions, graphql}) => {
         }
       }
       tags: allMdx {
-        group(field: frontmatter___tags) {
+        group(field: {frontmatter: {tags: SELECT}}) {
           name: fieldValue
         }
       }
