@@ -1,13 +1,13 @@
-const {
+import {
   createFilePath,
   createRemoteFileNode
-} = require('gatsby-source-filesystem');
-const {join} = require('path');
-const {v5} = require('uuid');
-const { compileMDXWithCustomOptions } = require(`gatsby-plugin-mdx`)
-const { remarkHeadingsPlugin } = require(`./remark-headings-plugin`)
+} from 'gatsby-source-filesystem';
+import {join, resolve} from 'path';
+import {v5} from 'uuid';
+import { compileMDXWithCustomOptions } from 'gatsby-plugin-mdx';
+import { remarkHeadingsPlugin } from './remark-headings-plugin.mjs';
 
-exports.sourceNodes = ({
+export const sourceNodes = ({
   actions: {createNode},
   createNodeId,
   store,
@@ -24,21 +24,7 @@ exports.sourceNodes = ({
     reporter
   });
 
-exports.onCreateWebpackConfig = ({actions}) => {
-  actions.setWebpackConfig({
-    resolve: {
-      fallback: {
-        // fallbacks needed for Algolia search-insights
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        // because we use `path` a lot
-        path: require.resolve('path-browserify')
-      }
-    }
-  });
-};
-
-exports.onCreateNode = async ({node, getNode, loadNodeContent, actions}) => {
+export const onCreateNode = async ({node, getNode, loadNodeContent, actions}) => {
   const {type, mediaType} = node.internal;
   switch (type) {
     case 'File':
@@ -87,9 +73,9 @@ const getNavItems = items =>
         }
   );
 
-const pageTemplate = require.resolve(`./src/templates/page.jsx`)
+export const createPages = async ({actions, graphql}) => {
+  const pageTemplate = resolve("./src/templates/page.jsx")
 
-exports.createPages = async ({actions, graphql}) => {
   const {data} = await graphql(`
     {
       pages: allFile(filter: {extension: {in: ["md", "mdx"]}}) {
@@ -153,7 +139,7 @@ exports.createPages = async ({actions, graphql}) => {
   });
 };
 
-exports.createSchemaCustomization = async ({ getNode, getNodesByType, pathPrefix, reporter, cache, actions, schema, store }) => {
+export const createSchemaCustomization = async ({ getNode, getNodesByType, pathPrefix, reporter, cache, actions, schema, store }) => {
   const { createTypes } = actions
 
   const headingsResolver = schema.buildObjectType({

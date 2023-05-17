@@ -1,9 +1,3 @@
-const {
-  remarkTypescript,
-  highlightPreservation,
-  isWrapped
-} = require('remark-typescript');
-
 const gatsbyRemarkPlugins = [
   '@fec/remark-a11y-emoji/gatsby',
   {
@@ -85,7 +79,7 @@ plugins.push(
   }
 );
 
-module.exports = {
+const config = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
   trailingSlash: 'ignore',
   siteMetadata: {
@@ -93,3 +87,5 @@ module.exports = {
   },
   plugins
 };
+
+export default config;

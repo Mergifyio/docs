@@ -43,7 +43,7 @@ import {
 } from '@apollo/chakra-helpers';
 import {PathContext, useFieldTableStyles} from '../utils';
 import {TOTAL_HEADER_HEIGHT} from './Header';
-import {dirname, join} from 'path';
+import {dirname, join} from 'path-browserify';
 import {rehype} from 'rehype';
 
 // these must be imported after MarkdownCodeBlock

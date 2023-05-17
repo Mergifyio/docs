@@ -5,6 +5,7 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "develop": "gatsby develop",
+    "clean": "gatsby clean",
     "eslint": "eslint src",
     "test": "jest"
   },
