@@ -92,7 +92,7 @@ pull_request_rules:
 This format represents a schedule. It can contains only days, only times or
 both and can have a timezone specified with the times (for the list of
 available time zones, see [IANA format](https://www.iana.org/time-zones). If no
-timezone is specified, it will default to UTC.
+timezone is specified, it defaults to UTC.
 
 It can be used with the equality operators `=` and `!=`.
 
@@ -117,8 +117,10 @@ It can be used with the equality operators `=` and `!=`.
 
 The timestamp format must follow the [ISO 8601
 standard](https://en.wikipedia.org/wiki/ISO_8601). If the timezone is missing,
-the timestamp is assumed to be in UTC.
+the timestamp is assumed to be in UTC. The supported timezones come from the
+[IANA database](https://www.iana.org/time-zones).
 
+Supported formats:
 ```
 2021-04-05
 2012-09-17T22:02:51
@@ -147,8 +149,8 @@ is `[DD days] [HH:MM]` :
 * `HH`, the number of hours
 * `MM`, the number of minutes
 
-If the current date is 18th June 2020, `updated-at>=14 days ago` will be
-translated `updated-at>=2020-06-04T00:00:00`.
+If the current date is 18th June 2020, `updated-at>=14 days ago` is translated
+to `updated-at>=2020-06-04T00:00:00`.
 
 ```yaml
 - name: close stale pull request
