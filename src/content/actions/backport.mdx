@@ -4,6 +4,7 @@ description: Copy a pull request to another branch once it is merged.
 ---
 
 import { Warning } from '../../components/Alerts';
+import ActionOptionsTable from '../../components/ActionOptionsTable';
 
 The `backport` action enables you to automatically create a backport of a
 merged pull request. When the conditions you specify are met, Mergify will
@@ -29,7 +30,7 @@ The `backport` action takes a list of branches to which the changes from the
 merged pull request will be backported. The branch names should be specified as
 strings.
 
-{/* FIXME: auto generate https://linear.app/mergify/issue/MRGFY-2196/automatically-generate-actions-configuration-parameters-from-schema */}
+<ActionOptionsTable action='backport'/>
 
 As the title and body are templates, you can leverage any pull request
 attributes to use as content, e.g., `{{author}}`. You can also use this

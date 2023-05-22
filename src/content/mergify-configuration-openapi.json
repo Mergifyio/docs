@@ -341,6 +341,7 @@
       ],
       "anyOf": [
         {
+          "dataType": "list of string",
           "$ref": "#/definitions/StringArray"
         },
         {
@@ -386,6 +387,7 @@
       "type": "array",
       "default": [],
       "items": {
+        "valueType": "Template",
         "$ref": "#/definitions/Template"
       }
     },
@@ -394,6 +396,7 @@
       "type": "array",
       "default": [],
       "items": {
+        "valueType": "Template",
         "$ref": "#/definitions/Template"
       }
     },
@@ -402,6 +405,7 @@
       "type": "array",
       "default": [],
       "items": {
+        "valueType": "Template",
         "$ref": "#/definitions/Template"
       }
     },
@@ -528,18 +532,22 @@
           "$ref": "#/definitions/Duration"
         },
         "commit_message_template": {
+          "valueType": "Template",
           "$ref": "#/definitions/Template"
         },
         "disallow_checks_interruption_from_queues": {
+          "dataType": "list of string",
           "$ref": "#/definitions/StringArray"
         },
         "draft_bot_account": {
           "type": "string"
         },
         "merge_bot_account": {
+          "valueType": "Template",
           "$ref": "#/definitions/Template"
         },
         "update_bot_account": {
+          "valueType": "Template",
           "$ref": "#/definitions/Template"
         },
         "merge_conditions": {
@@ -626,9 +634,15 @@
           "type": "object",
           "properties": {
             "add_users": {
+              "valueType": "list of Template",
+              "default": "",
+              "description": "The users to assign to the pull request.",
               "$ref": "#/definitions/UserArray"
             },
             "remove_users": {
+              "valueType": "list of Template",
+              "default": "",
+              "description": "The users to remove from assignees.",
               "$ref": "#/definitions/UserArray"
             }
           }
@@ -637,31 +651,57 @@
           "type": "object",
           "properties": {
             "assignees": {
+              "default": "",
+              "description": "Users to assign the newly created pull request. As the type is :ref:`data type template`, you could use, e.g., ``{{author}}`` to assign the pull request to its original author.",
+              "valueType": "list of Template",
               "$ref": "#/definitions/TemplateArray"
             },
             "body": {
+              "description": "The pull request body.",
+              "valueType": "Template",
+              "default": "This is an automatic backport of pull request #{{number}} done by [Mergify](https://mergify.com).\n{{cherry_pick_error}}",
               "$ref": "#/definitions/Template"
             },
             "bot_account": {
+              "description": "Mergify can impersonate a GitHub user to backport a pull request. If no ``bot_account`` is set, Mergify backports the pull request itself.",
+              "valueType": "Template",
+              "default": "",
               "$ref": "#/definitions/Template"
             },
             "branches": {
+              "description": "The list of branches the pull request should be copied to.",
+              "valueType": "list of string",
+              "default": "[]",
               "$ref": "#/definitions/BranchArray"
             },
             "ignore_conflicts": {
+              "valueType": "Boolean",
+              "description": "Whether to create the pull requests even if they are conflicts when cherry-picking the commits.",
               "type": "boolean",
               "default": true
             },
             "labels": {
+              "description": "The list of labels to add to the created pull requests.",
+              "valueType": "list of string",
+              "default": "[]",
               "$ref": "#/definitions/StringArray"
             },
             "label_conflicts": {
+              "valueType": "string",
+              "default": "conflicts",
+              "description": "The label to add to the created pull request if it has conflicts and ``ignore_conflicts`` is set to ``true``.",
               "type": "string"
             },
             "regexes": {
+              "description": "The list of regexes to find branches the pull request should be copied to.",
+              "valueType": "list of string",
+              "default": "[]",
               "$ref": "#/definitions/StringArray"
             },
             "title": {
+              "description": "The pull request title.",
+              "valueType": "Template",
+              "default": "{{ title }} (backport #{{ number }})",
               "$ref": "#/definitions/Template"
             }
           }
@@ -670,6 +710,9 @@
           "type": "object",
           "properties": {
             "message": {
+              "valueType": "Template",
+              "default": "This pull request has been automatically closed by Mergify.",
+              "description": "The ``message`` to write as a comment after closing the pull request.",
               "$ref": "#/definitions/Template"
             }
           }
@@ -678,27 +721,56 @@
           "type": "object",
           "properties": {
             "assignees": {
+              "description": "Users to assign the newly created pull request. As the type is Template, you could use, e.g., {{author}} to assign the pull request to its original author.",
+              "default": "",
+              "valueType": "list of Template",
               "$ref": "#/definitions/TemplateArray"
             },
             "body": {
+              "description": "The pull request body.",
+              "default": "This is an automatic copy of pull request #{{number}} done by [Mergify](https://mergify.com).\n{{cherry_pick_error}}",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             },
             "bot_account": {
+              "description": "Mergify can impersonate a GitHub user to copy a pull request. If no bot_account is set, Mergify copies the pull request itself.",
+              "default": "",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             },
             "branches": {
+              "description": "The list of branches the pull request should be copied to.",
+              "default": "[]",
+              "valueType": "list of string",
               "$ref": "#/definitions/BranchArray"
             },
             "ignore_conflicts": {
+              "description": "Whether to create the pull requests even if they are conflicts when cherry-picking the commits.",
+              "default": "true",
               "type": "boolean"
             },
             "labels": {
+              "description": "The list of labels to add to the created pull requests.",
+              "default": "[]",
+              "valueType": "list of string",
               "$ref": "#/definitions/StringArray"
             },
+            "label_conflicts": {
+              "description": "The label to add to the created pull request if it has conflicts and ignore_conflicts is set to true.",
+              "default": "conflicts",
+              "valueType": "string",
+              "type": "string"
+            },
             "regexes": {
+              "description": "The list of regexes to find branches the pull request should be copied to.",
+              "default": "[]",
+              "valueType": "list of string",
               "$ref": "#/definitions/StringArray"
             },
             "title": {
+              "description": "The pull request title.",
+              "default": "{{ title }} (copy #{{ number }})",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             }
           }
@@ -707,9 +779,13 @@
           "type": "object",
           "properties": {
             "bot_account": {
+              "valueType": "Template",
+              "description": "Mergify can impersonate a GitHub user to comment a pull request. If no ``bot_account`` is set, Mergify will comment the pull request itself.",
               "$ref": "#/definitions/Template"
             },
             "message": {
+              "valueType": "Template",
+              "description": "The message to write as a comment.",
               "$ref": "#/definitions/Template"
             }
           }
@@ -718,7 +794,10 @@
           "type": "object",
           "properties": {
             "force": {
-              "type": "boolean"
+              "type": "boolean",
+              "valueType": "Boolean",
+              "default": false,
+              "description": "If set to ``true``, the branch will be deleted even if another pull request depends on the head branch. GitHub will therefore close the dependent pull requests."
             }
           }
         },
@@ -726,6 +805,8 @@
           "type": "object",
           "properties": {
             "approved": {
+              "valueType": "Boolean or list of string",
+              "description": "If set to ``true``, all the approving reviews will be removed when the pull request is updated. If set to ``false``, nothing will be done. If set to a list, each item should be the GitHub login of a user whose review will be removed. If set to ``from_requested_reviewers``, the list of requested reviewers will be used to get whose review will be removed.",
               "default": true,
               "anyOf": [
                 {
@@ -740,6 +821,8 @@
               ]
             },
             "changes_requested": {
+              "valueType": "Boolean or list of string",
+              "description": "If set to ``true``, all the reviews requesting changes will be removed when the pull request is updated. If set to ``false``, nothing will be done. If set to a list, each item should be the GitHub login of a user whose review will be removed. If set to ``from_requested_reviewers``, the list of requested reviewers will be used to get whose review will be removed.",
               "default": true,
               "anyOf": [
                 {
@@ -754,10 +837,14 @@
               ]
             },
             "message": {
+              "description": "The message to post when dismissing the review.",
               "default": "Pull request has been modified.",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             },
             "when": {
+              "valueType": "synchronize or always",
+              "description": "If set to ``synchronize``, the action will run only if the pull request commits changed. Otherwise, it will run each time the rule matches.",
               "default": "synchronize",
               "enum": [
                 "synchronize",
@@ -770,6 +857,9 @@
           "type": "object",
           "properties": {
             "draft": {
+              "valueType": "Boolean",
+              "description": "If the pull request should be a draft (``true``) or the other way around (``false``).",
+              "default": "None",
               "type": "boolean"
             }
           }
@@ -778,15 +868,26 @@
           "type": "object",
           "properties": {
             "add": {
+              "valueType": "list of Template",
+              "default": "[]",
+              "description": "The list of labels to add.",
               "$ref": "#/definitions/LabelArray"
             },
             "remove": {
+              "valueType": "list of Template",
+              "default": "[]",
+              "description": "The list of labels to remove.",
               "$ref": "#/definitions/LabelArray"
             },
             "toggle": {
+              "valueType": "list of Template",
+              "default": "[]",
+              "description": "Toggle labels in the list based on the conditions. If all the conditions are a success, all the labels in the list will be added, otherwise, they will all be removed.",
               "$ref": "#/definitions/LabelArray"
             },
             "remove_all": {
+              "valueType": "Boolean",
+              "description": "Remove all labels from the pull request.",
               "type": "boolean",
               "default": false
             }
@@ -796,22 +897,26 @@
           "type": "object",
           "properties": {
             "commit_message_template": {
+              "valueType": "Template",
+              "description": "Template to use as the commit message when using the ``merge`` or ``squash`` merge method. Template can also be defined in the pull request body (see :ref:`commit message`).",
               "$ref": "#/definitions/Template"
             },
             "merge_bot_account": {
+              "valueType": "Template",
+              "description": "Mergify can impersonate a GitHub user to merge pull request. If no ``merge_bot_account`` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.",
               "$ref": "#/definitions/Template"
             },
             "method": {
+              "valueType": "string",
+              "description": "Merge method to use. Possible values are ``merge``, ``squash``, ``rebase`` or ``fast-forward``.",
               "$ref": "#/definitions/MergeMethod",
               "default": "merge"
             },
-            "rebase_fallback": {
-              "enum": [
-                "merge",
-                "squash",
-                "none"
-              ],
-              "default": "none"
+            "allow_merging_configuration_change": {
+              "type": "boolean",
+              "valueType": "Boolean",
+              "description": "Allow merging Mergify configuration change.",
+              "default": false
             }
           }
         },
@@ -819,7 +924,9 @@
           "type": "object",
           "properties": {
             "success_conditions": {
+              "valueType": "list of conditions",
               "type": "array",
+              "description": "List of conditions to match to mark the pull request check as succeeded, otherwise, it will be marked as failing. If unset, the conditions from the rule that triggers this action are used.",
               "default": [
                 ""
               ],
@@ -828,9 +935,13 @@
               }
             },
             "summary": {
+              "description": "The summary of the check.",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             },
             "title": {
+              "description": "The title of the check.",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             }
           }
@@ -841,13 +952,26 @@
             "null"
           ],
           "properties": {
+            "autosquash": {
+              "valueType": "Boolean",
+              "type": "boolean",
+              "default": true,
+              "description": "This option is relevant only if you do inplace checks and if you use the ``rebase`` option of the ``update_method``. It will automatically squash your commits beginning by ``squash!``, ``fixup!`` or ``amend!``, just like the option with the same name when doing a ``git rebase``.",
+              "$ref": "#/definitions/Template"
+            },
             "commit_message_template": {
+              "description": "Template to use as the commit message when using the ``merge`` or ``squash`` merge method. Template can also be defined in the pull request body (see :ref:`commit message`).\n This option has been moved under the :ref:`queue rules` section of the configuration and will be removed from this section in the future.",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             },
             "merge_bot_account": {
+              "valueType": "Template",
+              "description": "Mergify can impersonate a GitHub user to merge pull request. If no ``merge_bot_account`` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.\n This option overrides the value defined in the :ref:`queue rules` section of the configuration.",
               "$ref": "#/definitions/Template"
             },
             "method": {
+              "valueType": "string",
+              "description": "Merge method to use. Possible values are ``merge``, ``squash``, ``rebase`` or ``fast-forward``. ``fast-forward`` is not supported on queues with ``speculative_checks > 1``, ``batch_size > 1``, or with ``allow_inplace_checks`` set to ``false``.\n This option overrides the value defined in the :ref:`queue rules` section of the configuration.",
               "enum": [
                 "merge",
                 "squash",
@@ -858,11 +982,20 @@
             "name": {
               "type": "string",
               "default": "default",
-              "description": "The name of the queue in which the pull request should be added."
+              "description": "The name of the queue where the pull request should be added. If no name is set, ``routing_conditions`` will be applied instead."
             },
             "priority": {
               "$ref": "#/definitions/Priority",
-              "default": "medium"
+              "default": "medium",
+              "valueType": "1 <= integer <= 10000 or ``low`` or ``medium`` or ``high``",
+              "deprecated": true,
+              "description": "To set your priorities, you should now use :ref:`priority_rules`. This sets the priority of the pull request in the queue. The pull request with the highest priority is merged first. ``low``, ``medium``, ``high`` are aliases for ``1000``, ``2000``, ``3000``."
+            },
+            "allow_merging_configuration_change": {
+              "valueType": "Boolean",
+              "type": "boolean",
+              "default": false,
+              "description": "Allow merging Mergify configuration change."
             },
             "rebase_fallback": {
               "enum": [
@@ -875,13 +1008,18 @@
             },
             "require_branch_protection": {
               "type": "boolean",
+              "valueType": "Boolean",
               "default": true,
               "description": "Whether branch protections are required for queueing pull requests."
             },
             "update_bot_account": {
-              "$ref": "#/definitions/Template"
+              "valueType": "Template",
+              "$ref": "#/definitions/Template",
+              "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. If no ``update_bot_account`` is set, Mergify picks randomly one of the organization users instead. The user account **must** have already been logged in Mergify dashboard once.\n\n This option overrides the value defined in the :ref:`queue rules` section of the configuration."
             },
             "update_method": {
+              "valueType": "string",
+              "description": "``merge`` for all merge methods except ``fast-forward`` where ``rebase`` is used Method to use to update the pull request with its base branch when the speculative check is done in-place. Possible values: \n * ``merge`` to merge the base branch into the pull request. * ``rebase`` to rebase the pull request against its base branch. \n Note that the ``rebase`` method has some drawbacks, see :ref:`update method rebase`. \n This option overrides the value defined in the :ref:`queue rules` section of the configuration.",
               "enum": [
                 "merge",
                 "rebase"
@@ -895,11 +1033,12 @@
             "autosquash": {
               "type": "boolean",
               "default": true,
-              "description": "When set to True, commits starting with fixup!, squash! and amend! are squashed during the rebase."
+              "description": "When set to ``True``, commits starting with ``fixup!``, ``squash!`` and ``amend!``are squashed during the rebase."
             },
             "bot_account": {
+              "valueType": "Template",
               "$ref": "#/definitions/Template",
-              "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. If no bot_account is set, Mergify picks randomly one of the organization users instead. The user account must have already been logged in Mergify dashboard once."
+              "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. If no ``bot_account`` is set, Mergify picks randomly one of the organization users instead. The user account **must** have already been logged in Mergify dashboard once."
             }
           }
         },
@@ -907,18 +1046,28 @@
           "type": "object",
           "properties": {
             "users": {
-              "$ref": "#/definitions/LoginArray"
+              "description": "The username to request reviews from.",
+              "$ref": "#/definitions/LoginArray",
+              "valueType": "list of string or dictionary of login and weight"
             },
             "users_from_teams": {
-              "$ref": "#/definitions/LoginArray"
+              "description": "The team names to get the list of users to request reviews from.",
+              "$ref": "#/definitions/LoginArray",
+              "valueType": "list of string or dictionary of login and weight"
             },
             "teams": {
-              "$ref": "#/definitions/LoginArray"
+              "description": "The team name to request reviews from.",
+              "$ref": "#/definitions/LoginArray",
+              "valueType": "list of string or dictionary of login and weight"
             },
             "bot_account": {
+              "description": "Mergify can impersonate a GitHub user to request a review on a pull request. If no ``bot_account`` is set, Mergify will request the review itself.",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             },
             "random_count": {
+              "description": "Pick random users and teams from the provided lists. When ``random_count`` is specified, ``users`` and ``teams`` can be a dictionary where the key is the login and the value is the weight to use. Weight must be between 1 and 65535 included.",
+              "valueType": "integer between 1 and 15",
               "type": "number",
               "minimum": 1,
               "maximum": 15
@@ -929,13 +1078,19 @@
           "type": "object",
           "properties": {
             "bot_account": {
+              "valueType": "Template",
+              "description": "Mergify can impersonate a GitHub user to review a pull request. If no ``bot_account`` is set, Mergify will review the pull request itself.",
               "$ref": "#/definitions/Template"
             },
             "message": {
+              "valueType": "Template",
+              "description": "The message to write as a comment.",
               "$ref": "#/definitions/Template"
             },
             "type": {
               "default": "APPROVE",
+              "valueType": "string",
+              "description": "The kind of review, can be ``APPROVE``, ``REQUEST_CHANGES``, ``COMMENT``",
               "enum": [
                 "APPROVE",
                 "REQUEST_CHANGES",
@@ -948,6 +1103,8 @@
           "type": "object",
           "properties": {
             "bot_account": {
+              "description": "Mergify can impersonate a GitHub user to review a pull request. If no ``bot_account`` is set, Mergify will update the pull request itself.",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             }
           }
@@ -956,9 +1113,13 @@
           "type": "object",
           "properties": {
             "bot_account": {
+              "description": "Mergify can impersonate a GitHub user to review a pull request. If no ``bot_account`` is set, Mergify will squash the pull request itself.",
+              "valueType": "Template",
               "$ref": "#/definitions/Template"
             },
             "commit_message": {
+              "valueType": "string",
+              "description": "Defines what commit message to use for the squashed commit if not commit message is defined in the pull request body (see :ref:`commit message`). Possible values are:\n- ``all-commits`` to use the same format as GitHub squashed merge commit.\n- ``first-commit`` to use the message of the first commit of the pull request.\n- ``title+body`` means to use the title and body from the pull request   itself as the commit message. The pull request number will be added to   end of the title.",
               "enum": [
                 "all-commits",
                 "first-commit",
