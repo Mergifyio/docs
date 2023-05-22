@@ -4,6 +4,7 @@ description: Assign a pull request to a user.
 ---
 
 import { Warning } from '../../components/Alerts/Warning';
+import ActionOptionsTable from '../../components/ActionOptionsTable';
 
 The `assign` action allows you to assign one or more users to a pull request
 when the conditions you specify are met. This can help automate the process of
@@ -14,7 +15,7 @@ pull requests that require their attention.
 
 ## Parameters
 
-{/* FIXME: auto generate https://linear.app/mergify/issue/MRGFY-2196/automatically-generate-actions-configuration-parameters-from-schema */}
+<ActionOptionsTable action='assign'/>
 
 As the list of users in `add_users` or `remove_users` is based on
 [templates](data-type#template), you can use, e.g., `{{author}}` to assign the
