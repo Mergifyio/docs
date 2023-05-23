@@ -1,4 +1,4 @@
-import { Table, TableCaption, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+import { Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
 import React from 'react'
 import ReactMarkdown from 'react-markdown';
 import configSchema from '../content/mergify-configuration-openapi.json';
@@ -21,7 +21,6 @@ export default function ActionOptionsTable({ action }: Props) {
 
   return (
     <Table>
-      <TableCaption>Pull Request Attributes</TableCaption>
       <Thead>
         <Tr>
           <Th>Key name</Th>
