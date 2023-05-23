@@ -1,0 +1,32 @@
+---
+title: Edit
+description: Edit pull request attributes.
+---
+
+import ActionOptionsTable from '../../components/ActionOptionsTable';
+
+The `edit` action allows Mergify to edit the body of a pull request. This can
+be helpful in situations where you want to automatically edit attributes
+of the pull request.
+
+## Parameters
+
+<ActionOptionsTable action='edit'/>
+
+## Examples
+
+### Converting a Pull Request to a Draft on Check Failure
+
+If any of your continuous integration checks fail, it might be worth converting
+the pull request to a draft automatically since it's likely that it's not ready
+for review.
+
+```yaml
+pull_request_rules:
+  - name: convert to draft
+    conditions:
+      - "#check-failure>0"
+    actions:
+      edit:
+        draft: true
+```

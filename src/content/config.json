@@ -16,7 +16,13 @@
       "Actions": {
         "Assign": "/actions/assign",
         "Backport": "/actions/backport",
-        "Close": "/actions/close"
+        "Close": "/actions/close",
+        "Comment": "/actions/comment",
+        "Delete Head Branch": "/actions/delete_head_branch",
+        "Dismiss Reviews": "/actions/dismiss_reviews",
+        "Edit": "/actions/edit",
+        "Label": "/actions/label",
+        "Merge": "/actions/merge"
       }
     },
     "Integration": {
