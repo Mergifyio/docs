@@ -7,7 +7,13 @@ import ExpansionPanel, {
 import InlineCode from './InlineCode';
 import PageLayout, {usePageLayoutProps} from './PageLayout';
 import Pagination from './Pagination';
-import Prism from 'prismjs';
+import {
+  MarkdownCodeBlock,
+} from '../chakra-helpers/CodeBlock'
+import {
+  MultiCodeBlock,
+  MultiCodeBlockContext
+} from '../chakra-helpers/MultiCodeBlock'
 import PropTypes from 'prop-types';
 import React, {Fragment, createElement, useMemo} from 'react';
 import RelativeLink, {ButtonLink} from './RelativeLink';
@@ -36,11 +42,6 @@ import {
 import {FaComment, FaGithub} from 'react-icons/fa';
 import {FiStar} from 'react-icons/fi';
 import {MDXProvider} from '@mdx-js/react';
-import {
-  MarkdownCodeBlock,
-  MultiCodeBlock,
-  MultiCodeBlockContext
-} from '@apollo/chakra-helpers';
 import {PathContext, useFieldTableStyles} from '../utils';
 import {TOTAL_HEADER_HEIGHT} from './Header';
 import {dirname, join} from 'path-browserify';
