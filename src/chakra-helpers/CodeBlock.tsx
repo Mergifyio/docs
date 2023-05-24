@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import Highlight, {Language} from 'prism-react-renderer';
+import {Highlight, themes} from 'prism-react-renderer';
 import Prism from 'prismjs';
 import React, {ReactNode, createContext, useContext, useState} from 'react';
 import fenceparser from 'fenceparser';
@@ -92,7 +92,7 @@ export const MarkdownCodeBlock = ({
 };
 
 export type CodeBlockProps = {
-  language?: Language;
+  language?: string;
   title?: string;
   linesToHighlight?: number[];
   disableCopy?: boolean;
@@ -126,6 +126,7 @@ export const CodeBlock = ({
   );
 
   const blockLanguage = getNormalizedLanguage(language);
+  const theme = useColorModeValue(themes.github, themes.duotoneDark);
 
   return (
     <Box>
@@ -140,7 +141,8 @@ export const CodeBlock = ({
         // @ts-ignore
         Prism={Prism}
         code={code}
-        language={language}
+        language={language as string}
+        theme={theme}
       >
         {({className, style, tokens, getLineProps, getTokenProps}) => {
           // length of longest line number
@@ -149,7 +151,7 @@ export const CodeBlock = ({
 
           // create an array of lines highlighted by "highlight-start" and
           // "highlight-end" comments
-          const highlightRange = [];
+          const highlightRange: number[] = [];
           let isHighlighting = false;
           let highlightOffset = 0;
           for (let i = 0; i < tokens.length; i++) {
@@ -226,7 +228,7 @@ export const CodeBlock = ({
                             // for line highlighting to go all the way across code block
                             minW="full"
                             w="fit-content"
-                            bg={shouldHighlight && highlightColor}
+                            bg={shouldHighlight ? highlightColor : 'none'}
                           >
                             {showLineNumbers && (
                               <Box
