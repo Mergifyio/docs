@@ -21,7 +21,7 @@ type MultiCodeBlockProps = {
 
 export const MultiCodeBlock = ({
   children
-}: MultiCodeBlockProps): JSX.Element => {
+}: MultiCodeBlockProps) => {
   const codeBlocks = React.Children.toArray(children).reduce<
     Record<string, React.ReactElement<CodeBlockProps>>
   >((acc, child) => {

@@ -1,6 +1,3 @@
-import {ColorHues} from '@chakra-ui/react';
-import {mix} from 'polished';
-
 const body = "'Source Sans Pro', sans-serif";
 export const fonts = {
   body,

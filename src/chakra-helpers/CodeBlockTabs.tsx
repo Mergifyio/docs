@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Box,
   Button,
@@ -10,8 +10,6 @@ import {
 } from '@chakra-ui/react';
 import {BsChevronLeft} from '@react-icons/all-files/bs/BsChevronLeft';
 import {BsChevronRight} from '@react-icons/all-files/bs/BsChevronRight';
-import {GA_EVENT_CATEGORY_CODE_BLOCK} from './CodeBlock';
-import {MultiCodeBlockContext} from './MultiCodeBlock';
 import {TinyColor} from '@ctrl/tinycolor';
 import {getIconComponent} from './language-util';
 
@@ -54,7 +52,7 @@ export const CodeBlockTabs = ({
   languages,
   activeLanguage,
   setLanguage
-}: CodeBlockTabsProps): JSX.Element => {
+}: CodeBlockTabsProps) => {
   // Track inner (infinite width) and outer (container width) boxes using refs
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
