@@ -1,6 +1,6 @@
 import React from 'react';
 import {Heading, Link, List, ListItem, SimpleGrid} from '@chakra-ui/react';
-import {footerConfig} from '@apollo/chakra-helpers';
+import {defaultConfig as footerConfig} from '../chakra-helpers/footer';
 
 export default function Footer() {
   return (

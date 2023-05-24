@@ -1,4 +1,4 @@
-import {components, fonts} from '@apollo/chakra-helpers';
+import {components, fonts} from '../../chakra-helpers/helpers';
 import {extendTheme} from '@chakra-ui/react';
 
 const blue = {

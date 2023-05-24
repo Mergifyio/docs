@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/named
 import Highlight, {Language} from 'prism-react-renderer';
 import Prism from 'prismjs';
 import React, {ReactNode, createContext, useContext, useState} from 'react';
@@ -52,7 +53,7 @@ type MarkdownCodeBlockProps = {
 export const MarkdownCodeBlock = ({
   children,
   isPartOfMultiCode
-}: MarkdownCodeBlockProps): JSX.Element => {
+}: MarkdownCodeBlockProps) => {
   const defaultShowLineNumbers = useContext(LineNumbersContext);
   const [child] = Array.isArray(children) ? children : [children];
   const {
@@ -112,7 +113,7 @@ export const CodeBlock = ({
   disableCopy = false,
   isPartOfMultiCode = false,
   disableTabs = false
-}: CodeBlockProps): JSX.Element => {
+}: CodeBlockProps) => {
   const {onCopy, hasCopied} = useClipboard(
     getCodeWithoutHighlightComments(code)
   );
