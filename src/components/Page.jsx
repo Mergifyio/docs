@@ -40,7 +40,6 @@ import {
   chakra
 } from '@chakra-ui/react';
 import {FaComment, FaGithub} from 'react-icons/fa';
-import {FiStar} from 'react-icons/fi';
 import {MDXProvider} from '@mdx-js/react';
 import {PathContext, useFieldTableStyles} from '../utils';
 import {TOTAL_HEADER_HEIGHT} from './Header';
@@ -129,9 +128,10 @@ const components = {
   undefined: Fragment // because remark-a11y-emoji adds <undefined> around stuff
 };
 
-const mdxComponents = {
+export const mdxComponents = {
   ...components,
   inlineCode: InlineCode,
+  code: InlineCode,
   Button, // TODO: consider making pages import this from @chakra-ui/react
   ExpansionPanel,
   ExpansionPanelList,

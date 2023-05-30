@@ -3,6 +3,7 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown';
 import configSchema from '../content/mergify-configuration-openapi.json';
 import InlineCode from './InlineCode';
+import { mdxComponents } from './Page';
 
 interface Props {
   /** Action's name to retrieve its options */
@@ -33,18 +34,16 @@ export default function ActionOptionsTable({ action }: Props) {
         {Object.entries(options).map(([optionKey, definition]) => (
           <Tr>
             <Td sx={{whiteSpace: 'nowrap'}}>
-              <code>{optionKey}</code>
+              <InlineCode>{optionKey}</InlineCode>
             </Td>
             <Td>{definition.valueType}</Td>
             <Td>
-              <ReactMarkdown components={{
-                code: InlineCode
-              }}>
+              <InlineCode>
                 {definition.default}
-              </ReactMarkdown>
+              </InlineCode>
             </Td>
             <Td>
-              <ReactMarkdown>
+              <ReactMarkdown components={mdxComponents as any}>
                 {definition.description}
               </ReactMarkdown>
             </Td>
