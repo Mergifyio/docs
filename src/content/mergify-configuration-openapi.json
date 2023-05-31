@@ -121,6 +121,7 @@
           "description": "Whether the pull request is closed."
         },
         {
+          "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "closed-at",
           "inputType": "relativeTimestamp",
           "dataType": "Timestamp or Relative timestamp",
@@ -157,6 +158,7 @@
           "description": "Whether the pull request is conflicting with its base branch."
         },
         {
+          "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "created-at",
           "inputType": "relativeTimestamp",
           "dataType": "Timestamp or Relative timestamp",
@@ -229,6 +231,7 @@
           "description": "Whether the pull request is merged. This attribute doesn't work on pull requests merged before a rule using this attribute is created."
         },
         {
+          "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "merged-at",
           "inputType": "relativeTimestamp",
           "dataType": "Timestamp or Relative timestamp",
@@ -255,7 +258,7 @@
         {
           "key": "queue-partition-name",
           "inputType": "string",
-          "dataType": "lust of string",
+          "dataType": "list of string",
           "description": "The name of the partitions the pull request is queued in."
         },
         {
@@ -265,12 +268,14 @@
           "description": "The position of the pull request in its queue if queued.\nThe first pull request in the queue has position 0.\nThe value is set to -1 if the pull request is not queued.\nNB: If you are using partitions, this condition returns the maximum position of the pull request from all the partitions it is queued in."
         },
         {
+          "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "queued-at",
           "inputType": "relativeTimestamp",
           "dataType": "Timestamp or Relative timestamp",
           "description": "The time the pull request was queued at for merge."
         },
         {
+          "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "queue-merge-started-at",
           "inputType": "relativeTimestamp",
           "dataType": "Timestamp or Relative timestamp",
@@ -319,6 +324,7 @@
           "description": "The title of the pull request."
         },
         {
+          "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "updated-at",
           "inputType": "relativeTimestamp",
           "dataType": "Timestamp or Relative timestamp",
@@ -459,6 +465,25 @@
         "squash",
         "rebase",
         "fast-forward"
+      ]
+    },
+    "Timestamp": {
+      "$id": "#/Timestamp",
+      "type": "string"
+    },
+    "RelativeTimestamp": {
+      "$id": "#/RelativeTimestamp",
+      "type": "string"
+    },
+    "TimestampOrRelativeTimestamp": {
+      "$id": "#/TimestampOrRelativeTimestamp",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Timestamp"
+        },
+        {
+          "$ref": "#/definitions/RelativeTimestamp"
+        }
       ]
     },
     "PullRequestRule": {

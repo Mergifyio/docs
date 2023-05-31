@@ -1,7 +1,8 @@
-import { Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+import { Table, Thead, Tr, Th, Tbody, Td, Link } from '@chakra-ui/react';
 import React from 'react'
 import ReactMarkdown from 'react-markdown';
 import configSchema from '../content/mergify-configuration-openapi.json';
+import { getTypeLink } from '../utils/getTypeLink';
 import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
 
@@ -14,7 +15,7 @@ interface OptionDefinition {
   valueType: string;
   description: string;
   default: string;
-  $ref: any; // Not used here
+  $ref: any;
 }
 
 export default function ActionOptionsTable({ action }: Props) {
@@ -31,24 +32,28 @@ export default function ActionOptionsTable({ action }: Props) {
         </Tr>
       </Thead>
       <Tbody>
-        {Object.entries(options).map(([optionKey, definition]) => (
-          <Tr>
-            <Td sx={{whiteSpace: 'nowrap'}}>
-              <InlineCode>{optionKey}</InlineCode>
-            </Td>
-            <Td>{definition.valueType}</Td>
-            <Td>
-              <InlineCode>
-                {definition.default}
-              </InlineCode>
-            </Td>
-            <Td>
-              <ReactMarkdown components={mdxComponents as any}>
-                {definition.description}
-              </ReactMarkdown>
-            </Td>
-          </Tr>
-        ))}
+        {Object.entries(options).map(([optionKey, definition]) => {
+          const valueTypeLink = getTypeLink(definition.$ref);
+
+          return (
+            <Tr>
+              <Td sx={{whiteSpace: 'nowrap'}}>
+                <InlineCode>{optionKey}</InlineCode>
+              </Td>
+              <Td>{valueTypeLink ? <Link color='primary' textDecoration='underline' href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
+              <Td>
+                <InlineCode>
+                  {definition.default}
+                </InlineCode>
+              </Td>
+              <Td>
+                <ReactMarkdown components={mdxComponents as any}>
+                  {definition.description}
+                </ReactMarkdown>
+              </Td>
+            </Tr>
+          )
+        })}
       </Tbody>
     </Table>
   )
