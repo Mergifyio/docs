@@ -88,7 +88,7 @@ export default function Page({
       >
         {banner}
         <Flex
-          maxW="6xl"
+          maxW="8xl"
           mx="auto"
           align="flex-start"
           px={{base: 6, md: 10}}
