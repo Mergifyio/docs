@@ -20,17 +20,17 @@ git checkout main
 git pull
 
 git checkout -b "A"
-touch "file_A" || echo "" > "file_A"
+type nul > "file_A"
 git add "file_A"
 git commit -a -m "A"
 
 git checkout -b "B"
-touch "file_B" || echo "" > "file_B"
+type nul > "file_B"
 git add "file_B"
 git commit -a -m "B"
 
 git checkout -b "C"
-touch "file_C" || echo "" > "file_C"
+type nul > "file_C"
 git add "file_C"
 git commit -a -m "C"
 ```
