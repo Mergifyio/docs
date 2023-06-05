@@ -80,7 +80,7 @@ C: https://app.graphite.dev/github/pr/OWNER/YOUR_REPO/Z (created)
 
 ### Step 2: Activating "Automatically delete head branches" on Your Repository
 
-To ensure seamless integration between Mergify and Graphite, activate the **Automatically Delete Head Branches** setting on your GitHub repository. Enabling this setting allows GitHub to automatically delete the head branch upon PR merge and change the base branch of upstack PRs to the branch in which the PR was merged.
+To ensure seamless integration between Mergify and Graphite, you need to activate the **Automatically Delete Head Branches** setting on your GitHub repository. Enabling this setting allows GitHub to automatically delete the head branch upon pull request merge and change the base branch of upstack pull requests to the branch in which the PR was merged.
 
 For example, in our sample stack, when PR A is merged into `main`, enabling this setting will delete branch A and change the base branch of PR B from A to `main`.
 
