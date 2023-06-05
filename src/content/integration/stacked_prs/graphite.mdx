@@ -88,7 +88,7 @@ To activate **Automatically delete head branches**, follow the steps outlined in
 
 ### Step 2: Configuring Mergify
 
-To configure Mergify for your repository, modify the [.mergify.yml configuration file](/configuration/file-format) on the `main` branch. Set a condition on the `base` attribute to be equal to the name of your trunk branch (`main` in our sample stack). This ensures that Mergify only merges a PR that is at the bottom of its stack.
+To configure Mergify for your repository, modify the [Mergify configuration file](/configuration/file-format) on the `main` branch. Set a condition on the `base` attribute to be equal to the name of your trunk branch (`main` in our sample stack). This ensures that Mergify only merges pull requests that are at the bottom of their stack.
 
 Here is a sample of what your `.mergify.yml` file could look like for our sample stack:
 
