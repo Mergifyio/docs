@@ -104,13 +104,11 @@ pull_request_rules:
 
 queue_rules:
   - name: default
-    conditions:
+    routing_conditions:
       - base=main
 ```
 
-**Note:** *We assume that you are following this guide alone, so we can't use the PR approval system since authors can't approve their own PR. We will mimic approval by adding a label.*
-
-If you make changes to your `.mergify.yml` file, make sure your changes are on the `main` branch and that your stack is up to date. Execute the following commands to ensure this:
+If you make changes to your Mergify configuration file, make sure your changes are on the `main` branch and that your stack is up to date. Execute the following commands to ensure this:
 
 ```shell
 git switch main
@@ -121,7 +119,5 @@ gt stack submit
 ```
 
 ### Step 3: Let the Magic Happen
-
-Now that everything is set up, you can go to the [Graphite dashboard](https://app.graphite.dev/) (or you can do it directly on GitHub if you prefer) and "approve" PR A by adding the `Approved` label. Wait a few seconds and observe Mergify automatically merging PR A into `main`. GitHub will then delete branch A and set `main` as the base branch for PR B.
-
-Suppose PR B is not yet ready, but PR C is. Approve PR C with the label and wait as long as you want. Nothing will happen until PR B is approved. As soon as PR B is approved, it will be merged into `main`, and GitHub will handle the branch changes accordingly. PR C will then be merged into `main`.
+{/* FIXME: add link to queueing howto */}
+Now that everything is set up, you can queue your pull request. Wait a few seconds and observe Mergify automatically merging pull request A into `main`. GitHub will then delete the branch A and set `main` as the base branch for pull request B.
