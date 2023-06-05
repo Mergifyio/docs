@@ -4,36 +4,10 @@
 
 ### Prerequisites
 
-Before getting started, make sure you have the following prerequisites in place:
-
 - A GitHub repository ready for Mergify usage.
 - Graphite installed and configured for your project. If you are not familiar with Graphite, we recommend following their [quick start guide](https://graphite.dev/docs/graphite-quick-start).
 
-### Step 1: Building our Sample Stack of Pull Requests
-
-Assuming your "trunk branch" is named `main`, execute the following commands in your repository folder to build three branches stacked on top of each other over `main`:
-
-```shell
-git checkout main
-git pull
-
-git checkout -b "A"
-type nul > "file_A"
-git add "file_A"
-git commit -a -m "A"
-
-git checkout -b "B"
-type nul > "file_B"
-git add "file_B"
-git commit -a -m "B"
-
-git checkout -b "C"
-type nul > "file_C"
-git add "file_C"
-git commit -a -m "C"
-```
-
-You should have the following structure in your repository:
+In the following step we will use a sample stack with our "trunk branch" named `main` and three branches A, B and C with their corresponding pull requests
 
 ```
 o C
@@ -47,38 +21,7 @@ o main
 :
 ```
 
-Submit your stack by running the following command. For the three branches, leave the default title, choose `Skip (leave empty)` for the body option and `Publish Pull Request` for the submit option:
-
-```shell
-gt stack submit
-```
-
-In the end, your output should resemble the following:
-
-```shell
-🥞 Validating that this Graphite stack is ready to submit...
-
-✏️  Preparing to submit PRs for the following branches...
-▸ A (Create)
-✔ Title … A
-✔ Body › Skip (leave empty)
-✔ Submit › Publish Pull Request
-▸ B (Create)
-✔ Title … B
-✔ Body › Skip (leave empty)
-✔ Submit › Publish Pull Request
-▸ C (Create)
-✔ Title … C
-✔ Body › Skip (leave empty)
-✔ Submit › Publish Pull Request
-
-📨 Pushing to remote and creating/updating PRs...
-A: https://app.graphite.dev/github/pr/OWNER/YOUR_REPO/X (created)
-B: https://app.graphite.dev/github/pr/OWNER/YOUR_REPO/Y (created)
-C: https://app.graphite.dev/github/pr/OWNER/YOUR_REPO/Z (created)
-```
-
-### Step 2: Activating "Automatically delete head branches" on Your Repository
+### Step 1: Activating "Automatically delete head branches" on Your Repository
 
 To ensure seamless integration between Mergify and Graphite, you need to activate the **Automatically Delete Head Branches** setting on your GitHub repository. Enabling this setting allows GitHub to automatically delete the head branch upon pull request merge and change the base branch of upstack pull requests to the branch in which the PR was merged.
 
@@ -88,34 +31,15 @@ To activate **Automatically delete head branches**, follow the steps outlined in
 
 ### Step 2: Configuring Mergify
 
-To configure Mergify for your repository, modify the [Mergify configuration file](/configuration/file-format) on the `main` branch. Set a condition on the `base` attribute to be equal to the name of your trunk branch (`main` in our sample stack). This ensures that Mergify only merges pull requests that are at the bottom of their stack.
+To ensure that Mergify only merges pull requests that are at the bottom of their stack. In the [Mergify configuration file](/configuration/file-format), you have to set a condition on the `base` attribute to be equal to the name of your trunk branch (`main` in our sample stack).
 
 Here is a sample of what your Mergify configuration file could look like for our sample stack:
 
 ```yaml
-pull_request_rules:
-  - name: Merge on approval
-    conditions:
-      - label=Approved
-      - base=main
-    actions:
-      queue:
-        name: default
-
 queue_rules:
   - name: default
     routing_conditions:
       - base=main
-```
-
-If you make changes to your Mergify configuration file, make sure your changes are on the `main` branch and that your stack is up to date. Execute the following commands to ensure this:
-
-```shell
-git switch main
-git pull
-git switch C
-gt stack restack
-gt stack submit
 ```
 
 ### Step 3: Let the Magic Happen
