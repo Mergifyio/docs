@@ -4,6 +4,7 @@ import configSchema from '../content/mergify-configuration-openapi.json';
 import ReactMarkdown from 'react-markdown';
 import InlineCode from './InlineCode';
 import { getTypeLink } from '../utils/getTypeLink';
+import { mdxComponents } from './Page';
 
 export default function PullRequestAttributesTable() {
   /**
@@ -28,13 +29,11 @@ export default function PullRequestAttributesTable() {
           return (
             <Tr>
               <Td sx={{whiteSpace: 'nowrap'}}>
-                <code>{attr.key}</code>
+                <InlineCode>{attr.key}</InlineCode>
               </Td>
               <Td>{dataTypeLink ? <Link color='primary' textDecoration='underline' href={dataTypeLink}>{attr.dataType}</Link> : attr.dataType}</Td>
               <Td>
-                <ReactMarkdown components={{
-                  code: InlineCode
-                }}>
+                <ReactMarkdown components={mdxComponents}>
                   {attr.description}
                 </ReactMarkdown>
               </Td>
