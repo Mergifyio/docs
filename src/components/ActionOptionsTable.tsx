@@ -42,9 +42,11 @@ export default function ActionOptionsTable({ action }: Props) {
               </Td>
               <Td>{valueTypeLink ? <Link color='primary' textDecoration='underline' href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
               <Td>
-                <InlineCode>
-                  {definition.default}
-                </InlineCode>
+                {!!definition.default && (
+                  <InlineCode>
+                    {definition.default}
+                  </InlineCode>
+                )}
               </Td>
               <Td>
                 <ReactMarkdown components={mdxComponents as any}>
