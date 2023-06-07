@@ -24,7 +24,8 @@
         "Label": "/actions/label",
         "Merge": "/actions/merge",
         "Post Check": "/actions/post_check",
-        "Rebase": "/actions/rebase"
+        "Rebase": "/actions/rebase",
+        "Request Reviews": "/actions/request_reviews"
       }
     },
     "Integration": {
