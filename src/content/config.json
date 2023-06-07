@@ -23,7 +23,8 @@
         "Edit": "/actions/edit",
         "Label": "/actions/label",
         "Merge": "/actions/merge",
-        "Post Check": "/actions/post_check"
+        "Post Check": "/actions/post_check",
+        "Rebase": "/actions/rebase"
       }
     },
     "Integration": {
