@@ -1056,6 +1056,7 @@
           "type": "object",
           "properties": {
             "autosquash": {
+              "valueType": "Boolean",
               "type": "boolean",
               "default": true,
               "description": "When set to ``True``, commits starting with ``fixup!``, ``squash!`` and ``amend!``are squashed during the rebase."
