@@ -14,12 +14,16 @@ interface Props {
 interface OptionDefinition {
   valueType: string;
   description: string;
-  default: string;
+  default: string | boolean;
   $ref: any;
 }
 
 export default function ActionOptionsTable({ action }: Props) {
   const options = configSchema.definitions.Actions.properties[action].properties as {[optionKey: string]: OptionDefinition};
+
+  const hasDefaultValue = (definition: OptionDefinition) => {
+    return definition.default !== undefined && String(definition.default).length > 0
+  }
 
   return (
     <Table>
@@ -42,9 +46,9 @@ export default function ActionOptionsTable({ action }: Props) {
               </Td>
               <Td>{valueTypeLink ? <Link color='primary' textDecoration='underline' href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
               <Td>
-                {!!definition.default && (
+                {hasDefaultValue(definition) && (
                   <InlineCode>
-                    {definition.default}
+                    {String(definition.default)}
                   </InlineCode>
                 )}
               </Td>
