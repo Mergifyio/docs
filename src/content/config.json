@@ -22,7 +22,8 @@
         "Dismiss Reviews": "/actions/dismiss_reviews",
         "Edit": "/actions/edit",
         "Label": "/actions/label",
-        "Merge": "/actions/merge"
+        "Merge": "/actions/merge",
+        "Post Check": "/actions/post_check"
       }
     },
     "Integration": {
