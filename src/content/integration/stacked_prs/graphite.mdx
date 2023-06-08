@@ -1,6 +1,6 @@
 ## Using Mergify with Graphite
 
-[Graphite](https://graphite.dev) is a modern code review tool designed for fast-moving teams. It helps engineers write and review smaller pull requests (PRs), stay unblocked, and ship faster. In this documentation, we will explain how to use Mergify with Graphite and highlight some important configurations.
+[Graphite](https://graphite.dev) is a modern code review tool designed for fast-moving teams. It helps engineers write and review smaller pull requests (PRs), stay unblocked, and ship faster. In this documentation, we explain how to use Mergify with Graphite and highlight some important configurations.
 
 ### Prerequisites
 
@@ -21,7 +21,7 @@ o main
 :
 ```
 
-### Step 1: Activating "Automatically delete head branches" on Your Repository
+### Step 1: Configuring Your Repositorys
 
 To ensure seamless integration between Mergify and Graphite, you need to activate the **Automatically Delete Head Branches** setting on your GitHub repository. Enabling this setting allows GitHub to automatically delete the head branch upon pull request merge and change the base branch of upstack pull requests to the branch in which the PR was merged.
 
@@ -42,6 +42,9 @@ queue_rules:
       - base=main
 ```
 
+This makes sure that if a user queues by mistake the pull request B while A is not yet merged, the pull request B won't be queued.
+
 ### Step 3: Let the Magic Happen
 {/* FIXME: add link to queueing howto */}
-Now that everything is set up, you can queue your pull request. Wait a few seconds and observe Mergify automatically merging pull request A into `main`. GitHub will then delete the branch A and set `main` as the base branch for pull request B.
+Now that everything is set up, you can queue your pull request.
+When Mergify is done merging pull request A into `main`. GitHub will delete branch A and set `main` as the base branch for pull request B. You can then queue the pull request B at its turn.

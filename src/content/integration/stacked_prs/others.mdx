@@ -1,7 +1,8 @@
+import { Info } from '../../../components/Alerts';
+
 ## Using Mergify with Stacked PRs
 
-Mergify supports stacked PRs with just a few configurations. This guide assumes that you are familiar with the concept of stacked PRs, if not, feel free to read this [article](https://timothya.com/blog/git-stack/#headline-1).
-
+Mergify supports stacked PRs with just a few configurations. This guide assumes that you are familiar with the concept of [stacked PRs](https://timothya.com/blog/git-stack).
 ### Prerequisites
 
 Before getting started, make sure you have the following prerequisites in place:
@@ -20,17 +21,17 @@ git checkout main
 git pull
 
 git checkout -b "A"
-type nul > "file_A"
+echo nul > "file_A"
 git add "file_A"
 git commit -a -m "A"
 
 git checkout -b "B"
-type nul > "file_B"
+echo nul > "file_B"
 git add "file_B"
 git commit -a -m "B"
 
 git checkout -b "C"
-type nul > "file_C"
+echo nul > "file_C"
 git add "file_C"
 git commit -a -m "C"
 ```
@@ -60,9 +61,11 @@ git switch C
 gh pr create --title C --body "PR C" --base B
 ```
 
-**Note:** *If you don't use `gh`, push branches A, B and C on GitHub and create the three PRs manually. Make sure to correctly set the base branch for each PR (A on main, B on A and C on B).*
+<Info>
+  If you don't use `gh`, push branches A, B and C on GitHub and create the three PRs manually. Make sure to correctly set the base branch for each PR (A on main, B on A and C on B).
+</Info>
 
-### Step 2: Activating "Automatically delete head branches" on Your Repository
+### Step 2: Configuring Your Repository
 
 To ensure that stacked PRs work seamlessly with Mergify, activate the **Automatically Delete Head Branches** setting on your GitHub repository. Enabling this setting allows GitHub to automatically delete the head branch upon PR merge and change the base branch of upstack PRs to the branch in which the PR was merged.
 
@@ -70,7 +73,7 @@ For example, in our sample stack, when PR A is merged into `main`, enabling this
 
 To activate **Automatically delete head branches**, follow the steps outlined in the [GitHub documentation: Managing the automatic deletion of branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches).
 
-### Step 2: Configuring Mergify
+### Step 3: Configuring Mergify
 
 To configure Mergify for your repository, modify the [.mergify.yml configuration file](/configuration/file-format) on the `main` branch. Set a condition on the `base` attribute to be equal to the name of your trunk branch (`main` in our sample stack). This ensures that Mergify only merges a PR that is at the bottom of its stack.
 
@@ -92,9 +95,11 @@ queue_rules:
       - base=main
 ```
 
-**Note:** *We assume that you are following this guide alone, so we can't use the PR approval system since authors can't approve their own PR. We will mimic approval by adding a label.*
+<Info>
+  We assume that you are following this guide alone, so we can't use the PR approval system since authors can't approve their own PR. We will mimic approval by adding a label.
+</Info>
 
-If you make changes to your `.mergify.yml` file, make sure your changes are on the `main` branch and that your stack is up to date. Execute the following commands to ensure this:
+If you make changes to your Mergify configuration file, make sure your changes are on the `main` branch and that your stack is up to date. Execute the following commands to ensure this:
 
 ```shell
 git switch main
