@@ -28,7 +28,11 @@
     "Integration": {
       "GitHub Actions": "/integration/gha",
       "Continuous Integration": "/integration/ci",
-      "Datadog": "/integration/datadog"
+      "Datadog": "/integration/datadog",
+      "Stacked Pull Requests": {
+        "Graphite": "/integration/stacked_prs/graphite",
+        "Others": "/integration/stacked_prs/others"
+      }
     },
     "Security": "/security"
   }
