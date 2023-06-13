@@ -7,6 +7,27 @@ import {v5} from 'uuid';
 import { compileMDXWithCustomOptions } from 'gatsby-plugin-mdx';
 import { remarkHeadingsPlugin } from './remark-headings-plugin.mjs';
 
+export const onCreateWebpackConfig = ({ actions, stage, plugins }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      fallback: {
+        "stream": false,
+        "path": false,
+        "process": false,
+        "url": false
+      }
+    }
+  });
+
+  if (stage === 'build-javascript' || stage === 'develop') {
+    actions.setWebpackConfig({
+      plugins: [
+        plugins.provide({ process: 'process/browser' })
+      ]
+    })
+  }
+}
+
 export const sourceNodes = ({
   actions: {createNode},
   createNodeId,
