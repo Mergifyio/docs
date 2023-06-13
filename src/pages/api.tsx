@@ -5,6 +5,8 @@ import '@stoplight/elements/styles.min.css';
 
 export default function APISpecifications() {
   return (
-    <API apiDescriptionDocument={openapi} basePath={'/api'}/>
+    <div>
+      <API apiDescriptionDocument={openapi} basePath={'/api'} router={typeof window === 'undefined' ? 'memory' : 'history'}/>
+    </div>
   )
 }
