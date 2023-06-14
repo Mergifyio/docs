@@ -1,12 +1,13 @@
+import { chakra } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import React, {useEffect, useRef} from 'react';
-import {TOTAL_HEADER_HEIGHT} from '../Header';
-import {chakra} from '@chakra-ui/react';
+import React, { useEffect, useRef } from 'react';
+
+import { TOTAL_HEADER_HEIGHT } from '../Header';
 
 export const SIDEBAR_WIDTH_BASE = 250;
 export const SIDEBAR_WIDTH_XL = 300;
 
-export function Sidebar({children, isHidden}) {
+export function Sidebar({ children, isHidden }) {
   const sidebarRef = useRef();
 
   useEffect(() => {
@@ -20,14 +21,14 @@ export function Sidebar({children, isHidden}) {
   return (
     <chakra.aside
       ref={sidebarRef}
-      display={{base: 'none', md: 'block'}}
+      display={{ base: 'none', md: 'block' }}
       h={
         // account for header border
         `calc(100vh - ${TOTAL_HEADER_HEIGHT}px)`
       }
       w={{
         base: SIDEBAR_WIDTH_BASE,
-        xl: SIDEBAR_WIDTH_XL
+        xl: SIDEBAR_WIDTH_XL,
       }}
       borderRightWidth="1px"
       pos="fixed"
@@ -37,12 +38,12 @@ export function Sidebar({children, isHidden}) {
       transitionProperty="visibility, opacity, transform"
       transitionDuration="normal"
       bg="bg"
-      sx={{scrollPaddingTop: 12}}
-      css={{top: TOTAL_HEADER_HEIGHT}}
+      sx={{ scrollPaddingTop: 12 }}
+      css={{ top: TOTAL_HEADER_HEIGHT }}
       style={{
         visibility: isHidden ? 'hidden' : 'visible',
         opacity: isHidden ? 0 : 1,
-        transform: isHidden ? 'translateX(-100%)' : 'none'
+        transform: isHidden ? 'translateX(-100%)' : 'none',
       }}
     >
       {children}
@@ -52,5 +53,5 @@ export function Sidebar({children, isHidden}) {
 
 Sidebar.propTypes = {
   children: PropTypes.node.isRequired,
-  isHidden: PropTypes.bool
+  isHidden: PropTypes.bool,
 };

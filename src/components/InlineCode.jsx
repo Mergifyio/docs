@@ -1,5 +1,5 @@
+import { chakra, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
-import {chakra, useColorModeValue} from '@chakra-ui/react';
 
 export default function InlineCode(props) {
   const bgColor = useColorModeValue('gray.50', 'gray.700');

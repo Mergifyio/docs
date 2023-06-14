@@ -1,9 +1,13 @@
+import {
+  Button, Flex, Heading, Text, chakra,
+} from '@chakra-ui/react';
+import { Link as GatsbyLink } from 'gatsby';
+import React from 'react';
+
+import { FiChevronLeft } from 'react-icons/fi';
+
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import React from 'react';
-import {Button, Flex, Heading, Text, chakra} from '@chakra-ui/react';
-import {FiChevronLeft} from 'react-icons/fi';
-import {Link as GatsbyLink} from 'gatsby';
 
 export default function NotFound() {
   return (
@@ -22,7 +26,7 @@ export default function NotFound() {
         <chakra.h1
           fontWeight="semibold"
           lineHeight="normal"
-          fontSize={{base: '8xl', md: '9xl'}}
+          fontSize={{ base: '8xl', md: '9xl' }}
         >
           404
         </chakra.h1>

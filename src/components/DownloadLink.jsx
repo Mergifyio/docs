@@ -1,7 +1,9 @@
-import {PrimaryLink, useLinkProps} from './RelativeLink'
-import React from 'react'
+import React from 'react';
 
-export default function DownloadLink({path, children}) {
+import { PrimaryLink, useLinkProps } from './RelativeLink';
+
+// eslint-disable-next-line react/prop-types
+export default function DownloadLink({ path, children }) {
   const linkProps = useLinkProps(path);
   return (
     <PrimaryLink
@@ -9,9 +11,9 @@ export default function DownloadLink({path, children}) {
       to={undefined}
       href={linkProps.to}
       download
-      target='_blank'
+      target="_blank"
     >
       {children}
     </PrimaryLink>
-  )
+  );
 }

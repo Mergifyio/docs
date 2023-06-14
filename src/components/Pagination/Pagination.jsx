@@ -1,27 +1,30 @@
-import PaginationButton from './PaginationButton';
+import { Flex } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import React, {useContext, useMemo} from 'react';
-import {FiChevronLeft, FiChevronRight} from 'react-icons/fi';
-import {Flex} from '@chakra-ui/react';
+import React, { useContext, useMemo } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+
 import {
   PathContext,
   flattenNavItems,
   getFullPath,
-  isPathActive
+  isPathActive,
 } from '../../utils';
 
-export function Pagination({navItems}) {
-  const {uri, basePath} = useContext(PathContext);
+import PaginationButton from './PaginationButton';
+
+export function Pagination({ navItems }) {
+  const { uri, basePath } = useContext(PathContext);
 
   const [prevItem, nextItem] = useMemo(() => {
     const navLinks = flattenNavItems(navItems).filter(
-      navItem =>
+      (navItem) => (
         // only include link items
-        !navItem.children &&
-        // and just local pages
-        navItem.path.startsWith('/')
+        !navItem.children
+         // and just local pages
+         && navItem.path.startsWith('/')
+      ),
     );
-    const currentIndex = navLinks.findIndex(navItem => {
+    const currentIndex = navLinks.findIndex((navItem) => {
       const fullPath = getFullPath(navItem.path, basePath);
       return isPathActive(fullPath, uri);
     });
@@ -56,5 +59,5 @@ export function Pagination({navItems}) {
 }
 
 Pagination.propTypes = {
-  navItems: PropTypes.array.isRequired
+  navItems: PropTypes.array.isRequired,
 };

@@ -1,30 +1,34 @@
-import PropTypes from 'prop-types';
-import React, {createContext, useContext} from 'react';
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   Button,
   Collapse,
   Stack,
   chakra,
-  useColorModeValue
+  useColorModeValue,
 } from '@chakra-ui/react';
-import {FiChevronDown, FiChevronRight, FiExternalLink} from 'react-icons/fi';
-import {Link as GatsbyLink} from 'gatsby';
+import { Link as GatsbyLink } from 'gatsby';
+import PropTypes from 'prop-types';
+import React, { createContext, useContext } from 'react';
+import { FiChevronDown, FiChevronRight, FiExternalLink } from 'react-icons/fi';
+
 import {
   PathContext,
   getFullPath,
   isPathActive,
   isUrl,
-  useTagColors
+  useTagColors,
 } from '../../utils';
 
 export const NavContext = createContext();
 
-const getItemPaths = (items, basePath) =>
-  items.flatMap(({path, children}) =>
-    children ? getItemPaths(children, basePath) : getFullPath(path, basePath)
-  );
+const getItemPaths = (items, basePath) => items.flatMap(({ path, children }) => (
+  children ? getItemPaths(children, basePath) : getFullPath(path, basePath)
+));
 
-function NavButton({isActive, depth, children, ...props}) {
+function NavButton({
+  isActive, depth, children, ...props
+}) {
   const [activeBg, activeTextColor] = useTagColors();
   const activeHoverBg = useColorModeValue('blue.50', 'blue.500');
 
@@ -32,8 +36,8 @@ function NavButton({isActive, depth, children, ...props}) {
     bg: activeBg,
     color: activeTextColor,
     _hover: {
-      bg: activeHoverBg
-    }
+      bg: activeHoverBg,
+    },
   };
 
   return (
@@ -56,17 +60,15 @@ function NavButton({isActive, depth, children, ...props}) {
 NavButton.propTypes = {
   children: PropTypes.node.isRequired,
   isActive: PropTypes.bool,
-  depth: PropTypes.number.isRequired
+  depth: PropTypes.number.isRequired,
 };
 
-function NavGroup({group, depth}) {
-  const {nav, setNav} = useContext(NavContext);
-  const {basePath, uri} = useContext(PathContext);
+function NavGroup({ group, depth }) {
+  const { nav, setNav } = useContext(NavContext);
+  const { basePath, uri } = useContext(PathContext);
 
   const isOpen = nav[group.id];
-  const isActive = getItemPaths(group.children, basePath).some(path =>
-    isPathActive(path, uri)
-  );
+  const isActive = getItemPaths(group.children, basePath).some((path) => isPathActive(path, uri));
 
   return (
     <div>
@@ -80,7 +82,7 @@ function NavGroup({group, depth}) {
           const open = !isOpen;
           setNav({
             ...nav,
-            [group.id]: open
+            [group.id]: open,
           });
         }}
         depth={depth}
@@ -101,11 +103,11 @@ function NavGroup({group, depth}) {
 
 NavGroup.propTypes = {
   group: PropTypes.object.isRequired,
-  depth: PropTypes.number.isRequired
+  depth: PropTypes.number.isRequired,
 };
 
-export default function NavItems({items, depth = 0}) {
-  const {basePath, uri} = useContext(PathContext);
+export default function NavItems({ items, depth = 0 }) {
+  const { basePath, uri } = useContext(PathContext);
   return (
     <Stack spacing="1" align="flex-start" pb={depth && 3}>
       {items.map((item, index) => {
@@ -115,11 +117,11 @@ export default function NavItems({items, depth = 0}) {
 
         if (isUrl(item.path)) {
           const buttonProps = !item.path.startsWith(
-            'https://www.apollographql.com'
+            'https://www.apollographql.com',
           ) && {
             target: '_blank',
             rel: 'noreferrer noopener',
-            rightIcon: <FiExternalLink />
+            rightIcon: <FiExternalLink />,
           };
           return (
             <NavButton
@@ -154,5 +156,5 @@ export default function NavItems({items, depth = 0}) {
 
 NavItems.propTypes = {
   items: PropTypes.array.isRequired,
-  depth: PropTypes.number
+  depth: PropTypes.number,
 };

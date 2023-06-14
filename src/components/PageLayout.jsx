@@ -1,14 +1,3 @@
-import Footer from './Footer';
-import Header, {TOTAL_HEADER_HEIGHT} from './Header';
-import MobileNav from './MobileNav';
-import PropTypes from 'prop-types';
-import React from 'react';
-import Sidebar, {
-  SIDEBAR_WIDTH_BASE,
-  SIDEBAR_WIDTH_XL,
-  SidebarNav
-} from './Sidebar';
-import useLocalStorage from 'react-use/lib/useLocalStorage';
 import {
   Box,
   Divider,
@@ -18,10 +7,26 @@ import {
   IconButton,
   Tooltip,
   useColorModeValue,
-  useToken
+  useToken,
 } from '@chakra-ui/react';
-import {FiChevronsRight} from 'react-icons/fi';
-import '../main.css'
+import PropTypes from 'prop-types';
+
+import React from 'react';
+
+import { FiChevronsRight } from 'react-icons/fi';
+import useLocalStorage from 'react-use/lib/useLocalStorage';
+
+import Footer from './Footer';
+import Header, { TOTAL_HEADER_HEIGHT } from './Header';
+import MobileNav from './MobileNav';
+
+import Sidebar, {
+  SIDEBAR_WIDTH_BASE,
+  SIDEBAR_WIDTH_XL,
+  SidebarNav,
+} from './Sidebar';
+
+import '../main.css';
 
 export function usePageLayoutProps(props) {
   const paddingTop = useToken('space', 10);
@@ -29,7 +34,7 @@ export function usePageLayoutProps(props) {
   return {
     ...props,
     paddingTop,
-    paddingBottom
+    paddingBottom,
   };
 }
 
@@ -43,11 +48,11 @@ export default function Page({
   aside,
   paddingTop,
   paddingBottom,
-  contentProps
+  contentProps,
 }) {
   const [sidebarHidden, setSidebarHidden] = useLocalStorage('sidebar');
 
-  const {navItems} = pageContext;
+  const { navItems } = pageContext;
   const bgColor = useColorModeValue('white', 'blue.800');
 
   return (
@@ -60,7 +65,7 @@ export default function Page({
       <Fade in={sidebarHidden} unmountOnExit delay={0.25}>
         <Tooltip placement="right" label="Show sidebar">
           <IconButton
-            display={{base: 'none', md: 'flex'}}
+            display={{ base: 'none', md: 'flex' }}
             pos="fixed"
             mt="2"
             left="2"
@@ -68,7 +73,7 @@ export default function Page({
             variant="outline"
             fontSize="md"
             icon={<FiChevronsRight />}
-            css={{top: TOTAL_HEADER_HEIGHT}}
+            css={{ top: TOTAL_HEADER_HEIGHT }}
             onClick={() => setSidebarHidden(false)}
           />
         </Tooltip>
@@ -80,7 +85,7 @@ export default function Page({
         marginLeft={{
           base: 0,
           md: sidebarHidden ? 0 : SIDEBAR_WIDTH_BASE,
-          xl: sidebarHidden ? 0 : SIDEBAR_WIDTH_XL
+          xl: sidebarHidden ? 0 : SIDEBAR_WIDTH_XL,
         }}
         transitionProperty="margin-left"
         transitionDuration="normal"
@@ -91,11 +96,11 @@ export default function Page({
           maxW="8xl"
           mx="auto"
           align="flex-start"
-          px={{base: 6, md: 10}}
+          px={{ base: 6, md: 10 }}
           as="main"
           sx={{
             paddingTop,
-            paddingBottom
+            paddingBottom,
           }}
         >
           <Box flexGrow="1" w="0">
@@ -104,7 +109,7 @@ export default function Page({
             </Heading>
             {subtitle}
             <Divider my="8" />
-            <Box fontSize={{md: 'lg'}} lineHeight={{md: 1.7}} {...contentProps}>
+            <Box fontSize={{ md: 'lg' }} lineHeight={{ md: 1.7 }} {...contentProps}>
               {children}
             </Box>
             {pagination}
@@ -128,5 +133,5 @@ Page.propTypes = {
   aside: PropTypes.element,
   subtitle: PropTypes.node,
   description: PropTypes.string,
-  contentProps: PropTypes.object
+  contentProps: PropTypes.object,
 };

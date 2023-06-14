@@ -1,14 +1,18 @@
-import { Table, Thead, Tr, Th, Tbody, Td, Link } from '@chakra-ui/react';
-import React from 'react'
+import {
+  Table, Thead, Tr, Th, Tbody, Td, Link,
+} from '@chakra-ui/react';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
+
 import configSchema from '../content/mergify-configuration-openapi.json';
 import { getTypeLink } from '../utils/getTypeLink';
+
 import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
 
 interface Props {
   /** Action's name to retrieve its options */
-  action: string;
+  action: keyof typeof configSchema.definitions.Actions.properties;
 }
 
 interface OptionDefinition {
@@ -19,11 +23,12 @@ interface OptionDefinition {
 }
 
 export default function ActionOptionsTable({ action }: Props) {
-  const options = configSchema.definitions.Actions.properties[action].properties as {[optionKey: string]: OptionDefinition};
+  const options = configSchema.definitions.Actions
+    .properties[action].properties as { [optionKey: string]: OptionDefinition };
 
-  const hasDefaultValue = (definition: OptionDefinition) => {
-    return definition.default !== undefined && String(definition.default).length > 0
-  }
+  const hasDefaultValue = (definition: OptionDefinition) => (
+    definition.default !== undefined && String(definition.default).length > 0
+  );
 
   return (
     <Table>
@@ -41,10 +46,10 @@ export default function ActionOptionsTable({ action }: Props) {
 
           return (
             <Tr>
-              <Td sx={{whiteSpace: 'nowrap'}}>
+              <Td sx={{ whiteSpace: 'nowrap' }}>
                 <InlineCode>{optionKey}</InlineCode>
               </Td>
-              <Td>{valueTypeLink ? <Link color='primary' textDecoration='underline' href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
+              <Td>{valueTypeLink ? <Link color="primary" textDecoration="underline" href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
               <Td>
                 {hasDefaultValue(definition) && (
                   <InlineCode>
@@ -58,9 +63,9 @@ export default function ActionOptionsTable({ action }: Props) {
                 </ReactMarkdown>
               </Td>
             </Tr>
-          )
+          );
         })}
       </Tbody>
     </Table>
-  )
+  );
 }

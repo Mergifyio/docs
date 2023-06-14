@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import {
   Flex,
   HStack,
@@ -7,21 +5,24 @@ import {
   IconButton,
   Link,
   SimpleGrid,
-  Text
+  Text,
 } from '@chakra-ui/react';
-import {Link as GatsbyLink} from 'gatsby';
-import {PrimaryLink} from './RelativeLink';
+import { Link as GatsbyLink } from 'gatsby';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-export const DocsetGrid = props => (
-  <SimpleGrid spacing="4" minChildWidth="250px" {...props} />
-);
+import { PrimaryLink } from './RelativeLink';
+
+export function DocsetGrid(props) {
+  return <SimpleGrid spacing="4" minChildWidth="250px" {...props} />;
+}
 
 export function Docset({
   title,
   children,
   description,
   path,
-  icon
+  icon,
 }) {
   return (
     <PrimaryLink as={GatsbyLink} to={path}>
@@ -46,9 +47,9 @@ Docset.propTypes = {
   description: PropTypes.string,
   path: PropTypes.string.isRequired,
   icon: PropTypes.element,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
-export const CommunityButton = props => (
-  <IconButton as={Link} fontSize="larger" isExternal {...props} />
-);
+export function CommunityButton(props) {
+  return <IconButton as={Link} fontSize="larger" isExternal {...props} />;
+}

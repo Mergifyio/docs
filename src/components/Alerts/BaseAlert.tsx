@@ -1,5 +1,7 @@
+import {
+  Alert, AlertDescription, AlertIcon, AlertProps, AlertTitle, Box,
+} from '@chakra-ui/react';
 import React from 'react';
-import {Alert, AlertDescription, AlertIcon, AlertProps, AlertTitle, Box} from '@chakra-ui/react';
 
 interface Props {
   children: React.ReactNode;
@@ -8,10 +10,12 @@ interface Props {
   status: AlertProps['status']
 }
 
-export const BaseAlert = ({children, title, alertProps, status}: Props) => {
+export function BaseAlert({
+  children, title, alertProps, status,
+}: Props) {
   return (
     <Alert
-      variant='left-accent'
+      variant="left-accent"
       status={status}
       {...alertProps}
     >
@@ -24,4 +28,4 @@ export const BaseAlert = ({children, title, alertProps, status}: Props) => {
       </Box>
     </Alert>
   );
-};
+}

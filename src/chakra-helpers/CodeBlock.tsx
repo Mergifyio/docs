@@ -1,9 +1,4 @@
 // eslint-disable-next-line import/named
-import {Highlight, themes} from 'prism-react-renderer';
-import Prism from 'prismjs';
-import React, {ReactNode, createContext, useContext, useState} from 'react';
-import fenceparser from 'fenceparser';
-import rangeParser from 'parse-numeric-range';
 import {
   Box,
   Button,
@@ -12,13 +7,22 @@ import {
   IconButton,
   chakra,
   useClipboard,
-  useColorModeValue
+  useColorModeValue,
 } from '@chakra-ui/react';
-import {CodeBlockTabs} from './CodeBlockTabs';
-import {FiCheck} from '@react-icons/all-files/fi/FiCheck';
-import {FiClipboard} from '@react-icons/all-files/fi/FiClipboard';
-import {FiEyeOff} from '@react-icons/all-files/fi/FiEyeOff';
-import {getNormalizedLanguage} from './language-util';
+import { FiCheck } from '@react-icons/all-files/fi/FiCheck';
+import { FiClipboard } from '@react-icons/all-files/fi/FiClipboard';
+import { FiEyeOff } from '@react-icons/all-files/fi/FiEyeOff';
+import fenceparser from 'fenceparser';
+import rangeParser from 'parse-numeric-range';
+import { Highlight, themes } from 'prism-react-renderer';
+import Prism from 'prismjs';
+import React, {
+  ReactNode, createContext, useContext, useState,
+} from 'react';
+
+import { CodeBlockTabs } from './CodeBlockTabs';
+
+import { getNormalizedLanguage } from './language-util';
 
 const CODE_BLOCK_SPACING = 4;
 export const GA_EVENT_CATEGORY_CODE_BLOCK = 'Code Block';
@@ -26,21 +30,17 @@ export const GA_EVENT_CATEGORY_CODE_BLOCK = 'Code Block';
 export const CodeBlockContext = createContext(null);
 export const LineNumbersContext = createContext(true);
 
-const isHighlightComment = (token, comment = 'highlight-line') => {
-  return (
-    token.types.includes('comment') &&
-    new RegExp(`\\b${comment}$`).test(token.content)
-  );
-};
+const isHighlightComment = (token, comment = 'highlight-line') => (
+  token.types.includes('comment')
+    && new RegExp(`\\b${comment}$`).test(token.content)
+);
 
-const isHighlightStart = (line, comment = 'highlight-start') =>
-  line.some(token => isHighlightComment(token, comment));
+const isHighlightStart = (line, comment = 'highlight-start') => line.some((token) => isHighlightComment(token, comment));
 
-const isHighlightEnd = line => isHighlightStart(line, 'highlight-end');
+const isHighlightEnd = (line) => isHighlightStart(line, 'highlight-end');
 
 const getCodeWithoutHighlightComments = (code: string) => {
-  const highlightRegex =
-    /\/\/ (highlight-line|highlight-start|highlight-end)$/gm;
+  const highlightRegex = /\/\/ (highlight-line|highlight-start|highlight-end)$/gm;
 
   return code.replace(highlightRegex, '');
 };
@@ -50,10 +50,10 @@ type MarkdownCodeBlockProps = {
   isPartOfMultiCode?: boolean;
 };
 
-export const MarkdownCodeBlock = ({
+export function MarkdownCodeBlock({
   children,
-  isPartOfMultiCode
-}: MarkdownCodeBlockProps) => {
+  isPartOfMultiCode,
+}: MarkdownCodeBlockProps) {
   const defaultShowLineNumbers = useContext(LineNumbersContext);
   const [child] = Array.isArray(children) ? children : [children];
   const {
@@ -61,7 +61,7 @@ export const MarkdownCodeBlock = ({
     children: innerChildren,
     metastring,
     'data-meta': dataMeta,
-    hidden = false
+    hidden = false,
   } = child.props;
 
   const meta = metastring || dataMeta;
@@ -69,7 +69,7 @@ export const MarkdownCodeBlock = ({
     title = null,
     highlight = null,
     showLineNumbers = defaultShowLineNumbers,
-    disableCopy = false
+    disableCopy = false,
   } = meta ? fenceparser(meta) : {};
   const linesToHighlight = highlight
     ? rangeParser(Object.keys(highlight).toString())
@@ -89,7 +89,7 @@ export const MarkdownCodeBlock = ({
       isPartOfMultiCode={isPartOfMultiCode}
     />
   );
-};
+}
 
 export type CodeBlockProps = {
   language?: string;
@@ -103,7 +103,7 @@ export type CodeBlockProps = {
   disableTabs?: boolean;
 };
 
-export const CodeBlock = ({
+export function CodeBlock({
   code,
   language,
   title,
@@ -112,17 +112,17 @@ export const CodeBlock = ({
   hidden: defaultHidden = false,
   disableCopy = false,
   isPartOfMultiCode = false,
-  disableTabs = false
-}: CodeBlockProps) => {
-  const {onCopy, hasCopied} = useClipboard(
-    getCodeWithoutHighlightComments(code)
+  disableTabs = false,
+}: CodeBlockProps) {
+  const { onCopy, hasCopied } = useClipboard(
+    getCodeWithoutHighlightComments(code),
   );
   const [hidden, setHidden] = useState(defaultHidden);
 
   const highlightColor = useColorModeValue('gray.100', 'gray.700');
   const lineNumberColor = useColorModeValue(
     'gray.500',
-    '#798FBB'
+    '#798FBB',
   );
 
   const blockLanguage = getNormalizedLanguage(language);
@@ -144,10 +144,12 @@ export const CodeBlock = ({
         language={language as string}
         theme={theme}
       >
-        {({className, style, tokens, getLineProps, getTokenProps}) => {
+        {({
+          className, style, tokens, getLineProps, getTokenProps,
+        }) => {
           // length of longest line number
           // ex. if there are 28 lines in the code block, lineNumberOffset = 2ch
-          const lineNumberOffset = tokens.length.toString().length + 'ch';
+          const lineNumberOffset = `${tokens.length.toString().length}ch`;
 
           // create an array of lines highlighted by "highlight-start" and
           // "highlight-end" comments
@@ -198,7 +200,7 @@ export const CodeBlock = ({
                     hidden && {
                       filter: 'blur(8px)',
                       pointerEvents: 'none',
-                      userSelect: 'none'
+                      userSelect: 'none',
                     }
                   }
                 >
@@ -211,18 +213,21 @@ export const CodeBlock = ({
                   >
                     {tokens
                       .filter(
-                        line => !isHighlightStart(line) && !isHighlightEnd(line)
+                        (line) => !isHighlightStart(line) && !isHighlightEnd(line),
                       )
                       .map((line, i) => {
-                        const shouldHighlight =
-                          // if the line number exists in the meta string or highlight comment ranges
+                        const shouldHighlight = (
+                          // if the line number exists in the meta
+                          // string or highlight comment ranges
                           linesToHighlight
                             .concat(highlightRange)
-                            .includes(i + 1) ||
+                            .includes(i + 1)
                           // or if the line has a "highlight-line" comment in it
-                          line.some(token => isHighlightComment(token));
+                          || line.some((token) => isHighlightComment(token))
+                        );
                         return (
                           <Flex
+                            // eslint-disable-next-line react/no-array-index-key
                             key={i}
                             px={CODE_BLOCK_SPACING}
                             // for line highlighting to go all the way across code block
@@ -246,17 +251,18 @@ export const CodeBlock = ({
                             <Box
                               {...getLineProps({
                                 line,
-                                key: i
+                                key: i,
                               })}
                             >
                               <Box>
                                 {line
                                   // filter out "highlight-line" comments
-                                  .filter(token => !isHighlightComment(token))
+                                  .filter((token) => !isHighlightComment(token))
                                   .map((token, key) => (
                                     <span
+                                      // eslint-disable-next-line react/no-array-index-key
                                       key={key}
-                                      {...getTokenProps({token, key})}
+                                      {...getTokenProps({ token, key })}
                                     />
                                   ))}
                               </Box>
@@ -276,7 +282,7 @@ export const CodeBlock = ({
                 css={
                   hidden && {
                     opacity: 0,
-                    transition: 'none'
+                    transition: 'none',
                   }
                 }
               >
@@ -317,4 +323,4 @@ export const CodeBlock = ({
       </Highlight>
     </Box>
   );
-};
+}

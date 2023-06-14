@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import {
   Box,
   Drawer,
@@ -7,17 +5,19 @@ import {
   DrawerContent,
   DrawerOverlay,
   IconButton,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
-import {FiMenu} from 'react-icons/fi';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { FiMenu } from 'react-icons/fi';
 
-export default function MobileNav({children}) {
-  const {isOpen, onOpen, onClose} = useDisclosure();
+export default function MobileNav({ children }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <IconButton
         ml="-2"
-        display={{base: 'flex', md: 'none'}}
+        display={{ base: 'flex', md: 'none' }}
         variant="ghost"
         fontSize="2xl"
         icon={<FiMenu />}
@@ -37,5 +37,5 @@ export default function MobileNav({children}) {
 }
 
 MobileNav.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };

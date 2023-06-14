@@ -1,25 +1,24 @@
+import { BiText } from '@react-icons/all-files/bi/BiText';
+import type { IconType } from '@react-icons/all-files/lib';
+import { SiGnubash } from '@react-icons/all-files/si/SiGnubash';
+import { SiGraphql } from '@react-icons/all-files/si/SiGraphql';
+import { SiGroovy } from '@react-icons/all-files/si/SiGroovy';
+import { SiJava } from '@react-icons/all-files/si/SiJava';
+import { SiJavascript } from '@react-icons/all-files/si/SiJavascript';
+import { SiJson } from '@react-icons/all-files/si/SiJson';
+import { SiKotlin } from '@react-icons/all-files/si/SiKotlin';
+import { SiRuby } from '@react-icons/all-files/si/SiRuby';
+import { SiRust } from '@react-icons/all-files/si/SiRust';
+import { SiSwift } from '@react-icons/all-files/si/SiSwift';
+import { SiTypescript } from '@react-icons/all-files/si/SiTypescript';
+import { TiDocumentText } from '@react-icons/all-files/ti/TiDocumentText';
 import React from 'react';
-import {BiText} from '@react-icons/all-files/bi/BiText';
-import {SiGnubash} from '@react-icons/all-files/si/SiGnubash';
-import {SiGraphql} from '@react-icons/all-files/si/SiGraphql';
-import {SiGroovy} from '@react-icons/all-files/si/SiGroovy';
-import {SiJava} from '@react-icons/all-files/si/SiJava';
-import {SiJavascript} from '@react-icons/all-files/si/SiJavascript';
-import {SiJson} from '@react-icons/all-files/si/SiJson';
-import {SiKotlin} from '@react-icons/all-files/si/SiKotlin';
-import {SiRuby} from '@react-icons/all-files/si/SiRuby';
-import {SiRust} from '@react-icons/all-files/si/SiRust';
-import {SiSwift} from '@react-icons/all-files/si/SiSwift';
-import {SiTypescript} from '@react-icons/all-files/si/SiTypescript';
-import {TiDocumentText} from '@react-icons/all-files/ti/TiDocumentText';
-import type {IconType} from '@react-icons/all-files/lib';
 
 export function getNormalizedLanguage(language?: string): string {
-  const classless =
-    language
-      ?.replace(/language-/g, '')
-      .toLocaleLowerCase()
-      .replace(/:.*/g, '') ?? '';
+  const classless = language
+    ?.replace(/language-/g, '')
+    .toLocaleLowerCase()
+    .replace(/:.*/g, '') ?? '';
   switch (classless) {
     case 'js':
     case 'jsx':
@@ -65,7 +64,7 @@ export function getIconComponentType(language: string): IconType | undefined {
     Ruby: SiRuby,
     Rust: SiRust,
     Swift: SiSwift,
-    YAML: TiDocumentText
+    YAML: TiDocumentText,
   };
   const component = componentMap[normalizedLang];
   return component;

@@ -1,11 +1,12 @@
+import { Box, Button } from '@chakra-ui/react';
+import { Link as GatsbyLink } from 'gatsby';
 import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
-import {Box, Button} from '@chakra-ui/react';
-import {Link as GatsbyLink} from 'gatsby';
-import {PathContext, getFullPath} from '../../utils';
+import React, { useContext } from 'react';
 
-export default function PaginationButton({item, label, ...props}) {
-  const {basePath} = useContext(PathContext);
+import { PathContext, getFullPath } from '../../utils';
+
+export default function PaginationButton({ item, label, ...props }) {
+  const { basePath } = useContext(PathContext);
   return (
     <Button
       h="auto"
@@ -32,5 +33,5 @@ export default function PaginationButton({item, label, ...props}) {
 
 PaginationButton.propTypes = {
   item: PropTypes.object.isRequired,
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
 };

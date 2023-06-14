@@ -1,20 +1,20 @@
 import React from 'react';
 
-export function Screenshot(props) {
+// TODO: Migrate to tsx to enforce `alt` property via props
 
+export function Screenshot(props) {
   const imgStyle = {
     margin: 'auto',
     marginBottom: '1em',
   };
 
   return (
+    // eslint-disable-next-line jsx-a11y/alt-text
     <img style={imgStyle} {...props} />
   );
 }
 
-
 export function IntegrationLogo(props) {
-
   const imgStyle = {
     float: 'right',
     marginLeft: '1em',
@@ -24,6 +24,7 @@ export function IntegrationLogo(props) {
   };
 
   return (
+    // eslint-disable-next-line jsx-a11y/alt-text
     <img style={imgStyle} {...props} />
   );
 }

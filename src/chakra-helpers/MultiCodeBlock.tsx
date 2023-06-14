@@ -1,35 +1,36 @@
+import { Box, Flex } from '@chakra-ui/react';
 import React, {
   ReactNode,
   createContext,
   isValidElement,
   useContext,
-  useState
+  useState,
 } from 'react';
-import {Box, Flex} from '@chakra-ui/react';
-import {CodeBlockProps} from './CodeBlock';
-import {CodeBlockTabs} from './CodeBlockTabs';
-import {getNormalizedLanguage} from './language-util';
+
+import { CodeBlockProps } from './CodeBlock';
+import { CodeBlockTabs } from './CodeBlockTabs';
+import { getNormalizedLanguage } from './language-util';
 
 export const MultiCodeBlockContext = createContext<{
   language: string | null;
   setLanguage: React.Dispatch<string>;
-}>(null);
+} | null>(null);
 
 type MultiCodeBlockProps = {
   children: ReactNode;
 };
 
-export const MultiCodeBlock = ({
-  children
-}: MultiCodeBlockProps) => {
+export function MultiCodeBlock({
+  children,
+}: MultiCodeBlockProps) {
   const codeBlocks = React.Children.toArray(children).reduce<
-    Record<string, React.ReactElement<CodeBlockProps>>
+  Record<string, React.ReactElement<CodeBlockProps>>
   >((acc, child) => {
     if (!isValidElement(child)) {
       return acc;
     }
     return Object.assign(acc, {
-      [getNormalizedLanguage(child.props.children.props.className)]: child
+      [getNormalizedLanguage(child.props.children.props.className)]: child,
     });
   }, {});
 
@@ -38,10 +39,8 @@ export const MultiCodeBlock = ({
   const languages = Object.keys(codeBlocks);
   const defaultLanguage = languages[0];
   const [localLanguage, setLocalLanguage] = useState(languages[0]);
-  const language = codeBlockContext ? codeBlockContext.language : localLanguage;
-  const setLanguage = codeBlockContext
-    ? codeBlockContext.setLanguage
-    : setLocalLanguage;
+  const language = codeBlockContext?.language ?? localLanguage;
+  const setLanguage = codeBlockContext?.setLanguage ?? setLocalLanguage;
   const renderedLanguage = languages.includes(language)
     ? language
     : defaultLanguage;
@@ -53,18 +52,18 @@ export const MultiCodeBlock = ({
         activeLanguage={renderedLanguage}
         setLanguage={setLanguage}
       />
-      {languages.map(language => (
+      {languages.map((lang) => (
         <Box
-          key={language}
+          key={lang}
           role="tabpanel"
           tabIndex={0}
-          display={language === renderedLanguage ? 'block' : 'none'}
+          display={lang === renderedLanguage ? 'block' : 'none'}
         >
-          {React.cloneElement(codeBlocks[language], {
-            isPartOfMultiCode: true
+          {React.cloneElement(codeBlocks[lang], {
+            isPartOfMultiCode: true,
           })}
         </Box>
       ))}
     </Flex>
   );
-};
+}

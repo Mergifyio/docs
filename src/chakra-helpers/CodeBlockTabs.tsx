@@ -1,4 +1,3 @@
-import React, {useEffect, useRef, useState} from 'react';
 import {
   Box,
   Button,
@@ -6,17 +5,19 @@ import {
   Flex,
   FlexProps,
   useColorModeValue,
-  useToken
+  useToken,
 } from '@chakra-ui/react';
-import {BsChevronLeft} from '@react-icons/all-files/bs/BsChevronLeft';
-import {BsChevronRight} from '@react-icons/all-files/bs/BsChevronRight';
-import {TinyColor} from '@ctrl/tinycolor';
-import {getIconComponent} from './language-util';
+import { TinyColor } from '@ctrl/tinycolor';
+import { BsChevronLeft } from '@react-icons/all-files/bs/BsChevronLeft';
+import { BsChevronRight } from '@react-icons/all-files/bs/BsChevronRight';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { getIconComponent } from './language-util';
 
 function getTabButtonProps(
   loc: 'LEFT' | 'RIGHT',
   visible: boolean,
-  gradientColor: TinyColor
+  gradientColor: TinyColor,
 ): FlexProps {
   const endColor = gradientColor.clone().setAlpha(0);
 
@@ -33,12 +34,12 @@ function getTabButtonProps(
     background: `linear-gradient(${[
       loc === 'LEFT' ? '90deg' : '270deg',
       `${gradientColor.toRgbString()} 50%`,
-      endColor.toRgbString()
+      endColor.toRgbString(),
     ]})`,
     opacity: visible ? 1 : 0,
     pointerEvents: visible ? 'all' : 'none',
     transition: 'all 250ms ease-in-out',
-    cursor: 'pointer'
+    cursor: 'pointer',
   };
 }
 
@@ -48,11 +49,11 @@ interface CodeBlockTabsProps {
   setLanguage?: (language: string) => void;
 }
 
-export const CodeBlockTabs = ({
+export function CodeBlockTabs({
   languages,
   activeLanguage,
-  setLanguage
-}: CodeBlockTabsProps) => {
+  setLanguage,
+}: CodeBlockTabsProps) {
   // Track inner (infinite width) and outer (container width) boxes using refs
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
@@ -61,7 +62,7 @@ export const CodeBlockTabs = ({
 
   // Track tabs scroll position to determine if arrows are necessary
   useEffect(() => {
-    if (!outerRef.current) return;
+    if (!outerRef.current) return () => null;
     const el = outerRef.current;
     const onScroll = () => {
       const maxScroll = el.scrollWidth - el.clientWidth;
@@ -78,21 +79,21 @@ export const CodeBlockTabs = ({
     if (!outerRef) return;
     outerRef.current?.scrollBy({
       left: distance,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
   const bgColor = useToken('colors', 'gray.800');
   const gradientColor = useColorModeValue(
     new TinyColor('white'),
-    new TinyColor(bgColor)
+    new TinyColor(bgColor),
   );
 
   // Determine which arrows (if any) need to be shown
   const showArrows = Boolean(
-    innerRef.current &&
-      outerRef.current &&
-      innerRef.current.clientWidth > outerRef.current.clientWidth
+    innerRef.current
+      && outerRef.current
+      && innerRef.current.clientWidth > outerRef.current.clientWidth,
   );
   // Determine if the left or right arrows should be shown based on overall
   // visibility, and the scroll position
@@ -112,10 +113,10 @@ export const CodeBlockTabs = ({
         pos="relative"
         css={{
           '&::-webkit-scrollbar': {
-            display: 'none'
+            display: 'none',
           },
           '-ms-overflow-style': 'none',
-          'scrollbar-width': 'none'
+          'scrollbar-width': 'none',
         }}
         ref={outerRef}
       >
@@ -127,7 +128,7 @@ export const CodeBlockTabs = ({
           flexDirection="row"
           w="max-content"
         >
-          {languages.map(language => (
+          {languages.map((language) => (
             <Button
               leftIcon={getIconComponent(language)}
               key={language}
@@ -155,4 +156,4 @@ export const CodeBlockTabs = ({
       </Flex>
     </Box>
   );
-};
+}

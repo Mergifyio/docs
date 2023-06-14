@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import {
   Box,
   Button,
@@ -9,21 +7,23 @@ import {
   List,
   ListItem,
   Stack,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
-import {FiCheck, FiChevronDown, FiChevronUp} from 'react-icons/fi';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { FiCheck, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 function ExpansionPanelLine(props) {
   return <Box w="px" mx="auto" bg="current" {...props} />;
 }
 
-export function ExpansionPanelListItem({number, children}) {
+export function ExpansionPanelListItem({ number, children }) {
   const isLast = isNaN(number);
   return (
     <ListItem>
       <Flex>
         <Flex mr="2" shrink="0" direction="column" color="primary">
-          <ExpansionPanelLine h="0.5" sx={number === 1 && {bg: 'none'}} />
+          <ExpansionPanelLine h="0.5" sx={number === 1 && { bg: 'none' }} />
           <Circle
             size="6"
             borderWidth="1px"
@@ -45,16 +45,16 @@ export function ExpansionPanelListItem({number, children}) {
 
 ExpansionPanelListItem.propTypes = {
   number: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
-export function ExpansionPanelList({children}) {
+export function ExpansionPanelList({ children }) {
   return (
     <List>
       {React.Children.toArray(children).map((child, index, array) => {
         const number = index + 1;
         return React.cloneElement(child, {
-          number: number < array.length ? number : <FiCheck />
+          number: number < array.length ? number : <FiCheck />,
         });
       })}
     </List>
@@ -62,15 +62,15 @@ export function ExpansionPanelList({children}) {
 }
 
 ExpansionPanelList.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export default function ExpansionPanel({
   children,
   title = 'Click to expand',
-  defaultIsOpen
+  defaultIsOpen,
 }) {
-  const {isOpen, onToggle} = useDisclosure({defaultIsOpen});
+  const { isOpen, onToggle } = useDisclosure({ defaultIsOpen });
   return (
     <Box
       borderWidth="1px"
@@ -86,7 +86,7 @@ export default function ExpansionPanel({
         justifyContent="flex-start"
         leftIcon={isOpen ? <FiChevronUp /> : <FiChevronDown />}
         onClick={onToggle}
-        _focus={{shadow: 'none'}}
+        _focus={{ shadow: 'none' }}
       >
         {title}
       </Button>
@@ -102,5 +102,5 @@ export default function ExpansionPanel({
 ExpansionPanel.propTypes = {
   defaultIsOpen: PropTypes.bool,
   children: PropTypes.node.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
 };
