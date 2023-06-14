@@ -1,0 +1,68 @@
+---
+title: Update
+description: Update the pull request branch with its base branch.
+---
+
+import ActionOptionsTable from '../../components/ActionOptionsTable'
+import { Info } from '../../components/Alerts/Info';
+import { Screenshot } from "../../components/Images"
+import updateBranchScreenshot from "../images/actions/update/update-branch.png"
+
+The `update` action instructs Mergify to update the pull request branch with
+its base branch.
+
+<Screenshot src={updateBranchScreenshot} alt="Mergify Branch Update" />
+
+When this action is added to a rule, Mergify will update the pull request
+branch with the latest changes from its base branch, if necessary. This is done
+by merging the base branch into the pull request branch or by rebasing the pull
+request branch onto the base branch, based on your preference.
+
+<Info>
+{/* FIXME: link to merge queue doc */}
+You do not need to use this action if you use the merge queue. The merge
+queue automatically update the pull requests it processes as necessary, making
+sure they are tested with up-to-date code before being merged.
+</Info>
+
+## Parameters
+
+<ActionOptionsTable action='update' />
+
+## Examples
+
+### Update When Behind
+
+You can ask Mergify to update your pull requests when they are a few commits
+behind their base branch, for example:
+
+```yaml
+pull_request_rules:
+  - name: automatic update of pull requests where more 5 commits behind
+    conditions:
+      - base=main
+      - "#commits-behind>5"
+    actions:
+      update:
+```
+
+### Linear History
+
+As GitHub supports linear history in pull request settings, it is very handy to
+use a rule to keep your pull requests up-to-date. As you do not want to trigger
+your CI too often by always re-running it on every pull request — especially
+when there is still work in progress — you can limit this action to labeled
+pull requests.
+
+```yaml
+pull_request_rules:
+  - name: automatic update for PR marked as “keep-up-to-date“
+    conditions:
+      - -draft # filter-out draft PRs
+      - label="keep-up-to-date"
+    actions:
+      update:
+```
+
+When a pull request is not a draft, and has the label `keep-up-to-date`, it
+will be automatically updated with its base branch.
