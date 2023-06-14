@@ -18,7 +18,6 @@ import PropTypes from 'prop-types';
 import React, {Fragment, createElement, useMemo} from 'react';
 import RelativeLink, {ButtonLink} from './RelativeLink';
 import TableOfContents from './TableOfContents';
-import TypeScriptApiBox from './TypeScriptApiBox';
 import autolinkHeadings from 'rehype-autolink-headings';
 import rehypeReact from 'rehype-react';
 import useLocalStorage from 'react-use/lib/useLocalStorage';
@@ -138,8 +137,6 @@ export const mdxComponents = {
   ExpansionPanelListItem,
   MultiCodeBlock,
   CodeColumns,
-  TypeScriptApiBox,
-  TypescriptApiBox: TypeScriptApiBox,
   ButtonLink
 };
 
