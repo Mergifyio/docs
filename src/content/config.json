@@ -27,7 +27,8 @@
         "Rebase": "/actions/rebase",
         "Request Reviews": "/actions/request_reviews",
         "Review": "/actions/review",
-        "Update": "/actions/update"
+        "Update": "/actions/update",
+        "Squash": "/actions/squash"
       }
     },
     "Integration": {
