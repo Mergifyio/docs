@@ -25,7 +25,8 @@
         "Merge": "/actions/merge",
         "Post Check": "/actions/post_check",
         "Rebase": "/actions/rebase",
-        "Request Reviews": "/actions/request_reviews"
+        "Request Reviews": "/actions/request_reviews",
+        "Review": "/actions/review"
       }
     },
     "Integration": {

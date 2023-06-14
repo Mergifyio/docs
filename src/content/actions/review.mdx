@@ -1,0 +1,59 @@
+---
+title: Review
+description: Automate reviews for your pull requests with customizable comments and review types.
+---
+
+import ActionOptionsTable from '../../components/ActionOptionsTable'
+
+The `review` action provides you with an automated way to review pull requests.
+This can be particularly useful in situations where you want to automatically
+approve pull requests that meet certain criteria, or to request changes on a
+pull request when a particular check fails. By automating this process, you can
+increase the efficiency of your workflow and ensure consistency in the way pull
+requests are reviewed in your repository.
+
+## Parameters
+
+<ActionOptionsTable action='review'/>
+
+## Examples
+
+### Approve a pull request when all checks have passed
+
+```yaml
+pull_request_rules:
+  - name: automatic approval
+    conditions:
+      - check-success=myfirstCIname
+      - check-success=mysecondCIname
+    actions:
+      review:
+        type: APPROVE
+```
+
+In this example, Mergify will automatically approve any pull request once all
+checks have passed successfully.
+
+### Approve Dependabot Pull Requests
+
+You can use Mergify to review a pull request on your behalf. This can be handy
+if you require a minimum number of review to be present on a pull request
+(e.g., due to [branch
+protection](https://docs.github.com/en/github/administering-a-repository/about-protected-branches))
+but want to automate some merge.
+
+[Dependabot](https://github.com/features/security) is the bot behind GitHub
+automatic security update. It sends automatic updates for your project's
+dependencies, making sure they are secure. You can automate the approval of
+pull request created by `dependabot` with a rule such as:
+
+```yaml
+pull_request_rules:
+  - name: automatic approval for Dependabot pull requests
+    conditions:
+      - author=dependabot[bot]
+    actions:
+      review:
+        type: APPROVE
+        message: Automatically approving dependabot
+```
