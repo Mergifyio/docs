@@ -1145,7 +1145,7 @@
             },
             "commit_message": {
               "valueType": "string",
-              "description": "Defines what commit message to use for the squashed commit if not commit message is defined in the pull request body (see :ref:`commit message`). Possible values are:\n- ``all-commits`` to use the same format as GitHub squashed merge commit.\n- ``first-commit`` to use the message of the first commit of the pull request.\n- ``title+body`` means to use the title and body from the pull request   itself as the commit message. The pull request number will be added to   end of the title.",
+              "description": "Defines what commit message to use for the squashed commit if no commit message is defined in the pull request body (see :ref:`commit message`). Possible values are:\n- ``all-commits`` to use the same format as GitHub squashed merge commit.\n- ``first-commit`` to use the message of the first commit of the pull request.\n- ``title+body`` means to use the title and body from the pull request   itself as the commit message. The pull request number will be added to   end of the title.",
               "enum": [
                 "all-commits",
                 "first-commit",
