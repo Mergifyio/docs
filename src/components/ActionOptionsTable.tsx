@@ -50,14 +50,14 @@ export default function ActionOptionsTable({ action }: Props) {
                 <InlineCode>{optionKey}</InlineCode>
               </Td>
               <Td>{valueTypeLink ? <Link color="primary" textDecoration="underline" href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
-              <Td>
+              <Td lineHeight="7">
                 {hasDefaultValue(definition) && (
                   <InlineCode>
                     {String(definition.default)}
                   </InlineCode>
                 )}
               </Td>
-              <Td>
+              <Td lineHeight="7">
                 <ReactMarkdown components={mdxComponents as any}>
                   {definition.description}
                 </ReactMarkdown>
