@@ -1,0 +1,611 @@
+---
+title: Introduction to Merge Queues
+description: Understand what merge queues are and how to use them.
+---
+
+Development workflows can often be complex, with multiple developers
+collaborating on a single codebase. This leads to multiple pull requests that
+need to be merged in a specific order to ensure code stability and
+compatibility. In this context, merge queues are an essential tool.
+
+A merge queue is a mechanism to manage and control the order of merging pull
+requests into the main branch of your repository. It helps streamline the
+development process, reduce merge conflicts, and maintain a healthy and stable
+codebase.
+
+In this guide, we will explore the concept of merge queues, their importance in
+continuous integration and development workflows, and how Mergify's Merge Queue
+can simplify and improve your development process.
+
+## Why Do You Need a Merge Queue?
+
+In modern software development, teams often work in parallel on multiple
+features or bug fixes. This parallel work, although necessary for swift
+development, poses a risk when changes are merged into the main branch.
+
+Even with sophisticated CI/CD pipelines validating the correctness of each
+change, a problem arises when multiple changes are ready to merge
+simultaneously. While each change may be correct and compatible with the main
+branch at the time it was last updated, merging one could introduce
+incompatibilities with others that are also ready to merge.
+
+This is the risk of merging pull requests that are not up-to-date with the main
+branch: they may have been validated against an outdated version of the
+codebase.
+
+To mitigate this risk, engineers often find themselves in a race to update and
+merge their pull requests before others do, leading to what we can call a
+"merge war". This race not only distracts from productive development work but
+also puts unnecessary pressure on engineers and creates an inefficient working
+environment.
+
+A merge queue addresses this issue by automatically ordering pull requests
+ready to be merged, updating each one against the main branch, re-running
+validations, and merging them only if they pass. This ensures that each change
+is always up-to-date and validated against the real state of the main branch at
+the time it's merged.
+
+With a merge queue, there is no longer a need for engineers to participate in a
+"merge war". The queue takes care of update and merge processes, allowing
+engineers to focus on their core development tasks, while maintaining a steady,
+efficient, and error-free integration flow.
+
+### Understanding The Problem: A Real-world Example
+
+Let's consider a situation with a having a pull request ready to merge.
+
+#### Step 1: PR Passes CI
+
+The developer made their changes on their feature branches. They've pushed
+their changes, and their pull request have successfully passed all CI checks.
+The CI pipeline has validated that their changes are compatible with the main
+branch, and everything seems ready to merge.
+
+```dot class="graph"
+strict digraph g {
+    rankdir="LR";
+    forcelabels=false;
+    newrank=false;
+    fontname="sans-serif";
+
+    // general
+    node [style=filled, color="black", fontcolor="black", fontname="sans-serif";];
+    edge [color="black", arrowhead=none, fontname="sans-serif";];
+
+    // graph
+    node [width=0.2, height=0.2, fixedsize=true, label="", shape=circle, fillcolor="#FF0000"]
+
+
+    subgraph main {
+        node [group="main", fillcolor="#C9E7F8"];
+        ms;
+        m0;
+        m1;
+        m2;
+        me;
+
+        ms:e -> m0:w [style=dotted, arrowhead=none];
+        m0:e -> m1:w;
+        m1:e -> m2:w;
+        m2:e -> me:w [style=dotted, arrowhead=normal, arrowsize=0.25];
+    }
+
+    subgraph {
+        rank=min;
+        ms [width=0, height=0, penwidth=0];
+    }
+
+    subgraph {
+        rank=sink;
+        me [label="main", shape=none, fixedsize=false, fillcolor=none, fontcolor=black];
+    }
+
+    subgraph pr {
+        subgraph cluster_pr {
+            subgraph {
+                rank=same;
+                pr11 [group="pr", fillcolor="#53A9DB"];
+            }
+            label="PR #1";
+            style="rounded,filled";
+            fillcolor="#28A744";
+            fontcolor="white";
+            pr12 [group="pr", fillcolor="#53A9DB"];
+            pr11 -> pr12;
+        }
+    }
+
+    m2:e -> pr11:w;
+
+    subgraph ci {
+        // CI connections
+        ci [label="Continuous\nIntegration", fixedsize=false, shape="box", style="filled", fillcolor="#034870", fontcolor=white, penwidth=1.5]
+        edge [arrowhead=none, style=dashed, arrowsize=0.5, arrowtail=normal, color="#19d642", dir=both, penwidth=1, label="Success", fontcolor="#19d642", fontsize="8pt"];
+        pr12 -> ci;
+        m2 -> ci;
+    }
+}
+```
+
+#### Step 2: Main Branch Gets a New Commit
+
+Meanwhile, a second developer merges another change into the main branch. This
+change doesn't conflict with the previous pull request at the code level, so
+GitHub still marks them as safe to merge.
+
+```dot class="graph"
+strict digraph g {
+    rankdir="LR";
+    forcelabels=false;
+    newrank=false;
+    fontname="sans-serif";
+
+    // general
+    node [style=filled, color="black", fontcolor="black", fontname="sans-serif"];
+    edge [color="black", arrowhead=none, fontname="sans-serif"];
+
+    // graph
+    node [width=0.2, height=0.2, fixedsize=true, label="", shape=circle, fillcolor="#FF0000"]
+
+
+    subgraph main {
+        node [group="main", fillcolor="#C9E7F8"];
+        ms;
+        m0;
+        m1;
+        m2;
+        me;
+
+        ms:e -> m0:w [style=dotted, arrowhead=none];
+        m0:e -> m1:w;
+        m1:e -> m2:w;
+        m2:e -> m2bis:w;
+        m2bis:e -> me:w [style=dotted, arrowhead=normal, arrowsize=0.25];
+    }
+
+    subgraph {
+        rank=min;
+        ms [width=0, height=0, penwidth=0];
+    }
+
+    subgraph {
+        rank=sink;
+        me [label="main", shape=none, fixedsize=false, fillcolor=none, fontcolor=black];
+    }
+
+    subgraph pr {
+        subgraph cluster_pr {
+            subgraph {
+                rank=same;
+                pr11 [group="pr", fillcolor="#53A9DB"];
+            }
+            label="PR #1";
+            style="rounded,filled";
+            fillcolor="#28A744";
+            fontcolor="white";
+            pr12 [group="pr", fillcolor="#53A9DB"];
+            pr11 -> pr12;
+        }
+    }
+
+    m2 -> pr11:w;
+
+    subgraph ci {
+        // CI connections
+        ci [label="Continuous\nIntegration", fixedsize=false, shape="box", style="filled", fillcolor="#034870", fontcolor=white, penwidth=1.5]
+        edge [arrowhead=none, style=dashed, arrowsize=0.5, arrowtail=normal, color="#19d642", dir=both, penwidth=1, label="Success", fontcolor="#19d642", fontsize="8pt"];
+        pr12 -> ci;
+        m2bis -> ci;
+    }
+}
+```
+
+What's not seen here, is that the new commit on the main branchhave caused a
+change in the behavior of the code that makes the changes in our developer's PR
+incompatible.
+
+**This could be anything**: a new linter check has been added, a functional
+test has been added and won't pass with this new code, a file or a component
+has been renamed, etc.
+
+#### Step 3: Merging the PR Would Fail the CI
+
+If the pull request gets merged now, it will create a failure in the main
+branch because its changes are not compatible with the latest commit from the
+main branch. The CI system couldn't know about this, because it validated the
+developer's pull request against the previous main branch commit, and not the
+latest.
+
+```dot class="graph"
+ strict digraph g {
+    rankdir="LR";
+    forcelabels=false;
+    newrank=false;
+   fontname="sans-serif";
+
+    // general
+    node [style=filled, color="black", fontcolor="black", fontname="sans-serif"];
+    edge [color="black", arrowhead=none, fontname="sans-serif"];
+
+    // graph
+    node [width=0.2, height=0.2, fixedsize=true, label="", shape=circle, fillcolor="#FF0000"]
+
+
+    subgraph main {
+        node [group="main", fillcolor="#C9E7F8"];
+        ms;
+        m0;
+        m1;
+        m2;
+        me;
+        mmerge;
+
+        ms:e -> m0:w [style=dotted, arrowhead=none];
+        m0:e -> m1:w;
+        m1:e -> m2:w;
+        m2:e -> m2bis:w;
+        m2bis:e -> mmerge;
+        mmerge:e -> me:w [style=dotted, arrowhead=normal, arrowsize=0.25];
+    }
+
+    subgraph {
+        rank=min;
+        ms [width=0, height=0, penwidth=0];
+    }
+
+    subgraph {
+        rank=sink;
+        me [label="main", shape=none, fixedsize=false, fillcolor=none, fontcolor=black];
+    }
+
+    subgraph pr {
+        subgraph cluster_pr {
+            subgraph {
+                rank=same;
+                pr11 [group="pr", fillcolor="#53A9DB"];
+            }
+            label="PR #1";
+            style="rounded,filled";
+            fillcolor="#6F42C1";
+            fontcolor="white";
+            pr12 [group="pr", fillcolor="#53A9DB"];
+            pr11 -> pr12;
+        }
+    }
+
+    m2 -> pr11:w;
+    pr12:e -> mmerge;
+
+    subgraph ci {
+        // CI connections
+        ci [label="Continuous\nIntegration", fixedsize=false, shape="box", style="filled", fillcolor="#034870", fontcolor=white, penwidth=1.5]
+        edge [arrowhead=none, style=dashed, arrowsize=0.5, arrowtail=normal, color="#19d642", dir=both, penwidth=1, fontcolor="#19d642", fontsize="8pt"];
+        mmerge -> ci [label="Failure", color="red", fontcolor="red"];
+    }
+}
+```
+
+Despite the CI check, the main branch now has a failure because the CI could
+not anticipate the effect of the latest changes on the changes in the
+developer's pull request.
+
+**This scenario breaks the main branch.** This could prevent any deployment of
+the code and will make any pull request created from this latest commit to not
+pass the CI, blocking the entire development team until the situation is
+manually addressed by an engineer.
+
+This example demonstrates **the risk of merging pull requests that are not
+up-to-date with the main branch.** It's a common scenario in active development
+teams, and it's exactly the kind of problem a merge queue is designed to
+prevent.
+
+### Solving the Problem Using a Merge Queue
+
+A merge queue provides an effective solution to the problem described above.
+Let's walk through the same example but this time using a merge queue.
+
+After the developer's pull request have passed their initial CI checks, they're
+added to the merge queue rather than being merged immediately.
+
+Here's where the magic happens. The merge queue will now update the pull
+request to include changes from the latest commits from the main branch,
+creating a new temporary merge commit.
+
+```dot class="graph"
+strict digraph g {
+    rankdir="LR";
+    forcelabels=false;
+    newrank=false;
+    splines=true;
+    fontname="sans-serif";
+
+    // general
+    node [style=filled, color="black", fontcolor="black", fontname="sans-serif"];
+    edge [color="black", arrowhead=none, fontname="sans-serif"];
+
+    // graph
+    node [width=0.2, height=0.2, fixedsize=true, label="", shape=circle, fillcolor="#FF0000"]
+    subgraph pr {
+        subgraph cluster_pr {
+            subgraph {
+                rank=same;
+                pr11 [group="pr", fillcolor="#53A9DB"];
+            }
+            label="PR #1";
+            style="rounded,filled";
+            fillcolor="#28A744";
+            fontcolor="white";
+            prm [group="pr", fillcolor="#53A9DB", label="Merge main\ninto PR\n\n\n\n\n\n", fontcolor=white, fontsize="5pt"];
+            pr12 [group="pr", fillcolor="#53A9DB"];
+            pr11 -> pr12;
+            pr12 -> prm;
+        }
+    }
+
+
+    subgraph main {
+        node [group="main", fillcolor="#C9E7F8"];
+        ms;
+        m0;
+        m1;
+        m2;
+        me;
+
+        ms:e -> m0:w [style=dotted, arrowhead=none ];
+        m0:e -> m1:w;
+        m1:e -> m2:w;
+        m2:e -> m2bis:w;
+        m2bis:e -> me:w [style=dotted,  arrowhead=normal, arrowsize=0.25];
+    }
+
+    subgraph {
+        rank=min;
+        ms [width=0, height=0, penwidth=0];
+    }
+
+    subgraph {
+        rank=sink;
+        me [label="main", shape=none, fixedsize=false, fillcolor=none, fontcolor=black];
+    }
+
+    m2:ne -> pr11:w;
+    m2bis:ne -> prm:sw;
+
+    subgraph ci {
+        // CI connections
+        ci [label="Continuous\nIntegration", fixedsize=false, shape="box", style="filled", fillcolor="#034870", fontcolor=white, penwidth=1.5]
+        edge [arrowhead=none, style=dashed, arrowsize=0.5, arrowtail=normal, color="#19d642", dir=both, penwidth=1, label="Success", fontcolor="#19d642", fontsize="8pt"];
+        prm -> ci [label="Failure", color="red", fontcolor="red"];
+        m2bis -> ci [label="Success"];
+    }
+}
+```
+
+It then runs CI checks on this new merge commit. This ensures that the changes
+in the pull request are compatible with the current state of the main branch,
+not its state when the PR was originally created.
+
+In our example above, this would catch the incompatibility problem and
+**prevents the pull request to get merged and to break the main branch.** The
+PR is therefore not merged and is returned to the developer for revision.
+
+By always testing against the latest state of the main branch, a merge queue
+helps to prevent broken main branches, maintaining the integrity of your
+codebase and ensuring that your team can always deliver working software.
+
+When multiple pull requests are mergeable, they are scheduled to be merged
+sequentially, and are updated on top of each other. The pull request branch
+update is only done when the pull request is ready to be merged.
+
+That means that when a first pull request has been merged, and the second one
+is outdated like this:
+
+```dot class="graph"
+strict digraph g {
+    rankdir="LR";
+    forcelabels=false;
+    fontname="sans-serif"
+    // general
+    node [style=filled, color="black", fontcolor="black", fontname="sans-serif"];
+    edge [color="black", arrowhead=none, fontname="sans-serif"];
+
+    // graph
+    node [width=0.2, height=0.2, fixedsize=true, label="", shape=circle, fillcolor="#FF0000"]
+
+
+    node [group="main", fillcolor="#C9E7F8"];
+    ms:e -> m0:w [style=dotted, arrowhead=none];
+    m0:e -> m1:w;
+    m1:e -> m2:w;
+    m2 -> mpr1 [minlen=3];
+    mpr1 [label="Merge PR#1\ninto main\n\n\n\n\n\n", fontcolor=black, fontsize="8pt"];
+
+    subgraph {
+        rank=min;
+        ms [width=0, height=0, penwidth=0];
+    }
+
+    subgraph {
+        rank=sink;
+        me [label="main", shape=none, fixedsize=false, fillcolor=none, fontcolor=black];
+    }
+
+    subgraph cluster_pr1 {
+        margin=3;
+        label="PR #1";
+        style="rounded,filled";
+        fillcolor="#6F42C1";
+        fontcolor="white";
+        node [group="pr", fillcolor="#53A9DB"];
+        pr11 -> pr12;
+    }
+
+    subgraph cluster_pr2 {
+        node [group="pr2", fillcolor="#53A9DB"];
+        label="PR #2";
+        style="rounded,filled";
+        fillcolor="#28A744";
+        fontcolor="white";
+        pr21 -> pr22;
+    }
+
+    m2:e -> pr11:w;
+    m2:n -> pr21:w;
+    pr12:e -> mpr1:w;
+    mpr1:e -> me:w [style=dotted, arrowhead=normal, arrowsize=0.25];
+}
+```
+
+A merge queue will make sure the pull request #2 is updated with the latest tip
+of the base branch before being merged:
+
+
+```dot class="graph"
+strict digraph g {
+    rankdir="LR";
+    forcelabels=false;
+    fontname="sans-serif";
+
+    // general
+    node [style=filled, color="black", fontcolor="black", fontname="sans-serif"];
+    edge [color="black", arrowhead=none, fontname="sans-serif"];
+
+    // graph
+    node [width=0.2, height=0.2, fixedsize=true, label="", shape=circle, fillcolor="#FF0000"]
+
+
+    node [group="main", fillcolor="#C9E7F8"];
+    ms:e -> m0:w [style=dotted, arrowhead=none];
+    m0:e -> m1:w;
+    m1:e -> m2:w;
+    m2 -> mpr1 [minlen=3];
+    mpr1 [label="Merge PR#1\ninto main\n\n\n\n\n\n", fontcolor=black, fontsize="8pt"];
+    mpr2 [label="Merge PR#2\ninto main\n\n\n\n\n\n", fontcolor=black, fontsize="8pt"];
+
+    subgraph {
+        rank=min;
+        ms [width=0, height=0, penwidth=0];
+    }
+
+    subgraph {
+        rank=sink;
+        me [label="main", shape=none, fixedsize=false, fillcolor=none, fontcolor=black];
+    }
+
+    subgraph cluster_pr1 {
+        label="PR #1";
+        style="rounded,filled";
+        fillcolor="#6F42C1";
+        fontcolor="white";
+        node [group="pr", fillcolor="#53A9DB"];
+        pr11 -> pr12;
+    }
+
+    subgraph cluster_pr2 {
+        node [group="pr2", fillcolor="#53A9DB"];
+        label="PR #2";
+        style="rounded,filled";
+        fillcolor="#6F42C1";
+        fontcolor="white";
+        pr21 -> pr22;
+        pr22 -> pr23 [minlen=4];
+        pr23 [label="\n\n\n\n\n\n\nMerge main\ninto PR#2", fontcolor=black, fontsize="8pt"];
+    }
+
+    m2:e -> pr11:w;
+    m2:n -> pr21:w;
+    mpr1 -> mpr2 [minlen=6];
+    pr12:e -> mpr1:w;
+    pr23:e -> mpr2:w;
+    mpr1:e -> pr23:w [minlen=2];
+    mpr2:e -> me:w [style=dotted, arrowhead=normal, arrowsize=0.25];
+
+}
+```
+
+## When to Use Merge Queues
+
+Determining when to use a merge queue largely depends on your team's
+development practices, the complexity of your project, and the rate of incoming
+pull requests. Here are some common scenarios where a merge queue can be
+beneficial:
+
+### High Volume of Pull Requests
+
+If your project is receiving a large number of pull requests, it can be
+challenging to keep track of which PRs are ready for merging and which ones
+need further checks or updates. A merge queue automates this process, ensuring
+that only validated and up-to-date PRs are merged.
+
+### Complex Projects
+
+For complex projects with multiple dependencies, a small change can potentially
+have significant effects. Running updated CI checks on each PR in a merge queue
+ensures that all changes are compatible with the
+
+### Agile Teams
+
+Teams that practice Agile methodologies such as continuous integration and
+continuous deployment (CI/CD) can benefit significantly from a merge queue. By
+automating the testing and merging process, a merge queue helps maintain the
+pace of continuous delivery while ensuring code quality.
+
+### Teams with Varying Time Zones
+
+If your team members are distributed across various time zones, coordinating PR
+reviews and merges can be tricky. With a merge queue, PRs can be merged in an
+orderly manner as they pass checks, regardless of who is currently online.
+
+### Prioritizing Important Pull Requests
+
+Sometimes, you have important pull requests that should be merged before
+others, irrespective of the order in which they were created. With a merge
+queue, you can prioritize these important PRs to be merged as soon as they pass
+their CI checks.
+
+In summary, a merge queue can be a valuable tool for any team looking to
+streamline their development process, improve code quality, and maintain a
+healthy main branch. With Mergify's merge queues, you can automate this entire
+process, making your team more productive and your project more robust.
+
+## Benefits of Using Merge Queues
+
+Merge queues offer a multitude of benefits that can greatly enhance the
+efficiency and quality of your software development process. Here are some key
+advantages:
+
+### Ensures Codebase Stability
+
+By merging only up-to-date and CI-checked PRs, merge queues significantly
+reduce the risk of introducing bugs or conflicts into your codebase, thus
+enhancing its stability.
+
+### Saves Time and Reduces Manual Labor
+
+Merge queues automate the process of testing and merging PRs, saving developers
+from the tedious task of constantly updating and checking their PRs. This
+allows them to focus more on writing quality code and less on administrative
+tasks.
+
+### Optimizes Resource Usage
+
+Merge queues minimize the use of CI resources by avoiding unnecessary checks on
+PRs that are not up-to-date with the main branch. Usage of advanced options such as batches
+
+{/* FIXME: link to batch features */}
+
+### Enhances Collaboration
+
+Merge queues promote a more collaborative environment where developers don't
+need to compete to get their PRs merged. Instead, they can confidently work
+knowing that their PRs will be handled fairly and efficiently.
+
+### Streamlines Workflow
+
+By automatically handling PR updates and merges, a merge queue streamlines the
+software development workflow. This makes the process smoother, faster, and
+less prone to human error.
+
+In essence, merge queues can significantly boost your team's productivity and
+the quality of your product, making them a worthwhile addition to your
+development toolbox.

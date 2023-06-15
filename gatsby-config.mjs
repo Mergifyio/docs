@@ -18,6 +18,7 @@ const gatsbyRemarkPlugins = [
       maxWidth: 1200,
     },
   },
+  'gatsby-remark-graphviz',
 ];
 
 const plugins = [
