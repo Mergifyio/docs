@@ -39,7 +39,7 @@ export default function PullRequestAttributesTable() {
                 <InlineCode>{attr.key}</InlineCode>
               </Td>
               <Td>{dataTypeLink ? <Link color="primary" textDecoration="underline" href={dataTypeLink}>{attr.dataType}</Link> : attr.dataType}</Td>
-              <Td>
+              <Td lineHeight="7">
                 <ReactMarkdown components={mdxComponents}>
                   {attr.description}
                 </ReactMarkdown>
