@@ -1,11 +1,5 @@
 import {
-  Flex,
-  HStack,
-  Heading,
-  IconButton,
-  Link,
-  SimpleGrid,
-  Text,
+  Flex, HStack, Heading, IconButton, Link, SimpleGrid, Text,
 } from '@chakra-ui/react';
 import { Link as GatsbyLink } from 'gatsby';
 import PropTypes from 'prop-types';
@@ -18,27 +12,23 @@ export function DocsetGrid(props) {
 }
 
 export function Docset({
-  title,
-  children,
-  description,
-  path,
-  icon,
+  title, children, description, path, icon,
 }) {
   return (
-    <PrimaryLink as={GatsbyLink} to={path}>
-      <Flex align="flex-start" p="6" rounded="md" borderWidth="1px">
-        <Flex align="flex-start" direction="column" h="full">
-          <Heading as="h3" size="lg" mb="4">
+    <Flex align="flex-start" p="6" rounded="md" borderWidth="1px">
+      <Flex align="flex-start" direction="column" h="full">
+        <PrimaryLink as={GatsbyLink} to={path}>
+          <Heading as="h4" size="md" mb="4" color="linkedin.700">
             <HStack spacing="3">
               {icon}
               <span>{title}</span>
             </HStack>
           </Heading>
-          {description && <Text mb="4">{description}</Text>}
-        </Flex>
-        {children}
+        </PrimaryLink>
+        {description && <Text fontSize="md">{description}</Text>}
       </Flex>
-    </PrimaryLink>
+      {children}
+    </Flex>
   );
 }
 

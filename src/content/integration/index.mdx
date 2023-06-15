@@ -8,22 +8,29 @@ import {
   Docset,
   DocsetGrid,
 } from '../../components/HomePage';
+import {VscGithubAction} from 'react-icons/vsc'
+import {FaJenkins, datado} from 'react-icons/fa'
+import {IoIosGitNetwork} from 'react-icons/io'
+import {SiDatadog} from 'react-icons/si'
 
 <DocsetGrid>
   <Docset
     title="GitHub Actions"
     description="Learn how Mergify integrates with GitHub Action."
     path="gha"
+    icon={<VscGithubAction/>}
   />
   <Docset
     title="Jenkins"
     description="Learn how Mergify integrates with Jenkins."
     path="ci"
+    icon={<FaJenkins/>}
   />
   <Docset
     title="Continous Integration"
     description="Learn how Mergify integrates with any CI system."
     path="ci"
+    icon={<IoIosGitNetwork/>}
   />
 </DocsetGrid>
 
@@ -32,5 +39,6 @@ import {
     title="Datadog"
     description="Monitor your merge queues with Mergify Datadog integration"
     path="datadog"
+    icon={<SiDatadog/>}
   />
 </DocsetGrid>
