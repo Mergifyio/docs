@@ -13,27 +13,27 @@ This can be useful in situations where you want to add a custom check to the
 status of a pull request based on Mergify's evaluation.
 
 <Info>
-Checks posted by Mergify using this action are usable as any other condition.
-See the [example below](post_check#enforcing-conventional-commits).
+  Checks posted by Mergify using this action are usable as any other condition.
+  See the [example below](post_check#enforcing-conventional-commits).
 </Info>
 
 ## Parameters
 
-<ActionOptionsTable action='post_check'/>
+<ActionOptionsTable action="post_check" />
 
 As the `title` and `summary` are
 [templates](/configuration/data-types#template), you can benefit from any [pull
 request attributes](/configuration/conditions#attributes), e.g. `{{author}}`,
 and also these additional variables:
 
-* `{{ check_rule_name }}` the name of the rule that triggered this action;
+- `{{ check_rule_name }}` the name of the rule that triggered this action;
 
-* `{{ check_succeed }}` is `true` if all the conditions match, `false`
+- `{{ check_succeed }}` is `true` if all the conditions match, `false`
   otherwise;
 
 {/* FIXME: add an example with a screenshot */}
 
-* `{{ check_conditions }}` the list of all conditions with a checkbox marked if
+- `{{ check_conditions }}` the list of all conditions with a checkbox marked if
   the condition matches.
 
 ## Examples

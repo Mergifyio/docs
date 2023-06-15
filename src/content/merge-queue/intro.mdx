@@ -459,7 +459,6 @@ strict digraph g {
 A merge queue will make sure the pull request #2 is updated with the latest tip
 of the base branch before being merged:
 
-
 ```dot class="graph"
 strict digraph g {
     rankdir="LR";
@@ -589,8 +588,9 @@ tasks.
 
 ### Optimizes Resource Usage
 
-Merge queues minimize the use of CI resources by avoiding unnecessary checks on
-PRs that are not up-to-date with the main branch. Usage of advanced options such as batches
+Merge queues minimize the use of CI resources by avoiding unnecessary
+checks on PRs that are not up-to-date with the main branch. Usage of
+advanced options such as batches
 
 {/* FIXME: link to batch features */}
 

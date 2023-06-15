@@ -35,8 +35,9 @@ The grammar for a condition is as follows:
 
 - The optional minus (`-`) operator at the beginning of the condition negates
   the result of the condition, acting as a "not" operator.
-- The optional hash (`#`) operator is used to evaluate the length of a list when
-  the attribute is a list.
+
+- The optional hash (`#`) operator is used to evaluate the length of a list
+  when the attribute is a list.
 
 ### Attributes
 
@@ -65,19 +66,21 @@ For example, consider the following condition:
 
 In this condition:
 
-- The attribute is `approved-reviews-by`, which represents the list of
-  approved reviewers for a pull request.
+- The attribute is `approved-reviews-by`, which represents the list of approved
+  reviewers for a pull request.
+
 - The operator is `>=`, which means "greater than or equal to."
+
 - The value is `2`, which indicates the minimum number of approved reviews
   required for the condition to be true.
+
 - The hash (`#`) operator is used to evaluate the length of the list of
   approved reviewers.
 
 Understanding the structure of a condition is crucial for creating effective
 Mergify rules that cater to your specific needs and requirements.
 
-
-## Attributes
+## Attributes list
 
 Attributes are properties of pull requests or events used to filter and evaluate
 the conditions within rules. They can be used to create more specific and
@@ -85,8 +88,7 @@ targeted rules for your repository.
 
 <PullRequestAttributesTable />
 
-
-## Operators
+## Operators list
 
 Operators allow you to compare attributes with specified values in order to
 determine if a condition is true or false. Mergify supports several types of
@@ -104,56 +106,91 @@ Here is a list of the available operators:
       <Th>Description</Th>
     </Tr>
   </Thead>
+
   <Tbody>
     <Tr>
       <Td>Equal</Td>
-      <Td>``=`` or ``:``</Td>
+
+      <Td>
+        `=` or `:`
+      </Td>
+
       <Td lineHeight='7'>This operator checks for strict equality. If the target attribute
-       type is a list, each element of the list is compared against the value
-       and the condition is true if **any** value matches.</Td>
+      type is a list, each element of the list is compared against the value
+      and the condition is true if **any** value matches.</Td>
     </Tr>
+
     <Tr>
       <Td>Not Equal</Td>
-      <Td>``!=`` or ``≠``</Td>
+
+      <Td>
+        `!=` or `≠`
+      </Td>
+
       <Td lineHeight='7'>This operator checks for non equality. If the target attribute type
-       is a list, each element of the list is compared against the value and
-       the condition is true if no value matches.</Td>
+      is a list, each element of the list is compared against the value and
+      the condition is true if no value matches.</Td>
     </Tr>
+
     <Tr>
       <Td>Match</Td>
-      <Td>`~=`</Td>
+
+      <Td>
+        `~=`
+      </Td>
+
       <Td lineHeight='7'>This operator checks for [regular
-       expressions](data-types#regular-expressions)
-       matching. If the target attribute type is a list, each
-       element of the list is matched against the value and the condition is
-       true if any value matches.</Td>
+      expressions](data-types#regular-expressions)
+      matching. If the target attribute type is a list, each
+      element of the list is matched against the value and the condition is
+      true if any value matches.</Td>
     </Tr>
+
     <Tr>
       <Td>Greater Than or Equal</Td>
-      <Td>`>=` or `≥`</Td>
+
+      <Td>
+        `>=` or `≥`
+      </Td>
+
       <Td lineHeight='7'>This operator checks for the value to be greater than or equal to the
-          provided value. It's usually used to compare against the length of a
-          list using the ``#`` prefix.</Td>
+      provided value. It's usually used to compare against the length of a
+      list using the `#` prefix.</Td>
     </Tr>
+
     <Tr>
       <Td>Greater Than</Td>
-      <Td>`>`</Td>
+
+      <Td>
+        `>`
+      </Td>
+
       <Td lineHeight='7'>This operator checks for the value to be greater than the provided
-       value. It's usually used to compare against the length of a list using
-       the `#` prefix.</Td>
+      value. It's usually used to compare against the length of a list using
+      the `#` prefix.</Td>
     </Tr>
+
     <Tr>
       <Td>Lesser Than or Equal</Td>
-      <Td>`<=` or `≤`</Td>
+
+      <Td>
+        `<=` or `≤`
+      </Td>
+
       <Td lineHeight='7'>This operator checks for the value to be lesser then or equal to the
-       provided value. It's usually used to compare against the length of a
-       list using the ``#`` prefix.</Td>
+      provided value. It's usually used to compare against the length of a
+      list using the `#` prefix.</Td>
     </Tr>
+
     <Tr>
       <Td>Lesser Than</Td>
-      <Td>``<``</Td>
+
+      <Td>
+        `<`
+      </Td>
+
       <Td lineHeight='7'>
-       This operator checks for the value to be lesser than the provided value. It's
+        This operator checks for the value to be lesser than the provided value. It's
         usually used to compare against the length of a list using the `#` prefix.
       </Td>
     </Tr>
@@ -168,13 +205,15 @@ a specific label:
 In this condition:
 
 - The attribute is `label`, which represents the labels associated with a pull
-  request.
+    request.
+
 - The operator is `=`, which means "equal to."
+
 - The value is `bugfix`, which is the label we want the pull request to have.
 
 ### Operators on Lists
 
-Some [attributes](conditions#attributes) have a type of ``list``. Most
+Some [attributes](conditions#attributes) have a type of `list`. Most
 [operators](conditions#operators) are able to match value against lists: they
 will iterate over all the values of the list and return true if **any** of the
 value matches.
@@ -196,7 +235,7 @@ of the label attached to a pull request. With a pull request whose labels are
   expression `^work`.
 
 - `-label~=^work` is **false** because there is a label matching the regular
-  expression `^work` but the condition is reversed with the `-` prefix.
+   expression `^work` but the condition is reversed with the `-` prefix.
 
 The same applies for the `files` attribute — which contains the list of
 modified files:
@@ -204,17 +243,17 @@ modified files:
 - `files=README` is **true** if the file `README` is modified in the pull
   request.
 
-- `files!=README` is **true** if the file `README` is not modified in the
-  pull request.
+- `files!=README` is **true** if the file `README` is not modified in the pull
+  request.
 
-- `files~=^src/` is **true** if any files in the `src` directory is
-  modified in the pull request.
+- `files~=^src/` is **true** if any files in the `src` directory is modified in
+  the pull request.
 
-- `-files~=^src/` is **true** if none of the files that are modified are in
-  the `src` directory.
+- `-files~=^src/` is **true** if none of the files that are modified are in the
+  `src` directory.
 
-- `files~=^(README.md|CONTRIBUTING.md)$` is **true** if the file
-  `README.md` **or** `CONTRIBUTING.md` is modified in the pull requests.
+- `files~=^(README.md|CONTRIBUTING.md)$` is **true** if the file `README.md`
+  **or** `CONTRIBUTING.md` is modified in the pull requests.
 
 ### Examples with operators
 
@@ -231,6 +270,8 @@ pull request:
     # Your actions here
 ```
 
+{/* lint ignore */}
+
 #### Apply the rule only when the number of changes is less than or equal to a certain threshold
 
 In this example, we use the `<= operator` to check if the number of files
@@ -243,6 +284,7 @@ modified in the pull request is less than or equal to 50:
   actions:
     # Your actions here
 ```
+{/* lint ignore */}
 
 #### Apply the rule only when the pull request is labeled with at least one of the specified labels
 
@@ -316,7 +358,6 @@ reviews or if the `test job` check passes.
 
 Combining conditions using logical operators can help you create more
 sophisticated rules tailored to your repository's workflow and requirements.
-
 
 ## Testing and Debugging Conditions
 

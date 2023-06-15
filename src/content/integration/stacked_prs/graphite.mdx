@@ -1,15 +1,22 @@
 ## Using Mergify with Graphite
 
-[Graphite](https://graphite.dev) is a modern code review tool designed for fast-moving teams. It helps engineers write and review smaller pull requests (PRs), stay unblocked, and ship faster. In this documentation, we explain how to use Mergify with Graphite and highlight some important configurations.
+[Graphite](https://graphite.dev) is a modern code review tool designed for
+fast-moving teams. It helps engineers write and review smaller pull requests
+(PRs), stay unblocked, and ship faster. In this documentation, we explain
+how to use Mergify with Graphite and highlight some important configurations.
 
 ### Prerequisites
 
 - A GitHub repository ready for Mergify usage.
-- Graphite installed and configured for your project. If you are not familiar with Graphite, we recommend following their [quick start guide](https://graphite.dev/docs/graphite-quick-start).
 
-In the following step we will use a sample stack with our "trunk branch" named `main` and three branches A, B and C with their corresponding pull requests
+- Graphite installed and configured for your project. If you are not familiar
+  with Graphite, we recommend following their [quick start
+  guide](https://graphite.dev/docs/graphite-quick-start).
 
-```
+In the following step we will use a sample stack with our "trunk branch" named
+`main` and three branches A, B and C with their corresponding pull requests
+
+```text
 o C
 │
 o B
@@ -23,17 +30,28 @@ o main
 
 ### Step 1: Configuring Your Repository
 
-To ensure seamless integration between Mergify and Graphite, you need to activate the **Automatically Delete Head Branches** setting on your GitHub repository. Enabling this setting allows GitHub to automatically delete the head branch upon pull request merge and change the base branch of upstack pull requests to the branch in which the PR was merged.
+To ensure seamless integration between Mergify and Graphite, you need
+to activate the **Automatically Delete Head Branches** setting on your
+GitHub repository. Enabling this setting allows GitHub to automatically
+delete the head branch upon pull request merge and change the base
+branch of upstack pull requests to the branch in which the PR was merged.
 
-For example, in our sample stack, when PR A is merged into `main`, enabling this setting will delete branch A and change the base branch of PR B from A to `main`.
+For example, in our sample stack, when PR A is merged into `main`, enabling
+this setting will delete branch A and change the base branch of PR B from
+A to `main`.
 
-To activate **Automatically delete head branches**, follow the steps outlined in the [GitHub documentation: Managing the automatic deletion of branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches).
+To activate **Automatically delete head branches**, follow the steps outlined
+in the [GitHub documentation: Managing the automatic deletion of branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches).
 
 ### Step 2: Configuring Mergify
 
-To ensure that Mergify only merges pull requests that are at the bottom of their stack. In the [Mergify configuration file](/configuration/file-format), you have to set a condition on the `base` attribute to be equal to the name of your trunk branch (`main` in our sample stack).
+To ensure that Mergify only merges pull requests that are at the bottom of their
+stack. In the [Mergify configuration file](/configuration/file-format),
+you have to set a condition on the `base` attribute to be equal to the
+name of your trunk branch (`main` in our sample stack).
 
-Here is a sample of what your Mergify configuration file could look like for our sample stack:
+Here is a sample of what your Mergify configuration file could look like for our
+sample stack:
 
 ```yaml
 queue_rules:
@@ -42,9 +60,14 @@ queue_rules:
       - base=main
 ```
 
-This makes sure that if a user queues by mistake the pull request B while A is not yet merged, the pull request B won't be queued.
+This makes sure that if a user queues by mistake the pull request B while A
+is not yet merged, the pull request B won't be queued.
 
 ### Step 3: Let the Magic Happen
+
 {/* FIXME: add link to queueing howto */}
+
 Now that everything is set up, you can queue your pull request.
-When Mergify is done merging pull request A into `main`. GitHub will delete branch A and set `main` as the base branch for pull request B. You can then queue the pull request B at its turn.
+When Mergify is done merging pull request A into `main`. GitHub will delete
+branch A and set `main` as the base branch for pull request B.
+You can then queue the pull request B at its turn.

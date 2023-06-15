@@ -9,7 +9,6 @@ When using templates or conditions, data are made of different types. You will
 find below the different data types that are available and exposed in Mergify
 configuration file.
 
-
 ## Commit
 
 A commit is an object that embeds several information about a [Git
@@ -33,7 +32,6 @@ Example structure of a commit object:
 ```
 
 You can use a commit object in templates:
-
 
 ```jinja2
 {% for commit in commits %}
@@ -60,12 +58,13 @@ pull_request_rules:
 
 You can use regular expressions with matching operators in your [conditions](conditions).
 
-Mergify leverages [Python regular expressions](https://docs.python.org/3/library/re.html) to match rules.
+Mergify leverages [Python regular expressions](https://docs.python.org/3/library/re.html)
+to match rules.
 
 <Info>
-   You can use [regex101](https://regex101.com),
-   [PyRegex](http://www.pyregex.com), or [Pythex](https://pythex.org) to test your
-   regular expressions.
+  You can use [regex101](https://regex101.com),
+  [PyRegex](http://www.pyregex.com), or [Pythex](https://pythex.org) to test your
+  regular expressions.
 </Info>
 
 ```yaml
@@ -112,7 +111,6 @@ It can be used with the equality operators `=` and `!=`.
     merge:
 ```
 
-
 ## Timestamp
 
 The timestamp format must follow the [ISO 8601
@@ -121,7 +119,8 @@ the timestamp is assumed to be in UTC. The supported timezones come from the
 [IANA database](https://www.iana.org/time-zones).
 
 Supported formats:
-```
+
+```text
 2021-04-05
 2012-09-17T22:02:51
 2008-09-22T14:01:54Z
@@ -145,9 +144,9 @@ Supported formats:
 Timestamps can be expressed relative to the current date and time. The format
 is `[DD days] [HH:MM]` :
 
-* `DD`, the number of days
-* `HH`, the number of hours
-* `MM`, the number of minutes
+- `DD`, the number of days
+- `HH`, the number of hours
+- `MM`, the number of minutes
 
 If the current date is 18th June 2020, `updated-at>=14 days ago` is translated
 to `updated-at>=2020-06-04T00:00:00`.
@@ -172,16 +171,17 @@ abbreviations or plurals of these units;
 
 .. code-block::
 
-   1 day 15 hours 6 minutes 42 seconds
-   1 d 15 h 6 m 42 s
+1 day 15 hours 6 minutes 42 seconds
+1 d 15 h 6 m 42 s
 
 ## Priority
 
 Priority values can be expressed by using an integer between 1 and 10000.
 You can also use those aliases:
-* `low` (1000)
-* `medium` (2000)
-* `high` (3000)
+
+- `low` (1000)
+- `medium` (2000)
+- `high` (3000)
 
 ```yaml
 priority_rules:
@@ -208,8 +208,8 @@ template language](https://jinja.palletsprojects.com/templates/).
 If you don't need any of the power coming with this templating language, you
 can just use this as a regular string.
 
-However, those templates allow to use any of the [pull request attribute](conditions/#attributes-11) in the final
-string.
+However, those templates allow to use any of the [pull request attribute](conditions/#attributes-11)
+in the final string.
 
 For example the template string:
 
@@ -219,12 +219,12 @@ Thank you @{{author}} for your contribution!
 
 will render to:
 
-```
+```text
 Thank you @jd for your contribution!
 ```
 
 when used in your configuration file — considering the pull request author
-login is ``jd``.
+login is `jd`.
 
 [Jinja2
 filters](https://jinja.palletsprojects.com/en/3.0.x/templates/#builtin-filters)
@@ -244,25 +244,25 @@ are also supported, you can split string for example with:
 
 Mergify also provides custom Jinja2 filters:
 
-* `markdownify`: to convert HTML to Markdown:
+- `markdownify`: to convert HTML to Markdown:
 
 ```jinja2
 {{ body | markdownify }}
 ```
 
-* `get_section(<section>, <default>)`: to extract one Markdown section
+- `get_section(<section>, <default>)`: to extract one Markdown section
 
 ```jinja2
 {{ body | get_section("## Description") }}
 ```
 
 <Warning>
-   You need to replace the `-` character by `_` from the [pull request attribute](conditions#attributes-1) names when
-   using templates. The `-` is not a valid character for variable names in
-   Jinja2 template.
+  You need to replace the `-` character by `_` from the [pull request attribute](conditions#attributes-1) names when
+  using templates. The `-` is not a valid character for variable names in
+  Jinja2 template.
 </Warning>
 
 <Info>
-   By default, the HTML comments are stripped from `body`. To get the full
-   body, you can use the `body_raw` attribute.
+  By default, the HTML comments are stripped from `body`. To get the full
+  body, you can use the `body_raw` attribute.
 </Info>

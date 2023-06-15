@@ -13,7 +13,7 @@ workflow more organized and efficient.
 
 ## Parameters
 
-<ActionOptionsTable action='label'/>
+<ActionOptionsTable action="label" />
 
 ## Examples
 
@@ -33,7 +33,6 @@ pull_request_rules:
 In this example, Mergify will automatically add the "WIP" label to any pull
 request whose title contains "WIP". If the pull request does not match the
 rule anymore, the label will be removed.
-
 
 ### Warn on Conflicts
 
@@ -62,7 +61,7 @@ Then, your pull request list will look like this on conflict:
 
 This rule toggle a label based on the failure status of a CI system.
 
-```
+```yaml
 pull_request_rules:
   - name: toggle labels based on CI state
     conditions:

@@ -55,8 +55,8 @@ request automation process that aligns with your project's needs.
 To get started with creating your first rule in the Mergify configuration file,
 follow these steps:
 
-1. **Choose a unique name for your rule**: This will help you identify and manage
-   the rule within your configuration file.
+1. **Choose a unique name for your rule**: This will help you identify and
+   manage the rule within your configuration file.
 
 2. **Define the conditions**: List the criteria that a pull request must meet
    for the rule to apply. Conditions are written in YAML syntax and may include
@@ -83,8 +83,8 @@ In this example, the rule named "Automatic merge when CI passes and approved"
 will be triggered when the following conditions are met:
 
 - The pull request has at least 2 approved reviews.
-- The _your-ci-name_ check passes.
-- The base branch for the pull request is _main_.
+- The *your-ci-name* check passes.
+- The base branch for the pull request is *main*.
 
 When these conditions are satisfied, Mergify will perform the following action:
 
@@ -102,22 +102,28 @@ To use the configuration editor, follow these steps:
 
 1. **Navigate to the [Mergify dashboard](https://dashboard.mergify.com)**: Log
    in to your Mergify account and access your dashboard.
-2. **Open the configuration editor**: Locate and click on the _Configuration
-   Editor_ link or button within the dashboard.
-3. **Edit your configuration**: Use the textarea provided to write or modify your
-   Mergify configuration file. The editor supports YAML syntax and provides a
-   convenient way to define your rules, conditions, and actions.
-4. **Specify a pull request number**: To validate your configuration, enter a pull
-   request number in the designated field. This allows the editor to test your
-   configuration against a real pull request to ensure it works as expected.
+
+2. **Open the configuration editor**: Locate and click on the *Configuration
+   Editor* link or button within the dashboard.
+
+3. **Edit your configuration**: Use the textarea provided to write or modify
+   your Mergify configuration file. The editor supports YAML syntax and
+   provides a convenient way to define your rules, conditions, and actions.
+
+4. **Specify a pull request number**: To validate your configuration, enter a
+   pull request number in the designated field. This allows the editor to test
+   your configuration against a real pull request to ensure it works as
+   expected.
+
 5. **Validate your configuration**: As you edit your configuration, the editor
    automatically checks for syntax and formatting errors. Ensure that your
    configuration is valid before proceeding.
+
 6. **Create a pull request to save your configuration**: Once you have finished
    editing and validating your configuration, click the "Create Pull Request"
-   button. This will generate a new pull request with your updated configuration
-   file, allowing you to review the changes before merging them into your
-   repository.
+   button. This will generate a new pull request with your updated
+   configuration file, allowing you to review the changes before merging them
+   into your repository.
 
 By using the configuration editor, you can easily manage your Mergify rules and
 ensure a smooth automation process for your pull requests.
@@ -129,7 +135,8 @@ ensure a smooth automation process for your pull requests.
 Mergify continuously evaluates your rules whenever a pull request is updated or
 modified. When a rule's conditions are met, Mergify triggers the corresponding
 actions. To help users understand what is happening with their rules and why
-certain actions are or are not triggered, Mergify provides a summary of its rules
+certain actions are or are not triggered, Mergify provides a
+summary of its rules
 evaluation within a Check, similar to other CI systems.
 
 ### Mergify Summary
@@ -142,10 +149,13 @@ To view the Mergify Summary, follow these steps:
 
 1. **Open the pull request**: Navigate to the pull request you want to review
    within the GitHub UI.
+
 2. **Access the Checks tab**: Click on the "Checks" tab located near the top of
    the pull request page.
-3. **Locate the Mergify Summary**: Scroll through the list of Checks to find the
-   one named "Mergify". Click on the "Details" link to view the full summary.
+
+3. **Locate the Mergify Summary**: Scroll through the list of Checks to find
+   the one named "Mergify". Click on the "Details" link to view the full
+   summary.
 
 The Mergify Summary provides information on:
 

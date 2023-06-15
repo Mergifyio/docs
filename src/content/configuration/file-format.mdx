@@ -27,7 +27,6 @@ Mergify applies the following rule to find and use its configuration:
   `extends` — see ["extending the configuration
   file"](file-format#extending-configuration-files).
 
-
 ## File Format
 
 The configuration file uses the [YAML](https://yaml.org/) format, which is both
@@ -40,16 +39,21 @@ different aspect of Mergify:
 {/* FIXME: add link to sections */}
 
 - `pull_request_rules` configures Automation Workflow;
+
 - `queue_rules` configures the Merge Queue;
+
 - `partition_rules` configures monorepository support in the merge queue;
+
 - `commands_restrictions` configures whos is able to run commands;
+
 - `defaults` allows to configure default options for various actions;
+
 - `shared` allows to define any YAML payload that can be used using YAML
   anchors;
-- `extends` allows to [extend the
-  configuration](file-format#extending-configuration-files) file by importing another
-  configuration file.
 
+- `extends` allows to [extend the
+  configuration](file-format#extending-configuration-files) file by importing
+  another configuration file.
 
 ## Extending Configuration Files
 
@@ -58,10 +62,10 @@ configuration from another repository. This feature is particularly useful when
 you want to share and reuse configuration rules across multiple repositories,
 making it easier to maintain consistency and reduce duplication.
 
-To extend a configuration file, use the `extends` keyword at the top level of your
-`.mergify.yml` file. Specify the repository name from which you want to include the
-configuration. The configuration from the specified repository will be loaded and
-applied before the one in the current repository.
+To extend a configuration file, use the `extends` keyword at the top level of
+your `.mergify.yml` file. Specify the repository name from which you want
+to include the configuration. The configuration from the specified repository
+will be loaded and applied before the one in the current repository.
 
 <Warning>
   The Mergify application must also be installed on the source repository
@@ -82,20 +86,17 @@ pull_request_rules:
         add: ["repository-specific"]
 ```
 
-
 In this example, the configuration from the organization/shared-config
 repository is imported and applied first, followed by the rules defined in the
 current repository's `.mergify.yml` file.
 
-
-
 <Warning>
-   - Values in the ``shared`` key will not be merged and shared between local and
-   remote configurations.
-   - Values in the ``default`` key will be merged and remote default values will
-   apply to local configuration.
-</Warning>
+  - Values in the `shared` key will not be merged and shared between local and
+    remote configurations.
 
+  - Values in the `default` key will be merged and remote default values will
+    apply to local configuration.
+</Warning>
 
 ## OpenAPI Specification
 
@@ -105,7 +106,7 @@ specification is available. This specification can help you understand the
 structure of the configuration file and can be used to generate client
 libraries, server stubs, or API documentation.
 
-You can find <DownloadLink path='/mergify-configuration-openapi.json'>the
+You can find <DownloadLink path="/mergify-configuration-openapi.json">the
 OpenAPI specification for the Mergify configuration here</DownloadLink>.
 
 ## Validation and Troubleshooting
@@ -134,25 +135,25 @@ potential issues.
 If you encounter issues or unexpected behavior with your Mergify configuration
 file, consider the following troubleshooting steps:
 
-1. Double-check the file name and location: ensure that your configuration file
-is correctly named (e.g., `.mergify.yml`) and is located in the right place.
-See [Configuration File Name](.#configuration-file-name) for details.
+1.Double-check the file name and location: ensure that your configuration file
+  is correctly named (e.g., `.mergify.yml`) and is located in the right place.
+  See [Configuration File Name](.#configuration-file-name) for details.
 
 2. Verify the YAML syntax: confirm that your configuration file follows the
-proper YAML syntax, including correct indentation, spacing, and structure.
+   proper YAML syntax, including correct indentation, spacing, and structure.
 
 3. Review your rules and conditions: Make sure that your rules and conditions
-are correctly defined and accurately reflect your intended workflow.
+   are correctly defined and accurately reflect your intended workflow.
 
 4. Check for conflicting rules: examine your rules for any conflicts or
-overlapping conditions that could cause unintended behavior.
+   overlapping conditions that could cause unintended behavior.
 
 5. Consult Mergify's documentation: refer to Mergify's documentation for
-guidance on creating and managing your configuration file, as well as
-understanding the various features and options available to you.
+   guidance on creating and managing your configuration file, as well as
+   understanding the various features and options available to you.
 
 6. In the case you'd still be having issues, reach out to [support
-team](mailto:support@mergify.com) for further help.
+   team](mailto:support@mergify.com) for further help.
 
 By following these troubleshooting steps, you can effectively identify and
 resolve any issues with your Mergify configuration file, ensuring a smooth and

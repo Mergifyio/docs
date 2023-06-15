@@ -10,8 +10,8 @@ The `backport` action enables you to automatically create a backport of a
 merged pull request. When the conditions you specify are met, Mergify will
 create a new pull request to merge the changes into the specified base branch.
 
-The `backport` action is extremely useful for maintaining older versions of 
-your project. It helps automate the process of applying bug fixes or other 
+The `backport` action is extremely useful for maintaining older versions of
+your project. It helps automate the process of applying bug fixes or other
 changes from the main branch to other branches.
 
 Note that in case of a conflict during the backport, Mergify will create a pull
@@ -30,7 +30,7 @@ The `backport` action takes a list of branches to which the changes from the
 merged pull request will be backported. The branch names should be specified as
 strings.
 
-<ActionOptionsTable action='backport'/>
+<ActionOptionsTable action="backport" />
 
 As the title and body are templates, you can leverage any pull request
 attributes to use as content, e.g., `{{author}}`. You can also use this
@@ -38,8 +38,8 @@ additional variable:
 
 - `{{ destination_branch }}`: the name of the destination branch.
 
-- `{{ cherry_pick_error }}`: the cherry pick error message if any (only available in body).
-
+- `{{ cherry_pick_error }}`: the cherry pick error message if any (only
+    available in body).
 
 ## Examples
 
@@ -60,7 +60,6 @@ pull_request_rules:
         assignees:
           - "{{ author }}"
 ```
-
 
 ### Combining Automatic Merge
 
@@ -92,5 +91,6 @@ pull_request_rules:
         method: merge
 ```
 
-In this configuration, a pull request is backported when it has the label `backport`. Then, when the backport is created and passes the check named
+In this configuration, a pull request is backported when it has the label `backport`. 
+Then, when the backport is created and passes the check named
 `continuous-integration`, it will be automatically merged.

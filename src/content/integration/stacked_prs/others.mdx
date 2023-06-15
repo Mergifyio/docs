@@ -2,7 +2,9 @@ import { Info } from '../../../components/Alerts';
 
 ## Using Mergify with Stacked PRs
 
-Mergify supports stacked PRs with just a few configurations. This guide assumes that you are familiar with the concept of [stacked PRs](https://timothya.com/blog/git-stack).
+Mergify supports stacked PRs with just a few configurations. This guide
+assumes that you are familiar with the concept of [stacked PRs](https://timothya.com/blog/git-stack).
+
 ### Prerequisites
 
 Before getting started, make sure you have the following prerequisites in place:
@@ -10,11 +12,16 @@ Before getting started, make sure you have the following prerequisites in place:
 - A GitHub repository ready for Mergify usage.
 
 Optional:
-- [GitHub CLI](https://github.com/cli/cli#readme) is installed and ready to use. If you don't want to install GitHub CLI, you can manually reproduce `gh` commands directly on GitHub.
+
+- [GitHub CLI](https://github.com/cli/cli#readme) is installed and ready to
+  use. If you don't want to install GitHub CLI, you can manually reproduce `gh`
+  commands directly on GitHub.
 
 ### Step 1: Building our Sample Stack of Pull Requests
 
-Assuming your "trunk branch" is named `main`, execute the following commands in your repository folder to build three branches stacked on top of each other over `main`:
+Assuming your "trunk branch" is named `main`, execute the following
+commands in your repository folder to build three branches stacked
+on top of each other over `main`:
 
 ```shell
 git checkout main
@@ -38,7 +45,7 @@ git commit -a -m "C"
 
 You should have the following structure in your repository:
 
-```
+```text
 o C
 │
 o B
@@ -50,7 +57,8 @@ o main
 :
 ```
 
-Submit your stack by running the following command. For the three branches, when asking, push them to your remote:
+Submit your stack by running the following command.
+For the three branches, when asking, push them to your remote:
 
 ```shell
 git switch A
@@ -67,17 +75,29 @@ gh pr create --title C --body "PR C" --base B
 
 ### Step 2: Configuring Your Repository
 
-To ensure that stacked PRs work seamlessly with Mergify, activate the **Automatically Delete Head Branches** setting on your GitHub repository. Enabling this setting allows GitHub to automatically delete the head branch upon PR merge and change the base branch of upstack PRs to the branch in which the PR was merged.
+To ensure that stacked PRs work seamlessly with Mergify, activate the
+**Automatically Delete Head Branches** setting on your GitHub repository.
+Enabling this setting allows GitHub to automatically delete the head
+branch upon PR merge and change the base branch of upstack PRs to the
+branch in which the PR was merged.
 
-For example, in our sample stack, when PR A is merged into `main`, enabling this setting will delete branch A and change the base branch of PR B from A to `main`.
+For example, in our sample stack, when PR A is merged into `main`,
+enabling this setting will delete branch A and change the base
+branch of PR B from A to `main`.
 
-To activate **Automatically delete head branches**, follow the steps outlined in the [GitHub documentation: Managing the automatic deletion of branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches).
+To activate **Automatically delete head branches**, follow the steps
+outlined in the [GitHub documentation: Managing the automatic deletion
+of branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches).
 
 ### Step 3: Configuring Mergify
 
-To configure Mergify for your repository, modify the [.mergify.yml configuration file](/configuration/file-format) on the `main` branch. Set a condition on the `base` attribute to be equal to the name of your trunk branch (`main` in our sample stack). This ensures that Mergify only merges a PR that is at the bottom of its stack.
+To configure Mergify for your repository, modify the [.mergify.yml configuration file](/configuration/file-format)
+on the `main` branch. Set a condition on the `base` attribute to be equal
+to the name of your trunk branch (`main` in our sample stack). This ensures
+that Mergify only merges a PR that is at the bottom of its stack.
 
-Here is a sample of what your `.mergify.yml` file could look like for our sample stack:
+Here is a sample of what your `.mergify.yml` file could look like
+for our sample stack:
 
 ```yaml
 pull_request_rules:
@@ -99,7 +119,9 @@ queue_rules:
   We assume that you are following this guide alone, so we can't use the PR approval system since authors can't approve their own PR. We will mimic approval by adding a label.
 </Info>
 
-If you make changes to your Mergify configuration file, make sure your changes are on the `main` branch and that your stack is up to date. Execute the following commands to ensure this:
+If you make changes to your Mergify configuration file,
+make sure your changes are on the `main` branch and that
+your stack is up to date. Execute the following commands to ensure this:
 
 ```shell
 git switch main
@@ -117,7 +139,12 @@ git push
 
 ### Step 3: Let the Magic Happen
 
-Now that everything is set up, you can go to GitHub and "approve" PR A by adding the `Approved` label. Wait a few seconds and observe Mergify automatically merging PR A into `main`. GitHub will then delete branch A and set `main` as the base branch for PR B.
+Now that everything is set up, you can go to GitHub and "approve" PR A by
+adding the `Approved` label. Wait a few seconds and observe Mergify
+automatically merging PR A into `main`. GitHub will then delete branch
+A and set `main` as the base branch for PR B.
 
-Suppose PR B is not yet ready, but PR C is. Approve PR C with the label and wait as long as you want. Nothing will happen until PR B is approved. As soon as PR B is approved, it will be merged into `main`, and GitHub will handle the branch changes accordingly. PR C will then be merged into `main`.
-
+Suppose PR B is not yet ready, but PR C is. Approve PR C with the label
+and wait as long as you want. Nothing will happen until PR B is approved.
+As soon as PR B is approved, it will be merged into `main`, and GitHub
+will handle the branch changes accordingly. PR C will then be merged into `main`.

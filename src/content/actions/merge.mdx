@@ -16,10 +16,15 @@ reducing the need for manual intervention.
 Whatever your conditions are, Mergify might inject extra conditions for the
 merge action to take place:
 
-- Mergify always respects the [branch protection settings](merge#branch-protection-conditions);
-- Mergify always respect [pull request dependencies](merge#pull-request-dependencies);
-- Mergify always respect the [merge date](merge#merge-date);
-- Mergify does not merge pull request modifying its configuration file by default (see [`allow_merging_configuration_change`](merge#parameters) parameter).
+- Mergify always respects the [branch protection settings](merge#branch-protection-conditions)
+
+- Mergify always respect [pull request dependencies](merge#pull-request-dependencies)
+
+- Mergify always respect the [merge date](merge#merge-date)
+
+- Mergify does not merge pull request modifying its configuration file by
+  default (see [`allow_merging_configuration_change`](merge#parameters)
+  parameter).
 
 ## Branch Protection Conditions
 
@@ -49,9 +54,10 @@ You can specify dependencies between pull requests from the same repository.
 Mergify waits for the linked pull requests to be merged before merging any pull
 request with a `Depends-On:` header.
 
-To use this feature, add the `Depends-On:` header to the body of your pull request:
+To use this feature, add the `Depends-On:` header to the body of your pull
+request:
 
-```
+```text
 New awesome feature 🎉
 
 To get the full picture, you may need to look at these pull requests:
@@ -64,14 +70,16 @@ In this example, the pull request will only be merged when the pull request #42
 and #123 are merged.
 
 <Warning>
-This feature does not work for cross-repository dependencies (yet).
+  This feature does not work for cross-repository dependencies (yet).
 </Warning>
 
 <Warning>
-If the dependency happens between pull requests targeting different branches,
-the evaluation of the dependent will not be automatic. You might need to use
-{/* FIXME link to refresh command */}
-the refresh command to make Mergify realize the dependency has been merged.
+  If the dependency happens between pull requests targeting different branches,
+  the evaluation of the dependent will not be automatic. You might need to use
+
+  {/* FIXME link to refresh command */}
+
+  the refresh command to make Mergify realize the dependency has been merged.
 </Warning>
 
 ## Merge Date
@@ -85,7 +93,8 @@ request, followed by the date in the [timestamp
 format](../configuration/data-types#timestamp).
 
 For example, if a pull request body contains:
-```
+
+```text
 Merge-After: 2023-04-18 18:20
 ```
 
@@ -94,7 +103,7 @@ all other merge conditions are satisfied.
 
 ## Parameters
 
-<ActionOptionsTable action='merge'/>
+<ActionOptionsTable action="merge" />
 
 ## Examples
 
@@ -142,7 +151,7 @@ from the title, includes the pull request number and uses the body as the
 message. Merging the pull request results in a single squashed commit with the
 message:
 
-```
+```text
 Fix some bug (#123)
 
 This fixes some bug I found while testing the app.
@@ -172,7 +181,7 @@ Approved-By: {{user}}
 
 which would result to the following commit message:
 
-```
+```text
 Fix some bug (#123)
 
 This fixes some bug I found while testing the app.
