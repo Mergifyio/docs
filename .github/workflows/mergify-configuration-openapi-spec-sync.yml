@@ -1,0 +1,27 @@
+name: Upload production docs to GCP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/content/mergify-configuration-openapi.json'
+
+
+
+jobs:
+  configuration-openapi-spec-sync:
+    strategy:
+      matrix:
+        repository: ["engine", "dashboard-ui"]
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          ORGANIZATION: mergifyio
+          REPOSITORY: ${{ matrix.repository }}
+          GITHUB_TOKEN: ${{ secrets.MERGIFY_CI_BOT_PAT }}
+        run: |
+          gh workflow -R "$ORGANIZATION"/"$REPOSITORY" run \
+            .github/workflows/mergify-configuration-openapi-spec-sync.yml
+
+
