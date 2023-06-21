@@ -7,7 +7,8 @@
       "Writing Your First Rule": "/workflow/writing-your-first-rule"
     },
     "Merge Queue": {
-      "Introduction to Merge Queues": "/merge-queue/intro"
+      "Introduction": "/merge-queue/intro",
+      "Setup": "/merge-queue/setup"
     },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
