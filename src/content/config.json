@@ -35,6 +35,7 @@
     "Integration": {
       "GitHub Actions": "/integration/gha",
       "Jenkins": "/integration/jenkins",
+      "TeamCity": "/integration/teamcity",
       "Continuous Integration": "/integration/ci",
       "Datadog": "/integration/datadog",
       "Stacked Pull Requests": {
