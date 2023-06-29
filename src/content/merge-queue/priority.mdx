@@ -56,6 +56,13 @@ against its conditions. This assessment determines where the pull request will
 be placed in the queue. If multiple rules match the pull request, the one with
 the highest priority value is chosen.
 
+<Info>
+
+  If no priority rules matches, Mergify assignes the `medium` priority to a
+  pull request. This is the default and is not configurable.
+
+</Info>
+
 Here is a glimpse into the structure of a priority rule:
 
 ```yaml
@@ -84,7 +91,8 @@ In the above configuration:
 
 - Each rule contains conditions (`label=urgent` and `label=refactor`,
   respectively) which, if met, apply a certain priority to the pull request
-  (`high` or `low`).
+  (`high` or `low`). Pull requests that match no priority rules get assigned to
+  `medium` priority.
 
 - The name under each rule is just an identifier and doesn't impact the
   functioning of the rule.
@@ -98,14 +106,14 @@ offer you the control you need over your merge queue.
 
 Defining priority rules is straightforward and involves the following steps:
 
-1. **Choose a Queue**: Priority rules are tied to a specific queue. So, first,
+1. **Choose a queue**: Priority rules are tied to a specific queue. So, first,
    choose the queue where you want to apply these rules.
 
-2. **Define Priority Levels**: Decide on the levels of priority you want to
+2. **Define priority levels**: Decide on the levels of priority you want to
    establish for your pull requests. You can use either keywords (`low`,
    `medium`, `high`) or numerical values for this purpose.
 
-3. **Set up Conditions**: Define the conditions under which a pull request
+3. **Set up conditions**: Define the conditions under which a pull request
    should be assigned a particular priority level. These conditions can be
    based on any [pull request attribute](/configuration/conditions).
 
