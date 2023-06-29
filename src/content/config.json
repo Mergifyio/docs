@@ -9,7 +9,8 @@
     "Merge Queue": {
       "Introduction": "/merge-queue/intro",
       "Setup": "/merge-queue/setup",
-      "Lifecycle": "/merge-queue/lifecycle"
+      "Lifecycle": "/merge-queue/lifecycle",
+      "Priority": "/merge-queue/priority"
     },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
