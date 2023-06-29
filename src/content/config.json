@@ -8,7 +8,8 @@
     },
     "Merge Queue": {
       "Introduction": "/merge-queue/intro",
-      "Setup": "/merge-queue/setup"
+      "Setup": "/merge-queue/setup",
+      "Lifecycle": "/merge-queue/lifecycle"
     },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
