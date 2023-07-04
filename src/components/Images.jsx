@@ -6,6 +6,7 @@ export function Screenshot(props) {
   const imgStyle = {
     margin: 'auto',
     marginBottom: '1em',
+    marginTop: '1em',
   };
 
   return (

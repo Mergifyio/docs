@@ -10,7 +10,8 @@
       "Introduction": "/merge-queue/intro",
       "Setup": "/merge-queue/setup",
       "Lifecycle": "/merge-queue/lifecycle",
-      "Priority": "/merge-queue/priority"
+      "Priority": "/merge-queue/priority",
+      "Speculative Checks": "/merge-queue/speculative-checks"
     },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
