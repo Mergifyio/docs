@@ -14,53 +14,41 @@ export const companyCategory: Category = {
   links: [
     {
       text: 'About Us',
-      href: 'https://www.apollographql.com/about-us',
+      href: 'https://mergify.com/about-us',
     },
     {
       text: 'Careers',
-      href: 'https://www.apollographql.com/careers',
+      href: 'https://careers.mergify.com',
     },
     {
-      text: 'Open Positions',
-      href: 'https://www.apollographql.com/careers#positions',
+      text: 'Customers',
+      href: 'https://mergify.com/customers',
     },
     {
-      text: 'Team',
-      href: 'https://www.apollographql.com/careers/team',
-    },
-    {
-      text: 'Leadership',
-      href: 'https://www.apollographql.com/about-us',
-    },
-    {
-      text: 'Interns',
-      href: 'https://www.apollographql.com/careers/interns',
+      text: 'Media Kit',
+      href: 'https://pitch.com/public/e6899bfc-fbc7-4172-8aef-a85d31778646',
     },
   ],
 };
 
 export const productCategory: Category = {
-  title: 'Product',
+  title: 'Products',
   links: [
     {
-      text: 'Apollo Studio',
-      href: 'https://www.apollographql.com/docs/studio/',
+      text: 'Workflow Automation',
+      href: 'https://mergify.com/workflow-automation',
     },
     {
-      text: 'Apollo Federation',
-      href: 'https://www.apollographql.com/docs/federation/',
+      text: 'Merge Queue',
+      href: 'https://mergify.com/merge-queue',
     },
     {
-      text: 'Apollo Client',
-      href: 'https://www.apollographql.com/docs/react/',
+      text: 'Integrations',
+      href: 'https://mergify.com/integrations',
     },
     {
-      text: 'Apollo Server',
-      href: 'https://www.apollographql.com/docs/apollo-server/',
-    },
-    {
-      text: 'Tooling',
-      href: 'https://www.apollographql.com/docs/devtools/cli/',
+      text: 'Pricing',
+      href: 'https://mergify.com/pricing',
     },
   ],
 };
@@ -69,54 +57,28 @@ export const communityCategory: Category = {
   title: 'Community',
   links: [
     {
-      text: 'GraphQL Tutorials',
-      href: 'https://www.apollographql.com/tutorials',
+      text: 'Documentation',
+      href: 'https://docs.mergify.com',
     },
     {
-      text: 'GraphQL Summit',
-      href: 'https://summit.graphql.com',
+      text: 'Changelog',
+      href: 'https://changelog.mergify.com/',
     },
     {
-      text: 'Apollo Community',
-      href: 'https://community.apollographql.com',
+      text: 'Service Status',
+      href: 'https://status.mergify.com/',
     },
     {
       text: 'Blog',
-      href: 'https://blog.apollographql.com',
+      href: 'https://blog.mergify.com',
     },
     {
-      text: 'DevHub',
-      href: 'https://www.apollographql.com/developers',
+      text: 'Slack',
+      href: 'https://slack.mergify.com',
     },
     {
-      text: 'Graph Champions',
-      href: 'https://www.apollographql.com/events/champions-corner/welcome/',
-    },
-    {
-      text: 'Contribute',
-      href: 'https://www.apollographql.com/docs/community/contributing/',
-    },
-  ],
-};
-
-export const whyApolloCategory: Category = {
-  title: 'Why Apollo?',
-  links: [
-    {
-      text: 'Customer Stories',
-      href: 'https://www.apollographql.com/customers',
-    },
-    {
-      text: 'Content Library',
-      href: 'https://www.apollographql.com/resources',
-    },
-    {
-      text: 'Apollo for Enterprise',
-      href: 'https://www.apollographql.com/enterprise',
-    },
-    {
-      text: 'Events at Apollo',
-      href: 'https://www.apollographql.com/events/',
+      text: 'Convince Your Manager',
+      href: 'https://mergify.com/convince-your-manager',
     },
   ],
 };
@@ -125,32 +87,31 @@ export const helpCategory: Category = {
   title: 'Help',
   links: [
     {
-      text: 'Contact an Expert',
-      href: 'https://www.apollographql.com/contact-sales',
+      text: 'Slack',
+      href: 'https://slack.mergify.com',
     },
     {
-      text: 'Get Support',
-      href: 'https://www.apollographql.com/support',
+      text: 'Discussions',
+      href: 'https://github.com/Mergifyio/mergify/discussions',
     },
     {
-      text: 'Website Terms of Service',
-      href: 'https://www.apollographql.com/Apollo-Website-Terms-of-Service.pdf',
+      text: 'Terms of Service',
+      href: 'https://mergify.com/tos',
     },
     {
-      text: 'Product Terms of Service',
-      href: 'https://www.apollographql.com/Apollo-Terms-of-Service.pdf',
+      text: 'Support',
+      href: 'mailto:support@mergify.com',
     },
     {
       text: 'Privacy Policy',
-      href: 'https://www.apollographql.com/privacy-policy',
+      href: 'https://mergify.com/privacy',
     },
   ],
 };
 
 export const defaultConfig = [
-  communityCategory,
   companyCategory,
-  helpCategory,
   productCategory,
-  whyApolloCategory,
+  communityCategory,
+  helpCategory,
 ];
