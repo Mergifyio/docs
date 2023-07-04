@@ -11,8 +11,12 @@ import {
   DocsetGrid,
 } from '../components/HomePage';
 import {SiSlack, SiGithub, SiTwitter, SiYoutube, SiLinkedin} from 'react-icons/si';
+import {SlRefresh} from 'react-icons/sl';
 import {GoGitMerge, GoGitCommit} from 'react-icons/go';
 import {BsDoorOpen, BsLightningCharge, BsListTask, BsRobot, BsChatText, BsType} from 'react-icons/bs';
+import {BiSolidCoinStack, BiRuler} from 'react-icons/bi';
+import {TbCrystalBall, TbPackages} from 'react-icons/tb';
+import {FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake} from 'react-icons/fa6';
 import {AiOutlineStop} from 'react-icons/ai';
 
 Welcome to Mergify Documentation. 
@@ -27,11 +31,13 @@ Automate your GitHub pull requests workflow.
     title="Getting Started"
     description="Learn how to deploy Mergify on your repositories."
     path="/getting-started"
+    icon={<FaCirclePlay/>}
   />
   <Docset
     title="Writing Your First Rule"
     description="Write your first automation rule using Mergify workflow automation."
     path="/workflow/writing-your-first-rule"
+    icon={<BiRuler/>}
   />
 </DocsetGrid>
 
@@ -110,16 +116,19 @@ and adapt it to your own needs.
     title="Getting Started"
     description="Learn how to deploy Mergify on your repositories."
     path="/getting-started"
+    icon={<FaCirclePlay/>}
   />
   <Docset
     title="Introduction to Merge Queues"
     description="Understand what merge queues are and how to use them."
     path="/merge-queue/intro"
+    icon={<FaRegLightbulb/>}
   />
   <Docset
     title="Setting Up Your First Merge Queue"
     description="Implement your first merge queue."
     path="/merge-queue/setup"
+    icon={<FaGear/>}
   />
 </DocsetGrid>
 
@@ -128,16 +137,19 @@ and adapt it to your own needs.
     title="Pull Request Lifecycle"
     description="Understand the lifecycle of a pull request before and once it enters a merge queue."
     path="/merge-queue/lifecycle"
+    icon={<SlRefresh/>}
   />
   <Docset
     title="Using Piorities"
     description="Learn how to order your pull requests in the queue by priority."
     path="/merge-queue/priority"
+    icon={<FaTrafficLight/>}
   />
   <Docset
     title="Freeze"
     description="Learn how to freeze your merge queues during incidents or planned events."
     path="/merge-queue/freeze"
+    icon={<FaSnowflake/>}
   />
 </DocsetGrid>
 
@@ -146,16 +158,19 @@ and adapt it to your own needs.
     title="Using Multiple Queues"
     description="Learn how to implement multiple merge queues and route your pull requests."
     path="/merge-queue/multi"
+    icon={<BiSolidCoinStack/>}
   />
   <Docset
     title="Speculative Checks"
-    description="Increase your merge queue throughput by using speculative checks."
+    description="Accelerates the merging process by testing the compatibility of multiple queued pull requests in parallel."
     path="/merge-queue/speculative-checks"
+    icon={<TbCrystalBall/>}
   />
   <Docset
     title="Batches"
     description="Increase your merge queue throughput and decrease your CI usage."
     path="/merge-queue/batch"
+    icon={<TbPackages/>}
   />
 </DocsetGrid>
 
