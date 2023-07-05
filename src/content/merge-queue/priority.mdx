@@ -68,7 +68,7 @@ Here is a glimpse into the structure of a priority rule:
 ```yaml
 queue_rules:
   - name: default
-    routing_conditions:
+    queue_conditions:
       - "#approved-reviews-by>=2"
       - check-success=Travis CI - Pull Request
     priority_rules:
@@ -122,7 +122,7 @@ Let's look at an example:
 ```yaml
 queue_rules:
   - name: default
-    routing_conditions:
+    queue_conditions:
       - "#approved-reviews-by>=2"
       - check-success=TeamCity
     priority_rules:

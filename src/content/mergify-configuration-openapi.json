@@ -1007,7 +1007,7 @@
             "name": {
               "type": "string",
               "default": "default",
-              "description": "The name of the queue where the pull request should be added. If no name is set, `routing_conditions` will be applied instead."
+              "description": "The name of the queue where the pull request should be added. If no name is set, `queue_conditions` will be applied instead."
             },
             "priority": {
               "$ref": "#/definitions/Priority",

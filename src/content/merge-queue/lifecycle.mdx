@@ -37,14 +37,14 @@ the process:
    the merge queue based on the rules defined in the `pull_request_rules`
    section of your [Mergify configuration file](/configuration/file-format).
 
-3. **Meeting routing conditions:** Before a pull request can be added to the
+3. **Meeting queue conditions:** Before a pull request can be added to the
    merge queue, it must meet certain conditions, specified under
-   `routing_conditions` in your `queue_rules`. These conditions might include
+   `queue_conditions` in your `queue_rules`. These conditions might include
    requirements such as passing all checks, having a certain number of approved
    reviews, or having specific labels.
 
 {/* FIXME: add link to priority rules */}
-4. **Entering the queue:** Once a pull request meets the specified routing
+4. **Entering the queue:** Once a pull request meets the specified queue
    conditions, it is added to the end of the merge queue. However, priority
    rules can be used to alter its position in the queue.
 
@@ -62,12 +62,12 @@ strict digraph {
     edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
 
     Unqueued -> Queueing [label="    `queue` or `requeue`    \n    command or action    "];
-    Queueing -> Queued [label="Matches\n`routing_conditions`"];    
+    Queueing -> Queued [label="Matches\n`queue_conditions`"];
 
-    Queued -> Unqueued [label="Unmatches\n    `routing_conditions`   \nor\n `unqueue` command    "]
+    Queued -> Unqueued [label="Unmatches\n    `queue_conditions`   \nor\n `unqueue` command    "]
     Queued -> Validating [label="Reaches\n    top of the queue    "]
     Validating -> Merged [label="Matches\n    `merge_conditions`    "];
-    Validating -> Unqueued [label="Unmatches\n    `routing_conditions` \nor\n    `unqueue` command     \nor\nfails to match\n`merge_conditions`"];
+    Validating -> Unqueued [label="Unmatches\n    `queue_conditions` \nor\n    `unqueue` command     \nor\nfails to match\n`merge_conditions`"];
 
     Validating [fillcolor="#DCAB07"];
     Queueing [fillcolor="#DCAB07"];
@@ -135,7 +135,7 @@ If the pull request cannot be updated due to conflicts that can't be resolved
 automatically, it will be removed from the queue, and you will be notified to
 manually resolve the conflicts and requeue the pull request.
 
-In case any of the `routing_conditions` stop being true during the update,
+In case any of the `queue_conditions` stop being true during the update,
 Mergify will also stop the merge process. For example, if a new commit is
 pushed to the base branch that makes a test on the pull request fail, the pull
 request would be removed from the queue. In such situations, the issues need to
@@ -150,10 +150,10 @@ validated and up-to-date pull requests make it to your main branch.
 A pull request can be removed or "unqueued" from the merge queue in a couple of
 ways:
 
-1. **Non-compliance with `routing_conditions`:** If a pull request no longer
-   meets the `routing_conditions` specified in the Mergify configuration file,
+1. **Non-compliance with `queue_conditions`:** If a pull request no longer
+   meets the `queue_conditions` specified in the Mergify configuration file,
    it will automatically be removed from the queue. For instance, if one of the
-   `routing_conditions` is the presence of a specific label, and that label
+   `queue_conditions` is the presence of a specific label, and that label
    gets removed from the pull request, Mergify will automatically remove the
    pull request from the queue.
 
@@ -167,7 +167,7 @@ ways:
 Please note, a pull request removed from the queue with the `unqueue` command
 will not rejoin the queue automatically — it will need to be manually re-added
 to the queue, either by re-applying the `queue` command or by re-satisfying the
-`routing_conditions`.
+`queue_conditions`.
 
 These methods provide granular control over your merge queue, ensuring that
 only the appropriate pull requests get processed and merged.
@@ -220,12 +220,12 @@ Mergify is happy to retry it.
 
 To requeue a pull request, you can use the `@mergifyio requeue` command in the
 pull request conversation. Once issued, the command will place the pull request
-back in the merge queue according to the queue's `routing_conditions`.
+back in the merge queue according to the queue's `queue_conditions`.
 
 On the other hand, if you manually unqueued a pull request using the
 `@mergifyio unqueue`
 command, you will need to use the `@mergifyio queue` command to put back the PR
-in a queue matching its `routing_conditions`.
+in a queue matching its `queue_conditions`.
 
 ## Monitoring the Status of PRs in the Merge Queue
 

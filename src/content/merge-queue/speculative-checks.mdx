@@ -218,12 +218,12 @@ PR is removed from the queue. The checks are then re-run on the remaining PRs.
 
 ### Changes to Queue Rules or PRs
 
-If an embarked PR no longer matches the `routing_conditions`, it is removed
+If an embarked PR no longer matches the `queue_conditions`, it is removed
 from the speculative checks. Similarly, all PRs embarked after the removed PR
 are also disembarked and re-embarked according to their new order in the queue.
 
 This situation can occur when there are changes to the PR itself (such as a new
-commit or a change in labels) or changes to the `routing_conditions`. In either
+commit or a change in labels) or changes to the `queue_conditions`. In either
 case, the queue is updated and the speculative checks process is restarted.
 
 ### New Commit on the Base Branch

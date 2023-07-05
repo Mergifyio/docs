@@ -48,7 +48,7 @@ For more details about merge queues and their functions, you can refer to our
 To have a more refined control over the PRs entering the merge queue and when
 they get merged, you can set up `queue_rules` in your Mergify configuration
 file. These two constructs allow you to define custom conditions that should be
-met before a PR is added to the queue (`routing_conditions`) and when it can be
+met before a PR is added to the queue (`queue_conditions`) and when it can be
 merged (`merge_conditions`).
 
 Here is an example of how you can use `queue_rules`:
@@ -56,7 +56,7 @@ Here is an example of how you can use `queue_rules`:
 ```yaml
 queue_rules:
   - name: default
-    routing_conditions:
+    queue_conditions:
       - check-success = mycijob
       - "#approved-reviews-by >= 1"
 ```
@@ -76,15 +76,15 @@ if you want, or only rely on Mergify for setting up those conditions:
 ```yaml
 queue_rules:
   - name: default
-    routing_conditions:
+    queue_conditions:
       - check-success = mycijob
       - "#approved-reviews-by >= 1"
     merge_rules:
       - check-success = mycijob-extra
 ```
 
-If a PR stops matching its `routing_condition`, it will be removed from the
-queue. That means there is no need to repeat the `routing_conditions` in the
+If a PR stops matching its `queue_conditions`, it will be removed from the
+queue. That means there is no need to repeat the `queue_conditions` in the
 `merge_conditions` as they are implicit.
 
 ## Adding a Pull Request to the Merge Queue
@@ -94,7 +94,7 @@ queue. That means there is no need to repeat the `routing_conditions` in the
 Once you have your merge queue rules set up, you can manually add a PR to the
 merge queue. To do this, use the `queue` command. This will add your PR to the
 specified merge queue, or to the merge queue matching the right
-`routing_conditions`.
+`queue_conditions`.
 
 <Screenshot src={queueCommandScreenshot} alt="Mergify queue command" />
 
@@ -118,7 +118,7 @@ queue.
 
 Here, you can view all the PRs in the queue and their current statuses. PRs
 that are waiting for their `merge_conditions` to be met are marked as pending,
-while those that have met all their `routing_conditions` are displayed in the
+while those that have met all their `queue_conditions` are displayed in the
 queue and will be merged when they reach the top of the queue.
 
 Remember, the PRs in the queue are ordered based on their addition time. The PR
