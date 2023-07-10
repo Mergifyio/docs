@@ -1,40 +1,21 @@
 extends: .github
+shared:
+  DefaultQueueOptions: &DefaultQueueOptions
+    commit_message_template: |
+      {{ title }} (#{{ number }})
+
+      {{ body }}
+    allow_inplace_checks: true
+    merge_method: squash
+    speculative_checks: 5
+  CheckRuns: &CheckRuns
+    - check-success=docs
+    - check-success=lint
 
 queue_rules:
   - name: hotfix
-    allow_inplace_checks: true
-    merge_method: squash
-    merge_conditions:
-      - and: &CheckRuns
-          - check-success=docs
-          - check-success=lint
-    speculative_checks: 5
-
-  - name: default
-    allow_inplace_checks: true
-    merge_method: squash
-    merge_conditions:
-      - and: *CheckRuns
-      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
-    speculative_checks: 5
-
-  - name: lowprio
-    allow_inplace_checks: true
-    merge_method: merge
-    merge_conditions:
-      - and: *CheckRuns
-      - schedule=Mon-Fri 09:00-17:00[Europe/Paris]
-    batch_size: 7
-    batch_max_wait_time: 5min
-    queue_branch_merge_method: fast-forward
-    disallow_checks_interruption_from_queues:
-      - default
-
-
-pull_request_rules:
-  - name: automatic merge for hotfix
-    conditions:
-      - base=main
+    <<: *DefaultQueueOptions
+    queue_conditions:
       - check-success=semantic-pull-request
       - or:
           # Author is engineering manager, we allow with one review
@@ -53,35 +34,47 @@ pull_request_rules:
       - label=hotfix
       - "#changes-requested-reviews-by=0"
       - "#review-requested=0"
-      - label!=manual merge
-    actions:
-      queue:
-        name: hotfix
+    merge_conditions:
+      - and: *CheckRuns
 
+  - name: default
+    <<: *DefaultQueueOptions
+    merge_conditions:
+      - and: *CheckRuns
+      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
+
+  - name: lowprio
+    <<: *DefaultQueueOptions
+    merge_method: merge
+    speculative_checks: 1
+    queue_conditions:
+      - and: *CheckRuns
+      - "#commits=1"
+      - or:
+          - and:
+              - author=mergify-ci-bot
+              - head~=^clifus/
+              - "title~=^chore: bump"
+          - author=dependabot[bot]
+    merge_conditions:
+      - and: *CheckRuns
+      - schedule=Mon-Fri 09:00-17:00[Europe/Paris]
+    batch_size: 7
+    batch_max_wait_time: 5min
+    queue_branch_merge_method: fast-forward
+    disallow_checks_interruption_from_queues:
+      - default
+    commit_message_template: null
+
+
+pull_request_rules:
   - name: automatic merge
     conditions:
       - base=main
       - check-success=semantic-pull-request
-      - and: *CheckRuns
-      - "#approved-reviews-by>=2"
-      - "#changes-requested-reviews-by=0"
-      - "#review-threads-unresolved=0"
-      - "#review-requested=0"
       - label!=manual merge
     actions:
       queue:
-
-  - name: automatic merge from dependabot
-    conditions:
-      - and: *CheckRuns
-      - check-success=semantic-pull-request
-      - author=dependabot[bot]
-      - label!=manual merge
-      - "#commits=1"
-    actions:
-      queue:
-        name: lowprio
-        commit_message_template: null
 
   - name: request review
     conditions:
