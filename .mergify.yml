@@ -3,7 +3,8 @@ extends: .github
 queue_rules:
   - name: hotfix
     allow_inplace_checks: true
-    conditions:
+    merge_method: squash
+    merge_conditions:
       - and: &CheckRuns
           - check-success=docs
           - check-success=lint
@@ -11,14 +12,16 @@ queue_rules:
 
   - name: default
     allow_inplace_checks: true
-    conditions:
+    merge_method: squash
+    merge_conditions:
       - and: *CheckRuns
       - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
     speculative_checks: 5
 
   - name: lowprio
     allow_inplace_checks: true
-    conditions:
+    merge_method: merge
+    merge_conditions:
       - and: *CheckRuns
       - schedule=Mon-Fri 09:00-17:00[Europe/Paris]
     batch_size: 7
@@ -78,7 +81,6 @@ pull_request_rules:
     actions:
       queue:
         name: lowprio
-        method: merge
         commit_message_template: null
 
   - name: request review
