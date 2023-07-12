@@ -1,0 +1,179 @@
+---
+title: Merge Queue Freeze
+description: Learn how to freeze your merge queues during incidents or planned events.
+---
+
+import { Warning } from '../../components/Alerts/Warning';
+import { Screenshot } from "../../components/Images"
+import freezeButtonScreenshot from "../images/merge-queue/freeze/freeze-button.png"
+import unfreezeButtonScreenshot from "../images/merge-queue/freeze/unfreeze-button.png"
+
+In the life cycle of software development and deployment, there can be times
+when it is necessary to halt the merging of pull requests. Perhaps there's an
+ongoing incident in the production environment, and it is crucial to control
+any changes being merged until the issue is resolved. For scenarios like these,
+Mergify provides a feature to **freeze** merge queues.
+
+Freezing a merge queue means suspending the merging of pull requests, while
+still allowing other operations such as queuing of pull requests and scheduling
+checks in the queue. This ensures that your development workflow continues
+seamlessly, while preventing any possibly disruptive merges.
+
+## Managing Incidents with Merge Queues
+
+Incidents are inevitable in any production system. However, managing these
+incidents effectively is key to minimizing their impact. Here's how merge queue
+freezing can be an invaluable tool during such incidents.
+
+Imagine a scenario where there's a critical incident in your production
+environment, and your team is working to resolve it. During this time, it might
+be best not to introduce any new changes that could potentially aggravate the
+issue or make it more difficult to identify the root cause.
+
+In such cases, freezing your merge queues can be extremely helpful. By halting
+the merging of pull requests, you ensure that your production environment
+remains stable and changes-free, allowing your team to focus entirely on
+resolving the incident.
+
+Once the incident is resolved, you can simply unfreeze your queues, and merging
+resumes from where it was left off, ensuring a smooth transition back to normal
+operation.
+
+## Freezing and Unfreezing Queues
+
+### How to Freeze a Merge Queue
+
+Freezing a merge queue in Mergify is a straightforward operation. To freeze a
+queue, you need to navigate to the queue page in your repository and look for
+the option labeled "Freeze Queue". Clicking on this option will effectively
+pause all merges for that specific queue.
+
+<Screenshot src={freezeButtonScreenshot} alt="Mergify queue freeze button" />
+
+Please note that while the queue is frozen, pull requests can still be added to
+the queue, and checks can still be scheduled and updated. The only operation
+that is halted is the final merge operation.
+
+### How to Unfreeze a Merge Queue
+
+Unfreezing a merge queue is as simple as freezing it. In the queue settings,
+click on the "Unfreeze Queue" option to resume the merge operations. As soon as
+a queue is unfrozen, the merge operations continue from where they left off,
+assuming all checks and conditions are still met.
+
+
+<Screenshot src={unfreezeButtonScreenshot} alt="Mergify queue unfreeze button" />
+
+## Understanding the Cascading Effect
+
+The cascade effect is a useful feature when you want to freeze a queue and all
+the queues beneath it. By choosing to freeze with "Cascading Effect", you halt
+merges for a particular queue and any queue with a lower priority. This is
+particularly useful in situations where you may want to continue merging
+critical hotfixes (usually kept in the highest priority queue) while halting
+other less critical merges.
+
+To use the cascade effect, select the "Cascading Effect" option.
+
+<Warning>
+
+  You cannot unfreeze a lower priority queue individually if it has been frozen
+  as part of a cascade. The higher priority queue must be unfrozen first.
+
+</Warning>
+
+## Operations During a Freeze
+
+When a merge queue is frozen, it might appear that all operations are halted.
+However, a freeze in Mergify primarily stops the merging of pull requests.
+Here's what continues to happen in a frozen queue:
+
+- **Pull Request Queueing**: Even in a frozen state, pull requests can still be
+  added to the queue. This allows developers to continue their work and submit
+  pull requests as usual, without having to worry about the state of the merge
+  queue.
+
+- **Check Scheduling and Updating**: While a queue is frozen, Mergify continues
+  to schedule and update checks for the pull requests in the queue. This
+  ensures that all pull requests are up-to-date and validated against the
+  latest state of the base branch.
+
+- **Review and Approval Process**: The review and approval process for pull
+  requests in the queue isn't affected by a freeze. Reviews can be carried out
+  as usual, and approvals (or changes requested) will still affect the pull
+  request's position and status in the queue.
+
+In essence, all operations except the final merging process continue to
+function during a freeze. This enables teams to continue their workflows
+largely undisturbed during an incident, ready to resume merging as soon as the
+queue is unfrozen.
+
+## Benefits of freezing the queue during incidents
+
+Freezing your merge queues during an incident offers several benefits:
+
+- **Stability**: By preventing new changes from being merged, you maintain a
+  stable, changes-free environment that's easier to diagnose and troubleshoot.
+
+- **Focus**: Your team can focus on resolving the incident, without having to
+  worry about handling or reviewing new changes.
+
+- **Continuity**: Developers can continue to queue their pull requests as
+  usual, ensuring that development work can continue uninterrupted.
+
+- **Control**: You have finer control over when and where to introduce changes,
+  especially useful if you want to merge some high-priority fixes before
+  unfreezing the queue.
+
+In essence, the ability to freeze merge queues adds an extra layer of control
+and flexibility to your incident management process.
+
+## Troubleshooting and Common Issues
+
+Despite best intentions, issues can arise while working with frozen merge
+queues. This section aims to address some of these common concerns and offer
+potential solutions:
+
+1. **Unable to unfreeze lower priority queue**: Remember, if a high-priority
+   queue is frozen with cascading enabled, all lower priority queues
+   automatically get frozen due to the cascade effect. If you try to unfreeze a
+   lower priority queue while a higher one is still frozen, it will not work.
+   To unfreeze the lower priority queue, you first need to unfreeze the higher
+   priority queue.
+
+2. **Merge not resuming after unfreezing**: If you notice that the merges are
+   not resuming after you've unfrozen a queue, check to ensure that no other
+   higher priority queue is still frozen.
+
+## Best Practices
+
+Here are some guidelines to follow when working with freeze and unfreeze
+commands in Mergify:
+
+1. **Plan your freeze periods carefully**: Use the freeze feature wisely and
+   only when needed. Unnecessary or prolonged freezing of queues can delay
+   merges and slow down the development process.
+
+2. **Communicate effectively**: If a queue freeze is expected to last for a
+   longer duration or is due to an issue that affects multiple teams,
+   communicate this early and update all concerned parties.
+
+3. **Use the cascade effect effectively**: Understand when to leverage the
+   cascade effect for freezing multiple queues with a single command. It's
+   especially handy during emergencies or critical incidents where you need to
+   stop all merges quickly.
+
+4. **Regularly review the status of your queues**: Regularly checking your
+   queue status, especially after freezing and unfreezing actions, can help
+   ensure that your queues are functioning as expected.
+
+{/* FIXME: add link to multi queue configuration */}
+
+5. **Use priority wisely**: Consider the implications of freezing high-priority
+   queues, and how that will impact lower priority ones due to the cascade
+   effect. In some situations, it might make sense to freeze a lower priority
+   queue instead to avoid unnecessary disruptions.
+
+6. Use descriptive names for queues: This helps in easily identifying and
+   managing the queues, especially in situations when you have to freeze or
+   unfreeze them.
