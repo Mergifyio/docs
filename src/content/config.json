@@ -11,6 +11,7 @@
       "Setup": "/merge-queue/setup",
       "Lifecycle": "/merge-queue/lifecycle",
       "Priority": "/merge-queue/priority",
+      "Freeze": "/merge-queue/freeze",
       "Speculative Checks": "/merge-queue/speculative-checks"
     },
     "Technical Reference": {
