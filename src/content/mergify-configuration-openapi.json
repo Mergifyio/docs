@@ -994,7 +994,7 @@
               "description": "Mergify can impersonate a GitHub user to merge pull request. If no `merge_bot_account` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.\n This option overrides the value defined in the queue rules section of the configuration.",
               "$ref": "#/definitions/Template"
             },
-            "method": {
+            "merge_method": {
               "valueType": "string",
               "description": "Merge method to use. Possible values are `merge`, `squash`, `rebase` or `fast-forward`. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.\n This option overrides the value defined in the queue rules section of the configuration.",
               "enum": [
