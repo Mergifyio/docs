@@ -1044,7 +1044,7 @@
             },
             "update_method": {
               "valueType": "string",
-              "description": "`merge` for all merge methods except `fast-forward` where `rebase` is used Method to use to update the pull request with its base branch when the speculative check is done in-place. Possible values: \n * `merge` to merge the base branch into the pull request. * `rebase` to rebase the pull request against its base branch. \n This option overrides the value defined in the queue rules section of the configuration.",
+              "description": "`merge` for all merge methods except `fast-forward` where `rebase` is used Method to use to update the pull request with its base branch when the speculative check is done in-place. Possible values: \n * `merge` to merge the base branch into the pull request.\n* `rebase` to rebase the pull request against its base branch. \n This option overrides the value defined in the queue rules section of the configuration.",
               "enum": [
                 "merge",
                 "rebase"
