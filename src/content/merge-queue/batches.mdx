@@ -1,0 +1,161 @@
+---
+title: Merge Queue Batches
+description: Increase your merge queue throughput and decrease your CI usage.
+---
+
+import { Screenshot } from "../../components/Images"
+import batchesScreenshot from "../images/merge-queue/batches/batches-dashboard.png"
+
+Mergify's batch merging feature is a powerful tool that enhances productivity
+and efficiency in your development workflow. Instead of merging pull requests
+one by one, which can be time-consuming, especially for larger projects, batch
+merging allows you to combine and merge multiple pull requests at once.
+
+The batch merging process works by setting a `batch_size` option on your merge
+queue. This option determines the number of pull requests that Mergify will
+combine into a single draft pull request. The draft pull request is then
+validated by your Continuous Integration (CI) system. If the CI validation
+passes, Mergify merges all the pull requests in the batch and closes the draft
+pull request. If a failure occurs, Mergify identifies the problematic pull
+request(s) and removes them from the queue, allowing the rest of the queue to
+be processed as usual.
+
+This feature is especially useful for large-scale projects with many pull
+requests to merge, as it can significantly reduce the time required to merge
+them all.
+
+
+## Understanding Batch Merging
+
+Batch merging works by utilizing the `batch_size` option in your Mergify
+configuration. This option tells Mergify how many pull requests it should try
+to combine and validate at once. The `batch_size` can be adjusted according to
+the needs of your project, with a higher number indicating a larger batch size.
+
+For example, if you set `batch_size` to 3, Mergify will create a draft pull
+request that includes the changes from the next three pull requests in the
+queue. This draft pull request is then validated by your CI system. If all
+checks pass, then the three pull requests included in the batch are deemed
+ready to be merged.
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size: 3
+    ...
+```
+
+{/* FIXME: add a graphviz schema */}
+
+In case the draft pull request fails CI validation, it means one or more pull
+requests in the batch have introduced changes that are causing the failure.
+Mergify handles this scenario by using a binary search method to identify the
+failing pull request(s). It does this by systematically reducing the batch size
+and re-running the CI checks until it finds the problematic pull request. Once
+found, the failing pull request is removed from the queue and the rest of the
+pull requests are processed as usual.
+
+This batch merging process allows multiple pull requests to be validated and
+merged more efficiently than if they were handled individually.
+
+## Configuring Batch Merging
+
+Configuring batch merging involves adjusting your Mergify configuration file to
+set the `batch_size` options according to your project's needs.
+
+1. Open your [Mergify configuration file](/configuration/file-format).
+
+2. Under `queue_rules`, set the `batch_size` option to the number of pull
+   requests you want to be tested together in a batch.
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size: 3
+    ...
+```
+
+In the above example, batches of up to 3 pull requests will be created and
+tested together.
+
+<Screenshot src={batchesScreenshot} alt="Mergify merge queue with batches" />
+
+If you want to further optimize your merge queue, you can also adjust the
+`speculative_checks` option. This determines how many batches Mergify will try
+to validate at the same time.
+
+```yaml
+queue_rules:
+  - name: default
+    speculative_checks: 2
+    batch_size: 3
+    ...
+```
+
+In the above example, Mergify will create up to 2 batches, each containing up
+to 3 pull requests, and test them in parallel.
+
+By adjusting these settings, you can find the optimal balance for your project
+between ensuring quality (by thoroughly testing each change) and maintaining
+productivity (by merging changes quickly).
+
+## Batch Merging and Speculative Checks
+
+Batch merging and speculative checks are two powerful features that work in
+synergy to improve the efficiency of your merge queue.
+
+Batch merging allows Mergify to test multiple pull requests together as a
+single unit, reducing the amount of time waiting for individual pull request
+tests to complete. On the other hand, [speculative checks](speculative-checks)
+allow for multiple batches to be tested in parallel, further speeding up the
+merge process.
+
+When both these features are enabled, Mergify creates multiple batches of pull
+requests (according to the `batch_size` option) and then runs tests on several
+of these batches at the same time (as defined by the `speculative_checks`
+option). If any pull request within a batch fails, Mergify identifies the
+culprit through a binary search, removes it from the queue, and continues
+processing the rest of the queue.
+
+Combining these two features allows you to optimize the throughput of your
+merge queue. You can increase the batch size to merge more pull requests
+concurrently, while also increasing the number of speculative checks to test
+more batches in parallel. This minimizes idle time and makes full use of your
+CI resources.
+
+Suppose your queue has 15 pull requests waiting, and your CI pipeline takes
+about 10 minutes to complete. If you set `batch_size` to 5 and
+`speculative_checks` to 3, Mergify would create 3 batches, each containing 5
+pull requests. These batches are then tested in parallel.
+
+{/* FIXME: add a graphviz schema? */}
+
+With this configuration, even if your CI time is 10 minutes, you can merge all
+15 pull requests in only 10 minutes, as opposed to the 2.5 hours it would
+typically take to test each pull request individually.
+
+# Important Considerations
+
+While using batch merging and speculative checks together can significantly
+speed up your merge queue processing, it's crucial to consider the following
+points for an optimal setup:
+
+- **CI Resource Utilization**: Increasing the batch size and speculative checks
+  could lead to higher usage of your Continuous Integration (CI) resources.
+  Ensure that your CI provider can handle the increased load without affecting
+  other tasks or exceeding any limitations.
+
+- **Base Branch Updates**: Batch merging tests pull requests against the latest
+  version of the base branch within another temporary pull request. Therefore,
+  if a new commit is pushed to the base branch, Mergify resets the process and
+  starts over with the updated base branch.
+
+- **Branch Protection Settings**: Since pull requests are tested within
+  temporary ones, the branch protection setting `Require branches to be up to
+  date before merging` needs to be disabled. If your team requires a linear
+  history, you can set the queue option `merge_method: rebase`.
+
+- **Queue Management**: With batch merging, if a pull request within a batch
+  fails, it is removed from the queue, and the remaining ones are processed as
+  usual. It's essential to monitor your queue to handle any such failures
+  promptly.

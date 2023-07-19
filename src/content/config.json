@@ -12,7 +12,8 @@
       "Lifecycle": "/merge-queue/lifecycle",
       "Priority": "/merge-queue/priority",
       "Freeze": "/merge-queue/freeze",
-      "Speculative Checks": "/merge-queue/speculative-checks"
+      "Speculative Checks": "/merge-queue/speculative-checks",
+      "Batches": "/merge-queue/batches"
     },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
