@@ -12,6 +12,7 @@
       "Lifecycle": "/merge-queue/lifecycle",
       "Priority": "/merge-queue/priority",
       "Freeze": "/merge-queue/freeze",
+      "Multiple Queues": "/merge-queue/multi",
       "Speculative Checks": "/merge-queue/speculative-checks",
       "Batches": "/merge-queue/batches"
     },
