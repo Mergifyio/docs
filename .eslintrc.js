@@ -10,6 +10,7 @@ module.exports = {
       files: ['*.mdx'],
       extends: 'plugin:mdx/recommended',
       rules: {
+        'mdx/remark': 'error',
         'no-unused-vars': 'off'
       }
     },
@@ -19,8 +20,8 @@ module.exports = {
       extends: [
         'airbnb',
         'airbnb-typescript',
-        'react-app', 
-        'eslint:recommended', 
+        'react-app',
+        'eslint:recommended',
         'plugin:import/recommended',
         'plugin:import/errors',
         'plugin:import/warnings',
