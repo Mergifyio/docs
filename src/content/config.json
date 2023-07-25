@@ -50,6 +50,7 @@
         "Others": "/integration/stacked_prs/others"
       }
     },
-    "Security": "/security"
+    "Security": "/security",
+    "Badge": "/badge"
   }
 }
