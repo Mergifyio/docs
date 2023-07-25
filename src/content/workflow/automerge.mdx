@@ -71,8 +71,8 @@ steps:
 3. **Customize Your Merge Action**: The `merge` action in the rule can be
    customized further. You can specify the `method` to use for merging
    (`merge`, `rebase`, or `squash`), or specify commit message options. Check
-   the [merge action](/actions/merge/) documentation
-   for more information on these options.
+   the [merge action](/workflow/actions/merge/) documentation for more
+   information on these options.
 
 4. **Save and Commit Your Changes**: Once you've added and customized your
    merge rule, commit the changes to your configuration file and push it to
@@ -137,8 +137,8 @@ When automatic merging is enabled, pull requests are merged as soon as all the
 conditions specified in your rule are met. In the context of [Mergify's Merge
 Queue](/merge-queue/intro), automatic merge works in tandem with the
 prioritization and organization that queues offer. You can leverage the [queue
-action](/actions/queue) to put pull requests in the merge queue rather than
-merging directly.
+action](/workflow/actions/queue) to put pull requests in the merge queue rather
+than merging directly.
 
 Here's an example of how this might look in your Mergify configuration file:
 
