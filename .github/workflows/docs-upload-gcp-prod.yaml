@@ -24,7 +24,7 @@ jobs:
         if: always()
         uses: Mergifyio/gha-slack-notification@main
         with:
-          mode: deploy-start
+          type: deploy-start
           project: "documentation (gatsby)"
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
@@ -49,6 +49,6 @@ jobs:
         if: always()
         uses: Mergifyio/gha-slack-notification@main
         with:
-          mode: deploy-finish
+          type: deploy-finish
           project: "documentation (gatsby)"
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
