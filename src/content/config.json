@@ -22,6 +22,7 @@
     },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
+      "Sharing Configuration": "/configuration/sharing",
       "Conditions": "/configuration/conditions",
       "Data Types": "/configuration/data-types",
       "Actions": {
