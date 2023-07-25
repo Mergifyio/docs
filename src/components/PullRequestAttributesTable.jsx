@@ -14,9 +14,6 @@ import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
 
 export default function PullRequestAttributesTable() {
-  /**
-   * TODO: Source json schema from a shared endpoint somewhere
-   */
   const attributes = configSchema?.definitions?.PullRequestAttribute?.enum ?? [];
 
   return (
