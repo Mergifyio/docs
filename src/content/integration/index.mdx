@@ -1,6 +1,6 @@
 ---
 title: Mergify Integration
-description: Mergify integration with other systems
+description: Mergify integration with other systems.
 toc: false
 ---
 
@@ -8,10 +8,12 @@ import {
   Docset,
   DocsetGrid,
 } from '../../components/HomePage';
-import {VscGithubAction} from 'react-icons/vsc'
-import {FaJenkins, datado} from 'react-icons/fa'
-import {IoIosGitNetwork} from 'react-icons/io'
-import {SiDatadog} from 'react-icons/si'
+import {VscGithubAction} from 'react-icons/vsc';
+import {FaJenkins, datado} from 'react-icons/fa';
+import {IoIosGitNetwork} from 'react-icons/io';
+import {SiDatadog} from 'react-icons/si';
+import {GoStack} from 'react-icons/go';
+import {CgStack} from 'react-icons/cg';
 
 <DocsetGrid>
   <Docset
@@ -40,5 +42,22 @@ import {SiDatadog} from 'react-icons/si'
     description="Monitor your merge queues with Mergify Datadog integration"
     path="datadog"
     icon={<SiDatadog/>}
+  />
+</DocsetGrid>
+
+## Stacked Pull Requests
+
+<DocsetGrid>
+  <Docset
+    title="Graphite"
+    description="Learn how you can use Graphite and Mergify together."
+    path="stacked_prs/graphite"
+    icon={<GoStack/>}
+  />
+  <Docset
+    title="Others"
+    description="Learn how you can use stacked PRs with Mergify."
+    path="stacked_prs/graphite"
+    icon={<CgStack/>}
   />
 </DocsetGrid>
