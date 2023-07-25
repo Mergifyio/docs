@@ -4,7 +4,10 @@
     "Home": "/",
     "Getting Started": "/getting-started",
     "Workflow": {
-      "Writing Your First Rule": "/workflow/writing-your-first-rule"
+      "Writing Your First Rule": "/workflow/writing-your-first-rule",
+      "Use Cases": {
+        "Automatic Merge": "/workflow/automerge"
+      }
     },
     "Merge Queue": {
       "Introduction": "/merge-queue/intro",
