@@ -8,12 +8,20 @@ import {
   Tooltip,
   useColorModeValue,
   useToken,
+  Link,
+  HStack,
+  Button,
+  Show,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
 import React from 'react';
 
+import { AiOutlineDashboard } from 'react-icons/ai';
+import { FaGithub } from 'react-icons/fa';
 import { FiChevronsRight } from 'react-icons/fi';
+import { HiOutlineDocumentArrowUp } from 'react-icons/hi2';
+import { SiSlack, SiStatuspage } from 'react-icons/si';
 import useLocalStorage from 'react-use/lib/useLocalStorage';
 
 import Footer from './Footer';
@@ -36,6 +44,36 @@ export function usePageLayoutProps(props) {
     paddingTop,
     paddingBottom,
   };
+}
+
+function HeaderLink(props) {
+  const activeHoverBg = useColorModeValue('blue.50', 'blue.500');
+
+  return (
+    <Button
+      h={10}
+      whiteSpace="normal"
+      variant="ghost"
+      roundedLeft="full"
+      roundedRight="full"
+      fontWeight="normal"
+      _hover={{
+        bg: activeHoverBg,
+      }}
+    >
+
+      <Link
+        style={{ textDecoration: 'none' }}
+        target="_blank"
+        sx={{
+          code: {
+            color: 'inherit',
+          },
+        }}
+        {...props}
+      />
+    </Button>
+  );
 }
 
 export default function Page({
@@ -61,6 +99,15 @@ export default function Page({
         <MobileNav>
           <SidebarNav navItems={navItems} darkBg="gray.700" />
         </MobileNav>
+        <Show above="xl">
+          <HStack ml={20} spacing={8}>
+            <HeaderLink href="https://dashboard.mergify.com"><AiOutlineDashboard style={{ display: 'inline' }} /> Dashboard</HeaderLink>
+            <HeaderLink href="https://slack.mergify.com"><SiSlack style={{ display: 'inline' }} /> Slack Community</HeaderLink>
+            <HeaderLink href="https://github.com/Mergifyio/mergify/discussions"><FaGithub style={{ display: 'inline' }} /> Discussions</HeaderLink>
+            <HeaderLink href="https://changelog.mergify.com"><HiOutlineDocumentArrowUp style={{ display: 'inline' }} /> Changelog</HeaderLink>
+            <HeaderLink href="https://status.mergify.com"><SiStatuspage style={{ display: 'inline' }} /> Status</HeaderLink>
+          </HStack>
+        </Show>
       </Header>
       <Fade in={sidebarHidden} unmountOnExit delay={0.25}>
         <Tooltip placement="right" label="Show sidebar">
