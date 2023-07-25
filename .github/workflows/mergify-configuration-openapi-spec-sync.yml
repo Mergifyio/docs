@@ -1,4 +1,4 @@
-name: Upload production docs to GCP
+name: Sync Mergify configuration OpenAPI spec
 
 on:
   push:
