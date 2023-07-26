@@ -236,7 +236,7 @@ export default function Page({
         )}
         pagination={<Pagination navItems={navItems} />}
         aside={
-            toc ? (
+            toc !== false ? (
               // hide the table of contents on the home page
               <chakra.aside
                 display={{ base: 'none', lg: 'flex' }}
