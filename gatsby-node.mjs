@@ -32,7 +32,7 @@ export const onCreateNode = async ({node, getNode, loadNodeContent, actions}) =>
   const {type, mediaType} = node.internal;
   switch (type) {
     case 'File':
-      if (mediaType === 'application/json' || node.base === '_redirects') {
+      if (mediaType === 'application/json') {
         // save the raw content of JSON files as a field
         const content = await loadNodeContent(node);
         actions.createNodeField({
