@@ -1,0 +1,117 @@
+---
+title: Partitions
+description: Optimize your merge queue for monorepos.
+---
+
+import OptionsTable from '../../components/OptionsTable';
+
+In Mergify, partition rules are a powerful feature designed to optimize the
+handling of monorepos. Each partition runs in parallel, encompassing all the
+queues defined in the queue rules. Partitions function independently from one
+another, leading to more efficient and effective management of pull requests
+(PRs) across your repository.
+
+## How Partitions Work
+
+Each partition acts like a separated repository. When a PR is queued in a
+partition, any changes to the base branch in that partition don't interrupt the
+processes in other partitions. Consequently, multiple partitions can
+simultaneously manage different PRs, thereby ensuring smooth operations in a
+monorepo.
+
+A single PR can be queued in multiple partitions. In this scenario, Mergify
+waits until the PR gets validated in each partition before merging it.
+Therefore, although partitions operate independently, they can coordinate to
+guarantee PR validation.
+
+However, if a PR queued in several partitions fails in one partition, it is
+deemed unmergeable. To be merged, a PR needs to meet the requirements of all
+the partitions it is queued in.
+
+{/* FIXME: schema! */}
+
+## Setting Up Partition Rules
+
+To assign a PR to a specific partition, use partition rules in the Mergify
+configuration file. These rules can use different conditions, such as the
+modification of certain files in the PR. For instance, a PR modifying any file
+in the `projectA/` folder will be added to the `projectA` partition. Similarly,
+a PR that modifies files in both `projectA/` and `projectB/` folders will be
+added to both respective partitions.
+
+If a PR does not match any existing partition rules, it will be added to all
+partitions. You can then use queue rules to determine the specific queue within
+the partition(s) where the PR should be added.
+
+```yaml
+partition_rules:
+  - name: projectA
+    conditions:
+      - files~=^projectA/
+
+  - name: projectB
+    conditions:
+      - files~=^projectB/
+
+queue_rules:
+  - name: default
+    queue_conditions:
+      - or:
+        - and:
+          - queue-partition-name=projectA
+          - check-success=ciA
+        - and:
+          - queue-partition-name=projectB
+          - check-success=ciB
+```
+
+{/* FIXME: screenshot! */}
+
+## Partition Rules Options
+
+<OptionsTable name="PartitionRule" />
+
+## Using a Fallback Partition
+
+While migrating to partition rules, you can use a `fallback_partition` to
+handle PRs that don't yet have a designated partition. This fallback partition
+catches every PR that doesn't match any existing partition. Thus, it ensures
+that your project operates as usual while you're transitioning to partition
+rules.
+
+There can only be one `fallback_partition` in a configuration file, and it must
+not have any conditions to catch all possible PRs.
+
+```yaml
+partition_rules:
+  - name: fallback
+    fallback_partition: true
+
+  - name: projectA
+    conditions:
+      - files~=^projectA/
+
+  - name: projectB
+    conditions:
+      - files~=^projectB/
+
+queue_rules:
+  - name: default
+    queue_conditions:
+      - or:
+        - and:
+          - queue-partition-name=projectA
+          - check-success=ciA
+        - and:
+          - queue-partition-name=projectB
+          - check-success=ciB
+```
+
+During this migration phase, if you manually merge a PR, Mergify will evaluate
+it against the current partition rules. If the PR matches an existing
+partition, that partition will be reset; otherwise, only the fallback partition
+will be reset.
+
+With a clear understanding of partition rules and how to use them, you can
+efficiently manage your monorepo in Mergify, making your development workflow
+more effective and agile.
