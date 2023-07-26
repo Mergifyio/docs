@@ -13,6 +13,12 @@
         "$ref": "#/definitions/QueueRule"
       }
     },
+    "partition_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/PartitionRule"
+      }
+    },
     "pull_request_rules": {
       "type": "array",
       "items": {
@@ -518,6 +524,32 @@
       ],
       "title": "PullRequestRule"
     },
+    "PartitionRule": {
+      "$id": "#/PartitionRule",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "",
+          "description": "The name of the partition."
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RuleCondition",
+            "valueName": "conditions"
+          },
+          "description": "List of conditions to determine the partition(s) in which the pull request will be queued. If no partition matches, the pull request will be added to every partition."
+        },
+        "fallback_partition" : {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
     "QueueRule": {
       "$id": "#/QueueRule",
       "type": "object",
@@ -620,6 +652,7 @@
       }
     },
     "RuleCondition": {
+      "$id": "#/RuleCondition",
       "anyOf": [
         {
           "type": "array",

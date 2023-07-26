@@ -6,6 +6,7 @@ const valueTypeLinks: { [key: string]: string } = {
   '#/Template': '/configuration/data-types#template',
   '#/LabelArray': '/configuration/data-types#template',
   '#/TimestampOrRelativeTimestamp': '/configuration/data-types#timestamp',
+  '#/RuleCondition': '/configuration/conditions',
 };
 
 export function getTypeLink(ref: string) {
