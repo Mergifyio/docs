@@ -5,7 +5,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import configSchema from '../content/mergify-configuration-openapi.json';
-import { getTypeLink } from '../utils/getTypeLink';
+import { getTypeLink, getTypeDescription } from '../utils/getTypeLink';
 
 import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
@@ -37,32 +37,74 @@ export default function OptionsTable({ name }: Props) {
           <Th>Key name</Th>
           <Th>Value type</Th>
           <Th>Default</Th>
-          <Th>Description</Th>
         </Tr>
       </Thead>
       <Tbody>
         {Object.entries(options).map(([optionKey, definition]) => {
-          const typeLink = (definition.type === 'array') ? getTypeLink(definition.items.$ref) : undefined;
+          let valueType = null;
+
+          if (definition.type === 'array') {
+            const typeLink = getTypeLink(definition.items.$ref);
+            const typeDescription = (
+              <ReactMarkdown components={mdxComponents as any}>
+                {getTypeDescription(definition.items.$ref)}
+              </ReactMarkdown>
+            );
+
+            if (typeLink !== undefined) {
+              valueType = (
+                <>list of
+                  <Link color="primary" textDecoration="underline" href={typeLink}>
+                    {typeDescription}
+                  </Link>
+                </>
+              );
+            } else valueType = <>list of {typeDescription}</>;
+          } else if (definition.$ref !== undefined) {
+            const typeLink = getTypeLink(definition.$ref);
+            const typeDescription = (
+              <ReactMarkdown components={mdxComponents as any}>
+                {getTypeDescription(definition.$ref)}
+              </ReactMarkdown>
+            );
+
+            if (typeLink !== undefined) {
+              valueType = (
+                <Link color="primary" textDecoration="underline" href={typeLink}>
+                  {typeDescription}
+                </Link>
+              );
+            } else valueType = typeDescription;
+          } else {
+            valueType = definition.type;
+          }
 
           return (
-            <Tr>
-              <Td sx={{ whiteSpace: 'nowrap' }}>
-                <InlineCode>{optionKey}</InlineCode>
-              </Td>
-              <Td>{typeLink ? <>{definition.type} of <Link color="primary" textDecoration="underline" href={typeLink}>{definition.items.valueName}</Link></> : definition.type}</Td>
-              <Td lineHeight="7">
-                {hasDefaultValue(definition) && (
+            <>
+              <Tr>
+                <Td>
+                  <InlineCode>{optionKey}</InlineCode>
+                </Td>
+                <Td>
+                  {valueType}
+                </Td>
+                <Td lineHeight="7">
+                  {hasDefaultValue(definition) && (
                   <InlineCode>
                     {String(definition.default)}
                   </InlineCode>
-                )}
-              </Td>
-              <Td lineHeight="7">
-                <ReactMarkdown components={mdxComponents as any}>
-                  {definition.description}
-                </ReactMarkdown>
-              </Td>
-            </Tr>
+                  )}
+                </Td>
+              </Tr>
+              <Tr>
+                {/* FIXME: don't hardcode the border color like that */}
+                <Td lineHeight="7" colspan="3" style={{ borderBottom: '2px solid #eee' }}>
+                  <ReactMarkdown components={mdxComponents as any}>
+                    {definition.description}
+                  </ReactMarkdown>
+                </Td>
+              </Tr>
+            </>
           );
         })}
       </Tbody>

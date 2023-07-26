@@ -290,6 +290,7 @@
     },
     "StringArray": {
       "type": "array",
+      "description": "list of string",
       "items": {
         "type": "string"
       },
@@ -323,6 +324,7 @@
     },
     "Template": {
       "$id": "#/Template",
+      "description": "template",
       "default": "",
       "anyOf": [
         {
@@ -336,7 +338,8 @@
     "Duration": {
       "$id": "#/Duration",
       "type": "string",
-      "default": ""
+      "default": "",
+      "description": "duration"
     },
     "ConditionString": {
       "$id": "#/ConditionString",
@@ -346,6 +349,7 @@
     "TemplateArray": {
       "$id": "#/TemplateArray",
       "type": "array",
+      "description": "list of template",
       "default": [],
       "items": {
         "valueType": "Template",
@@ -380,24 +384,29 @@
     },
     "PriorityRule": {
       "$id": "#/PriorityRule",
+      "description": "priority rule",
       "type": "object",
       "properties": {
         "name": {
+          "description": "Name of the rule.",
           "type": "string"
         },
         "conditions": {
+          "description": "The list of conditions that needs to match to assign priority to the pull request.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/ConditionString"
           }
         },
         "priority": {
+          "description": "The priority of the pull request.",
           "$ref": "#/definitions/Priority"
         }
       }
     },
     "Priority": {
       "$id": "#/Priority",
+      "description": "priority: `low`, `medium`, `high` or a value between 1 and 10000",
       "anyOf": [
         {
           "type": "number",
@@ -415,6 +424,7 @@
     },
     "MergeMethod": {
       "$id": "#/MergeMethod",
+      "description": "merge method: `merge`, `squash`, `rebase` or `fast-forward`",
       "enum": [
         "merge",
         "squash",
@@ -447,22 +457,18 @@
       "additionalProperties": false,
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "The name of the rule. This is used when reporting information about a rule. It's not possible to have two rules with the same name."
         },
         "conditions": {
           "type": "array",
+          "description": "A list of conditions that must match against the pull request for the rule to be applied.",
           "items": {
-            "anyOf": [
-              {
-                "$ref": "#/definitions/RuleCondition"
-              },
-              {
-                "$ref": "#/definitions/ConditionString"
-              }
-            ]
+            "$ref": "#/definitions/RuleCondition"
           }
         },
         "actions": {
+          "description": "A dictionary made of actions that will be executed on the matching pull requests.",
           "$ref": "#/definitions/Actions"
         }
       },
@@ -488,12 +494,12 @@
         "conditions": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/RuleCondition",
-            "valueName": "conditions"
+            "$ref": "#/definitions/RuleCondition"
           },
-          "description": "List of conditions to determine the partition(s) in which the pull request will be queued. If no partition matches, the pull request will be added to every partition."
+          "description": "List of conditions to determine the partition(s) in which the pull request will be queued. If a pull request matches no partition, it is added to the fallback partition if defined, otherwise it is added to every partition."
         },
         "fallback_partition" : {
+          "description": "Allow the partition to work as the fallback partition.",
           "type": "boolean",
           "default": false
         }
@@ -507,100 +513,122 @@
       ],
       "properties": {
         "name": {
+          "description": "The name of the merge queue.",
           "type": "string"
         },
+        "queue_conditions": {
+          "description": "The list of conditions that needs to match to queue the pull request.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RuleCondition"
+          }
+        },
+        "merge_conditions": {
+          "description": "The list of conditions to match to get the queued pull request merged. This automatically includes the `queue_conditions`. In case of speculative merge pull request, the merge conditions starting by `check-` are evaluated against the temporary pull request instead of the original one.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RuleCondition"
+          }
+        },
         "allow_checks_interruption": {
+          "description": "Allow interrupting the ongoing checks when a pull request with higher priority enters in the queue. If false, pull request with higher priority will be inserted just after the pull requests that have checks running.",
           "type": "boolean",
           "default": true
         },
         "allow_inplace_checks": {
+          "description": "Allow to update/rebase the original pull request to check its mergeability when first in the queue and not part of a batch or speculative check.",
           "type": "boolean",
           "default": true
         },
         "allow_queue_branch_edit": {
+          "description": "When creating a branch for a queue, if the code of this branch is edited by an entity external to Mergify, Mergify un-queues all pull requests embarked in the branch and report the issue as a failure. If set to true, Mergify will allow such modifications and trust the content of the branch. Make sure only Mergify and your external application are allowed to edit these branches.",
           "type": "boolean",
           "default": false
         },
         "batch_max_failure_resolution_attempts": {
-          "type": "number"
+          "type": "number",
+          "description": "The number of attempts to resolve a batch failure before unqueueing pull requests. By default, Mergify will attempt to resolve a batch failure by splitting the batch multiple times until it finds the root cause of the failure. You can stop this process earlier by limiting the number of resolution attempts. Setting this to 0 will unqueue all the pull requests from a batch when a batch fails."
         },
         "batch_max_wait_time": {
+          "description": "The maximum amount of time to wait before creating a batch when the batch is not full.",
           "$ref": "#/definitions/Duration",
           "default": "30 s"
         },
         "batch_size": {
+          "description": "The maximum number of pull requests per speculative check in the queue. Must be between 1 and 20.",
           "type": "number",
           "default": 1,
           "minimum": 1,
           "maximum": 20
         },
         "checks_timeout": {
+          "description": "The amount of time Mergify waits for pending checks to return before unqueueing pull requests. This cannot be less than 60 seconds.",
           "$ref": "#/definitions/Duration"
         },
         "commit_message_template": {
+          "description": "Template to use as the commit message when using the `merge` or `squash` merge method.",
           "valueType": "Template",
           "$ref": "#/definitions/Template"
         },
         "disallow_checks_interruption_from_queues": {
+          "description": "The list of higher priorities queue that are not allowed to interrupt the ongoing checks of this queue.",
           "$ref": "#/definitions/StringArray"
         },
         "draft_bot_account": {
+          "description": "Mergify can impersonate a GitHub user to create its draft pull requests. If no `draft_bot_account` is set, Mergify creates the draft pull request itself. The user account must have already been logged in Mergify dashboard once and have admin, write or maintain permission.",
           "type": "string"
         },
         "merge_bot_account": {
+          "description": "Mergify can impersonate a GitHub user to merge pull requests. If no `merge_bot_account` is set, Mergify will merge the pull request itself. The user account must have already been logged in Mergify dashboard once and have write or maintain permission.",
           "valueType": "Template",
           "$ref": "#/definitions/Template"
-        },
-        "update_bot_account": {
-          "valueType": "Template",
-          "$ref": "#/definitions/Template"
-        },
-        "merge_conditions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RuleCondition"
-          }
-        },
-        "conditions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RuleCondition"
-          }
         },
         "merge_method": {
+          "description": "Merge method to use. Possible values are `merge`, `squash`, `rebase` or `fast-forward`. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to false.",
           "$ref": "#/definitions/MergeMethod"
         },
         "priority_rules": {
+          "description": "The list of priority rules a pull request can match in order to be prioritized when added to a queue. The rule with the highest priority value wins.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/PriorityRule"
           }
         },
         "queue_branch_merge_method": {
+          "description": "If set to `fast-forward`, Mergify will merge the draft pull request instead of merging the original pull request that has been checked. This only works when the queue action `merge_method` is set to its default `merge`.",
           "type": "string",
           "default": "none"
         },
         "queue_branch_prefix": {
+          "description": "The prefix used to name the branch of draft pull requests.",
           "type": "string",
           "default": "mergify/merge-queue/"
         },
         "speculative_checks": {
+          "description": "The maximum number of checks to run in parallel in the queue. Must be between 1 and 20.",
           "type": "number",
           "default": 1,
           "minimum": 1,
           "maximum": 20
         },
         "update_method": {
+          "description": "Method to use to update the pull request with its base branch when the speculative check is done in-place. Possible values:\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.",
           "type": "string",
           "enum": [
             "merge",
             "rebase"
           ]
+        },
+        "update_bot_account": {
+          "description": "For merging or rebasing branches, Mergify might have to impersonate a GitHub user. You can specify the account to use with this option. If no `update_bot_account` is set, Mergify uses the author of the PR. The user account must have already been logged in Mergify dashboard once.",
+          "valueType": "Template",
+          "$ref": "#/definitions/Template"
         }
       }
     },
     "RuleCondition": {
       "$id": "#/RuleCondition",
+      "description": "condition",
       "anyOf": [
         {
           "type": "array",
@@ -634,6 +662,7 @@
       "title": "RuleCondition"
     },
     "Actions": {
+      "description": "action",
       "type": "object",
       "properties": {
         "assign": {
@@ -909,7 +938,7 @@
             },
             "merge_bot_account": {
               "valueType": "Template",
-              "description": "Mergify can impersonate a GitHub user to merge pull request. If no `merge_bot_account` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.",
+              "description": "Mergify can impersonate a GitHub user to merge pull requests. If no `merge_bot_account` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.",
               "$ref": "#/definitions/Template"
             },
             "method": {
@@ -937,7 +966,7 @@
                 ""
               ],
               "items": {
-                "$ref": "#/definitions/ConditionString"
+                "$ref": "#/definitions/RuleCondition"
               }
             },
             "summary": {
@@ -972,7 +1001,7 @@
             },
             "merge_bot_account": {
               "valueType": "Template",
-              "description": "Mergify can impersonate a GitHub user to merge pull request. If no `merge_bot_account` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.\n This option overrides the value defined in the queue rules section of the configuration.",
+              "description": "Mergify can impersonate a GitHub user to merge pull requests. If no `merge_bot_account` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.\n This option overrides the value defined in the queue rules section of the configuration.",
               "$ref": "#/definitions/Template"
             },
             "merge_method": {
