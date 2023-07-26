@@ -28,23 +28,6 @@ export const onCreateWebpackConfig = ({ actions, stage, plugins }) => {
   }
 }
 
-export const sourceNodes = ({
-  actions: {createNode},
-  createNodeId,
-  store,
-  cache,
-  reporter
-}) =>
-  // download Apollo Client typedoc output and save it as a file node
-  createRemoteFileNode({
-    url: 'https://apollo-client-docs.netlify.app/docs.json',
-    store,
-    cache,
-    createNode,
-    createNodeId,
-    reporter
-  });
-
 export const onCreateNode = async ({node, getNode, loadNodeContent, actions}) => {
   const {type, mediaType} = node.internal;
   switch (type) {
@@ -130,23 +113,19 @@ export const createPages = async ({actions, graphql}) => {
   `);
 
   const configs = data.configs.nodes.reduce((acc, node) => {
-    // TODO: convert configs to YAML
-    const {title, version, sidebar, algoliaFilters, internal} = JSON.parse(
+    const {title, sidebar} = JSON.parse(
       node.fields.content
     );
     return {
       ...acc,
       [node.sourceInstanceName]: {
         docset: title,
-        currentVersion: version,
         navItems: getNavItems(sidebar),
-        algoliaFilters,
-        internal
       }
     };
   }, {});
 
-  data.pages.nodes.forEach(({id, gitRemote, sourceInstanceName, children, absolutePath}) => {
+  data.pages.nodes.forEach(({id, sourceInstanceName, children, absolutePath}) => {
     const [{fields}] = children;
 
     actions.createPage({
