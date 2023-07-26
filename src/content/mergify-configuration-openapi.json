@@ -33,307 +33,257 @@
         {
           "key": "approved-reviews-by",
           "inputType": "userSingle",
-          "dataType": "list of string",
           "description": "The list of GitHub user or team login that approved the pull request. Team logins are prefixed with the `@` character and must belong to the repository organization. This only matches reviewers with `admin`, `write` or `maintain` permission on the repository."
         },
         {
           "key": "assignee",
           "inputType": "userSingle",
-          "dataType": "list of string",
           "description": "The list of GitHub user or team login that are assigned to the pull request. Team logins are prefixed with the `@` character and must belong to the repository organization."
         },
         {
           "key": "author",
           "inputType": "userSingle",
-          "dataType": "string",
           "description": "The GitHub user or team login of the author of the pull request. Team logins are prefixed with the `@` character and must belong to the repository organization."
         },
         {
           "key": "base",
           "inputType": "branchSingle",
-          "dataType": "string",
           "description": "The name of the branch the pull request should be pulled into."
         },
         {
           "key": "body",
           "inputType": "string",
-          "dataType": "string",
           "description": "The content of the pull request description without Markdown/HTML comments."
         },
         {
           "key": "body-raw",
           "inputType": "string",
-          "dataType": "string",
           "description": "The content of the pull request description."
         },
         {
           "key": "branch-protection-review-decision",
           "inputType": "string",
-          "dataType": "string",
           "description": "The review decision, could be one of `APPROVED`, `CHANGES_REQUESTED` or `REVIEW_REQUIRED`. This indicates if `CODEOWNERS` have reviewed the pull request when the Require Review from Code Owners branch protection rule is enabled."
         },
         {
           "key": "changes-requested-reviews-by",
           "inputType": "userSingle",
-          "dataType": "list of string",
           "description": "The list of GitHub user or team login that have requested changes in a review for the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
           "key": "check-failure",
           "inputType": "check",
-          "dataType": "list of string",
           "description": "The list of status checks that failed for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details. Checks that report being cancelled, timed out, and action required are also considered as failures."
         },
         {
           "key": "check-neutral",
           "inputType": "check",
-          "dataType": "list of string",
           "description": "The list of status checks that are neutral for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-pending",
           "inputType": "check",
-          "dataType": "list of string",
           "description": "The list of status checks that is pending for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-skipped",
           "inputType": "check",
-          "dataType": "list of string",
           "description": "The list of status checks that was skipped for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-stale",
           "inputType": "check",
-          "dataType": "list of string",
           "description": "The list of status checks that are stale for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-success",
           "inputType": "check",
-          "dataType": "list of string",
           "description": "The list of status checks that successfully passed for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-timed-out",
           "inputType": "check",
-          "dataType": "list of string",
           "description": "The list of status checks that timed out for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "closed",
           "inputType": "boolean",
-          "dataType": "boolean",
           "description": "Whether the pull request is closed."
         },
         {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "closed-at",
           "inputType": "relativeTimestamp",
-          "dataType": "Timestamp or Relative timestamp",
           "description": "The time the pull request was closed at."
         },
         {
           "key": "commented-reviews-by",
           "inputType": "userSingle",
-          "dataType": "list of string",
           "description": "The list of GitHub user or team login that have commented in a review for the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
           "key": "commits",
           "inputType": "string",
-          "dataType": "list of commits",
           "description": "The list of commits of the pull request. The index 0 is the first commit of the pull request, while -1 is the last commit of the pull request."
         },
         {
           "key": "commits-behind",
           "inputType": "string",
-          "dataType": "list of commits",
           "description": "The list of commits between the head of the base branch and the base of the pull request. This can only be used with the length operator as #commits-behind."
         },
         {
           "key": "commits-unverified",
           "inputType": "string",
-          "dataType": "list of string",
           "description": "The list of commit messages that are marked as unverified by GitHub."
         },
         {
           "key": "conflict",
           "inputType": "boolean",
-          "dataType": "boolean",
           "description": "Whether the pull request is conflicting with its base branch."
         },
         {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "created-at",
           "inputType": "relativeTimestamp",
-          "dataType": "Timestamp or Relative timestamp",
           "description": "The time the pull request was created at."
         },
         {
           "key": "dependabot-dependency-name",
           "inputType": "string",
-          "dataType": "string",
           "description": "The dependency-name value included in the Dependabot commit message."
         },
         {
           "key": "dependabot-dependency-type",
           "inputType": "string",
-          "dataType": "string",
           "description": "The dependency-type value included in the Dependabot commit message."
         },
         {
           "key": "dependabot-update-type",
           "inputType": "string",
-          "dataType": "string",
           "description": "The update-type value included in the Dependabot commit message."
         },
         {
           "key": "dismissed-reviews-by",
           "inputType": "userSingle",
-          "dataType": "list of string",
           "description": "The list of GitHub user or team login that have their review dismissed in the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
           "key": "draft",
           "inputType": "boolean",
-          "dataType": "boolean",
           "description": "Whether the pull request is in draft state."
         },
         {
           "key": "files",
           "inputType": "string",
-          "dataType": "list of string",
           "description": "The files that are modified, deleted or added by the pull request."
         },
         {
           "key": "head",
           "inputType": "branchSingle",
-          "dataType": "string",
           "description": "The name of the branch where the pull request changes are implemented."
         },
         {
           "key": "label",
           "inputType": "labelSingle",
-          "dataType": "list of string",
           "description": "The list of labels of the pull request."
         },
         {
           "key": "linear-history",
           "inputType": "boolean",
-          "dataType": "boolean",
           "description": "Whether the pull request commits history is linear (no merge commit)."
         },
         {
           "key": "locked",
           "inputType": "boolean",
-          "dataType": "boolean",
           "description": "Whether the pull request is locked."
         },
         {
           "key": "merged",
           "inputType": "boolean",
-          "dataType": "boolean",
           "description": "Whether the pull request is merged. This attribute doesn't work on pull requests merged before a rule using this attribute is created."
         },
         {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "merged-at",
           "inputType": "relativeTimestamp",
-          "dataType": "Timestamp or Relative timestamp",
           "description": "The time the pull request was merged at."
         },
         {
           "key": "merged-by",
           "inputType": "string",
-          "dataType": "string",
           "description": "The GitHub user or team login that merged the pull request. Team logins are prefixed with the @ character and must belong to the repository organization."
         },
         {
           "key": "milestone",
           "inputType": "string",
-          "dataType": "string",
           "description": "The milestone title associated to the pull request."
         },
         {
           "key": "number",
           "inputType": "string",
-          "dataType": "integer",
           "description": "The pull request number."
         },
         {
           "key": "queue-partition-name",
           "inputType": "string",
-          "dataType": "list of string",
           "description": "The name of the partitions the pull request is queued in."
         },
         {
           "key": "queue-position",
           "inputType": "number",
-          "dataType": "integer",
           "description": "The position of the pull request in its queue if queued.\nThe first pull request in the queue has position 0.\nThe value is set to -1 if the pull request is not queued.\nNB: If you are using partitions, this condition returns the maximum position of the pull request from all the partitions it is queued in."
         },
         {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "queued-at",
           "inputType": "relativeTimestamp",
-          "dataType": "Timestamp or Relative timestamp",
           "description": "The time the pull request was queued at for merge."
         },
         {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "queue-merge-started-at",
           "inputType": "relativeTimestamp",
-          "dataType": "Timestamp or Relative timestamp",
           "description": "The time the pull request mergeability checks have started at. \nNB: This attribute does not work when using Partition Rules."
         },
         {
           "key": "repository-full-name",
           "inputType": "string",
-          "dataType": "string",
           "description": "The current repository full name (complete version with the organization name)."
         },
         {
           "key": "repository-name",
           "inputType": "string",
-          "dataType": "string",
           "description": "The current repository name (short version without the organization name)."
         },
         {
           "key": "review-requested",
           "inputType": "userSingle",
-          "dataType": "list of string",
           "description": "The list of GitHub user or team login that were requested to review the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
           "key": "review-threads-resolved",
           "inputType": "string",
-          "dataType": "list of string",
           "description": "The list of bodies associated to review threads that are marked as resolved by GitHub."
         },
         {
           "key": "review-threads-unresolved",
           "inputType": "string",
-          "dataType": "list of string",
           "description": "The list of bodies associated to review threads that are NOT marked as resolved by GitHub."
         },
         {
           "key": "schedule",
           "inputType": "string",
-          "dataType": "Schedule",
           "description": "The current time will be compared against this schedule to un/validate this attribute."
         },
         {
           "key": "title",
           "inputType": "string",
-          "dataType": "string",
           "description": "The title of the pull request."
         },
         {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "updated-at",
           "inputType": "relativeTimestamp",
-          "dataType": "Timestamp or Relative timestamp",
           "description": "The time the pull request was updated at."
         }
       ]
@@ -353,7 +303,6 @@
       ],
       "anyOf": [
         {
-          "dataType": "list of string",
           "$ref": "#/definitions/StringArray"
         },
         {
@@ -593,7 +542,6 @@
           "$ref": "#/definitions/Template"
         },
         "disallow_checks_interruption_from_queues": {
-          "dataType": "list of string",
           "$ref": "#/definitions/StringArray"
         },
         "draft_bot_account": {
