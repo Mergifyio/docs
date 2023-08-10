@@ -5,6 +5,8 @@ description: Learn how to order your pull requests in the queue by priority.
 
 import { Info } from "../../components/Alerts/Info"
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import OptionsTable from '../../components/OptionsTable';
+import InlineCode from '../../components/InlineCode';
 
 In the realm of software development, the ability to effectively prioritize
 tasks is a critical skill that can greatly improve efficiency and productivity.
@@ -24,32 +26,8 @@ helping you handle urgent tasks more promptly.
 Priority rules in Mergify are a set of guidelines that determine the order of
 pull requests within a merge queue. They apply a priority — which could be a
 keyword such as `low`, `medium`, `high` or a numerical value — to a pull
-request based on conditions you've defined.
-
-The textual priorities have the following numerical values:
-
-<Table>
-  <Thead>
-    <Tr>
-      <Th>Keyword</Th>
-      <Th>Numerical Value</Th>
-    </Tr>
-    <Tr>
-      <Td>Low</Td>
-      <Td>1000</Td>
-    </Tr>
-    <Tr>
-      <Td>Medium</Td>
-      <Td>2000</Td>
-    </Tr>
-    <Tr>
-      <Td>High</Td>
-      <Td>3000</Td>
-    </Tr>
-  </Thead>
-</Table>
-
-When using numerical value, the value can be between 1 and 10,000.
+request based on conditions you've defined. When using numerical value, the
+value can be between 1 and 10,000.
 
 When a pull request is added to a queue, each priority rule is evaluated
 against its conditions. This assessment determines where the pull request will
@@ -116,6 +94,33 @@ Defining priority rules is straightforward and involves the following steps:
 3. **Set up conditions**: Define the conditions under which a pull request
    should be assigned a particular priority level. These conditions can be
    based on any [pull request attribute](/configuration/conditions).
+
+Reference:
+
+<OptionsTable name="PriorityRule" />
+
+The textual priorities have the following numerical values:
+
+<Table>
+  <Thead>
+    <Tr>
+      <Th>Keyword</Th>
+      <Th>Numerical Value</Th>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>low</InlineCode></Td>
+      <Td>1000</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>medium</InlineCode></Td>
+      <Td>2000</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>high</InlineCode></Td>
+      <Td>3000</Td>
+    </Tr>
+  </Thead>
+</Table>
 
 Let's look at an example:
 
