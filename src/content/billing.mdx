@@ -1,0 +1,143 @@
+---
+title: Understanding Mergify Billing System
+description: Understand how Mergify fair billing works.
+---
+
+import { Info } from "../components/Alerts/Info"
+import { Screenshot } from "../components/Images"
+import UsageScreenshot from "./images/billing/usage.png"
+import InvoicePreviousPeriod from "./images/billing/invoice-previous-period.png"
+import InvoiceNextPeriod from "./images/billing/invoice-next-period.png"
+
+At Mergify, our goal is to offer you a transparent and efficient billing system
+that meets your needs. Here's a comprehensive guide to help you grasp how our
+billing system functions:
+
+## Plans Overview
+
+We offer multiple plans tailored to provide various features. At present, we
+primarily offer two distinct plans:
+
+- **Advanced Plan**: giving access to all our features.
+
+- **Enterprise Plan**: An on-premise plan specifically designed for those
+utilizing GitHub Enterprise Server (GHES).
+
+<Info>
+  We had previously offered other plans, but currently, these two are our main
+  available. If you want to migrate to another plan, see [Switching or
+  Cancelling Plans](#switching-or-cancelling-plans).
+</Info>
+
+## Active User-Based Billing
+
+Many enterprise solutions charge per user, irrespective of actual usage. At
+Mergify, we firmly believe in billing you only for what you actively use.
+
+This is why our billing system operates on the principle of active users.
+Here's how it works:
+
+- An active user is any individual who **engages in activities on a
+  repository**. This includes opening, closing, commenting, pushing or
+  reviewing a pull request.
+
+- Each user is counted **only once**, even if they're active across multiple
+  repositories.
+
+- The system uses a 30-day sliding window approach. This means a user is
+  regarded as *active* for 30 days from their last activity. Post this period,
+  if no further activity is detected, they are no longer considered 8active*
+  for billing purposes.
+
+- Usage is prorated to the day: if a user is seen active during 48 days, the
+  system only bills for precisely 48 days — not 2 entire months.
+
+## Collaborator-Based Billing
+
+For specific scenarios, like public repositories, we offer an alternative
+billing mode based on the number of collaborators. This mode isn't the default,
+but can be requested through our support.
+
+A collaborator is identified as any user granted write access (or higher) to a
+repository.
+
+<Info>
+  Collaborator-based billing might only be advantageous if your repository has
+  many transient contributors but only a few maintainers or core contributors
+  with write access.
+</Info>
+
+## Annual Subscription
+
+Mergify does not require an annual subscription, but offer substantial discount
+if you buy users for a 12-months period.
+
+An annual subscription allows you to buy a base of number of seats (users) at
+the start of the year.
+
+If your usage goes beyond the pre-purchased seats, additional seats are billed
+monthly, prorated to the exact day of use.
+
+You can subscribe to a yearly plan at any time by contacting your customer
+representative.
+
+{/* FIXME: add a button that opens intercom */}
+
+## Checking Current Usage
+
+You can check your current usage by going through [Mergify
+dashboard](https://dashboard.mergify.com) and clicking on the Usage panel.
+
+<Screenshot src={UsageScreenshot} alt="Mergify usage panel"/>
+
+## Switching or Cancelling Plans
+
+If you wish to switch between plans or cancel your subscription, please contact
+our customer support. They'll guide you through the process and ensure a smooth
+transition.
+
+{/* FIXME: add a button that opens intercom */}
+
+## Understanding Your Invoice
+
+Our billing system aims for fairness, but its dynamic nature may result in
+invoices that can be complex to understand at first glance. Each invoice
+comprises two main sections.
+
+### 1. **Real-time User Adjustment**
+
+Our system continually monitors the number of users in your repositories and
+adjusts your bill in real-time. On your invoice, you might see line items
+labeled "remaining" and "unused time." These adjustments occur whenever there's
+a change in your user count.
+
+For instance, if the system identifies a change in your user count, it will
+credit you for the number of users you previously paid for, prorated by day. It
+then charges for the updated user count for the remaining days of the billing
+cycle.
+
+In the following example, the initial bill was for 76 users. As this grew to
+77, the system credited the $1,360.92 previously paid. It then charges
+$1,378.83, leading to an increase of $17.91 to account for the additional user
+for the rest of the month.
+
+<figure>
+  <Screenshot src={InvoicePreviousPeriod} alt="Invoice for previous period"/>
+  <figcaption>Invoice lines detailing adjustments from the previous period.</figcaption>
+</figure>
+
+### 2. **Upcoming Period Charge**
+
+The latter part of the invoice projects your charges for the next billing
+cycle, such as from Jul 14th to Aug 14th. This charge is based on the current
+number of active users. If there's a change in this user count during this
+period, the subsequent invoice will account for this, similar to the real-time
+adjustment mentioned earlier.
+
+<figure>
+  <Screenshot src={InvoiceNextPeriod} alt="Invoice for next period"/>
+  <figcaption>Invoice lines for the upcoming billing period.</figcaption>
+</figure>
+
+By understanding these two sections, you can more easily interpret and
+anticipate how changes in your active users influence your Mergify charges.

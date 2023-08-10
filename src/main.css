@@ -8,3 +8,14 @@ svg.graph {
     margin-bottom: 1em;
     width: 80%;
 }
+
+figcaption {
+    text-align: right;
+    font-size: 0.9em;    /* Slightly smaller than normal text */
+    color: #666;         /* A shade of gray to differentiate from main content */
+    margin-bottom: 1em;
+    font-style: italic;  /* Make the caption italic */
+    max-width: 90%;      /* Ensure it doesn't stretch too wide */
+    margin-left: auto;   /* These two lines will center the caption if it's shorter than the image */
+    margin-right: auto;
+}
