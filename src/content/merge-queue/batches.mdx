@@ -5,6 +5,7 @@ description: Increase your merge queue throughput and decrease your CI usage.
 
 import { Screenshot } from "../../components/Images"
 import batchesScreenshot from "../images/merge-queue/batches/batches-dashboard.png"
+import { Success } from "../../components/Alerts/Success"
 
 Mergify's batch merging feature is a powerful tool that enhances productivity
 and efficiency in your development workflow. Instead of merging pull requests
@@ -112,9 +113,9 @@ merge process.
 When both these features are enabled, Mergify creates multiple batches of pull
 requests (according to the `batch_size` option) and then runs tests on several
 of these batches at the same time (as defined by the `speculative_checks`
-option). If any pull request within a batch fails, Mergify identifies the
+option). If any pull request within a batch fails, [Mergify identifies the
 culprit through a binary search, removes it from the queue, and continues
-processing the rest of the queue.
+processing the rest of the queue](#handling-batch-failure).
 
 Combining these two features allows you to optimize the throughput of your
 merge queue. You can increase the batch size to merge more pull requests
@@ -133,7 +134,75 @@ With this configuration, even if your CI time is 10 minutes, you can merge all
 15 pull requests in only 10 minutes, as opposed to the 2.5 hours it would
 typically take to test each pull request individually.
 
-# Important Considerations
+## Handling Batch Failure
+
+When a batch fails, Mergify does not remove all its pull requests from the
+queue. Instead, it takes additional steps to identify the problematic pull
+request and remove it from the queue.
+
+This is how it works:
+
+1. **Splitting the batch**: If a batch fails, all subsequent batches are deemed
+   to fail as well, are canceled and put back into the queue. The system splits
+   the failed batch to isolate the problematic pull request. The size of these
+   new batches is determined by the `speculative_checks` parameter. By default,
+   the batch is split into two; however, if `speculative_checks` is set to a
+   value greater than 1, it dictates the number of batches the failed batch
+   should be divided into.
+
+2. **Testing the new batches**: After splitting, the first new batch is
+   immediately retested, while others are queued. If `speculative_checks` is
+   greater than 1, the system will also test subsequent batch split at the same
+   time. This continues until the split is done.
+
+3. **Handling the result**: If the first batch split succeeds, it is merged and
+   the next split is scheduled for testing. If the batch fails, Mergify splits
+   this batch, going back to step 1.
+
+4. **Pin-pointing the failed batch**: If a batch contains only one pull request
+   and still fails, it is deemed to be the culprit and is removed from the
+   queue.
+
+Note that this system is completely automatic and there is no need to
+intervene. The number of maximum splits can be controlled by
+[`batch_max_failure_resolution_attempts`](/configuration/file-format#queue-rules).
+
+### Batch Failure Scenario Example
+
+Let's assume that we have a batch of 6 pull requests: `[PR1 + PR2 + PR3 + PR4 +
+PR5 + PR6]`. During the initial testing, Mergify first tests the batch with all
+6 pull requests together.
+
+As the batch fails, this could be due to any of the PRs or a specific
+combination of them. Mergify learned that the combination
+`[PR1 + PR2 + PR3 + PR4 + PR5 + PR6]` does not work; it now needs to test parts
+of this combination.
+
+With `speculative_checks` set to 3, the system will aim to split the batch into
+3 parts:
+
+- First part: `[PR1 + PR2]`
+- Second part: `[PR1 + PR2 + PR3 + PR4]`
+- Third part: `[PR1 + PR2 + PR3 + PR4 + PR5]`
+
+<Success title="Remember">
+  Mergify already tested `[PR1 + PR2 + PR3 + PR4 + PR5 + PR6]` in the
+  original batch and knows it does not work. No need to test it again!
+</Success>
+
+The system will immediately retest the different parts since the number of
+splits matches the number of speculative checks allowed.
+
+If the first part `[PR1 + PR2]` passes, the system will merge it.
+
+If the first part `[PR1 + PR2]` fails, the system will split it again and test
+each PR individually, applying the algorithm again.
+
+If there's a consecutive failure in the subsequent parts, the system will
+continue to split and isolate the problematic PR(s) and retest until the split
+contains a single pull request.
+
+## Important Considerations
 
 While using batch merging and speculative checks together can significantly
 speed up your merge queue processing, it's crucial to consider the following

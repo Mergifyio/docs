@@ -4,11 +4,12 @@ import { BaseAlert } from './BaseAlert';
 
 interface Props {
   children: React.ReactNode;
+  title?: string;
 }
 
-export function Success({ children }: Props) {
+export function Success({ children, title = 'Success' }: Props) {
   return (
-    <BaseAlert title="Success" status="success">
+    <BaseAlert title={title} status="success">
       {children}
     </BaseAlert>
   );
