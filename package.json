@@ -30,6 +30,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@stoplight/elements": "^7.7.21",
     "fenceparser": "^2.2.0",
+    "fuse.js": "^6.6.2",
     "gatsby": "^5.11.0",
     "gatsby-plugin-manifest": "^5.11.0",
     "gatsby-plugin-mdx": "^5.11.0",

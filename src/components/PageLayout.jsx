@@ -61,7 +61,6 @@ function HeaderLink(props) {
         bg: activeHoverBg,
       }}
     >
-
       <Link
         style={{ textDecoration: 'none' }}
         target="_blank"
