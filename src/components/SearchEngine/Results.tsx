@@ -2,7 +2,7 @@ import {
   Box, VStack, Text, useColorModeValue, HStack, Divider, Show,
 } from '@chakra-ui/react';
 import Fuse from 'fuse.js';
-import { Link } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import React, { useEffect, useState } from 'react';
 
 import { BsArrowReturnLeft } from 'react-icons/bs';
@@ -17,7 +17,7 @@ interface PageResultProps extends Fuse.FuseResult<Page> {
 }
 
 function PageResult({
-  item: { childMdx }, matches, onHover, active,
+  item: { childMdx, id }, matches, onHover, active,
 }: PageResultProps) {
   const activeBackground = useColorModeValue('blue.100', 'blue.700');
 
@@ -33,6 +33,7 @@ function PageResult({
       as={Link}
       to={childMdx.fields.slug}
       _focus={{ outline: 'auto' }}
+      id={id}
     >
       <Box>
         <Text
@@ -72,13 +73,68 @@ export default function Results({ results }: ResultsProps) {
     setFocusedPage(page);
   };
 
+  const handleKeysNavigation = (e: KeyboardEvent) => {
+    const getCurrentFocusedIndex = (current: Fuse.FuseResult<Page> | null) => (
+      results.findIndex((el) => el.item.id === current?.item.id)
+    );
+
+    const scrollToFocusedPage = (page: Fuse.FuseResult<Page> | null) => {
+      if (page) {
+        const element = document.getElementById(page.item.id);
+        const container = element?.parentElement;
+
+        if (element && container) {
+          const containerHeight = container.clientHeight;
+          const elementTop = element.offsetTop;
+          const isHiddenTop = elementTop <= container.scrollTop;
+          const isVisibleAtBottom = elementTop + element.clientHeight <= containerHeight;
+
+          if (isHiddenTop || !isVisibleAtBottom) {
+            container.scrollTo({
+              top: elementTop,
+            });
+          }
+        }
+      }
+    };
+
+    if (e.key === 'ArrowDown') {
+      setFocusedPage((current) => {
+        const currentIndex = getCurrentFocusedIndex(current);
+        const newFocused = results[Math.min(currentIndex + 1, results.length - 1)];
+
+        scrollToFocusedPage(newFocused);
+
+        return newFocused;
+      });
+    } else if (e.key === 'ArrowUp') {
+      setFocusedPage((current) => {
+        const currentIndex = getCurrentFocusedIndex(current);
+        const newFocused = results[Math.max(currentIndex - 1, 0)];
+
+        scrollToFocusedPage(newFocused);
+
+        return newFocused;
+      });
+    } else if (e.key === 'Enter') {
+      if (focusedPage) navigate(focusedPage?.item.childMdx.fields.slug);
+    }
+  };
+
   useEffect(() => {
     setFocusedPage(results[0] ?? null);
   }, [results]);
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeysNavigation);
+
+    return () => window.removeEventListener('keydown', handleKeysNavigation);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [results, focusedPage]);
+
   return (
-    <HStack height="100%">
-      <VStack flex={1} alignItems="flex-start" height="100%" overflow="auto">
+    <HStack height="100%" overflow="hidden">
+      <VStack flex={1} alignItems="flex-start" height="100%" overflow="auto" position="relative">
         {results.map((page) => (
           <PageResult
             active={focusedPage?.item.id === page.item.id}
