@@ -1,5 +1,5 @@
 import {
-  Box, VStack, Text, useColorModeValue, HStack, Divider,
+  Box, VStack, Text, useColorModeValue, HStack, Divider, Show,
 } from '@chakra-ui/react';
 import Fuse from 'fuse.js';
 import { Link } from 'gatsby';
@@ -32,6 +32,7 @@ function PageResult({
       cursor="pointer"
       as={Link}
       to={childMdx.fields.slug}
+      _focus={{ outline: 'auto' }}
     >
       <Box>
         <Text
@@ -88,7 +89,9 @@ export default function Results({ results }: ResultsProps) {
         ))}
       </VStack>
       <Divider orientation="vertical" />
-      {focusedPage && <Preview key={focusedPage.item.id} {...focusedPage} />}
+      <Show above="md">
+        {focusedPage && <Preview key={focusedPage.item.id} {...focusedPage} />}
+      </Show>
     </HStack>
   );
 }

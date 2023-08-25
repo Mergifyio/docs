@@ -46,17 +46,18 @@ export function usePageLayoutProps(props) {
   };
 }
 
-function HeaderLink(props) {
+// eslint-disable-next-line react/prop-types
+function HeaderLink({ icon, ...linkProps }) {
   const activeHoverBg = useColorModeValue('blue.50', 'blue.500');
 
   return (
     <Button
-      h={10}
-      whiteSpace="normal"
+      whiteSpace="nowrap"
       variant="ghost"
       roundedLeft="full"
       roundedRight="full"
       fontWeight="normal"
+      leftIcon={icon}
       _hover={{
         bg: activeHoverBg,
       }}
@@ -69,7 +70,7 @@ function HeaderLink(props) {
             color: 'inherit',
           },
         }}
-        {...props}
+        {...linkProps}
       />
     </Button>
   );
@@ -99,12 +100,12 @@ export default function Page({
           <SidebarNav navItems={navItems} darkBg="gray.700" />
         </MobileNav>
         <Show above="xl">
-          <HStack ml={20} spacing={8}>
-            <HeaderLink href="https://dashboard.mergify.com"><AiOutlineDashboard style={{ display: 'inline' }} /> Dashboard</HeaderLink>
-            <HeaderLink href="https://slack.mergify.com"><SiSlack style={{ display: 'inline' }} /> Slack Community</HeaderLink>
-            <HeaderLink href="https://github.com/Mergifyio/mergify/discussions"><FaGithub style={{ display: 'inline' }} /> Discussions</HeaderLink>
-            <HeaderLink href="https://changelog.mergify.com"><HiOutlineDocumentArrowUp style={{ display: 'inline' }} /> Changelog</HeaderLink>
-            <HeaderLink href="https://status.mergify.com"><SiStatuspage style={{ display: 'inline' }} /> Status</HeaderLink>
+          <HStack marginX={20} spacing={6}>
+            <HeaderLink href="https://dashboard.mergify.com" icon={<AiOutlineDashboard />}> Dashboard</HeaderLink>
+            <HeaderLink href="https://slack.mergify.com" icon={<SiSlack />}> Slack Community</HeaderLink>
+            <HeaderLink href="https://github.com/Mergifyio/mergify/discussions" icon={<FaGithub />}> Discussions</HeaderLink>
+            <HeaderLink href="https://changelog.mergify.com" icon={<HiOutlineDocumentArrowUp />}> Changelog</HeaderLink>
+            <HeaderLink href="https://status.mergify.com" icon={<SiStatuspage />}> Status</HeaderLink>
           </HStack>
         </Show>
       </Header>

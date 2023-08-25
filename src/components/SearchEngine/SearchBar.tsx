@@ -19,7 +19,7 @@ const pagesQuery = graphql`
           fields {
             slug
           }
-          excerpt
+          excerpt(pruneLength: 400)
           frontmatter {
             title
             description
@@ -54,7 +54,7 @@ export default function SearchBar() {
 
   return (
     <>
-      <InputGroup style={{ marginLeft: 'auto', maxWidth: 200 }} onClick={handleOpen}>
+      <InputGroup marginRight={4} marginLeft={4} onClick={handleOpen}>
         <InputLeftAddon><BsSearch /></InputLeftAddon>
         <Input placeholder="Search Mergify" size="md" />
       </InputGroup>
