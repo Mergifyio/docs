@@ -11,6 +11,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FiMoon, FiSun } from 'react-icons/fi';
 
+import SearchBar from '../SearchEngine/SearchBar';
+
 const HEADER_HEIGHT = 60;
 const HEADER_BORDER_WIDTH = 1;
 export const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + HEADER_BORDER_WIDTH;
@@ -117,6 +119,7 @@ export function Header({ children }) {
           {children}
         </HStack>
         <HStack display={{ base: 'flex', md: 'none' }}>{children}</HStack>
+        <SearchBar />
         <IconButton
           ml="auto"
           mr="2"
