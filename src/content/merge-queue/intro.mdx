@@ -529,38 +529,31 @@ development practices, the complexity of your project, and the rate of incoming
 pull requests. Here are some common scenarios where a merge queue can be
 beneficial:
 
-### High Volume of Pull Requests
+- **High Volume of Pull Requests**: if your project is receiving a large number
+of pull requests, it can be challenging to keep track of which PRs are ready
+for merging and which ones need further checks or updates. A merge queue
+automates this process, ensuring that only validated and up-to-date PRs are
+merged.
 
-If your project is receiving a large number of pull requests, it can be
-challenging to keep track of which PRs are ready for merging and which ones
-need further checks or updates. A merge queue automates this process, ensuring
-that only validated and up-to-date PRs are merged.
+- **Complex Projects**: for complex projects with multiple dependencies, a
+small change can potentially have significant effects. Running updated CI
+checks on each PR in a merge queue ensures that all changes are compatible with
+the
 
-### Complex Projects
+- **Agile Teams**: teams that practice Agile methodologies such as continuous
+integration and continuous deployment (CI/CD) can benefit significantly from a
+merge queue. By automating the testing and merging process, a merge queue helps
+maintain the pace of continuous delivery while ensuring code quality.
 
-For complex projects with multiple dependencies, a small change can potentially
-have significant effects. Running updated CI checks on each PR in a merge queue
-ensures that all changes are compatible with the
+- **Teams with Varying Time Zones**: if your team members are distributed
+across various time zones, coordinating PR reviews and merges can be tricky.
+With a merge queue, PRs can be merged in an orderly manner as they pass checks,
+regardless of who is currently online.
 
-### Agile Teams
-
-Teams that practice Agile methodologies such as continuous integration and
-continuous deployment (CI/CD) can benefit significantly from a merge queue. By
-automating the testing and merging process, a merge queue helps maintain the
-pace of continuous delivery while ensuring code quality.
-
-### Teams with Varying Time Zones
-
-If your team members are distributed across various time zones, coordinating PR
-reviews and merges can be tricky. With a merge queue, PRs can be merged in an
-orderly manner as they pass checks, regardless of who is currently online.
-
-### Prioritizing Important Pull Requests
-
-Sometimes, you have important pull requests that should be merged before
-others, irrespective of the order in which they were created. With a merge
-queue, you can prioritize these important PRs to be merged as soon as they pass
-their CI checks.
+- **Prioritizing Important Pull Requests**: sometimes, you have important pull
+requests that should be merged before others, irrespective of the order in
+which they were created. With a merge queue, you can prioritize these important
+PRs to be merged as soon as they pass their CI checks.
 
 In summary, a merge queue can be a valuable tool for any team looking to
 streamline their development process, improve code quality, and maintain a
@@ -573,38 +566,27 @@ Merge queues offer a multitude of benefits that can greatly enhance the
 efficiency and quality of your software development process. Here are some key
 advantages:
 
-### Ensures Codebase Stability
+- **Ensures Codebase Stability**: by merging only up-to-date and CI-checked
+PRs, merge queues significantly reduce the risk of introducing bugs or
+conflicts into your codebase, thus enhancing its stability.
 
-By merging only up-to-date and CI-checked PRs, merge queues significantly
-reduce the risk of introducing bugs or conflicts into your codebase, thus
-enhancing its stability.
+- **Saves Time and Reduces Manual Labor**: merge queues automate the process of
+testing and merging PRs, saving developers from the tedious task of constantly
+updating and checking their PRs. This allows them to focus more on writing
+quality code and less on administrative tasks.
 
-### Saves Time and Reduces Manual Labor
+- **Optimizes Resource Usage**: merge queues minimize the use of CI resources
+by avoiding unnecessary checks on PRs that are not up-to-date with the main
+branch. Usage of advanced options such as [batches](batches).
 
-Merge queues automate the process of testing and merging PRs, saving developers
-from the tedious task of constantly updating and checking their PRs. This
-allows them to focus more on writing quality code and less on administrative
-tasks.
+- **Enhances Collaboration**: merge queues promote a more collaborative
+environment where developers don't need to compete to get their PRs merged.
+Instead, they can confidently work knowing that their PRs will be handled
+fairly and efficiently.
 
-### Optimizes Resource Usage
-
-Merge queues minimize the use of CI resources by avoiding unnecessary
-checks on PRs that are not up-to-date with the main branch. Usage of
-advanced options such as batches
-
-{/* FIXME: link to batch features */}
-
-### Enhances Collaboration
-
-Merge queues promote a more collaborative environment where developers don't
-need to compete to get their PRs merged. Instead, they can confidently work
-knowing that their PRs will be handled fairly and efficiently.
-
-### Streamlines Workflow
-
-By automatically handling PR updates and merges, a merge queue streamlines the
-software development workflow. This makes the process smoother, faster, and
-less prone to human error.
+- **Streamlines Workflow**: by automatically handling PR updates and merges, a
+merge queue streamlines the software development workflow. This makes the
+process smoother, faster, and less prone to human error.
 
 In essence, merge queues can significantly boost your team's productivity and
 the quality of your product, making them a worthwhile addition to your
