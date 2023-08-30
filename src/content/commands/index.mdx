@@ -1,0 +1,119 @@
+---
+title: Mergify Commands
+description: Complete list of commands you can use with Mergify.
+---
+
+import { Screenshot } from "../../components/Images"
+import commandExample from "../images/commands/command-example.png"
+import {BsDoorOpen} from 'react-icons/bs';
+import {FaRegCopy, FaCompressArrowsAlt} from 'react-icons/fa';
+import {BiAddToQueue, BiGitBranch, BiRefresh, BiGitMerge} from 'react-icons/bi';
+import {IoRefreshCircleOutline} from 'react-icons/io5';
+import {MdOutlineRemoveCircleOutline} from 'react-icons/md';
+import {
+  Docset,
+  DocsetGrid,
+} from '../../components/HomePage';
+
+Mergify commands are powerful, user-friendly directives that you can invoke
+directly from your repository's comments. Designed to streamline the
+interaction with the Mergify bot, these commands empower users to execute
+specific actions on pull requests without leaving the GitHub interface. Whether
+you wish to rebase a branch, refresh checks, or perform any other
+Mergify-supported action, a simple command can save you time and clicks.
+
+## Getting Started with Commands
+
+Using Mergify commands is straightforward and intuitive. These commands are
+designed to be invoked directly within the comments section of your pull
+requests, ensuring seamless integration with your regular GitHub workflow.
+Here's a step-by-step guide to getting started:
+
+1. **Navigate to Your Pull Request**: Head over to the pull request where you
+   want to execute a Mergify action.
+
+2. **Enter Command in the Comment Section**: In the comment box, type the
+   Mergify command you wish to use. All Mergify commands are prefixed with
+   `@Mergifyio` to ensure they're correctly identified and executed by the bot.
+   For instance, to rebase your pull request, you'd type `@Mergifyio rebase`.
+
+3. **Submit the Comment**: Click on the "Comment" button to post your command.
+   Mergify will immediately detect the command and begin processing your
+   request. Mergify will acknowledge the comment with a 👍 reaction and you'll
+   see a response from the Mergify bot confirming the action or providing
+   feedback in case of errors.
+
+4. **Check Mergify's Feedback**: Once the action is complete, Mergify will
+   typically leave a comment or update the pull request's status to let you
+   know the outcome. This feedback can be especially useful to understand any
+   issues or conflicts that might arise from the command.
+
+5. **Advanced Commands**: Some commands may accept additional parameters or
+   have specific nuances. Always refer back to this documentation to understand
+   the complete syntax and behavior.
+
+<Screenshot src={commandExample}/>
+
+Remember, while Mergify commands are powerful and offer great convenience,
+always ensure you understand the impact of a command, especially in a
+collaborative environment. Misused commands can potentially disrupt the
+workflow of other contributors.
+
+## Command List
+
+<DocsetGrid>
+  <Docset
+    title="Backport"
+    description="Copy a pull request to another branch after merge."
+    path="backport"
+    icon={<BsDoorOpen/>}
+  />
+  <Docset
+    title="Copy"
+    description="Copy a pull request to another branch."
+    path="copy"
+    icon={<FaRegCopy/>}
+  />
+  <Docset
+    title="Queue"
+    description="Add a pull request to a merge queue"
+    path="queue"
+    icon={<BiAddToQueue/>}
+  />
+  <Docset
+    title="Rebase"
+    description="Rebase a pull request."
+    path="rebase"
+    icon={<BiGitBranch/>}
+  />
+  <Docset
+    title="Refresh"
+    description="Refresh Mergify status of a pull request."
+    path="refresh"
+    icon={<BiRefresh/>}
+  />
+  <Docset
+    title="Requeue"
+    description="Allow a pull request to re-enter a merge queue."
+    path="requeue"
+    icon={<IoRefreshCircleOutline/>}
+  />
+  <Docset
+    title="Squash"
+    description="Squash commits of a pull request."
+    path="squash"
+    icon={<FaCompressArrowsAlt/>}
+  />
+  <Docset
+    title="Update"
+    description="Update a pull request by merging its base branch."
+    path="update"
+    icon={<BiGitMerge/>}
+  />
+  <Docset
+    title="Unqueue"
+    description="Remove a pull request from a merge queue."
+    path="unqueue"
+    icon={<MdOutlineRemoveCircleOutline/>}
+  />
+</DocsetGrid>

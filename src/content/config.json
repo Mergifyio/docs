@@ -38,6 +38,18 @@
       "Batches": "/merge-queue/batches",
       "Partitions": "/merge-queue/partitions"
     },
+    "Commands": {
+      "About Commands": "/commands",
+      "Backport": "/commands/backport",
+      "Copy": "/commands/copy",
+      "Queue": "/commands/queue",
+      "Rebase": "/commands/rebase",
+      "Refresh": "/commands/refresh",
+      "Requeue": "/commands/requeue",
+      "Squash": "/commands/squash",
+      "Update": "/commands/update",
+      "Unqueue": "/commands/unqueue"
+    },
     "Technical Reference": {
       "Configuration File": "/configuration/file-format",
       "Sharing Configuration": "/configuration/sharing",

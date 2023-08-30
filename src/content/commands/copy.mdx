@@ -1,0 +1,67 @@
+---
+title: Mergify Copy Command
+description: Copy a pull request to another branch.
+---
+
+import { Success } from "../../components/Alerts/Success"
+import { Info } from "../../components/Alerts/Info"
+
+The `copy` command is a convenient tool in Mergify's suite, allowing users to
+replicate changes from a pull request to another branch within the same
+repository. This is particularly useful for teams working with multiple
+branches, such as feature branches, and wanting to propagate changes without
+manually creating multiple pull requests.
+
+Utilizing the `copy` command with Mergify can streamline your branching
+strategy and development flow by quickly mirroring changes where needed within
+the same repository.
+
+After initiating the copy process, Mergify will provide feedback via comments.
+If the copy is successful, a link to the new pull request will be provided. In
+case of issues, Mergify will provide a concise description of the problem.
+
+If Mergify encounters merge conflicts during the copying process, it will
+create a pull request with the unresolved conflicts. These will need to be
+resolved manually on GitHub.
+
+The `copy` command is especially handy for:
+
+- **Feature Propagation**: When a change made in one branch, such as a feature
+  branch, needs to be mirrored in another branch, like a development or staging
+  branch.
+
+- **Hotfixes and Quick Patches**: When a quick fix made in one branch needs to
+  be propagated to multiple other branches.
+
+<Success title="Tips">
+
+- Always review the new pull request created by the `copy` command before
+  merging. This ensures that the copied changes align with the intent and
+  context of the destination branch.
+
+- Communicate with your team when using the `copy` command, especially if
+  multiple developers are working on the same branches.
+
+</Success>
+
+## Syntax
+
+```text
+@Mergifyio copy <target-branch> [<another-target-branch>] […]
+```
+
+## Parameters
+
+- `<target-branch>`: The destination branch within the same repository.
+
+## Example
+
+Assume you have made changes in a pull request targeting the `feature-x` branch
+and you want to copy these changes to the `development` branch:
+
+```text
+@Mergifyio copy development
+```
+
+Mergify will then try to create a new pull request in the `development` branch
+with the changes from the current pull request.

@@ -1,0 +1,60 @@
+---
+title: Mergify Queue Command
+description: Add a pull request to a merge queue.
+---
+
+import { Success } from "../../components/Alerts/Success"
+
+The `queue` command in Mergify offers users a direct way to interact with the
+[Mergify merge queue](/merge-queue/intro), right from their pull request
+comments. By utilizing this command, users can add the pull request to a merge
+queue.
+
+To enter a queue, a pull request must match the `queue_conditions` of the
+targeted queue. See [Adding a Pull Request to the Merge
+Queue](/merge-queue/lifecycle#adding-a-pull-request-to-the-merge-queue) for
+more details.
+
+<Success title="Tips">
+
+  If you're unsure about the state or position of your pull request within a
+  queue, refer to [Mergify's dashboard](https://dashboard.mergify.com) for a
+  visual representation.
+
+</Success>
+
+## Syntax
+
+```text
+@mergifyio queue [queue-name]
+```
+
+## Parameters
+
+- `[queue-name]` is an optional queue name. If no queue name is specified, the
+  pull request will be queued in the first queue that matches the
+  `queue_conditions`.
+
+## Example
+
+### Adding a Pull Request to a Queue
+
+To add a pull request to a queue, simply use:
+
+```text
+@mergifyio queue
+```
+
+This command will place the pull request in the first queue that matches
+`queue_conditions`.
+
+### Adding a Pull Request to a Specific Queue
+
+To add a pull request to a specific queue, simply use:
+
+```text
+@mergifyio queue production
+```
+
+This command will place the pull request in the `production` queue as soon as
+it passes its `queue_conditions`.
