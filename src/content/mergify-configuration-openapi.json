@@ -498,7 +498,7 @@
           },
           "description": "List of conditions to determine the partition(s) in which the pull request will be queued. If a pull request matches no partition, it is added to the fallback partition if defined, otherwise it is added to every partition."
         },
-        "fallback_partition" : {
+        "fallback_partition": {
           "description": "Allow the partition to work as the fallback partition.",
           "type": "boolean",
           "default": false
