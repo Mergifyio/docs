@@ -5,7 +5,8 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import configSchema from '../content/mergify-configuration-openapi.json';
-import { getTypeLink } from '../utils/getTypeLink';
+
+import { getTypeLink } from './ConfigOptions';
 
 import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
