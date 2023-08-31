@@ -122,6 +122,12 @@
           "description": "The list of GitHub user or team login that have commented in a review for the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
+          "$ref": "#/definitions/CommitAuthor",
+          "key": "co-authors",
+          "inputType": "string",
+          "description": "The list of co-authors on the pull request."
+        },
+        {
           "key": "commits",
           "inputType": "string",
           "description": "The list of commits of the pull request. The index 0 is the first commit of the pull request, while -1 is the last commit of the pull request."
@@ -450,6 +456,20 @@
           "$ref": "#/definitions/RelativeTimestamp"
         }
       ]
+    },
+    "CommitAuthor": {
+      "$id": "/definition/CommitAuthor",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Author name",
+          "type": "string"
+        },
+        "email": {
+          "descriptin": "Author email address",
+          "type": "string"
+        }
+      }
     },
     "PullRequestRule": {
       "$id": "/definition/PullRequestRule",
