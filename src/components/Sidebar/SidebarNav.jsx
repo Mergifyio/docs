@@ -27,12 +27,12 @@ export function SidebarNav({
     [navItems],
   );
 
-  // set all nav items to open by default
+  // set all nav items to close by default
   const initialNavState = useMemo(
     () => navGroups.reduce(
       (acc, group) => ({
         ...acc,
-        [group.id]: true,
+        [group.id]: false,
       }),
       {},
     ),
