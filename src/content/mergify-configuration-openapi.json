@@ -298,7 +298,7 @@
       "default": []
     },
     "LoginArray": {
-      "$id": "#/LoginArray",
+      "$id": "/definitions/LoginArray",
       "default": [
         ""
       ],
@@ -323,7 +323,7 @@
       ]
     },
     "Template": {
-      "$id": "#/Template",
+      "$id": "/definitions/Template",
       "description": "template",
       "default": "",
       "anyOf": [
@@ -336,18 +336,18 @@
       ]
     },
     "Duration": {
-      "$id": "#/Duration",
+      "$id": "/definions/Duration",
       "type": "string",
       "default": "",
       "description": "duration"
     },
     "ConditionString": {
-      "$id": "#/ConditionString",
+      "$id": "/definitions/ConditionString",
       "type": "string",
       "default": ""
     },
     "TemplateArray": {
-      "$id": "#/TemplateArray",
+      "$id": "/definitions/TemplateArray",
       "type": "array",
       "description": "list of template",
       "default": [],
@@ -357,7 +357,7 @@
       }
     },
     "LabelArray": {
-      "$id": "#/LabelArray",
+      "$id": "/definition/LabelArray",
       "type": "array",
       "default": [],
       "items": {
@@ -366,7 +366,7 @@
       }
     },
     "UserArray": {
-      "$id": "#/UserArray",
+      "$id": "/definition/UserArray",
       "type": "array",
       "default": [],
       "items": {
@@ -375,7 +375,7 @@
       }
     },
     "BranchArray": {
-      "$id": "#/BranchArray",
+      "$id": "/definition/BranchArray",
       "type": "array",
       "default": [],
       "items": {
@@ -383,7 +383,7 @@
       }
     },
     "PriorityRule": {
-      "$id": "#/PriorityRule",
+      "$id": "/definition/PriorityRule",
       "description": "priority rule",
       "type": "object",
       "properties": {
@@ -405,7 +405,7 @@
       }
     },
     "Priority": {
-      "$id": "#/Priority",
+      "$id": "/definition/Priority",
       "description": "priority: `low`, `medium`, `high` or a value between 1 and 10000",
       "anyOf": [
         {
@@ -423,7 +423,7 @@
       ]
     },
     "MergeMethod": {
-      "$id": "#/MergeMethod",
+      "$id": "/definition/MergeMethod",
       "description": "merge method: `merge`, `squash`, `rebase` or `fast-forward`",
       "enum": [
         "merge",
@@ -433,15 +433,15 @@
       ]
     },
     "Timestamp": {
-      "$id": "#/Timestamp",
+      "$id": "/definition/Timestamp",
       "type": "string"
     },
     "RelativeTimestamp": {
-      "$id": "#/RelativeTimestamp",
+      "$id": "/definition/RelativeTimestamp",
       "type": "string"
     },
     "TimestampOrRelativeTimestamp": {
-      "$id": "#/TimestampOrRelativeTimestamp",
+      "$id": "/definition/TimestampOrRelativeTimestamp",
       "anyOf": [
         {
           "$ref": "#/definitions/Timestamp"
@@ -452,7 +452,7 @@
       ]
     },
     "PullRequestRule": {
-      "$id": "#/PullRequestRule",
+      "$id": "/definition/PullRequestRule",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -480,7 +480,7 @@
       "title": "PullRequestRule"
     },
     "PartitionRule": {
-      "$id": "#/PartitionRule",
+      "$id": "/definition/PartitionRule",
       "type": "object",
       "required": [
         "name"
@@ -506,7 +506,7 @@
       }
     },
     "QueueRule": {
-      "$id": "#/QueueRule",
+      "$id": "/definition/QueueRule",
       "type": "object",
       "required": [
         "name"
@@ -627,7 +627,7 @@
       }
     },
     "RuleCondition": {
-      "$id": "#/RuleCondition",
+      "$id": "/definition/RuleCondition",
       "description": "condition",
       "anyOf": [
         {
