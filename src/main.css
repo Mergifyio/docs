@@ -19,3 +19,7 @@ figcaption {
     margin-left: auto;   /* These two lines will center the caption if it's shorter than the image */
     margin-right: auto;
 }
+
+.sl-flex-wrap-wrap {
+  flex-wrap: wrap;
+}
