@@ -4,6 +4,25 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "shared": {
+      "type": [
+        "array",
+        "boolean",
+        "integer",
+        "null",
+        "number",
+        "object",
+        "string"
+      ]
+    },
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "actions": {
+          "$ref": "#/definitions/Actions"
+        }
+      }
+    },
     "extends": {
       "type": "string"
     },
@@ -677,6 +696,9 @@
               "$ref": "#/definitions/RuleCondition"
             }
           }
+        },
+        {
+          "$ref": "#/definitions/ConditionString"
         }
       ],
       "title": "RuleCondition"
@@ -686,7 +708,10 @@
       "type": "object",
       "properties": {
         "assign": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "add_users": {
               "valueType": "list of Template",
@@ -703,7 +728,10 @@
           }
         },
         "backport": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "assignees": {
               "default": "",
@@ -762,7 +790,10 @@
           }
         },
         "close": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "message": {
               "valueType": "Template",
@@ -773,7 +804,10 @@
           }
         },
         "copy": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "assignees": {
               "description": "Users to assign the newly created pull request. As the type is Template, you could use, e.g., {{author}} to assign the pull request to its original author.",
@@ -831,7 +865,10 @@
           }
         },
         "comment": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "bot_account": {
               "valueType": "Template",
@@ -846,7 +883,10 @@
           }
         },
         "delete_head_branch": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "force": {
               "type": "boolean",
@@ -857,7 +897,10 @@
           }
         },
         "dismiss_reviews": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "approved": {
               "valueType": "Boolean or list of string",
@@ -909,7 +952,10 @@
           }
         },
         "edit": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "draft": {
               "valueType": "Boolean",
@@ -920,7 +966,10 @@
           }
         },
         "label": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "add": {
               "valueType": "list of Template",
@@ -949,7 +998,10 @@
           }
         },
         "merge": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "commit_message_template": {
               "valueType": "Template",
@@ -976,7 +1028,10 @@
           }
         },
         "post_check": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "success_conditions": {
               "valueType": "list of conditions",
@@ -1074,7 +1129,10 @@
           }
         },
         "rebase": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "autosquash": {
               "valueType": "Boolean",
@@ -1090,7 +1148,10 @@
           }
         },
         "request_reviews": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "users": {
               "description": "The username to request reviews from.",
@@ -1122,7 +1183,10 @@
           }
         },
         "review": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "bot_account": {
               "valueType": "Template",
@@ -1147,7 +1211,10 @@
           }
         },
         "update": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to review a pull request. If no `bot_account` is set, Mergify will update the pull request itself.",
@@ -1157,7 +1224,10 @@
           }
         },
         "squash": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to review a pull request. If no `bot_account` is set, Mergify will squash the pull request itself.",
