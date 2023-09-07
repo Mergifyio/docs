@@ -1,0 +1,28 @@
+---
+title: Mergify Requeue Command
+description: Allow a pull request to re-enter a merge queue.
+---
+
+The `requeue` command allows you to manually re-add a pull request to Mergify's
+merge queue. This is especially useful if, for some reason, a pull request has
+been removed from the queue or if you've made configuration changes and you
+want the pull request to be reconsidered based on the new merge queue settings.
+
+## Syntax
+
+To use the `requeue` command, comment on the pull request with:
+
+```text
+@mergifyio requeue
+```
+
+Upon receiving the command, Mergify will place the pull request back in the
+appropriate merge queue, considering its conditions.
+
+## Example
+
+Suppose you have a pull request that was removed from the merge queue due to a
+transient failure, or after making a crucial update to the pull request, you
+want to ensure it's re-added to the queue. By commenting `@mergifyio requeue`
+on the pull request, Mergify will reconsider it for merging, ensuring it's
+queued appropriately.
