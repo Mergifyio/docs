@@ -1,0 +1,22 @@
+---
+title: Mergify Rebase Command
+description: Rebase a pull request.
+---
+
+The `rebase` command provides users with an instant method to instruct Mergify
+to rebase a pull request against its base branch. It's a handy way to ensure
+that the pull request is updated with the latest changes from the base branch
+without manually triggering a rebase.
+
+By leveraging the `rebase` command, developers can keep their pull requests
+up-to-date and maintain a clean commit history, enhancing the clarity and
+quality of the project's development.
+
+## Syntax
+
+To make use of the `rebase` command, simply comment on the desired pull
+request:
+
+```text
+@mergifyio rebase
+```
