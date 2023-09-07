@@ -1,0 +1,20 @@
+---
+title: Mergify Refresh Command
+description: Refresh Mergify status of a pull request.
+---
+
+The `refresh` command is used to manually trigger Mergify to reevaluate a pull
+request's conditions. It's particularly useful if you've updated your Mergify
+configuration and want to apply the new rules to existing pull requests without
+waiting for a new event to naturally trigger the reevaluation.
+
+## Syntax
+
+To use the `refresh` command, comment on the pull request with:
+
+```text
+@mergifyio refresh
+```
+
+Mergify will then reevaluate the pull request based on your latest
+configuration and rules.
