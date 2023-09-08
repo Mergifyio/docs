@@ -16,6 +16,7 @@ const valueTypeLinks: { [key: string]: string } = {
   '/definition/Template': '/configuration/data-types#template',
   '/definition/LabelArray': '/configuration/data-types#template',
   '/definition/TimestampOrRelativeTimestamp': '/configuration/data-types#timestamp',
+  '/definition/TimestampOrTimestampInterval': '/configuration/data-types#timestamp-interval',
   '/definition/RuleCondition': '/configuration/conditions',
   '/definition/Duration': '/configuration/data-types#duration',
   '/definition/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
