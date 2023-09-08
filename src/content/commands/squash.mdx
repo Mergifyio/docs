@@ -1,0 +1,41 @@
+---
+title: Mergify Squash Command
+description: Squash the commits of a pull request into one.
+---
+
+The `squash` command is an integral tool in Mergify's arsenal, empowering users
+to condense all the changes from a pull request into a single commit. For PRs
+that come with a myriad of incremental commits, this command serves as a boon
+for those desiring a neat and concise commit history.
+
+Implementing the `squash` command with Mergify is a stride towards a cleaner
+commit history, especially when you wish to merge a pull request without the
+clutter of multiple individual commits.
+
+The `squash` command proves to be invaluable for:
+
+- **Clarity and Neatness**: Maintaining a clean commit history, especially when
+  numerous commits have only minor changes.
+
+- **Simplified Review**: When reviewers prefer seeing the entirety of changes
+  in one commit, making the review process more straightforward.
+
+## Syntax
+
+```text
+@Mergifyio squash [<commit message format>]
+```
+
+## Parameters
+
+- `commit message format` defines what commit message to use for the squashed
+  commit. Possible values are:
+
+  - `all-commits` to use the same format as GitHub squashed merge commit
+    (default).
+
+  - `first-commit` to use the message of the first commit of the pull request.
+
+  - `title+body` means to use the title and body from the pull request itself
+    as the commit message. The pull request number will be added to end of the
+    title.
