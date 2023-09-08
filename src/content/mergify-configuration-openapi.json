@@ -173,6 +173,11 @@
           "description": "The time the pull request was created at."
         },
         {
+          "$ref": "#/definitions/TimestampOrTimestampInterval",
+          "key": "current-datetime",
+          "description": "The current date and time."
+        },
+        {
           "key": "dependabot-dependency-name",
           "inputType": "string",
           "description": "The dependency-name value included in the Dependabot commit message."
@@ -465,6 +470,10 @@
       "$id": "/definition/RelativeTimestamp",
       "type": "string"
     },
+    "TimestampInterval": {
+      "$id": "/definition/TimestampInterval",
+      "type": "string"
+    },
     "TimestampOrRelativeTimestamp": {
       "$id": "/definition/TimestampOrRelativeTimestamp",
       "anyOf": [
@@ -473,6 +482,17 @@
         },
         {
           "$ref": "#/definitions/RelativeTimestamp"
+        }
+      ]
+    },
+    "TimestampOrTimestampInterval": {
+      "$id": "/definition/TimestampOrTimestampInterval",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Timestamp"
+        },
+        {
+          "$ref": "#/definitions/TimestampInterval"
         }
       ]
     },
