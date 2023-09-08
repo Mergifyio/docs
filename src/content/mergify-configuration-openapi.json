@@ -144,7 +144,7 @@
           "$ref": "#/definitions/CommitAuthor",
           "key": "co-authors",
           "inputType": "string",
-          "description": "The list of co-authors on the pull request."
+          "description": "The list of co-authors on the pull request (excluding merge commits and bots)."
         },
         {
           "key": "commits",
