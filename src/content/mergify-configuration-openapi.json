@@ -582,6 +582,12 @@
             "$ref": "#/definitions/RuleCondition"
           }
         },
+        "require_branch_protection": {
+          "type": "boolean",
+          "valueType": "Boolean",
+          "default": true,
+          "description": "Whether branch protections are required for queueing pull requests."
+        },
         "merge_conditions": {
           "description": "The list of conditions to match to get the queued pull request merged. This automatically includes the `queue_conditions`. In case of speculative merge pull request, the merge conditions starting by `check-` are evaluated against the temporary pull request instead of the original one.",
           "type": "array",
@@ -1131,6 +1137,7 @@
               "type": "boolean",
               "valueType": "Boolean",
               "default": true,
+              "deprecated": true,
               "description": "Whether branch protections are required for queueing pull requests."
             },
             "update_bot_account": {
