@@ -139,6 +139,51 @@ Supported formats:
         The pull request needs to be rebased after end of life of version 10.0
 ```
 
+## Timestamp Interval
+
+Mergify supports [ISO8601 time
+intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) for some of
+the exposed attributes.
+
+If the timezone is missing, the timestamp is assumed to be in UTC. The
+supported timezones come from the [IANA
+database](https://www.iana.org/time-zones).
+
+```text
+2023-07-13T14:00/2023-07-13T16:00
+2023-07-13T14:00:00.123/2023-07-13T16:00:00.123
+2023-07-13T14:00Z/2023-07-13T16:00Z
+2023-07-13T14:00/2023-07-13T16:00[Europe/Paris]
+```
+
+```yaml
+- name: merge except on new year day
+  conditions:
+    - current-datetime!=2023-01-01T00:00/2023-01-01T23:59[Europe/Paris]
+  actions:
+    merge:
+```
+
+Unspecified digits can also be used for some part of the timestamp:
+
+```text
+# 14:00 to 19:00 the 14th of July of every year
+XXXX-07-14T14:00/XXXX-07-14T19:00[Europe/Paris]
+
+# 14:00 to 19:00 every day of July of every year
+XXXX-07-XXT14:00/XXXX-07-XXT19:00[Europe/Paris]
+
+# 14:00 to 19:00 every day of July of 2023
+2023-07-XXT14:00/XXXX-07-XXT19:00[Europe/Paris]
+
+# 14:00 to 19:00 every 31st day of every month of 2023
+# If a month doesn't have a 31st day it will be skipped
+2023-XX-31T14:00/2023-XX-31T19:00[Europe/Paris]
+
+# 14:00 to 19:00 every 31st day of every month of every year
+XXXX-XX-31T14:00/XXXX-XX-31T19:00[Europe/Paris]
+```
+
 ## Relative Timestamp
 
 Timestamps can be expressed relative to the current date and time. The format
