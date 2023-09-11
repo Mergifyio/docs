@@ -90,7 +90,7 @@ before merging your pull request.
 
 To use this feature, add the `Merge-After:` header to the body of your pull
 request, followed by the date in the [timestamp
-format](../configuration/data-types#timestamp).
+format](../../configuration/data-types#timestamp).
 
 For example, if a pull request body contains:
 
@@ -128,7 +128,7 @@ pull_request_rules:
 When a pull request is merged using the squash or merge method, you can
 override the default commit message. To that end, you need to set
 `commit_message_template`. This setting is a
-[template](../configuration/data-types#template), which means you can use
+[template](../../configuration/data-types#template), which means you can use
 attributes of the pull request to build the content of the commit message.
 
 ```yaml
