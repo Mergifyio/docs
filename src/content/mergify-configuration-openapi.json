@@ -205,6 +205,30 @@
           "description": "The files that are modified, deleted or added by the pull request."
         },
         {
+          "key": "added-files",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The files that are added by the pull request."
+        },
+        {
+          "key": "modified-files",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The files that are modified by the pull request."
+        },
+        {
+          "key": "removed-files",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The files that are removed by the pull request."
+        },
+        {
           "key": "head",
           "type": "branchSingle",
           "description": "The name of the branch where the pull request changes are implemented."
