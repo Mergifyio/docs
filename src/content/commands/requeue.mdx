@@ -13,11 +13,16 @@ want the pull request to be reconsidered based on the new merge queue settings.
 To use the `requeue` command, comment on the pull request with:
 
 ```text
-@mergifyio requeue
+@mergifyio requeue [<queue-name>]
 ```
 
 Upon receiving the command, Mergify will place the pull request back in the
 appropriate merge queue, considering its conditions.
+
+## Parameters
+
+- `<queue-name>` can be specified to indicate in which queue the pull request
+  should be queued back.
 
 ## Example
 
