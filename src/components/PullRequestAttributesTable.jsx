@@ -1,5 +1,5 @@
 import {
-  Table, TableCaption, Tbody, Td, Th, Thead, Tr, Link,
+  Table, TableCaption, Tbody, Td, Th, Thead, Tr,
 } from '@chakra-ui/react';
 import React from 'react';
 
@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 
 import configSchema from '../content/mergify-configuration-openapi.json';
 
-import { getTypeLink } from './ConfigOptions';
+import { getValueType } from './ConfigOptions';
 
 import InlineCode from './InlineCode';
 
@@ -28,14 +28,14 @@ export default function PullRequestAttributesTable() {
       </Thead>
       <Tbody>
         {attributes.map((attr) => {
-          const dataTypeLink = getTypeLink(attr.$ref);
+          const valueType = getValueType(attr);
 
           return (
             <Tr>
               <Td sx={{ whiteSpace: 'nowrap' }}>
                 <InlineCode>{attr.key}</InlineCode>
               </Td>
-              <Td>{dataTypeLink ? <Link color="primary" textDecoration="underline" href={dataTypeLink}>{attr.dataType}</Link> : attr.dataType}</Td>
+              <Td>{valueType}</Td>
               <Td lineHeight="7">
                 <ReactMarkdown components={mdxComponents}>
                   {attr.description}
