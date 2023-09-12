@@ -29,7 +29,7 @@ export interface OptionDefinition {
   $ref: any;
 }
 
-export function getTypeLink(ref: string): string | undefined {
+function getTypeLink(ref: string): string | undefined {
   if (ref) {
     const refPath = ref.split('/').slice(1);
     const refDefinition = refPath.reduce((acc, segment) => (acc as any)[segment], configSchema);
