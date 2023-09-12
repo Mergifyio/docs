@@ -1,5 +1,5 @@
 import {
-  Table, Thead, Tr, Th, Tbody, Td, Link,
+  Table, Thead, Tr, Th, Tbody, Td, Link, Badge,
 } from '@chakra-ui/react';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -20,6 +20,7 @@ interface OptionDefinition {
   valueType: string;
   description: string;
   default: string | boolean;
+  deprecated?: boolean;
   $ref: any;
 }
 
@@ -38,30 +39,35 @@ export default function ActionOptionsTable({ action }: Props) {
           <Th>Key name</Th>
           <Th>Value type</Th>
           <Th>Default</Th>
+          <Th />
         </Tr>
       </Thead>
       <Tbody>
         {Object.entries(options).map(([optionKey, definition]) => {
           const valueTypeLink = getTypeLink(definition.$ref);
+          const { deprecated } = definition;
 
           return (
             <>
-              <Tr>
+              <Tr position="relative">
                 <Td sx={{ whiteSpace: 'nowrap' }}>
                   <InlineCode>{optionKey}</InlineCode>
                 </Td>
                 <Td>{valueTypeLink ? <Link color="primary" textDecoration="underline" href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
                 <Td lineHeight="7">
                   {hasDefaultValue(definition) && (
-                  <InlineCode>
-                    {String(definition.default)}
-                  </InlineCode>
+                    <InlineCode>
+                      {String(definition.default)}
+                    </InlineCode>
                   )}
+                </Td>
+                <Td>
+                  {deprecated && <Badge colorScheme="orange" top={0} left={0}>deprecated</Badge>}
                 </Td>
               </Tr>
               <Tr>
                 {/* FIXME: don't hardcode the border color like that */}
-                <Td lineHeight="7" colspan="3" style={{ borderBottom: '2px solid #eee' }}>
+                <Td lineHeight="7" colspan="4" style={{ borderBottom: '2px solid #eee' }}>
                   <ReactMarkdown components={mdxComponents as any}>
                     {definition.description}
                   </ReactMarkdown>
