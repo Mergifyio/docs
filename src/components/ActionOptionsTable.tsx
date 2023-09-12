@@ -38,7 +38,6 @@ export default function ActionOptionsTable({ action }: Props) {
           <Th>Key name</Th>
           <Th>Value type</Th>
           <Th>Default</Th>
-          <Th>Description</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -46,24 +45,29 @@ export default function ActionOptionsTable({ action }: Props) {
           const valueTypeLink = getTypeLink(definition.$ref);
 
           return (
-            <Tr>
-              <Td sx={{ whiteSpace: 'nowrap' }}>
-                <InlineCode>{optionKey}</InlineCode>
-              </Td>
-              <Td>{valueTypeLink ? <Link color="primary" textDecoration="underline" href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
-              <Td lineHeight="7">
-                {hasDefaultValue(definition) && (
+            <>
+              <Tr>
+                <Td sx={{ whiteSpace: 'nowrap' }}>
+                  <InlineCode>{optionKey}</InlineCode>
+                </Td>
+                <Td>{valueTypeLink ? <Link color="primary" textDecoration="underline" href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
+                <Td lineHeight="7">
+                  {hasDefaultValue(definition) && (
                   <InlineCode>
                     {String(definition.default)}
                   </InlineCode>
-                )}
-              </Td>
-              <Td lineHeight="7">
-                <ReactMarkdown components={mdxComponents as any}>
-                  {definition.description}
-                </ReactMarkdown>
-              </Td>
-            </Tr>
+                  )}
+                </Td>
+              </Tr>
+              <Tr>
+                {/* FIXME: don't hardcode the border color like that */}
+                <Td lineHeight="7" colspan="3" style={{ borderBottom: '2px solid #eee' }}>
+                  <ReactMarkdown components={mdxComponents as any}>
+                    {definition.description}
+                  </ReactMarkdown>
+                </Td>
+              </Tr>
+            </>
           );
         })}
       </Tbody>
