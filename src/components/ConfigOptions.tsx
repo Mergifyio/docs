@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 
 import configSchema from '../content/mergify-configuration-openapi.json';
 
+import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
 
 // FIXME: move this to JSON schema?
@@ -86,6 +87,30 @@ export function getValueType(definition): string {
         </Link>
       );
     } else valueType = typeDescription;
+  } else if ('enum' in definition) {
+    valueType = (
+      <>
+        Enum of {definition.type}: {' '}
+        {definition.enum.map((item, index) => {
+          let separator;
+          if (index === definition.enum.length - 2) {
+          // The last item and not the only item
+            separator = ' or ';
+          } else if (index < definition.enum.length - 1) {
+            separator = ', ';
+          } else {
+            separator = '';
+          }
+
+          return (
+            <React.Fragment key={item}>
+              <InlineCode>{item}</InlineCode>
+              {separator}
+            </React.Fragment>
+          );
+        })}
+      </>
+    );
   } else {
     valueType = definition.type;
   }
