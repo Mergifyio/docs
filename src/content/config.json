@@ -16,6 +16,7 @@
         "Delete Head Branch": "/workflow/actions/delete_head_branch",
         "Dismiss Reviews": "/workflow/actions/dismiss_reviews",
         "Edit": "/workflow/actions/edit",
+        "GitHub Actions": "/workflow/actions/github_actions",
         "Label": "/workflow/actions/label",
         "Merge": "/workflow/actions/merge",
         "Post Check": "/workflow/actions/post_check",
