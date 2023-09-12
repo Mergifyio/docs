@@ -67,7 +67,7 @@ export default function ActionOptionsTable({ action }: Props) {
               </Tr>
               <Tr>
                 {/* FIXME: don't hardcode the border color like that */}
-                <Td lineHeight="7" colspan="4" style={{ borderBottom: '2px solid #eee' }}>
+                <Td lineHeight="7" colSpan="4" style={{ borderBottom: '2px solid #eee' }}>
                   <ReactMarkdown components={mdxComponents as any}>
                     {definition.description}
                   </ReactMarkdown>
