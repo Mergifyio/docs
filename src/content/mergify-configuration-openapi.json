@@ -1138,8 +1138,7 @@
               "valueType": "Boolean",
               "type": "boolean",
               "default": true,
-              "description": "This option is relevant only if you do inplace checks and if you use the `rebase` option of the `update_method`. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`.",
-              "$ref": "#/definitions/Template"
+              "description": "This option is relevant only if you do inplace checks and if you use the `rebase` option of the `update_method`. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`."
             },
             "commit_message_template": {
               "description": "Template to use as the commit message when using the `merge` or `squash` merge method. This option has been moved under the queue rules section of the configuration and will be removed from this section in the future.",
