@@ -4,6 +4,7 @@ description: The different data types you can find in Mergify configuration file
 ---
 
 import { Warning, Info } from '../../components/Alerts';
+import OptionsTable from '../../components/OptionsTable';
 
 When using templates or conditions, data are made of different types. You will
 find below the different data types that are available and exposed in Mergify
@@ -14,22 +15,7 @@ configuration file.
 A commit is an object that embeds several information about a [Git
 commit](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/about-commits)
 
-Example structure of a commit object:
-
-```json
-{
-    "sha": "foo-sha",
-    "parents": ["parent-foo-sha", "another-parent-foo-sha"],
-    "commit_message": "a commit message",
-    "commit_verification_verified": true,
-    "author": "commit-author",
-    "date_author": "2012-04-14T16:00:49Z",
-    "email_author": "user@example.com",
-    "committer": "commit-committer",
-    "date_committer": "2012-04-15T16:00:49Z",
-    "email_committer": "user@example.com"
-}
-```
+<OptionsTable name="Commit" />
 
 You can use a commit object in templates:
 
@@ -51,6 +37,10 @@ pull_request_rules:
       comment:
         message: One of the commit is too old!
 ```
+
+## Commit Author
+
+<OptionsTable name="CommitAuthor" />
 
 ## Regular Expressions
 

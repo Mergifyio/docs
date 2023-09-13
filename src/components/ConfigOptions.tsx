@@ -16,8 +16,11 @@ const valueTypeLinks: { [key: string]: string } = {
   '/definition/UserArray': '/configuration/data-types#template',
   '/definition/Template': '/configuration/data-types#template',
   '/definition/LabelArray': '/configuration/data-types#template',
+  '/definitions/Timestamp': '/configuration/data-types#timestamp',
   '/definition/TimestampOrRelativeTimestamp': '/configuration/data-types#timestamp',
   '/definition/TimestampOrTimestampInterval': '/configuration/data-types#timestamp-interval',
+  '/definitions/Commit': '/configuration/data-types#commit',
+  '/definitions/CommitAuthor': '/configuration/data-types#commit-author',
   '/definition/RuleCondition': '/configuration/conditions',
   '/definition/Duration': '/configuration/data-types#duration',
   '/definition/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
@@ -58,12 +61,19 @@ export function getValueType(definition): string {
   let valueType = null;
 
   if (definition.type === 'array') {
-    const typeLink = getTypeLink(definition.items.$ref);
-    const typeDescription = (
-      <ReactMarkdown components={mdxComponents as any}>
-        {getTypeDescription(definition.items.$ref)}
-      </ReactMarkdown>
-    );
+    let typeLink;
+    let typeDescription;
+
+    if ('$ref' in definition.items) {
+      typeLink = getTypeLink(definition.items.$ref);
+      typeDescription = (
+        <ReactMarkdown components={mdxComponents as any}>
+          {getTypeDescription(definition.items.$ref)}
+        </ReactMarkdown>
+      );
+    } else {
+      typeDescription = definition.items.type;
+    }
 
     if (typeLink !== undefined) {
       valueType = (

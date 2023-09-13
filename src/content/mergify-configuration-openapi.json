@@ -91,32 +91,32 @@
         },
         {
           "key": "changes-requested-reviews-by",
-          "type": "userSingle",
+          "$ref": "#/definitions/GitHubLoginOrTeam",
           "description": "The list of GitHub user or team login that have requested changes in a review for the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
           "key": "check-failure",
-          "type": "check",
+          "type": "string",
           "description": "The list of status checks that failed for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details. Checks that report being cancelled, timed out, and action required are also considered as failures."
         },
         {
           "key": "check-neutral",
-          "type": "check",
+          "type": "string",
           "description": "The list of status checks that are neutral for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-pending",
-          "type": "check",
+          "type": "string",
           "description": "The list of status checks that is pending for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-skipped",
-          "type": "check",
+          "type": "string",
           "description": "The list of status checks that was skipped for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
           "key": "check-stale",
-          "type": "check",
+          "type": "string",
           "description": "The list of status checks that are stale for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
@@ -126,7 +126,7 @@
         },
         {
           "key": "check-timed-out",
-          "type": "check",
+          "type": "string",
           "description": "The list of status checks that timed out for the pull request. This is the name of a status check such as continuous-integration/travis-ci/pr or of a check run such as Travis CI - Pull Request. See About Status Checks for more details."
         },
         {
@@ -141,17 +141,23 @@
         },
         {
           "key": "commented-reviews-by",
-          "type": "userSingle",
+          "$ref": "#/definitions/GitHubLoginOrTeam",
           "description": "The list of GitHub user or team login that have commented in a review for the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
-          "$ref": "#/definitions/CommitAuthor",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CommitAuthor"
+          },
           "key": "co-authors",
           "description": "The list of co-authors on the pull request (excluding merge commits and bots)."
         },
         {
           "key": "commits",
-          "type": "string",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Commit"
+          },
           "description": "The list of commits of the pull request. The index 0 is the first commit of the pull request, while -1 is the last commit of the pull request."
         },
         {
@@ -196,7 +202,7 @@
         },
         {
           "key": "dismissed-reviews-by",
-          "type": "userSingle",
+          "$ref": "#/definitions/GitHubLoginOrTeam",
           "description": "The list of GitHub user or team login that have their review dismissed in the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
@@ -206,7 +212,10 @@
         },
         {
           "key": "files",
-          "type": "string",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "description": "The files that are modified, deleted or added by the pull request."
         },
         {
@@ -235,12 +244,15 @@
         },
         {
           "key": "head",
-          "type": "branchSingle",
+          "$ref": "#/definitions/BranchName",
           "description": "The name of the branch where the pull request changes are implemented."
         },
         {
           "key": "label",
-          "type": "labelSingle",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "description": "The list of labels of the pull request."
         },
         {
@@ -265,7 +277,7 @@
         },
         {
           "key": "merged-by",
-          "type": "string",
+          "$ref": "#/definitions/GitHubLoginOrTeam",
           "description": "The GitHub user or team login that merged the pull request. Team logins are prefixed with the @ character and must belong to the repository organization."
         },
         {
@@ -311,17 +323,23 @@
         },
         {
           "key": "review-requested",
-          "type": "userSingle",
+          "$ref": "#/definitions/GitHubLoginOrTeam",
           "description": "The list of GitHub user or team login that were requested to review the pull request. Team logins are prefixed with the @ character and must belong to the repository organization. This only matches reviewers with admin, write or maintain permission on the repository."
         },
         {
           "key": "review-threads-resolved",
-          "type": "string",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "description": "The list of bodies associated to review threads that are marked as resolved by GitHub."
         },
         {
           "key": "review-threads-unresolved",
-          "type": "string",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "description": "The list of bodies associated to review threads that are NOT marked as resolved by GitHub."
         },
         {
@@ -536,7 +554,8 @@
       ]
     },
     "Timestamp": {
-      "$id": "/definition/Timestamp",
+      "$id": "/definitions/Timestamp",
+      "description": "Timestamp",
       "type": "string"
     },
     "RelativeTimestamp": {
@@ -570,8 +589,59 @@
         }
       ]
     },
+    "Commit": {
+      "$id": "/definitions/Commit",
+      "description": "Commit",
+      "type": "object",
+      "properties": {
+        "sha": {
+          "description": "Commit sha",
+          "type": "string"
+        },
+        "parents": {
+          "description": "List of parents sha",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commit_message": {
+          "description": "The commit message",
+          "type": "string"
+        },
+        "commit_verification_verified": {
+          "type": "boolean",
+          "description": "Whether the commit was verified by GitHub"
+        },
+        "author": {
+          "description": "The commit author",
+          "type": "string"
+        },
+        "date_author": {
+          "description": "The date the commit was authored",
+          "$ref": "#/definitions/Timestamp"
+        },
+        "email_author": {
+          "description": "The email address of the commit author",
+          "type": "string"
+        },
+        "committer": {
+          "description": "The committer",
+          "type": "string"
+        },
+        "date_committer": {
+          "description": "The date the commit was committed",
+          "$ref": "#/definitions/Timestamp"
+        },
+        "email_author": {
+          "description": "The email address of the committer",
+          "type": "string"
+        }
+      }
+    },
     "CommitAuthor": {
-      "$id": "/definition/CommitAuthor",
+      "$id": "/definitions/CommitAuthor",
+      "description": "Commit author",
       "type": "object",
       "properties": {
         "name": {
@@ -579,7 +649,7 @@
           "type": "string"
         },
         "email": {
-          "descriptin": "Author email address",
+          "description": "Author email address",
           "type": "string"
         }
       }
