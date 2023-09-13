@@ -738,6 +738,15 @@
             "$ref": "#/definitions/RuleCondition"
           }
         },
+        "branch_protection_injection_mode": {
+          "type": "string",
+          "enum": [
+            "queue",
+            "merge",
+            "none"
+          ],
+          "description": "Branch protections conditions injection mode to use.\n- `queue` will inject branch protections conditions as required conditions for queuing and merging pull requests.\n- `merge` will inject branch protections conditions as required conditions only for merging pull requests.\n- `none` will disable branch protections. This mode is supported only on queues using a `merge_bot_account` with admin rights."
+        },
         "allow_checks_interruption": {
           "description": "Allow interrupting the ongoing checks when a pull request with higher priority enters in the queue. If false, pull request with higher priority will be inserted just after the pull requests that have checks running.",
           "type": "boolean",
