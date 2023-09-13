@@ -21,6 +21,8 @@ const valueTypeLinks: { [key: string]: string } = {
   '/definition/RuleCondition': '/configuration/conditions',
   '/definition/Duration': '/configuration/data-types#duration',
   '/definition/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
+  '/definitions/GitHubActionsWorkflow': '/workflow/actions/github_actions#workflow-action',
+  '/definitions/GitHubActionsWorkflowDispatch': '/workflow/actions/github_actions#workflow-action-dispatch',
 };
 
 export interface OptionDefinition {
