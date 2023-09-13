@@ -12,20 +12,20 @@ import specChecksListScreenshot from "../images/merge-queue/speculative-checks/s
 import requiredPRbypassScreenshot from "../images/merge-queue/speculative-checks/mergify-required-pull-request-bypass.png"
 
 In the context of software development, waiting for pull requests (PRs) to
-merge serially can be time-consuming, especially when each merge requires
-passing through continuous integration (CI) pipelines. This is where
-**Speculative Checks** come in.
+merge one after another can be time-consuming, especially when each one needs
+to pass through continuous integration (CI) pipelines. This is where
+**Speculative Checks** come into play.
 
-Speculative checks, as part of Mergify's queuing feature, allow for the
-parallel testing of multiple PRs to expedite the merging process. They leverage
-the concept of a **merge train** - a set of PRs tested together to ensure
-compatibility before merging.
+Speculative checks, as part of Mergify's queuing feature, facilitate the
+simultaneous testing of multiple PRs to speed up the merging process. They test
+a set of PRs together to ensure compatibility before committing them to the
+main branch.
 
-Essentially, speculative checks help accelerate the PR merging process by
-preemptively checking for potential merge conflicts or test failures, saving
-valuable development time. This introduction will guide you through
-understanding speculative checks, how they operate, and how to configure them
-effectively.
+At its core, speculative checks aim to hasten the PR merging process by
+proactively identifying potential merge conflicts or test failures, thereby
+saving valuable development time. This introduction will guide you in grasping
+the concept of speculative checks, their functionality, and the optimal way to
+set them up.
 
 ## How Speculative Checks Work
 
