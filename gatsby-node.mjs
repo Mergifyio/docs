@@ -63,20 +63,6 @@ export const onCreateNode = async ({node, getNode, loadNodeContent, actions}) =>
   }
 };
 
-const getNavItems = items =>
-  // turn a sidebar configuration object to an array of nav items
-  Object.entries(items).map(([title, path]) =>
-    typeof path === 'string'
-      ? {title, path} // links are treated normally
-      : {
-          title,
-          // generate an id for each group, for use with the sidebar nav state
-          id: v5(JSON.stringify(path), v5.DNS),
-          // recurse over its children and turn them into nav items
-          children: getNavItems(path)
-        }
-  );
-
 export const createPages = async ({actions, graphql}) => {
   const pageTemplate = resolve("./src/templates/page.jsx")
 
@@ -96,14 +82,6 @@ export const createPages = async ({actions, graphql}) => {
           }
         }
       }
-      configs: allFile(filter: {base: {eq: "config.json"}}) {
-        nodes {
-          fields {
-            content
-          }
-          sourceInstanceName
-        }
-      }
       tags: allMdx {
         group(field: {frontmatter: {tags: SELECT}}) {
           name: fieldValue
@@ -111,19 +89,6 @@ export const createPages = async ({actions, graphql}) => {
       }
     }
   `);
-
-  const configs = data.configs.nodes.reduce((acc, node) => {
-    const {title, sidebar} = JSON.parse(
-      node.fields.content
-    );
-    return {
-      ...acc,
-      [node.sourceInstanceName]: {
-        docset: title,
-        navItems: getNavItems(sidebar),
-      }
-    };
-  }, {});
 
   data.pages.nodes.forEach(({id, sourceInstanceName, children, absolutePath}) => {
     const [{fields}] = children;
@@ -133,7 +98,6 @@ export const createPages = async ({actions, graphql}) => {
       component: `${pageTemplate}?__contentFilePath=${absolutePath}`,
       context: {
         id,
-        ...configs[sourceInstanceName]
       }
     });
   });

@@ -108,6 +108,7 @@ NavGroup.propTypes = {
 
 export default function NavItems({ items, depth = 0 }) {
   const { basePath, uri } = useContext(PathContext);
+
   return (
     <Stack spacing="1" align="flex-start" pb={depth && 3}>
       {items.map((item, index) => {

@@ -16,7 +16,7 @@ export const isPathActive = (path, uri) => !relative(
 export const getFullPath = (path, basePath) => join('/', basePath, path);
 
 export const flattenNavItems = (items) => items
-  .flatMap((item) => (item.children ? [item, ...flattenNavItems(item.children)] : item));
+  ?.flatMap((item) => (item.children ? [item, ...flattenNavItems(item.children)] : item)) ?? [];
 
 export function useTagColors() {
   const bg = useColorModeValue('blue.100', 'blue.600');

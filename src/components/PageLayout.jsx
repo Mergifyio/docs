@@ -77,7 +77,6 @@ function HeaderLink({ icon, ...linkProps }) {
 }
 
 export default function Page({
-  pageContext,
   title,
   children,
   banner,
@@ -90,14 +89,13 @@ export default function Page({
 }) {
   const [sidebarHidden, setSidebarHidden] = useLocalStorage('sidebar');
 
-  const { navItems } = pageContext;
   const bgColor = useColorModeValue('white', 'blue.800');
 
   return (
     <>
       <Header>
         <MobileNav>
-          <SidebarNav navItems={navItems} darkBg="gray.700" />
+          <SidebarNav darkBg="gray.700" />
         </MobileNav>
         <Show above="xl">
           <HStack marginX={20} spacing={6}>
@@ -126,7 +124,7 @@ export default function Page({
         </Tooltip>
       </Fade>
       <Sidebar isHidden={sidebarHidden}>
-        <SidebarNav navItems={navItems} onHide={() => setSidebarHidden(true)} />
+        <SidebarNav onHide={() => setSidebarHidden(true)} />
       </Sidebar>
       <Box
         marginLeft={{

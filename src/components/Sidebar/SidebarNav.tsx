@@ -7,32 +7,40 @@ import {
   chakra,
   useColorModeValue,
 } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import { BsChevronContract, BsChevronExpand } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
 import useLocalStorage from 'react-use/lib/useLocalStorage';
 
+import navItems, { NavItem } from '../../content/config';
 import { flattenNavItems } from '../../utils';
 
 import NavItems, { NavContext } from './NavItems';
 
+interface Props {
+  onHide: () => void;
+  children: React.ReactNode;
+  darkBg: string;
+}
+
+type NavState = { [id: string]: boolean };
+
 export function SidebarNav({
-  navItems, onHide, darkBg = 'blue.800', children,
-}) {
+  onHide, darkBg = 'blue.800', children,
+}: Props) {
   const bg = useColorModeValue('white', darkBg);
 
-  const navGroups = useMemo(
-    () => flattenNavItems(navItems).filter((item) => item.children),
-    [navItems],
+  const navGroups: NavItem[] = useMemo(
+    () => flattenNavItems(navItems).filter((item: NavItem) => item.children),
+    [],
   );
 
   // set all nav items to close by default
   const initialNavState = useMemo(
     () => navGroups.reduce(
-      (acc, group) => ({
+      (acc: NavState, group: NavItem) => ({
         ...acc,
-        [group.id]: false,
+        [group.id as string]: false,
       }),
       {},
     ),
@@ -40,7 +48,7 @@ export function SidebarNav({
   );
 
   // save nav state in storage
-  const [localNavState, setLocalNavState] = useLocalStorage('nav');
+  const [localNavState, setLocalNavState] = useLocalStorage<NavState>('nav');
 
   // combine initial and local nav states
   const nav = useMemo(
@@ -56,7 +64,7 @@ export function SidebarNav({
     () => (
       // get an array of the state of all nav items that also exist in the list of
       // valid nav group ids (above)
-      navGroups.every((group) => nav[group.id])
+      navGroups.every((group) => nav[group.id as string])
     ),
     [navGroups, nav],
   );
@@ -84,7 +92,7 @@ export function SidebarNav({
                 navGroups.reduce(
                   (acc, group) => ({
                     ...acc,
-                    [group.id]: expanded,
+                    [group.id as string]: expanded,
                   }),
                   {},
                 ),
@@ -100,6 +108,7 @@ export function SidebarNav({
                 variant="ghost"
                 fontSize="md"
                 onClick={onHide}
+                aria-label="Hide sidebar"
                 icon={<FiChevronsLeft />}
               />
             </Tooltip>
@@ -114,10 +123,3 @@ export function SidebarNav({
     </>
   );
 }
-
-SidebarNav.propTypes = {
-  children: PropTypes.node,
-  navItems: PropTypes.array.isRequired,
-  onHide: PropTypes.func,
-  darkBg: PropTypes.string,
-};
