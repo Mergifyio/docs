@@ -1153,6 +1153,7 @@
             "merge_method": {
               "valueType": "string",
               "description": "Merge method to use. Possible values are `merge`, `squash`, `rebase` or `fast-forward`. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.\n This option overrides the value defined in the queue rules section of the configuration.",
+              "type": "string",
               "enum": [
                 "merge",
                 "squash",
