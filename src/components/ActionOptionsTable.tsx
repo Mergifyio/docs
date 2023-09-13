@@ -1,12 +1,12 @@
 import {
-  Table, Thead, Tr, Th, Tbody, Td, Link, Badge,
+  Table, Thead, Tr, Th, Tbody, Td, Badge,
 } from '@chakra-ui/react';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import configSchema from '../content/mergify-configuration-openapi.json';
 
-import { getTypeLink } from './ConfigOptions';
+import { getValueType } from './ConfigOptions';
 
 import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
@@ -44,7 +44,7 @@ export default function ActionOptionsTable({ action }: Props) {
       </Thead>
       <Tbody>
         {Object.entries(options).map(([optionKey, definition]) => {
-          const valueTypeLink = getTypeLink(definition.$ref);
+          const valueType = getValueType(definition);
           const { deprecated } = definition;
 
           return (
@@ -53,7 +53,7 @@ export default function ActionOptionsTable({ action }: Props) {
                 <Td sx={{ whiteSpace: 'nowrap' }}>
                   <InlineCode>{optionKey}</InlineCode>
                 </Td>
-                <Td>{valueTypeLink ? <Link color="primary" textDecoration="underline" href={valueTypeLink}>{definition.valueType}</Link> : definition.valueType}</Td>
+                <Td>{valueType}</Td>
                 <Td lineHeight="7">
                   {hasDefaultValue(definition) && (
                     <InlineCode>
