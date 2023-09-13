@@ -12,18 +12,18 @@ import { mdxComponents } from './Page';
 
 // FIXME: move this to JSON schema?
 const valueTypeLinks: { [key: string]: string } = {
-  '/definition/TemplateArray': '/configuration/data-types#template',
-  '/definition/UserArray': '/configuration/data-types#template',
-  '/definition/Template': '/configuration/data-types#template',
-  '/definition/LabelArray': '/configuration/data-types#template',
+  '/definitions/TemplateArray': '/configuration/data-types#template',
+  '/definitions/UserArray': '/configuration/data-types#template',
+  '/definitions/Template': '/configuration/data-types#template',
+  '/definitions/LabelArray': '/configuration/data-types#template',
   '/definitions/Timestamp': '/configuration/data-types#timestamp',
-  '/definition/TimestampOrRelativeTimestamp': '/configuration/data-types#timestamp',
-  '/definition/TimestampOrTimestampInterval': '/configuration/data-types#timestamp-interval',
+  '/definitions/TimestampOrRelativeTimestamp': '/configuration/data-types#timestamp',
+  '/definitions/TimestampOrTimestampInterval': '/configuration/data-types#timestamp-interval',
   '/definitions/Commit': '/configuration/data-types#commit',
   '/definitions/CommitAuthor': '/configuration/data-types#commit-author',
-  '/definition/RuleCondition': '/configuration/conditions',
-  '/definition/Duration': '/configuration/data-types#duration',
-  '/definition/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
+  '/definitions/RuleCondition': '/configuration/conditions',
+  '/definitions/Duration': '/configuration/data-types#duration',
+  '/definitions/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
   '/definitions/GitHubActionsWorkflow': '/workflow/actions/github_actions#workflow-action',
   '/definitions/GitHubActionsWorkflowDispatch': '/workflow/actions/github_actions#workflow-action-dispatch',
 };

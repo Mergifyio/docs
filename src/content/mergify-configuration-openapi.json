@@ -404,7 +404,7 @@
       "type": "string"
     },
     "GitHubLoginOrTeam": {
-      "$id": "/definition/GitHubLoginOrTeam",
+      "$id": "/definitions/GitHubLoginOrTeam",
       "description": "GitHub login or team",
       "anyOf": [
         {
@@ -460,7 +460,7 @@
       ]
     },
     "Duration": {
-      "$id": "/definions/Duration",
+      "$id": "/definitions/Duration",
       "type": "string",
       "default": "",
       "description": "duration"
@@ -480,7 +480,7 @@
       }
     },
     "LabelArray": {
-      "$id": "/definition/LabelArray",
+      "$id": "/definitions/LabelArray",
       "type": "array",
       "default": [],
       "items": {
@@ -488,7 +488,7 @@
       }
     },
     "UserArray": {
-      "$id": "/definition/UserArray",
+      "$id": "/definitions/UserArray",
       "type": "array",
       "default": [],
       "items": {
@@ -496,7 +496,7 @@
       }
     },
     "BranchArray": {
-      "$id": "/definition/BranchArray",
+      "$id": "/definitions/BranchArray",
       "type": "array",
       "default": [],
       "items": {
@@ -504,7 +504,7 @@
       }
     },
     "PriorityRule": {
-      "$id": "/definition/PriorityRule",
+      "$id": "/definitions/PriorityRule",
       "description": "priority rule",
       "type": "object",
       "properties": {
@@ -526,7 +526,7 @@
       }
     },
     "Priority": {
-      "$id": "/definition/Priority",
+      "$id": "/definitions/Priority",
       "description": "priority: `low`, `medium`, `high` or a value between 1 and 10000",
       "anyOf": [
         {
@@ -544,7 +544,7 @@
       ]
     },
     "MergeMethod": {
-      "$id": "/definition/MergeMethod",
+      "$id": "/definitions/MergeMethod",
       "description": "merge method: `merge`, `squash`, `rebase` or `fast-forward`",
       "enum": [
         "merge",
@@ -559,15 +559,15 @@
       "type": "string"
     },
     "RelativeTimestamp": {
-      "$id": "/definition/RelativeTimestamp",
+      "$id": "/definitions/RelativeTimestamp",
       "type": "string"
     },
     "TimestampInterval": {
-      "$id": "/definition/TimestampInterval",
+      "$id": "/definitions/TimestampInterval",
       "type": "string"
     },
     "TimestampOrRelativeTimestamp": {
-      "$id": "/definition/TimestampOrRelativeTimestamp",
+      "$id": "/definitions/TimestampOrRelativeTimestamp",
       "description": "Timestamp or relative timestamp",
       "anyOf": [
         {
@@ -579,7 +579,7 @@
       ]
     },
     "TimestampOrTimestampInterval": {
-      "$id": "/definition/TimestampOrTimestampInterval",
+      "$id": "/definitions/TimestampOrTimestampInterval",
       "anyOf": [
         {
           "$ref": "#/definitions/Timestamp"
@@ -655,7 +655,7 @@
       }
     },
     "PullRequestRule": {
-      "$id": "/definition/PullRequestRule",
+      "$id": "/definitions/PullRequestRule",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -683,7 +683,7 @@
       "title": "PullRequestRule"
     },
     "PartitionRule": {
-      "$id": "/definition/PartitionRule",
+      "$id": "/definitions/PartitionRule",
       "type": "object",
       "required": [
         "name"
@@ -709,7 +709,7 @@
       }
     },
     "QueueRule": {
-      "$id": "/definition/QueueRule",
+      "$id": "/definitions/QueueRule",
       "type": "object",
       "required": [
         "name"
@@ -832,7 +832,7 @@
       }
     },
     "RuleCondition": {
-      "$id": "/definition/RuleCondition",
+      "$id": "/definitions/RuleCondition",
       "description": "condition",
       "anyOf": [
         {
