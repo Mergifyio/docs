@@ -301,6 +301,33 @@
           "description": "The position of the pull request in its queue if queued.\nThe first pull request in the queue has position 0.\nThe value is set to -1 if the pull request is not queued.\nNB: If you are using partitions, this condition returns the maximum position of the pull request from all the partitions it is queued in."
         },
         {
+          "key": "queue-dequeue-reason",
+          "type": "string",
+          "enum": [
+            "pr-merged",
+            "pr-dequeued",
+            "pr-ahead-dequeued",
+            "pr-ahead-failed-to-merge",
+            "pr-with-higher-priority-queued",
+            "pr-queued-twice",
+            "speculative-check-number-reduced",
+            "checks-timeout",
+            "checks-failed",
+            "queue-rule-missing",
+            "unexpected-queue-change",
+            "pr-frozen-no-cascading",
+            "target-branch-missing",
+            "target-branch-changed",
+            "pr-unexpectedly-failed-to-merge",
+            "batch-max-failure-resolution-attempts",
+            "pr-checks-stopped-because-merge-queue-pause",
+            "conflict-with-base-branch",
+            "conflict-with-pull-ahead",
+            "branch-update-failed"
+          ],
+          "description": "A dequeue code is associated to each specific reason for when a pull request has been disembarked from the merge queue."
+        },
+        {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
           "key": "queued-at",
           "description": "The time the pull request was queued at for merge."
