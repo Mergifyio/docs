@@ -82,7 +82,12 @@
         {
           "key": "branch-protection-review-decision",
           "type": "string",
-          "description": "The review decision, could be one of `APPROVED`, `CHANGES_REQUESTED` or `REVIEW_REQUIRED`. This indicates if `CODEOWNERS` have reviewed the pull request when the Require Review from Code Owners branch protection rule is enabled."
+          "enum": [
+            "APPROVED",
+            "CHANGES_REQUESTED",
+            "REVIEW_REQUIRED"
+          ],
+          "description": "The review decision. This indicates if `CODEOWNERS` have reviewed the pull request when the Require Review from Code Owners branch protection rule is enabled."
         },
         {
           "key": "changes-requested-reviews-by",
