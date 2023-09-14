@@ -104,9 +104,45 @@ the merge queue](/merge-queue/partitions).
 
 ### Defaults
 
-{/* FIXME: add link to the page when it's written + description */}
+The `defaults` section provides a means to set configuration values that act as
+fallbacks for actions executed by both [pull request rules](/workflow/) and
+[commands](/commands). Instead of defining the same options repeatedly for
+different rules, you can specify them once in the defaults section. If a
+particular option is directly defined under `pull_request_rules`, it will take
+precedence; otherwise, the system resorts to the values defined in defaults.
 
-{/* <OptionsTable name="Default" /> */}
+```yaml
+defaults:
+  actions:
+    comment:
+      bot_account: Autobot
+
+pull_request_rules:
+  - name: comment with default
+    conditions:
+      - label=comment
+    actions:
+      comment:
+        message: I 💙 Mergify
+```
+
+This configuration is equivalent to:
+
+```yaml
+pull_request_rules:
+  - name: comment with default
+    conditions:
+      - label=comment
+    actions:
+      comment:
+        message: I 💙 Mergify
+        bot_account: Autobot
+
+```
+
+In the example, the `bot_account` value is taken from the `defaults` section,
+simplifying the `pull_request_rules` and ensuring consistent behavior across
+different rules.
 
 ### Shared
 
