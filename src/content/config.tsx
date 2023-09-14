@@ -1,22 +1,38 @@
+import React from 'react';
+import {
+  BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
+} from 'react-icons/bs';
+
 import { v5 } from 'uuid';
 
-export type NavItem = { title: string, path?: string, children?: NavItem[], id?: string };
+import MergeQueueIcon from '../components/MergeQueueIcon';
+
+export type NavItem = {
+  title: string,
+  path?: string,
+  children?: NavItem[],
+  id?: string,
+  icon?: React.ReactElement
+};
 
 const navItems: NavItem[] = [
   { title: 'Home', path: '/' },
   { title: 'Getting Started', path: '/getting-started' },
   {
     title: 'Workflow Automation',
+    icon: <BsGear />,
     children: [
       { title: 'Writing Your First Rule', path: '/workflow/writing-your-first-rule' },
       {
         title: 'Use Cases',
+        icon: <BsLightbulb />,
         children: [
           { title: 'Automatic Merge', path: '/workflow/automerge' },
         ],
       },
       {
         title: 'Actions',
+        icon: <BsRocket />,
         children: [
           { title: 'Assign', path: '/workflow/actions/assign' },
           { title: 'Backport', path: '/workflow/actions/backport' },
@@ -41,6 +57,7 @@ const navItems: NavItem[] = [
   },
   {
     title: 'Merge Queue',
+    icon: <MergeQueueIcon />,
     children: [
       { title: 'Introduction', path: '/merge-queue/intro' },
       { title: 'Setup', path: '/merge-queue/setup' },
@@ -55,6 +72,7 @@ const navItems: NavItem[] = [
   },
   {
     title: 'Commands',
+    icon: <BsCommand />,
     children: [
       { title: 'About Commands', path: '/commands' },
       { title: 'Backport', path: '/commands/backport' },
@@ -70,6 +88,7 @@ const navItems: NavItem[] = [
   },
   {
     title: 'Technical Reference',
+    icon: <BsBook />,
     children: [
       { title: 'Configuration File', path: '/configuration/file-format' },
       { title: 'Sharing Configuration', path: '/configuration/sharing' },
@@ -79,6 +98,7 @@ const navItems: NavItem[] = [
   },
   {
     title: 'Integration',
+    icon: <BsPlugin />,
     children: [
       { title: 'GitHub Actions', path: '/integration/gha' },
       { title: 'Jenkins', path: '/integration/jenkins' },
@@ -87,6 +107,7 @@ const navItems: NavItem[] = [
       { title: 'Datadog', path: '/integration/datadog' },
       {
         title: 'Stacked Pull Requests',
+        icon: <BsStack />,
         children: [
           { title: 'Graphite', path: '/integration/stacked_prs/graphite' },
           { title: 'Others', path: '/integration/stacked_prs/others' },
