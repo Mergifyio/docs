@@ -26,6 +26,8 @@ const getItemPaths = (items, basePath) => items.flatMap(({ path, children }) => 
   children ? getItemPaths(children, basePath) : getFullPath(path, basePath)
 ));
 
+const BASE_ITEM_PADDING = 4;
+
 function NavButton({
   isActive, depth, children, ...props
 }) {
@@ -44,6 +46,8 @@ function NavButton({
     <Button
       h="auto"
       py={depth ? 1.5 : 2.5} // give top level nav items larger padding
+      // eslint-disable-next-line react/prop-types
+      pl={depth * 2 + BASE_ITEM_PADDING}
       whiteSpace="normal"
       variant="ghost"
       roundedLeft="none"
@@ -52,7 +56,7 @@ function NavButton({
       {...buttonProps}
       {...props}
     >
-      <chakra.span pl={depth * 2}>{children}</chakra.span>
+      <chakra.span>{children}</chakra.span>
     </Button>
   );
 }
@@ -86,6 +90,8 @@ function NavGroup({ group, depth }) {
           });
         }}
         depth={depth}
+        leftIcon={group.icon}
+        color="linkedin.700" // Color title of groups
       >
         {group.title}
       </NavButton>
