@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 
 import configSchema from '../content/mergify-configuration-openapi.json';
 
-import { getValueType } from './ConfigOptions';
+import { getValueType, OptionDefinition } from './ConfigOptions';
 
 import InlineCode from './InlineCode';
 import { mdxComponents } from './Page';
@@ -14,14 +14,6 @@ import { mdxComponents } from './Page';
 interface Props {
   /** Action's name to retrieve its options */
   action: keyof typeof configSchema.definitions.Actions.properties;
-}
-
-interface OptionDefinition {
-  valueType: string;
-  description: string;
-  default: string | boolean;
-  deprecated?: boolean;
-  $ref: any;
 }
 
 export default function ActionOptionsTable({ action }: Props) {

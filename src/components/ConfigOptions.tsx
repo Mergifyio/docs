@@ -32,6 +32,7 @@ export interface OptionDefinition {
   valueType: string;
   description: string;
   default: string | boolean;
+  deprecated?: boolean;
   $ref: any;
 }
 
