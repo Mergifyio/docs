@@ -392,14 +392,10 @@
       "items": {
         "type": "string"
       },
-      "uniqueItems": true,
-      "default": []
+      "uniqueItems": true
     },
     "LoginArray": {
       "$id": "/definitions/LoginArray",
-      "default": [
-        ""
-      ],
       "anyOf": [
         {
           "$ref": "#/definitions/StringArray"
@@ -476,7 +472,6 @@
     "Template": {
       "$id": "/definitions/Template",
       "description": "template",
-      "default": "",
       "anyOf": [
         {
           "type": "string"
@@ -489,19 +484,16 @@
     "Duration": {
       "$id": "/definitions/Duration",
       "type": "string",
-      "default": "",
       "description": "duration"
     },
     "ConditionString": {
       "$id": "/definitions/ConditionString",
-      "type": "string",
-      "default": ""
+      "type": "string"
     },
     "TemplateArray": {
       "$id": "/definitions/TemplateArray",
       "type": "array",
       "description": "list of template",
-      "default": [],
       "items": {
         "$ref": "#/definitions/Template"
       }
@@ -509,7 +501,6 @@
     "LabelArray": {
       "$id": "/definitions/LabelArray",
       "type": "array",
-      "default": [],
       "items": {
         "$ref": "#/definitions/Template"
       }
@@ -517,7 +508,6 @@
     "UserArray": {
       "$id": "/definitions/UserArray",
       "type": "array",
-      "default": [],
       "items": {
         "$ref": "#/definitions/Template"
       }
@@ -525,7 +515,6 @@
     "BranchArray": {
       "$id": "/definitions/BranchArray",
       "type": "array",
-      "default": [],
       "items": {
         "type": "string"
       }
@@ -718,7 +707,6 @@
       "properties": {
         "name": {
           "type": "string",
-          "default": "",
           "description": "The name of the partition."
         },
         "conditions": {
@@ -916,12 +904,10 @@
           ],
           "properties": {
             "add_users": {
-              "default": "",
               "description": "The users to assign to the pull request.",
               "$ref": "#/definitions/UserArray"
             },
             "remove_users": {
-              "default": "",
               "description": "The users to remove from assignees.",
               "$ref": "#/definitions/UserArray"
             }
@@ -934,7 +920,6 @@
           ],
           "properties": {
             "assignees": {
-              "default": "",
               "description": "Users to assign the newly created pull request. As the type is a data type template, you could use, e.g., `{{author}}` to assign the pull request to its original author.",
               "$ref": "#/definitions/TemplateArray"
             },
@@ -945,12 +930,10 @@
             },
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to backport a pull request. If no `bot_account` is set, Mergify backports the pull request itself.",
-              "default": "",
               "$ref": "#/definitions/Template"
             },
             "branches": {
               "description": "The list of branches the pull request should be copied to.",
-              "default": "[]",
               "$ref": "#/definitions/BranchArray"
             },
             "ignore_conflicts": {
@@ -960,7 +943,6 @@
             },
             "labels": {
               "description": "The list of labels to add to the created pull requests.",
-              "default": "[]",
               "$ref": "#/definitions/StringArray"
             },
             "label_conflicts": {
@@ -970,7 +952,6 @@
             },
             "regexes": {
               "description": "The list of regexes to find branches the pull request should be copied to.",
-              "default": "[]",
               "$ref": "#/definitions/StringArray"
             },
             "title": {
@@ -1001,7 +982,6 @@
           "properties": {
             "assignees": {
               "description": "Users to assign the newly created pull request. As the type is Template, you could use, e.g., {{author}} to assign the pull request to its original author.",
-              "default": "",
               "$ref": "#/definitions/TemplateArray"
             },
             "body": {
@@ -1011,22 +991,19 @@
             },
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to copy a pull request. If no bot_account is set, Mergify copies the pull request itself.",
-              "default": "",
               "$ref": "#/definitions/Template"
             },
             "branches": {
               "description": "The list of branches the pull request should be copied to.",
-              "default": "[]",
               "$ref": "#/definitions/BranchArray"
             },
             "ignore_conflicts": {
               "description": "Whether to create the pull requests even if they are conflicts when cherry-picking the commits.",
-              "default": "true",
+              "default": true,
               "type": "boolean"
             },
             "labels": {
               "description": "The list of labels to add to the created pull requests.",
-              "default": "[]",
               "$ref": "#/definitions/StringArray"
             },
             "label_conflicts": {
@@ -1036,7 +1013,6 @@
             },
             "regexes": {
               "description": "The list of regexes to find branches the pull request should be copied to.",
-              "default": "[]",
               "$ref": "#/definitions/StringArray"
             },
             "title": {
@@ -1134,7 +1110,6 @@
           "properties": {
             "draft": {
               "description": "If the pull request should be a draft (`true`) or the other way around (`false`).",
-              "default": "None",
               "type": "boolean"
             }
           }
@@ -1146,17 +1121,14 @@
           ],
           "properties": {
             "add": {
-              "default": "[]",
               "description": "The list of labels to add.",
               "$ref": "#/definitions/LabelArray"
             },
             "remove": {
-              "default": "[]",
               "description": "The list of labels to remove.",
               "$ref": "#/definitions/LabelArray"
             },
             "toggle": {
-              "default": "[]",
               "description": "Toggle labels in the list based on the conditions. If all the conditions are a success, all the labels in the list will be added, otherwise, they will all be removed.",
               "$ref": "#/definitions/LabelArray"
             },
@@ -1213,9 +1185,6 @@
             "success_conditions": {
               "type": "array",
               "description": "List of conditions to match to mark the pull request check as succeeded, otherwise, it will be marked as failing. If unset, the conditions from the rule that triggers this action are used.",
-              "default": [
-                ""
-              ],
               "items": {
                 "$ref": "#/definitions/RuleCondition"
               }
@@ -1261,7 +1230,6 @@
             },
             "name": {
               "type": "string",
-              "default": "default",
               "description": "The name of the queue where the pull request should be added. If no name is set, `queue_conditions` will be applied instead."
             },
             "priority": {
