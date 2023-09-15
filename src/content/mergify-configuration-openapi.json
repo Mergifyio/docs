@@ -15,6 +15,81 @@
         "string"
       ]
     },
+    "commands_restrictions": {
+      "description": "Commands restriction",
+      "type": "object",
+      "properties": {
+        "backport": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            "sender-permission>=write"
+          ]
+        },
+        "copy": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            "sender-permission>=write"
+          ]
+        },
+        "queue": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            "sender-permission>=write"
+          ]
+        },
+        "rebase": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            {
+              "or": [
+                "sender-permission>=write",
+                "sender={{author}}"
+              ]
+            }
+          ]
+        },
+        "refresh": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            {
+              "or": [
+                "sender-permission>=write",
+                "sender={{author}}"
+              ]
+            }
+          ]
+        },
+        "requeue": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            "sender-permission>=write"
+            ]
+        },
+        "squash": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            {
+              "or": [
+                "sender-permission>=write",
+                "sender={{author}}"
+              ]
+            }
+          ]
+        },
+        "unqueue": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            "sender-permission>=write"
+          ]
+        },
+        "update": {
+          "$ref": "#/definitions/CommandRestriction",
+          "default": [
+            "sender-permission>=write"
+          ]
+        }
+      }
+    },
     "defaults": {
       "type": "object",
       "properties": {
@@ -720,6 +795,19 @@
           "description": "Allow the partition to work as the fallback partition.",
           "type": "boolean",
           "default": false
+        }
+      }
+    },
+    "CommandRestriction": {
+      "description": "Command restriction",
+      "$id": "/definitions/CommandRestriction",
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RuleCondition"
+          }
         }
       }
     },
