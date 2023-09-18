@@ -101,6 +101,7 @@ const navItems: NavItem[] = [
     icon: <BsPlugin />,
     children: [
       { title: 'GitHub Actions', path: '/integration/gha' },
+      { title: 'Dependabot', path: '/integration/dependabot' },
       { title: 'Jenkins', path: '/integration/jenkins' },
       { title: 'TeamCity', path: '/integration/teamcity' },
       { title: 'Continuous Integration', path: '/integration/ci' },
