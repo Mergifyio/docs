@@ -26,6 +26,7 @@ const valueTypeLinks: { [key: string]: string } = {
   '/definitions/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
   '/definitions/GitHubActionsWorkflow': '/workflow/actions/github_actions#workflow-action',
   '/definitions/GitHubActionsWorkflowDispatch': '/workflow/actions/github_actions#workflow-action-dispatch',
+  '/definitions/CommandRestriction': '/commands/restrictions#command-restriction-format',
 };
 
 export interface OptionDefinition {

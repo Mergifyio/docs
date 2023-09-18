@@ -5,6 +5,7 @@ export default function InlineCode(props) {
   const bgColor = useColorModeValue('gray.50', 'gray.700');
   return (
     <chakra.code
+      whiteSpace="pre-wrap"
       fontFamily="mono"
       fontSize="calc(1em / 1.125)"
       px="1"

@@ -75,6 +75,7 @@ const navItems: NavItem[] = [
     icon: <BsCommand />,
     children: [
       { title: 'About Commands', path: '/commands' },
+      { title: 'Restrictions', path: '/commands/restrictions' },
       { title: 'Backport', path: '/commands/backport' },
       { title: 'Copy', path: '/commands/copy' },
       { title: 'Queue', path: '/commands/queue' },

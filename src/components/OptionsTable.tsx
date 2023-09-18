@@ -1,6 +1,7 @@
 import {
   Table, Thead, Tr, Th, Tbody, Td, Badge,
 } from '@chakra-ui/react';
+import * as yaml from 'js-yaml';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -14,6 +15,18 @@ import { mdxComponents } from './Page';
 interface Props {
   /** Name to retrieve its options */
   name: keyof typeof configSchema.definitions;
+}
+
+interface RootProps {
+  /** Name to retrieve its options */
+  name: keyof typeof configSchema.properties;
+}
+
+export function RootOptionsTable({ name }: RootProps) {
+  const options = configSchema.properties[name]
+    .properties as { [optionKey: string]: OptionDefinition };
+
+  return OptionsTableBase(options);
 }
 
 export default function OptionsTable({ name }: Props) {
@@ -55,7 +68,7 @@ export function OptionsTableBase(options: OptionDefinition) {
                 <Td lineHeight="7">
                   {hasDefaultValue(definition) && (
                   <InlineCode>
-                    {String(definition.default)}
+                    {yaml.dump(definition.default)}
                   </InlineCode>
                   )}
                 </Td>
@@ -63,14 +76,17 @@ export function OptionsTableBase(options: OptionDefinition) {
                   {deprecated && <Badge colorScheme="orange" top={0} left={0}>deprecated</Badge>}
                 </Td>
               </Tr>
-              <Tr>
-                {/* FIXME: don't hardcode the border color like that */}
-                <Td lineHeight="7" colSpan="4" style={{ borderBottom: '2px solid #eee' }}>
-                  <ReactMarkdown components={mdxComponents as any}>
-                    {definition.description}
-                  </ReactMarkdown>
-                </Td>
-              </Tr>
+              {definition.description !== undefined
+                && (
+                <Tr>
+                  {/* FIXME: don't hardcode the border color like that */}
+                  <Td lineHeight="7" colSpan="4" style={{ borderBottom: '2px solid #eee' }}>
+                    <ReactMarkdown components={mdxComponents as any}>
+                      {definition.description}
+                    </ReactMarkdown>
+                  </Td>
+                </Tr>
+                )}
             </>
           );
         })}
