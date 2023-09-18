@@ -65,6 +65,12 @@ export const onCreateNode = async ({node, getNode, loadNodeContent, actions}) =>
 
 export const createPages = async ({actions, graphql}) => {
   const pageTemplate = resolve("./src/templates/page.jsx")
+  const {createRedirect} = actions; 
+
+  createRedirect({
+    fromPath: '/_redirect',
+    toPath: '/workflow/writing-your-first-rule'
+  })
 
   const {data} = await graphql(`
     {
