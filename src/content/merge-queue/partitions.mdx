@@ -57,12 +57,11 @@ queue_rules:
   - name: default
     queue_conditions:
       - or:
-        - and:
-          - queue-partition-name=projectA
-          - check-success=ciA
-        - and:
-          - queue-partition-name=projectB
-          - check-success=ciB
+        - queue-partition-name!=projectA
+        - check-success=ciA
+      - or:
+        - queue-partition-name!=projectB
+        - check-success=ciB
 ```
 
 {/* FIXME: screenshot! */}
@@ -99,12 +98,11 @@ queue_rules:
   - name: default
     queue_conditions:
       - or:
-        - and:
-          - queue-partition-name=projectA
-          - check-success=ciA
-        - and:
-          - queue-partition-name=projectB
-          - check-success=ciB
+        - queue-partition-name!=projectA
+        - check-success=ciA
+      - or:
+        - queue-partition-name!=projectB
+        - check-success=ciB
 ```
 
 During this migration phase, if you manually merge a PR, Mergify will evaluate
