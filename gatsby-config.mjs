@@ -79,6 +79,8 @@ plugins.push(
   }
 );
 
+plugins.push('gatsby-plugin-client-side-redirect')
+
 const config = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
   trailingSlash: 'ignore',

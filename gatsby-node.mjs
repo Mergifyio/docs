@@ -6,6 +6,9 @@ import {join, resolve} from 'path';
 import {v5} from 'uuid';
 import { compileMDXWithCustomOptions } from 'gatsby-plugin-mdx';
 import { remarkHeadingsPlugin } from './remark-headings-plugin.mjs';
+import redirects from './redirects.json' assert {
+  type: 'json'
+}
 
 export const onCreateWebpackConfig = ({ actions, stage, plugins }) => {
   actions.setWebpackConfig({
@@ -65,6 +68,14 @@ export const onCreateNode = async ({node, getNode, loadNodeContent, actions}) =>
 
 export const createPages = async ({actions, graphql}) => {
   const pageTemplate = resolve("./src/templates/page.jsx")
+  const {createRedirect} = actions; 
+
+  redirects.forEach(redirect => {
+    createRedirect({
+      ...redirect,
+      isPermanent: true
+    })
+  })
 
   const {data} = await graphql(`
     {
