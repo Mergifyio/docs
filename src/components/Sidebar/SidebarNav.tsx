@@ -7,13 +7,15 @@ import {
   chakra,
   useColorModeValue,
 } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { BsChevronContract, BsChevronExpand } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
 import useLocalStorage from 'react-use/lib/useLocalStorage';
 
 import navItems, { NavItem } from '../../content/config';
-import { flattenNavItems } from '../../utils';
+import {
+  PathContext, flattenNavItems, getFullPath, isPathActive,
+} from '../../utils';
 
 import NavItems, { NavContext } from './NavItems';
 
@@ -28,12 +30,18 @@ type NavState = { [id: string]: boolean };
 export function SidebarNav({
   onHide, darkBg = 'blue.800', children,
 }: Props) {
+  const { uri, basePath } = useContext(PathContext);
   const bg = useColorModeValue('white', darkBg);
 
   const navGroups: NavItem[] = useMemo(
     () => flattenNavItems(navItems).filter((item: NavItem) => item.children),
     [],
   );
+
+  const activeItem = flattenNavItems(navItems)
+    .find((navItem: NavItem) => (
+      navItem?.path && isPathActive(getFullPath(navItem?.path, basePath), uri)
+    ));
 
   // set all nav items to close by default
   const initialNavState = useMemo(
@@ -74,6 +82,7 @@ export function SidebarNav({
   return (
     <>
       <Box p="2" pl="0" pos="sticky" top="0" bg={bg} zIndex="1">
+        <title>{activeItem?.title} | Mergify Documentation</title>
         {children}
         <Flex>
           <Button
