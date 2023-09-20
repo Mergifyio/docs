@@ -62,7 +62,7 @@ export function OptionsTableBase(options: OptionDefinition) {
                 <Td>
                   <InlineCode>{optionKey}</InlineCode>
                 </Td>
-                <Td>
+                <Td lineHeight="7">
                   {valueType}
                 </Td>
                 <Td lineHeight="7">

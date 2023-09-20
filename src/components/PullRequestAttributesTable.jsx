@@ -35,7 +35,7 @@ export default function PullRequestAttributesTable() {
               <Td sx={{ whiteSpace: 'nowrap' }}>
                 <InlineCode>{attr.key}</InlineCode>
               </Td>
-              <Td>{valueType}</Td>
+              <Td lineHeight="7">{valueType}</Td>
               <Td lineHeight="7">
                 <ReactMarkdown components={mdxComponents}>
                   {attr.description}
