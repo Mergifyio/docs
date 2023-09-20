@@ -47,7 +47,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v0'
 
       - name: Deploy 🚀
-        run: 'gsutil rsync -d -r ./build gs://mergify-docs-staging'
+        run: 'gsutil rsync -d -r ./public gs://mergify-docs-staging'
 
       - name: Deployment finish
         if: always()
