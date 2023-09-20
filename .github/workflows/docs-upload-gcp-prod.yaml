@@ -43,12 +43,11 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_DOCS_CREDENTIAL_JSON }}"
 
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+
       - name: Deploy 🚀
-        uses: google-github-actions/upload-cloud-storage@v1.0.3
-        with:
-          path: public
-          destination: mergify-docs-staging
-          parent: false
+        run: 'gsutil rsync -d -r ./build gs://mergify-docs-staging'
 
       - name: Deployment finish
         if: always()
