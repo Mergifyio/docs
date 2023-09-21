@@ -13,7 +13,7 @@ import {
 import {SiSlack, SiGithub, SiTwitter, SiYoutube, SiLinkedin} from 'react-icons/si';
 import {SlRefresh} from 'react-icons/sl';
 import {GoGitMerge, GoGitCommit} from 'react-icons/go';
-import {BsDoorOpen, BsLightningCharge, BsListTask, BsRobot, BsChatText, BsType} from 'react-icons/bs';
+import {BsStack, BsDoorOpen, BsLightningCharge, BsListTask, BsRobot, BsChatText, BsType} from 'react-icons/bs';
 import {BiSolidCoinStack, BiRuler} from 'react-icons/bi';
 import {TbCrystalBall, TbPackages} from 'react-icons/tb';
 import {FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake, FaMoneyBill1} from 'react-icons/fa6';
@@ -225,10 +225,21 @@ Detailed documentation about every part of Mergify.
     description="Integrate with Mergify using its API."
     path="/api-usage"
   />
+</DocsetGrid>
+
+## Other
+
+<DocsetGrid>
  <Docset
     title="Integrations"
     description="Integration with other systems."
     path="/integration"
+  />
+   <Docset
+    title="Stacked PRs"
+    description="How to create and manage stacked PRs."
+    path="/stacked_prs"
+    icon={<BsStack />}
   />
   <Docset
     title="Badge"

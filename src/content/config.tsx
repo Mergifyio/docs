@@ -101,7 +101,7 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    title: 'Integration',
+    title: 'Integrations',
     icon: <BsPlugin />,
     children: [
       { title: 'GitHub Actions', path: '/integrations/gha' },
@@ -110,15 +110,13 @@ const navItems: NavItem[] = [
       { title: 'TeamCity', path: '/integrations/teamcity' },
       { title: 'Continuous Integration', path: '/integrations/ci' },
       { title: 'Datadog', path: '/integrations/datadog' },
-      {
-        title: 'Stacked Pull Requests',
-        icon: <BsStack />,
-        children: [
-          { title: 'Graphite', path: '/integrations/stacked_prs/graphite' },
-          { title: 'Others', path: '/integrations/stacked_prs/others' },
-        ],
-      },
+      { title: 'Graphite', path: '/integrations/graphite' },
     ],
+  },
+  {
+    title: 'Stacked PRs',
+    icon: <BsStack />,
+    path: '/stacked_prs',
   },
   { title: 'Security', path: '/security' },
   { title: 'Badge', path: '/badge' },
