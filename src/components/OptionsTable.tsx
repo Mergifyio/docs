@@ -38,7 +38,7 @@ export default function OptionsTable({ name }: Props) {
 
 export function OptionsTableBase(options: OptionDefinition) {
   const hasDefaultValue = (definition: OptionDefinition) => (
-    definition.default !== undefined && String(definition.default).length > 0
+    definition.default !== undefined
   );
 
   return (
@@ -68,7 +68,9 @@ export function OptionsTableBase(options: OptionDefinition) {
                 <Td lineHeight="7">
                   {hasDefaultValue(definition) && (
                   <InlineCode>
-                    {yaml.dump(definition.default)}
+                      {yaml.dump(definition.default, {
+                        noCompatMode: true, lineWidth: -1, quotingType: '"', noRefs: true,
+                      })}
                   </InlineCode>
                   )}
                 </Td>

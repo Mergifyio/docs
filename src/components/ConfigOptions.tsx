@@ -101,10 +101,31 @@ export function getValueType(definition): string {
         </Link>
       );
     } else valueType = typeDescription;
+  } else if ('anyOf' in definition) {
+    valueType = (
+      <>
+        {definition.anyOf.map((item, index) => {
+          let separator;
+          if (index === definition.anyOf.length - 2) {
+            // The last item and not the only item
+            separator = ' or ';
+          } else if (index < definition.anyOf.length - 1) {
+            separator = ', ';
+          } else {
+            separator = '';
+          }
+
+          return (
+            <>
+              {getValueType(item)}{separator}
+            </>
+          );
+        })}
+      </>
+    );
   } else if ('enum' in definition) {
     valueType = (
       <>
-        Enum of {definition.type}: {' '}
         {definition.enum.map((item, index) => {
           let separator;
           if (index === definition.enum.length - 2) {
