@@ -96,6 +96,8 @@ const navItems: NavItem[] = [
       { title: 'Sharing Configuration', path: '/configuration/sharing' },
       { title: 'Conditions', path: '/configuration/conditions' },
       { title: 'Data Types', path: '/configuration/data-types' },
+      { title: 'API Usage', path: '/api-usage' },
+      { title: 'API Reference', path: '/api/' },
     ],
   },
   {
