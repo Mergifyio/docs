@@ -37,6 +37,7 @@ const navItems: NavItem[] = [
           { title: 'Assign', path: '/workflow/actions/assign' },
           { title: 'Backport', path: '/workflow/actions/backport' },
           { title: 'Close', path: '/workflow/actions/close' },
+          { title: 'Copy', path: '/workflow/actions/copy' },
           { title: 'Comment', path: '/workflow/actions/comment' },
           { title: 'Delete Head Branch', path: '/workflow/actions/delete_head_branch' },
           { title: 'Dismiss Reviews', path: '/workflow/actions/dismiss_reviews' },
