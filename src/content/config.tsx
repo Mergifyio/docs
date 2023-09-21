@@ -108,7 +108,6 @@ const navItems: NavItem[] = [
       { title: 'Dependabot', path: '/integrations/dependabot' },
       { title: 'Jenkins', path: '/integrations/jenkins' },
       { title: 'TeamCity', path: '/integrations/teamcity' },
-      { title: 'Continuous Integration', path: '/integrations/ci' },
       { title: 'Datadog', path: '/integrations/datadog' },
       { title: 'Graphite', path: '/integrations/graphite' },
     ],
