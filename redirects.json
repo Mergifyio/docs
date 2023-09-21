@@ -1,6 +1,94 @@
 [
   {
-    "fromPath": "/redirect",
-    "toPath": "/workflow/writing-your-first-rule"
+    "fromPath": "/configuration",
+    "toPath": "/configuration/file-format"
+  },
+  {
+    "fromPath": "/conditions",
+    "toPath": "/configuration/conditions"
+  },
+  {
+    "fromPath": "/api-intro",
+    "toPath": "/api-usage"
+  },
+  {
+    "fromPath": "/examples",
+    "toPath": "/integrations"
+  },
+  {
+    "fromPath": "/actions",
+    "toPath": "/workflow/actions"
+  },
+  {
+    "fromPath": "/actions/assign",
+    "toPath": "/workflow/actions/assign"
+  },
+  {
+    "fromPath": "/actions/backport",
+    "toPath": "/workflow/actions/backport"
+  },
+  {
+    "fromPath": "/actions/close",
+    "toPath": "/workflow/actions/close"
+  },
+  {
+    "fromPath": "/actions/comment",
+    "toPath": "/workflow/actions/comment"
+  },
+  {
+    "fromPath": "/actions/copy",
+    "toPath": "/workflow/actions/copy"
+  },
+  {
+    "fromPath": "/actions/delete_head_branch",
+    "toPath": "/workflow/actions/delete_head_branch"
+  },
+  {
+    "fromPath": "/actions/dismiss_reviews",
+    "toPath": "/workflow/actions/dismiss_reviews"
+  },
+  {
+    "fromPath": "/actions/edit",
+    "toPath": "/workflow/actions/edit"
+  },
+  {
+    "fromPath": "/actions/github_actions",
+    "toPath": "/workflow/actions/github_actions"
+  },
+  {
+    "fromPath": "/actions/label",
+    "toPath": "/workflow/actions/label"
+  },
+  {
+    "fromPath": "/actions/merge",
+    "toPath": "/workflow/actions/merge"
+  },
+  {
+    "fromPath": "/actions/post_check",
+    "toPath": "/workflow/actions/post_check"
+  },
+  {
+    "fromPath": "/actions/queue",
+    "toPath": "/workflow/actions/queue"
+  },
+  {
+    "fromPath": "/actions/rebase",
+    "toPath": "/workflow/actions/rebase"
+  },
+  {
+    "fromPath": "/actions/request_reviews",
+    "toPath": "/workflow/actions/request_reviews"
+  },
+  {
+    "fromPath": "/actions/review",
+    "toPath": "/workflow/actions/review"
+  },
+  {
+    "fromPath": "/actions/squash",
+    "toPath": "/workflow/actions/squash"
+  },
+  {
+    "fromPath": "/actions/update",
+    "toPath": "/workflow/actions/update"
   }
 ]
