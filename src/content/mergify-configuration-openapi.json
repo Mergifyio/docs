@@ -63,7 +63,7 @@
           "$ref": "#/definitions/CommandRestriction",
           "default": [
             "sender-permission>=write"
-            ]
+          ]
         },
         "squash": {
           "$ref": "#/definitions/CommandRestriction",
@@ -461,35 +461,13 @@
         }
       ]
     },
-    "StringArray": {
+    "StringSet": {
       "type": "array",
       "description": "list of string",
       "items": {
         "type": "string"
       },
       "uniqueItems": true
-    },
-    "LoginArray": {
-      "$id": "/definitions/LoginArray",
-      "anyOf": [
-        {
-          "$ref": "#/definitions/StringArray"
-        },
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "login": {
-                "type": "string"
-              },
-              "weight": {
-                "type": "number"
-              }
-            }
-          }
-        }
-      ]
     },
     "GitHubLogin": {
       "$id": "/definitions/GitHubLogin",
@@ -573,25 +551,12 @@
         "$ref": "#/definitions/Template"
       }
     },
-    "LabelArray": {
-      "$id": "/definitions/LabelArray",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Template"
-      }
-    },
-    "UserArray": {
-      "$id": "/definitions/UserArray",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Template"
-      }
-    },
     "BranchArray": {
       "$id": "/definitions/BranchArray",
+      "description": "list of branch names",
       "type": "array",
       "items": {
-        "type": "string"
+        "$ref": "#/definitions/BranchName"
       }
     },
     "PriorityRule": {
@@ -891,7 +856,7 @@
         },
         "disallow_checks_interruption_from_queues": {
           "description": "The list of higher priorities queue that are not allowed to interrupt the ongoing checks of this queue.",
-          "$ref": "#/definitions/StringArray"
+          "$ref": "#/definitions/StringSet"
         },
         "draft_bot_account": {
           "description": "Mergify can impersonate a GitHub user to create its draft pull requests. If no `draft_bot_account` is set, Mergify creates the draft pull request itself. The user account must have already been logged in Mergify dashboard once and have admin, write or maintain permission.",
@@ -993,11 +958,17 @@
           "properties": {
             "add_users": {
               "description": "The users to assign to the pull request.",
-              "$ref": "#/definitions/UserArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Template"
+              }
             },
             "remove_users": {
               "description": "The users to remove from assignees.",
-              "$ref": "#/definitions/UserArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Template"
+              }
             }
           }
         },
@@ -1022,7 +993,8 @@
             },
             "branches": {
               "description": "The list of branches the pull request should be copied to.",
-              "$ref": "#/definitions/BranchArray"
+              "$ref": "#/definitions/BranchArray",
+              "default": []
             },
             "ignore_conflicts": {
               "description": "Whether to create the pull requests even if they are conflicts when cherry-picking the commits.",
@@ -1031,7 +1003,7 @@
             },
             "labels": {
               "description": "The list of labels to add to the created pull requests.",
-              "$ref": "#/definitions/StringArray"
+              "$ref": "#/definitions/StringSet"
             },
             "label_conflicts": {
               "default": "conflicts",
@@ -1040,7 +1012,7 @@
             },
             "regexes": {
               "description": "The list of regexes to find branches the pull request should be copied to.",
-              "$ref": "#/definitions/StringArray"
+              "$ref": "#/definitions/StringSet"
             },
             "title": {
               "description": "The pull request title.",
@@ -1057,7 +1029,7 @@
           "properties": {
             "message": {
               "default": "This pull request has been automatically closed by Mergify.",
-              "description": "The `message` to write as a comment after closing the pull request.",
+              "description": "The message to write as a comment after closing the pull request.",
               "$ref": "#/definitions/Template"
             }
           }
@@ -1092,7 +1064,7 @@
             },
             "labels": {
               "description": "The list of labels to add to the created pull requests.",
-              "$ref": "#/definitions/StringArray"
+              "$ref": "#/definitions/StringSet"
             },
             "label_conflicts": {
               "description": "The label to add to the created pull request if it has conflicts and ignore_conflicts is set to true.",
@@ -1101,7 +1073,7 @@
             },
             "regexes": {
               "description": "The list of regexes to find branches the pull request should be copied to.",
-              "$ref": "#/definitions/StringArray"
+              "$ref": "#/definitions/StringSet"
             },
             "title": {
               "description": "The pull request title.",
@@ -1153,9 +1125,15 @@
                   "type": "boolean"
                 },
                 {
+                  "type": "string",
+                  "enum": [
+                    "from_requested_reviewers"
+                  ]
+                },
+                {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "$ref": "#/definitions/GitHubLogin"
                   }
                 }
               ]
@@ -1168,9 +1146,15 @@
                   "type": "boolean"
                 },
                 {
+                  "type": "string",
+                  "enum": [
+                    "from_requested_reviewers"
+                  ]
+                },
+                {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "$ref": "#/definitions/GitHubLogin"
                   }
                 }
               ]
@@ -1183,6 +1167,7 @@
             "when": {
               "description": "If set to `synchronize`, the action will run only if the pull request commits changed. Otherwise, it will run each time the rule matches.",
               "default": "synchronize",
+              "type": "string",
               "enum": [
                 "synchronize",
                 "always"
@@ -1210,15 +1195,24 @@
           "properties": {
             "add": {
               "description": "The list of labels to add.",
-              "$ref": "#/definitions/LabelArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Template"
+              }
             },
             "remove": {
               "description": "The list of labels to remove.",
-              "$ref": "#/definitions/LabelArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Template"
+              }
             },
             "toggle": {
               "description": "Toggle labels in the list based on the conditions. If all the conditions are a success, all the labels in the list will be added, otherwise, they will all be removed.",
-              "$ref": "#/definitions/LabelArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Template"
+              }
             },
             "remove_all": {
               "description": "Remove all labels from the pull request.",
@@ -1253,7 +1247,7 @@
               "$ref": "#/definitions/Template"
             },
             "method": {
-              "description": "Merge method to use. Possible values are `merge`, `squash`, `rebase` or `fast-forward`.",
+              "description": "Merge method to use.",
               "$ref": "#/definitions/MergeMethod",
               "default": "merge"
             },
@@ -1307,7 +1301,7 @@
               "$ref": "#/definitions/Template"
             },
             "merge_method": {
-              "description": "Merge method to use. Possible values are `merge`, `squash`, `rebase` or `fast-forward`. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.\n This option overrides the value defined in the queue rules section of the configuration.",
+              "description": "Merge method to use. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`. This option overrides the value defined in the queue rules section of the configuration.",
               "type": "string",
               "enum": [
                 "merge",
@@ -1342,7 +1336,8 @@
               "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. If no `update_bot_account` is set, Mergify picks randomly one of the organization users instead. The user account **must** have already been logged in Mergify dashboard once.\n\n This option overrides the value defined in the queue rules section of the configuration."
             },
             "update_method": {
-              "description": "`merge` for all merge methods except `fast-forward` where `rebase` is used Method to use to update the pull request with its base branch when the speculative check is done in-place. Possible values: \n * `merge` to merge the base branch into the pull request.\n* `rebase` to rebase the pull request against its base branch. \n This option overrides the value defined in the queue rules section of the configuration.",
+              "default": "merge",
+              "description": "Method to use to update the pull request with its base branch when the speculative check is done in-place.\nPossible values: \n * `merge` to merge the base branch into the pull request.\n* `rebase` to rebase the pull request against its base branch. \n This option overrides the value defined in the queue rules section of the configuration.\n The default is `rebase` when the `merge_method` is `fast-forward`.",
               "enum": [
                 "merge",
                 "rebase"
@@ -1375,15 +1370,69 @@
           "properties": {
             "users": {
               "description": "The username to request reviews from.",
-              "$ref": "#/definitions/LoginArray"
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/StringSet"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "login": {
+                        "$ref": "#/definitions/GitHubLogin"
+                      },
+                      "weight": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ]
             },
             "users_from_teams": {
               "description": "The team names to get the list of users to request reviews from.",
-              "$ref": "#/definitions/LoginArray"
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/StringSet"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "login": {
+                        "$ref": "#/definitions/GitHubLogin"
+                      },
+                      "weight": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ]
             },
             "teams": {
               "description": "The team name to request reviews from.",
-              "$ref": "#/definitions/LoginArray"
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/StringSet"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "login": {
+                        "$ref": "#/definitions/GitHubLogin"
+                      },
+                      "weight": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ]
             },
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to request a review on a pull request. If no `bot_account` is set, Mergify will request the review itself.",
@@ -1413,7 +1462,7 @@
             },
             "type": {
               "default": "APPROVE",
-              "description": "The kind of review, can be `APPROVE`, `REQUEST_CHANGES`, `COMMENT`",
+              "description": "The type of review.",
               "enum": [
                 "APPROVE",
                 "REQUEST_CHANGES",
