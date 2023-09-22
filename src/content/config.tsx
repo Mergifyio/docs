@@ -110,6 +110,7 @@ const navItems: NavItem[] = [
       { title: 'TeamCity', path: '/integrations/teamcity' },
       { title: 'Datadog', path: '/integrations/datadog' },
       { title: 'Graphite', path: '/integrations/graphite' },
+      { title: 'Snyk', path: '/integrations/snyk' },
     ],
   },
   {
