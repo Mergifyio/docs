@@ -5,7 +5,7 @@ import * as yaml from 'js-yaml';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import configSchema from '../content/mergify-configuration-openapi.json';
+import configSchema from '../../static/mergify-configuration-openapi.json';
 
 import { getValueType, OptionDefinition } from './ConfigOptions';
 
