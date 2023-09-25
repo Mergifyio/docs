@@ -688,10 +688,6 @@
         "date_committer": {
           "description": "The date the commit was committed",
           "$ref": "#/definitions/Timestamp"
-        },
-        "email_author": {
-          "description": "The email address of the committer",
-          "type": "string"
         }
       }
     },
