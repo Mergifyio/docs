@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   docs-upload-to-gcp-prod:
-    timeout-minutes: 5
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
