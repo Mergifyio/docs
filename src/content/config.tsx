@@ -21,6 +21,7 @@ const navItems: NavItem[] = [
   {
     title: 'Workflow Automation',
     icon: <BsGear />,
+    path: '/workflow',
     children: [
       { title: 'Writing Your First Rule', path: '/workflow/writing-your-first-rule' },
       {
@@ -33,6 +34,7 @@ const navItems: NavItem[] = [
       {
         title: 'Actions',
         icon: <BsRocket />,
+        path: '/workflow/actions',
         children: [
           { title: 'Assign', path: '/workflow/actions/assign' },
           { title: 'Backport', path: '/workflow/actions/backport' },
@@ -103,6 +105,7 @@ const navItems: NavItem[] = [
   {
     title: 'Integrations',
     icon: <BsPlugin />,
+    path: '/integrations',
     children: [
       { title: 'GitHub Actions', path: '/integrations/gha' },
       { title: 'Dependabot', path: '/integrations/dependabot' },
