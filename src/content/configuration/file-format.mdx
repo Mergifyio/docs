@@ -99,11 +99,12 @@ the merge queue](/merge-queue/partitions).
 ### Defaults
 
 The `defaults` section provides a means to set configuration values that act as
-fallbacks for actions executed by both [pull request rules](/workflow/) and
-[commands](/commands). Instead of defining the same options repeatedly for
-different rules, you can specify them once in the defaults section. If a
-particular option is directly defined under `pull_request_rules`, it will take
-precedence; otherwise, the system resorts to the values defined in defaults.
+fallbacks for actions executed by both [pull request
+rules](/workflow/writing-your-first-rule) and [commands](/commands). Instead of
+defining the same options repeatedly for different rules, you can specify them
+once in the defaults section. If a particular option is directly defined under
+`pull_request_rules`, it will take precedence; otherwise, the system resorts to
+the values defined in defaults.
 
 ```yaml
 defaults:
@@ -142,7 +143,7 @@ different rules.
 
 You can store anything in the `shared` key. Its main purpose is to provide a
 place to put redundant YAML anchors. See
-[Sharing](sharingsSharing-configuration-sections).
+[Sharing](sharings#Sharing-configuration-sections).
 
 ### Extends
 
@@ -207,9 +208,6 @@ file, consider the following troubleshooting steps:
 5. Consult Mergify's documentation: refer to Mergify's documentation for
    guidance on creating and managing your configuration file, as well as
    understanding the various features and options available to you.
-
-6. In the case you'd still be having issues, reach out to [support
-   team](mailto:support@mergify.com) for further help.
 
 By following these troubleshooting steps, you can effectively identify and
 resolve any issues with your Mergify configuration file, ensuring a smooth and
