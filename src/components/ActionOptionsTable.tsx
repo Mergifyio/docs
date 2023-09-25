@@ -1,4 +1,4 @@
-import configSchema from '../content/mergify-configuration-openapi.json';
+import configSchema from '../../static/mergify-configuration-openapi.json';
 
 import { OptionDefinition } from './ConfigOptions';
 import { OptionsTableBase } from './OptionsTable';
