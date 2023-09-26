@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "gatsby build",
+    "cf-build": "bash ./cf-build.sh",
     "serve": "gatsby serve",
     "develop": "gatsby develop",
     "eslint": "eslint src",

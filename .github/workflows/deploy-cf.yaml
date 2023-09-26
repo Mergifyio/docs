@@ -1,0 +1,26 @@
+name: Deployment trigger
+permissions: read-all
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  # yamllint disable-line rule:line-length
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    timeout-minutes: 5
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Deployment start
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        # yamllint disable-line rule:line-length
+        # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+        uses: Mergifyio/gha-slack-notification@main
+        with:
+          type: deploy-start
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOYMENT_WEBHOOK_URL_RELEASES }}
