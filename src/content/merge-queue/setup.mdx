@@ -89,12 +89,10 @@ queue. That means there is no need to repeat the `queue_conditions` in the
 
 ## Adding a Pull Request to the Merge Queue
 
-{/* FIXME: link to command */}
-
 Once you have your merge queue rules set up, you can manually add a PR to the
-merge queue. To do this, use the `queue` command. This will add your PR to the
-specified merge queue, or to the merge queue matching the right
-`queue_conditions`.
+merge queue. To do this, use [the `queue` command](/commands/queue). This will
+add your PR to the specified merge queue, or to the merge queue matching the
+right `queue_conditions`.
 
 <Screenshot src={queueCommandScreenshot} alt="Mergify queue command" />
 
@@ -104,7 +102,7 @@ Remember, the PR will only be merged once the conditions defined in the
 If you prefer, you can ask Mergify to automatically queue pull requests that
 are ready using workflow automation.
 
-{/* FIXME: add link to the queue command and how to do this. */}
+{/* FIXME: add how to do this. */}
 
 ## Monitoring Your Merge Queue
 
@@ -122,9 +120,9 @@ while those that have met all their `queue_conditions` are displayed in the
 queue and will be merged when they reach the top of the queue.
 
 Remember, the PRs in the queue are ordered based on their addition time. The PR
-added first will be merged first after all its conditions are met.
-
-{/* FIXME: explain you can change that with priorities */}
+added first will be merged first after all its conditions are met. You can
+modify the order of the pull request inside a queue using
+[priorities](priority).
 
 ## Conclusion
 
@@ -140,14 +138,13 @@ queues to your specific needs.
 For further exploration and inspiration, here are some additional resources and
 use cases that you might find useful:
 
-{/* FIXME: add links */}
-
-- Using priorities to order your pull requests;
-- Using multiple queues;
+- Using [priorities to order your pull requests](priority);
+- Using [multiple queues](multi);
 - Speeding up your merge queue with [speculative checks](speculative-checks);
-- Saving CI time with batches;
+- Saving CI time with [batches](batches);
+{/* FIXME: add link */}
 - Delaying checks at merge time;
-- Splitting repositories into partitions (monorepo support).
+- Splitting repositories into [partitions](partitions) (monorepo support).
 
 Remember, the possibilities with merge queues are limited only by your
 imagination. Happy merging!
