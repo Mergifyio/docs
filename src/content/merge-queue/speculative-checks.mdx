@@ -304,10 +304,9 @@ If your continuous integration pipeline isn't triggered when temporary pull
 requests are created, check your CI system configuration. Make sure it is set
 up to run on all pull requests, not just those targeting specific branches.
 
-{/* FIXME: link to settings */}
-
 Branches created by Mergify are prefixed with `mergify/merge-queue/` by default
-and can be change with the `queue_branch_prefix` settings.
+and can be change with the [`queue_branch_prefix`
+settings](/configuration/file-format#queue-rules).
 
 ### Problem: Mergify Creates Temporary Pull Requests, But They Aren't Merged
 
