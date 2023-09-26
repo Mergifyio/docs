@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
+  Box,
   Button,
   Collapse,
   Stack,
@@ -53,10 +54,12 @@ function NavButton({
       roundedLeft="none"
       roundedRight="full"
       fontWeight="normal"
+      width="100%"
+      justifyContent="flex-start"
       {...buttonProps}
       {...props}
     >
-      <chakra.span>{children}</chakra.span>
+      <chakra.span marginRight="auto">{children}</chakra.span>
     </Button>
   );
 }
@@ -75,7 +78,7 @@ function NavGroup({ group, depth }) {
   const isActive = getItemPaths(group.children, basePath).some((path) => isPathActive(path, uri));
 
   return (
-    <div>
+    <Box width="100%" justifyContent="flex-start">
       <NavButton
         mb="1"
         fontWeight="strong"
@@ -103,7 +106,7 @@ function NavGroup({ group, depth }) {
           depth={depth + 1}
         />
       </Collapse>
-    </div>
+    </Box>
   );
 }
 
