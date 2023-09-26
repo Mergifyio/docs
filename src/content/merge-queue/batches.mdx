@@ -45,7 +45,33 @@ queue_rules:
     ...
 ```
 
-{/* FIXME: add a graphviz schema */}
+```dot class="graph"
+strict digraph {
+    fontname="sans-serif";
+    rankdir="LR";
+    label="Merge Queue"
+
+    node [style=filled, shape=circle, fontcolor="black", fontname="sans-serif"];
+    edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
+
+    subgraph cluster_batch_0 {
+        style=filled;
+        color=lightcyan;
+        node [style=filled, color=black, fillcolor=white];
+        PR1 -> PR2;
+        PR2 -> PR3;
+        label = "Batch 1";
+    }
+
+    PR3 -> PR4;
+    PR4 -> PR5;
+    PR5 [label="…"];
+
+    CI [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#034870", fontcolor=white, shape=rectangle]
+    edge [arrowhead=none, style=dashed, arrowtail=normal, color="#DBAB0A", dir=both, fontcolor="#DBAB0A", fontsize="6pt"];
+    PR3 -> CI;
+}
+```
 
 In case the draft pull request fails CI validation, it means one or more pull
 requests in the batch have introduced changes that are causing the failure.
@@ -123,15 +149,52 @@ concurrently, while also increasing the number of speculative checks to test
 more batches in parallel. This minimizes idle time and makes full use of your
 CI resources.
 
-Suppose your queue has 15 pull requests waiting, and your CI pipeline takes
-about 10 minutes to complete. If you set `batch_size` to 5 and
-`speculative_checks` to 3, Mergify would create 3 batches, each containing 5
+Suppose your queue has 7 pull requests waiting, and your CI pipeline takes
+about 10 minutes to complete. If you set `batch_size` to 3 and
+`speculative_checks` to 2, Mergify would create 2 batches, each containing 3
 pull requests. These batches are then tested in parallel.
 
-{/* FIXME: add a graphviz schema? */}
+```dot class="graph"
+strict digraph {
+    fontname="sans-serif";
+    rankdir="LR";
+    label="Merge Queue"
 
-With this configuration, even if your CI time is 10 minutes, you can merge all
-15 pull requests in only 10 minutes, as opposed to the 2.5 hours it would
+    node [style=filled, shape=circle, fontcolor="black", fontname="sans-serif"];
+    edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
+
+    subgraph cluster_batch_1 {
+        style=filled;
+        color=lightblue;
+        node [style=filled, color=black, fillcolor=white];
+        PR3 -> PR4;
+        PR4 -> PR5;
+        PR5 -> PR6;
+        label = "Batch 2";
+
+        subgraph cluster_batch_0 {
+            style=filled;
+            color=lightcyan;
+            node [style=filled, color=black, fillcolor=white];
+            PR1 -> PR2;
+            PR2 -> PR3;
+            label = "Batch 1";
+        }
+    }
+
+    PR6 -> PR7;
+    PR7 -> PR8;
+    PR8 [label="…"];
+
+    CI [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#034870", fontcolor=white, shape=rectangle]
+    edge [arrowhead=none, style=dashed, arrowtail=normal, color="#DBAB0A", dir=both, fontcolor="#DBAB0A", fontsize="6pt"];
+    PR3 -> CI;
+    PR6 -> CI;
+}
+```
+
+With this configuration, even if your CI time is 10 minutes, you can merge the
+first 6 pull requests in only 10 minutes, as opposed to the 1 hour it would
 typically take to test each pull request individually.
 
 ## Handling Batch Failure
