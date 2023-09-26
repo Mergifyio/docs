@@ -46,8 +46,8 @@ temporary PRs:
 ```dot class="graph"
 strict digraph g {
     rankdir="LR"
-    node [group="pr", shape=box, style="rounded,filled", fillcolor="#53A9DB", fillcolor="#28A744", fontcolor=white]
-    edge [arrowhead=inv]
+    node [group="pr", shape=box, style="rounded,filled", fillcolor="#53A9DB", fillcolor="#28A744", fontcolor=white, fontname="sans-serif"]
+    edge [fontname="sans-serif", arrowhead=inv];
     fontname="sans-serif";
 
     subgraph cluster_mergequeue {
@@ -82,9 +82,9 @@ strict digraph g {
         style="filled"
         fontcolor=white
         fontsize="9pt"
-        traincar1 [label="PR#1"]
-        traincar2 [label="PR#1 + PR #2"]
-        traincar3 [label="PR#1 + PR #2 + PR #3"]
+        traincar1 [label=" PR#1 "]
+        traincar2 [label=" PR#1 + PR #2 "]
+        traincar3 [label=" PR#1 + PR #2 + PR #3 "]
     }
 
     edge [arrowhead=normal]
@@ -95,7 +95,7 @@ strict digraph g {
     subgraph ci {
         // CI connections
         ci [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#034870", fontcolor=white, penwidth=1.5]
-        edge [arrowhead=none, style=dashed, arrowsize=0.5, arrowtail=normal, color="#DBAB0A", dir=both, penwidth=1, xlabel="In Progress", fontcolor="#DBAB0A", fontsize="6pt"];
+        edge [arrowhead=none, style=dashed, arrowsize=0.5, arrowtail=normal, color="#DBAB0A", dir=both, penwidth=1, fontcolor="#DBAB0A"];
         traincar1 -> ci;
         traincar2 -> ci;
         traincar3 -> ci;
