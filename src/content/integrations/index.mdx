@@ -10,7 +10,10 @@ import {
 } from '../../components/HomePage';
 import {VscGithubAction} from 'react-icons/vsc';
 import {FaJenkins} from 'react-icons/fa';
-import {SiDatadog, SiSnyk} from 'react-icons/si';
+import {SiDatadog, SiSnyk, SiDependabot, SiTeamcity} from 'react-icons/si';
+import {BsStack} from 'react-icons/bs';
+
+## Continuous Integration
 
 <DocsetGrid>
   <Docset
@@ -26,10 +29,42 @@ import {SiDatadog, SiSnyk} from 'react-icons/si';
     icon={<FaJenkins/>}
   />
   <Docset
+    title="TeamCity"
+    description="How to automate your TeamCity workflow using Mergify."
+    path="teamcity"
+    icon={<SiTeamcity/>}
+  />
+</DocsetGrid>
+
+## Monitoring
+
+<DocsetGrid>
+  <Docset
     title="Datadog"
     description="Monitor your merge queues with Mergify Datadog integration."
     path="datadog"
     icon={<SiDatadog/>}
+  />
+</DocsetGrid>
+
+## Developers Tools
+
+<DocsetGrid>
+  <Docset
+    title="Graphite"
+    description="Learn how you can use Graphite and Mergify together."
+    path="graphite"
+    icon={<BsStack/>}
+  />
+</DocsetGrid>
+
+## Dependency Management
+<DocsetGrid>
+  <Docset
+    title="Dependabot"
+    description="How to automate your dependencies update using Mergify"
+    path="dependabot"
+    icon={<SiDependabot/>}
   />
   <Docset
     title="Snyk"
