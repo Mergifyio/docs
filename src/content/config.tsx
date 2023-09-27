@@ -1,5 +1,5 @@
 import React from 'react';
-import { AiOutlinePartition } from 'react-icons/ai';
+import { AiOutlinePartition, AiOutlineDeploymentUnit } from 'react-icons/ai';
 import { BiBadgeCheck, BiSolidCoinStack, BiRuler } from 'react-icons/bi';
 import {
   BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
@@ -84,6 +84,7 @@ const navItems: NavItem[] = [
       { title: 'Speculative Checks', path: '/merge-queue/speculative-checks', icon: <TbCrystalBall /> },
       { title: 'Batches', path: '/merge-queue/batches', icon: <TbPackages /> },
       { title: 'Partitions', path: '/merge-queue/partitions', icon: <AiOutlinePartition /> },
+      { title: 'Deployment', path: '/merge-queue/deploy', icon: <AiOutlineDeploymentUnit /> },
     ],
   },
   {
