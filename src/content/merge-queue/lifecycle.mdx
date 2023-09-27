@@ -28,9 +28,8 @@ A pull request can be added to the merge queue either manually or through a
 pull request rule using Mergify's workflow automation. Here's an overview of
 the process:
 
-{/* FIXME: add link to command page below */}
 1. **Manual addition:** A pull request can be manually added to the merge queue
-   using the `@mergifyio queue` command.
+   using the [`@mergifyio queue` command](/commands/queue).
 
 {/* FIXME: add link to workflow automation below */}
 2. **Automated addition:** A pull request can also be automatically added to
@@ -43,16 +42,15 @@ the process:
    requirements such as passing all checks, having a certain number of approved
    reviews, or having specific labels.
 
-{/* FIXME: add link to priority rules */}
 4. **Entering the queue:** Once a pull request meets the specified queue
-   conditions, it is added to the end of the merge queue. However, priority
-   rules can be used to alter its position in the queue.
+   conditions, it is added to the end of the merge queue. However, [priority
+   rules](priority) can be used to alter its position in the queue.
 
-{/* FIXME: add link to batch */}
 Please note that, by default, only one pull request is processed at a time to
 ensure that each pull request is tested against the most recent state of the
-base branch. You can test multiple pull requests at once by using batches or in
-advance by using [speculative checks](speculative-checks).
+base branch. You can test multiple pull requests at once by using
+[batches](batches) or in advance by using [speculative
+checks](speculative-checks).
 
 ```dot class="graph"
 strict digraph {
