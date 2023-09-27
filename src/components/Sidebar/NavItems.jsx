@@ -126,9 +126,7 @@ export default function NavItems({ items, depth = 0 }) {
         }
 
         if (isUrl(item.path)) {
-          const buttonProps = !item.path.startsWith(
-            'https://www.apollographql.com',
-          ) && {
+          const buttonProps = {
             target: '_blank',
             rel: 'noreferrer noopener',
             rightIcon: <FiExternalLink />,
