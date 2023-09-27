@@ -4,7 +4,7 @@ import { BiBadgeCheck, BiSolidCoinStack, BiRuler } from 'react-icons/bi';
 import {
   BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
 } from 'react-icons/bs';
-import { FaShieldAlt } from 'react-icons/fa';
+import { FaShieldAlt, FaHome } from 'react-icons/fa';
 import {
   FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake, FaMoneyBill1,
 } from 'react-icons/fa6';
@@ -29,7 +29,7 @@ export type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { title: 'Home', path: '/' },
+  { title: 'Home', path: '/', icon: <FaHome /> },
   { title: 'Getting Started', path: '/getting-started', icon: <FaCirclePlay /> },
   {
     title: 'Workflow Automation',
