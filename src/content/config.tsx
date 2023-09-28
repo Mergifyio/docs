@@ -14,7 +14,7 @@ import {
   SiDatadog, SiSnyk, SiDependabot, SiTeamcity, SiGithubactions, SiJenkins,
 } from 'react-icons/si';
 import { SlRefresh } from 'react-icons/sl';
-import { TbCrystalBall, TbPackages } from 'react-icons/tb';
+import { TbCrystalBall, TbPackages, TbBike } from 'react-icons/tb';
 
 import { v5 } from 'uuid';
 
@@ -126,6 +126,7 @@ const navItems: NavItem[] = [
       { title: 'TeamCity', path: '/integrations/teamcity', icon: <SiTeamcity /> },
       { title: 'Datadog', path: '/integrations/datadog', icon: <SiDatadog /> },
       { title: 'Graphite', path: '/integrations/graphite', icon: <BsStack /> },
+      { title: 'Rush', path: '/integrations/rush', icon: <TbBike /> },
       { title: 'Dependabot', path: '/integrations/dependabot', icon: <SiDependabot /> },
       { title: 'Snyk', path: '/integrations/snyk', icon: <SiSnyk /> },
     ],
