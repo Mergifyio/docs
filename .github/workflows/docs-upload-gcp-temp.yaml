@@ -10,6 +10,8 @@ jobs:
   docs-upload-to-gcp-preview:
     timeout-minutes: 5
     runs-on: ubuntu-latest
+    permissions:
+      id-token: "write"
     if: >
       ${{ github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success' }}
@@ -43,7 +45,9 @@ jobs:
       - name: Setup Google Auth 🔧
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: "${{ secrets.GCP_DOCS_CREDENTIAL_JSON }}"
+          # yamllint disable-line rule:line-length
+          workload_identity_provider: "projects/370784745717/locations/global/workloadIdentityPools/github/providers/github"
+          service_account: "github-actions@github-400420.iam.gserviceaccount.com"
 
       - name: Deploy 🚀
         uses: google-github-actions/upload-cloud-storage@v1.0.3
