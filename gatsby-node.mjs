@@ -12,6 +12,12 @@ import redirects from './redirects.json' assert {
 
 export const onCreateWebpackConfig = ({ actions, stage, plugins }) => {
   actions.setWebpackConfig({
+    devtool: "cheap-module-source-map",
+    cache: true,
+    watchOptions: {
+      poll: 500,
+      aggregateTimeout: 300,
+    },
     resolve: {
       fallback: {
         "stream": false,
