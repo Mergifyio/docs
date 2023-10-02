@@ -1,23 +1,21 @@
 import {
-  Box, VStack, Text, useColorModeValue, HStack, Divider, Show,
+  Box, VStack, Text, useColorModeValue, HStack, Divider, Show, theme,
 } from '@chakra-ui/react';
-import Fuse from 'fuse.js';
 import { Link, navigate } from 'gatsby';
 import React, { useEffect, useState } from 'react';
 
 import { BsArrowReturnLeft } from 'react-icons/bs';
 
 import Preview from './PageDetails';
-import { getHighlightedMatches } from './searchPage';
-import { Page } from './types';
+import { AlgoliaResult } from './types';
 
-interface PageResultProps extends Fuse.FuseResult<Page> {
+interface PageResultProps extends AlgoliaResult {
   onHover: () => void;
   active: boolean;
 }
 
 function PageResult({
-  item: { childMdx, id }, matches, onHover, active,
+  id, frontmatter, _highlightResult, fields, onHover, active,
 }: PageResultProps) {
   const activeBackground = useColorModeValue('blue.100', 'blue.700');
 
@@ -31,30 +29,21 @@ function PageResult({
       background={active ? activeBackground : 'none'}
       cursor="pointer"
       as={Link}
-      to={childMdx.fields.slug}
+      to={fields.slug}
       _focus={{ outline: 'auto' }}
       id={id}
     >
       <Box>
         <Text
           fontSize="lg"
-          dangerouslySetInnerHTML={{
-            __html: getHighlightedMatches(
-              matches?.find((match) => match.value === childMdx.frontmatter.title),
-              childMdx.frontmatter.title,
-            ),
-          }}
+          noOfLines={1}
+          dangerouslySetInnerHTML={{ __html: _highlightResult?.frontmatter?.title?.value ?? '' }}
         />
         <Text
           fontSize="sm"
-          dangerouslySetInnerHTML={{
-            __html: getHighlightedMatches(
-              matches?.find((match) => match.value === childMdx.frontmatter.description),
-              childMdx.frontmatter.description,
-            ),
-          }}
           noOfLines={1}
           color="gray.500"
+          dangerouslySetInnerHTML={{ __html: _highlightResult?.frontmatter?.description?.value ?? '' }}
         />
       </Box>
       {active && <BsArrowReturnLeft />}
@@ -63,24 +52,24 @@ function PageResult({
 }
 
 interface ResultsProps {
-  results: Fuse.FuseResult<Page>[];
+  results: AlgoliaResult[];
 }
 
 export default function Results({ results }: ResultsProps) {
-  const [focusedPage, setFocusedPage] = useState<Fuse.FuseResult<Page> | null>(results[0] ?? null);
+  const [focusedPage, setFocusedPage] = useState<AlgoliaResult | null>(results[0] ?? null);
 
-  const changeFocusedPage = (page: Fuse.FuseResult<Page>) => () => {
+  const changeFocusedPage = (page: AlgoliaResult) => () => {
     setFocusedPage(page);
   };
 
   const handleKeysNavigation = (e: KeyboardEvent) => {
-    const getCurrentFocusedIndex = (current: Fuse.FuseResult<Page> | null) => (
-      results.findIndex((el) => el.item.id === current?.item.id)
+    const getCurrentFocusedIndex = (current: AlgoliaResult | null) => (
+      results.findIndex((el) => el.id === current?.id)
     );
 
-    const scrollToFocusedPage = (page: Fuse.FuseResult<Page> | null) => {
+    const scrollToFocusedPage = (page: AlgoliaResult | null) => {
       if (page) {
-        const element = document.getElementById(page.item.id);
+        const element = document.getElementById(page.id);
         const container = element?.parentElement;
 
         if (element && container) {
@@ -117,7 +106,7 @@ export default function Results({ results }: ResultsProps) {
         return newFocused;
       });
     } else if (e.key === 'Enter') {
-      if (focusedPage) navigate(focusedPage?.item.childMdx.fields.slug);
+      if (focusedPage) navigate(focusedPage?.fields.slug);
     }
   };
 
@@ -133,20 +122,30 @@ export default function Results({ results }: ResultsProps) {
   }, [results, focusedPage]);
 
   return (
-    <HStack height="100%" overflow="hidden">
+    <HStack
+      css={{
+        em: {
+          color: theme.colors.linkedin[700],
+          fontStyle: 'normal',
+          fontWeight: '500',
+        },
+      }}
+      height="100%"
+      overflow="hidden"
+    >
       <VStack flex={1} alignItems="flex-start" height="100%" overflow="auto" position="relative">
         {results.map((page) => (
           <PageResult
-            active={focusedPage?.item.id === page.item.id}
+            active={focusedPage?.id === page.id}
             onHover={changeFocusedPage(page)}
             {...page}
-            key={page.item.id}
+            key={page.id}
           />
         ))}
       </VStack>
       <Divider orientation="vertical" />
       <Show above="md">
-        {focusedPage && <Preview key={focusedPage.item.id} {...focusedPage} />}
+        {focusedPage && <Preview key={focusedPage.id} {...focusedPage} />}
       </Show>
     </HStack>
   );
