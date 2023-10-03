@@ -81,7 +81,6 @@ export default function Page({
   children,
   banner,
   subtitle,
-  pagination,
   aside,
   paddingTop,
   paddingBottom,
@@ -157,7 +156,6 @@ export default function Page({
             <Box fontSize={{ md: 'lg' }} lineHeight={{ md: 1.7 }} {...contentProps}>
               {children}
             </Box>
-            {pagination}
           </Box>
           {aside}
         </Flex>
@@ -174,7 +172,6 @@ Page.propTypes = {
   paddingTop: PropTypes.string.isRequired,
   paddingBottom: PropTypes.string.isRequired,
   banner: PropTypes.element,
-  pagination: PropTypes.element,
   aside: PropTypes.element,
   subtitle: PropTypes.node,
   description: PropTypes.string,
