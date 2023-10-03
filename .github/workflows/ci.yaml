@@ -58,9 +58,6 @@ jobs:
       - name: Build 🔧
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GATSBY_ALGOLIA_APP_ID: ${{ secrets.DOCS_ALGOLIA_APP_ID }}
-          ALGOLIA_WRITE_KEY: ${{ secrets.DOCS_ALGOLIA_WRITE_KEY }}
-          GATSBY_ALGOLIA_SEARCH_KEY: ${{ secrets.DOCS_ALGOLIA_SEARCH_KEY }}
         run: |
           npm ci
           npm run build -- --prefix-paths

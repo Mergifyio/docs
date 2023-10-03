@@ -4,6 +4,15 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 });
 
+dotenv.populate(
+  process.env, 
+  {
+    GATSBY_ALGOLIA_APP_ID: "81GKA2I1R0",
+    GATSBY_ALGOLIA_SEARCH_KEY: "6fce1b6d8ccf82a6601a169c0167c0e3"
+  },
+  { override: true }
+)
+
 const gatsbyRemarkPlugins = [
   '@fec/remark-a11y-emoji/gatsby',
   {
