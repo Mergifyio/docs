@@ -166,7 +166,7 @@ const algoliaPlugin = {
   },
 }
 
-plugins.push(algoliaPlugin)
+Boolean(process.env.ALGOLIA_WRITE_KEY) && plugins.push(algoliaPlugin)
 
 const config = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
