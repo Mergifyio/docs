@@ -37,6 +37,7 @@ const gatsbyRemarkPlugins = [
 ];
 
 const plugins = [
+  'gatsby-plugin-react-helmet',
   'gatsby-plugin-svgr',
   '@chakra-ui/gatsby-plugin',
   'gatsby-plugin-sitemap',

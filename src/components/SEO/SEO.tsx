@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Helmet } from 'react-helmet';
+
 import { useSiteMetadata } from '../../utils/useSiteMetadata';
 
 interface Props {
@@ -24,11 +26,11 @@ export default function SEO({
   };
 
   return (
-    <>
+    <Helmet>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
       <meta name="image" content={seo.image} />
       {children}
-    </>
+    </Helmet>
   );
 }
