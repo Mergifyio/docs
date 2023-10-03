@@ -74,7 +74,7 @@ export const onCreateNode = async ({node, getNode, loadNodeContent, actions}) =>
 
 export const createPages = async ({actions, graphql}) => {
   const pageTemplate = resolve("./src/templates/page.jsx")
-  const {createRedirect} = actions; 
+  const {createRedirect} = actions;
 
   redirects.forEach(redirect => {
     createRedirect({
