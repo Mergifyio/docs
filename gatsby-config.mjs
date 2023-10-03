@@ -151,7 +151,7 @@ const algoliaPlugin = {
     indexName: 'docs-pages',
     queries,
     chunkSize: 20000,
-    dryRun: process.env.PUSH_TO_ALGOLIA === undefined || process.env.PUSH_TO_ALGOLIA === false,
+    dryRun: !process.env.ALGOLIA_WRITE_KEY,
     mergeSettings: true, // Merge settings with the ones defined on Algolia dashboard
     continueOnFailure: false,
   },
