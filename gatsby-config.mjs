@@ -178,7 +178,10 @@ const config = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
   trailingSlash: 'ignore',
   siteMetadata: {
-    siteUrl: 'https://docs.mergify.com'
+    title: 'Mergify Documentation',
+    description: 'Learn how to use Mergify, the powerful pull request automation tool that helps teams merge code faster and more safely. Automate your entire pull request workflow, from code review to deployment, and save time and frustration.',
+    siteUrl: 'https://docs.mergify.com',
+    image: '/favicon.svg'
   },
   plugins
 };

@@ -220,6 +220,7 @@ export default function Page({
     >
       <PageLayout
         {...pageProps}
+        description={description}
         subtitle={description && (
           <chakra.h2
             fontSize={{ base: 'xl', md: '2xl' }}

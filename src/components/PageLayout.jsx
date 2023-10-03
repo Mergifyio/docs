@@ -24,10 +24,15 @@ import { HiOutlineDocumentArrowUp } from 'react-icons/hi2';
 import { SiSlack, SiStatuspage } from 'react-icons/si';
 import useLocalStorage from 'react-use/lib/useLocalStorage';
 
+import navItems from '../content/config';
+import {
+  PathContext, flattenNavItems, getFullPath, isPathActive,
+} from '../utils';
+
 import Footer from './Footer';
 import Header, { TOTAL_HEADER_HEIGHT } from './Header';
 import MobileNav from './MobileNav';
-
+import SEO from './SEO/SEO';
 import Sidebar, {
   SIDEBAR_WIDTH_BASE,
   SIDEBAR_WIDTH_XL,
@@ -85,13 +90,26 @@ export default function Page({
   paddingTop,
   paddingBottom,
   contentProps,
+  description,
 }) {
+  const { uri, basePath } = React.useContext(PathContext);
+
   const [sidebarHidden, setSidebarHidden] = useLocalStorage('sidebar');
 
   const bgColor = useColorModeValue('white', 'blue.800');
+  const activeItem = flattenNavItems(navItems)
+    .find((navItem) => (
+      navItem?.path && isPathActive(getFullPath(navItem?.path, basePath), uri)
+    ));
+  const pageTitle = activeItem?.title ? `${activeItem?.title} | Mergify Documentation` : 'Mergify Documentation';
 
   return (
     <>
+      <SEO
+        title={pageTitle}
+        pathname={activeItem?.path}
+        description={description}
+      />
       <Header>
         <MobileNav>
           <SidebarNav darkBg="gray.700" />
