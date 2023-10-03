@@ -1,47 +1,93 @@
-import { VStack, Text } from '@chakra-ui/react';
-import Fuse from 'fuse.js';
+import {
+  VStack, Text, ListItem, theme, Divider, List, useColorModeValue,
+} from '@chakra-ui/react';
 import { Link } from 'gatsby';
 import React from 'react';
 
-import { getHighlightedMatches } from './searchPage';
-import { Page } from './types';
+import { AlgoliaResult } from './types';
 
-interface Props extends Fuse.FuseResult<Page> {}
+type HighlightHeading = NonNullable<NonNullable<AlgoliaResult['_highlightResult']>['tableOfContents']>;
 
-export default function Preview({ item: { childMdx }, matches }: Props) {
+interface TableOfContentsProps {
+  tableOfContents: HighlightHeading;
+  slug: string;
+}
+
+function TableOfContents({ tableOfContents, slug }: TableOfContentsProps) {
+  const hoverColor = useColorModeValue('black', 'white');
+  const color = useColorModeValue(theme.colors.gray[600], theme.colors.gray[400]);
+
+  function renderHeading(heading: HighlightHeading) {
+    return (
+      <>
+        <ListItem
+          textAlign="left"
+          fontSize="sm"
+          css={{
+            color,
+          }}
+          _hover={{
+            color: hoverColor,
+          }}
+        >
+          <Text
+            as={Link}
+            to={`${slug}${heading.url?.value.replaceAll('<em>', '').replaceAll('</em>', '')}`} // Remove highlight markups
+            dangerouslySetInnerHTML={{ __html: heading.title?.value ?? '' }}
+          />
+        </ListItem>
+        {heading.items && (
+          <List spacing={2} paddingLeft={4}>
+            {heading.items.map((item) => renderHeading(item as any))}
+          </List>
+        )}
+      </>
+    );
+  }
+
   return (
-    <VStack padding={4} justifyContent="flex-start" flex={1} height="100%">
+    <List spacing={2}>
+      {tableOfContents.items?.map((item) => renderHeading(item as any))}
+    </List>
+  );
+}
+
+interface Props extends AlgoliaResult {}
+
+export default function Preview({
+  fields, _highlightResult, tableOfContents, _snippetResult,
+}: Props) {
+  return (
+    <VStack padding={4} justifyContent="flex-start" alignItems="start" flex={1} height="100%" overflow="auto">
       <Text
         as={Link}
-        to={childMdx.fields.slug}
+        to={fields.slug}
         _hover={{ textDecoration: 'underline' }}
         fontSize="4xl"
-        align="center"
-        dangerouslySetInnerHTML={{
-          __html: getHighlightedMatches(
-            matches?.find((match) => match.value === childMdx.frontmatter.title),
-            childMdx.frontmatter.title,
-          ),
-        }}
+        lineHeight={1.2}
+        dangerouslySetInnerHTML={{ __html: _highlightResult?.frontmatter?.title?.value ?? '' }}
       />
       <Text
         fontSize="xl"
-        align="center"
-        marginTop={-2}
-        dangerouslySetInnerHTML={{
-          __html: getHighlightedMatches(
-            matches?.find((match) => match.value === childMdx.frontmatter.description),
-            childMdx.frontmatter.description,
-          ),
-        }}
+        dangerouslySetInnerHTML={{ __html: _highlightResult?.frontmatter?.description?.value ?? '' }}
       />
       <Text
         fontSize="md"
-        align="center"
-        marginTop={8}
-      >
-        {childMdx.excerpt}
-      </Text>
+        marginTop={2}
+        dangerouslySetInnerHTML={{ __html: _snippetResult?.excerpt?.value ?? '' }}
+      />
+      {_highlightResult?.tableOfContents && (
+        <>
+          <Divider marginY={2} />
+          <VStack alignItems="flex-start">
+            <Text fontWeight="bold" colorScheme="gray" fontSize="sm">ON THIS PAGE</Text>
+            <TableOfContents
+              tableOfContents={_highlightResult?.tableOfContents}
+              slug={fields.slug}
+            />
+          </VStack>
+        </>
+      )}
     </VStack>
   );
 }

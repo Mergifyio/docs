@@ -1,3 +1,18 @@
+import dotenv from 'dotenv'
+
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
+
+dotenv.populate(
+  process.env, 
+  {
+    GATSBY_ALGOLIA_APP_ID: "81GKA2I1R0",
+    GATSBY_ALGOLIA_SEARCH_KEY: "6fce1b6d8ccf82a6601a169c0167c0e3"
+  },
+  { override: true }
+)
+
 const gatsbyRemarkPlugins = [
   '@fec/remark-a11y-emoji/gatsby',
   {
@@ -103,6 +118,61 @@ const plugins = [
   }
 ];
 
+const algoliaPagesQuery = `
+{
+  pages: allFile(filter: {extension: {in: ["md", "mdx"]}}) {
+    nodes {
+      id
+      internal {
+        contentDigest
+      }
+      childMdx {
+        tableOfContents
+        fields {
+          slug
+        }
+        excerpt(pruneLength: 1000)
+        frontmatter {
+          title
+          description
+          toc
+          tags
+        }
+      }
+    }
+  }
+}
+`;
+
+const queries = [
+  {
+    query: algoliaPagesQuery,
+    transformer: ({ data }) => data.pages.nodes.map(node => {
+      const { childMdx, ...rest} = node;
+      delete rest.childMdx;
+      return {
+        ...childMdx,
+        ...rest
+      }
+    })
+  },
+];
+
+const algoliaPlugin = {
+  resolve: `gatsby-plugin-algolia`,
+  options: {
+    appId: process.env.GATSBY_ALGOLIA_APP_ID,
+    apiKey: process.env.ALGOLIA_WRITE_KEY,
+    indexName: 'docs-pages',
+    queries,
+    chunkSize: 20000,
+    dryRun: !process.env.ALGOLIA_WRITE_KEY,
+    mergeSettings: true, // Merge settings with the ones defined on Algolia dashboard
+    continueOnFailure: false,
+  },
+}
+
+Boolean(process.env.ALGOLIA_WRITE_KEY) && plugins.push(algoliaPlugin)
 
 const config = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
