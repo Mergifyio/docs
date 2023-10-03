@@ -37,7 +37,7 @@ import {
   MultiCodeBlockContext,
 } from '../chakra-helpers/MultiCodeBlock';
 
-import { PathContext, useFieldTableStyles } from '../utils';
+import { PathContext } from '../utils';
 
 import Blockquote from './Blockquote';
 import CodeColumns from './CodeColumns';
@@ -166,8 +166,6 @@ export default function Page({
 }) {
   const [language, setLanguage] = useLocalStorage('language');
 
-  const fieldTableStyles = useFieldTableStyles();
-
   const {
     name,
     childMdx,
@@ -293,29 +291,6 @@ export default function Page({
                 [HEADINGS]: {
                   mt: 10,
                   mb: 4,
-                },
-              },
-            },
-            'div.screenshot > img': {
-              shadow: 'md',
-              rounded: 'md',
-            },
-            '.field-table': fieldTableStyles,
-            '.sticky-table': {
-              shadow: 'inner',
-              table: {
-                [['td', 'th']]: {
-                  ':first-of-type': {
-                    position: 'sticky',
-                    left: 0,
-                    bg: 'bg',
-                    borderRightWidth: 1,
-                  },
-                },
-                'tr:last-child': {
-                  td: {
-                    borderBottom: 'none',
-                  },
                 },
               },
             },
