@@ -78,11 +78,12 @@ export function SidebarNav({
   );
 
   const context = useMemo(() => ({ nav, setNav: setLocalNavState }), [nav, setLocalNavState]);
+  const pageTitle = activeItem?.title ? `${activeItem?.title} | Mergify Documentation` : 'Mergify Documentation';
 
   return (
     <>
       <Box p="2" pl="0" pos="sticky" top="0" bg={bg} zIndex="1">
-        <title>{activeItem?.title} | Mergify Documentation</title>
+        <title>{pageTitle}</title>
         {children}
         <Flex>
           <Button
