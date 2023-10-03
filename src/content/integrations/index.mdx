@@ -9,7 +9,15 @@ import {
   DocsetGrid,
 } from '../../components/HomePage';
 import {VscGithubAction} from 'react-icons/vsc';
-import {SiJenkins, SiGithubactions, SiDatadog, SiSnyk, SiDependabot, SiTeamcity} from 'react-icons/si';
+import {
+  SiJenkins,
+  SiGithubactions,
+  SiDatadog,
+  SiSnyk,
+  SiDependabot,
+  SiTeamcity,
+  SiCircleci
+} from 'react-icons/si';
 import {BsStack} from 'react-icons/bs';
 import { TbBike } from 'react-icons/tb';
 
@@ -21,6 +29,12 @@ import { TbBike } from 'react-icons/tb';
     description="Learn how Mergify integrates with GitHub Actions."
     path="gha"
     icon={<SiGithubactions/>}
+  />
+  <Docset
+    title="CircleCI"
+    description="Learn how Mergify integrates with CircleCI."
+    path="circleci"
+    icon={<SiCircleci/>}
   />
   <Docset
     title="Jenkins"
