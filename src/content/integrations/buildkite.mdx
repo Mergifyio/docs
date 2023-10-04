@@ -1,0 +1,66 @@
+---
+title: Integrating Buildkite with Mergify
+description: How to automate your Buildkite workflow using Mergify
+---
+
+import buildkiteLogo from "../images/integrations/buildkite/logo.svg"
+import { IntegrationLogo } from "../../components/Images"
+import { Info } from "../../components/Alerts/Info"
+import { Screenshot } from "../../components/Images"
+import statusScreenshot from "../images/integrations/buildkite/github-status.png"
+
+<IntegrationLogo src={buildkiteLogo} />
+
+[Buildkite](https://buildkite.com/) is a CI/CD tool providing scalable
+orchestration system, dynamic pipelines, customizable runners, and a great
+local development experience. Mergify can interact with Buildkite by evaluating
+[the status
+checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks)
+reported by Buildkite to GitHub. This enables powerful automation workflows
+that react to the results of your Buildkite jobs.
+
+## Prerequisites
+
+Before you can use Mergify with Buildkite, ensure the following:
+
+1. Buildkite is properly set up and is building your projects. See the
+   [Buildkite
+   Documentation](https://buildkite.com/docs/tutorials/getting-started) for
+   help with setting up Buildkite.
+
+2. Buildkite is [configured to report build statuses to
+   GitHub](https://buildkite.com/docs/integrations/github#connecting-buildkite-and-github).
+
+3. The [Mergify GitHub App](/getting-started) is installed in your repository.
+
+## Using Buildkite Status Checks in Mergify Configuration
+
+Once Buildkite reports status checks to GitHub, they can be used as conditions
+in your Mergify rules.
+
+<Screenshot src={statusScreenshot} />
+
+Here's a simple example:
+
+```yaml
+pull_request_rules:
+  - name: Automatically merge when Buildkite build succeeds
+    conditions:
+      - check-success=buildkite/github-test  # Change this to match your Buildkite check name
+      - "#approved-reviews-by>=1"
+    actions:
+      merge:
+        method: merge
+```
+
+In this example, Mergify will automatically merge pull requests that have at
+least one approved review and a successful Buildkite build.
+
+## Further Configuration
+
+The possibilities of integrating Buildkite with Mergify are extensive.
+For instance, you could use Mergify to:
+
+import CIFurther from './ci-further.mdx'
+
+<CIFurther />
