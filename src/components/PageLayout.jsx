@@ -106,7 +106,8 @@ export default function Page({
   return (
     <>
       <SEO
-        title={pageTitle}
+        shortTitle={pageTitle}
+        longTitle={title}
         pathname={activeItem?.path}
         description={description}
       />
