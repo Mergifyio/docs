@@ -1,13 +1,16 @@
 import React from 'react';
-import { AiOutlinePartition, AiOutlineDeploymentUnit } from 'react-icons/ai';
+import {
+  AiOutlinePartition, AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi,
+} from 'react-icons/ai';
 import { BiBadgeCheck, BiSolidCoinStack, BiRuler } from 'react-icons/bi';
 import {
-  BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
+  BsPatchQuestion, BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
 } from 'react-icons/bs';
-import { FaShieldAlt, FaHome } from 'react-icons/fa';
+import { FaShieldAlt, FaHome, FaRegListAlt } from 'react-icons/fa';
 import {
   FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake, FaMoneyBill1,
 } from 'react-icons/fa6';
+import { FiType } from 'react-icons/fi';
 import { GoGitMerge } from 'react-icons/go';
 import { LiaShareAltSolid } from 'react-icons/lia';
 import {
@@ -108,12 +111,12 @@ const navItems: NavItem[] = [
     title: 'Technical Reference',
     icon: <BsBook />,
     children: [
-      { title: 'Configuration File', path: '/configuration/file-format' },
+      { title: 'Configuration File', path: '/configuration/file-format', icon: <AiOutlineFile /> },
       { title: 'Sharing Configuration', path: '/configuration/sharing', icon: <LiaShareAltSolid /> },
-      { title: 'Conditions', path: '/configuration/conditions' },
-      { title: 'Data Types', path: '/configuration/data-types' },
-      { title: 'API Usage', path: '/api-usage' },
-      { title: 'API Reference', path: '/api/' },
+      { title: 'Conditions', path: '/configuration/conditions', icon: <BsPatchQuestion /> },
+      { title: 'Data Types', path: '/configuration/data-types', icon: <FiType /> },
+      { title: 'API Usage', path: '/api-usage', icon: <AiOutlineApi /> },
+      { title: 'API Reference', path: '/api/', icon: <FaRegListAlt /> },
     ],
   },
   {

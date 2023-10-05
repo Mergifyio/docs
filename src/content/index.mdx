@@ -14,13 +14,14 @@ import { BiBadgeCheck } from 'react-icons/bi';
 import {SiSlack, SiGithub, SiTwitter, SiYoutube, SiLinkedin} from 'react-icons/si';
 import {SlRefresh} from 'react-icons/sl';
 import {GoGitMerge, GoGitCommit} from 'react-icons/go';
-import {BsRocket, BsPlugin, BsStack, BsDoorOpen, BsLightningCharge, BsListTask, BsRobot, BsChatText, BsType} from 'react-icons/bs';
+import {BsPatchQuestion, BsRocket, BsPlugin, BsStack, BsDoorOpen, BsLightningCharge, BsListTask, BsRobot, BsChatText, BsType, BsCommand} from 'react-icons/bs';
 import {BiSolidCoinStack, BiRuler} from 'react-icons/bi';
 import {TbCrystalBall, TbPackages} from 'react-icons/tb';
 import {FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake, FaMoneyBill1} from 'react-icons/fa6';
-import {FaShieldAlt} from 'react-icons/fa';
-import {AiOutlinePartition, AiOutlineDeploymentUnit} from 'react-icons/ai';
+import {FaShieldAlt, FaRegListAlt} from 'react-icons/fa';
+import {AiOutlinePartition, AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi} from 'react-icons/ai';
 import {LiaShareAltSolid} from 'react-icons/lia';
+import {FiType} from 'react-icons/fi';
 
 Welcome to Mergify Documentation. 
 Explore our guides and examples on how to integrate Mergify.
@@ -194,6 +195,7 @@ Detailed documentation about every part of Mergify.
     title="Configuration File Format"
     description="Details of the configuration file format."
     path="/configuration/file-format"
+    icon={<AiOutlineFile />}
   />
   <Docset
     title="Sharing Configuration"
@@ -205,21 +207,31 @@ Detailed documentation about every part of Mergify.
     title="Conditions"
     description="Everything you need to know when writing your conditions."
     path="/configuration/conditions"
+    icon={<BsPatchQuestion />}
   />
   <Docset
     title="Configuration Data Types"
     description="Details of the data types found in the configuration"
     path="/configuration/data-types"
+    icon={<FiType />}
   />
  <Docset
     title="Commands"
     description="Complete list of commands you can use with Mergify."
     path="/commands"
+    icon={<BsCommand />}
   />
   <Docset
     title="API Usage"
     description="Integrate with Mergify using its API."
     path="/api-usage"
+    icon={<AiOutlineApi />}
+  />
+  <Docset
+    title="API Reference"
+    description="Complete Mergify API reference."
+    path="/api"
+    icon={<FaRegListAlt/>}
   />
 </DocsetGrid>
 
