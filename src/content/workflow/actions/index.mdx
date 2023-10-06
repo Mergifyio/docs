@@ -7,6 +7,8 @@ import {
   Docset,
   DocsetGrid,
 } from '../../../components/HomePage';
+import { GoCodeReview } from 'react-icons/go';
+import { SiGithubactions } from 'react-icons/si';
 
 Actions are the engine that powers Mergify. They define what Mergify should do
 when a set of conditions is met. This can range from merging a pull request,
@@ -64,6 +66,7 @@ management.
     title="GitHub Actions"
     description="Dispatch an existing GitHub workflow in the repository."
     paths="github_actions"
+    icon={<SiGithubactions />}
   />
   <Docset
     title="Label"
@@ -89,6 +92,7 @@ management.
     title="Request Reviews"
     description="Request reviews from specific users or teams."
     paths="request_reviews"
+    icon={<GoCodeReview />}
   />
   <Docset
     title="Review"

@@ -11,7 +11,7 @@ import {
   FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake, FaMoneyBill1,
 } from 'react-icons/fa6';
 import { FiType } from 'react-icons/fi';
-import { GoGitMerge } from 'react-icons/go';
+import { GoGitMerge, GoCodeReview } from 'react-icons/go';
 import { LiaShareAltSolid } from 'react-icons/lia';
 import {
   SiDatadog, SiSnyk, SiDependabot, SiTeamcity, SiGithubactions, SiJenkins, SiCircleci, SiBuildkite,
@@ -45,6 +45,7 @@ const navItems: NavItem[] = [
         icon: <BsLightbulb />,
         children: [
           { title: 'Automatic Merge', path: '/workflow/automerge', icon: <GoGitMerge /> },
+          { title: 'Request Reviews', path: '/workflow/request-reviews', icon: <GoCodeReview /> },
         ],
       },
       {
@@ -66,7 +67,7 @@ const navItems: NavItem[] = [
           { title: 'Post Check', path: '/workflow/actions/post_check' },
           { title: 'Queue', path: '/workflow/actions/queue' },
           { title: 'Rebase', path: '/workflow/actions/rebase' },
-          { title: 'Request Reviews', path: '/workflow/actions/request_reviews' },
+          { title: 'Request Reviews', path: '/workflow/actions/request_reviews', icon: <GoCodeReview /> },
           { title: 'Review', path: '/workflow/actions/review' },
           { title: 'Update', path: '/workflow/actions/update' },
           { title: 'Squash', path: '/workflow/actions/squash' },
