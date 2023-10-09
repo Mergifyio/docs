@@ -1,5 +1,5 @@
 import fs from 'fs'
-import {createCanvas, loadImage} from 'canvas'
+import {createCanvas, loadImage, registerFont} from 'canvas'
 import {resolve} from 'path';
 
 const removeTrailingSlash = (str) => {
@@ -36,6 +36,8 @@ const saveImage = (path, content) => {
 
 export const generateImage = async (title, path) => {
   if (path === '/' || title == null) return; // Skip Home page
+  registerFont('./static/fonts/Poppins-Light.ttf', {family: 'Poppins', weight: 300})
+
   const canvas = createCanvas(1200, 630)
   const ctx = canvas.getContext("2d");
 
