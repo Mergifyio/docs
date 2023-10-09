@@ -30,6 +30,7 @@ export default function SEO({
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
       <meta name="image" content={seo.image} />
+      <meta name="og:image" content={`${siteUrl}/og-images${pathname || ''}.png`} />
       {children}
     </Helmet>
   );

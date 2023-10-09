@@ -1,6 +1,5 @@
 import {
   createFilePath,
-  createRemoteFileNode
 } from 'gatsby-source-filesystem';
 import {join, resolve} from 'path';
 import {v5} from 'uuid';
@@ -9,6 +8,7 @@ import { remarkHeadingsPlugin } from './remark-headings-plugin.mjs';
 import redirects from './redirects.json' assert {
   type: 'json'
 }
+import {generateImage} from './generate-og-images.mjs';
 
 export const onCreateWebpackConfig = ({ actions, stage, plugins }) => {
   actions.setWebpackConfig({
@@ -92,6 +92,9 @@ export const createPages = async ({actions, graphql}) => {
           sourceInstanceName
           children {
             ... on Mdx {
+              frontmatter {
+                title
+              }
               fields {
                 slug
               }
@@ -107,17 +110,20 @@ export const createPages = async ({actions, graphql}) => {
     }
   `);
 
-  data.pages.nodes.forEach(({id, sourceInstanceName, children, absolutePath}) => {
-    const [{fields}] = children;
 
-    actions.createPage({
+  await Promise.all(data.pages.nodes.map(async ({id, children, absolutePath}) => {
+    const [{fields, frontmatter}] = children;
+
+    await generateImage(frontmatter.title, fields.slug)
+
+    await actions.createPage({
       path: fields.slug,
       component: `${pageTemplate}?__contentFilePath=${absolutePath}`,
       context: {
         id,
       }
     });
-  });
+  }))
 };
 
 export const createSchemaCustomization = async ({ getNode, getNodesByType, pathPrefix, reporter, cache, actions, schema, store }) => {
