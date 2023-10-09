@@ -54,6 +54,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@stoplight/elements": "^7.13.4",
     "algoliasearch": "^4.20.0",
+    "canvas": "^2.11.2",
     "fenceparser": "^2.2.0",
     "fuse.js": "^6.6.2",
     "gatsby": "^5.12.4",

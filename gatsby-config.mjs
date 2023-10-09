@@ -70,7 +70,7 @@ const plugins = [
           },
           {
             family: 'Poppins',
-            variants: ['400', '600']
+            variants: ['300', '400', '600']
           }
         ]
       }
