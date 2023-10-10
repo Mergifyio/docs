@@ -30,6 +30,9 @@ export default function SEO({
     url: `${siteUrl}${pathname || ''}`,
   };
   const isHomepage = pathname === '/';
+  const previewImage = isHomepage
+    ? `${siteUrl}/og-images/home.png`
+    : `${siteUrl}/og-images${pathname || ''}.png`;
 
   return (
     <Helmet>
@@ -43,13 +46,19 @@ export default function SEO({
       <meta property="og:url" content={seo.url} />
       <meta
         property="og:image"
-        content={isHomepage
-          ? `${siteUrl}/og-images/home.png`
-          : `${siteUrl}/og-images${pathname || ''}.png`}
+        content={previewImage}
       />
       <meta property="og:type" content="article" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+
+      {/* Twitter specific tags for sharing */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@mergifyio" />
+      <meta name="twitter:title" content={seo.longTitle} />
+      <meta name="twitter:description" content={seo.description} />
+      <meta name="twitter:image" content={previewImage} />
+
       {children}
     </Helmet>
   );
