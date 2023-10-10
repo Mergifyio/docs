@@ -10,7 +10,7 @@ import { BsSearch } from 'react-icons/bs';
 import Results from './Results';
 import { Page } from './types';
 
-function useAlgoliaSearch(query: string) {
+function useAlgoliaSearch(query: string, open: boolean) {
   const [results, setResults] = useState<SearchResponse<Page>>();
 
   useEffect(() => {
@@ -27,8 +27,8 @@ function useAlgoliaSearch(query: string) {
       setResults(response);
     };
 
-    search();
-  }, [query]);
+    open && search();
+  }, [query, open]);
 
   return results;
 }
@@ -37,7 +37,7 @@ export default function SearchBar() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  const searchResults = useAlgoliaSearch(search);
+  const searchResults = useAlgoliaSearch(search, open);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
