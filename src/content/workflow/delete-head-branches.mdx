@@ -1,0 +1,115 @@
+---
+title: Delete Head Branches
+description: How to automatically delete head branches.
+---
+
+While GitHub offers settings for automatic deletion of merged branches, its
+approach is often a blunt instrument, indiscriminately deleting any merged
+branch. Mergify’s `delete_head_branch` action brings nuance to this process,
+allowing repository maintainers to craft conditions under which branches should
+be deleted after their pull requests are merged. By utilizing Mergify's
+intricate [pull request rules and
+conditions](/workflow/writing-your-first-rule), users can design custom branch
+cleanup strategies that cater to their specific workflow requirements.
+
+[GitHub's automatic branch deletion
+documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)
+provides the basic settings, but for those who require a more nuanced approach,
+Mergify's `delete_head_branch` is the ideal tool.
+
+**GitHub's Default Deletion:** As soon as a pull request branch is merged,
+GitHub will automatically delete it, given the repository setting is enabled.
+This doesn’t account for scenarios where you might want to retain the branch
+for some time or under specific conditions.
+
+**Mergify’s Conditional Deletion:** Using Mergify, one can establish specific
+conditions under which a branch should be deleted post-merge. This can be based
+on labels, types of files changed, the nature of the pull request, and more.
+
+Here are a few example workflows that showcase the flexibility and power of
+Mergify’s `delete_head_branch` action:
+
+## Cleanup On-Demand
+
+Only delete merged branches when the pull request is labeled with "cleanup".
+
+```yaml
+pull_request_rules:
+  - name: delete head branch after merge if the label "cleanup" is present
+    conditions:
+      - merged
+      - label = cleanup
+    actions:
+      delete_head_branch:
+```
+
+## Prevent Deletion for Dependent Branches
+
+Avoid deleting branches that other pull requests depend on, ensuring dependent
+work isn't inadvertently closed.
+
+```yaml
+pull_request_rules:
+  - name: delete head branch after merge but not if other PRs depend on it
+    conditions:
+      - merged
+    actions:
+      delete_head_branch:
+        force: false
+```
+
+## Aggressive Cleanup
+
+In scenarios where you are certain about deleting branches, even if other pull
+requests depend on them:
+
+```yaml
+pull_request_rules:
+  - name: always delete head branch after merge
+    conditions:
+      - merged
+    actions:
+      delete_head_branch:
+        force: true
+```
+
+## Conditional Cleanup Based on File Type
+
+For instance, if documentation-related branches (those that only modify `.md`
+files) need to be deleted immediately post-merge:
+
+```yaml
+pull_request_rules:
+  - name: delete doc-related branches post-merge
+    conditions:
+      - merged
+      - "files~=\.md$"
+    actions:
+      delete_head_branch:
+```
+
+## Time-based Cleanup
+
+Suppose you want branches to remain for a day post-merge for any potential
+discussions and then get deleted:
+
+```yaml
+pull_request_rules:
+  - name: delete branches 24 hours post-merge
+    conditions:
+      - merged-at < 1 day ago
+    actions:
+      delete_head_branch:
+```
+
+---
+
+The `delete_head_branch` action is an example of how Mergify offers detailed
+control over Git workflows, moving beyond the default settings of platforms
+like GitHub. By understanding the various use-cases and implementing them in
+your repository, you can maintain a cleaner, more organized codebase, and
+ensure that old branches don't clutter your project as it grows.
+
+Remember, the key is in understanding your project's requirements and
+leveraging tools like Mergify to tailor workflows that cater specifically to
+those needs.

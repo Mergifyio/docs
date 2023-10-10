@@ -10,7 +10,7 @@ import {
   Docset,
   DocsetGrid,
 } from '../components/HomePage';
-import { BiBadgeCheck } from 'react-icons/bi';
+import { BiBadgeCheck, BiCut } from 'react-icons/bi';
 import {SiSlack, SiGithub, SiTwitter, SiYoutube, SiLinkedin} from 'react-icons/si';
 import {SlRefresh} from 'react-icons/sl';
 import {GoGitMerge, GoGitCommit, GoCodeReview} from 'react-icons/go';
@@ -68,6 +68,12 @@ and adapt it to your own needs.
     description="Enhance your review workflow with customized, efficient, and dynamic review assignments tailored to your needs."
     path="/workflow/request-reviews"
     icon={<GoCodeReview/>}
+  />
+  <Docset
+    title="Delete Head Branches"
+    description="How to automatically delete head branches."
+    path="/workflow/delete-head-branches"
+    icon={<BiCut/>}
   />
   {/*
   <Docset

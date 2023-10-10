@@ -2,7 +2,9 @@ import React from 'react';
 import {
   AiOutlinePartition, AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi,
 } from 'react-icons/ai';
-import { BiBadgeCheck, BiSolidCoinStack, BiRuler } from 'react-icons/bi';
+import {
+  BiBadgeCheck, BiSolidCoinStack, BiRuler, BiCut,
+} from 'react-icons/bi';
 import {
   BsPatchQuestion, BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
 } from 'react-icons/bs';
@@ -46,6 +48,7 @@ const navItems: NavItem[] = [
         children: [
           { title: 'Automatic Merge', path: '/workflow/automerge', icon: <GoGitMerge /> },
           { title: 'Request Reviews', path: '/workflow/request-reviews', icon: <GoCodeReview /> },
+          { title: 'Delete Head Branches', path: '/workflow/delete-head-branches', icon: <BiCut /> },
         ],
       },
       {
