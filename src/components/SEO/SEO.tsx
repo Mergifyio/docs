@@ -29,6 +29,7 @@ export default function SEO({
     image: `${siteUrl}${image}`,
     url: `${siteUrl}${pathname || ''}`,
   };
+  const isHomepage = pathname === '/';
 
   return (
     <Helmet>
@@ -40,7 +41,12 @@ export default function SEO({
       <meta property="og:title" content={seo.longTitle} />
       <meta property="og:description" content={seo.description} />
       <meta property="og:url" content={seo.url} />
-      <meta property="og:image" content={`${siteUrl}/og-images${pathname || ''}.png`} />
+      <meta
+        property="og:image"
+        content={isHomepage
+          ? `${siteUrl}/og-images/home.png`
+          : `${siteUrl}/og-images${pathname || ''}.png`}
+      />
       <meta property="og:type" content="article" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />

@@ -114,7 +114,10 @@ export const createPages = async ({actions, graphql}) => {
   await Promise.all(data.pages.nodes.map(async ({id, children, absolutePath}) => {
     const [{fields, frontmatter}] = children;
 
-    await generateImage(frontmatter.title, fields.slug)
+    if (fields.slug === '/')
+      await generateImage('Home', fields.slug)
+    else
+      await generateImage(frontmatter.title, fields.slug)
 
     await actions.createPage({
       path: fields.slug,

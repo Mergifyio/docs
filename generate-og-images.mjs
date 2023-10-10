@@ -35,7 +35,7 @@ const saveImage = (path, content) => {
 }
 
 export const generateImage = async (title, path) => {
-  if (path === '/' || title == null) return; // Skip Home page
+  if (title == null) return;
   registerFont('./static/fonts/Poppins-Light.ttf', {family: 'Poppins', weight: 300})
 
   const canvas = createCanvas(1200, 630)
@@ -69,5 +69,5 @@ export const generateImage = async (title, path) => {
   }
   
   const buffer = canvas.toBuffer('image/png')
-  saveImage(resolve(`./static/og-images/${removeTrailingSlash(path)}.png`), buffer)
+  saveImage(resolve(`./static/og-images/${path === '/' ? 'home' : removeTrailingSlash(path)}.png`), buffer)
 };
