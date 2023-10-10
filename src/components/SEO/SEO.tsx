@@ -37,13 +37,13 @@ export default function SEO({
       <meta name="image" content={seo.image} />
 
       {/* Open Graph metadata for shearability on socials */}
-      <meta name="og:title" content={seo.longTitle} />
-      <meta name="og:description" content={seo.description} />
-      <meta name="og:url" content={seo.url} />
-      <meta name="og:image" content={`${siteUrl}/og-images${pathname || ''}.png`} />
-      <meta name="og:type" content="article" />
-      <meta name="og:image:width" content="1200" />
-      <meta name="og:image:height" content="630" />
+      <meta property="og:title" content={seo.longTitle} />
+      <meta property="og:description" content={seo.description} />
+      <meta property="og:url" content={seo.url} />
+      <meta property="og:image" content={`${siteUrl}/og-images${pathname || ''}.png`} />
+      <meta property="og:type" content="article" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       {children}
     </Helmet>
   );
