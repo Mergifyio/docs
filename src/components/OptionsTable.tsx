@@ -41,14 +41,19 @@ export function OptionsTableBase(options: OptionDefinition) {
     definition.default !== undefined
   );
 
+  const shouldHideDefaultColumn = Object.entries(options)
+    .every(([, definition]) => !definition.default);
+  const shouldHideDeprecatedColumn = Object.entries(options)
+    .every(([, definition]) => !definition.deprecated);
+
   return (
     <Table>
       <Thead>
         <Tr>
           <Th>Key name</Th>
           <Th>Value type</Th>
-          <Th>Default</Th>
-          <Th />
+          {!shouldHideDefaultColumn && <Th>Default</Th>}
+          {!shouldHideDeprecatedColumn && <Th />}
         </Tr>
       </Thead>
       <Tbody>
@@ -65,24 +70,28 @@ export function OptionsTableBase(options: OptionDefinition) {
                 <Td lineHeight="7">
                   {valueType}
                 </Td>
-                <Td lineHeight="7">
-                  {hasDefaultValue(definition) && (
-                  <InlineCode>
-                      {yaml.dump(definition.default, {
-                        noCompatMode: true, lineWidth: -1, quotingType: '"', noRefs: true,
-                      })}
-                  </InlineCode>
-                  )}
-                </Td>
-                <Td>
-                  {deprecated && <Badge colorScheme="orange" top={0} left={0}>deprecated</Badge>}
-                </Td>
+                {!shouldHideDefaultColumn && (
+                  <Td lineHeight="7">
+                    {hasDefaultValue(definition) && (
+                      <InlineCode>
+                        {yaml.dump(definition.default, {
+                          noCompatMode: true, lineWidth: -1, quotingType: '"', noRefs: true,
+                        })}
+                      </InlineCode>
+                    )}
+                  </Td>
+                )}
+                {!shouldHideDeprecatedColumn && (
+                  <Td>
+                    {deprecated && <Badge colorScheme="orange" top={0} left={0}>deprecated</Badge>}
+                  </Td>
+                )}
               </Tr>
               {definition.description !== undefined
                 && (
                 <Tr>
                   {/* FIXME: don't hardcode the border color like that */}
-                  <Td lineHeight="7" colSpan="4" style={{ borderBottom: '2px solid #eee' }}>
+                  <Td lineHeight="7" colSpan={shouldHideDefaultColumn ? '3' : '4'} style={{ borderBottom: '2px solid #eee' }}>
                     <ReactMarkdown components={mdxComponents as any}>
                       {definition.description}
                     </ReactMarkdown>
