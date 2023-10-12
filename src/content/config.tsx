@@ -18,7 +18,7 @@ import { LiaShareAltSolid } from 'react-icons/lia';
 import {
   SiDatadog, SiSnyk, SiDependabot, SiTeamcity, SiGithubactions, SiJenkins, SiCircleci, SiBuildkite,
 } from 'react-icons/si';
-import { SlRefresh } from 'react-icons/sl';
+import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
 import { TbCrystalBall, TbPackages, TbBike } from 'react-icons/tb';
 
 import { v5 } from 'uuid';
@@ -91,6 +91,7 @@ const navItems: NavItem[] = [
       { title: 'Speculative Checks', path: '/merge-queue/speculative-checks', icon: <TbCrystalBall /> },
       { title: 'Batches', path: '/merge-queue/batches', icon: <TbPackages /> },
       { title: 'Partitions', path: '/merge-queue/partitions', icon: <AiOutlinePartition /> },
+      { title: 'Performance', path: '/merge-queue/performance', icon: <SlSpeedometer /> },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: <AiOutlineDeploymentUnit /> },
     ],
   },
