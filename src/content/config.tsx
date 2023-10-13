@@ -16,7 +16,8 @@ import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
 import { LiaShareAltSolid } from 'react-icons/lia';
 import {
-  SiDatadog, SiSnyk, SiDependabot, SiTeamcity, SiGithubactions, SiJenkins, SiCircleci, SiBuildkite,
+  SiSlack, SiDatadog, SiSnyk, SiDependabot, SiTeamcity,
+  SiGithubactions, SiJenkins, SiCircleci, SiBuildkite,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
 import { TbCrystalBall, TbPackages, TbBike } from 'react-icons/tb';
@@ -135,6 +136,7 @@ const navItems: NavItem[] = [
       { title: 'TeamCity', path: '/integrations/teamcity', icon: <SiTeamcity /> },
       { title: 'BuildKite', path: '/integrations/buildkite', icon: <SiBuildkite /> },
       { title: 'Datadog', path: '/integrations/datadog', icon: <SiDatadog /> },
+      { title: 'Slack', path: '/integrations/slack', icon: <SiSlack /> },
       { title: 'Graphite', path: '/integrations/graphite', icon: <BsStack /> },
       { title: 'Rush', path: '/integrations/rush', icon: <TbBike /> },
       { title: 'Dependabot', path: '/integrations/dependabot', icon: <SiDependabot /> },
