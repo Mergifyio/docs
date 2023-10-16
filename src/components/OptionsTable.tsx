@@ -5,16 +5,19 @@ import * as yaml from 'js-yaml';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
+import rehypeRaw from 'rehype-raw';
+
 import configSchema from '../../static/mergify-configuration-openapi.json';
 
-import { getValueType, OptionDefinition } from './ConfigOptions';
+import { getValueType, HighlightCode, OptionDefinition } from './ConfigOptions';
 
 import InlineCode from './InlineCode';
-import { mdxComponents } from './Page';
+import { mdxComponents } from './mdxComponents';
 
 interface Props {
   /** Name to retrieve its options */
   name: keyof typeof configSchema.definitions;
+  options?: { [optionKey: string]: OptionDefinition }
 }
 
 interface RootProps {
@@ -73,11 +76,13 @@ export function OptionsTableBase(options: OptionDefinition) {
                 {!shouldHideDefaultColumn && (
                   <Td lineHeight="7">
                     {hasDefaultValue(definition) && (
-                      <InlineCode>
-                        {yaml.dump(definition.default, {
-                          noCompatMode: true, lineWidth: -1, quotingType: '"', noRefs: true,
-                        })}
-                      </InlineCode>
+                      <InlineCode
+                        dangerouslySetInnerHTML={{
+                          __html: yaml.dump(definition.default, {
+                            noCompatMode: true, lineWidth: -1, quotingType: '"', noRefs: true,
+                          }),
+                        }}
+                      />
                     )}
                   </Td>
                 )}
@@ -92,7 +97,10 @@ export function OptionsTableBase(options: OptionDefinition) {
                 <Tr>
                   {/* FIXME: don't hardcode the border color like that */}
                   <Td lineHeight="7" colSpan={shouldHideDefaultColumn ? '3' : '4'} style={{ borderBottom: '2px solid #eee' }}>
-                    <ReactMarkdown components={mdxComponents as any}>
+                    <ReactMarkdown
+                      rehypePlugins={[rehypeRaw as any]}
+                      components={{ ...mdxComponents, code: HighlightCode } as any}
+                    >
                       {definition.description}
                     </ReactMarkdown>
                   </Td>

@@ -4,6 +4,8 @@ import {
 import { Link } from 'gatsby';
 import React from 'react';
 
+import { renderMdxTable } from '../../utils/mdxast';
+
 import { AlgoliaResult } from './types';
 
 type HighlightHeading = NonNullable<NonNullable<AlgoliaResult['_highlightResult']>['tableOfContents']>;
@@ -55,10 +57,10 @@ function TableOfContents({ tableOfContents, slug }: TableOfContentsProps) {
 interface Props extends AlgoliaResult {}
 
 export default function Preview({
-  fields, _highlightResult, tableOfContents, _snippetResult,
+  fields, _highlightResult, _snippetResult, tables,
 }: Props) {
   return (
-    <VStack padding={4} justifyContent="flex-start" alignItems="start" flex={1} height="100%" overflow="auto">
+    <VStack padding={4} justifyContent="flex-start" alignItems="start" flex={2} height="100%" overflow="auto">
       <Text
         as={Link}
         to={fields.slug}
@@ -73,9 +75,16 @@ export default function Preview({
       />
       <Text
         fontSize="md"
-        marginTop={2}
+        marginY={2}
         dangerouslySetInnerHTML={{ __html: _snippetResult?.excerpt?.value ?? '' }}
       />
+      {_highlightResult?.tables?.filter((el) => el?.data?.matchLevel !== 'none' || (el?.content && el.content.matchLevel !== 'none')).map(
+        (table, index) => renderMdxTable({
+          data: table?.data?.value,
+          node: tables[index].node,
+          content: table?.content?.value,
+        }),
+      )}
       {_highlightResult?.tableOfContents && (
         <>
           <Divider marginY={2} />

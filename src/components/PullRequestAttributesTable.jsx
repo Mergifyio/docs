@@ -5,16 +5,20 @@ import React from 'react';
 
 import ReactMarkdown from 'react-markdown';
 
+import rehypeRaw from 'rehype-raw';
+
 import configSchema from '../../static/mergify-configuration-openapi.json';
 
-import { getValueType } from './ConfigOptions';
+import { getValueType, HighlightCode } from './ConfigOptions';
 
 import InlineCode from './InlineCode';
 
-import { mdxComponents } from './Page';
+import { mdxComponents } from './mdxComponents';
 
-export default function PullRequestAttributesTable() {
-  const attributes = configSchema?.definitions?.PullRequestAttribute?.enum ?? [];
+// eslint-disable-next-line react/prop-types
+export default function PullRequestAttributesTable({ staticAttributes }) {
+  const attributes = staticAttributes
+  ?? configSchema?.definitions?.PullRequestAttribute?.enum ?? [];
 
   return (
     <Table>
@@ -33,11 +37,16 @@ export default function PullRequestAttributesTable() {
           return (
             <Tr>
               <Td sx={{ whiteSpace: 'nowrap' }}>
-                <InlineCode>{attr.key}</InlineCode>
+                <InlineCode dangerouslySetInnerHTML={{ __html: attr.key }} />
               </Td>
               <Td lineHeight="7">{valueType}</Td>
               <Td lineHeight="7">
-                <ReactMarkdown components={mdxComponents}>
+                <ReactMarkdown
+                  // Need that rehype-raw plugin to render HTML tags.
+                  // It allows <em> tags from algolia to render
+                  rehypePlugins={[rehypeRaw]}
+                  components={{ ...mdxComponents, code: HighlightCode }}
+                >
                   {attr.description}
                 </ReactMarkdown>
               </Td>

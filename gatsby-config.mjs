@@ -133,6 +133,11 @@ const algoliaPagesQuery = `
         fields {
           slug
         }
+        tables {
+          node
+          data
+          content
+        }
         excerpt(pruneLength: 1000)
         frontmatter {
           title

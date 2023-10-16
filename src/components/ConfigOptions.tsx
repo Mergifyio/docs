@@ -5,10 +5,12 @@ import React from 'react';
 
 import ReactMarkdown from 'react-markdown';
 
+import rehypeRaw from 'rehype-raw';
+
 import configSchema from '../../static/mergify-configuration-openapi.json';
 
 import InlineCode from './InlineCode';
-import { mdxComponents } from './Page';
+import { mdxComponents } from './mdxComponents';
 
 // FIXME: move this to JSON schema?
 const valueTypeLinks: { [key: string]: string } = {
@@ -37,9 +39,14 @@ export interface OptionDefinition {
   $ref: any;
 }
 
+/** We need to strip <em> tags when highlighted by algolia */
+function splitRefPath($ref: string) {
+  return $ref.replace(/<\/?em>/g, '').split('/').slice(1);
+}
+
 function getTypeLink(ref: string): string | undefined {
   if (ref) {
-    const refPath = ref.split('/').slice(1);
+    const refPath = splitRefPath(ref);
     const refDefinition = refPath.reduce((acc, segment) => (acc as any)[segment], configSchema);
     const refId = refDefinition.$id;
 
@@ -51,7 +58,7 @@ function getTypeLink(ref: string): string | undefined {
 
 function getTypeDescription(ref: string): string {
   if (ref) {
-    const refPath = ref.split('/').slice(1);
+    const refPath = splitRefPath(ref);
     const refDefinition = refPath.reduce((acc, segment) => (acc as any)[segment], configSchema);
     return refDefinition.description;
   }
@@ -59,7 +66,7 @@ function getTypeDescription(ref: string): string {
   return '?';
 }
 
-export function getValueType(definition): string {
+export function getValueType(definition): React.ReactElement {
   let valueType = null;
 
   if (definition.type === 'array') {
@@ -68,11 +75,7 @@ export function getValueType(definition): string {
 
     if ('$ref' in definition.items) {
       typeLink = getTypeLink(definition.items.$ref);
-      typeDescription = (
-        <ReactMarkdown components={mdxComponents as any}>
-          {getTypeDescription(definition.items.$ref)}
-        </ReactMarkdown>
-      );
+      typeDescription = getTypeDescription(definition.items.$ref);
     } else {
       typeDescription = definition.items.type;
     }
@@ -85,11 +88,17 @@ export function getValueType(definition): string {
           </Link>
         </>
       );
-    } else valueType = <>list of {typeDescription}</>;
+    } else {
+      valueType = (
+        <ReactMarkdown rehypePlugins={[rehypeRaw as any]} components={mdxComponents as any}>
+          {`list of ${typeDescription}`}
+        </ReactMarkdown>
+      );
+    }
   } else if (definition.$ref !== undefined) {
     const typeLink = getTypeLink(definition.$ref);
     const typeDescription = (
-      <ReactMarkdown components={mdxComponents as any}>
+      <ReactMarkdown rehypePlugins={[rehypeRaw as any]} components={mdxComponents as any}>
         {getTypeDescription(definition.$ref)}
       </ReactMarkdown>
     );
@@ -139,7 +148,7 @@ export function getValueType(definition): string {
 
           return (
             <React.Fragment key={item}>
-              <InlineCode>{item}</InlineCode>
+              <HighlightCode>{item}</HighlightCode>
               {separator}
             </React.Fragment>
           );
@@ -147,8 +156,18 @@ export function getValueType(definition): string {
       </>
     );
   } else {
-    valueType = definition.type;
+    valueType = (
+      <HighlightCode>
+        {definition.type}
+      </HighlightCode>
+    );
   }
 
   return valueType;
+}
+
+export function HighlightCode(props: any) {
+  const { children } = props;
+  // eslint-disable-next-line react/no-danger
+  return <InlineCode dangerouslySetInnerHTML={{ __html: children }} />;
 }

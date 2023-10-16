@@ -1,5 +1,5 @@
 import {
-  Box, VStack, Text, useColorModeValue, HStack, Divider, Show, theme,
+  Box, VStack, Text, useColorModeValue, HStack, Divider, Show,
 } from '@chakra-ui/react';
 import { Link, navigate } from 'gatsby';
 import React, { useEffect, useState } from 'react';
@@ -125,7 +125,7 @@ export default function Results({ results }: ResultsProps) {
     <HStack
       css={{
         em: {
-          color: theme.colors.linkedin[700],
+          color: '#003dff',
           fontStyle: 'normal',
           fontWeight: '500',
         },

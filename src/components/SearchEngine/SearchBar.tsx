@@ -1,7 +1,7 @@
 import { SearchResponse } from '@algolia/client-search';
 import {
   Divider, Input, InputGroup, InputLeftAddon, Modal,
-  ModalBody, ModalContent, ModalHeader, ModalOverlay,
+  ModalBody, ModalContent, ModalHeader, ModalOverlay, useColorModeValue,
 } from '@chakra-ui/react';
 import algoliasearch from 'algoliasearch/lite';
 import React, { useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ function useAlgoliaSearch(query: string, open: boolean) {
       );
       const pagesIndex = searchClient.initIndex('docs-pages');
       const response = await pagesIndex.search<Page>(query, {
-        attributesToHighlight: ['excerpt', 'frontmatter', 'tableOfContents'],
+        attributesToHighlight: ['excerpt', 'frontmatter', 'tableOfContents', 'tables.data', 'tables.content'],
         attributesToSnippet: ['excerpt:40'],
       });
       setResults(response);
@@ -51,6 +51,7 @@ export default function SearchBar() {
     setOpen(false);
     setSearch('');
   };
+  const bgColor = useColorModeValue('white', 'blue.800');
 
   return (
     <>
@@ -58,9 +59,9 @@ export default function SearchBar() {
         <InputLeftAddon><BsSearch /></InputLeftAddon>
         <Input placeholder="Search Mergify" size="md" />
       </InputGroup>
-      <Modal scrollBehavior="inside" isOpen={open} onClose={handleClose} size="4xl">
+      <Modal scrollBehavior="inside" isOpen={open} onClose={handleClose}>
         <ModalOverlay />
-        <ModalContent height="100%">
+        <ModalContent background={bgColor} height="100%" maxWidth="90vw">
           <ModalHeader padding={0}>
             <InputGroup padding={1} onClick={handleOpen}>
               <InputLeftAddon background="none" border="none"><BsSearch /></InputLeftAddon>

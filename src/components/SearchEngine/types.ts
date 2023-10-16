@@ -13,6 +13,11 @@ export type Page = {
   }
   excerpt: string;
   tableOfContents: Heading,
+  tables: {
+    node: string;
+    data: string | null;
+    content: string | null;
+  }[]
   frontmatter: {
     title: string;
     description: string;

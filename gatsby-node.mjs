@@ -4,7 +4,7 @@ import {
 import {join, resolve} from 'path';
 import {v5} from 'uuid';
 import { compileMDXWithCustomOptions } from 'gatsby-plugin-mdx';
-import { remarkHeadingsPlugin } from './remark-headings-plugin.mjs';
+import { remarkHeadingsPlugin, remarkTablePlugin } from './remark-headings-plugin.mjs';
 import redirects from './redirects.json' assert {
   type: 'json'
 }
@@ -171,6 +171,43 @@ export const createSchemaCustomization = async ({ getNode, getNodesByType, pathP
 
           return result.metadata.headings
         }
+      },
+      tables: {
+        type: `[MdxTable]`,
+        async resolve(mdxNode) {
+          const fileNode = getNode(mdxNode.parent)
+
+          if (!fileNode) {
+            return null
+          }
+
+          const result = await compileMDXWithCustomOptions(
+            {
+              source: mdxNode.body,
+              absolutePath: fileNode.absolutePath,
+            },
+            {
+              pluginOptions: {},
+              customOptions: {
+                mdxOptions: {
+                  remarkPlugins: [remarkTablePlugin],
+                },
+              },
+              getNode,
+              getNodesByType,
+              pathPrefix,
+              reporter,
+              cache,
+              store,
+            }
+          )
+
+          if (!result) {
+            return null
+          }
+
+          return result.metadata.tables
+        }
       }
     }
   })
@@ -180,6 +217,11 @@ export const createSchemaCustomization = async ({ getNode, getNodesByType, pathP
       type MdxHeading {
         value: String
         depth: Int
+      }
+      type MdxTable {
+        node: String
+        data: String
+        content: String
       }
     `,
     headingsResolver,
