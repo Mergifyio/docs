@@ -90,6 +90,7 @@ const plugins = [
     }
   },
   'gatsby-plugin-local-docs', // local plugin
+  'algolia-plugin', // local plugin
   {
     resolve: 'gatsby-source-filesystem',
     options: {
@@ -117,69 +118,8 @@ const plugins = [
       transformHeaders: (headers, path) => headers,
       generateMatchPathRewrites: true,
     },
-  }
-];
-
-const algoliaPagesQuery = `
-{
-  pages: allFile(filter: {extension: {in: ["md", "mdx"]}}) {
-    nodes {
-      id
-      internal {
-        contentDigest
-      }
-      childMdx {
-        tableOfContents
-        fields {
-          slug
-        }
-        tables {
-          node
-          data
-          content
-        }
-        excerpt(pruneLength: 1000)
-        frontmatter {
-          title
-          description
-          toc
-          tags
-        }
-      }
-    }
-  }
-}
-`;
-
-const queries = [
-  {
-    query: algoliaPagesQuery,
-    transformer: ({ data }) => data.pages.nodes.map(node => {
-      const { childMdx, ...rest} = node;
-      delete rest.childMdx;
-      return {
-        ...childMdx,
-        ...rest
-      }
-    })
   },
 ];
-
-const algoliaPlugin = {
-  resolve: `gatsby-plugin-algolia`,
-  options: {
-    appId: process.env.GATSBY_ALGOLIA_APP_ID,
-    apiKey: process.env.ALGOLIA_WRITE_KEY,
-    indexName: 'docs-pages',
-    queries,
-    chunkSize: 20000,
-    dryRun: !process.env.ALGOLIA_WRITE_KEY,
-    mergeSettings: true, // Merge settings with the ones defined on Algolia dashboard
-    continueOnFailure: false,
-  },
-}
-
-Boolean(process.env.ALGOLIA_WRITE_KEY) && plugins.push(algoliaPlugin)
 
 const config = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
