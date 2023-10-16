@@ -44,7 +44,7 @@ function transformRecords({data}) {
 exports.onPostBuild = async ({ graphql, reporter }) => {
   reporter.info('Starting indexing on algolia...')
   const client = algoliasearch(process.env.GATSBY_ALGOLIA_APP_ID, process.env.ALGOLIA_WRITE_KEY);
-  const index = client.initIndex('docs-pages-dev')
+  const index = client.initIndex('docs-pages')
   const data = await graphql(algoliaPagesQuery);
   const pages = transformRecords(data);
   

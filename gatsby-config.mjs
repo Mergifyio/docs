@@ -90,7 +90,6 @@ const plugins = [
     }
   },
   'gatsby-plugin-local-docs', // local plugin
-  'algolia-plugin', // local plugin
   {
     resolve: 'gatsby-source-filesystem',
     options: {
@@ -120,6 +119,9 @@ const plugins = [
     },
   },
 ];
+
+/** Custom plugin to push records on algolia */
+Boolean(process.env.ALGOLIA_WRITE_KEY) && plugins.push('algolia-plugin')
 
 const config = {
   pathPrefix: '/' + process.env.PR_NUMBER + '/docs',
