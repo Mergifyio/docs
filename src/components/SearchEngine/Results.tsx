@@ -15,7 +15,7 @@ interface PageResultProps extends AlgoliaResult {
 }
 
 function PageResult({
-  id, frontmatter, _highlightResult, fields, onHover, active,
+  objectID, frontmatter, _highlightResult, fields, onHover, active,
 }: PageResultProps) {
   const activeBackground = useColorModeValue('blue.100', 'blue.700');
 
@@ -31,7 +31,7 @@ function PageResult({
       as={Link}
       to={fields.slug}
       _focus={{ outline: 'auto' }}
-      id={id}
+      id={objectID}
     >
       <Box>
         <Text
@@ -63,13 +63,12 @@ export default function Results({ results }: ResultsProps) {
   };
 
   const handleKeysNavigation = (e: KeyboardEvent) => {
-    const getCurrentFocusedIndex = (current: AlgoliaResult | null) => (
-      results.findIndex((el) => el.id === current?.id)
-    );
+    const getCurrentFocusedIndex = (current: AlgoliaResult | null) => results
+      .findIndex((el) => el.objectID === current?.objectID);
 
     const scrollToFocusedPage = (page: AlgoliaResult | null) => {
       if (page) {
-        const element = document.getElementById(page.id);
+        const element = document.getElementById(page.objectID);
         const container = element?.parentElement;
 
         if (element && container) {
@@ -136,16 +135,16 @@ export default function Results({ results }: ResultsProps) {
       <VStack flex={1} alignItems="flex-start" height="100%" overflow="auto" position="relative">
         {results.map((page) => (
           <PageResult
-            active={focusedPage?.id === page.id}
+            active={focusedPage?.objectID === page.objectID}
             onHover={changeFocusedPage(page)}
             {...page}
-            key={page.id}
+            key={page.objectID}
           />
         ))}
       </VStack>
       <Divider orientation="vertical" />
       <Show above="md">
-        {focusedPage && <Preview key={focusedPage.id} {...focusedPage} />}
+        {focusedPage && <Preview key={focusedPage.objectID} {...focusedPage} />}
       </Show>
     </HStack>
   );
