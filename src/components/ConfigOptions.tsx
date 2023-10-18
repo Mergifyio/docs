@@ -82,7 +82,7 @@ export function getValueType(definition): React.ReactElement {
 
     if (typeLink !== undefined) {
       valueType = (
-        <>list of
+        <>list of{' '}
           <Link color="primary" textDecoration="underline" href={typeLink}>
             {typeDescription}
           </Link>
