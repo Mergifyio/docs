@@ -1,10 +1,12 @@
 ---
 title: Security
-description: Learn more about Mergify security obsession.
+description: Learn more about the applications permissions and Mergify's security obsession.
 ---
 
-import { Button, ButtonGroup, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Icon, Button, ButtonGroup, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { FaCheck, FaXmark } from 'react-icons/fa6';
 import { PrimaryLink } from '../components/RelativeLink';
+import { Info } from '../components/Alerts/Info';
 
 At Mergify, security is of utmost importance to us. We understand the crucial
 role we play in the software development process and are fully committed to
@@ -57,7 +59,7 @@ We appreciate your collaboration in ensuring the security of Mergify and its
 community. Rest assured, all communications related to security matters will be
 treated with the highest priority and confidentiality.
 
-## Required Permissions
+## GitHub App Required Permissions
 
 Below is the list of the required permission on GitHub for
 Mergify to function properly.
@@ -133,3 +135,96 @@ Mergify to function properly.
     </Tr>
   </Tbody>
 </Table>
+
+## User Permissions
+
+To perform any actions on Mergify, such as adding a pull request in a merge
+queue or triggering a command, a person must have sufficient access to the
+relevant account or resource. This access is controlled by permissions. A
+permission is the ability to perform a specific action. A role is a set of
+permissions you can assign to individuals or teams.
+
+Mergify users inherit their roles directly from [GitHub
+roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization).
+
+That means that a user that has the `Read` role for a repository in GitHub will
+also inherit this role in Mergify.
+
+### Features Permissions
+
+<Table>
+  <Thead>
+    <Tr>
+      <Th>Feature</Th>
+      <Th>Read</Th>
+      <Th>Triage</Th>
+      <Th>Write</Th>
+      <Th>Maintain</Th>
+      <Th>Admin</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+      <Tr>
+      <Td>View the merge queues</Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+    </Tr>
+    <Tr>
+      <Td>Freeze a merge queue</Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+    </Tr>
+    <Tr>
+      <Td>Unfreeze a merge queue</Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+    </Tr>
+    <Tr>
+      <Td>Pause merge queues</Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+    </Tr>
+    <Tr>
+      <Td>Manage API keys</Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+    </Tr>
+    <Tr>
+      <Td>Manage Mergify subscription</Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaXmark} /></Td>
+      <Td><Icon as={FaCheck} /></Td>
+    </Tr>
+  </Tbody>
+</Table>
+
+<Info>
+  Non-admin users might be able to manage permissions on demand. <PrimaryLink
+  href="mailto:support@mergify.com">Contact our support</PrimaryLink>
+  to request a non-admin to get access to Mergify subscription and
+  billing details.
+</Info>
+
+### Command Permissions
+
+[Mergify commands](/commands) are [restricted by
+default](/commands/restrictions/#default-restrictions) and have their own
+mechanism that can be modified. See [Commands
+Restrictions](/commands/restrictions/) for changing the default.
