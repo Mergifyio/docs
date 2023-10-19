@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fa6';
 import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
+import { IoIosRemoveCircleOutline } from 'react-icons/io';
 import { LiaShareAltSolid } from 'react-icons/lia';
 import { MdMonitorHeart } from 'react-icons/md';
 import {
@@ -51,6 +52,7 @@ const navItems: NavItem[] = [
           { title: 'Automatic Merge', path: '/workflow/automerge', icon: <GoGitMerge /> },
           { title: 'Request Reviews', path: '/workflow/request-reviews', icon: <GoCodeReview /> },
           { title: 'Delete Head Branches', path: '/workflow/delete-head-branches', icon: <BiCut /> },
+          { title: 'Dismiss Reviews', path: '/workflow/dismiss-reviews', icon: <IoIosRemoveCircleOutline /> },
         ],
       },
       {
@@ -64,7 +66,7 @@ const navItems: NavItem[] = [
           { title: 'Copy', path: '/workflow/actions/copy' },
           { title: 'Comment', path: '/workflow/actions/comment' },
           { title: 'Delete Head Branch', path: '/workflow/actions/delete_head_branch' },
-          { title: 'Dismiss Reviews', path: '/workflow/actions/dismiss_reviews' },
+          { title: 'Dismiss Reviews', path: '/workflow/actions/dismiss_reviews', icon: <IoIosRemoveCircleOutline /> },
           { title: 'Edit', path: '/workflow/actions/edit' },
           { title: 'GitHub Actions', path: '/workflow/actions/github_actions', icon: <SiGithubactions /> },
           { title: 'Label', path: '/workflow/actions/label' },

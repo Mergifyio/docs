@@ -9,6 +9,7 @@ import {
 } from '../../../components/HomePage';
 import { GoCodeReview } from 'react-icons/go';
 import { SiGithubactions } from 'react-icons/si';
+import {IoIosRemoveCircleOutline} from 'react-icons/io';
 
 Actions are the engine that powers Mergify. They define what Mergify should do
 when a set of conditions is met. This can range from merging a pull request,
@@ -56,6 +57,7 @@ management.
     title="Dismiss Reviews"
     description="Dismiss previous reviews on a pull request."
     paths="dismiss_reviews"
+    icon={<IoIosRemoveCircleOutline /> }
   />
   <Docset
     title="Edit"

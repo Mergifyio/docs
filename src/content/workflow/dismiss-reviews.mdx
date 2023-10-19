@@ -1,0 +1,91 @@
+---
+title: Dismiss Reviews
+description: Optimize your pull request workflow, tailoring review dismissal to specific scenarios and users.
+---
+
+Keeping your reviews up to date is essential to maintain a coherent and
+reliable development workflow. Mergify offers a granular approach with the
+[`dismiss_reviews`](/workflow/actions/dismiss_reviews) action.
+
+1. **Conditional Triggers**: Only dismiss reviews when specific conditions on
+   the pull request are met.
+
+2. **Selective Removal**: Choose to remove only approvals, only reviews from
+   particular users, or only changes requested.
+
+3. **Targeted Dismissal**: Dismiss reviews only from users that are in the
+   requested reviewers list.
+
+4. **Event-driven**: Opt to have the action run when a PR is pushed again or
+   keep it active continuously.
+
+There are multiple scenarios where you can use this action to automatically
+remove change requests or approvals.
+
+## Re-Review on Push
+
+Automatically dismiss reviews when new commits are pushed to a PR targeting the
+main branch with a "re-review" label:
+
+```yaml
+pull_request_rules:
+  - name: dismiss reviews when new commits are pushed, if the label "re-review" is present
+    conditions:
+      - base=main
+      - label=re-review
+    actions:
+      dismiss_reviews:
+```
+
+## Team-based Review Dismissal
+
+Retain the approvals if the author is from a trusted team, even if they update
+their code:
+
+```yaml
+pull_request_rules:
+  - name: remove outdated reviews for non trusted authors
+    conditions:
+      - base=main
+      - author!=@mytrustedteam
+    actions:
+      dismiss_reviews:
+```
+
+## Specific User-based Review Dismissal
+
+Dismiss reviews from specific users, which can be useful if you have a bot user
+or a particular reviewer whose comments might not be relevant upon code
+changes:
+
+```yaml
+pull_request_rules:
+  - name: remove reviews from the bot when the PR is updated
+    conditions:
+      - base=main
+    actions:
+      dismiss_reviews:
+        approved:
+          - mybotusername
+        changes_requested:
+          - mybotusername
+```
+
+## Dismiss Reviews When Request Review
+
+When a user request a new review from a reviewer, asking for a review does not
+dismiss the current review from the reviewer. You can do that using this
+snippet:
+
+```yaml
+pull_request_rules:
+  - name: dismiss reviews when review is requested
+    conditions:
+      - base=main
+    actions:
+      dismiss_reviews:
+        approved: from_requested_reviewers
+        changes_requested: from_requested_reviewers
+        when: always
+        message: "Review dismissed due to new review request."
+```
