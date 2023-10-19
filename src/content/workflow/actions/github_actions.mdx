@@ -35,10 +35,13 @@ specific GitHub Actions based on Mergify's conditions.
 
 ### Dispatching GitHub Workflows with Inputs
 
-To dispatch two workflows named `hello_world_workflow.yaml` and
-`foo_workflow.yaml` when a pull request is labeled with "dispatch", use the
-following rule. Here, the `hello_world_workflow.yaml` workflow accepts two
-inputs, which are defined as `name` and `age`.
+To dispatch three workflows named `foo_workflow.yaml`, `hello_world_workflow.yaml` and
+`dynamic_workflow.yaml` when a pull request is labeled with "dispatch", use the
+following rule.
+
+Here, the `hello_world_workflow.yaml` workflow accepts two
+inputs, which are defined as `name` and `age`. The `dynamic_workflow.yaml`
+takes the [`template`](template) input `author`.
 
 ```yaml
 pull_request_rules:
@@ -49,9 +52,12 @@ pull_request_rules:
       github_actions:
         workflow:
           dispatch:
+            - workflow: foo_workflow.yaml
             - workflow: hello_world_workflow.yaml
               inputs:
                 name: steve
                 age: 42
-            - workflow: foo_workflow.yaml
+            - workflow: dynamic_workflow.yaml
+              inputs:
+                author: "{{ author }}"
 ```
