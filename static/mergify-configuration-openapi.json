@@ -899,7 +899,7 @@
           ]
         },
         "update_bot_account": {
-          "description": "For merging or rebasing branches, Mergify might have to impersonate a GitHub user. You can specify the account to use with this option. If no `update_bot_account` is set, Mergify uses the author of the PR. The user account must have already been logged in Mergify dashboard once.",
+          "description": "For rebasing branches, Mergify might have to impersonate a GitHub user. You can specify the account to use with this option. If no `update_bot_account` is set, Mergify uses the author of the PR. The user account must have already been logged in Mergify dashboard once.\nFor `update_method: merge` this option will be ignored in order for Mergify to not reset the merge queue, because of the merge commit done has a person instead of a bot.",
           "$ref": "#/definitions/Template"
         }
       }
