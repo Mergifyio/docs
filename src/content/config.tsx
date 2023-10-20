@@ -22,7 +22,9 @@ import {
   SiGithubactions, SiJenkins, SiCircleci, SiBuildkite, SiGitlab,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
-import { TbCrystalBall, TbPackages, TbBike } from 'react-icons/tb';
+import {
+  TbCrystalBall, TbPackages, TbBike, TbGitBranch,
+} from 'react-icons/tb';
 
 import { v5 } from 'uuid';
 
@@ -53,6 +55,7 @@ const navItems: NavItem[] = [
           { title: 'Request Reviews', path: '/workflow/request-reviews', icon: <GoCodeReview /> },
           { title: 'Delete Head Branches', path: '/workflow/delete-head-branches', icon: <BiCut /> },
           { title: 'Dismiss Reviews', path: '/workflow/dismiss-reviews', icon: <IoIosRemoveCircleOutline /> },
+          { title: 'Rebasing PRs', path: '/workflow/rebase', icon: <TbGitBranch /> },
         ],
       },
       {

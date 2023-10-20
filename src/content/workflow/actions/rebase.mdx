@@ -5,6 +5,7 @@ description: Rebase the pull request on top of its base branch.
 
 import ActionOptionsTable from '../../../components/ActionOptionsTable'
 import { Info } from '../../../components/Alerts/Info';
+import { Button } from '@chakra-ui/react';
 
 The `rebase` action makes Mergify rebase the pull request on top of its base
 branch. This is useful when you want to ensure that your pull request is always
@@ -23,29 +24,9 @@ up-to-date with the latest changes from the base branch.
 
 ## Examples
 
-Here's an example of how to use the `rebase` action:
-
-```yaml
-pull_request_rules:
-  - name: continuously rebase pull request when it's labeled with `rebase`
-    conditions:
-      - label=rebase
-    actions:
-      rebase:
-```
-
-Note that this will rebase the pull request as long as it has the label.
-
-If you wanted to do rebase only once, you would also need to remove the label.
-
-```yaml
-pull_request_rules:
-  - name: rebase pull request once when it's labeled with `rebase`
-    conditions:
-      - label=rebase
-    actions:
-      rebase: {}
-      label:
-        remove:
-          - rebase
-```
+<a href="/workflow/rebase#automatically-rebasing-prs">
+  <Button colorScheme='teal' size='lg'
+  style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+    Read Rebase Use Cases
+  </Button>
+</a>

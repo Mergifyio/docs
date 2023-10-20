@@ -3,6 +3,9 @@ title: Mergify Rebase Command
 description: Rebase a pull request.
 ---
 
+import { Screenshot } from "../../components/Images";
+import rebaseScreenshot from "../images/commands/rebase/example.png"
+
 The `rebase` command provides users with an instant method to instruct Mergify
 to rebase a pull request against its base branch. It's a handy way to ensure
 that the pull request is updated with the latest changes from the base branch
@@ -12,17 +15,9 @@ By leveraging the `rebase` command, developers can keep their pull requests
 up-to-date and maintain a clean commit history, enhancing the clarity and
 quality of the project's development.
 
-The `rebase` command provided by Mergify has several advantages over the native
-GitHub rebase feature:
+import RebaseAdvantage from './_rebase_advantages.mdx';
 
-- Rebases are done using the
-  [`--autosquash`](https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---autosquash)
-  option. This mean commits starting with `fixup!`, `squash!` or other commands
-  will be honored.
-
-- When the [`dismiss_reviews`](/workflow/actions/dismiss_reviews) action is
-  being used, it will not reset the reviews if the rebase is executed by
-  Mergify.
+<RebaseAdvantage />
 
 ## Syntax
 
@@ -32,3 +27,5 @@ request:
 ```text
 @mergifyio rebase
 ```
+
+<Screenshot src={rebaseScreenshot} />

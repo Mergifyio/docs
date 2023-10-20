@@ -1,0 +1,15 @@
+The `rebase` command provided by Mergify has several advantages over the native
+GitHub rebase feature:
+
+- Rebases are done using the
+  [`--autosquash`](https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---autosquash)
+  option. This mean commits starting with `fixup!`, `squash!` or other commands
+  will be honored.
+
+- When the [`dismiss_reviews`](/workflow/actions/dismiss_reviews) action is
+  being used, it will not reset the reviews if the rebase is executed by
+  Mergify.
+
+- It's always available, whatever the repository configuration might be.
+
+- It can be [restricted](/commands/restrictions/) to certain users or teams.
