@@ -1,5 +1,5 @@
 ---
-title: Understanding Mergify Billing System
+title: Mergify Billing System
 description: Understand how Mergify fair billing works.
 ---
 
@@ -30,7 +30,9 @@ utilizing GitHub Enterprise Server (GHES).
   Cancelling Plans](#switching-or-cancelling-plans).
 </Info>
 
-## Active User-Based Billing
+## User Accounting Modes
+
+### Active User-Based Billing
 
 Many enterprise solutions charge per user, irrespective of actual usage. At
 Mergify, we firmly believe in billing you only for what you actively use.
@@ -53,11 +55,12 @@ Here's how it works:
 - Usage is prorated to the day: if a user is seen active during 48 days, the
   system only bills for precisely 48 days — not 2 entire months.
 
-## Collaborator-Based Billing
+### Collaborator-Based Billing
 
-For specific scenarios, like public repositories, we offer an alternative
+For specific scenarios, such as public repositories, we offer an alternative
 billing mode based on the number of collaborators. This mode isn't the default,
-but can be requested through our support.
+but can be requested through <PrimaryLink href="mailto:support@mergify.com">our
+support</PrimaryLink>.
 
 A collaborator is identified as any user granted write access (or higher) to a
 repository.
@@ -70,17 +73,22 @@ repository.
 
 ## Annual Subscription
 
-Mergify does not require an annual subscription, but offer substantial discount
-if you buy users for a 12-months period.
+Mergify does not require an annual subscription (except for the Enterprise
+plan), but offer substantial discount if you buy users in advance for a
+12-months period.
 
 An annual subscription allows you to buy a base of number of seats (users) at
-the start of the year.
+the start of the year. If your usage goes beyond the pre-purchased seats,
+additional seats are billed monthly, prorated to the exact day of use.
 
-If your usage goes beyond the pre-purchased seats, additional seats are billed
-monthly, prorated to the exact day of use.
+For example, let's say you have purchased a annual license for 100 users. If
+your number of users increases to 110 users during 45 days, you will be
+invoiced for 10 extra users over 45 days.
 
-You can subscribe to a yearly plan at any time by contacting <PrimaryLink
-href="mailto:support@mergify.com">your customer representative</PrimaryLink>.
+<Info>
+  You can subscribe to a yearly plan at any time by contacting <PrimaryLink
+  href="mailto:support@mergify.com">your customer representative</PrimaryLink>.
+</Info>
 
 ## Checking Current Usage
 
@@ -88,6 +96,10 @@ You can check your current usage by going through [Mergify
 dashboard](https://dashboard.mergify.com) and clicking on the Usage panel.
 
 <Screenshot src={UsageScreenshot} alt="Mergify usage panel"/>
+
+<Info>
+  This is not available for the **Enterprise** plan.
+</Info>
 
 ## Switching or Cancelling Plans
 
@@ -100,7 +112,7 @@ smooth transition.
 
 Our billing system aims for fairness, but its dynamic nature may result in
 invoices that can be complex to understand at first glance. Each invoice
-comprises two main sections.
+comprises two main sections:
 
 ### 1. **Real-time User Adjustment**
 
