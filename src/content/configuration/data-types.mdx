@@ -80,25 +80,20 @@ pull_request_rules:
 
 This format represents a schedule. It can contains only days, only times or
 both and can have a timezone specified with the times (for the list of
-available time zones, see [IANA format](https://www.iana.org/time-zones). If no
+available time zones, see [IANA
+format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). If no
 timezone is specified, it defaults to UTC.
 
-It can be used with the equality operators `=` and `!=`.
+<Warning>
+  Schedule can be only used with the equality operators `=` and `!=`.
+</Warning>
 
 ```yaml
-  schedule=Mon-Fri
-  schedule=09:00-19:00
-  schedule=09:00-19:00[America/Vancouver]
-  schedule!=Mon-Fri 09:00-19:00[America/Vancouver]
-  schedule!=SAT-SUN
-```
-
-```yaml
-- name: merge on working hour
-  conditions:
-    - schedule=Mon-Fri 09:00-19:00[America/Vancouver]
-  actions:
-    merge:
+schedule = Mon-Fri
+schedule = 09:00-19:00
+schedule = 09:00-19:00[America/Vancouver]
+schedule != Mon-Fri 09:00-19:00[America/Vancouver]
+schedule != SAT-SUN
 ```
 
 ## Timestamp

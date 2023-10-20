@@ -25,6 +25,7 @@ const valueTypeLinks: { [key: string]: string } = {
   '/definitions/CommitAuthor': '/configuration/data-types#commit-author',
   '/definitions/RuleCondition': '/configuration/conditions',
   '/definitions/Duration': '/configuration/data-types#duration',
+  '/definitions/Schedule': '/configuration/data-types#schedule',
   '/definitions/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
   '/definitions/GitHubActionsWorkflow': '/workflow/actions/github_actions#workflow-action',
   '/definitions/GitHubActionsWorkflowDispatch': '/workflow/actions/github_actions#workflow-action-dispatch',

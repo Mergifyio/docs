@@ -446,7 +446,7 @@
         },
         {
           "key": "schedule",
-          "type": "string",
+          "$ref": "#/definitions/Schedule",
           "description": "The current time will be compared against this schedule to un/validate this attribute."
         },
         {
@@ -538,6 +538,11 @@
       "$id": "/definitions/Duration",
       "type": "string",
       "description": "duration"
+    },
+    "Schedule": {
+      "$id": "/definitions/Schedule",
+      "type": "string",
+      "description": "schedule"
     },
     "ConditionString": {
       "$id": "/definitions/ConditionString",
