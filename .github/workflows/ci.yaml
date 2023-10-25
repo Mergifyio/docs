@@ -27,7 +27,7 @@ jobs:
 
   lint:
     timeout-minutes: 20
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4.1.1
@@ -36,7 +36,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          node-version: 18
+          node-version: 20
 
       - name: Lint
         run: |
@@ -45,7 +45,7 @@ jobs:
 
   docs:
     timeout-minutes: 20
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4.1.1
@@ -53,7 +53,7 @@ jobs:
       - name: Setup Node 🔧
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Build 🔧
         env:
