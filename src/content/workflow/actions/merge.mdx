@@ -7,7 +7,6 @@ import ActionOptionsTable from '../../../components/ActionOptionsTable';
 import { Screenshot } from "../../../components/Images"
 import branchProtectionConditionsScreenshot from "../../images/workflow/actions/merge/branch-protections-injection.png"
 import { Warning } from '../../../components/Alerts/Warning';
-import PlanTags from '../../../components/PlanTags';
 
 The `merge` action allows Mergify to automatically merge pull requests when
 certain conditions are met. This can significantly streamline your workflow by
@@ -53,7 +52,7 @@ The following protection settings are only partially supported by Mergify:
 - Require conversation resolution before merging;
 - Require approvals.
 
-## Pull Request Dependencies <PlanTags advanced openSource premium />
+## Pull Request Dependencies
 
 You can specify dependencies between pull requests from the same repository.
 Mergify waits for the linked pull requests to be merged before merging any pull
