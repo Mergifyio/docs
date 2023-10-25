@@ -868,7 +868,7 @@
           "$ref": "#/definitions/Template"
         },
         "merge_method": {
-          "description": "Merge method to use. Possible values are `merge`, `squash`, `rebase` or `fast-forward`. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to false.",
+          "description": "Merge method to use. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to false.",
           "$ref": "#/definitions/MergeMethod"
         },
         "priority_rules": {
@@ -1248,9 +1248,8 @@
               "$ref": "#/definitions/Template"
             },
             "method": {
-              "description": "Merge method to use.",
-              "$ref": "#/definitions/MergeMethod",
-              "default": "merge"
+              "description": "Merge method to use. If no value is set, Mergify will use the first authorized method available in the repository configuration.",
+              "$ref": "#/definitions/MergeMethod"
             },
             "allow_merging_configuration_change": {
               "type": "boolean",
@@ -1302,14 +1301,8 @@
               "$ref": "#/definitions/Template"
             },
             "merge_method": {
-              "description": "Merge method to use. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`. This option overrides the value defined in the queue rules section of the configuration.",
-              "type": "string",
-              "enum": [
-                "merge",
-                "squash",
-                "rebase",
-                "fast-forward"
-              ]
+              "description": "Merge method to use. If no value is set, Mergify will use the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`. This option overrides the value defined in the queue rules section of the configuration.",
+              "$ref": "#/definitions/MergeMethod"
             },
             "name": {
               "type": "string",
