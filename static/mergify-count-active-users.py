@@ -38,12 +38,27 @@ def get_api_and_repo_name_from_url(url):
     return host, parsed.path.strip("/")
 
 
+def _requests_get(*args, **kwargs):
+    try:
+        response = requests.get(
+            *args,
+            **kwargs,
+        )
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print("E: Unable to request GitHub, error below:")
+        print(e.json())
+        raise
+    else:
+        return response
+
+
 def get_active_prs_for_repo(api_endpoint, repo_name):
     page = 1
     prs = []
     while True:
         try:
-            response = requests.get(
+            response = _requests_get(
                 f"{api_endpoint}/repos/{repo_name}/pulls",
                 headers=HEADERS,
                 params={
@@ -93,13 +108,13 @@ def get_users_from_pr(api_endpoint, repo_name, pr):
 
     # Get PR reviewers
     try:
-        reviews_response = requests.get(
+        reviews_response = _requests_get(
             f"{api_endpoint}/repos/{repo_name}/pulls/{pr['number']}/reviews?per_page=100",
             headers=HEADERS,
         )
         reviews_response.raise_for_status()
     except Exception:
-        print("W: Unable to retrieve PR reviews, ignoring")
+        print("W: Unable to retrieve PR reviews, ignoring, error below:")
     else:
         for reviewer in reviews_response.json():
             if not is_user_ignored(reviewer["user"]):
@@ -107,7 +122,7 @@ def get_users_from_pr(api_endpoint, repo_name, pr):
 
     # Get PR comments authors
     try:
-        comments_response = requests.get(
+        comments_response = _requests_get(
             f"{api_endpoint}/repos/{repo_name}/issues/{pr['number']}/comments?per_page=100",
             headers=HEADERS,
         )
