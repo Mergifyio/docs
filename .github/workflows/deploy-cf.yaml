@@ -14,7 +14,7 @@ concurrency:
 jobs:
   deploy:
     timeout-minutes: 5
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Deployment start
         if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
