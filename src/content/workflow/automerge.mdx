@@ -54,7 +54,7 @@ steps:
      - name: Automatic merge when CI passes and reviews approve
        conditions:
          - "#approved-reviews-by>=1"
-         - status-success=CI # replace "CI" with the name of your CI status check
+         - check-success=CI # replace "CI" with the name of your CI status check
        actions:
          merge:
            method: merge
@@ -145,7 +145,7 @@ meet certain criteria. Here's how you can set this up:
      - name: Automatic merge when CI passes and reviews approve
        conditions:
          - "#approved-reviews-by>=2"
-         - status-success=CI # replace "CI" with the name of your CI status check
+         - check-success=CI # replace "CI" with the name of your CI status check
        actions:
          merge:
            method: merge
@@ -160,7 +160,7 @@ meet certain criteria. Here's how you can set this up:
      - name: Automatic merge when CI passes and reviews approve, unless 'do-not-merge' label is present
        conditions:
          - "#approved-reviews-by>=2"
-         - status-success=CI # replace "CI" with the name of your CI status check
+         - check-success=CI # replace "CI" with the name of your CI status check
          - label!=do-not-merge
        actions:
          merge:
@@ -190,14 +190,14 @@ pull_request_rules:
   - name: Automatic merge when CI passes and reviews approve
     conditions:
       - "#approved-reviews-by>=2"
-      - status-success=CI # replace "CI" with the name of your CI status check
+      - check-success=CI # replace "CI" with the name of your CI status check
     actions:
       queue:
         merge_method: merge
 ```
 
 In this case, when a pull request meets the conditions
-(`#approved-reviews-by>=2` and `status-success=CI`), it is added to the merge
+(`#approved-reviews-by>=2` and `check-success=CI`), it is added to the merge
 queue. Once it's at the front of the queue, Mergify will automatically merge it
 into the target branch and then move on to the next pull request in the queue.
 
