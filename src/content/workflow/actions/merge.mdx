@@ -119,7 +119,7 @@ pull request that has passed its CI checks and has at least 2 approved reviews.
 pull_request_rules:
   - name: automatic merge when CI checks pass and at least 2 approved reviews
     conditions:
-      - status-success=test
+      - check-success=test
       - "#approved-reviews-by>=2"
     actions:
       merge:
@@ -138,7 +138,7 @@ attributes of the pull request to build the content of the commit message.
 pull_request_rules:
   - name: automatic merge when CI checks pass and at least 2 approved reviews
     conditions:
-      - status-success=test
+      - check-success=test
       - "#approved-reviews-by>=2"
     actions:
       merge:
@@ -167,7 +167,7 @@ message of a pull request:
 pull_request_rules:
   - name: automatic merge when CI checks pass and at least 2 approved reviews
     conditions:
-      - status-success=test
+      - check-success=test
       - "#approved-reviews-by>=2"
     actions:
       merge:
