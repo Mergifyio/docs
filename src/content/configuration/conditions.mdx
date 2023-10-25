@@ -323,7 +323,7 @@ pull_request_rules:
     conditions:
       - and:
         - "#approved-reviews-by>=2"
-        - "status-success=test job"
+        - "check-success=test job"
     actions:
       merge:
         method: merge
@@ -347,7 +347,7 @@ pull_request_rules:
     conditions:
       - or:
         - "#approved-reviews-by>=2"
-        - "status-success=test job"
+        - "check-success=test job"
     actions:
       merge:
         method: merge
