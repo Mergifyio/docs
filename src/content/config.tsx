@@ -89,7 +89,7 @@ const navItems: NavItem[] = [
     title: 'Merge Queue',
     icon: <MergeQueueIcon />,
     children: [
-      { title: 'Introduction', path: '/merge-queue/intro', icon: <FaRegLightbulb /> },
+      { title: 'Introduction', path: '/merge-queue', icon: <FaRegLightbulb /> },
       { title: 'Setup', path: '/merge-queue/setup', icon: <FaGear /> },
       { title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: <SlRefresh /> },
       { title: 'Priority', path: '/merge-queue/priority', icon: <FaTrafficLight /> },

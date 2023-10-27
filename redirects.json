@@ -1,5 +1,9 @@
 [
   {
+    "fromPath": "/merge-queue/intro",
+    "toPath": "/merge-queue"
+  },
+  {
     "fromPath": "/configuration",
     "toPath": "/configuration/file-format"
   },
