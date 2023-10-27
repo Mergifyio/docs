@@ -498,7 +498,7 @@
     },
     "GitHubActionsWorkflow": {
       "$id": "/definitions/GitHubActionsWorkflow",
-      "description": "A GitHub Action workflow action",
+      "description": "A GitHub Actions workflow action",
       "type": "object",
       "properties": {
         "dispatch": {
