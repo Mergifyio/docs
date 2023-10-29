@@ -103,11 +103,11 @@ const plugins = [
       headers: {
         "/*": [
           "Cache-control: public, max-age=600, no-transform",
-          "Content-Security-Policy: default-src 'self' https:; " +
+          "Content-Security-Policy: default-src 'self'; " +
             "frame-ancestors 'none'; " +
-            "script-src 'self' https: 'unsafe-inline'; " +
-            "style-src 'self' 'unsafe-inline' https:; " +
-            "img-src 'self' data: https:; " +
+            "script-src 'self' 'unsafe-inline' https://plausible.io; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data:; " +
             "manifest-src 'self' data:",
         ]
       },
