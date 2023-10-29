@@ -6,7 +6,7 @@ import {
   BiBadgeCheck, BiSolidCoinStack, BiRuler, BiCut,
 } from 'react-icons/bi';
 import {
-  BsPatchQuestion, BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
+  BsRobot, BsPatchQuestion, BsBook, BsCommand, BsGear, BsLightbulb, BsPlugin, BsRocket, BsStack,
 } from 'react-icons/bs';
 import { FaShieldAlt, FaHome, FaRegListAlt } from 'react-icons/fa';
 import {
@@ -46,6 +46,7 @@ const navItems: NavItem[] = [
     icon: <BsGear />,
     path: '/workflow',
     children: [
+      { title: 'Introducing Workflow Automation', path: '/workflow/', icon: <BsRobot /> },
       { title: 'Writing Your First Rule', path: '/workflow/writing-your-first-rule', icon: <BiRuler /> },
       {
         title: 'Use Cases',
