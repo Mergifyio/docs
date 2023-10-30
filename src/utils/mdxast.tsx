@@ -86,12 +86,28 @@ function unhighlightEscapedCharacters(str: string): string {
   return str.replaceAll(/\\<em>(.*?)<\/em>/g, '\\$1');
 }
 
+/**
+ * We can have a case where the highlighted JSON looks like `{"default": <em>true</em>}`, this
+ * makes the JSON invalid. We need to surround those values with quotes to prevent crashing
+ */
+function quoteHighlightedValues(str: string): string {
+  return str.replaceAll(/("\w+"):([^"}{\][,]+)/gm, '$1:"$2"');
+}
+
+/**
+ * Calls functions to format JSON input and prevent edge-case issues with algolia's
+ * highlighting.
+ */
+function preventHighlightIssues(str: string) {
+  return unhighlightEscapedCharacters(quoteHighlightedValues(str));
+}
+
 export function renderMdxTable(table: TableType) {
-  const node = JSON.parse(unhighlightEscapedCharacters(table.node)) as MdxNodeJsxElement;
+  const node = JSON.parse(table.node) as MdxNodeJsxElement;
   const highlights = [...new Set(extractHighlightsFromText(table.content))];
 
   const data = table.data
-    ? (stripHtmlFromkeys(JSON.parse(unhighlightEscapedCharacters(table.data))) as {
+    ? (stripHtmlFromkeys(JSON.parse(preventHighlightIssues(table.data))) as {
       [optionKey: string]: OptionDefinition;
     })
     : {};
