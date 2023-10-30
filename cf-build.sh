@@ -46,4 +46,8 @@ trap exit EXIT
 
 gatsby build 2>&1 | tee -a build.log
 
+# Security App Scanner complains, and Gatsby doesn't care :(
+# https://github.com/gatsbyjs/gatsby/issues/23629
+rm -f public/webpack.stats.json
+
 conclusion="success" emoji="🦾"
