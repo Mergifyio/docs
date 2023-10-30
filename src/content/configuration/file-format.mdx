@@ -39,7 +39,7 @@ different aspect of Mergify:
 {/* FIXME: add link to a better page than writing your first rule? */}
 
 - [`pull_request_rules`](#pull-request-rules) configures [Automation
-  Workflow](/workflow/writing-your-first-rule);
+  Workflow](/workflow/);
 
 - [`queue_rules`](#queue-rules) configures the [Merge
   Queue](/merge-queue);
@@ -99,12 +99,11 @@ the merge queue](/merge-queue/partitions).
 ### Defaults
 
 The `defaults` section provides a means to set configuration values that act as
-fallbacks for actions executed by both [pull request
-rules](/workflow/writing-your-first-rule) and [commands](/commands). Instead of
-defining the same options repeatedly for different rules, you can specify them
-once in the defaults section. If a particular option is directly defined under
-`pull_request_rules`, it will take precedence; otherwise, the system resorts to
-the values defined in defaults.
+fallbacks for actions executed by both [pull request rules](/workflow/) and
+[commands](/commands). Instead of defining the same options repeatedly for
+different rules, you can specify them once in the defaults section. If a
+particular option is directly defined under `pull_request_rules`, it will take
+precedence; otherwise, the system resorts to the values defined in defaults.
 
 ```yaml
 defaults:
