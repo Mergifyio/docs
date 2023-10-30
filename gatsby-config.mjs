@@ -103,7 +103,9 @@ const plugins = [
       headers: {
         "/*": [
           "Cache-control: public, max-age=600, no-transform",
-          "Content-Security-Policy: default-src 'self'; " +
+          "Content-Security-Policy: " +
+            "default-src 'self'; " +
+            "connect-src https://*.algolia.net https://*.algolianet.com https://*.algolia.io; " +
             "frame-ancestors 'none'; " +
             "script-src 'self' 'unsafe-inline' https://plausible.io; " +
             "style-src 'self' 'unsafe-inline'; " +
