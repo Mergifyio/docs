@@ -10,7 +10,8 @@ import {
 } from 'react-icons/bs';
 import { FaShieldAlt, FaHome, FaRegListAlt } from 'react-icons/fa';
 import {
-  FaStairs, FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake, FaMoneyBill1,
+  FaStairs, FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight,
+  FaSnowflake, FaMoneyBill1, FaRegCirclePause,
 } from 'react-icons/fa6';
 import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
@@ -95,6 +96,7 @@ const navItems: NavItem[] = [
       { title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: <SlRefresh /> },
       { title: 'Priority', path: '/merge-queue/priority', icon: <FaTrafficLight /> },
       { title: 'Freeze', path: '/merge-queue/freeze', icon: <FaSnowflake /> },
+      { title: 'Pause', path: '/merge-queue/pause', icon: <FaRegCirclePause /> },
       { title: 'Multiple Queues', path: '/merge-queue/multi', icon: <BiSolidCoinStack /> },
       { title: 'Speculative Checks', path: '/merge-queue/speculative-checks', icon: <TbCrystalBall /> },
       { title: 'Batches', path: '/merge-queue/batches', icon: <TbPackages /> },
