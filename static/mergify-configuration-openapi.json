@@ -645,6 +645,7 @@
       ]
     },
     "TimestampOrTimestampInterval": {
+      "description": "Timestamp or timestamp interval",
       "$id": "/definitions/TimestampOrTimestampInterval",
       "anyOf": [
         {
