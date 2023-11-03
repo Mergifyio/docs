@@ -1277,6 +1277,13 @@
                 "$ref": "#/definitions/RuleCondition"
               }
             },
+            "neutral_conditions": {
+              "type": "array",
+              "description": "List of conditions to match to mark the pull request check as neutral, otherwise, it will be marked as failing.",
+              "items": {
+                "$ref": "#/definitions/RuleCondition"
+              }
+            },
             "summary": {
               "description": "The summary of the check.",
               "$ref": "#/definitions/Template"
