@@ -111,15 +111,16 @@ export function getValueType(definition): React.ReactElement {
         </Link>
       );
     } else valueType = typeDescription;
-  } else if ('anyOf' in definition) {
+  } else if ('anyOf' in definition || 'oneOf' in definition) {
+    const def = definition.anyOf || definition.oneOf;
     valueType = (
       <>
-        {definition.anyOf.map((item, index) => {
+        {def.map((item, index) => {
           let separator;
-          if (index === definition.anyOf.length - 2) {
+          if (index === def.length - 2) {
             // The last item and not the only item
             separator = ' or ';
-          } else if (index < definition.anyOf.length - 1) {
+          } else if (index < def.length - 1) {
             separator = ', ';
           } else {
             separator = '';

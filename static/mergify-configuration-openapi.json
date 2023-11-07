@@ -855,7 +855,10 @@
         },
         "checks_timeout": {
           "description": "The amount of time Mergify waits for pending checks to return before unqueueing pull requests. This cannot be less than 60 seconds.",
-          "$ref": "#/definitions/Duration"
+          "oneOf": [
+            { "$ref": "#/definitions/Duration" },
+            { "type": "null" }
+          ]
         },
         "commit_message_template": {
           "description": "Template to use as the commit message when using the `merge` or `squash` merge method.",
