@@ -382,30 +382,8 @@
         },
         {
           "key": "queue-dequeue-reason",
-          "type": "string",
-          "enum": [
-            "pr-merged",
-            "pr-dequeued",
-            "pr-ahead-dequeued",
-            "pr-ahead-failed-to-merge",
-            "pr-with-higher-priority-queued",
-            "pr-queued-twice",
-            "speculative-check-number-reduced",
-            "checks-timeout",
-            "checks-failed",
-            "queue-rule-missing",
-            "unexpected-queue-change",
-            "pr-frozen-no-cascading",
-            "target-branch-missing",
-            "target-branch-changed",
-            "pr-unexpectedly-failed-to-merge",
-            "batch-max-failure-resolution-attempts",
-            "pr-checks-stopped-because-merge-queue-pause",
-            "conflict-with-base-branch",
-            "conflict-with-pull-ahead",
-            "branch-update-failed"
-          ],
-          "description": "A dequeue code is associated to each specific reason for when a pull request has been disembarked from the merge queue."
+          "$ref": "#/definitions/QueueDequeueReason",
+          "description": "A dequeue code for when a pull request has been disembarked from the merge queue."
         },
         {
           "$ref": "#/definitions/TimestampOrRelativeTimestamp",
@@ -782,6 +760,25 @@
           }
         }
       }
+    },
+    "QueueDequeueReason": {
+      "$id": "/definitions/QueueDequeueReason",
+      "description": "Dequeue code for when a pull request has been disembarked from the merge queue.",
+      "type": "string",
+      "enum": [
+            "pr-merged",
+            "pr-dequeued",
+            "checks-timeout",
+            "checks-failed",
+            "queue-rule-missing",
+            "target-branch-missing",
+            "target-branch-changed",
+            "pr-unexpectedly-failed-to-merge",
+            "batch-max-failure-resolution-attempts",
+            "conflict-with-base-branch",
+            "conflict-with-pull-ahead",
+            "branch-update-failed"
+          ]
     },
     "QueueRule": {
       "$id": "/definitions/QueueRule",

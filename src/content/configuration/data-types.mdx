@@ -5,6 +5,9 @@ description: The different data types you can find in Mergify configuration file
 
 import { Warning, Info } from '../../components/Alerts';
 import OptionsTable from '../../components/OptionsTable';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import InlineCode from '../../components/InlineCode';
+import { PrimaryLink } from '../../components/RelativeLink';
 
 When using templates or conditions, data are made of different types. You will
 find below the different data types that are available and exposed in Mergify
@@ -296,3 +299,72 @@ Mergify also provides custom Jinja2 filters:
   By default, the HTML comments are stripped from `body`. To get the full
   body, you can use the `body_raw` attribute.
 </Info>
+
+## Queue Dequeue Reason
+
+This describes the reason why a pull request has been removed from the queue.
+
+<Table>
+  <Thead>
+    <Th>Reason</Th>
+    <Th>Description</Th>
+  </Thead>
+  <Tbody>
+    <Tr>
+      <Td><InlineCode>pr-merged</InlineCode></Td>
+      <Td>Pull request has been merged.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>pr-dequeued</InlineCode></Td>
+      <Td>
+        Pull request has been removed from the queue by an
+        <PrimaryLink href="/commands/unqueue">unqueue command</PrimaryLink> or
+        by an <PrimaryLink href="/workflow">automation rule</PrimaryLink>
+      </Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>checks-timeout</InlineCode></Td>
+      <Td>
+        The configured <PrimaryLink href="/configuration/file-format/#queue-rules">
+        <InlineCode>checks_timeout</InlineCode></PrimaryLink> has been reached.
+      </Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>checks-failed</InlineCode></Td>
+      <Td>The checks have failed.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>queue-rule-missing</InlineCode></Td>
+      <Td>The queue rule has been removed from the configuration.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>target-branch-missing</InlineCode></Td>
+      <Td>The pull request base branch is missing.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>target-branch-changed</InlineCode></Td>
+      <Td>The pull request base branch has changed.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>pr-unexpectedly-failed-to-merge</InlineCode></Td>
+      <Td>An unexpected error happened while merging the pull request.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>batch-max-failure-resolution-attempts</InlineCode></Td>
+      <Td>The maximum number of resolution attempts set in <PrimaryLink href="/configuration/file-format/#queue-rules">
+          <InlineCode>batch_max_failure_resolution_attempts</InlineCode></PrimaryLink> has been reached.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>conflict-with-base-branch</InlineCode></Td>
+      <Td>The pull request conflicts with its base branch.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>conflict-with-pull-ahead</InlineCode></Td>
+      <Td>The pull request conflicts with a pull request ahead of it.</Td>
+    </Tr>
+    <Tr>
+      <Td><InlineCode>branch-update-failed</InlineCode></Td>
+      <Td>Updating the head branch of the pull request failed.</Td>
+    </Tr>
+  </Tbody>
+</Table>
