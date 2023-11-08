@@ -68,7 +68,7 @@
     "gatsby-plugin-sitemap": "^6.12.3",
     "gatsby-plugin-svgr": "^3.0.0-beta.0",
     "gatsby-plugin-webfonts": "^2.3.2",
-    "gatsby-remark-autolink-headers": "^6.12.2",
+    "gatsby-remark-autolink-headers": "^6.12.3",
     "gatsby-remark-copy-linked-files": "^6.12.0",
     "gatsby-remark-embed-video": "^3.2.1",
     "gatsby-remark-graphviz": "^5.12.0",
