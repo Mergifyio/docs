@@ -465,7 +465,7 @@
     "GitHubLoginOrTeam": {
       "$id": "/definitions/GitHubLoginOrTeam",
       "description": "GitHub login or team",
-      "anyOf": [
+      "oneOf": [
         {
           "$ref": "#/definitions/GitHubLogin"
         },
@@ -508,7 +508,7 @@
     "Template": {
       "$id": "/definitions/Template",
       "description": "template",
-      "anyOf": [
+      "oneOf": [
         {
           "type": "string"
         },
@@ -572,7 +572,7 @@
     "Priority": {
       "$id": "/definitions/Priority",
       "description": "priority: `low`, `medium`, `high` or a value between 1 and 10000",
-      "anyOf": [
+      "oneOf": [
         {
           "type": "number",
           "minimum": 1,
@@ -613,7 +613,7 @@
     "TimestampOrRelativeTimestamp": {
       "$id": "/definitions/TimestampOrRelativeTimestamp",
       "description": "Timestamp or relative timestamp",
-      "anyOf": [
+      "oneOf": [
         {
           "$ref": "#/definitions/Timestamp"
         },
@@ -625,7 +625,7 @@
     "TimestampOrTimestampInterval": {
       "description": "Timestamp or timestamp interval",
       "$id": "/definitions/TimestampOrTimestampInterval",
-      "anyOf": [
+      "oneOf": [
         {
           "$ref": "#/definitions/Timestamp"
         },
@@ -921,11 +921,11 @@
     "RuleCondition": {
       "$id": "/definitions/RuleCondition",
       "description": "condition",
-      "anyOf": [
+      "oneOf": [
         {
           "type": "array",
           "items": {
-            "anyOf": [
+            "oneOf": [
               {
                 "$ref": "#/definitions/RuleCondition"
               },
@@ -1130,7 +1130,7 @@
             "approved": {
               "description": "If set to `true`, all the approving reviews will be removed when the pull request is updated. If set to `false`, nothing will be done. If set to a list, each item should be the GitHub login of a user whose review will be removed. If set to `from_requested_reviewers`, the list of requested reviewers will be used to get whose review will be removed.",
               "default": true,
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "boolean"
                 },
@@ -1151,7 +1151,7 @@
             "changes_requested": {
               "description": "If set to `true`, all the reviews requesting changes will be removed when the pull request is updated. If set to `false`, nothing will be done. If set to a list, each item should be the GitHub login of a user whose review will be removed. If set to `from_requested_reviewers`, the list of requested reviewers will be used to get whose review will be removed.",
               "default": true,
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "boolean"
                 },
@@ -1380,7 +1380,7 @@
           "properties": {
             "users": {
               "description": "The username to request reviews from.",
-              "anyOf": [
+              "oneOf": [
                 {
                   "$ref": "#/definitions/StringSet"
                 },
@@ -1402,7 +1402,7 @@
             },
             "users_from_teams": {
               "description": "The team names to get the list of users to request reviews from.",
-              "anyOf": [
+              "oneOf": [
                 {
                   "$ref": "#/definitions/StringSet"
                 },
@@ -1424,7 +1424,7 @@
             },
             "teams": {
               "description": "The team name to request reviews from.",
-              "anyOf": [
+              "oneOf": [
                 {
                   "$ref": "#/definitions/StringSet"
                 },
