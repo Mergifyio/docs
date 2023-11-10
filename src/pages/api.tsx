@@ -7,7 +7,7 @@ import ApiSchemas from './api-schemas.json';
 
 export default function APISpecifications() {
   return (
-    <div>
+    <div id="api-reference">
       <API apiDescriptionDocument={ApiSchemas} basePath="/api" router={typeof window === 'undefined' ? 'memory' : 'history'} />
     </div>
   );
