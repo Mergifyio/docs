@@ -118,5 +118,9 @@
   {
     "fromPath": "/actions/*",
     "toPath": "/workflow/actions/*"
+  },
+  {
+    "fromPath": "/commands/unqueue",
+    "toPath": "/commands/dequeue"
   }
 ]

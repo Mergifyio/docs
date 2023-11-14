@@ -121,7 +121,7 @@ const navItems: NavItem[] = [
       { title: 'Requeue', path: '/commands/requeue' },
       { title: 'Squash', path: '/commands/squash' },
       { title: 'Update', path: '/commands/update' },
-      { title: 'Unqueue', path: '/commands/unqueue' },
+      { title: 'Dequeue', path: '/commands/dequeue' },
     ],
   },
   {

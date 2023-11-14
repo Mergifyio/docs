@@ -76,7 +76,7 @@
             }
           ]
         },
-        "unqueue": {
+        "dequeue": {
           "$ref": "#/definitions/CommandRestriction",
           "default": [
             "sender-permission>=write"
@@ -839,7 +839,7 @@
             { "type": "number" },
             { "type": "null" }
           ],
-          "description": "The number of attempts to resolve a batch failure before unqueueing pull requests. By default, Mergify will attempt to resolve a batch failure by splitting the batch multiple times until it finds the root cause of the failure. You can stop this process earlier by limiting the number of resolution attempts. Setting this to 0 will unqueue all the pull requests from a batch when a batch fails."
+          "description": "The number of attempts to resolve a batch failure before dequeueing pull requests. By default, Mergify will attempt to resolve a batch failure by splitting the batch multiple times until it finds the root cause of the failure. You can stop this process earlier by limiting the number of resolution attempts. Setting this to 0 will dequeue all the pull requests from a batch when a batch fails."
         },
         "batch_max_wait_time": {
           "description": "The maximum amount of time to wait before creating a batch when the batch is not full.",
@@ -854,7 +854,7 @@
           "maximum": 20
         },
         "checks_timeout": {
-          "description": "The amount of time Mergify waits for pending checks to return before unqueueing pull requests. This cannot be less than 60 seconds.",
+          "description": "The amount of time Mergify waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds.",
           "oneOf": [
             { "$ref": "#/definitions/Duration" },
             { "type": "null" }

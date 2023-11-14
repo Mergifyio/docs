@@ -18,7 +18,7 @@ In this guide, we will walk you through the journey of a PR once it enters the
 merge queue, from the moment it's added until it's either successfully merged
 or removed from the queue. We'll also explain how to monitor and manage your
 merge queue effectively, and share some best practices for handling common
-scenarios such as requeueing and unqueueing PRs.
+scenarios such as requeueing and dequeueing PRs.
 
 ## Adding a Pull Request to the Merge Queue
 
@@ -57,13 +57,13 @@ strict digraph {
     node [style=filled, shape=circle, fontcolor="black", fontname="sans-serif";];
     edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
 
-    Unqueued -> Queueing [label="    `queue` or `requeue`    \n    command or action    "];
+    Dequeued -> Queueing [label="    `queue` or `requeue`    \n    command or action    "];
     Queueing -> Queued [label="Matches\n`queue_conditions`"];
 
-    Queued -> Unqueued [label="Unmatches\n    `queue_conditions`   \nor\n `unqueue` command    "]
+    Queued -> Dequeued [label="Unmatches\n    `queue_conditions`   \nor\n `dequeue` command    "]
     Queued -> Validating [label="Reaches\n    top of the queue    "]
     Validating -> Merged [label="Matches\n    `merge_conditions`    "];
-    Validating -> Unqueued [label="Unmatches\n    `queue_conditions` \nor\n    `unqueue` command     \nor\nfails to match\n`merge_conditions`"];
+    Validating -> Dequeued [label="Unmatches\n    `queue_conditions` \nor\n    `dequeue` command     \nor\nfails to match\n`merge_conditions`"];
 
     Validating [fillcolor="#DCAB07"];
     Queueing [fillcolor="#DCAB07"];
@@ -104,7 +104,7 @@ the queue.
      base branch or failure of some checks.
 
 Remember that while a pull request is in the queue, its status and position can
-be monitored, and if necessary, it can be manually requeued or unqueued — which
+be monitored, and if necessary, it can be manually requeued or dequeued — which
 we will explore in the following sections.
 
 ## Validation Checks and Updates
@@ -140,7 +140,7 @@ validated and up-to-date pull requests make it to your main branch.
 
 ## Removing a Pull Request from the Merge Queue
 
-A pull request can be removed or "unqueued" from the merge queue in a couple of
+A pull request can be removed or "dequeued" from the merge queue in a couple of
 ways:
 
 1. **Non-compliance with `queue_conditions`:** If a pull request no longer
@@ -150,12 +150,12 @@ ways:
    gets removed from the pull request, Mergify will automatically remove the
    pull request from the queue.
 
-2. **Use of the [`unqueue` command](/commands/unqueue):** A pull request can be
-   manually removed from the queue by issuing the `@mergifyio unqueue` command.
+2. **Use of the [`dequeue` command](/commands/dequeue):** A pull request can be
+   manually removed from the queue by issuing the `@mergifyio dequeue` command.
    This is particularly useful in situations where you need to stop a pull
    request from being merged, such as when a critical issue is discovered.
 
-Please note, a pull request removed from the queue with the `unqueue` command
+Please note, a pull request removed from the queue with the `dequeue` command
 will not rejoin the queue automatically — it will need to be manually re-added
 to the queue, either by re-applying the `queue` command or by re-satisfying the
 `queue_conditions`.
@@ -213,8 +213,8 @@ To requeue a pull request, you can use the `@mergifyio requeue` command in the
 pull request conversation. Once issued, the command will place the pull request
 back in the merge queue according to the queue's `queue_conditions`.
 
-On the other hand, if you manually unqueued a pull request using the
-`@mergifyio unqueue`
+On the other hand, if you manually dequeued a pull request using the
+`@mergifyio dequeue`
 command, you will need to use the `@mergifyio queue` command to put back the PR
 in a queue matching its `queue_conditions`.
 
