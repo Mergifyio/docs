@@ -4,9 +4,8 @@ description: Create a check-run on a pull request.
 ---
 
 import ActionOptionsTable from '../../../components/ActionOptionsTable';
-import { Screenshot } from "../../../components/Images"
-import postCheckActions from "../../images/workflow/actions/post_check/post-check-actions.png"
 import { Info } from '../../../components/Alerts/Info';
+import { Button } from '@chakra-ui/react';
 
 The `post_check` action allows Mergify to create a check-run on a pull request.
 This can be useful in situations where you want to add a custom check to the
@@ -31,77 +30,14 @@ and also these additional variables:
 - `{{ check_succeed }}` is `true` if all the conditions match, `false`
   otherwise;
 
-{/* FIXME: add an example with a screenshot */}
-
 - `{{ check_conditions }}` the list of all conditions with a checkbox marked if
   the condition matches.
 
 ## Examples
 
-### Check Number of Approvals
-
-```yaml
-pull_request_rules:
-  - name: post a check when PR is approved
-    conditions:
-      - "#approved-reviews-by>=2"
-    actions:
-      post_check:
-        title: PR Approved
-        summary: This PR has been approved by at least 2 developers.
-```
-
-In this example, when a pull request has at least 2 approved reviews, Mergify
-will add a new check titled "PR Approved" and set the summary and text as
-indicated. This will be visible in the checks section of the pull request on
-GitHub.
-
-### Enforcing Conventional Commits
-
-You might want to enforce some guidelines as how to write pull request titles.
-The following rules add such a check, making sure your team follows
-[Conventional Commits](https://www.conventionalcommits.org/).
-
-The check will be posted only on pull requests targeting the main branch. The
-check's conclusion will be a success if the title contains a conventional
-commit type, otherwise it will be a failure.
-
-```yaml
-pull_request_rules:
-  - name: Conventional Commit
-    conditions:
-      - base=main
-    actions:
-      post_check:
-        success_conditions:
-          - "title~=^(fix|feat|docs|style|refactor|perf|test|build|ci|chore|revert)(?:\\(.+\\))?:"
-        title: |
-          {% if check_succeed %}
-          Title follows Conventional Commit
-          {% else %}
-          Title does not follow Conventional Commit
-          {% endif %}
-        summary: |
-          {% if not check_succeed %}
-          Your pull request title must follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/).
-          {% endif %}
-```
-
-The result of this check will be visible in GitHub user interface, near the
-merge button.
-
-<Screenshot src={postCheckActions} alt="Mergify Post Check" />
-
-Checks posted by Mergify using this action are usable for any other conditions.
-Taking the, you could use the posted check to add a label when a pull request
-does not match your convention:
-
-```yaml
-pull_request_rules:
-  - name: label non compliant pull requests
-    conditions:
-      - "check-failure=Rule: Convention Commit (post_check)"
-    label:
-      toggle:
-        - non-compliant
-```
+<a href="/workflow/custom-branch-protection#leveraging-custom-checks">
+  <Button colorScheme='teal' size='lg'
+  style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+    Read Custom Branch Protections Use Case
+  </Button>
+</a>

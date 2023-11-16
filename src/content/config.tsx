@@ -11,7 +11,7 @@ import {
 import { FaShieldAlt, FaHome, FaRegListAlt } from 'react-icons/fa';
 import {
   FaStairs, FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight,
-  FaSnowflake, FaMoneyBill1, FaRegCirclePause,
+  FaSnowflake, FaMoneyBill1, FaRegCirclePause, FaUserShield,
 } from 'react-icons/fa6';
 import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
@@ -58,6 +58,7 @@ const navItems: NavItem[] = [
           { title: 'Delete Head Branches', path: '/workflow/delete-head-branches', icon: <BiCut /> },
           { title: 'Dismiss Reviews', path: '/workflow/dismiss-reviews', icon: <IoIosRemoveCircleOutline /> },
           { title: 'Rebasing PRs', path: '/workflow/rebase', icon: <TbGitBranch /> },
+          { title: 'Custom Branch Protections', path: '/workflow/custom-branch-protections', icon: <FaUserShield /> },
         ],
       },
       {
