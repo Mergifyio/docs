@@ -1,0 +1,48 @@
+---
+title: Troubleshooting your Merge Queue
+description: Solutions for troubleshooting common issues with Mergify's merge queue to ensure smooth and efficient pull request processing.
+---
+
+import { PrimaryLink } from '../../components/RelativeLink';
+
+Navigating the complexities of Mergify's merge queue can sometimes lead to
+challenges. This guide offers concise, effective solutions for the most common
+issues, helping you maintain a smooth and efficient pull request process.
+
+Whether it's a delay, an unexpected behavior, or a processing hiccup, we've got
+you covered with practical tips to keep your workflow running seamlessly.
+
+### Problem: Continuous Integration Pipeline Isn't Triggered 
+
+If your continuous integration pipeline isn't triggered when temporary pull
+requests are created, check your CI system configuration. Make sure it is set
+up to run on all pull requests, not just those targeting specific branches.
+
+Branches created by Mergify are prefixed with `mergify/merge-queue/` by default
+and can be change with the [`queue_branch_prefix`
+settings](/configuration/file-format#queue-rules).
+
+### Problem: Mergify Creates Temporary Pull Requests, But They Aren't Merged
+
+Check the `merge_conditions` in the `queue_rules` from your Mergify
+configuration. If these conditions aren't met, Mergify won't be able to merge
+the temporary pull requests.
+
+### Problem: Merge Process is Slow Despite Speculative Checks
+
+This could be due to various reasons. Your `speculative_checks` number might be
+too low, causing fewer PRs to be tested together. Alternatively, your
+continuous integration might be the bottleneck. Check the capacity of your CI
+system; you might need to scale it up to handle the load from speculative
+checks.
+
+Remember, the primary goal of speculative checks is to reduce the overall time
+to merge all PRs. It does not necessarily decrease the time to merge a single
+PR.
+
+You can check the [performance](performance) page for more insight on merge
+queue performances.
+
+For further issues, don't hesitate to contact the <PrimaryLink
+href="mailto:support@mergify.com">Mergify support team</PrimaryLink> will be
+glad to assist you.

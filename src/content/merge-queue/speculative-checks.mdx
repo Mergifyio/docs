@@ -3,7 +3,6 @@ title: Speculative Checks
 description: Accelerates the merging process by testing the compatibility of multiple queued pull requests in parallel.
 ---
 
-import { PrimaryLink } from '../../components/RelativeLink';
 import { Info } from "../../components/Alerts/Info"
 import { Warning } from "../../components/Alerts/Warning"
 import { Screenshot } from "../../components/Images"
@@ -239,35 +238,6 @@ In all these scenarios, the speculative checks process is dynamic and adjusts
 itself to the changes, ensuring that the merged code meets the criteria defined
 in the `queue_rules`.
 
-## Advanced Tips and Best Practices
-
-### 1. Use a High `speculative_checks` Value for Active Repositories
-
-If your repository is very active with numerous pull requests being created and
-merged regularly, consider setting a high `speculative_checks` value. This
-allows more PRs to be tested in parallel, thereby speeding up the overall
-merging process.
-
-### 2. Optimize Your CI Pipeline
-
-Speculative checks aim to reduce the overall merge time by parallelizing the
-testing of multiple PRs. This, however, requires a robust CI/CD pipeline that
-can handle multiple runs simultaneously. Optimizing your pipeline by reducing
-test run time or increasing concurrent job limit can significantly improve the
-effectiveness of speculative checks.
-
-### 3. Pair with Priority Rules
-
-When combined with [priority rules](priority), speculative checks become even
-more powerful. You can define priority for PRs so that urgent ones are merged
-faster, while the rest are tested speculatively in the background.
-
-### 4. Review Your `queue_rules` Regularly
-
-Regularly reviewing and updating your `queue_rules` can ensure your speculative
-checks configuration is always aligned with your project's current needs and
-workflow.
-
 ## Important Considerations
 
 While speculative checks can greatly speed up the merging process, there are a
@@ -277,7 +247,7 @@ few important considerations to keep in mind when using this feature:
 
 Speculative checks operate by creating temporary pull requests, which merge
 multiple PRs with the base branch. This process requires the branch protection
-setting "Require branches to be up to date before merging" to be disabled.
+setting `Require branches to be up to date before merging` to be disabled.
 
 This does not mean that Mergify will test outdated PRs, but it will merge the
 original pull requests once its speculative checks is finished. The original PR
@@ -293,41 +263,7 @@ depending on your requirements and available CI resources.
 ### Queued PR Changes
 
 Remember that changes to PRs or the queue can disrupt the speculative checks
-process. If a PR is updated in a way that it no longer meets the `queue_rules`,
-it will be removed from the queue, and the order of checks will be updated. In
-such cases, the process resets, and the remaining PRs are rechecked in their
-new order.
-
-## Troubleshooting Speculative Checks
-
-### Problem: Continuous Integration Pipeline Isn't Triggered 
-
-If your continuous integration pipeline isn't triggered when temporary pull
-requests are created, check your CI system configuration. Make sure it is set
-up to run on all pull requests, not just those targeting specific branches.
-
-Branches created by Mergify are prefixed with `mergify/merge-queue/` by default
-and can be change with the [`queue_branch_prefix`
-settings](/configuration/file-format#queue-rules).
-
-### Problem: Mergify Creates Temporary Pull Requests, But They Aren't Merged
-
-Check the `queue_rules` merge conditions in your Mergify configuration. If
-these conditions aren't met, Mergify won't be able to merge the temporary pull
-requests.
-
-### Problem: Merge Process is Slow Despite Speculative Checks
-
-This could be due to various reasons. Your `speculative_checks` number might be
-too low, causing fewer PRs to be tested together. Alternatively, your
-continuous integration might be the bottleneck. Check the capacity of your CI
-system; you might need to scale it up to handle the load from speculative
-checks.
-
-Remember, the primary goal of speculative checks is to reduce the overall time
-to merge all PRs. It does not necessarily decrease the time to merge a single
-PR.
-
-For further issues, don't hesitate to contact the <PrimaryLink
-href="mailto:support@mergify.com">Mergify support team</PrimaryLink> will be
-glad to assist you.
+process. If a PR is updated or changes in a way that it no longer meets the
+`queue_rules`, it will be removed from the queue, and the order of checks will
+be updated. In such cases, the process resets, and the remaining PRs are
+rechecked in their new order.
