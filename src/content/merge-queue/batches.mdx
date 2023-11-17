@@ -17,9 +17,11 @@ queue. This option determines the number of pull requests that Mergify will
 combine into a single draft pull request. The draft pull request is then
 validated by your Continuous Integration (CI) system. If the CI validation
 passes, Mergify merges all the pull requests in the batch and closes the draft
-pull request. If a failure occurs, Mergify identifies the problematic pull
-request(s) and removes them from the queue, allowing the rest of the queue to
-be processed as usual.
+pull request.
+
+If a failure occurs, Mergify identifies the problematic pull request(s)
+automatically and removes them from the queue, allowing the rest of the queue
+to be processed as usual.
 
 This feature is especially useful for large-scale projects with many pull
 requests to merge, as it can significantly reduce the time required to merge
@@ -29,7 +31,7 @@ them all.
 
 ## Understanding Batch Merging
 
-Batch merging works by utilizing the `batch_size` option in your Mergify
+Batch merging works by utilizing the `batch_size` option in your Mergify queue
 configuration. This option tells Mergify how many pull requests it should try
 to combine and validate at once. The `batch_size` can be adjusted according to
 the needs of your project, with a higher number indicating a larger batch size.
@@ -78,7 +80,7 @@ strict digraph {
 In case the draft pull request fails CI validation, it means one or more pull
 requests in the batch have introduced changes that are causing the failure.
 Mergify handles this scenario by using a binary search method to identify the
-failing pull request(s). It does this by systematically reducing the batch size
+failing pull request. It does this by systematically reducing the batch size
 and re-running the CI checks until it finds the problematic pull request. Once
 found, the failing pull request is removed from the queue and the rest of the
 pull requests are processed as usual.
@@ -89,7 +91,7 @@ merged more efficiently than if they were handled individually.
 ## Configuring Batch Merging
 
 Configuring batch merging involves adjusting your Mergify configuration file to
-set the `batch_size` options according to your project's needs.
+set the `batch_size` option according to your project's needs.
 
 1. Open your [Mergify configuration file](/configuration/file-format).
 
@@ -107,6 +109,21 @@ In the above example, batches of up to 3 pull requests will be created and
 tested together.
 
 <Screenshot src={batchesScreenshot} alt="Mergify merge queue with batches" />
+
+You can configure the delay that Mergify will use to wait for the batch to be
+filled up using the `batch_max_wait_time` option.
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size: 5
+    batch_max_wait_time: 5 min
+    ...
+```
+
+With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
+the queue before creating a batch. This allows you to pick the right trade-off
+between latency and minimal CI usage.
 
 If you want to further optimize your merge queue, you can also adjust the
 `speculative_checks` option. This determines how many batches Mergify will try
@@ -198,6 +215,8 @@ strict digraph {
 With this configuration, even if your CI time is 10 minutes, you can merge the
 first 6 pull requests in only 10 minutes, as opposed to the 1 hour it would
 typically take to test each pull request individually.
+
+Check out our [performance page](performance) for more information.
 
 ## Handling Batch Failure
 
