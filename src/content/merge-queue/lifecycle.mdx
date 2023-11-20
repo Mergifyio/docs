@@ -218,6 +218,12 @@ On the other hand, if you manually dequeued a pull request using the
 command, you will need to use the `@mergifyio queue` command to put back the PR
 in a queue matching its `queue_conditions`.
 
+## Base Branch Updates
+
+The merge queue tests pull requests against the latest version of the base
+branch. Therefore, if a new commit is pushed to the base branch, Mergify resets
+the process and starts over with the updated base branch.
+
 ## Monitoring the Status of PRs in the Merge Queue
 
 To keep track of the status and progress of your pull requests in the merge

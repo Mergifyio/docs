@@ -11,7 +11,7 @@ import {
 import { FaShieldAlt, FaHome, FaRegListAlt } from 'react-icons/fa';
 import {
   FaStairs, FaCirclePlay, FaRegLightbulb, FaGear, FaTrafficLight,
-  FaSnowflake, FaMoneyBill1, FaRegCirclePause, FaUserShield,
+  FaSnowflake, FaMoneyBill1, FaRegCirclePause, FaUserShield, FaBug,
 } from 'react-icons/fa6';
 import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
@@ -106,6 +106,7 @@ const navItems: NavItem[] = [
       { title: 'Partitions', path: '/merge-queue/partitions', icon: <AiOutlinePartition /> },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: <AiOutlineDeploymentUnit /> },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: <MdMonitorHeart /> },
+      { title: 'Troubleshooting', path: '/merge-queue/troubleshooting', icon: <FaBug /> },
     ],
   },
   {

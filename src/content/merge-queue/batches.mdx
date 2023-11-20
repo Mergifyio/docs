@@ -283,22 +283,22 @@ While using batch merging and speculative checks together can significantly
 speed up your merge queue processing, it's crucial to consider the following
 points for an optimal setup:
 
-- **CI Resource Utilization**: Increasing the batch size and speculative checks
-  could lead to higher usage of your Continuous Integration (CI) resources.
-  Ensure that your CI provider can handle the increased load without affecting
-  other tasks or exceeding any limitations.
+### Branch Protection Settings
 
-- **Base Branch Updates**: Batch merging tests pull requests against the latest
-  version of the base branch within another temporary pull request. Therefore,
-  if a new commit is pushed to the base branch, Mergify resets the process and
-  starts over with the updated base branch.
+Since pull requests are tested within temporary ones, the branch protection
+setting `Require branches to be up to date before merging` needs to be
+disabled. If your team requires a linear history, you can set the queue option
+`merge_method: rebase`.
 
-- **Branch Protection Settings**: Since pull requests are tested within
-  temporary ones, the branch protection setting `Require branches to be up to
-  date before merging` needs to be disabled. If your team requires a linear
-  history, you can set the queue option `merge_method: rebase`.
+This does not mean that Mergify will test outdated PRs, but it will merge the
+original pull requests once its speculative checks is finished. The original PR
+won't be up-to-date according to GitHub, which means using this setting would
+block the merge.
 
-- **Queue Management**: With batch merging, if a pull request within a batch
-  fails, it is removed from the queue, and the remaining ones are processed as
-  usual. It's essential to monitor your queue to handle any such failures
-  promptly.
+### Queued PR Changes
+
+Remember that changes to PRs or the queue can disrupt the batch process. If a
+PR is updated or changes in a way that it no longer meets the `queue_rules`, it
+will be removed from the queue, and the order of checks will be updated. In
+such cases, the process resets, and the remaining PRs are rechecked in their
+new order.
