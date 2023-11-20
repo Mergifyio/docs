@@ -124,26 +124,6 @@ queue_rules:
 With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
-
-If you want to further optimize your merge queue, you can also adjust the
-`speculative_checks` option. This determines how many batches Mergify will try
-to validate at the same time.
-
-```yaml
-queue_rules:
-  - name: default
-    speculative_checks: 2
-    batch_size: 3
-    ...
-```
-
-In the above example, Mergify will create up to 2 batches, each containing up
-to 3 pull requests, and test them in parallel.
-
-By adjusting these settings, you can find the optimal balance for your project
-between ensuring quality (by thoroughly testing each change) and maintaining
-productivity (by merging changes quickly).
-
 ## Batch Merging and Speculative Checks
 
 Batch merging and speculative checks are two powerful features that work in
@@ -161,6 +141,17 @@ of these batches at the same time (as defined by the `speculative_checks`
 option). If any pull request within a batch fails, [Mergify identifies the
 culprit through a binary search, removes it from the queue, and continues
 processing the rest of the queue](#handling-batch-failure).
+
+```yaml
+queue_rules:
+  - name: default
+    speculative_checks: 2
+    batch_size: 3
+    ...
+```
+
+In the above example, Mergify will create up to 2 batches, each containing up
+to 3 pull requests, and test them in parallel.
 
 Combining these two features allows you to optimize the throughput of your
 merge queue. You can increase the batch size to merge more pull requests
