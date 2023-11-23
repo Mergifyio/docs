@@ -57,10 +57,10 @@ queue_rules:
   - name: default
     queue_conditions:
       - or:
-        - queue-partition-name!=projectA
+        - partition-name!=projectA
         - check-success=ciA
       - or:
-        - queue-partition-name!=projectB
+        - partition-name!=projectB
         - check-success=ciB
 ```
 
@@ -98,10 +98,10 @@ queue_rules:
   - name: default
     queue_conditions:
       - or:
-        - queue-partition-name!=projectA
+        - partition-name!=projectA
         - check-success=ciA
       - or:
-        - queue-partition-name!=projectB
+        - partition-name!=projectB
         - check-success=ciB
 ```
 
