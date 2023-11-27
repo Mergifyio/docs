@@ -3,9 +3,12 @@ title: Merge Queue Batches
 description: Increase your merge queue throughput and decrease your CI usage.
 ---
 
+import { Info } from "../../components/Alerts/Info"
+import { Warning } from "../../components/Alerts/Warning"
 import { Screenshot } from "../../components/Images"
 import batchesScreenshot from "../images/merge-queue/batches/batches-dashboard.png"
 import { Success } from "../../components/Alerts/Success"
+import requiredPRbypassScreenshot from "../images/merge-queue/batches/mergify-required-pull-request-bypass.png"
 
 Mergify's batch merging feature is a powerful tool that enhances productivity
 and efficiency in your development workflow. Instead of merging pull requests
@@ -124,6 +127,7 @@ queue_rules:
 With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
+
 ## Batch Merging and Speculative Checks
 
 Batch merging and speculative checks are two powerful features that work in
@@ -208,6 +212,60 @@ first 6 pull requests in only 10 minutes, as opposed to the 1 hour it would
 typically take to test each pull request individually.
 
 Check out our [performance page](performance) for more information.
+
+## Merging the Draft PRs
+
+By default, Mergify creates temporary branches and draft PRs for testing
+batches. However, the original PRs are the ones merged, not these temporary
+branches. This ensures the integrity and traceability of the original pull
+requests.
+
+However, there might be scenarios where you want to merge the temporary
+branches instead. One advantage of this is maintaining the same SHA1, which
+might be important for some workflows and for traceability.
+
+Also, if you are deploying after a merge, this can also make sure that you
+trigger only a single deployment once a batch of pull request is fully tested
+and passes the CI.
+
+Mergify provides a setting called `queue_branch_merge_method` for this purpose.
+By setting `queue_branch_merge_method` to `fast-forward`, Mergify will merge
+the temporary branches instead of the original PRs. The default setting is
+`none`, which means the temporary branches are not merged.
+
+Here is an example configuration:
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size: 10
+    queue_branch_merge_method: fast-forward
+    merge_method: merge
+```
+
+<Info>
+
+  Please note that this setting only works if `merge_method` is set to `merge`.
+  This is necessary so GitHub can mark the original PR as "merged" once the
+  temporary branch is merged. This configuration makes sure that the original
+  SHA1 from the PRs are included in the temporary branch and thus are detected
+  as merged. Importantly, the final merged result is the exact SHA1 of what has
+  been tested by CI, ensuring consistency and traceability.
+
+</Info>
+
+<Warning>
+
+  If GitHub branch protections are enabled, fast-forward requires some
+  additional configuration in branch protection settings, you also need to
+  allow Mergify to "bypass the required pull requests" to merge.
+
+  This is mandatory since Mergify pushes the temporary branch to the base
+  branch without going through a pull request in order to keep the same SHA1.
+
+  <Screenshot src={requiredPRbypassScreenshot} alt="Mergify bypass required pull requests" />
+
+</Warning>
 
 ## Handling Batch Failure
 
