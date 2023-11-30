@@ -44,9 +44,9 @@ jobs:
           token: ${{ secrets.MERGIFY_CI_BOT_PAT }}
           author: mergify-ci-bot <mergify-ci-bot@users.noreply.github.com>
           title: "chore: sync Mergify public API schema file"
-          body: "Online API docs update is automatically fetched from engine"
+          body: "Online API docs update is automatically fetched from engine via GCS"
           commit-message: "chore: sync Mergify public API schema file"
-          branch: openapi-docs-sync
+          branch: openapi-spec-sync
           base: main
 
       - name: Report Status
