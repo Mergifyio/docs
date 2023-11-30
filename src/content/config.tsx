@@ -17,7 +17,7 @@ import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
 import { IoIosRemoveCircleOutline } from 'react-icons/io';
 import { LiaShareAltSolid } from 'react-icons/lia';
-import { MdMonitorHeart } from 'react-icons/md';
+import { MdMonitorHeart, MdScheduleSend } from 'react-icons/md';
 import {
   SiSlack, SiDatadog, SiSnyk, SiDependabot, SiTeamcity,
   SiGithubactions, SiJenkins, SiCircleci, SiBuildkite, SiGitlab,
@@ -54,6 +54,7 @@ const navItems: NavItem[] = [
         icon: <BsLightbulb />,
         children: [
           { title: 'Automatic Merge', path: '/workflow/automerge', icon: <GoGitMerge /> },
+          { title: 'Scheduling Merges', path: '/workflow/schedule-merge', icon: <MdScheduleSend /> },
           { title: 'Request Reviews', path: '/workflow/request-reviews', icon: <GoCodeReview /> },
           { title: 'Delete Head Branches', path: '/workflow/delete-head-branches', icon: <BiCut /> },
           { title: 'Dismiss Reviews', path: '/workflow/dismiss-reviews', icon: <IoIosRemoveCircleOutline /> },

@@ -13,7 +13,7 @@ import {
 import { BiBadgeCheck, BiCut } from 'react-icons/bi';
 import {SiSlack, SiGithub, SiTwitter, SiYoutube, SiLinkedin} from 'react-icons/si';
 import {SlRefresh, SlSpeedometer} from 'react-icons/sl';
-import {MdMonitorHeart} from 'react-icons/md';
+import {MdMonitorHeart, MdScheduleSend} from 'react-icons/md';
 import {GoGitMerge, GoGitCommit, GoCodeReview} from 'react-icons/go';
 import {BsPatchQuestion, BsRocket, BsPlugin, BsStack, BsDoorOpen, BsLightningCharge, BsListTask, BsRobot, BsChatText, BsType, BsCommand} from 'react-icons/bs';
 import {BiSolidCoinStack, BiRuler} from 'react-icons/bi';
@@ -70,6 +70,12 @@ and adapt it to your own needs.
     description="Merge your pull requests as soon as they are ready."
     path="/workflow/automerge"
     icon={<GoGitMerge/>}
+  />
+  <Docset
+    title="Scheduling Merges"
+    description="Schedule your pull requests at the right time."
+    path="/workflow/schedule-merge"
+    icon={<MdScheduleSend/>}
   />
   <Docset
     title="Request Reviews"
