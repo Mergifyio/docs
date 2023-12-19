@@ -485,7 +485,10 @@
       "type": "object",
       "properties": {
         "dispatch": {
-          "$ref": "#/definitions/GitHubActionsWorkflowDispatch",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GitHubActionsWorkflowDispatch"
+          },
           "description": "The list of workflows to dispatch via the action."
         }
       }
@@ -928,7 +931,19 @@
           "items": {
             "oneOf": [
               {
-                "$ref": "#/definitions/RuleCondition"
+                "type": "object",
+                "propertyNames": {
+                  "enum": [
+                    "or",
+                    "and",
+                    "not"
+                  ]
+                },
+                "patternProperties": {
+                  "": {
+                    "$ref": "#/definitions/RuleCondition"
+                  }
+                }
               },
               {
                 "$ref": "#/definitions/ConditionString"
