@@ -376,6 +376,11 @@
           "description": "The name of the partitions the pull request is queued in."
         },
         {
+          "key": "queue-name",
+          "type": "string",
+          "description": "The name of the queue containing the pull request."
+        },
+        {
           "key": "queue-position",
           "type": "number",
           "description": "The position of the pull request in its queue if queued.\nThe first pull request in the queue has position 0.\nThe value is set to -1 if the pull request is not queued.\nNB: If you are using partitions, this condition returns the maximum position of the pull request from all the partitions it is queued in."
