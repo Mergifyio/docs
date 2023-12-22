@@ -381,6 +381,16 @@
           "description": "The position of the pull request in its queue if queued.\nThe first pull request in the queue has position 0.\nThe value is set to -1 if the pull request is not queued.\nNB: If you are using partitions, this condition returns the maximum position of the pull request from all the partitions it is queued in."
         },
         {
+          "key": "queue-frozen",
+          "type": "boolean",
+          "description": "Whether the pull request is in a queue that is frozen."
+        },
+        {
+          "key": "queue-freeze-reason",
+          "type": "string",
+          "description": "The reason for the queue containing the pull request to be frozen."
+        },
+        {
           "key": "queue-dequeue-reason",
           "$ref": "#/definitions/QueueDequeueReason",
           "description": "A dequeue code for when a pull request has been disembarked from the merge queue."
