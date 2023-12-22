@@ -1,0 +1,54 @@
+---
+title: Using Datadog with Mergify
+description: Learn how you can monitor Mergify using Datadog.
+---
+
+import { Image } from "astro:assets"
+import datadogDashboadScreenshot from "../../images/integrations/datadog/dashboard.png"
+import Button from '../../../components/Button.astro';
+import datadogLogo from "../../images/integrations/datadog/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={datadogLogo} alt="DataDog logo"/>
+
+Mergify now seamlessly integrates with Datadog, enabling you to monitor your
+automation workflows and gain actionable insights from your development
+process. This integration empowers teams with metrics from Mergify, all
+visualized in your Datadog dashboard.
+
+## Getting Started
+
+Before diving into the features, you'll need to set up the integration:
+
+<Button href="https://docs.datadoghq.com/integrations/mergify/" colorScheme='blue' 
+style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+  Deploy Mergify plugin for Datadog agent
+</Button>
+
+## Features and Benefits
+
+### Real-Time Monitoring
+
+Monitor your Mergify activity in real-time. Track the number of pull requests
+queued, and any issues or bugs that arise during the check process.
+
+<Image src={datadogDashboadScreenshot} alt="Datadog dashboard with mergify's metrics"/>
+
+### Customizable Dashboards
+
+Craft your dashboard views in Datadog to highlight the most crucial Mergify
+metrics for your team. Whether you're looking at PR merge times or tracking
+down an automation error, you can mold the dashboard to fit your needs.
+
+### Alerts and Notifications
+
+Set up custom alerts based on specific Mergify events or thresholds. Get
+notified instantly when something needs your attention, ensuring rapid response
+times and maintaining smooth development flows.
+
+### Continuous Improvement
+
+By integrating Mergify with Datadog, you're not just monitoring; you're
+continuously improving. The insights gathered can guide process enhancements,
+identify bottlenecks, and ensure that your development lifecycle is as
+efficient as it can be.

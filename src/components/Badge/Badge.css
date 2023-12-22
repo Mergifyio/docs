@@ -1,0 +1,12 @@
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0.25em 0.5em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1ch;
+  white-space: nowrap;
+  background-color: var(--chakra-colors-orange-100);
+  color: var(--chakra-colors-orange-800);
+}

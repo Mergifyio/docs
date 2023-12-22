@@ -1,0 +1,137 @@
+---
+title: Using Multiple Queues
+description: Learn how to implement multiple merge queues and route your pull requests.
+---
+import Youtube from '../../../components/Youtube.astro'
+
+In larger projects with a high volume of pull requests, managing merges can
+become a complex task. This is where Mergify's multiple queues feature can be a
+game-changer. It enables you to have finer control over the merge process by
+categorizing and prioritizing pull requests based on their relevance, urgency,
+or any other criteria you define.
+
+Multiple queues allow you to organize your pull requests into separate lanes,
+each with its own rules and priorities. This is particularly useful when you
+want to expedite critical fixes or prioritize feature deployments without
+disrupting the regular flow of code integration. By using multiple queues, you
+can ensure that important pull requests get the attention they deserve, while
+others continue to be processed in their own time. In this documentation, we'll
+guide you through the process of understanding, setting up, and efficiently
+managing multiple queues.
+
+<Youtube video="RlV43lXINwc" title="Prioritize Urgent Merging" />
+
+## Understanding Multiple Queues
+
+Mergify's multiple queues system is a powerful tool for managing a large number
+of pull requests. In essence, it allows you to create different queues, each
+with its unique configuration, set of rules and priorities.
+
+The processing of queues is done in the order they are defined. The first queue
+listed in your configuration is considered the highest priority queue. This
+means that all pull requests in this queue will be processed before moving onto
+the next queue. Mergify starts processing from the highest priority queue and
+then moves down to lower priority queues.
+
+{/* FIXME: add graphviz schema */}
+
+Inside each queue, pull requests are processed in the order they arrive,
+following a First-In-First-Out (FIFO) model. However, if you define [priority
+rules](priority), you can influence this order. Each pull request can have its
+own priority within the queue based on these rules. This adds another layer of
+control, allowing you to specify the order of pull requests within each queue.
+
+In short, queues control the order in which groups of pull requests are
+processed, while [priority rules](priority) (if defined) can adjust the order
+of pull requests within each queue. Furthermore, each queue can have its own
+configuration (e.g., [speculative checks](speculative-checks),
+[batches](batches)), giving you even more control over its behavior.
+
+This dual-layer system gives you fine-grained control over your pull request
+processing pipeline.
+
+## Configuring Multiple Queues
+
+Multiple queues in Mergify can be configured using the `queue_rules`
+configuration in your Mergify YAML file. Each queue rule should be identified
+by a unique name and can have different configurations. Here is a step-by-step
+guide on how to set up multiple queues and some configuration options that you
+can use.
+
+1. **Define Your Queues**: Start by identifying the different queues you need.
+   This could be based on your project's requirements, the type of pull
+   requests, or the teams working on them. Write your
+   [`queue_conditions`](lifecycle#adding-a-pull-request-to-the-merge-queue)
+   accordingly.
+
+```yaml
+queue_rules:
+  - name: urgent
+    # This can be queued before CI finishes its first run if the PR has the urgent label
+    queue_conditions:
+      - label = urgent
+    # We still want the CI to pass to merge the PR
+    merge_conditions:
+      - check-success = myci
+  - name: standard
+    # CI is needed for queueing and merging the PR
+    queue_conditions:
+      - check-success = myci
+```
+
+   In this example, pull requests with the `urgent` label will be queued into
+   the `urgent` queue before the first CI even finished, making sure the PR is
+   updated and scheduled as soon as possible.
+
+2. **Configure Each Queue**: For each queue, you can specify different
+   configurations like `batch_size` or `speculative_checks`.
+
+```yaml
+queue_rules:
+  - name: urgent
+    ...
+    batch_size: 2
+    speculative_checks: 2
+  - name: standard
+    ...
+    batch_size: 5
+    speculative_checks: 3
+```
+
+## Queue Interruption and Priority
+
+One of the essential features of Mergify's multiple queues is the dynamic
+handling of queue priorities. By default, when a pull request enters a queue
+that has a higher precedence over the one currently being processed, the
+processing of the current queue gets interrupted, and the higher precedence
+queue takes over. This ensures that your most critical pull requests are
+processed as soon as possible, regardless of what else is happening.
+
+However, there might be cases where you don't want this interruption to occur —
+perhaps you don't want to disturb an ongoing CI process, or you have specific
+scheduling needs. For this, Mergify offers the
+`disallow_checks_interruption_from_queues` configuration option.
+
+By listing queues in `disallow_checks_interruption_from_queues` that should not
+interrupt the queue, you can prevent a lower priority queue from being
+interrupted by a newly arrived pull request in a higher priority queue. This
+gives you even more control over how your pull requests are processed and
+merged, allowing you to fine-tune the process to match your team's workflow and
+needs.
+
+```yaml
+queue_rules:
+  - name: urgent
+    ...
+  - name: default
+    ...
+  - name: lowprio
+    ...
+    disallow_checks_interruption_from_queues:
+      - default
+```
+
+In the example above, if Mergify has launched a job to process PRs from the
+`lowprio` queue, it will not interrupt this job as soon as a PR enter the
+`default` queue. Mergify waits for the current job to be finished, and then
+move on to the `default` queue.

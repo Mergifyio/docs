@@ -1,0 +1,61 @@
+---
+title: Assign
+description: Assign a pull request to a user.
+---
+
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
+
+The `assign` action allows you to assign one or more users to a pull request
+when the conditions you specify are met. This can help automate the process of
+designating the right people to handle specific pull requests, based on your
+conditions. This can significantly streamline your pull request management
+process and ensure that the right people are always aware of and working on the
+pull requests that require their attention.
+
+## Parameters
+
+<ActionOptionsTable action="assign"  />
+
+As the list of users in `add_users` or `remove_users` is based on
+[templates](/configuration/data-types#template), you can use, e.g.,
+`{{author}}` to assign the pull request to its author.
+
+:::caution
+  Make sure the users you specify in the assign action have the necessary
+  access to the repository and the pull request. If the specified user does not
+  have the necessary permissions, the action will fail.
+:::
+
+## Examples
+
+### Assign Defined User
+
+Below is an example of how to use the `assign` action:
+
+```yaml
+pull_request_rules:
+  - name: assign PR to a user
+    conditions:
+      - "#files=1"
+    actions:
+      assign:
+        add_users:
+          - "username1"
+          - "username2"
+```
+
+### Assign Pull Request Author User
+
+Below is an example of how to use the `assign` action to assign a pull request
+to its author:
+
+```yaml
+pull_request_rules:
+  - name: assign PR to its author
+    conditions:
+      - "#files=1"
+    actions:
+      assign:
+        add_users:
+          - "{{author}}"
+```

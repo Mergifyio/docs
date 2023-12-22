@@ -1,0 +1,29 @@
+---
+title: Rebase
+description: Rebase the pull request on top of its base branch.
+---
+
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable'
+import Button from '../../../../components/Button.astro';
+
+The `rebase` action makes Mergify rebase the pull request on top of its base
+branch. This is useful when you want to ensure that your pull request is always
+up-to-date with the latest changes from the base branch.
+
+:::note
+  You do not need to use this action if you use the [merge
+  queue](/merge-queue). The merge queue automatically update the pull requests
+  it processes as necessary, making sure they are tested with up-to-date code
+  before being merged.
+:::
+
+## Parameters
+
+<ActionOptionsTable action='rebase'/>
+
+## Examples
+
+<Button colorScheme='teal' size='lg' href="/workflow/rebase#automatically-rebasing-prs"
+style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+  Read Rebase Use Cases
+</Button>

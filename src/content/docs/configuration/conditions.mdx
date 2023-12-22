@@ -1,0 +1,400 @@
+---
+title: Mergify Conditions
+description: Everything you need to know when writing conditions in Mergify
+---
+
+import PullRequestAttributesTable from '../../../components/Tables/PullRequestAttributes.tsx';
+import { Image } from "astro:assets"
+import configEditorScreenshot from "../../images/configuration/config-editor.png"
+import checkSummaryScreenshot from "../../images/configuration/check-summary.png"
+
+Conditions are an essential component of Mergify rules, as they define the
+criteria that must be met for a rule to be applied. By utilizing conditions,
+you can create highly customizable and flexible rules tailored to your specific
+workflow requirements. Conditions enable you to target pull requests based on
+various factors such as their status, properties, labels, and associated
+statuses or checks.
+
+In this guide, we will explore the structure, syntax, and usage of conditions
+in Mergify rules. You will learn how to craft effective conditions that help
+you automate and streamline your pull request management process.
+
+## Structure of a Condition
+
+A condition in Mergify rules is composed of three key components: attributes,
+operators, and values, along with optional modifiers. These components work
+together to define the criteria that must be met for the condition to be
+considered true.
+
+The grammar for a condition is as follows:
+
+`[ "-" ] [ "#" ] <attribute> [ <operator> <value> ]`
+
+### Modifiers
+
+- The optional minus (`-`) operator at the beginning of the condition negates
+  the result of the condition, acting as a "not" operator.
+
+- The optional hash (`#`) operator is used to evaluate the length of a list
+  when the attribute is a list.
+
+### Attributes
+
+Attributes represent the properties or characteristics of a pull request that
+you want to evaluate in your condition. These can include elements such as the
+number of approvals, the presence of specific labels, or the status of CI
+checks.
+
+### Operators
+
+Operators are used to compare the attribute to a specified value. Mergify
+supports various comparison operators (e.g., `=`, `!=`, `<`, `>`).
+
+When the attribute is a list, comparison operators behave as if "any" is used on
+the list, meaning the condition will return true if any element of the list
+matches the given operator and value.
+
+### Values
+
+Values are the reference points used to evaluate the attribute. They can be
+strings, numbers, or booleans, depending on the attribute being evaluated.
+
+For example, consider the following condition:
+
+`#approved-reviews-by>=2`
+
+In this condition:
+
+- The attribute is `approved-reviews-by`, which represents the list of approved
+  reviewers for a pull request.
+
+- The operator is `>=`, which means "greater than or equal to."
+
+- The value is `2`, which indicates the minimum number of approved reviews
+  required for the condition to be true.
+
+- The hash (`#`) operator is used to evaluate the length of the list of
+  approved reviewers.
+
+Understanding the structure of a condition is crucial for creating effective
+Mergify rules that cater to your specific needs and requirements.
+
+## Attributes List
+
+Attributes are properties of pull requests or events used to filter and evaluate
+the conditions within rules. They can be used to create more specific and
+targeted rules for your repository.
+
+<PullRequestAttributesTable />
+
+## Operators List
+
+Operators allow you to compare attributes with specified values in order to
+determine if a condition is true or false. Mergify supports several types of
+operators that cater to different types of comparisons. Familiarizing yourself
+with these operators is essential for crafting effective conditions in your
+Mergify rules.
+
+Here is a list of the available operators:
+
+<table>
+  <thead>
+    <tr>
+      <th>Operator Name</th>
+      <th>Symbols</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>Equal</td>
+
+      <td>
+        `=` or `:`
+      </td>
+
+      <td>This operator checks for strict equality. If the target attribute
+      type is a list, each element of the list is compared against the value
+      and the condition is true if **any** value matches.</td>
+    </tr>
+
+    <tr>
+      <td>Not Equal</td>
+
+      <td>
+        `!=` or `≠`
+      </td>
+
+      <td>This operator checks for non equality. If the target attribute type
+      is a list, each element of the list is compared against the value and
+      the condition is true if no value matches.</td>
+    </tr>
+
+    <tr>
+      <td>Match</td>
+
+      <td>
+        `~=`
+      </td>
+
+      <td>This operator checks for [regular
+      expressions](data-types#regular-expressions)
+      matching. If the target attribute type is a list, each
+      element of the list is matched against the value and the condition is
+      true if any value matches.</td>
+    </tr>
+
+    <tr>
+      <td>Greater Than or Equal</td>
+
+      <td>
+        `>=` or `≥`
+      </td>
+
+      <td>This operator checks for the value to be greater than or equal to the
+      provided value. It's usually used to compare against the length of a
+      list using the `#` prefix.</td>
+    </tr>
+
+    <tr>
+      <td>Greater Than</td>
+
+      <td>
+        `>`
+      </td>
+
+      <td>This operator checks for the value to be greater than the provided
+      value. It's usually used to compare against the length of a list using
+      the `#` prefix.</td>
+    </tr>
+
+    <tr>
+      <td>Lesser Than or Equal</td>
+
+      <td>
+        `<=` or `≤`
+      </td>
+
+      <td>This operator checks for the value to be lesser then or equal to the
+      provided value. It's usually used to compare against the length of a
+      list using the `#` prefix.</td>
+    </tr>
+
+    <tr>
+      <td>Lesser Than</td>
+
+      <td>
+        `<`
+      </td>
+
+      <td>
+        This operator checks for the value to be lesser than the provided value. It's
+        usually used to compare against the length of a list using the `#` prefix.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+For example, let's consider a condition that requires a pull request to have
+a specific label:
+
+`label=bugfix`
+
+In this condition:
+
+- The attribute is `label`, which represents the labels associated with a pull
+    request.
+
+- The operator is `=`, which means "equal to."
+
+- The value is `bugfix`, which is the label we want the pull request to have.
+
+### Operators on Lists
+
+Some [attributes](conditions#attributes) have a type of `list`. Most
+[operators](conditions#operators) are able to match value against lists: they
+will iterate over all the values of the list and return true if **any** of the
+value matches.
+
+For example, the `label` attribute is a list of string containing the names
+of the label attached to a pull request. With a pull request whose labels are
+`(bug, work-in-progress)`, then:
+
+- `label=work-in-progress` is **true** because there is a label named
+  `work-in-progress`.
+
+- `label=enhancement` is **false** because there is no label named
+  `enhancement`.
+
+- `label!=work-in-progress` is **false** because there is a label named
+  `work-in-progress`.
+
+- `label~=^work` is **true** because there is a label matching the regular
+  expression `^work`.
+
+- `-label~=^work` is **false** because there is a label matching the regular
+   expression `^work` but the condition is reversed with the `-` prefix.
+
+The same applies for the `files` attribute — which contains the list of
+modified files:
+
+- `files=README` is **true** if the file `README` is modified in the pull
+  request.
+
+- `files!=README` is **true** if the file `README` is not modified in the pull
+  request.
+
+- `files~=^src/` is **true** if any files in the `src` directory is modified in
+  the pull request.
+
+- `-files~=^src/` is **true** if none of the files that are modified are in the
+  `src` directory.
+
+- `files~=^(README.md|CONTRIBUTING.md)$` is **true** if the file `README.md`
+  **or** `CONTRIBUTING.md` is modified in the pull requests.
+
+### Examples with Operators
+
+#### Apply the rule only to pull requests with a specific milestone
+
+In this example, we use the `=` operator to match a specific milestone for the
+pull request:
+
+```yaml
+- name: Rule for milestone "v1.0"
+  conditions:
+    - milestone="v1.0"
+  actions:
+    # Your actions here
+```
+
+{/* lint ignore */}
+
+#### Apply the rule only when the number of changes is less than or equal to a certain threshold
+
+In this example, we use the `<= operator` to check if the number of files
+modified in the pull request is less than or equal to 50:
+
+```yaml
+- name: Rule for small changes
+  conditions:
+    - "#files<=50"
+  actions:
+    # Your actions here
+```
+{/* lint ignore */}
+
+#### Apply the rule only when the pull request is labeled with at least one of the specified labels
+
+In this example, we use the `!=` operator to check if the pull request does not
+have the specified labels:
+
+```yaml
+- name: Rule when not a bug
+  conditions:
+    - label!=bug
+  actions:
+    # Your actions here
+```
+
+## Combining Conditions Using Logical Operators
+
+Mergify allows you to combine multiple conditions using logical operators,
+making it possible to create more intricate rules that cater to your specific
+workflow requirements. You can use the `and` and `or` logical operators to join
+conditions together.
+
+### The `and` Operator
+
+The `and` operator is used to join conditions such that all conditions must be
+true for the overall condition to be true. In Mergify rules, the `and` operator
+is represented by placing conditions on separate lines within the same rule.
+
+Alternatively, you can use the `and` keyword to explicitly group conditions
+together.
+
+Example:
+
+```yaml
+pull_request_rules:
+  - name: Merge when all conditions are met
+    conditions:
+      - and:
+        - "#approved-reviews-by>=2"
+        - "check-success=test job"
+    actions:
+      merge:
+        method: merge
+```
+
+In this example, the pull request will only be merged if it has at least 2
+approved reviews and the `test job` check passes.
+
+### The `or` Operator
+
+The `or` operator is used to join conditions such that if any one of the
+conditions is true, the overall condition is considered true. In Mergify rules,
+the `or` operator is represented by using the `or` keyword and specifying
+conditions as a list.
+
+Example:
+
+```yaml
+pull_request_rules:
+  - name: Merge when either condition is met
+    conditions:
+      - or:
+        - "#approved-reviews-by>=2"
+        - "check-success=test job"
+    actions:
+      merge:
+        method: merge
+```
+
+In this example, the pull request will be merged if it has at least 2 approved
+reviews or if the `test job` check passes.
+
+Combining conditions using logical operators can help you create more
+sophisticated rules tailored to your repository's workflow and requirements.
+
+## Testing and Debugging Conditions
+
+When crafting conditions for your Mergify rules, it's essential to test and
+debug them to ensure they are working as intended. This section will guide you
+through the process of testing and debugging conditions in your Mergify
+configuration.
+
+### Use the Mergify Configuration Editor
+
+The Mergify configuration editor is a useful tool to help you test your
+conditions and rules on existing pull requests without actually triggering the
+actions defined in your rules. To access the configuration editor, follow these
+steps:
+
+1. Navigate to your [Mergify dashboard](https://dashboard.mergify.com).
+2. Select the repository you want to test.
+3. Click on the "Config Editor" tab.
+
+<Image src={configEditorScreenshot} alt="Mergify Configuration Editor" />
+
+In the configuration editor, you can enter your conditions and see how they
+would be evaluated on your pull requests. You can also test your entire Mergify
+configuration by copying and pasting it into the configuration editor.
+
+### Analyze the Mergify Checks
+
+Once you have created and committed your Mergify configuration file, Mergify
+will evaluate the conditions in your rules for each pull request. To debug your
+conditions and understand why a rule may not be working as expected, you can
+analyze the Mergify Checks on a pull request:
+
+1. Navigate to the "Checks" tab of the pull request.
+2. Look for the "Mergify" check in the list of checks.
+3. Click on "Summary" to view the detailed Mergify report.
+
+In the Mergify report, you can see which rules were evaluated and whether the
+conditions were met or not. This can help you identify any issues in your
+conditions and make adjustments as necessary.
+
+<Image src={checkSummaryScreenshot} alt="Mergify Check Summary" />

@@ -1,9 +1,25 @@
 module.exports = {
-  globals: {
-    __PATH_PREFIX__: true,
+  env: {
+    node: true,
+    es2022: true,
+    browser: true,
   },
+  extends: ['eslint:recommended', 'plugin:astro/recommended'],
   parserOptions: {
-    "project": ["tsconfig.json"],
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  rules: {
+    'no-mixed-spaces-and-tabs': 'off',
+    'no-case-declarations': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+  },
+  settings: {
+    react: {
+      pragma: 'h',
+      version: '16.0',
+    },
   },
   overrides: [
     {
@@ -11,47 +27,73 @@ module.exports = {
       extends: 'plugin:mdx/recommended',
       rules: {
         'mdx/remark': 'error',
-        'no-unused-vars': 'off'
-      }
+        'no-unused-vars': 'off',
+      },
     },
     {
-      files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
+      files: ['*.astro'],
+      parser: 'astro-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        extraFileExtensions: ['.astro'],
+      },
+      rules: {},
+    },
+    {
+      files: ['*.ts'],
       parser: '@typescript-eslint/parser',
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { argsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_' },
+        ],
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+    {
+      files: ['*.d.ts'],
+      rules: {
+        '@typescript-eslint/triple-slash-reference': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+    {
+      files: ['*.tsx'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['react', '@typescript-eslint'],
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: ['./tsconfig.json'],
+      },
       extends: [
-        'airbnb',
-        'airbnb-typescript',
-        'react-app',
         'eslint:recommended',
-        'plugin:import/recommended',
-        'plugin:import/errors',
-        'plugin:import/warnings',
+        'plugin:react/recommended',
+        'plugin:react/jsx-runtime',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
       ],
       rules: {
-        "react/no-danger": "error",
-        "import/order": [
-          "error",
-          {
-            "newlines-between": "always-and-inside-groups",
-            "alphabetize": {
-              "order": "asc"
-            }
-          }
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { argsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_' },
         ],
-        "jsx-a11y/click-events-have-key-events": "off",
-        "jsx-a11y/no-static-element-interactions": "off",
-        "jsx-a11y/no-autofocus": "off",
-        "jsx-a11y/label-has-associated-control": "off",
-        "react/jsx-one-expression-per-line": "off",
-        "react/jsx-props-no-spreading": "off",
-        "react/jsx-filename-extension": "off",
-        "react/require-default-props": "off",
-        "react/forbid-prop-types": "off",
-        "@typescript-eslint/require-default-props": "off",
-        "@typescript-eslint/naming-convention": "off",
-        "import/prefer-default-export": "off",
-        "no-underscore-dangle": "off",
-        "no-plusplus": ["error", {allowForLoopAfterthoughts: true}]
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        'no-mixed-spaces-and-tabs': 'off',
       },
-    }
-  ]
+    },
+    {
+      // Define the configuration for `<script>` tag.
+      // Script in `<script>` is assigned a virtual file name with the `.js` extension.
+      files: ['**/*.astro/*.js', '*.astro/*.js'],
+      parser: '@typescript-eslint/parser',
+    },
+  ],
 };

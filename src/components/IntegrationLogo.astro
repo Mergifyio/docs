@@ -1,0 +1,22 @@
+---
+import { Image } from 'astro:assets';
+import { ImageMetadata } from 'astro';
+export interface Props {
+	src: ImageMetadata;
+	alt: string;
+}
+
+const { src, alt } = Astro.props as Props;
+---
+
+<Image class="integration-logo" src={src} alt={alt} />
+
+<style>
+	.integration-logo {
+		float: right;
+		margin-left: 1em;
+		margin-bottom: 1em;
+		max-width: 256px;
+		max-height: 256px;
+	}
+</style>

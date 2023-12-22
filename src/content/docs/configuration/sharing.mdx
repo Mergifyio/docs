@@ -1,0 +1,96 @@
+---
+title: Sharing Configuration
+description: Learn how to share and reuse configuration pieces in your configuration.
+---
+
+In Mergify, you can leverage certain features like YAML anchors and aliases,
+the `shared` key, and the `extends` key to reduce redundancy, maintain
+consistency, and increase code reusability.
+
+## YAML Anchors and Aliases
+
+[YAML anchors (`&`) and aliases
+(`*`)](https://yaml.org/spec/1.2.2/#anchors-and-aliases) are supported in the
+[configuration file](file-format). These allow you to reuse configuration
+sections. For example, you can create a list of continuous integration checks
+and use it in multiple sections:
+
+```yaml
+queue_rules:
+  - name: hotfix
+    queue_conditions:
+      - and: &CheckRuns
+        - check-success=linters
+        - check-success=unit
+        - check-success=functionnal
+        - check-success=e2e
+        - check-success=docker
+  - name: default
+    queue_conditions:
+      - and: *CheckRuns
+      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
+```
+
+## Sharing Configuration Sections
+
+You can store anything in the `shared` key. Its main purpose is to provide a
+place to put redundant YAML anchors:
+
+```yaml
+shared:
+  my_ci: &common_checks
+    - check-success=ci-one
+    - check-success=ci-two
+
+queue_rules:
+  - name: hotfix
+    queue_conditions:
+      - and: *my_ci
+  - name: default
+    queue_conditions:
+      - and: *my_ci
+      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
+```
+
+## Extending Configuration Files
+
+Mergify lets you extend your configuration file by including the configuration
+from another repository. This feature is useful when you want to share and
+reuse configuration rules across multiple repositories, helping maintain
+consistency and reduce duplication.
+
+To extend a configuration file, use the `extends` keyword at the top level of
+your configuration file file and specify the repository name from which you
+want to include the configuration.
+
+```yaml
+extends: organization/shared-config
+```
+
+:::caution
+  The Mergify application must also be installed on the source repository
+  that you want to import the configuration from.
+:::
+
+The configuration from the specified repository will be loaded and applied
+before the one in the current repository. Here's an example:
+
+```yaml
+extends: organization/shared-config
+
+pull_request_rules:
+  - name: additional rule specific to this repository
+    conditions:
+      - base=main
+    actions:
+      label:
+        add: ["repository-specific"]
+```
+
+:::caution
+  - Values in the `shared` key will not be merged and shared between local and
+    remote configurations.
+
+  - Values in the `default` key will be merged and remote default values will
+    apply to local configuration.
+:::

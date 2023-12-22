@@ -1,0 +1,32 @@
+---
+export interface Props {
+	href: string;
+	icon: Function;
+}
+
+const { href } = Astro.props as Props;
+---
+
+<a href={href} class="community-button">
+	{!!Astro.props.icon && <Astro.props.icon />}
+</a>
+
+<style lang="scss">
+	.community-button {
+		font-size: x-large;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		border-radius: 6px;
+		transition: background 0.2s;
+
+		&:hover {
+			background: var(--chakra-colors-gray-100);
+		}
+
+		& > svg {
+			margin: auto;
+			vertical-align: middle;
+		}
+	}
+</style>

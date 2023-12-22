@@ -44,10 +44,9 @@ exit() { slack_message "*Deployment (${CF_PAGES_BRANCH}/${CF_PAGES_COMMIT_SHA}) 
 conclusion="failure" emoji="💥"
 trap exit EXIT
 
-gatsby build 2>&1 | tee -a build.log
+astro build 2>&1 | tee -a build.log
 
-# Security App Scanner complains, and Gatsby doesn't care :(
-# https://github.com/gatsbyjs/gatsby/issues/23629
-rm -f public/webpack.stats.json
+rm -rf public
+mv dist public
 
 conclusion="success" emoji="🦾"

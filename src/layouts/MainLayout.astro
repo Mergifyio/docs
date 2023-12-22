@@ -1,0 +1,40 @@
+---
+import type { MarkdownHeading } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import generateToc from '~/util/generateToc';
+import PageContent from '../components/PageContent/PageContent.astro';
+import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
+import TableOfContents from '../components/RightSidebar/TableOfContents';
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+	content: CollectionEntry<'docs'>['data'];
+	headings: MarkdownHeading[];
+}
+
+const { content, headings } = Astro.props;
+---
+
+<BaseLayout {...Astro.props}>
+	<RightSidebar slot="secondary-sidebar" {...{ content, headings }} />
+	<PageContent {...{ content }}>
+		{
+			headings && (
+				<Fragment slot="before-article">
+					<nav>
+						<TableOfContents
+							client:media="(max-width: 82em)"
+							toc={generateToc(headings)}
+							labels={{
+								onThisPage: 'On this page',
+							}}
+							isMobile={true}
+						/>
+					</nav>
+				</Fragment>
+			)
+		}
+		<Fragment slot="after-title"><slot name="header" /></Fragment>
+		<slot />
+	</PageContent>
+</BaseLayout>

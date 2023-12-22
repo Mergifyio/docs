@@ -1,0 +1,75 @@
+---
+title: Deploying your Merge Queue
+description: Monitor key metrics of your merge queue to optimize throughput and reduce latency, ensuring a streamlined development cycle.
+---
+
+import { Image } from "astro:assets"
+import dashboardStatsScrenshot from "../../images/merge-queue/monitoring/dashboard.png"
+
+# Monitoring the Merge Queue
+
+The performance and health of your merge queue are essential for maintaining a
+productive and efficient development cycle. Monitoring key metrics ensures that
+you can respond promptly to any bottlenecks, inefficiencies, or potential
+issues. 
+
+Understanding your merge queue's performance is pivotal for maintaining a
+robust and streamlined development cycle. Regular monitoring and prompt action
+based on these metrics can ensure you achieve optimal throughput and latency.
+
+Here's a guide to the most critical metrics to monitor and how to
+interpret them.
+
+## Key Metrics to Monitor
+
+1. **PRs Merged Per Day:** Monitor this metric to ensure your throughput
+  remains stable. Track the number of pull requests merged each day. A
+  consistent trend indicates a stable development environment. Sudden drops or
+  spikes can indicate issues that need attention.
+
+2. **CI Runtime:** Keep an eye on CI times to ensure efficiency and timely
+   merges. Monitor the time your Continuous Integration (CI) tests take to run.
+   A sudden increase in runtime can slow down your entire merge queue, delaying
+   other PRs.
+
+3. **Merge Outcome:** High success rates indicate a healthy development and
+   review process. It's essential to ensure that most of the PRs entering the
+   queue get successfully merged. If PRs are frequently removed or fail to
+   merge for any reason, it may signal a need for process refinement or
+   improvement to the CI.
+
+4. **Queue Size:** A manageable queue size ensures that PRs don't stagnate. The
+   number of PRs waiting in the queue should be manageable. If the queue grows
+   significantly or continuously, it indicates a bottleneck or an inefficiency
+   in the process or CI.
+
+5. **Running Checks:** A balanced number of running checks ensures you're
+   utilizing your resources efficiently. Monitor the number of running checks
+   in your queue. If you're often at full capacity, it might be time to
+   consider adding more speculative checks to increase throughput.
+
+6. **Time Spent in the Queue:** Reducing idle time reduces overall latency for
+   your PRs. Track how long PRs spend idle in the queue. Extended idle times
+   increase overall latency and can delay the delivery of features or fixes.
+
+## Monitoring Tools & Resources
+
+### Visual Insights
+
+For a visual representation of these metrics, you can refer to the statistics
+available on the merge queue page of your
+[dashboard](https://dashboard.mergify.com). Below are some sample insights:
+
+<Image src={dashboardStatsScrenshot} alt="Statistics page on mergify's dashboard"/>
+
+### Available Integrations
+
+import Monitoring from '../integrations/_monitoring.mdx'
+
+<Monitoring />
+
+### Building Your Own Monitoring
+
+If our available [integrations](#available-integrations) don't suit your needs,
+you have the flexibility to build your own monitoring solution using our
+[API](/api-usage).

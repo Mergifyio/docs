@@ -1,0 +1,73 @@
+---
+import type { NavItem } from '~/content/navItems';
+import { removeLeadingSlash } from '~/util';
+import { isSubPage } from '~/util/isSubPage';
+export interface Props {
+	currentPageMatch: string;
+	navItem: NavItem;
+}
+
+const { currentPageMatch, navItem } = Astro.props as Props;
+const navLink = `${import.meta.env.BASE_URL}${removeLeadingSlash(navItem.path as string)}`;
+const isHomepage = navItem.path === '/';
+const isHomepageMatch = isHomepage && currentPageMatch === '';
+const isPageMatch =
+	!isHomepage && currentPageMatch.endsWith(removeLeadingSlash(navItem.path as string));
+---
+
+<li class="nav-link">
+	<a
+		href={navLink}
+		aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`}
+		data-current-parent={`${
+			isSubPage(currentPageMatch, navItem.path as string) ? 'true' : 'false'
+		}`}
+	>
+		{navItem.icon && <navItem.icon className="left-icon" />}
+		<Fragment set:html={navItem.title} />
+	</a>
+</li>
+<style>
+	.left-icon {
+		min-width: 16px;
+		min-height: 16px;
+	}
+
+	.nav-link a {
+		margin: 1px;
+		padding: 0.3rem 1rem;
+		font: inherit;
+		color: var(--theme-text-lighter);
+		text-decoration: none;
+		display: flex;
+		gap: 12px;
+		align-items: center;
+		white-space: nowrap;
+		transition: background-color 0.115s;
+
+		&:hover,
+		&:focus {
+			background-color: var(--theme-bg-hover);
+		}
+
+		&[aria-current='page'],
+		&[data-current-parent='true'] {
+			color: var(--theme-text);
+			background-color: var(--theme-bg-hover);
+			font-weight: 500;
+			/* Indicates the current page for forced colors users in older browsers */
+			outline: 1px solid transparent;
+
+			&:focus {
+				outline: 2px solid;
+			}
+		}
+
+		@media (forced-colors: active) {
+			&[aria-current='page'],
+			&[data-current-parent='true'] {
+				border: 1px solid LinkText;
+			}
+		}
+	}
+</style>

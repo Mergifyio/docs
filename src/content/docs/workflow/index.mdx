@@ -1,0 +1,90 @@
+---
+title: Introducing Mergify Workflow Automation
+description: An overview of Mergify Workflow Automation and its capabilities to supercharge your pull request process.
+---
+
+Mergify Workflow Automation is a sophisticated system designed to revolutionize
+your pull request process. It empowers development teams to automate tasks and
+processes using a rule-based approach. This ensures efficiency, consistency,
+and adherence to project standards.
+
+## Why Use Mergify Workflow Automation?
+
+1. **Automate Repetitive Tasks**: Frequent tasks such as labeling, assigning,
+   or merging pull requests can be automated, freeing up developers to focus on
+   code and innovative solutions.
+
+2. **Consistent Standards**: Ensure that each pull request adheres to your
+   project's guidelines, with automated checks and balances in place.
+
+3. **Flexible and Powerful**: The system is based on rules that you define,
+   offering flexibility to cater to your project's unique needs.
+
+4. **Real-time Feedback**: Instantly inform contributors about the status of
+   their pull requests, ensuring clarity and quick response times.
+
+5. **Easier On-boarding**: Make it easy for any developer to understand your
+   repository rules by crafting your rules in an easy-to-read YAML format.
+
+## State-Based, Edge-Triggered System
+
+Mergify evaluates the state of a pull request rather than individual events.
+
+This means it checks the current status of a pull request and acts based on
+defined conditions. This behavior is known as "edge triggering."
+
+An action will only by re-triggered for a pull request if the state flips back
+from being unmatched to matched.
+
+For instance, consider a rule that specifies a pull request should be merged if
+it has at least two approved reviews and all CI checks pass. Even if the second
+approval and CI success come at different times, Mergify will act once the
+entire state of the pull request matches the rule.
+
+```yaml
+pull_request_rules:
+  - name: merge automatically when CI passes and PR is approved
+    conditions:
+      - "#approved-reviews-by >= 2"
+      - check-success = my-favorite-ci
+    actions:
+      merge:
+```
+
+On the other hand, a rule that posts a comment when a pull request is in
+conflict with its base branch will only be triggered when the pull request
+becomes in conflict, or when it becomes in conflict again — not every push to
+its base branch.
+
+```yaml
+pull_request_rules:
+  - name: merge automatically when CI passes and PR is approved
+    conditions:
+      - conflict
+    actions:
+      comment:
+        message: Your PR is in conflict, {{author}}. You should fix it.
+```
+
+This makes sure the system does not *spam* the pull request.
+
+:::note
+Mergify never evaluates rules for pull request drafts it creates to
+  processing the [merge queue](/merge-queue).
+:::
+
+## Getting Started
+
+To begin with Mergify, you'll need to [setup Mergify on your
+repository](/getting-started). You can then [set up rules for your
+repository](writing-your-first-rule).
+
+Each rule will contain conditions (e.g., pull request state, number of reviews)
+and actions (e.g., merge, label). When a pull request meets the conditions of a
+rule, the specified actions are automatically executed.
+
+Mergify Workflow Automation is more than just a tool – it's a game changer for
+developers and teams who seek efficiency, consistency, and automation in their
+pull request process. By introducing state-based, edge-triggered rules, Mergify
+provides unparalleled control over your project's workflows. Dive in, set up
+your first rule, and experience the transformation firsthand.

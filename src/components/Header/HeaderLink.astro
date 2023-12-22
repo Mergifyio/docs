@@ -1,0 +1,26 @@
+---
+import Button from '../Button.astro';
+
+export interface Props {
+	icon: Function;
+	href: string;
+}
+
+const { href, icon } = Astro.props as Props;
+---
+
+<div class="header-btn">
+	<Button colorScheme="blue" variant="ghost" icon={icon} href={href}>
+		<slot />
+	</Button>
+</div>
+
+<style is:global>
+	.header-btn .button {
+		display: flex;
+		height: 42px;
+		font-size: var(--theme-text-md);
+		color: var(--theme-text-light);
+		white-space: nowrap;
+	}
+</style>

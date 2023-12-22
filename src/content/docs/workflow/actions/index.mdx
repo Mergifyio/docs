@@ -1,0 +1,112 @@
+---
+title: Actions
+description: A complete list of actions you can use with Mergify.
+---
+
+import Docset from '../../../../components/DocsetGrid/Docset.astro';
+import DocsetGrid from '../../../../components/DocsetGrid/DocsetGrid.astro';
+import { GoCodeReview } from 'react-icons/go';
+import { SiGithubactions } from 'react-icons/si';
+import {IoIosRemoveCircleOutline} from 'react-icons/io';
+
+Actions are the engine that powers Mergify. They define what Mergify should do
+when a set of conditions is met. This can range from merging a pull request,
+updating it with the latest changes, commenting on the pull request, assigning
+it to a user, adding labels, and so much more.
+
+In essence, actions are the tasks that Mergify performs on your behalf to
+automate your pull request management workflow. By carefully crafting and
+combining actions, you can create a highly efficient and automated process
+that takes care of most of the routine tasks associated with pull request
+management.
+
+<DocsetGrid>
+  <Docset
+    title="Assign"
+    description="Assign a pull request to a user."
+    path="assign"
+  />
+  <Docset
+    title="Backport"
+    description="Copy a pull request to another branch once it is merged."
+    path="backport"
+  />
+  <Docset
+    title="Close"
+    description="Close a pull request."
+    path="close"
+  />
+  <Docset
+    title="Copy"
+    description="Copy a pull request."
+    path="copy"
+  />
+  <Docset
+    title="Comment"
+    description="Comment a pull request."
+    path="comment"
+  />
+  <Docset
+    title="Delete Head Branch"
+    description="Delete pull request head branch."
+    path="delete_head_branch"
+  />
+  <Docset
+    title="Dismiss Reviews"
+    description="Dismiss previous reviews on a pull request."
+    path="dismiss_reviews"
+    icon={IoIosRemoveCircleOutline}
+  />
+  <Docset
+    title="Edit"
+    description="Edit pull request body, title or draft state."
+    path="edit"
+  />
+  <Docset
+    title="GitHub Actions"
+    description="Dispatch an existing GitHub workflow in the repository."
+    path="github_actions"
+    icon={SiGithubactions}
+  />
+  <Docset
+    title="Label"
+    description="Add, remove or toggle label on a pull request."
+    path="label"
+  />
+  <Docset
+    title="Merge"
+    description="Automate the merging of your pull requests."
+    path="merge"
+  />
+  <Docset
+    title="Post Check"
+    description="Create a check-run on a pull request."
+    path="post_check"
+  />
+  <Docset
+    title="Rebase"
+    description="Rebase the pull request on top of its base branch."
+    path="rebase"
+  />
+  <Docset
+    title="Request Reviews"
+    description="Request reviews from specific users or teams."
+    path="request_reviews"
+    icon={GoCodeReview}
+  />
+  <Docset
+    title="Review"
+    description="Automate reviews for your pull requests with customizable comments and review types."
+    path="review"
+  />
+  <Docset
+    title="Update"
+    description="Update the pull request branch with its base branch."
+    path="update"
+  />
+  <Docset
+    title="Squash"
+    description="Squash commits in the pull request."
+    path="squash"
+  />
+</DocsetGrid>

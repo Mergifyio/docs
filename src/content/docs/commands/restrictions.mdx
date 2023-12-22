@@ -1,0 +1,61 @@
+---
+title: Command Restriction
+description: Set limitations on who can execute specific Mergify commands.
+---
+
+import OptionsTable from '../../../components/Tables/OptionsTable';
+import { RootOptionsTable } from '../../../components/Tables/OptionsTable';
+
+Mergify commands can be a powerful tool to control and manage pull requests.
+However, in some scenarios, you might want to restrict who can use these
+commands to ensure they're executed only by authorized individuals. The command
+restrictions feature allows you to define a set of users or teams who are
+permitted to use specific Mergify commands.
+
+## How Restrictions Work
+
+With command restrictions, you can leverage
+[conditions](/configuration/conditions) to define the valid context that are
+authorized to run a specific command. This could be a list of allowed users or
+teams, or even attributes related to the pull request itself.
+
+The restrictions are configured with the top-level key `commands_restrictions`
+which can specify restrictions for each commands.
+
+### Examples
+
+To limit backport commands for pull requests coming from the `main` branch:
+
+```yaml
+commands_restrictions:
+  backport:
+    conditions:
+      - base=main
+```
+
+To limit backport commands usage to a specific team (or user):
+
+```yaml
+commands_restrictions:
+  backport:
+    conditions:
+      - sender=@team
+```
+
+To limit backport commands for users with a specific permission on the
+repository.
+
+```yaml
+commands_restrictions:
+  backport:
+    conditions:
+      - sender-permission>=write
+```
+
+## Default Restrictions
+
+<RootOptionsTable name="commands_restrictions" />
+
+### Command Restriction Format
+
+<OptionsTable name="CommandRestriction" />

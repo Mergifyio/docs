@@ -1,0 +1,59 @@
+---
+title: Queue
+description: Put your pull request into the merge queue.
+---
+
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
+
+The `queue` action allows you to put a pull request into a [merge
+queue](/merge-queue). By placing pull requests in a queue, you can make sure
+they are up-to-date and control their processing based on their priority.
+
+Each queue can also have its own configuration for [speculative
+checks](/merge-queue/speculative-checks), [batches](/merge-queue/batches), etc.
+
+## Parameters
+
+<ActionOptionsTable action="queue" />
+
+## Examples
+
+### Simple Queue
+
+```yaml
+pull_request_rules:
+  - name: put PRs in queue
+    conditions:
+      - base=main
+    actions:
+      queue:
+```
+
+In this example, any pull request that is based on the main branch will be
+placed in the production queue. The pull request still needs to match the
+`queue_conditions` defined in the queue to enter the queue.
+
+### Choosing the Merge Method
+
+```yaml
+pull_request_rules:
+  - name: put PRs in queue (rebase)
+    conditions:
+      - base=main
+      - label=rebase
+    actions:
+      queue:
+        merge_method: rebase
+
+  - name: put PRs in queue (merge)
+    conditions:
+      - base=main
+      - label!=rebase
+    actions:
+      queue:
+        merge_method: merge
+```
+
+In this example, any pull request that has the label `rebase` will enter the
+queue with a `merge_method` set to `rebase`, ensuring it's merged via rebase.
+Whereas all the other pull requests will be merged using the `merge` method.

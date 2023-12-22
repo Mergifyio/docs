@@ -1,0 +1,8 @@
+---
+import { ApiReference } from '@scalar/api-reference';
+import apiSchema from '../api-schemas.json';
+---
+
+<link rel="stylesheet" href={`${import.meta.env.BASE_URL}api.css`} />
+
+<ApiReference client:only="vue" {...{ configuration: { spec: { content: apiSchema } } }} />

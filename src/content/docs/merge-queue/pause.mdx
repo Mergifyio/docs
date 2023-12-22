@@ -1,0 +1,77 @@
+---
+title: Pausing the Merge Queue
+description: Understand the pause feature and how it can be utilized during CI incidents.
+---
+
+import screenshotButtonPause from '../../images/merge-queue/pause/dashboard-button-pause-mq.png';
+import { Image } from "astro:assets";
+
+Mergify's Merge Queue offers a feature known as "pausing" that grants users
+increased control over the automation process during special circumstances.
+Let's explore what pausing involves, its impacts, and its typical use cases.
+
+## What Does Pausing Do?
+
+When you pause the merge queues:
+
+1. **Pause All Queues**: All active merge queues will be suspended, not just a
+   specific one. This affects all queues in the project.
+
+2. **Addition to the Queue Continues**: Even with paused merge queues, new pull
+   requests can still join the queue. This ensures pull requests remain
+   organized and ready for when operations resume.
+
+3. **Stops Scheduling and Actions**: After pausing the merge queues, Mergify
+   will not schedule new checks, update, or merge pull requests. Pull requests
+   can enter the queue but won't be acted upon.
+
+4. **Cancel Running Checks**: As soon as the queues are paused, Mergify cancels
+   any running checks and waits for the queues to be resumed.
+
+## How to Pause the Merge Queues
+
+### From the Dashboard
+
+Navigate to your [Mergify dashboard](https://dashboard.mergify.com). There
+you'll find an option to pause the merge queues. Clicking on this will suspend
+all active queues.
+
+<Image alt="Pause button is in the top right corner in Mergify's dashboard" src={screenshotButtonPause} />
+
+### Using the API
+
+You can also pause the merge queues programmatically using the [Mergify
+API](/api-usage). For detailed steps on how to achieve this, refer to our API
+documentation.
+
+## Typical Use Cases
+
+### CI Incidents
+
+During a major incident with the Continuous Integration (CI) system, the pause
+feature can be invaluable. If there's a likelihood that checks will fail and
+consequently eject the pull request from the queue, it's beneficial to pause
+the merge queues.
+
+### Non-CI Incidents
+
+If an incident is unrelated to the CI, like a production issue, but you wish to
+halt merging while allowing checks to run, then the [freeze feature](freeze) is
+a more suitable choice. "Freezing" simply halts merges, letting checks and
+other actions proceed.
+
+## Benefits of Using the Pause Feature
+
+1. **Maintain Queue Integrity**: During CI failures or other disruptions,
+   pausing ensures pull requests stay in the queue, preserving their order.
+
+2. **Flexibility**: It provides an immediate response tool during unexpected
+   complications, giving you control over the merge process.
+
+3. **Reduce Noise**: Constantly failing checks during a CI incident can create
+   unnecessary notifications. Pausing the queue mitigates this.
+
+The pause feature of the Mergify merge queue offers users an enhanced layer of
+control and adaptability during special situations. Familiarizing yourself with
+when and how to pause your merge queues can optimize your workflow and reduce
+disruptions.

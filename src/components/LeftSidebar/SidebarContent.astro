@@ -1,0 +1,40 @@
+---
+import navItems from '../../content/navItems';
+import NavLink from './NavLink.astro';
+import NavGroup from './NavGroup.astro';
+
+export interface Props {
+	currentPageMatch: string;
+}
+const { currentPageMatch } = Astro.props as Props;
+---
+
+{
+	navItems.map((navItem) =>
+		navItem.children ? (
+			<NavGroup navGroup={navItem} currentPageMatch={currentPageMatch} />
+		) : (
+			<NavLink currentPageMatch={currentPageMatch} navItem={navItem} />
+		)
+	)
+}
+
+<script>
+	import navItems, { NavItem } from '~/content/navItems';
+	import { flattenNavItems } from '~/util/flattenNavItems';
+
+	const navGroups = flattenNavItems(navItems).filter((el: NavItem) => el.children);
+	const initialNavState = navGroups.reduce(
+		(acc: any, group) => ({
+			...acc,
+			[group.id as string]: true,
+		}),
+		{}
+	);
+
+	const navState = window.localStorage.getItem('navState');
+
+	if (!navState) {
+		window.localStorage.setItem('navState', JSON.stringify(initialNavState));
+	}
+</script>

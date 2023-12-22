@@ -41,7 +41,7 @@ jobs:
       - name: Lint
         run: |
           npm ci
-          npm run eslint
+          npm run check
 
   docs:
     timeout-minutes: 20
@@ -58,9 +58,11 @@ jobs:
       - name: Build 🔧
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
+        # `@rollup/rollup-linux-x64-gnu` is not installed when running npm ci, we have to install it manually
         run: |
           npm ci
-          npm run build -- --prefix-paths
+          npm i @rollup/rollup-linux-x64-gnu
+          npm run build
 
       # NOTE(sileht): workflow run on/pull_request doesn't have access to
       # secrets
@@ -70,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: docs-pr-${{ github.event.pull_request.number }}
-          path: public
+          path: dist
 
       # yamllint disable-line rule:line-length
       - run: echo "docs=https://docs-preview.mergify.com/${{ github.event.pull_request.number }}/docs" >> "$GITHUB_OUTPUT"

@@ -1,0 +1,33 @@
+---
+title: Squash
+description: Squash commits in the pull request.
+---
+
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable'
+
+The `squash` action instructs Mergify to squash all commits from a pull request
+into one.
+
+When you add this action to a rule, Mergify will squash all the commits from
+the pull request into one commit, making the history of your project cleaner
+and easier to read.
+
+## Parameters
+
+<ActionOptionsTable action='squash'/>
+
+## Examples
+
+### Squash on Label
+
+In this example, whenever there's a label `to-squash` added, any new commits
+pushed to the branch will be squashed into a single commit:
+
+```yaml
+pull_request_rules:
+  - name: automatic squash of pull requests
+    conditions:
+      - label=to-squash
+    actions:
+      squash:
+```

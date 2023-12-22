@@ -1,0 +1,65 @@
+---
+title: Using Slack with Mergify
+description: Learn how you can send Slack notifications.
+---
+
+import slackLogo from "../../images/integrations/slack/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={slackLogo} alt="Slack logo"/>
+
+While there isn't a direct integration between Mergify and Slack, you can still
+achieve notifications in Slack based on Mergify actions by leveraging the
+GitHub to Slack integration. Here's a step-by-step guide on how you can set it
+up:
+
+## Setting Up GitHub-Slack Integration
+
+1. Go to [Slack's GitHub Integration page](https://slack.github.com/).
+
+2. Click on the 'Add to Slack' button.
+
+3. Invite the GitHub app to the channel you want. Refer to the
+   [documentation](https://github.com/integrations/slack/blob/master/README.md)
+   for more details.
+
+4. Make sure you subscribe to the repositories [to receive the
+   mentions](https://github.com/integrations/slack/blob/master/README.md#mentions)
+   as private message for the GitHub Slack app.
+
+Now that the Slack-GitHub integration is complete, let's see how you can use
+Mergify to mention a user, which will then notify them on Slack.
+
+## Using Mergify's Comment Action with Slack Notifications
+
+The primary idea is to use Mergify's `comment` action to mention the PR author,
+leveraging GitHub's mention feature. This mention will be forwarded to Slack,
+notifying the mentioned user.
+
+Here's an example of a Mergify configuration that comments on a PR if a CI
+fails and the label is "hotfix":
+
+```yaml
+pull_request_rules:
+  - name: Notify author on CI failure for hotfixes
+    conditions:
+      - "#check-failure>0"
+      - "label=hotfix"
+    actions:
+      comment:
+        message: "@{{author}} :warning: The CI failed on this hotfix PR. Please review the issues and address them."
+```
+
+In the above rule:
+
+- We're checking if there are any CI failures with `#check-failure>0`.
+
+- We're also ensuring that the PR has a label 'hotfix'.
+
+- If both conditions are met, Mergify will leave a comment mentioning the PR
+  author using `@{{author}}`. This mention will trigger a notification in Slack
+  if the author has their GitHub integrated with Slack.
+
+By setting up this flow, you can ensure that critical PRs, like those labeled
+"hotfix", receive immediate attention from their authors, even if they're
+primarily monitoring Slack.

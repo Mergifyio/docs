@@ -1,0 +1,164 @@
+---
+import type { NavItem } from '~/content/navItems';
+import NavLink from './NavLink.astro';
+export interface Props {
+	navGroup: NavItem;
+	currentPageMatch: string;
+}
+
+const { navGroup, currentPageMatch } = Astro.props as Props;
+---
+
+<li class:list={['nav-group', 'active']}>
+	<nav-group data-uuid={navGroup.id}>
+		<details>
+			<summary class="nav-group-title">
+				<h2>
+					{navGroup.icon && <navGroup.icon className="left-icon" />}
+					{navGroup.title}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 1 16 16"
+						width="16"
+						height="16"
+						aria-hidden="true"
+						class="chevron"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"
+						></path>
+					</svg>
+				</h2>
+			</summary>
+			<ul>
+				{
+					navGroup.children?.map((child) => {
+						return child.children ? (
+							<Astro.self currentPageMatch={currentPageMatch} navGroup={child} />
+						) : (
+							<NavLink currentPageMatch={currentPageMatch} navItem={child} />
+						);
+					})
+				}
+			</ul>
+		</details>
+	</nav-group>
+</li>
+
+<script>
+	class NavGroup extends HTMLElement {
+		constructor() {
+			super();
+
+			const uuid = this.dataset.uuid;
+			const navState = JSON.parse(window.localStorage.getItem('navState'));
+			const isOpen = navState[uuid];
+			const navGroupDetails = this.querySelector(`[data-uuid="${uuid}"] > details`);
+			const navGroupTitle = this.querySelector(
+				`[data-uuid="${uuid}"] > details > .nav-group-title`
+			);
+			if (isOpen) {
+				navGroupDetails.setAttribute('open', '');
+			} else {
+				navGroupDetails.removeAttribute('open');
+			}
+
+			navGroupTitle.addEventListener('click', () => {
+				const navState = JSON.parse(window.localStorage.getItem('navState'));
+				navState[uuid] = !navState[uuid];
+				window.localStorage.setItem('navState', JSON.stringify({ ...navState }));
+			});
+		}
+	}
+
+	customElements.define('nav-group', NavGroup);
+</script>
+
+<style lang="scss">
+	.nav-group .placeholder {
+		opacity: 0.6;
+		text-align: center;
+		display: block;
+	}
+	@media (max-width: 50em) {
+		.sm-hidden {
+			display: none !important;
+		}
+	}
+	@media (min-width: 50em) {
+		.nav-group {
+			display: none;
+			margin-bottom: 0.5rem;
+		}
+	}
+	.nav-group.active {
+		display: block;
+	}
+	.nav-group-title {
+		font-size: 1em;
+		font-weight: 600;
+		padding: 0.3rem 2rem;
+
+		h2 {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+	}
+
+	@media (min-width: 50em) {
+		.nav-group-title,
+		.nav-link a {
+			padding: 0.2rem 1rem;
+		}
+	}
+
+	:global(:root.theme-dark) .nav-link a[aria-current='page'],
+	:global(:root.theme-dark) .nav-link a[data-current-parent='true'] {
+		color: hsla(var(--color-base-white), 100%, 1);
+	}
+
+	.fallback {
+		font-size: 0.75em;
+		line-height: 1;
+		font-weight: bold;
+		color: var(--theme-text-light);
+	}
+
+	details > ul {
+		padding-left: 1rem;
+	}
+
+	details > summary {
+		list-style: none;
+	}
+
+	details > summary::marker,
+	details > summary::-webkit-details-marker {
+		display: none;
+	}
+
+	details[open] > summary .chevron {
+		transform: rotate(90deg);
+	}
+
+	summary {
+		cursor: pointer;
+	}
+
+	summary h2 {
+		all: inherit;
+		margin: 0;
+		padding: 0;
+	}
+
+	svg {
+		transform: rotate(0);
+		transition: 0.15s transform ease;
+	}
+
+	svg path {
+		fill: currentColor;
+	}
+</style>

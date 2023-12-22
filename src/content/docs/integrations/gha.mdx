@@ -1,0 +1,81 @@
+---
+title: Integrating GitHub Actions with Mergify
+description: How to leverage GitHub Actions using Mergify.
+---
+import {Image} from 'astro:assets'
+import ghaLogo from "../../images/integrations/gha/logo.png"
+import statusCheckExample from "../../images/integrations/gha/status-check-gh-example.png"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={ghaLogo} alt="GitHub Actions logo"/>
+
+# GitHub Actions Integration with Mergify
+
+[GitHub Actions](https://github.com/features/actions) is a CI/CD platform
+provided by GitHub that helps you automate tasks within your software
+development life cycle. Mergify can interact seamlessly with GitHub Actions by
+evaluating the status checks that GitHub Actions reports to your repositories.
+This integration paves the way for powerful automation workflows that respond
+to the outcomes of your GitHub Actions runs.
+
+## Prerequisites
+
+Before leveraging Mergify's features with GitHub Actions, ensure the following:
+
+1. You've set up GitHub Actions in your repository. If you're new to GitHub
+   Actions, their [official documentation](https://docs.github.com/en/actions)
+   provides comprehensive guides.
+
+2. GitHub Actions is already configured to report job statuses to your pull
+   requests.
+
+3. The [Mergify GitHub App](/getting-started) is installed in your repository.
+
+## Using GitHub Actions Status Checks in Mergify Configuration
+
+To harness the full power of Mergify and GitHub Actions, you can utilize status
+checks reported by GitHub Actions as conditions in your Mergify rules.
+
+:::caution
+  GitHub Actions works slightly differently. To match a status check when using
+  GitHub Actions, only the job name is used (not the workflow name).
+:::
+
+<Image src={statusCheckExample} alt="Status check example" />
+
+Based on the example above, to validate the listed jobs, use the following
+configuration:
+
+```yaml
+pull_request_rules:
+  - name: Automatically merge when GitHub Actions jobs succeed
+    conditions:
+       - check-success=changelog_sync
+       - check-success=actionlint
+       - check-success=docker-onpremise
+       - check-success=docker-saas
+       - check-success=docker-label
+       - check-success=add-linear-author-as-reviewer
+    actions:
+      merge:
+        method: merge
+```
+
+## Triggering GitHub Actions Workflow via Mergify
+
+With Mergify, it's also possible to trigger a GitHub Actions workflow directly.
+This can be achieved by using the
+[`github_actions`](/workflow/actions/github_actions) action in your Mergify
+configuration.
+
+## Further Configuration and Advanced Use Cases
+
+The integration of GitHub Actions with Mergify offers extensive possibilities.
+You can:
+
+- Craft rules that depend on specific GitHub Actions job results.
+
+- Merge pull requests only after certain workflows complete successfully.
+
+- React to failures in GitHub Actions runs by adding comments, labels, or even
+  requesting reviews.

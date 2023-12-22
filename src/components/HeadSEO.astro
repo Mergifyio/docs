@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { OPEN_GRAPH } from '../config';
+import { getOgImageUrl } from '../util/getOgImageUrl';
+
+export interface Props {
+	content: CollectionEntry<'docs'>['data'];
+	canonicalURL: URL;
+}
+
+const { content, canonicalURL } = Astro.props;
+const ogImageUrl = getOgImageUrl(canonicalURL.pathname, !!Astro.params.fallback);
+const imageSrc = ogImageUrl;
+const canonicalImageSrc = new URL(imageSrc, Astro.site);
+const imageAlt = imageSrc === ogImageUrl ? '' : "Mergify's logo with text Docs on blue background";
+const siteDescription =
+	'Learn how to use Mergify, the powerful pull request automation tool that helps teams merge code faster and more safely. Automate your entire pull request workflow, from code review to deployment, and save time and frustration.';
+---
+
+<!-- Page Metadata -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- OpenGraph Tags -->
+<meta property="og:title" content={content.title ?? 'Mergify Documentation'} />
+<meta property="og:type" content="article" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:locale" content={'en'} />
+<meta property="og:image" content={canonicalImageSrc} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta
+	name="description"
+	property="og:description"
+	content={content.description ? content.description : siteDescription}
+/>
+<meta property="og:site_name" content={'Mergify Documentation'} />
+
+<!-- Twitter Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content={OPEN_GRAPH.twitter} />
+<meta name="twitter:title" content={content.title ?? 'Mergify Documentation'} />
+<meta
+	name="twitter:description"
+	content={content.description ? content.description : siteDescription}
+/>
+<meta name="twitter:image" content={canonicalImageSrc} />
+<meta name="twitter:image:alt" content={imageAlt} />

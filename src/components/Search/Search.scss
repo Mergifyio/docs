@@ -1,0 +1,53 @@
+#search-bar {
+  font-size: var(--theme-text-md);
+
+  em {
+    color: #003dff;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .modal-content {
+    background: var(--theme-bg);
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--theme-text);
+  }
+
+  .page-result {
+    &.active {
+      background: var(--chakra-colors-blue-100)
+    }
+  }
+
+  .result-title {
+    font-size: var(--theme-text-lg);
+  }
+
+  .result-description {
+    color: var(--theme-text-lighter);
+    font-weight: 300;
+    text-decoration: none !important;
+  }
+
+  .table-of-content {
+    a {
+      color: var(--theme-text-lighter);
+      transition: color .115s;
+
+      &:hover {
+        color: var(--theme-text);
+      }
+    }
+  }
+}
+
+.theme-dark .page-result.active {
+  background: var(--chakra-colors-blue-700) !important
+}
+
+.theme-dark #search-bar em {
+  color: #5468ff;
+}
