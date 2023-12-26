@@ -1,0 +1,44 @@
+name: Documentation Preview
+permissions: read-all
+
+on:
+  # NOTE(sileht): safe as long as we don't run/build anything from the pull request
+  # BEWARE THIS WORKFLOW USE actions/checkout, any change must take care of
+  # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - reopened
+      - opened
+      - synchronize
+      - closed
+
+jobs:
+  build-preview-doc:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.closed == false
+    steps:
+      - name: Sync preview
+        env:
+          GH_TOKEN: ${{ secrets.MERGIFY_CI_BOT_PAT }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          DEST_REF: refs/heads/preview/${{ github.event.pull_request.number }}
+        run: |
+          if gh api --silent "/repos/Mergifyio/docs/git/${DEST_REF}"; then
+            gh api -X POST "/repos/Mergifyio/docs/git" -f "sha=${HEAD_SHA}" -f "refs=$DEST_REF"
+          else
+            gh api -X PATCH "/repos/Mergifyio/docs/git/$DEST_REF" -f "sha=${HEAD_SHA}" -F force=true
+          fi
+  delete-preview-doc:
+    runs-on: ubuntu-22.04
+    if: github.event.pull_request.closed == true
+    steps:
+      - name: Sync preview
+        env:
+          GH_TOKEN: ${{ secrets.MERGIFY_CI_BOT_PAT }}
+          DEST_REF: refs/heads/preview/${{ github.event.pull_request.number }}
+        run: |
+          if gh api --silent "/repos/Mergifyio/docs/git/${DEST_REF}"; then
+            gh api -X DELETE "/repos/Mergifyio/docs/git/$DEST_REF"
+          fi
