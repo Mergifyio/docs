@@ -1,0 +1,16 @@
+---
+import icon from '../assets/merge-queue-icon.svg?raw';
+
+export interface Props {
+	width?: string | number;
+}
+---
+
+<div set:html={icon} />
+
+<style>
+	div {
+		width: 20px;
+		height: 20px;
+	}
+</style>

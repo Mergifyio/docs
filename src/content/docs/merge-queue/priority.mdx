@@ -1,0 +1,313 @@
+---
+title: Using Priorities
+description: Learn how to order your pull requests in the queue by priority.
+---
+
+import OptionsTable from '../../../components/Tables/OptionsTable';
+import Youtube from '../../../components/Youtube.astro'
+
+In the realm of software development, the ability to effectively prioritize
+tasks is a critical skill that can greatly improve efficiency and productivity.
+When dealing with multiple pull requests, it becomes imperative to properly
+prioritize them to ensure a smooth and efficient merging process. That's where
+Mergify's priority rules come into play.
+
+Priority rules are an optional but highly useful feature in Mergify's arsenal.
+They offer you a more refined control over how your pull requests are ordered
+within a queue. By applying these rules, you can assign priorities to pull
+requests based on the conditions you define. This makes it possible to
+influence the position in which a pull request is added to the queue, thereby
+helping you handle urgent tasks more promptly.
+
+<Youtube video="G9IFIwjByqM" title="Priority Rules Demo" />
+
+## Understanding Priority Rules
+
+Priority rules in Mergify are a set of guidelines that determine the order of
+pull requests within a merge queue. They apply a priority — which could be a
+keyword such as `low`, `medium`, `high` or a numerical value — to a pull
+request based on conditions you've defined. When using numerical value, the
+value can be between 1 and 10,000.
+
+When a pull request is added to a queue, each priority rule is evaluated
+against its conditions. This assessment determines where the pull request will
+be placed in the queue. If multiple rules match the pull request, the one with
+the highest priority value is chosen.
+
+:::note
+
+  If no priority rules matches, Mergify assignes the `medium` priority to a
+  pull request. This is the default and is not configurable.
+
+:::
+
+Here is a glimpse into the structure of a priority rule:
+
+```yaml
+queue_rules:
+  - name: default
+    queue_conditions:
+      - "#approved-reviews-by>=2"
+      - check-success=Travis CI - Pull Request
+    priority_rules:
+      - name: high priority
+        conditions:
+          - label=urgent
+        priority: high
+      - name: low priority
+        conditions:
+          - label=refactor
+        priority: low
+```
+
+In the above configuration:
+
+- The `priority_rules` section sets up priority rules for the queue named
+  `default`.
+
+- Two priority rules, `high priority` and `low priority`, are defined.
+
+- Each rule contains conditions (`label=urgent` and `label=refactor`,
+  respectively) which, if met, apply a certain priority to the pull request
+  (`high` or `low`). Pull requests that match no priority rules get assigned to
+  `medium` priority.
+
+- The name under each rule is just an identifier and doesn't impact the
+  functioning of the rule.
+
+The power of priority rules lies in their flexibility. You can set up as many
+rules as you need, tailored to your specific workflow. Whether it's to
+prioritize bug fixes or to push feature updates to the back, priority rules
+offer you the control you need over your merge queue.
+
+## How to Define Priority Rules
+
+Defining priority rules is straightforward and involves the following steps:
+
+1. **Choose a queue**: Priority rules are tied to a specific queue. So, first,
+   choose the queue where you want to apply these rules.
+
+2. **Define priority levels**: Decide on the levels of priority you want to
+   establish for your pull requests. You can use either keywords (`low`,
+   `medium`, `high`) or numerical values for this purpose.
+
+3. **Set up conditions**: Define the conditions under which a pull request
+   should be assigned a particular priority level. These conditions can be
+   based on any [pull request attribute](/configuration/conditions#attributes-list).
+
+Reference:
+
+<OptionsTable name="PriorityRule" />
+
+The textual priorities have the following numerical values:
+
+<table>
+    <thead>
+      <tr>
+        <th>Keyword</th>
+        <th>Numerical Value</th>
+      </tr>
+    </thead>
+    <tr>
+      <td><code>low</code></td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td><code>medium</code></td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <td><code>high</code></td>
+      <td>3000</td>
+    </tr>
+</table>
+
+Let's look at an example:
+
+```yaml
+queue_rules:
+  - name: default
+    queue_conditions:
+      - "#approved-reviews-by>=2"
+      - check-success=TeamCity
+    priority_rules:
+      - name: urgent fixes
+        conditions:
+          - label=urgent
+          - label=bug
+        priority: high
+      - name: low-priority tasks
+        conditions:
+          - label=refactor
+        priority: 10
+```
+
+In this configuration:
+
+- We are defining priority rules for the `default` queue.
+
+- Two priority levels are set up: `high` for urgent bug fixes and `10` for
+  refactoring tasks.
+
+- The conditions for the `high` priority level are that the pull request has
+  labels `urgent` and `bug`.
+
+- The condition for the low-priority tasks is that the pull request has the
+  `refactor` label.
+
+:::note
+
+  Remember that a pull request can match multiple rules. In such cases, Mergify
+  picks the rule with the highest priority value. So it's a good idea to define
+  your rules considering all possible scenarios.
+
+:::
+
+## Managing Check Interruptions Based on Priority
+
+The `allow_checks_interruption` option plays a critical role in managing the
+sequence of pull requests within the merge queue. When set to `true`, which is
+the default setting, this option allows the interruption of ongoing
+[speculative checks](speculative-checks) if a pull request with higher priority
+enters the queue.
+
+In practice, this means that if a high priority pull request is added to the
+queue, Mergify can stop the checks on the current pull request in order to
+prioritize the high priority one.
+
+Conversely, if `allow_checks_interruption` is set to `false`, Mergify will not
+interrupt the checks. Instead, a pull request with a higher priority will be
+inserted just after the pull requests that currently have checks running. This
+ensures the continuity of the testing process while still respecting the
+priority order in the queue.
+
+```yaml
+queue_rules:
+  - name: default
+    merge_conditions:
+      - "#approved-reviews-by>=2"
+      - check-success=TeamCity
+    allow_checks_interruption: false
+    priority_rules:
+      - name: urgent
+        conditions:
+          - label=urgent
+        priority: high
+      - name: normal
+        conditions:
+          - label=normal
+        priority: low
+```
+
+In this configuration, `allow_checks_interruption` is set to `false`. This
+means if a pull request with the `urgent` label (which has a higher priority)
+enters the queue, it will not interrupt the checks running on a pull request
+with the `normal` label. Instead, it will wait for the `normal` pull request's
+checks to complete before starting its own checks.
+
+## Advanced Priority Rule Usage
+
+Beyond the basic use of priority rules, you can leverage advanced features to
+fine-tune how your pull requests are prioritized in the queue.
+
+### Using Numerical Values
+
+While the keywords (`low`, `medium`, `high`) provide an easy way to define
+priority, they might be restrictive in some cases. If you need more granular
+control, consider using numerical values for priority. The higher the number,
+the higher the priority.
+
+For example:
+
+```yaml
+priority_rules:
+  - name: extremely urgent
+    conditions:
+      - label=critical
+    priority: 5000
+```
+
+In this rule, pull requests labeled `critical` are given a very high priority.
+
+### Mixing Keywords and Numerical Values
+
+There is no rule that prevents you from mixing keyword and numerical values in
+your priority definitions. This could be useful in scenarios where you want to
+distinguish between a general set of important tasks (assigned a keyword like
+`high`) and extremely important tasks (assigned a high numerical value).
+
+```yaml
+priority_rules:
+  - name: important task
+    conditions:
+      - label=important
+    priority: high
+  - name: critical task
+    conditions:
+      - label=critical
+    priority: 5000
+```
+
+In this configuration, `critical` tasks are treated with the utmost urgency,
+while `important` tasks also receive high priority but are placed after
+`critical` tasks in the queue.
+
+### Complex Condition Definitions
+
+The conditions for priority rules are not limited to simple label checks. You
+can make use of any condition syntax available in Mergify. This includes checks
+for review status, authorship, file paths, and more. This opens up a wide array
+of possibilities for defining intricate priority systems based on your team's
+workflow.
+
+Here's an example that gives high priority to pull requests that modify the
+`/src` directory:
+
+```yaml
+priority_rules:
+  - name: core changes
+    conditions:
+      - files~=^src/
+    priority: high
+```
+
+These are just a few ways to get the most out of Mergify's priority rules. By
+thinking about your team's needs and workflow, you can leverage these advanced
+usage scenarios to create a priority system that best serves your project.
+
+## Troubleshooting Priority Rules
+
+Even with the best planning and understanding, you may run into issues when
+setting up or managing priority rules. Here are some common problems and their
+solutions:
+
+### Priority Rule Not Applied
+
+If you find that a priority rule is not applied as expected, there may be
+several reasons:
+
+- Check the conditions of the priority rule. Ensure that the pull request
+  matches the conditions specified in the priority rule.
+
+- The priority rule could be overridden by another rule with a higher priority.
+  Remember, if a pull request matches multiple rules, the rule with the highest
+  priority will be retained.
+
+- There might be an error in the syntax or formatting of your Mergify
+  configuration file. Be sure to verify the syntax and structure of your
+  configuration file.
+
+### Unexpected Queue Position
+
+If a pull request ends up in an unexpected position in the queue:
+
+- Verify the priority assigned in the priority rule. A higher value or a higher
+  priority keyword (e.g., "high") will place the pull request closer to the
+  front of the queue.
+
+- Make sure there isn't another priority rule that is placing the pull request
+  at a different position.
+
+- Confirm that your priority rules are correctly set up in the queue rule. The
+  priority rules should be nested under the correct queue rule in your
+  configuration file.

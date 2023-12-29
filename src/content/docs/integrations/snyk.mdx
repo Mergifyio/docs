@@ -1,0 +1,126 @@
+---
+title: Using Snyk with Mergify
+description: Streamline your dependency management.
+---
+
+import { Image } from "astro:assets"
+import snykLogo from "../../images/integrations/snyk/logo.svg"
+import prScreenshot from "../../images/integrations/snyk/pr.png"
+import enableScreenshot from "../../images/integrations/snyk/enable.png"
+import githubIntegScreenshot from "../../images/integrations/snyk/github-integ.png"
+import depupdateScreenshot from "../../images/integrations/snyk/depupdate.png"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={snykLogo} alt="Snyk logo"/>
+
+Dependency management is pivotal for maintaining a robust and secure project.
+But with regular updates, security patches, and version changes, it can become
+overwhelming. Snyk and Mergify combined, offer a powerful solution to
+streamline this process.
+
+[Snyk](https://snyk.io) is a developer-focused security platform. Apart from
+its renowned vulnerability scanning capabilities, it offers automated pull
+requests for dependency updates. Regularly, Snyk checks your project
+dependencies, and upon identifying a newer version, opens a pull request on
+your GitHub repository. This PR contains detailed information about the update,
+allowing for a thorough review.
+
+<Image src={prScreenshot} alt="Snyk pull request details on GitHub"/>
+
+## Setting Up Automated Dependency Upgrades with Snyk
+
+1. **Initial Setup**
+   - Choose a GitHub repository.
+   - Create a Mergify account and integrate it with your repository.
+   - Create a Snyk account and link it to your GitHub repository.
+
+2. **Configuring Snyk**
+   - Sign-up/log-in to Snyk.
+
+   - Go to `Projects` > `Add projects`, and import the desired GitHub
+   repositories.
+
+   <Image src={enableScreenshot} alt="Enable desired repositories on Snyk"/>
+   - To enable automated dependency upgrades: `Settings` > `Integrations` >
+   `GitHub`.
+
+   <Image src={githubIntegScreenshot} alt="Showing GitHub integrations menu in Snyk"/>
+
+   - Scroll to `Automatic dependency upgrade PRs` and activate it.
+
+   <Image src={depupdateScreenshot} alt="Automatic dependency upgrade PRs in snyk interface"/>
+
+3. **Mergify Configuration**
+   - Log in to Mergify with your GitHub credentials.
+
+   - Select the repositories you want Mergify to manage.
+
+   - Define the merge policy using the Mergify [configuration
+   file](/configuration/file-format) file in the repository root.
+
+     ```yaml
+     pull_request_rules:
+       - name: Automatic merge Snyk PRs on Status Checks passing
+         conditions:
+           - author = snyk-bot
+           - base = main
+         actions:
+           merge:
+             method: merge
+     ```
+
+     This configuration ensures that Snyk PRs are automatically merged when
+     they meet the defined conditions.
+
+## Batching Dependency Updates
+
+If you are using Mergify [merge queue](/merge-queue) in projects where there
+are frequent updates to a large number of small libraries, it's efficient to
+batch these updates together. Using Mergify's merge queue feature, you can
+automatically batch and test these updates together, reducing CI load and
+ensuring compatibility.
+
+For example, you could set up a merge queue to batch those PRs 10 by 10:
+
+```yaml
+queue_rules:
+  # If you have other queues defined, add this at the end so it is processed last
+  - name: dep-update
+    batch_size: 10
+    # Wait for up to 30 minutes for the batch to fill up
+    batch_max_wait_time: 30 min
+    queue_conditions:
+      - author = snyk-bot
+
+pull_request_rules:
+  - name: Automatically queue Snyk PRs
+    conditions:
+      - author = snyk-bot
+    actions:
+      queue:
+```
+
+## Tips for Efficient Dependency Upgrades
+
+To avoid being overwhelmed with too many PRs, consider the following strategies
+using Snyk:
+
+1. **Limit Open Upgrade PRs**: Restrict the number of simultaneous Snyk upgrade
+   PRs.
+
+2. **Selective Package Upgrades**: Choose specific packages to exclude from
+   automated updates.
+
+3. **Scope of Changes**: Opt for automatic upgrades of only minor and patch
+   versions to avoid potential breaking changes.
+
+4. **Automatically Merge**: Merge the pull requests as soon as they are ready.
+
+5. **Batch Merge**: Leverage [batches](#batching-dependency-updates) to save CI
+   time when using Mergify's Merge Queue.
+
+When integrated, Mergify and Snyk transform dependency management into a
+seamless process. Developers no longer need to keep tabs on every update or
+fear merging PRs that might break the CI. By leveraging these tools, projects
+stay updated, secure, and efficient, letting teams focus on what they do best:
+creating excellent software.

@@ -1,0 +1,87 @@
+---
+title: Label
+description: Add, remove and toggle labels on a pull request.
+---
+
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
+import { Image } from "astro:assets"
+import prConflictScreenshot from "../../../images/workflow/actions/label/conflict-pr-list.png"
+
+The `label` action allows Mergify to automatically add or remove labels from a
+pull request based on the conditions specified in your rules, making your
+workflow more organized and efficient.
+
+## Parameters
+
+<ActionOptionsTable action="label" />
+
+## Examples
+
+### WIP
+
+```yaml
+pull_request_rules:
+  - name: add "WIP" label when the title contains "WIP"
+    conditions:
+      - title~=WIP
+    actions:
+      label:
+        toggle:
+          - WIP
+```
+
+In this example, Mergify will automatically add the "WIP" label to any pull
+request whose title contains "WIP". If the pull request does not match the
+rule anymore, the label will be removed.
+
+### Warn on Conflicts
+
+When browsing the list of pull request, GitHub does not give any indication on
+which pull requests might be in conflict. Mergify allows to do this easily by
+adding a label.
+
+```yaml
+pull_request_rules:
+  - name: warn on conflicts
+    conditions:
+      - conflict
+    actions:
+      comment:
+        message: "@{{author}} this pull request is now in conflict 😩"
+      label:
+        toggle:
+          - conflict
+```
+
+Then, your pull request list will look like this on conflict:
+
+<Image src={prConflictScreenshot} alt="Pull request in conflict in pull request list" />
+
+### Toggle A Label Based on CI Status
+
+This rule toggle a label based on the failure status of a CI system.
+
+```yaml
+pull_request_rules:
+  - name: toggle labels based on CI state
+    conditions:
+      - check-failure=CI
+    actions:
+      label:
+        toggle:
+          - "CI:fail"
+```
+
+### Add A Label Based on The Name of The Branch
+
+This rule add a label with the name of the branch.
+
+```yaml
+pull_request_rules:
+  - name: add a label with the name of the branch
+    conditions: []
+    actions:
+      label:
+        add:
+          - "branch:{{base}}"
+```

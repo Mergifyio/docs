@@ -1,0 +1,8 @@
+dist
+node_modules
+.github
+src/api-schemas.json
+public/mergify-configuration-openapi.json
+.mergify.yml
+*.md
+*.mdx

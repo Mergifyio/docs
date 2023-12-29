@@ -1,0 +1,75 @@
+---
+title: API Usage
+description: Integrate with Mergify using its API.
+---
+
+import { Image } from "astro:assets"
+import applicationKeysCreate from "../images/api-intro/application_keys.png"
+import applicationKeysToken from "../images/api-intro/application_keys_token.png"
+import applicationKeysDelete from "../images/api-intro/application_keys_delete.png"
+import Button from '../../components/Button.astro';
+
+Mergify offers a comprehensive RESTful API that facilitates seamless
+integration. This API provides access to data and functionalities that can
+enhance your Mergify experience.
+
+## API Endpoint
+
+All API requests should be directed to: `https://api.mergify.com/v1/`
+
+The API is entirely documented in the [API reference](/api).
+
+<Button colorScheme="blue" href='/api' style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+  API Reference
+</Button>
+
+## Authentication
+
+### Creating an Application Key
+
+To start with the API, you'll first need to create an application associated
+with your organization:
+
+1. Navigate to your [dashboard](https://dashboard.mergify.com).
+2. Proceed to create an Application.
+
+<Image src={applicationKeysCreate} alt="Create application keys"/>
+
+Upon successful creation, the dashboard will provide you with an API key.
+
+<Image src={applicationKeysToken} alt="Application key token"/>
+
+### Using the API Key
+
+With the provided API key, you're set to make authenticated requests against
+the Mergify API. For example, to validate the authenticity of your token, you
+can retrieve your application's information:
+
+```bash
+curl -H "Accept: application/json" -H "Authorization: Bearer <my-application-api-key>" https://api.mergify.com/v1/application
+```
+
+Response:
+```json
+{
+    "id": 123,
+    "name": "my application",
+    "github_account": {
+        "id": 123,
+        "login": "Mergify",
+        "type": "Organization",
+    }
+}
+```
+
+### Revoking an Application Key
+
+If, for any reason, you need to revoke an application key:
+
+1. Head to the [dashboard](https://dashboard.mergify.com).
+2. Simply delete the corresponding application.
+
+<Image src={applicationKeysDelete} alt="Delete application key"/>
+
+By doing so, the application and its key will be removed, revoking any access
+provided by that key.

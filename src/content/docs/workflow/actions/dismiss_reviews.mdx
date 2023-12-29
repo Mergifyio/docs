@@ -1,0 +1,22 @@
+---
+title: Dismiss Reviews
+description: Dismiss previous reviews on a pull request.
+---
+
+import Button from '../../../../components/Button.astro';
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
+
+The `dismiss_reviews` action allows Mergify to automatically dismiss approved
+or changes requested reviews when new commits are pushed to the pull request.
+It is a powerful tool that can help maintain the freshness and relevance of
+reviews in your pull request workflow.
+
+## Parameters
+
+<ActionOptionsTable action="dismiss_reviews" />
+
+## Examples
+
+<Button colorScheme='teal' href="/workflow/dismiss-reviews" size='lg' style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+  Read Dismiss Reviews Use Case
+</Button>

@@ -1,0 +1,125 @@
+---
+title: Rebasing Pull Requests
+description: Bring your pull requests up-to-date with their base branch automatically.
+---
+
+import { Image } from "astro:assets";
+import rebaseScreenshot from "../../images/commands/rebase/example.png"
+
+Rebasing is a method to integrate changes from one branch into another. It's
+essentially like "replaying" changes from your branch onto another branch. This
+is helpful when you want to ensure your changes are built upon the most recent
+commits of the branch you're targeting.
+
+Rebasing a pull request in GitHub allows you to update the entire commit
+history of a branch onto its base branch, while the base branch received new
+commits.
+
+Mergify allows to rebase pull requests in two different ways:
+
+- Either by using the [`rebase` command](/commands/rebase) which rebases the
+  pull request immediately;
+
+- Either by using an automation rule that automatically triggers a rebase
+  when a pull request meets conditions.
+
+## Rebasing a PR from GitHub
+
+To instantly rebase a pull request without leaving GitHub, use the Mergify
+rebase command by typing:
+
+```text
+@mergifyio rebase
+```
+
+<Image src={rebaseScreenshot} alt="Sending command @mergifyio rebase in the pull request conversation on GitHub." />
+
+This command triggers a `git rebase` operation and force-push the rebased
+branch.
+
+import RebaseAdvantage from '../commands/_rebase_advantages.mdx';
+
+<RebaseAdvantage />
+
+## Automatically Rebasing PRs
+
+You might be tempted to rebase pull requests automatically when they are behind
+their base branch, such as `main` or `master`. The [`rebase`
+action](/workflow/actions/rebase) is a great candidate to help in such a case.
+
+You can write an automation rule that does exactly this for you:
+
+```yaml
+pull_request_rules:
+  - name: continuously rebase pull requests when it's labeled with `rebase`
+    conditions:
+      - label=rebase
+    actions:
+      rebase:
+```
+
+Note that this rebases the pull request as long as it has the label.
+
+If you wanted to rebase only once, you would also need to remove the label once
+the rebase is done:
+
+```yaml
+pull_request_rules:
+  - name: rebase pull requests once when it's labeled with `rebase`
+    conditions:
+      - label=rebase
+    actions:
+      rebase: {}
+      label:
+        remove:
+          - rebase
+```
+
+### Rebasing Outdated Pull Requests
+
+As rebasing a PR is likely to re-trigger your CI, rebasing your PR continuously
+could be time consuming for your CI system. Rather than doing it on every merge
+done in the base branch, you can rebase only when the PR is behind a number of
+commits. For example:
+
+```yaml
+pull_request_rules:
+  - name: rebase pull request when it's more than 10 commits behind main
+    conditions:
+      - base=main
+      - "#commits-behind>=10"
+    actions:
+      rebase:
+```
+
+With this rule, as soon as the pull request is more than 10 commits behind the
+`main` branch, Mergify automatically rebases the pull request which therefore
+retriggers the CI. This is useful to make sure that you don't merge pull
+request that are too much out-of-date.
+
+:::caution
+  If your goal is to only merge pull requests that are rebased and retested
+  before being merged, you are actually looking for a [merge
+  queue](/merge-queue). A merge queue makes sure each pull request is up to
+  date and retested before being merged, while avoiding to update all pull
+  requests at once.
+:::
+
+### Rebasing Pull Requests Once a Week
+
+As stated above, rebasing too often your pull requests might not be great for
+your CI resource usage. Therefore, you could also use a strategy where rebase
+would only be done during a certain time frame, once a day.
+
+```yaml
+pull_request_rules:
+  - name: rebase pull requests in the morning
+    conditions:
+      - base=main
+      - "schedule=Mon-Fri 08:00-09:00[US/Pacific]"
+    actions:
+      rebase:
+```
+
+With this rule, any pull request that is out-of-date between 8am and 9am PST
+during the week will be rebased.

@@ -1,0 +1,79 @@
+---
+title: Integrating Renovate with Mergify
+description: How to automate your dependencies update using Mergify.
+---
+
+import renovateLogo from "../../images/integrations/renovate/logo.png"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={renovateLogo} alt="Renovate logo"/>
+
+[Mend Renovate](https://www.mend.io/renovate/) scans your software, discovers
+dependencies, automatically checks to see if an updated version exists, and
+submits automated pull requests.
+
+## Automating Renovate Pull Request Merges
+
+There are two primary ways to automate the merging of Renovate PRs with
+Mergify:
+
+### 1. Direct Merge or Merge Queue
+
+You can set up a pull request rule to automatically merge Renovate PRs or
+place them in the merge queue.
+
+```yaml
+pull_request_rules:
+  - name: Automatically merge Renovate PRs
+    conditions:
+      - author = renovate[bot]
+    actions:
+      merge:
+      # Or use queue: to use the merge queue
+```
+
+### 2. PR Approval
+
+If you have GitHub's branch protection set up to require approvals, you can use
+Mergify to automatically approve Renovate PRs.
+
+```yaml
+pull_request_rules:
+  - name: Automatically approve Renovate PRs
+    conditions:
+      - author = renovate[bot]
+    actions:
+      review:
+        type: APPROVE
+```
+
+## Batching Dependency Updates
+
+For projects where there are frequent updates to a large number of small
+libraries, it's efficient to batch these updates together. Using Mergify's
+merge queue feature, you can automatically batch and test these updates
+together, reducing CI load and ensuring compatibility.
+
+For example, you could set up a merge queue to batch those PRs 10 by 10:
+
+```yaml
+queue_rules:
+  # If you have other queues defined, add this at the end so it is processed last
+  - name: dep-update
+    batch_size: 10
+    # Wait for up to 30 minutes for the batch to fill up
+    batch_max_wait_time: 30 min
+    queue_conditions:
+      - author = renovate[bot]
+
+pull_request_rules:
+  - name: Automatically queue Renovate PRs
+    conditions:
+      - author = renovate[bot]
+    actions:
+      queue:
+```
+
+With Mergify and Renovate working together, you can ensure your project's
+dependencies are always up-to-date with minimal effort, ensuring a smooth and
+efficient update process.

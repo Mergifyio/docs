@@ -1,0 +1,113 @@
+---
+title: Mergify Integration
+description: Mergify integration with other systems.
+---
+
+import {
+  SiJenkins,
+  SiGithubactions,
+  SiSnyk,
+  SiDependabot,
+  SiRenovatebot,
+  SiTeamcity,
+  SiCircleci,
+  SiBuildkite,
+  SiSlack,
+  SiGitlab,
+} from 'react-icons/si';
+import {BsStack} from 'react-icons/bs';
+import { TbBike } from 'react-icons/tb';
+import Docset from '../../../components/DocsetGrid/Docset.astro';
+import DocsetGrid from '../../../components/DocsetGrid/DocsetGrid.astro';
+
+## Continuous Integration
+
+<DocsetGrid>
+  <Docset
+    title="GitHub Actions"
+    description="Learn how Mergify integrates with GitHub Actions."
+    path="gha"
+    icon={SiGithubactions}
+  />
+  <Docset
+    title="CircleCI"
+    description="Learn how Mergify integrates with CircleCI."
+    path="circleci"
+    icon={SiCircleci}
+  />
+  <Docset
+    title="Jenkins"
+    description="Learn how Mergify integrates with Jenkins."
+    path="jenkins"
+    icon={SiJenkins}
+  />
+  <Docset
+    title="BuildKite"
+    description="How to automate your BuildKite workflow using Mergify."
+    path="buildkite"
+    icon={SiBuildkite}
+  />
+  <Docset
+    title="TeamCity"
+    description="How to automate your TeamCity workflow using Mergify."
+    path="teamcity"
+    icon={SiTeamcity}
+  />
+  <Docset
+    title="GitLab"
+    description="How to automate your GitLab CI workflow using Mergify."
+    path="gitlab"
+    icon={SiGitlab}
+  />
+</DocsetGrid>
+
+## Monitoring
+
+import Monitoring from './_monitoring.mdx'
+
+<Monitoring />
+
+## Developers Tools
+
+<DocsetGrid>
+  <Docset
+    title="Slack"
+    description="Learn how you can use Slack and Mergify together."
+    path="slack"
+    icon={SiSlack}
+  />
+  <Docset
+    title="Graphite"
+    description="Learn how you can use Graphite and Mergify together."
+    path="graphite"
+    icon={BsStack}
+  />
+  <Docset
+    title="Rush"
+    description="How to leverage your Rush monorepo with Mergify."
+    path="rush"
+    icon={TbBike}
+  />
+</DocsetGrid>
+
+## Dependency Management
+<DocsetGrid>
+  <Docset
+    title="Dependabot"
+    description="How to automate your dependencies update using Mergify"
+    path="dependabot"
+    icon={SiDependabot}
+  />
+  <Docset
+    title="Renovate"
+    description="How to automate your dependencies update using Mergify"
+    path="renovate"
+    icon={SiRenovatebot}
+  />
+  <Docset
+    title="Snyk"
+    description="Streamline your dependency management."
+    path="snyk"
+    icon={SiSnyk}
+  />
+</DocsetGrid>

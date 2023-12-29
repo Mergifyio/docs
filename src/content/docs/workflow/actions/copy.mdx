@@ -1,0 +1,59 @@
+---
+title: Copy
+description: Copy a pull request to another branch.
+---
+
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
+
+The `copy` action enables you to automatically create a copy of a pull request.
+When the conditions you specify are met, Mergify will create a new pull request
+to merge the changes into the specified base branch.
+
+:::note
+  The `copy` action is equivalent to the [`backport`](backport) action. The
+  only difference is that the `backport` action will only copy the original
+  pull request once it is merged.
+:::
+
+Note that in case of a conflict during the copy, Mergify will create a pull
+request with the conflict; you will have to resolve it manually. You can change
+this behaviour using the `ignore_conflicts` option.
+
+:::caution
+  Please make sure the branches specified in the copy action exist and you have
+  the necessary access permissions. If the branch does not exist or you don't
+  have the required permissions, the action will fail.
+:::
+
+## Parameters
+
+The `copy` action takes a list of branches to which the changes from the pull
+request will be copied. The branch names should be specified as strings.
+
+<ActionOptionsTable action="copy" />
+
+As the title and body are templates, you can leverage any pull request
+attributes to use as content, e.g., `{{author}}`. You can also use this
+additional variable:
+
+- `{{ destination_branch }}`: the name of the destination branch.
+
+- `{{ cherry_pick_error }}`: the cherry pick error message if any (only
+    available in body).
+
+## Examples
+
+### Using Labels to Copy
+
+Below is an example of how to use the `copy` action:
+
+```yaml
+pull_request_rules:
+  - name: copy patches to the prod branch
+    conditions:
+      - label=copy-to-prod
+    actions:
+      copy:
+        branches:
+          - prod
+```

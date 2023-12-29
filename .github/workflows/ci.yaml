@@ -41,4 +41,4 @@ jobs:
       - name: Lint
         run: |
           npm ci
-          npm run eslint
+          npm run check

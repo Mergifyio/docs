@@ -1,0 +1,116 @@
+---
+export interface Props {
+	colorScheme:
+		| 'whiteAlpha'
+		| 'blackAlpha'
+		| 'gray'
+		| 'red'
+		| 'orange'
+		| 'yellow'
+		| 'green'
+		| 'teal'
+		| 'blue'
+		| 'cyan'
+		| 'purple'
+		| 'pink'
+		| 'linkedin'
+		| 'facebook'
+		| 'messenger'
+		| 'whatsapp'
+		| 'twitter'
+		| 'telegram';
+	style?: string;
+	href?: string;
+	icon: Function;
+	variant?: 'ghost' | 'solid';
+}
+const { colorScheme, style, href, icon, variant = 'solid' } = Astro.props as Props;
+---
+
+<button class:list={['button', `button-${colorScheme}`, variant]} {style}>
+	<a href={href} target="_blank">
+		{icon && <Astro.props.icon />}
+		<slot />
+	</a>
+</button>
+
+<style is:global lang="scss">
+	.button {
+		border-radius: 4px;
+		font-size: large;
+		display: flex;
+		align-items: center;
+		padding: 0 16px;
+		cursor: pointer;
+	}
+	.button a {
+		display: flex;
+		align-items: center;
+		color: inherit;
+	}
+
+	@mixin generate-button-styles($colorSchemes) {
+		@each $colorScheme in $colorSchemes {
+			.button-#{$colorScheme}.solid {
+				background-color: var(--chakra-colors-#{$colorScheme}-500);
+				transition: background-color 0.2s;
+				color: white;
+
+				&:hover {
+					background-color: var(--chakra-colors-#{$colorScheme}-600);
+				}
+			}
+
+			.theme-dark .button-#{$colorScheme}.solid {
+				color: var(--chakra-colors-gray-800);
+
+				&:hover {
+					background-color: var(--chakra-colors-#{$colorScheme}-300);
+				}
+			}
+
+			.button-#{$colorScheme}.ghost {
+				background-color: transparent;
+				transition: background-color 0.2s;
+				color: black;
+
+				&:hover {
+					background-color: var(--chakra-colors-#{$colorScheme}-50);
+				}
+			}
+
+			.theme-dark .button-#{$colorScheme}.ghost {
+				color: var(--chakra-colors-whiteAlpha-900);
+
+				svg {
+					color: var(--chakra-colors-whiteAlpha-900);
+				}
+
+				&:hover {
+					background-color: var(--chakra-colors-#{$colorScheme}-600);
+				}
+			}
+		}
+	}
+
+	@include generate-button-styles(
+		[ 'whiteAlpha',
+		'blackAlpha',
+		'gray',
+		'red',
+		'orange',
+		'yellow',
+		'green',
+		'teal',
+		'blue',
+		'cyan',
+		'purple',
+		'pink',
+		'linkedin',
+		'facebook',
+		'messenger',
+		'whatsapp',
+		'twitter',
+		'telegram']
+	);
+</style>

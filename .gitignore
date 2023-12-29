@@ -1,8 +1,10 @@
 node_modules
 .cache
-public
 .env.development
 .env.production
+
+.astro/
+dist
 
 # Statically generated images at build time, don't push them
 /static/og-images

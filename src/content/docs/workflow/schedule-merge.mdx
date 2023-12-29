@@ -1,0 +1,87 @@
+---
+title: Scheduling Merges
+description: Mastering the art of timing your pull request merges with Mergify's scheduling features.
+---
+
+import {Image} from 'astro:assets'
+import mergeAfterBody from "../../images/workflow/schedule-merge/merge-after.png"
+import mergeAfterSummary from "../../images/workflow/schedule-merge/merge-after-summary.png"
+import dependsOnBody from "../../images/workflow/schedule-merge/depends-on.png"
+import dependsOnSummary from "../../images/workflow/schedule-merge/depends-on-summary.png"
+
+Effectively managing when pull requests are merged is crucial for maintaining a
+smooth workflow. Mergify offers various features to schedule merges, providing
+flexibility and control over your project’s integration process. This document
+outlines how you can schedule your merges using different Mergify features,
+including the `schedule` condition, `current-datetime` condition, `Merge-After`
+feature, and `Depends-On` feature.
+
+## Scheduling Merges During Work Hours
+
+The `schedule` condition allows you to define specific times during the week
+when merges should occur. This is particularly useful for avoiding merges
+during off-hours or weekends.
+
+```yaml
+pull_request_rules:
+  - name: merge during work hours
+    conditions:
+      - schedule = Mon-Fri 09:00-17:00[Europe/Paris]
+    actions:
+      merge:
+```
+In this example, pull requests will only be merged on weekdays between 09:00
+and 17:00 Paris time.
+
+## Avoid Merges on Specific Dates
+
+The `current-datetime` condition can be used to include or exclude specific
+dates or times in your merge automation. It supports being compared to a
+[timestamp](/configuration/data-types/#timestamp) or a [timestamp
+interval](/configuration/data-types/#timestamp-interval).
+
+```yaml
+pull_request_rules:
+  - name: avoid merges on specific dates
+    conditions:
+      - current-datetime != XXXX-01-01T00:00/XXXX-01-01T23:59[Europe/Paris]
+    actions:
+      merge:
+```
+
+This rule prevents merges from occurring on January 1st.
+
+## Delay Merge Until a Future Date
+
+You can use the `Merge-After` pull request header to merge a pull request after
+a certain date.
+
+<Image src={mergeAfterBody} alt="Ading 'Merge-After: 2023-12-25T00:00' in the pull request body on GitHub"/>
+
+Mergify automatically injects the `current-datetime >= ` condition in any rules
+that contain the `merge` or `queue` action.
+
+<Image src={mergeAfterSummary} alt="Seeing mergify's rules summary on GitHub, emphasizing on the condition saying won't merge until provided date"/>
+
+## Using `Depends-On` to Manage Merge Dependencies
+
+`Depends-On` ensures a pull request is only merged after another specified pull
+request has been successfully merged. This is useful for managing dependencies
+between pull requests.
+
+<Image src={dependsOnBody} alt="Adding 'Depends-On: #973' in pull request body on GitHub"/>
+
+Mergify automatically injects the `depends-on` condition in any rules
+that contain the `merge` or `queue` action.
+
+<Image src={dependsOnSummary} alt="Seeing depends on condition in the pull request summary."/>
+
+This rule ensures that the pull request will only be merged after PR #973 is
+merged.
+
+---
+
+By using these scheduling features, you can efficiently manage your project's
+merge workflow, ensuring that merges happen at the most appropriate times and
+in the correct order. This not only streamlines your development process but
+also helps in maintaining stability and continuity in your project.

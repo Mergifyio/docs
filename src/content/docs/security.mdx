@@ -1,0 +1,241 @@
+---
+title: Security
+description: Learn more about the applications permissions and Mergify's security obsession.
+---
+
+import { FaCheck, FaXmark } from 'react-icons/fa6';
+import Button from '../../components/Button.astro';
+
+At Mergify, security is of utmost importance to us. We understand the crucial
+role we play in the software development process and are fully committed to
+earning and maintaining the trust of our users. Our Security page is dedicated
+to providing transparency regarding our security measures and practices. We
+continually strive to improve the safety and reliability of our platform,
+ensuring that your repositories and code are well-protected.
+
+## Trust Report
+
+Our Trust Report is designed to provide transparency and instill confidence in
+our customers. By sharing our compliance reports and offering insights into our
+security practices, we aim to demonstrate our unwavering dedication to
+safeguarding your valuable information.
+
+<Button href="https://trust.mergify.com" colorScheme='blue' 
+style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+  Trust Report
+</Button>
+
+We invite you to explore this documentation and learn more about how we
+prioritize your trust. Click the button above to access our Trust Report page,
+where you will find in-depth information on our security measures and our
+ongoing commitment to protecting your data.
+
+## Bug Bounty Program
+
+Mergify hosts a public Bug Bounty program with HackerOne. If you’re an
+independent security expert or researcher and believe you’ve discovered a
+security-related issue on our platform, we appreciate you disclosing the issue
+to us responsibly, and thank you for your time and expertise.
+
+<a href="https://hackerone.com/mergify" target="_blank">
+  <Button colorScheme='blue' size='lg'
+  style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+    Submit a vulnerability
+  </Button>
+</a>
+
+## Contacting Us About Security Concerns
+
+At Mergify, we prioritize the security of our platform and the safety of our
+users. If you have any security-related questions, concerns, please reach out
+directly to our dedicated security team at <a
+href="mailto:security@mergify.com">security@mergify.com</a>.
+
+We appreciate your collaboration in ensuring the security of Mergify and its
+community. Rest assured, all communications related to security matters will be
+treated with the highest priority and confidentiality.
+
+## GitHub App Required Permissions
+
+Below is the list of the required permission on GitHub for
+Mergify to function properly.
+
+<table>
+  <thead>
+    <tr>
+      <th>Permission</th>
+      <th>Access</th>
+      <th>Usage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Repository: Actions</td>
+      <td>Read-only</td>
+      <td>Used to read workflow details.</td>
+    </tr>
+    <tr>
+      <td>Repository: Administration</td>
+      <td>Read-only</td>
+      <td>Used to access team details.</td>
+    </tr>
+    <tr>
+      <td>Repository: Checks</td>
+      <td>Read and write</td>
+      <td>Used to read and post checks.</td>
+    </tr>
+    <tr>
+      <td>Repository: Commit statuses</td>
+      <td>Read-only</td>
+      <td>Used to read checks status.</td>
+    </tr>
+    <tr>
+      <td>Repository: Contents</td>
+      <td>Read and write</td>
+      <td>Used to read repository content and write (merge).</td>
+    </tr>
+    <tr>
+      <td>Repository: Issues</td>
+      <td>Read and write</td>
+      <td>Used to close issues on merge.</td>
+    </tr>
+    <tr>
+      <td>Repository: Metadata</td>
+      <td>Read-only</td>
+      <td>Access repository metadata.</td>
+    </tr>
+    <tr>
+      <td>Repository: Pages</td>
+      <td>Read and write</td>
+      <td>Write required to trigger page workflow on merge.</td>
+    </tr>
+    <tr>
+      <td>Repository: Pull requests</td>
+      <td>Read and write</td>
+      <td>Used to read and edit pull requests.</td>
+    </tr>
+    <tr>
+      <td>Repository: Workflows</td>
+      <td>Read and write</td>
+      <td>Used to read workflows and merge pull requests modifying workflows.</td>
+    </tr>
+    <tr>
+      <td>Organization: Members</td>
+      <td>Read-only</td>
+      <td>Used to list organization members.</td>
+    </tr>
+    <tr>
+      <td>Account: Email addresses</td>
+      <td>Read-only</td>
+      <td>Used to read user email addresses.</td>
+    </tr>
+  </tbody>
+</table>
+
+## User Permissions
+
+To perform any actions on Mergify, such as adding a pull request in a merge
+queue or triggering a command, a person must have sufficient access to the
+relevant account or resource. This access is controlled by permissions. A
+permission is the ability to perform a specific action. A role is a set of
+permissions you can assign to individuals or teams.
+
+Mergify users inherit their roles directly from [GitHub
+roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization).
+
+That means that a user that has the `Read` role for a repository in GitHub will
+also inherit this role in Mergify.
+
+### Features Permissions
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Read</th>
+      <th>Triage</th>
+      <th>Write</th>
+      <th>Maintain</th>
+      <th>Admin</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+      <td>View the merge queues</td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+    </tr>
+    <tr>
+      <td>Freeze a merge queue</td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+    </tr>
+    <tr>
+      <td>Unfreeze a merge queue</td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+    </tr>
+    <tr>
+      <td>Pause merge queues</td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+      <td><FaCheck/></td>
+    </tr>
+    <tr>
+      <td>Manage API keys</td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaCheck/></td>
+    </tr>
+    <tr>
+      <td>Manage Mergify subscription</td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaXmark/></td>
+      <td><FaCheck/></td>
+    </tr>
+  </tbody>
+</table>
+
+:::note
+  Non-admin users might be able to manage permissions on demand. <a
+  href="mailto:support@mergify.com">Contact our support</a>
+  to request a non-admin to get access to Mergify subscription and
+  billing details.
+:::
+
+### Command Permissions
+
+[Mergify commands](/commands) are [restricted by
+default](/commands/restrictions/#default-restrictions) and have their own
+mechanism that can be modified. See [Commands
+Restrictions](/commands/restrictions/) for changing the default.
+
+## Managing IP Addresses Allowed for the GitHub App
+
+[GitHub allows to configure the list of IP adresses](https://docs.github.com/en/apps/maintaining-github-apps/managing-allowed-ip-addresses-for-a-github-app)
+that a GitHub App is allowed to use to access GitHub.
+
+Mergify services do not use a single static IP address. Therefore, you must
+allow the AWS EC2 `us-east-1` IP addresses.
+
+This list can be retrieved on [AWS website](https://docs.aws.amazon.com/vpc/latest/userguide/aws-ip-ranges.html)
+or via this command:
+
+```bash
+curl -s https://ip-ranges.amazonaws.com/ip-ranges.json -o- | jq -r '.prefixes[] | select(.region=="us-east-1" and .service=="EC2") | .ip_prefix'
+```

@@ -1,0 +1,17 @@
+---
+export interface Props {
+	// Id of the video (ex: 01ab2cd3efg)
+	video: string;
+	title: string;
+}
+
+const { video, title } = Astro.props as Props;
+---
+
+<iframe
+	width="560"
+	height="315"
+	src={`https://www.youtube.com/embed/${video}?rel=0`}
+	title={title}
+	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+	allowfullscreen></iframe>

@@ -1,0 +1,20 @@
+---
+import type { MarkdownHeading } from 'astro';
+import type { BackendEntry } from '~/content/config';
+import MainLayout from './MainLayout.astro';
+
+export interface Props {
+	content: BackendEntry['data'];
+	headings: MarkdownHeading[];
+}
+---
+
+<MainLayout {...Astro.props}>
+	<slot />
+</MainLayout>
+
+<style>
+	a {
+		font-weight: bold;
+	}
+</style>

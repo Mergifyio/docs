@@ -1,0 +1,40 @@
+---
+title: Post Check
+description: Create a check-run on a pull request.
+---
+
+import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
+import Button from '../../../../components/Button.astro';
+
+The `post_check` action allows Mergify to create a check-run on a pull request.
+This can be useful in situations where you want to add a custom check to the
+status of a pull request based on Mergify's evaluation.
+
+:::note
+  Checks posted by Mergify using this action are usable as any other condition.
+  See the [example below](post_check#enforcing-conventional-commits).
+:::
+
+## Parameters
+
+<ActionOptionsTable action="post_check" />
+
+As the `title` and `summary` are
+[templates](/configuration/data-types#template), you can benefit from any [pull
+request attributes](/configuration/conditions#attributes-list), e.g. `{{author}}`,
+and also these additional variables:
+
+- `{{ check_rule_name }}` the name of the rule that triggered this action;
+
+- `{{ check_succeed }}` is `true` if all the conditions match, `false`
+  otherwise;
+
+- `{{ check_conditions }}` the list of all conditions with a checkbox marked if
+  the condition matches.
+
+## Examples
+
+<Button href="/workflow/custom-branch-protections/#leveraging-custom-checks" colorScheme='teal' size='lg'
+style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
+  Read Custom Branch Protections Use Case
+</Button>

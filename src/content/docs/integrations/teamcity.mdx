@@ -1,0 +1,55 @@
+---
+title: Integrating TeamCity with Mergify
+description: How to automate your TeamCity workflow using Mergify.
+---
+
+import teamcityLogo from "../../images/integrations/teamcity/teamcity_logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={teamcityLogo} alt="Teamcity logo"/>
+
+TeamCity is a popular Continuous Integration (CI) tool used for automating
+tasks such as building, testing, and deploying software. On the other hand,
+Mergify is a powerful tool that helps automate GitHub workflows. By integrating
+the two, you can create a well-oiled CI/CD pipeline that will increase your
+productivity and efficiency.
+
+## Prerequisites
+
+Before you start, make sure that you have:
+
+- A GitHub account;
+
+- A repository for which you have admin permissions with [Mergify
+  installed](/getting-started);
+
+- A TeamCity account.
+
+## Using TeamCity Status Checks in Mergify Configuration
+
+Once TeamCity reports status checks to GitHub, they can be used as conditions in
+your Mergify rules. Here's a simple example:
+
+```yaml
+pull_request_rules:
+  - name: Automatically merge when TeamCity build succeeds
+    conditions:
+      - check-success=TeamCity  # Change this to match your TeamCity check name
+      - "#approved-reviews-by>=1"
+    actions:
+      merge:
+        method: merge
+```
+
+In this example, Mergify will automatically merge pull requests that have at
+least one approved review and a successful TeamCity build.
+
+:::note
+  The `check-success` check name should match the name of the TeamCity check
+  reporting to GitHub.
+:::
+
+## Further Configuration
+
+The possibilities of integrating TeamCity with Mergify are extensive. For
+instance, you could use Mergify to:
