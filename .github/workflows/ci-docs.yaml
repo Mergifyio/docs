@@ -26,9 +26,11 @@ jobs:
           DEST_REF: refs/heads/preview/${{ github.event.pull_request.number }}
         run: |
           if gh api --silent "/repos/Mergifyio/docs/git/${DEST_REF}"; then
-            gh api -X POST "/repos/Mergifyio/docs/git" -f "sha=${HEAD_SHA}" -f "refs=$DEST_REF"
-          else
+            echo "Updating $DEST_REF"
             gh api -X PATCH "/repos/Mergifyio/docs/git/$DEST_REF" -f "sha=${HEAD_SHA}" -F force=true
+          else
+            echo "Creating $DEST_REF"
+            gh api -X POST "/repos/Mergifyio/docs/git" -f "sha=${HEAD_SHA}" -f "refs=$DEST_REF"
           fi
   delete-preview-doc:
     runs-on: ubuntu-22.04
@@ -40,5 +42,6 @@ jobs:
           DEST_REF: refs/heads/preview/${{ github.event.pull_request.number }}
         run: |
           if gh api --silent "/repos/Mergifyio/docs/git/${DEST_REF}"; then
+            echo "Deleting $DEST_REF"
             gh api -X DELETE "/repos/Mergifyio/docs/git/$DEST_REF"
           fi
