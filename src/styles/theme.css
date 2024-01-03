@@ -134,7 +134,7 @@
 	--theme-backdrop-overlay: hsla(var(--color-gray-50), 0.8);
 	--theme-code-inline-bg: var(--chakra-colors-gray-50);
 	--theme-code-inline-text: #b83280;
-	--theme-code-bg: hsla(257, 31%, 22%, 1);
+	--theme-code-bg: var(--color-mergify-blue-dark);
 	--theme-code-tabs: hsla(257, 38%, 32%, 1);
 	--theme-code-text: hsla(var(--color-gray-95), 1);
 	--theme-navbar-bg: var(--theme-bg);
@@ -379,7 +379,7 @@
 	--theme-backdrop-overlay: hsla(var(--color-gray-10), 0.8);
 	--theme-code-inline-bg: var(--chakra-colors-gray-700);
 	--theme-code-inline-text: #f687b3;
-	--theme-code-bg: hsla(257, 31%, 11%, 1);
+	--theme-code-bg: var(--color-mergify-blue-dark);
 	--theme-code-tabs: hsla(261, 40%, 21%, 1);
 	--theme-code-text: hsla(var(--color-base-white), 80%, 1);
 	--theme-navbar-bg: var(--theme-bg);

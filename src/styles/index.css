@@ -290,9 +290,12 @@ article > section ::marker {
 }
 
 article > section iframe {
-	width: 100%;
+	width: 80%;
 	height: auto;
 	aspect-ratio: 16 / 9;
+	border: none;
+	display: block;
+	margin: 1em auto;
 }
 
 a > code {
@@ -416,6 +419,8 @@ img,
 video {
 	max-width: 100%;
 	height: auto;
+	margin: 1em auto;
+	display: block;
 }
 
 .content video {

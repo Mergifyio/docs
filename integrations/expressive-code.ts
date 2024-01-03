@@ -8,7 +8,7 @@ export const astroDocsExpressiveCode = () =>
 		theme: new ExpressiveCodeTheme(theme),
 		styleOverrides: {
 			codeBackground: 'var(--theme-code-bg)',
-			borderColor: 'hsl(202deg 22% 25%)',
+			borderColor: 'var(--theme-code-bg)',
 			scrollbarThumbColor: 'hsl(202deg 20% 90% / 0.25)',
 			scrollbarThumbHoverColor: 'hsl(202deg 20% 90% / 0.5)',
 			frames: {
