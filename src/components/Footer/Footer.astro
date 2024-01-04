@@ -7,7 +7,7 @@ import { defaultConfig as footerConfig } from './footer';
 	{
 		footerConfig.map(({ links, title }) => (
 			<div class="category">
-				<h6>{title}</h6>
+				<span>{title}</span>
 				<div class="links">
 					{links.map(({ href, text }) => (
 						<a href={href}>{text}</a>
@@ -37,7 +37,7 @@ import { defaultConfig as footerConfig } from './footer';
 		align-items: start;
 		flex-direction: column;
 
-		h6 {
+		span {
 			font-size: var(--theme-text-md);
 		}
 
