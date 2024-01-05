@@ -98,7 +98,7 @@ const { navGroup, currentPageMatch } = Astro.props as Props;
 	.nav-group-title {
 		font-size: 1em;
 		font-weight: 600;
-		padding: 0.3rem 2rem;
+		padding: 0.2rem 1rem;
 
 		h2 {
 			display: flex;
@@ -107,23 +107,8 @@ const { navGroup, currentPageMatch } = Astro.props as Props;
 		}
 	}
 
-	@media (min-width: 50em) {
-		.nav-group-title,
-		.nav-link a {
-			padding: 0.2rem 1rem;
-		}
-	}
-
-	:global(:root.theme-dark) .nav-link a[aria-current='page'],
-	:global(:root.theme-dark) .nav-link a[data-current-parent='true'] {
+	:global(:root.theme-dark) .nav-link a[aria-current='page'] {
 		color: hsla(var(--color-base-white), 100%, 1);
-	}
-
-	.fallback {
-		font-size: 0.75em;
-		line-height: 1;
-		font-weight: bold;
-		color: var(--theme-text-light);
 	}
 
 	details > ul {

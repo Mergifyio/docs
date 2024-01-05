@@ -9,7 +9,7 @@ export interface Props {
 }
 
 const { content, canonicalURL } = Astro.props;
-const ogImageUrl = getOgImageUrl(canonicalURL.pathname, !!Astro.params.fallback);
+const ogImageUrl = getOgImageUrl(canonicalURL.pathname);
 const imageSrc = ogImageUrl;
 const canonicalImageSrc = new URL(imageSrc, Astro.site);
 const imageAlt = imageSrc === ogImageUrl ? '' : "Mergify's logo with text Docs on blue background";

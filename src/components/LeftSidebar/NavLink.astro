@@ -1,7 +1,6 @@
 ---
 import type { NavItem } from '~/content/navItems';
 import { removeLeadingSlash } from '~/util';
-import { isSubPage } from '~/util/isSubPage';
 export interface Props {
 	currentPageMatch: string;
 	navItem: NavItem;
@@ -14,13 +13,7 @@ const isPageMatch = !isHomepage && currentPageMatch.endsWith(removeLeadingSlash(
 ---
 
 <li class="nav-link">
-	<a
-		href={navItem.path}
-		aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`}
-		data-current-parent={`${
-			isSubPage(currentPageMatch, navItem.path as string) ? 'true' : 'false'
-		}`}
-	>
+	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`}>
 		{navItem.icon && <navItem.icon className="left-icon" />}
 		<Fragment set:html={navItem.title} />
 	</a>
@@ -48,8 +41,7 @@ const isPageMatch = !isHomepage && currentPageMatch.endsWith(removeLeadingSlash(
 			background-color: var(--theme-bg-hover);
 		}
 
-		&[aria-current='page'],
-		&[data-current-parent='true'] {
+		&[aria-current='page'] {
 			color: var(--theme-text);
 			background-color: var(--theme-bg-hover);
 			font-weight: 500;
@@ -62,8 +54,7 @@ const isPageMatch = !isHomepage && currentPageMatch.endsWith(removeLeadingSlash(
 		}
 
 		@media (forced-colors: active) {
-			&[aria-current='page'],
-			&[data-current-parent='true'] {
+			&[aria-current='page'] {
 				border: 1px solid LinkText;
 			}
 		}

@@ -5,22 +5,17 @@ import HeadCommon from '../components/HeadCommon.astro';
 import Header from '../components/Header/Header.astro';
 import HeadSEO from '../components/HeadSEO.astro';
 import LeftSidebar from '../components/LeftSidebar/LeftSidebar.astro';
-import { getLanguageFromURL } from '../util';
-import { getPageCategory } from '../util/getPageCategory';
 
 export interface Props {
 	content: CollectionEntry<'docs'>['data'];
 }
 
 const { content } = Astro.props;
-const isFallback = !!Astro.params.fallback;
 const url = Astro.url;
-const lang = getLanguageFromURL(url.pathname);
 const currentPage = url.pathname;
 const formatTitle = (content: { title?: string }) => content.title;
 // Ensures the canonicalURL always has a trailing slash.
 const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro.site);
-if (isFallback) canonicalURL.pathname = canonicalURL.pathname.replace(`/${lang}/`, '/en/');
 ---
 
 <html dir={'ltr'} lang={'en'} class="initial">
@@ -130,7 +125,6 @@ if (isFallback) canonicalURL.pathname = canonicalURL.pathname.replace(`/${lang}/
 			</aside>
 			<div id="main-content" class="main-column">
 				<slot />
-				<span id="docsearch-lvl0" hidden>{getPageCategory(url)}</span>
 			</div>
 		</main>
 		<div class="main-column main-column-footer" style="margin-inline-end: 0;">
