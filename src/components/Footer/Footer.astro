@@ -20,7 +20,6 @@ import { defaultConfig as footerConfig } from './footer';
 
 <style lang="scss">
 	footer {
-		color: var(--theme-text-lighter);
 		font-size: var(--theme-text-sm);
 		display: grid;
 		grid-gap: var(--chakra-space-6);
@@ -38,7 +37,9 @@ import { defaultConfig as footerConfig } from './footer';
 		flex-direction: column;
 
 		span {
-			font-size: var(--theme-text-md);
+			font-size: var(--theme-text-lg);
+			font-weight: 600;
+			margin-bottom: 8px;
 		}
 
 		.links {
@@ -51,6 +52,7 @@ import { defaultConfig as footerConfig } from './footer';
 				color: inherit;
 				text-decoration: none;
 				transition: color 0.2s ease-in-out;
+				color: var(--theme-text-lighter);
 
 				&:hover {
 					color: var(--theme-text);

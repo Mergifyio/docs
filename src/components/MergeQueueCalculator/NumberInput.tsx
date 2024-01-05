@@ -31,7 +31,7 @@ export default function NumberInput({ label, onChange, value, min, max }: Props)
 					value={value ?? ''}
 					min={min}
 					max={max}
-					onChange={(e) => onChange(Number(e.target.value))}
+					onChange={(e: any) => onChange(Number(e.target.value))}
 				/>
 				<div className="input-number-nav">
 					<div className="input-number-button input-number-up" onClick={handleIncrement}>

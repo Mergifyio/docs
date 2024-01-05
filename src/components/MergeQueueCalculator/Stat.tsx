@@ -16,7 +16,7 @@ export default function Stat({ helperText, label, stat, ...props }: Props) {
 			</label>
 			<div style={{ display: 'flex', alignItems: 'flex-end', margin: '8px 0', gap: 12 }}>
 				<h3 style={{ margin: 0 }}>{stat}</h3>
-				<span style={{ color: 'var(--theme-text-lighter)' }}>{helperText}</span>
+				<span style={{ color: 'var(--theme-text-light)' }}>{helperText}</span>
 			</div>
 		</div>
 	);

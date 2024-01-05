@@ -123,8 +123,8 @@
 	--theme-divider: hsla(var(--color-blue), 0.1);
 	--theme-shade-subtle: hsla(var(--color-blue), 0.3);
 	--theme-text: hsla(var(--color-gray-10), 1);
-	--theme-text-light: hsla(var(--color-gray-30), 1);
-	--theme-text-lighter: hsla(var(--color-gray-50), 1);
+	--theme-text-light: var(--chakra-colors-blackAlpha-800);
+	--theme-text-lighter: var(--chakra-colors-blackAlpha-700);
 	--theme-bg: white;
 	--theme-bg-gradient-top: var(--theme-bg);
 	--theme-bg-gradient-bottom: white;
@@ -371,8 +371,8 @@
 	--theme-divider: hsla(var(--color-gray-95), 0.1);
 	--theme-shade-subtle: hsla(var(--color-gray-95), 0.4);
 	--theme-text: hsla(var(--color-gray-90), 1);
-	--theme-text-light: hsla(var(--color-gray-80), 1);
-	--theme-text-lighter: hsla(var(--color-gray-70), 1);
+	--theme-text-light: var(--chakra-colors-whiteAlpha-800);
+	--theme-text-lighter: var(--chakra-colors-whiteAlpha-700);
 	--theme-bg: #1a202c;
 	--theme-bg-hover: var(--color-mergify-blue-dark);
 	--theme-bg-offset: #0008;

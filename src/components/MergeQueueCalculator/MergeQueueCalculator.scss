@@ -41,9 +41,8 @@
 		border-left: 1px solid var(--theme-text-lighter);
 		width: 20px;
 		text-align: center;
-		color: #333;
+		color: var(--theme-text-light);
 		font-size: 13px;
-		font-family: 'Trebuchet MS', Helvetica, sans-serif !important;
 		line-height: 1.7;
 		-webkit-transform: translateX(-100%);
 		transform: translateX(-100%);

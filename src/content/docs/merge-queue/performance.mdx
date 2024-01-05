@@ -5,6 +5,7 @@ description: Optimizing your merge queue for maximum efficiency.
 
 import MergeQueueCalculator from "../../../components/MergeQueueCalculator/MergeQueueCalculator"
 import rcvDiagram from "../../images/merge-queue/rcv-theorem.png"
+import {Image} from 'astro:assets';
 
 As development teams scale and the volume of pull requests grows, achieving an
 optimal balance between merge speed, reliability, and resource usage becomes a
@@ -30,7 +31,7 @@ data stores, you can only optimize two of these properties simultaneously. This
 is what we term the **RCV Theorem**.
 
 <figure style={{ maxWidth: '66%', margin: 'auto' }}>
-  <img src={rcvDiagram} alt="RCV Theorem" />
+   <Image src={rcvDiagram} alt="RCV Theorem"/>
 </figure>
 
 Based on this trade-off, there are 3 scenarios that you can choose from:
