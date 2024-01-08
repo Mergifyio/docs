@@ -1,1 +1,41 @@
-<h1>404</h1>
+---
+import Footer from '../components/Footer/Footer.astro';
+import HeadCommon from '../components/HeadCommon.astro';
+import Header from '../components/Header/Header.astro';
+---
+
+<html dir={'ltr'} lang={'en'} class="initial">
+	<head>
+		<HeadCommon />
+		<title>{`Not found - Mergify Docs`}</title>
+		<style>
+			html,
+			body,
+			main {
+				height: 100%;
+			}
+			main {
+				display: grid;
+				place-items: center;
+				padding-inline: var(--min-spacing-inline);
+			}
+			:global(#menu-toggle) {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main class="layout">
+			<article>
+				<h1>404</h1>
+				<p>
+					We couldn't find the page you were looking for. <br />
+					<a href="/">Go back to the home page</a>.
+				</p>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
