@@ -12,6 +12,7 @@ shared:
     - check-success=Cloudflare Pages
     - check-success=build-preview-doc
     - check-success=lint
+    - check-success=test
 
 queue_rules:
   - name: hotfix
@@ -79,7 +80,6 @@ queue_rules:
     disallow_checks_interruption_from_queues:
       - default
     commit_message_template: null
-
 
 pull_request_rules:
   - name: automatic merge
