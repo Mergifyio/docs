@@ -44,7 +44,10 @@ exit() { slack_message "*Deployment (${CF_PAGES_BRANCH}/${CF_PAGES_COMMIT_SHA}/$
 conclusion="failure" emoji="💥"
 trap exit EXIT
 
-export SITE_URL="$CF_PAGES_URL"
+
+if [[ ${CF_PAGES_BRANCH} == preview/* ]]; then
+    export SITE_URL="$CF_PAGES_URL"
+fi
 
 astro build 2>&1 | tee -a build.log
 
