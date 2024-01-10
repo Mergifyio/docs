@@ -1,3 +1,6 @@
+// This file is intentionally kept even if not loaded anymore
+// to unregister the service worker of the previous versions of the documentation
+
 self.addEventListener('install', function () {
     self.skipWaiting();
 });
