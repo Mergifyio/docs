@@ -848,6 +848,10 @@
         "queue_branch_merge_method": {
           "description": "If set to `fast-forward`, Mergify will merge the draft pull request instead of merging the original pull request that has been checked. This only works when the queue action `merge_method` is set to its default `merge`.",
           "type": "string",
+          "enum": [
+            "none",
+            "fast-forward"
+          ],
           "default": "none"
         },
         "queue_branch_prefix": {
