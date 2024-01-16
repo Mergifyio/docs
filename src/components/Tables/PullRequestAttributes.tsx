@@ -22,19 +22,21 @@ export default function PullRequestAttributes({ staticAttributes }: Props) {
 				</tr>
 			</thead>
 			<tbody>
-				{attributes.map((attr) => {
-					const valueType = getValueType(attr);
+				{attributes
+					.sort((a, b) => (a.key > b.key ? 1 : -1))
+					.map((attr) => {
+						const valueType = getValueType(attr);
 
-					return (
-						<tr key={attr.key}>
-							<td>
-								<code>{attr.key}</code>
-							</td>
-							<td>{valueType}</td>
-							<td dangerouslySetInnerHTML={{ __html: renderMarkdown(attr.description) }} />
-						</tr>
-					);
-				})}
+						return (
+							<tr key={attr.key}>
+								<td>
+									<code>{attr.key}</code>
+								</td>
+								<td>{valueType}</td>
+								<td dangerouslySetInnerHTML={{ __html: renderMarkdown(attr.description) }} />
+							</tr>
+						);
+					})}
 			</tbody>
 		</table>
 	);
