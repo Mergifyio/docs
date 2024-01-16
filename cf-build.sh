@@ -34,7 +34,12 @@ SLACK_EOF
     echo -en "$payload" | curl -s -H "Content-type: application/json" -d @- "$SLACK_DEPLOYMENT_WEBHOOK_URL_RELEASES"
     if [ "$conclusion" == "failure" ]; then
         echo -en "$payload" | curl -s -H "Content-type: application/json" -d @- "$SLACK_DEPLOYMENT_WEBHOOK_URL_PROD"
-        curl -F file=@build.log -F "initial_comment=$filename" -F channels=CJBEQQPFG -H "Authorization: Bearer $SLACK_DEPLOYMENT_BOT_TOKEN" https://slack.com/api/files.upload
+        if [[ ${CF_PAGES_BRANCH} == preview/* ]]; then
+            channels=C02RRV28VGX
+        else
+            channels=CJBEQQPFG
+        fi
+        curl -F file=@build.log -F "initial_comment=$filename" -F "channels=$channels" -H "Authorization: Bearer $SLACK_DEPLOYMENT_BOT_TOKEN" https://slack.com/api/files.upload
     fi
 }
 
