@@ -32,7 +32,7 @@ jobs:
 
       - name: Generate new types from engine internal openapi
         run: |
-          gsutil cp gs://mergify-api-schemas/public.json src/pages/api-schemas.json
+          gsutil cp gs://mergify-api-schemas/public.json src/api-schemas.json
           rm -f gha-creds-*.json
 
       - name: Create the Pull Request
