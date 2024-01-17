@@ -21,17 +21,11 @@ import { remarkAlgolia } from './plugins/remark-algolia';
 dotenv.config({
 	path: `.env.${process.env.NODE_ENV}`,
 });
-dotenv.populate(
-	process.env,
-	{
-		PUBLIC_ALGOLIA_APP_ID: '81GKA2I1R0',
-		PUBLIC_ALGOLIA_INDEX_NAME: 'docs-pages-dev',
-		PUBLIC_ALGOLIA_SEARCH_KEY: '6fce1b6d8ccf82a6601a169c0167c0e3',
-	},
-	{
-		override: true,
-	}
-);
+dotenv.populate(process.env, {
+	PUBLIC_ALGOLIA_APP_ID: '81GKA2I1R0',
+	PUBLIC_ALGOLIA_INDEX_NAME: 'docs-pages-dev',
+	PUBLIC_ALGOLIA_SEARCH_KEY: '6fce1b6d8ccf82a6601a169c0167c0e3',
+});
 
 // https://astro.build/config
 export default defineConfig({
