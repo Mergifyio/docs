@@ -187,7 +187,7 @@ h5 {
 
 .heading-wrapper {
 	--icon-size-x: 2rem;
-	--icon-size-y: 1.5rem;
+	--icon-size-y: 1.875rem;
 	margin-inline-end: var(--icon-size-x);
 }
 
@@ -210,6 +210,7 @@ h5 {
 	text-decoration: none;
 	justify-content: center;
 	vertical-align: baseline;
+	z-index: 10;
 }
 
 /* Float anchor links to the left of headings on larger screens. */
