@@ -20,9 +20,9 @@ merge action to take place:
 
 - Mergify always respect the [merge date](merge#merge-date)
 
-- Mergify does not merge pull request modifying its configuration file by
-  default (see [`allow_merging_configuration_change`](merge#parameters)
-  parameter).
+- Mergify allows merging pull request modifying its configuration file by
+  default. But Mergify will always check whether these changes are
+  valid or not, to avoid merging broken configurations.
 
 ## Branch Protection Conditions
 

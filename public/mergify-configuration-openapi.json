@@ -1192,11 +1192,6 @@
             "method": {
               "description": "Merge method to use. If no value is set, Mergify will use the first authorized method available in the repository configuration.",
               "$ref": "#/definitions/MergeMethod"
-            },
-            "allow_merging_configuration_change": {
-              "type": "boolean",
-              "description": "Allow merging Mergify configuration change.",
-              "default": false
             }
           }
         },
@@ -1256,11 +1251,6 @@
               "default": "medium",
               "deprecated": true,
               "description": "To set your priorities, you should now use `priority_rules`. This sets the priority of the pull request in the queue. The pull request with the highest priority is merged first. `low`, `medium`, `high` are aliases for `1000`, `2000`, `3000`."
-            },
-            "allow_merging_configuration_change": {
-              "type": "boolean",
-              "default": false,
-              "description": "Allow merging Mergify configuration change."
             },
             "require_branch_protection": {
               "type": "boolean",
