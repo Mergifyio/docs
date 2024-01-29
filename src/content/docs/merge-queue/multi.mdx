@@ -37,15 +37,18 @@ then moves down to lower priority queues.
 
 Inside each queue, pull requests are processed in the order they arrive,
 following a First-In-First-Out (FIFO) model. However, if you define [priority
-rules](priority), you can influence this order. Each pull request can have its
+rules](/merge-queue/priority), you can influence this order. Each pull request
+can have its
 own priority within the queue based on these rules. This adds another layer of
 control, allowing you to specify the order of pull requests within each queue.
 
 In short, queues control the order in which groups of pull requests are
-processed, while [priority rules](priority) (if defined) can adjust the order
+processed, while [priority rules](/merge-queue/priority)
+(if defined) can adjust the order
 of pull requests within each queue. Furthermore, each queue can have its own
-configuration (e.g., [speculative checks](speculative-checks),
-[batches](batches)), giving you even more control over its behavior.
+configuration (e.g., [speculative checks](/merge-queue/speculative-checks),
+[batches](/merge-queue/batches)),
+giving you even more control over its behavior.
 
 This dual-layer system gives you fine-grained control over your pull request
 processing pipeline.
@@ -61,7 +64,7 @@ can use.
 1. **Define Your Queues**: Start by identifying the different queues you need.
    This could be based on your project's requirements, the type of pull
    requests, or the teams working on them. Write your
-   [`queue_conditions`](lifecycle#adding-a-pull-request-to-the-merge-queue)
+   [`queue_conditions`](/merge-queue/lifecycle#adding-a-pull-request-to-the-merge-queue)
    accordingly.
 
 ```yaml
