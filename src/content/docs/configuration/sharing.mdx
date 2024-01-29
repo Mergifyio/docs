@@ -94,3 +94,54 @@ pull_request_rules:
   - Values in the `default` key will be merged and remote default values will
     apply to local configuration.
 :::
+
+## Extending YAML anchors
+
+Mergify, by using the `extends` feature, also lets you extend the YAML anchors.
+With the same duplication reduction goal, you can centralize all your anchors
+inside one unique configuration file, that will be extended to others.
+
+To extend the anchors, you simply have to define them in the configuration file
+that will be extended to the current configuration file.
+Then you can simply use the corresponding aliases inside the current
+configuration file and Mergify will automatically replace them with
+the anchors defined in the extended file.
+
+The mechanism works as follows:
+
+- Main configuration file using `extends` keyword with an undefined YAML alias:
+```yaml
+extends: organization/shared-config
+
+pull_request_rules:
+  - name: additional rule specific to this repository
+    conditions: *my-extended-yaml-anchor
+    actions:
+      label:
+        add: ["repository-specific"]
+```
+
+- Extended file containing the YAML anchor definition:
+```yaml
+shared:
+  condition: &my-extended-yaml-anchor
+    - label=my-label
+```
+
+- Final main configuration file:
+```yaml
+extends: organization/shared-config
+
+pull_request_rules:
+  - name: additional rule specific to this repository
+    conditions:
+      - label=my-label
+    actions:
+      label:
+        add: ["repository-specific"]
+```
+
+:::caution
+  If you define the same anchor in both files, with different values,
+    Mergify will keep the value local to each file.
+:::
