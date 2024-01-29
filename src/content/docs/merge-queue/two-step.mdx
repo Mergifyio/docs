@@ -62,10 +62,10 @@ aspects while ensuring a thorough check before the merge. This also aids in
 conserving CI resources, as not all tests are run at every PR iteration.
 
 With Mergify's merge queue, you can further optimize this process. If you're
-[batching](batches) multiple PRs for a merge, instead of running the pre-merge
-tests for each PR individually, you can run them once for the entire batch.
-This can result in significant savings, especially when the pre-merge tests are
-extensive.
+[batching](/merge-queue/batches) multiple PRs for a merge, instead of running
+the pre-merge tests for each PR individually, you can run them once for the
+entire batch. This can result in significant savings, especially when the
+pre-merge tests are extensive.
 
 ```dot class="graph"
 strict digraph {

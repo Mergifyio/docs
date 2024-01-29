@@ -45,7 +45,7 @@ pull_request_rules:
 
 {/* fix links to "Operators" */}
 
-You can use regular expressions with matching operators in your [conditions](conditions).
+You can use regular expressions with matching operators in your [conditions](/configuration/conditions).
 
 Mergify leverages [Python regular expressions](https://docs.python.org/3/library/re.html)
 to match rules.
@@ -286,7 +286,7 @@ Mergify also provides custom Jinja2 filters:
 ```
 
 :::caution
-You need to replace the `-` character by `_` from the [pull request attribute](conditions#attributes-list)
+You need to replace the `-` character by `_` from the [pull request attribute](/configuration/conditions#attributes-list)
 names when using templates. The `-` is not a valid character for variable 
 names in Jinja2 template.
 :::

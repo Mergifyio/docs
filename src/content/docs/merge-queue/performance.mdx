@@ -44,16 +44,16 @@ Based on this trade-off, there are 3 scenarios that you can choose from:
 
 - **Reliable and Fast:** If you aim to reduce latency and maximize throughput
   without considering CI costs, enable **[speculative
-  checks](speculative-checks)**. This feature lets Mergify test pull requests
-  in parallel, predicting potential merges and executing CI runs
+  checks](/merge-queue/speculative-checks)**. This feature lets Mergify test
+  pull requests in parallel, predicting potential merges and executing CI runs
   simultaneously. Speculative checks can slightly increase CI cost: there might
-  be certain scenarios that are tested and whose results won't be used if a
-  pull request ahead in the queue fails.
+  be certain scenarios that are tested and whose results won't be used if a pull
+  request ahead in the queue fails.
 
-- **Cheap and Fast:** By using [batch mode](batches), you can merge groups of
-  pull requests simultaneously. This reduces CI runs but merges pull request
-  that are not tested individually. There is therefore a theoretical risk than
-  a hidden failure is merged, while the whole batch passes the CI.
+- **Cheap and Fast:** By using [batch mode](/merge-queue/batches), you can merge
+  groups of pull requests simultaneously. This reduces CI runs but merges pull
+  request that are not tested individually. There is therefore a theoretical
+  risk than a hidden failure is merged, while the whole batch passes the CI.
   
 You can also combine speculative checks and batching to achieve a balanced
 approach between reliability, cheapness, and velocity. This configuration
@@ -164,7 +164,7 @@ necessary tests are executed. Remember, every minute saved in CI time can have
 a cascading positive effect on your overall merge efficiency.
 
 A strategic approach to further optimize CI runtime is the [**Two-Step
-CI**](two-step) method. This approach differentiates between:
+CI**](/merge-queue/two-step) method. This approach differentiates between:
 
 1. **Preliminary Tests**: These are the tests run immediately when a PR is
 created or updated. They're designed to be quick yet effective, ensuring only

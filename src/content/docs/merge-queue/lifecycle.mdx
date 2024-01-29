@@ -42,13 +42,13 @@ the process:
 
 4. **Entering the queue:** Once a pull request meets the specified queue
    conditions, it is added to the end of the merge queue. However, [priority
-   rules](priority) can be used to alter its position in the queue.
+   rules](/merge-queue/priority) can be used to alter its position in the queue.
 
 Please note that, by default, only one pull request is processed at a time to
 ensure that each pull request is tested against the most recent state of the
 base branch. You can test multiple pull requests at once by using
-[batches](batches) or in advance by using [speculative
-checks](speculative-checks).
+[batches](/merge-queue/batches) or in advance by using [speculative
+checks](/merge-queue/speculative-checks).
 
 ```dot class="graph"
 strict digraph {
@@ -80,7 +80,7 @@ the queue.
 1. **Position in the queue:** The pull request assumes its position in the
    queue based on the order in which it entered. As mentioned in the previous
    section, the order may be influenced by any defined [priority
-   rules](priority).
+   rules](/merge-queue/priority).
 
 2. **Waiting for its turn:** The pull request will wait in the queue until it
    is its turn to be processed. The processing of pull requests in the queue is
