@@ -13,6 +13,7 @@ shared:
     - check-success=build-preview-doc
     - check-success=lint
     - check-success=test
+    - check-success=test-broken-links
 
 queue_rules:
   - name: hotfix
