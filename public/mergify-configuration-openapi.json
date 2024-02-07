@@ -139,37 +139,37 @@
         {
           "key": "check-failure",
           "type": "string",
-          "description": "The list of status checks that failed for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See About Status Checks for more details. Checks that report being cancelled, timed out, and action required are also considered as failures."
+          "description": "The list of status checks that failed for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See [About Status Checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) for more details. Checks that report being cancelled, timed out, and action required are also considered as failures."
         },
         {
           "key": "check-neutral",
           "type": "string",
-          "description": "The list of status checks that are neutral for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See About Status Checks for more details."
+          "description": "The list of status checks that are neutral for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See [About Status Checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) for more details."
         },
         {
           "key": "check-pending",
           "type": "string",
-          "description": "The list of status checks that is pending for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See About Status Checks for more details."
+          "description": "The list of status checks that is pending for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See [About Status Checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) for more details."
         },
         {
           "key": "check-skipped",
           "type": "string",
-          "description": "The list of status checks that was skipped for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See About Status Checks for more details."
+          "description": "The list of status checks that was skipped for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See [About Status Checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) for more details."
         },
         {
           "key": "check-stale",
           "type": "string",
-          "description": "The list of status checks that are stale for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See About Status Checks for more details."
+          "description": "The list of status checks that are stale for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See [About Status Checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) for more details."
         },
         {
           "key": "check-success",
           "type": "check",
-          "description": "The list of status checks that successfully passed for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See About Status Checks for more details."
+          "description": "The list of status checks that successfully passed for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See [About Status Checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) for more details."
         },
         {
           "key": "check-timed-out",
           "type": "string",
-          "description": "The list of status checks that timed out for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See About Status Checks for more details."
+          "description": "The list of status checks that timed out for the pull request. This is the name of a status check such as `continuous-integration/travis-ci/pr` or of a check run such as `Travis CI - Pull Request`. See [About Status Checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) for more details."
         },
         {
           "key": "closed",
