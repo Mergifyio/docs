@@ -171,21 +171,21 @@ XXXX-XX-31T14:00/XXXX-XX-31T19:00[Europe/Paris]
 ## Relative Timestamp
 
 Timestamps can be expressed relative to the current date and time. The format
-is `[DD days] [HH:MM] ago` :
+is `[DD days] [HH hours] [MM minutes] ago` :
 
 - `DD`, the number of days
 - `HH`, the number of hours
 - `MM`, the number of minutes
 
-If the current date is 18th June 2020, `updated-at>=14 days ago` is translated
-to `updated-at>=2020-06-04T00:00:00`.
+If the current date is 18th June 2020, `updated-at >= 14 days ago` is
+translated to `updated-at >= 2020-06-04T00:00:00`.
 
 ```yaml
 - name: close stale pull request
   conditions:
     - base=main
     - -closed
-    - updated-at<14 days ago
+    - updated-at < 14 days 3 hours 2 minutes ago
   actions:
     close:
       message: |
