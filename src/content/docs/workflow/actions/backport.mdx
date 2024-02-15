@@ -93,3 +93,25 @@ pull_request_rules:
 In this configuration, a pull request is backported when it has the label `backport`. 
 Then, when the backport is created and passes the check named
 `continuous-integration`, it will be automatically merged.
+
+### Implementing `-x` option
+
+If you are used to the `-x` option of `git cherry-pick` that includes which
+commits has been cherry-picked, you can implement the same thing with Mergify:
+
+```yaml
+pull_request_rules:
+  - name: backport patches to the stable branch
+    conditions:
+      - label=backport
+    actions:
+      backport:
+        body: |
+          {{ body }}
+
+          {% for c in commits %}
+          (cherry picked from commit {{ c.sha }})
+          {% endfor %}
+        branches:
+          - stable
+```
