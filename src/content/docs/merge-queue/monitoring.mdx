@@ -1,5 +1,5 @@
 ---
-title: Deploying your Merge Queue
+title: Monitoring your Merge Queue
 description: Monitor key metrics of your merge queue to optimize throughput and reduce latency, ensuring a streamlined development cycle.
 ---
 
@@ -32,9 +32,9 @@ interpret them.
    A sudden increase in runtime can slow down your entire merge queue, delaying
    other PRs.
 
-3. **Merge Outcome:** High success rates indicate a healthy development and
-   review process. It's essential to ensure that most of the PRs entering the
-   queue get successfully merged. If PRs are frequently removed or fail to
+3. **Queue Checks Outcome:** High success rates indicate a healthy development
+   and review process. It's essential to ensure that most of the PRs entering
+   the queue get successfully merged. If PRs are frequently removed or fail to
    merge for any reason, it may signal a need for process refinement or
    improvement to the CI.
 
@@ -48,7 +48,7 @@ interpret them.
    in your queue. If you're often at full capacity, it might be time to
    consider adding more speculative checks to increase throughput.
 
-6. **Time Spent in the Queue:** Reducing idle time reduces overall latency for
+6. **Queue Waiting Time:** Reducing waiting time reduces overall latency for
    your PRs. Track how long PRs spend idle in the queue. Extended idle times
    increase overall latency and can delay the delivery of features or fixes.
 
