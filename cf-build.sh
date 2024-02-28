@@ -56,7 +56,4 @@ fi
 
 astro build 2>&1 | tee -a build.log
 
-rm -rf public
-mv dist public
-
 conclusion="success" emoji="🦾"
