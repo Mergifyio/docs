@@ -537,6 +537,15 @@
         "$ref": "#/definitions/BranchName"
       }
     },
+    "ReportModeArray": {
+      "$id": "/definitions/ReportModeArray",
+      "description": "list of report modes",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["check", "comment"]
+      }
+    },
     "PriorityRule": {
       "$id": "/definitions/PriorityRule",
       "description": "priority rule",
@@ -994,6 +1003,11 @@
               "description": "The pull request title.",
               "default": "{{ title }} (backport #{{ number }})",
               "$ref": "#/definitions/Template"
+            },
+            "report_mode": {
+              "description": "List of reporting modes for the action's result.",
+              "default": ["check"],
+                "$ref": "#/definitions/ReportModeArray"
             }
           }
         },
@@ -1049,6 +1063,11 @@
               "description": "The pull request title.",
               "default": "{{ title }} (copy #{{ number }})",
               "$ref": "#/definitions/Template"
+            },
+            "report_mode": {
+              "description": "List of reporting modes for the action's result.",
+              "default": ["check"],
+                "$ref": "#/definitions/ReportModeArray"
             }
           }
         },

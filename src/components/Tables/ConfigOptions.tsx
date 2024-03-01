@@ -22,6 +22,7 @@ const valueTypeLinks: { [key: string]: string } = {
 		'/workflow/actions/github_actions#workflow-action-dispatch',
 	'/definitions/CommandRestriction': '/commands/restrictions#command-restriction-format',
 	'/definitions/QueueDequeueReason': '/configuration/data-types#queue-dequeue-reason',
+	'/definitions/ReportModeArray': '/configuration/data-types#report-modes',
 };
 
 export interface OptionDefinition {

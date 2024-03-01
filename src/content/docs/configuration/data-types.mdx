@@ -378,3 +378,32 @@ This describes the reason why a pull request has been removed from the queue.
     </tr>
   </tbody>
 </table>
+
+## Report Modes
+
+Report modes allow you to choose the type of report you want for your actions.
+Report mode values can be expressed in the configuration as a list of strings.
+The default value is `["check"]` and the list can't be empty.
+To fill the list, the following report modes are available:
+
+<table>
+  <thead>
+    <th>Mode</th>
+    <th>Description</th>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>check</code></td>
+      <td>Report the action's result as a GitHub check on the Pull Request. This is the default report mode.</td>
+    </tr>
+
+    <tr>
+      <td><code>comment</code></td>
+      <td>Report the action's result as a comment on the Pull Request</td>
+    </tr>
+
+  </tbody>
+</table>
+
+Report mode option is currently supported for only the following actions: [`backport`](/workflow/actions/backport), [`copy`](/workflow/actions/copy).
