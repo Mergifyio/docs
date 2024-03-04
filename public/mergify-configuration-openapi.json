@@ -694,6 +694,10 @@
           "type": "string",
           "description": "The name of the rule. This is used when reporting information about a rule. It's not possible to have two rules with the same name."
         },
+        "description": {
+            "type": "string",
+            "description": "This key is here as a way to add comments to your configuration. Any string can be added here, it won't affect Mergify's behavior in any way."
+        },
         "conditions": {
           "type": "array",
           "description": "A list of conditions that must match against the pull request for the rule to be applied.",
