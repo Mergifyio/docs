@@ -696,7 +696,7 @@
         },
         "description": {
             "type": "string",
-            "description": "This key is here as a way to add comments to your configuration. Any string can be added here, it won't affect Mergify's behavior in any way."
+            "description": "The description of the rule. This is not used directly by Mergify."
         },
         "conditions": {
           "type": "array",
