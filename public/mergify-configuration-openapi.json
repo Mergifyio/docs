@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "MergifyConfig#",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -440,17 +439,14 @@
       "uniqueItems": true
     },
     "GitHubLogin": {
-      "$id": "/definitions/GitHubLogin",
       "description": "GitHub login",
       "type": "string"
     },
     "GitHubTeam": {
-      "$id": "/definitions/GitHubTeam",
       "description": "GitHub team",
       "type": "string"
     },
     "GitHubLoginOrTeam": {
-      "$id": "/definitions/GitHubLoginOrTeam",
       "description": "GitHub login or team",
       "oneOf": [
         {
@@ -462,12 +458,10 @@
       ]
     },
     "BranchName": {
-      "$id": "/definitions/BranchName",
       "description": "branch name",
       "type": "string"
     },
     "GitHubActionsWorkflow": {
-      "$id": "/definitions/GitHubActionsWorkflow",
       "description": "A GitHub Actions workflow action",
       "type": "object",
       "properties": {
@@ -481,7 +475,6 @@
       }
     },
     "GitHubActionsWorkflowDispatch": {
-      "$id": "/definitions/GitHubActionsWorkflowDispatch",
       "description": "A GitHub Actions workflow dispatch",
       "type": "object",
       "properties": {
@@ -496,7 +489,6 @@
       }
     },
     "Template": {
-      "$id": "/definitions/Template",
       "description": "template",
       "oneOf": [
         {
@@ -508,21 +500,17 @@
       ]
     },
     "Duration": {
-      "$id": "/definitions/Duration",
       "type": "string",
       "description": "duration"
     },
     "Schedule": {
-      "$id": "/definitions/Schedule",
       "type": "string",
       "description": "schedule"
     },
     "ConditionString": {
-      "$id": "/definitions/ConditionString",
       "type": "string"
     },
     "TemplateArray": {
-      "$id": "/definitions/TemplateArray",
       "type": "array",
       "description": "list of template",
       "items": {
@@ -530,7 +518,6 @@
       }
     },
     "BranchArray": {
-      "$id": "/definitions/BranchArray",
       "description": "list of branch names",
       "type": "array",
       "items": {
@@ -538,7 +525,6 @@
       }
     },
     "ReportModeArray": {
-      "$id": "/definitions/ReportModeArray",
       "description": "list of report modes",
       "type": "array",
       "items": {
@@ -547,7 +533,6 @@
       }
     },
     "PriorityRule": {
-      "$id": "/definitions/PriorityRule",
       "description": "priority rule",
       "type": "object",
       "properties": {
@@ -569,7 +554,6 @@
       }
     },
     "Priority": {
-      "$id": "/definitions/Priority",
       "description": "priority: `low`, `medium`, `high` or a value between 1 and 10000",
       "oneOf": [
         {
@@ -583,25 +567,20 @@
       ]
     },
     "MergeMethod": {
-      "$id": "/definitions/MergeMethod",
       "description": "merge method: `merge`, `squash`, `rebase` or `fast-forward`",
       "enum": ["merge", "squash", "rebase", "fast-forward"]
     },
     "Timestamp": {
-      "$id": "/definitions/Timestamp",
       "description": "Timestamp",
       "type": "string"
     },
     "RelativeTimestamp": {
-      "$id": "/definitions/RelativeTimestamp",
       "type": "string"
     },
     "TimestampInterval": {
-      "$id": "/definitions/TimestampInterval",
       "type": "string"
     },
     "TimestampOrRelativeTimestamp": {
-      "$id": "/definitions/TimestampOrRelativeTimestamp",
       "description": "Timestamp or relative timestamp",
       "oneOf": [
         {
@@ -614,7 +593,6 @@
     },
     "TimestampOrTimestampInterval": {
       "description": "Timestamp or timestamp interval",
-      "$id": "/definitions/TimestampOrTimestampInterval",
       "oneOf": [
         {
           "$ref": "#/definitions/Timestamp"
@@ -625,7 +603,6 @@
       ]
     },
     "Commit": {
-      "$id": "/definitions/Commit",
       "description": "Commit",
       "type": "object",
       "properties": {
@@ -671,7 +648,6 @@
       }
     },
     "CommitAuthor": {
-      "$id": "/definitions/CommitAuthor",
       "description": "Commit author",
       "type": "object",
       "properties": {
@@ -686,7 +662,6 @@
       }
     },
     "PullRequestRule": {
-      "$id": "/definitions/PullRequestRule",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -714,7 +689,6 @@
       "title": "PullRequestRule"
     },
     "PartitionRule": {
-      "$id": "/definitions/PartitionRule",
       "type": "object",
       "required": ["name"],
       "properties": {
@@ -738,7 +712,6 @@
     },
     "CommandRestriction": {
       "description": "Command restriction",
-      "$id": "/definitions/CommandRestriction",
       "type": "object",
       "properties": {
         "conditions": {
@@ -750,7 +723,6 @@
       }
     },
     "QueueDequeueReason": {
-      "$id": "/definitions/QueueDequeueReason",
       "description": "Dequeue code for when a pull request has been disembarked from the merge queue.",
       "type": "string",
       "enum": [
@@ -770,7 +742,6 @@
       ]
     },
     "QueueRule": {
-      "$id": "/definitions/QueueRule",
       "type": "object",
       "required": ["name"],
       "properties": {
@@ -897,7 +868,6 @@
       }
     },
     "RuleCondition": {
-      "$id": "/definitions/RuleCondition",
       "description": "condition",
       "oneOf": [
         {
