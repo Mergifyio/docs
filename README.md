@@ -1,5 +1,7 @@
 # Mergify Docs
 
+TEST
+
 This repository contains the code responsible for building the Mergify Docs
 site.
 
