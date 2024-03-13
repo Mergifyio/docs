@@ -10,6 +10,7 @@
     "commands_restrictions": {
       "description": "Commands restriction",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "backport": {
           "$ref": "#/definitions/CommandRestriction",
@@ -470,6 +471,7 @@
       "$id": "/definitions/GitHubActionsWorkflow",
       "description": "A GitHub Actions workflow action",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "dispatch": {
           "type": "array",
@@ -484,6 +486,7 @@
       "$id": "/definitions/GitHubActionsWorkflowDispatch",
       "description": "A GitHub Actions workflow dispatch",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "workflow": {
           "type": "string",
@@ -550,6 +553,7 @@
       "$id": "/definitions/PriorityRule",
       "description": "priority rule",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "name": {
           "description": "Name of the rule.",
@@ -628,6 +632,7 @@
       "$id": "/definitions/Commit",
       "description": "Commit",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "sha": {
           "description": "Commit sha",
@@ -674,6 +679,7 @@
       "$id": "/definitions/CommitAuthor",
       "description": "Commit author",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "name": {
           "description": "Author name",
@@ -716,6 +722,7 @@
     "PartitionRule": {
       "$id": "/definitions/PartitionRule",
       "type": "object",
+      "additionalProperties": false,
       "required": ["name"],
       "properties": {
         "name": {
@@ -740,6 +747,7 @@
       "description": "Command restriction",
       "$id": "/definitions/CommandRestriction",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "conditions": {
           "type": "array",
@@ -772,6 +780,7 @@
     "QueueRule": {
       "$id": "/definitions/QueueRule",
       "type": "object",
+      "additionalProperties": false,
       "required": ["name"],
       "properties": {
         "name": {
@@ -906,6 +915,7 @@
             "oneOf": [
               {
                 "type": "object",
+                "additionalProperties": false,
                 "propertyNames": {
                   "enum": [
                     "or",
@@ -927,6 +937,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": false,
           "propertyNames": {
             "enum": ["or", "and", "not"]
           },
@@ -945,6 +956,7 @@
     "Actions": {
       "description": "action",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "assign": {
           "type": ["object", "null"],
@@ -1320,6 +1332,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "additionalProperties": false,
                     "properties": {
                       "login": {
                         "$ref": "#/definitions/GitHubLogin"
@@ -1342,6 +1355,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "additionalProperties": false,
                     "properties": {
                       "login": {
                         "$ref": "#/definitions/GitHubLogin"
@@ -1364,6 +1378,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "additionalProperties": false,
                     "properties": {
                       "login": {
                         "$ref": "#/definitions/GitHubLogin"
