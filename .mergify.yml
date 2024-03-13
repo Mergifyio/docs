@@ -9,7 +9,7 @@ shared:
     merge_method: squash
     speculative_checks: 5
   CheckRuns: &CheckRuns
-    - check-success=Cloudflare Pages
+    - "check-success=Cloudflare Pages: docs"
     - check-success=build-preview-doc
     - check-success=lint
     - check-success=test
