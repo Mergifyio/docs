@@ -4,25 +4,24 @@ import { renderMarkdown } from './utils';
 
 // FIXME: move this to JSON schema?
 const valueTypeLinks: { [key: string]: string } = {
-	'/definitions/TemplateArray': '/configuration/data-types#template',
-	'/definitions/UserArray': '/configuration/data-types#template',
-	'/definitions/Template': '/configuration/data-types#template',
-	'/definitions/LabelArray': '/configuration/data-types#template',
-	'/definitions/Timestamp': '/configuration/data-types#timestamp',
-	'/definitions/TimestampOrRelativeTimestamp': '/configuration/data-types#timestamp',
-	'/definitions/TimestampOrTimestampInterval': '/configuration/data-types#timestamp-interval',
-	'/definitions/Commit': '/configuration/data-types#commit',
-	'/definitions/CommitAuthor': '/configuration/data-types#commit-author',
-	'/definitions/RuleCondition': '/configuration/conditions',
-	'/definitions/Duration': '/configuration/data-types#duration',
-	'/definitions/Schedule': '/configuration/data-types#schedule',
-	'/definitions/PriorityRule': '/merge-queue/priority#how-to-define-priority-rules',
-	'/definitions/GitHubActionsWorkflow': '/workflow/actions/github_actions#workflow-action',
-	'/definitions/GitHubActionsWorkflowDispatch':
-		'/workflow/actions/github_actions#workflow-action-dispatch',
-	'/definitions/CommandRestriction': '/commands/restrictions#command-restriction-format',
-	'/definitions/QueueDequeueReason': '/configuration/data-types#queue-dequeue-reason',
-	'/definitions/ReportModeArray': '/configuration/data-types#report-modes',
+	TemplateArray: '/configuration/data-types#template',
+	UserArray: '/configuration/data-types#template',
+	Template: '/configuration/data-types#template',
+	LabelArray: '/configuration/data-types#template',
+	Timestamp: '/configuration/data-types#timestamp',
+	TimestampOrRelativeTimestamp: '/configuration/data-types#timestamp',
+	TimestampOrTimestampInterval: '/configuration/data-types#timestamp-interval',
+	Commit: '/configuration/data-types#commit',
+	CommitAuthor: '/configuration/data-types#commit-author',
+	RuleCondition: '/configuration/conditions',
+	Duration: '/configuration/data-types#duration',
+	Schedule: '/configuration/data-types#schedule',
+	PriorityRule: '/merge-queue/priority#how-to-define-priority-rules',
+	GitHubActionsWorkflow: '/workflow/actions/github_actions#workflow-action',
+	GitHubActionsWorkflowDispatch: '/workflow/actions/github_actions#workflow-action-dispatch',
+	CommandRestriction: '/commands/restrictions#command-restriction-format',
+	QueueDequeueReason: '/configuration/data-types#queue-dequeue-reason',
+	ReportModeArray: '/configuration/data-types#report-modes',
 };
 
 export interface OptionDefinition {
@@ -44,8 +43,7 @@ function splitRefPath($ref: string) {
 function getTypeLink(ref: string): string | undefined {
 	if (ref) {
 		const refPath = splitRefPath(ref);
-		const refDefinition = refPath.reduce((acc, segment) => (acc as any)[segment], configSchema);
-		const refId = refDefinition.$id;
+		const refId = refPath.at(-1);
 
 		return valueTypeLinks[refId];
 	}
