@@ -930,6 +930,7 @@
       "properties": {
         "assign": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "add_users": {
               "description": "The users to assign to the pull request.",
@@ -949,6 +950,7 @@
         },
         "backport": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "assignees": {
               "description": "Users to assign the newly created pull request. As the type is a data type template, you could use, e.g., `{{author}}` to assign the pull request to its original author.",
@@ -1000,6 +1002,7 @@
         },
         "close": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "message": {
               "default": "This pull request has been automatically closed by Mergify.",
@@ -1010,6 +1013,7 @@
         },
         "copy": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "assignees": {
               "description": "Users to assign the newly created pull request. As the type is Template, you could use, e.g., {{author}} to assign the pull request to its original author.",
@@ -1060,6 +1064,7 @@
         },
         "comment": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to comment a pull request. If no `bot_account` is set, Mergify will comment the pull request itself.",
@@ -1073,6 +1078,7 @@
         },
         "delete_head_branch": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "force": {
               "type": "boolean",
@@ -1083,6 +1089,7 @@
         },
         "dismiss_reviews": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "approved": {
               "description": "If set to `true`, all the approving reviews will be removed when the pull request is updated. If set to `false`, nothing will be done. If set to a list, each item should be the GitHub login of a user whose review will be removed. If set to `from_requested_reviewers`, the list of requested reviewers will be used to get whose review will be removed.",
@@ -1137,6 +1144,7 @@
         },
         "edit": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "draft": {
               "description": "If the pull request should be a draft (`true`) or the other way around (`false`).",
@@ -1146,6 +1154,7 @@
         },
         "label": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "add": {
               "description": "The list of labels to add.",
@@ -1177,6 +1186,7 @@
         },
         "github_actions": {
           "type": ["object"],
+          "additionalProperties": false,
           "properties": {
             "workflow": {
               "description": "The workflow to act on.",
@@ -1186,6 +1196,7 @@
         },
         "merge": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "commit_message_template": {
               "description": "Template to use as the commit message when using the `merge` or `squash` merge method.",
@@ -1203,6 +1214,7 @@
         },
         "post_check": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "success_conditions": {
               "type": "array",
@@ -1230,6 +1242,7 @@
         },
         "queue": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "autosquash": {
               "type": "boolean",
@@ -1277,6 +1290,7 @@
         },
         "rebase": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "autosquash": {
               "type": "boolean",
@@ -1291,6 +1305,7 @@
         },
         "request_reviews": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "users": {
               "description": "The username to request reviews from.",
@@ -1375,6 +1390,7 @@
         },
         "review": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to review a pull request. If no `bot_account` is set, Mergify will review the pull request itself.",
@@ -1393,6 +1409,7 @@
         },
         "update": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to review a pull request. If no `bot_account` is set, Mergify will update the pull request itself.",
@@ -1402,6 +1419,7 @@
         },
         "squash": {
           "type": ["object", "null"],
+          "additionalProperties": false,
           "properties": {
             "bot_account": {
               "description": "Mergify can impersonate a GitHub user to review a pull request. If no `bot_account` is set, Mergify will squash the pull request itself.",
