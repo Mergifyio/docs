@@ -277,6 +277,30 @@
           "description": "The files that are modified by the pull request."
         },
         {
+          "key": "added-lines",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The lines that are added by the pull request."
+        },
+        {
+          "key": "modified-lines",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The lines that are modified by the pull request."
+        },
+        {
+          "key": "deleted-lines",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The lines that are deleted by the pull request."
+        },
+        {
           "key": "removed-files",
           "type": "array",
           "items": {
