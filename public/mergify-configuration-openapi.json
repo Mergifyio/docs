@@ -982,7 +982,7 @@
             },
             "body": {
               "description": "The pull request body.",
-              "default": "This is an automatic backport of pull request #{{number}} done by [Mergify](https://mergify.com).\n{{cherry_pick_error}}",
+              "default": "{{ body }}<hr>This is an automatic backport of pull request #{{number}} done by [Mergify](https://mergify.com).",
               "$ref": "#/definitions/Template"
             },
             "bot_account": {
@@ -1045,7 +1045,7 @@
             },
             "body": {
               "description": "The pull request body.",
-              "default": "This is an automatic copy of pull request #{{number}} done by [Mergify](https://mergify.com).\n{{cherry_pick_error}}",
+              "default": "{{ body }}<hr>This is an automatic copy of pull request #{{number}} done by [Mergify](https://mergify.com).",
               "$ref": "#/definitions/Template"
             },
             "bot_account": {
