@@ -347,12 +347,12 @@ This describes the reason why a pull request has been removed from the queue.
     </tr>
 
     <tr>
-      <td><code>target-branch-missing</code></td>
+      <td><code>base-branch-missing</code></td>
       <td>The pull request base branch is missing.</td>
     </tr>
 
     <tr>
-      <td><code>target-branch-changed</code></td>
+      <td><code>base-branch-changed</code></td>
       <td>The pull request base branch has changed.</td>
     </tr>
 
@@ -380,6 +380,56 @@ This describes the reason why a pull request has been removed from the queue.
     <tr>
       <td><code>branch-update-failed</code></td>
       <td>Updating the head branch of the pull request failed.</td>
+    </tr>
+
+    <tr>
+      <td><code>pr-ahead-dequeued</code></td>
+      <td>A pull request which is ahead has been removed from the queue.</td>
+    </tr>
+
+    <tr>
+        <td><code>pr-ahead-failed-to-merge</code></td>
+        <td>The pull request which is ahead could not be merged.</td>
+    </tr>
+
+    <tr>
+        <td><code>pr-with-higher-priority-queued</code></td>
+        <td>A higher priority pull request has been queued in the meantime.</td>
+    </tr>
+
+    <tr>
+        <td><code>pr-queued-twice</code></td>
+        <td>The pull request got queued twice.</td>
+    </tr>
+
+    <tr>
+        <td><code>pr-frozen-no-cascading</code></td>
+        <td>The pull request was frozen by a freeze with cascading effect disabled.</td>
+    </tr>
+
+    <tr>
+        <td><code>pr-checks-stopped-because-merge-queue-pause</code></td>
+        <td>The checks have been interrupted because the merge queue is paused on this repository.</td>
+    </tr>
+
+    <tr>
+        <td><code>draft-pull-request-changed</code></td>
+        <td>The draft pull request has been unexpectedly changed.</td>
+    </tr>
+
+    <tr>
+        <td><code>pull-request-updated</code></td>
+        <td>The pull request has been manually updated.</td>
+    </tr>
+
+    <tr>
+        <td><code>merge-queue-reset</code></td>
+        <td>The merge queue was reset.</td>
+    </tr>
+
+    <tr>
+        <td><code>incompatibility-with-branch-protections</code></td>
+        <td>The pull request cannot be checked because of an incompatibility with branch protections.</td>
     </tr>
   </tbody>
 </table>
