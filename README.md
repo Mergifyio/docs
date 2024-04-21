@@ -39,4 +39,4 @@ You can build docs and run a preview close to how it's done in production
 
 Note that during the build, you can encounter some errors that you won't see in local dev.
 This is because you're building every single page, in opposite of a local dev server that builds
-pages when you visit them.
+pages when you visit them. 
