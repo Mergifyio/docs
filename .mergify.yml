@@ -12,6 +12,10 @@ shared:
     - check-success=lint
     - check-success=test
     - check-success=test-broken-links
+    - or:
+      - check-success=Cloudflare Pages
+      # fork can't have the preview build
+      - "head~=:"
 
 queue_rules:
   - name: hotfix
