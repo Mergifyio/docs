@@ -220,9 +220,9 @@ const navItems: NavItem[] = [
 		],
 	},
 	{
-		title: 'Stacked PRs',
+		title: 'Stacks',
 		icon: BsStack,
-		path: '/stacked_prs',
+		path: '/stacks',
 	},
 	{ title: 'Security', path: '/security', icon: FaShieldAlt },
 	{ title: 'Badge', path: '/badge', icon: BiBadgeCheck },

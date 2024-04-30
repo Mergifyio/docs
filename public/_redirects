@@ -50,3 +50,4 @@
 /actions/ /workflow/actions/ 301
 /actions/_ /workflow/actions/:splat 301
 /commands/unqueue /commands/dequeue 301
+/stacked_prs /stacks 301
