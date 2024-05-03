@@ -71,16 +71,18 @@ export function OptionsTableBase(options: OptionDefinition) {
 								{!shouldHideDefaultColumn && (
 									<td>
 										{hasDefaultValue(definition) && (
-											<code
-												dangerouslySetInnerHTML={{
-													__html: yaml.dump(definition.default, {
-														noCompatMode: true,
-														lineWidth: -1,
-														quotingType: '"',
-														noRefs: true,
-													}),
-												}}
-											/>
+											<pre>
+												<code
+													dangerouslySetInnerHTML={{
+														__html: yaml.dump(definition.default, {
+															noCompatMode: true,
+															lineWidth: -1,
+															quotingType: '"',
+															noRefs: true,
+														}),
+													}}
+												/>
+											</pre>
 										)}
 									</td>
 								)}
