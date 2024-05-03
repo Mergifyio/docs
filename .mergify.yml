@@ -15,7 +15,7 @@ shared:
     - or:
       - check-success=Cloudflare Pages
       # fork can't have the preview build
-      - "head~=:"
+      - "-head-repo-full-name~=^Mergifyio/"
 
 queue_rules:
   - name: hotfix
