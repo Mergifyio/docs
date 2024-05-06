@@ -789,11 +789,6 @@
             "$ref": "#/definitions/RuleCondition"
           }
         },
-        "require_branch_protection": {
-          "type": "boolean",
-          "default": true,
-          "description": "Whether branch protections are required for queueing pull requests."
-        },
         "merge_conditions": {
           "description": "The list of conditions to match to get the queued pull request merged. This automatically includes the `queue_conditions`. In case of speculative merge pull request, the merge conditions starting by `check-` are evaluated against the temporary pull request instead of the original one.",
           "type": "array",
@@ -1294,12 +1289,6 @@
               "default": "medium",
               "deprecated": true,
               "description": "To set your priorities, you should now use `priority_rules`. This sets the priority of the pull request in the queue. The pull request with the highest priority is merged first. `low`, `medium`, `high` are aliases for `1000`, `2000`, `3000`."
-            },
-            "require_branch_protection": {
-              "type": "boolean",
-              "default": true,
-              "deprecated": true,
-              "description": "Whether branch protections are required for queueing pull requests."
             },
             "update_bot_account": {
               "$ref": "#/definitions/Template",
