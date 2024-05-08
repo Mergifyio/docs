@@ -62,7 +62,7 @@
     "vitest": "^1.5.2"
   },
   "dependencies": {
-    "@astrojs/check": "^0.3.1",
+    "@astrojs/check": "^0.6.0",
     "@astrojs/react": "^3.3.2",
     "@astrojs/vue": "^4.1.0",
     "@chakra-ui/react": "^2.8.2",
