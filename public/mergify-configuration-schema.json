@@ -339,7 +339,7 @@
         {
           "key": "merge-commit-sha",
           "type": "string",
-          "description": "The merge commit sha of the pull request returned by GitHub."
+          "description": "The merge commit SHA of the pull request returned by GitHub."
         },
         {
           "key": "merged",
