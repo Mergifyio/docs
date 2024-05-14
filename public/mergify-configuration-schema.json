@@ -337,6 +337,11 @@
           "description": "Whether the pull request is locked."
         },
         {
+          "key": "merge-commit-sha",
+          "type": "string",
+          "description": "The merge commit sha of the pull request returned by GitHub."
+        },
+        {
           "key": "merged",
           "type": "boolean",
           "description": "Whether the pull request is merged. This attribute doesn't work on pull requests merged before a rule using this attribute is created."
