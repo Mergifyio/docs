@@ -32,8 +32,12 @@ strings.
 <ActionOptionsTable action="backport" />
 
 As the title and body are templates, you can leverage any pull request
-attributes to use as content, e.g., `{{author}}`. You can also use this
-additional variable:
+attributes to use as content, e.g., `{{author}}`.
+
+Note that the `commits` attribute here will be the list of cherry
+picked commits.
+
+On top of that, you can also use the following additional variables:
 
 - `{{ destination_branch }}`: the name of the destination branch.
 
