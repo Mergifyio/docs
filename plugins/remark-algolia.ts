@@ -1,6 +1,6 @@
 import { visit } from 'unist-util-visit';
 import configSchema from '../public/mergify-configuration-schema.json';
-import { toString } from 'hast-util-to-string';
+import { toString } from 'mdast-util-to-string';
 import algoliasearch from 'algoliasearch';
 import type * as unified from 'unified';
 import type * as mdast from 'mdast';
@@ -29,6 +29,17 @@ function getPath(path: string) {
 	return path.slice(path.indexOf('/docs/') + 5, path.length);
 }
 
+/** Naive excerpt which concatenate every paragraph node to string */
+function getExcerpt(tree: mdast.Root) {
+	const excerpt: string[] = [];
+
+	visit(tree, 'paragraph', (node) => {
+		excerpt.push(toString(node));
+	});
+
+	return excerpt.join(' ');
+}
+
 export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 	const transformer: unified.Transformer<mdast.Root> = async (tree, file) => {
 		const tables = [];
@@ -37,7 +48,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 		visit(tree, 'heading', (heading) => {
 			headings.push({
 				depth: heading.depth,
-				value: toString(heading as any),
+				value: toString(heading),
 			});
 		});
 
@@ -95,7 +106,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 			headings,
 			tables,
 			objectID: getPath(file.history[0]),
-			excerpt: toString(tree),
+			excerpt: getExcerpt(tree),
 			...file.data.astro.frontmatter,
 		});
 	};
