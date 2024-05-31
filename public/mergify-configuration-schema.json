@@ -603,6 +603,10 @@
       "description": "merge method: `merge`, `squash`, `rebase` or `fast-forward`",
       "enum": ["merge", "squash", "rebase", "fast-forward"]
     },
+    "MergeConflictStyle": {
+      "description": "`merge` or `diff3`",
+      "enum": ["merge", "diff3"]
+    },
     "Timestamp": {
       "description": "Timestamp",
       "type": "string"
@@ -1008,6 +1012,11 @@
               "description": "The label to add to the created pull request if it has conflicts and `ignore_conflicts` is set to `true`.",
               "type": "string"
             },
+            "merge_conflict_style": {
+                "description": "Style used by git when displaying merge conflicts",
+                "default": "merge",
+                "$ref": "#/definitions/MergeConflictStyle"
+            },
             "regexes": {
               "description": "The list of regexes to find branches the pull request should be copied to.",
               "$ref": "#/definitions/StringSet"
@@ -1069,6 +1078,11 @@
               "description": "The label to add to the created pull request if it has conflicts and ignore_conflicts is set to true.",
               "default": "conflicts",
               "type": "string"
+            },
+            "merge_conflict_style": {
+                "description": "Style used by git when displaying merge conflicts",
+                "default": "merge",
+                "$ref": "#/definitions/MergeConflictStyle"
             },
             "regexes": {
               "description": "The list of regexes to find branches the pull request should be copied to.",
