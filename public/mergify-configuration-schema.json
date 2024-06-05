@@ -89,6 +89,12 @@
       "items": {
         "$ref": "#/definitions/PullRequestRule"
       }
+    },
+    "merge_protections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MergeProtection"
+      }
     }
   },
   "title": "MergifyConfig",
@@ -699,6 +705,35 @@
           "type": "string"
         }
       }
+    },
+    "MergeProtection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the protection. It's not possible to have two protections with the same name."
+        },
+        "description": {
+          "type": "string",
+          "description": "The description of the protection."
+        },
+        "if": {
+          "type": "array",
+          "description": "A list of conditions that must match against the pull request for the protection to be applied.",
+          "items": {
+            "$ref": "#/definitions/RuleCondition"
+          }
+        },
+        "success_conditions": {
+          "type": "array",
+          "descriptions": "A list of conditions that must match against the pull request for the protection to be considered successful.",
+          "items": {
+            "$ref": "#/definitions/RuleCondition"
+          }
+        }
+      },
+      "required": ["name", "if", "success_conditions"]
     },
     "PullRequestRule": {
       "type": "object",
