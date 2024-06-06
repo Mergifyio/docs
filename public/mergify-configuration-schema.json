@@ -727,7 +727,7 @@
         },
         "success_conditions": {
           "type": "array",
-          "descriptions": "A list of conditions that must match against the pull request for the protection to be considered successful.",
+          "description": "A list of conditions that must match against the pull request for the protection to be considered successful.",
           "items": {
             "$ref": "#/definitions/RuleCondition"
           }
