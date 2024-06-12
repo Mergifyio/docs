@@ -7577,6 +7577,54 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "MatchingConditionsDict": {
+        "properties": {
+          "and": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "And"
+          },
+          "or": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Or"
+          },
+          "not": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Not"
+          }
+        },
+        "type": "object",
+        "title": "MatchingConditionsDict"
+      },
       "MergedCountResponse": {
         "properties": {
           "groups": {
@@ -8510,7 +8558,14 @@
           },
           "matching_conditions": {
             "items": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                },
+                {
+                  "type": "string"
+                }
+              ]
             },
             "type": "array",
             "title": "Matching Conditions"
