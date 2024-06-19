@@ -7105,9 +7105,9 @@
           "scheduled_freeze_attributes": {
             "$ref": "#/components/schemas/ScheduledFreezeEventLogAttributes"
           },
-          "deleted_reason": {
+          "reason": {
             "type": "string",
-            "title": "Deleted Reason"
+            "title": "Reason"
           },
           "deleted_by": {
             "$ref": "#/components/schemas/Actor"
@@ -7122,7 +7122,7 @@
         "required": [
           "scheduled_freeze_id",
           "scheduled_freeze_attributes",
-          "deleted_reason",
+          "reason",
           "deleted_by",
           "deleted_at"
         ],
