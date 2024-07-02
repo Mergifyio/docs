@@ -9288,6 +9288,10 @@
       "description": "Operations with event logs."
     },
     {
+      "name": "merge_protections",
+      "description": "Operations with merge protections."
+    },
+    {
       "name": "pull_requests",
       "description": "Operations with pull requests."
     },
