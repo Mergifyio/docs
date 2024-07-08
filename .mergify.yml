@@ -13,9 +13,9 @@ shared:
     - check-success=test
     - check-success=test-broken-links
     - or:
-      - check-success=Cloudflare Pages
-      # fork can't have the preview build
-      - "-head-repo-full-name~=^Mergifyio/"
+        - check-success=Cloudflare Pages
+        # fork can't have the preview build
+        - "-head-repo-full-name~=^Mergifyio/"
 
 queue_rules:
   - name: hotfix
@@ -67,7 +67,7 @@ queue_rules:
       - or:
           - and:
               - author=mergify-ci-bot
-              - head~=^configuration-spec-sync$
+              - head~=^(configuration-spec|openapi-types)-sync$
               - "title~=^chore: sync"
           - and:
               - author=mergify-ci-bot
