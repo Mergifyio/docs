@@ -3781,6 +3781,193 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/ci_issues_upload": {
+      "post": {
+        "tags": [
+          "ci_issues"
+        ],
+        "summary": "Send JUnit XML files to CI Issues",
+        "description": "Send, a maximum of 5, JUnit XML files to CI Issues",
+        "operationId": "upload_ci_issue_junit_files_repos__owner___repository__ci_issues_upload_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_ci_issue_junit_files_repos__owner___repository__ci_issues_upload_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ci_issues_token/{owner}": {
+      "get": {
+        "tags": [
+          "ci_issues"
+        ],
+        "summary": "Get the token to be able to upload JUnit XML reports",
+        "description": "Get the token to be able to upload JUnit XML reports",
+        "operationId": "get_ci_issues_token_ci_issues_token__owner__get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CiIssuesTokenResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ci_issues"
+        ],
+        "summary": "Rotate the token to be able to upload JUnit XML reports",
+        "description": "Rotate the token to be able to upload JUnit XML reports",
+        "operationId": "rotate_ci_issues_token_ci_issues_token__owner__put",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CiIssuesTokenResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/products/{owner}": {
       "get": {
         "tags": [
@@ -3931,6 +4118,67 @@
           "base_refs"
         ],
         "title": "BaseRefsResponse"
+      },
+      "Body_upload_ci_issue_junit_files_repos__owner___repository__ci_issues_upload_post": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "head_sha": {
+            "type": "string",
+            "maxLength": 40,
+            "title": "Head Sha"
+          },
+          "files": {
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Files"
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "none",
+              "github_action"
+            ],
+            "title": "Provider",
+            "default": "none"
+          },
+          "github_action_workflow_run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Github Action Workflow Run Id"
+          },
+          "github_action_workflow_run_attempt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Github Action Workflow Run Attempt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "head_sha"
+        ],
+        "title": "Body_upload_ci_issue_junit_files_repos__owner___repository__ci_issues_upload_post"
       },
       "Branch": {
         "properties": {
@@ -4156,6 +4404,19 @@
           "groups"
         ],
         "title": "ChecksOutcomeResponse"
+      },
+      "CiIssuesTokenResponse": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "CiIssuesTokenResponse"
       },
       "Cursor": {
         "properties": {
@@ -9164,6 +9425,10 @@
     },
     "securitySchemes": {
       "ApplicationAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "HTTPBearer": {
         "type": "http",
         "scheme": "bearer"
       }
