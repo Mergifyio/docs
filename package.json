@@ -24,7 +24,7 @@
     "@types/node": "^20.14.9",
     "@types/viz.js": "^2.1.5",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@typescript-eslint/parser": "^7.16.1",
     "astro": "^4.11.5",
     "astro-auto-import": "^0.4.2",
     "astro-eslint-parser": "^1.0.1",
