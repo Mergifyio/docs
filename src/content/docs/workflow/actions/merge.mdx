@@ -56,7 +56,8 @@ The following protection settings are only partially supported by Mergify:
 
 ## Pull Request Dependencies
 
-You can specify dependencies between pull requests from the same repository.
+You can specify dependencies between pull requests from the same repository,
+or from other repositories with Mergify installed within your organization.
 Mergify waits for the linked pull requests to be merged before merging any pull
 request with a `Depends-On:` header.
 
@@ -70,14 +71,13 @@ To get the full picture, you may need to look at these pull requests:
 
 Depends-On: #42
 Depends-On: https://github.com/organization/repository/pull/123
+Depends-On: https://github.com/organization/other-repository/pull/456
+Depends-On: organization/test-repository#789
 ```
 
-In this example, the pull request will only be merged when the pull request #42
-and #123 are merged.
-
-:::caution
-  This feature does not work for cross-repository dependencies (yet).
-:::
+In this example, the pull request will only be merged when the pull
+request #42, #123, #456 from `other-repository` and #789 from
+`test-repository` are merged.
 
 :::caution
   If the dependency happens between pull requests targeting different branches,
