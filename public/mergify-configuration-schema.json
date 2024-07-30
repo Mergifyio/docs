@@ -1320,17 +1320,21 @@
             "autosquash": {
               "type": "boolean",
               "default": true,
+              "deprecated": true,
               "description": "This option is relevant only if you do inplace checks and if you use the `rebase` option of the `update_method`. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`."
             },
             "commit_message_template": {
+              "deprecated": true,
               "description": "Template to use as the commit message when using the `merge` or `squash` merge method. This option has been moved under the queue rules section of the configuration and will be removed from this section in the future.",
               "$ref": "#/definitions/Template"
             },
             "merge_bot_account": {
+              "deprecated": true,
               "description": "Mergify can impersonate a GitHub user to merge pull requests. If no `merge_bot_account` is set, Mergify will merge the pull request itself. The user account **must** have already been logged in Mergify dashboard once and have **write** or **maintain** permission.\n This option overrides the value defined in the queue rules section of the configuration.",
               "$ref": "#/definitions/Template"
             },
             "merge_method": {
+              "deprecated": true,
               "description": "Merge method to use. If no value is set, Mergify will use the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`. This option overrides the value defined in the queue rules section of the configuration.",
               "$ref": "#/definitions/MergeMethod"
             },
@@ -1351,6 +1355,7 @@
             },
             "update_method": {
               "default": "merge",
+              "deprecated": true,
               "description": "Method to use to update the pull request with its base branch when the speculative check is done in-place.\nPossible values: \n * `merge` to merge the base branch into the pull request.\n* `rebase` to rebase the pull request against its base branch. \n This option overrides the value defined in the queue rules section of the configuration.\n The default is `rebase` when the `merge_method` is `fast-forward`.",
               "enum": ["merge", "rebase"]
             }
