@@ -44,26 +44,18 @@ the highest priority value is chosen.
 Here is a glimpse into the structure of a priority rule:
 
 ```yaml
-queue_rules:
-  - name: default
-    queue_conditions:
-      - "#approved-reviews-by>=2"
-      - check-success=Travis CI - Pull Request
-    priority_rules:
-      - name: high priority
-        conditions:
-          - label=urgent
-        priority: high
-      - name: low priority
-        conditions:
-          - label=refactor
-        priority: low
+priority_rules:
+  - name: high priority
+    conditions:
+      - label=urgent
+    priority: high
+  - name: low priority
+    conditions:
+      - label=refactor
+    priority: low
 ```
 
 In the above configuration:
-
-- The `priority_rules` section sets up priority rules for the queue named
-  `default`.
 
 - Two priority rules, `high priority` and `low priority`, are defined.
 
@@ -84,14 +76,11 @@ offer you the control you need over your merge queue.
 
 Defining priority rules is straightforward and involves the following steps:
 
-1. **Choose a queue**: Priority rules are tied to a specific queue. So, first,
-   choose the queue where you want to apply these rules.
-
-2. **Define priority levels**: Decide on the levels of priority you want to
+1. **Define priority levels**: Decide on the levels of priority you want to
    establish for your pull requests. You can use either keywords (`low`,
    `medium`, `high`) or numerical values for this purpose.
 
-3. **Set up conditions**: Define the conditions under which a pull request
+2. **Set up conditions**: Define the conditions under which a pull request
    should be assigned a particular priority level. These conditions can be
    based on any [pull request attribute](/configuration/conditions#attributes-list).
 
@@ -121,39 +110,6 @@ The textual priorities have the following numerical values:
       <td>3000</td>
     </tr>
 </table>
-
-Let's look at an example:
-
-```yaml
-queue_rules:
-  - name: default
-    queue_conditions:
-      - "#approved-reviews-by>=2"
-      - check-success=TeamCity
-    priority_rules:
-      - name: urgent fixes
-        conditions:
-          - label=urgent
-          - label=bug
-        priority: high
-      - name: low-priority tasks
-        conditions:
-          - label=refactor
-        priority: 10
-```
-
-In this configuration:
-
-- We are defining priority rules for the `default` queue.
-
-- Two priority levels are set up: `high` for urgent bug fixes and `10` for
-  refactoring tasks.
-
-- The conditions for the `high` priority level are that the pull request has
-  labels `urgent` and `bug`.
-
-- The condition for the low-priority tasks is that the pull request has the
-  `refactor` label.
 
 :::note
 
@@ -188,15 +144,16 @@ queue_rules:
       - "#approved-reviews-by>=2"
       - check-success=TeamCity
     allow_checks_interruption: false
-    priority_rules:
-      - name: urgent
-        conditions:
-          - label=urgent
-        priority: high
-      - name: normal
-        conditions:
-          - label=normal
-        priority: low
+
+priority_rules:
+  - name: urgent
+    conditions:
+      - label=urgent
+    priority: high
+  - name: normal
+    conditions:
+      - label=normal
+    priority: low
 ```
 
 In this configuration, `allow_checks_interruption` is set to `false`. This
@@ -308,6 +265,7 @@ If a pull request ends up in an unexpected position in the queue:
 - Make sure there isn't another priority rule that is placing the pull request
   at a different position.
 
-- Confirm that your priority rules are correctly set up in the queue rule. The
-  priority rules should be nested under the correct queue rule in your
-  configuration file.
+- Confirm that your priority rules are correctly set up at the top level of your
+  configuration file. Also make sure that there aren't priority rules defined
+  both at the top level and in the under the `queue_rule` section (which is now deprecated),
+  as both cannot be defined at the same time.

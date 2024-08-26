@@ -78,6 +78,13 @@
         "$ref": "#/definitions/QueueRule"
       }
     },
+    "priority_rules": {
+      "type": "array",
+      "description": "The list of priority rules a pull request can match in order to be prioritized when added to a queue. The rule with the highest priority value wins.",
+      "items": {
+        "$ref": "#/definitions/PriorityRule"
+      }
+    },
     "partition_rules": {
       "type": "array",
       "items": {
@@ -901,7 +908,8 @@
           "$ref": "#/definitions/MergeMethod"
         },
         "priority_rules": {
-          "description": "The list of priority rules a pull request can match in order to be prioritized when added to a queue. The rule with the highest priority value wins.",
+          "deprecated": true,
+          "description": "This attribute is deprecated in favor of `priority_rules` at the top level of the Mergify configuration file.\nThe list of priority rules a pull request can match in order to be prioritized when added to a queue. The rule with the highest priority value wins.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/PriorityRule"

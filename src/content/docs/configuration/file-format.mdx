@@ -44,6 +44,9 @@ different aspect of Mergify:
 - [`queue_rules`](#queue-rules) configures the [Merge
   Queue](/merge-queue);
 
+- [`priority_rules`](#priority-rules) configures the [priorities for the Merge
+  Queue](/merge-queue/priority);
+
 - [`partition_rules`](#partition-rules) configures [monorepository support in
   the merge queue](/merge-queue/partitions);
 
@@ -88,6 +91,13 @@ The top-level key `queue_rules` allows to define the rules that reign over your
 [merge queues](/merge-queue).
 
 <OptionsTable name="QueueRule" />
+
+### Priority Rules
+
+The top-level key `priority rules` allows to define the rules that will determine
+which [priority](/merge-queue/priority) a pull request has when entering your merge queue.
+
+<OptionsTable name="PriorityRule" />
 
 ### Partition Rules
 
