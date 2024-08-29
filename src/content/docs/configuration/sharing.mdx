@@ -93,4 +93,9 @@ pull_request_rules:
 
   - Values in the `default` key will be merged and remote default values will
     apply to local configuration.
+
+  - Rules in the `pull_request_rules`, `queue_rules`, `priority_rules`, `partition_rules`,
+    or `merge_protections` section will be merged and remote default values will apply to local
+    configuration. A rule will not be overwritten, by the extended configuration, if it has the same name
+    in both the extended and local configuration.
 :::
