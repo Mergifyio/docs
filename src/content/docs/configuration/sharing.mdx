@@ -91,8 +91,9 @@ pull_request_rules:
   - Values in the `shared` key will not be merged and shared between local and
     remote configurations.
 
-  - Values in the `default` key will be merged and remote default values will
-    apply to local configuration.
+  - Values in the `defaults` and `commands_restrictions` key will be merged and remote default
+    values will apply to local configuration, unless a same default value already exist in the
+    local configuration.
 
   - Rules in the `pull_request_rules`, `queue_rules`, `priority_rules`, `partition_rules`,
     or `merge_protections` section will be merged and remote default values will apply to local
