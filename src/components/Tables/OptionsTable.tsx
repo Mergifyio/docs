@@ -15,7 +15,7 @@ type KeysWithProperties<T> = {
 
 interface Props {
 	/** Name to retrieve its options */
-	name: KeysWithProperties<typeof configSchema.definitions>;
+	name: KeysWithProperties<typeof configSchema.$defs>;
 	options?: { [optionKey: string]: OptionDefinition };
 }
 
@@ -31,7 +31,7 @@ export function RootOptionsTable({ name }: RootProps) {
 }
 
 export default function OptionsTable({ name }: Props) {
-	const options = configSchema.definitions[name].properties;
+	const options = configSchema.$defs[name].properties;
 
 	return OptionsTableBase(options as any);
 }

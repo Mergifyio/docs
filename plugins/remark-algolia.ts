@@ -58,7 +58,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 					const name = element.attributes.find(
 						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'name'
 					).value;
-					const optionsTableData = configSchema?.definitions?.[name]?.properties;
+					const optionsTableData = configSchema?.$defs?.[name]?.properties;
 
 					tables.push({
 						node: JSON.stringify(element),
@@ -68,7 +68,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 					break;
 
 				case 'PullRequestAttributesTable':
-					const pullRequestAttributes = configSchema?.definitions?.PullRequestAttribute?.enum;
+					const pullRequestAttributes = configSchema?.$defs?.PullRequestAttribute?.enum;
 
 					tables.push({
 						node: JSON.stringify(element),
@@ -82,7 +82,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'action'
 					).value;
 					const actionOptions =
-						configSchema?.definitions?.Actions?.properties?.[action]?.properties;
+						configSchema?.$defs?.Actions?.properties?.[action]?.properties;
 
 					tables.push({
 						node: JSON.stringify(element),

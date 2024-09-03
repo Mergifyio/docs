@@ -4,12 +4,11 @@ import { getValueType } from './ConfigOptions';
 import { renderMarkdown } from './utils';
 
 interface Props {
-	staticAttributes: typeof configSchema.definitions.PullRequestAttribute.enum;
+	staticAttributes: typeof configSchema.$defs.PullRequestAttribute.enum;
 }
 
 export default function PullRequestAttributes({ staticAttributes }: Props) {
-	const attributes =
-		staticAttributes ?? configSchema?.definitions?.PullRequestAttribute?.enum ?? [];
+	const attributes = staticAttributes ?? configSchema?.$defs?.PullRequestAttribute?.enum ?? [];
 
 	return (
 		<table>
