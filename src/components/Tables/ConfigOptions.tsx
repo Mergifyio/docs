@@ -1,8 +1,8 @@
 import React from 'react';
+import jsonpointer from 'jsonpointer';
 import configSchema from '../../../public/mergify-configuration-schema.json';
 import { renderMarkdown } from './utils';
 
-// FIXME: move this to JSON schema?
 const valueTypeLinks: { [key: string]: string } = {
 	TemplateArray: '/configuration/data-types#template',
 	UserArray: '/configuration/data-types#template',
@@ -51,14 +51,28 @@ function getTypeLink(ref: string): string | undefined {
 	return undefined;
 }
 
-function getTypeDescription(ref: string): string {
-	if (ref) {
-		const refPath = splitRefPath(ref);
-		const refDefinition = refPath.reduce((acc, segment) => (acc as any)[segment], configSchema);
-		return refDefinition.description;
-	}
+/**
+ * Resolves a JSON Schema item, following $refs until a complete type is found.
+ * @param schema - The root JSON schema.
+ * @param item - The current item in the schema to resolve.
+ * @returns The fully resolved schema item.
+ */
+export function resolveSchema(schema: object, item: object): object {
+	if (item.$ref) {
+		// Resolve the $ref using jsonpointer
+		const refPath = item.$ref.replace('#', ''); // Clean the $ref path
+		const resolvedItem = jsonpointer.get(schema, refPath);
 
-	return '?';
+		// Recursively resolve if the resolved item is another $ref
+		return resolveSchema(schema, resolvedItem);
+	} else {
+		// Return the item if it's a complete definition (not a $ref)
+		return item;
+	}
+}
+
+function getTypeDescription(ref: object): string {
+	return resolveSchema(configSchema, ref).description;
 }
 
 export function getValueType(definition: any): React.ReactElement {

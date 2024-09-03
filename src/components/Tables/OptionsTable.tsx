@@ -2,7 +2,7 @@ import * as yaml from 'js-yaml';
 
 import configSchema from '../../../public/mergify-configuration-schema.json';
 
-import { getValueType, OptionDefinition } from './ConfigOptions';
+import { getValueType, OptionDefinition, resolveSchema } from './ConfigOptions';
 import { renderMarkdown } from './utils';
 import Badge from '../Badge/Badge';
 
@@ -25,9 +25,8 @@ interface RootProps {
 }
 
 export function RootOptionsTable({ name }: RootProps) {
-	const options = configSchema.properties[name].properties;
-
-	return OptionsTableBase(options as any);
+	const def = resolveSchema(configSchema, configSchema.properties[name]);
+	return OptionsTableBase(def.properties);
 }
 
 export default function OptionsTable({ name }: Props) {
