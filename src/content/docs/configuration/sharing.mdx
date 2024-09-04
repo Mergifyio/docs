@@ -20,15 +20,15 @@ queue_rules:
   - name: hotfix
     queue_conditions:
       - and: &CheckRuns
-        - check-success=linters
-        - check-success=unit
-        - check-success=functionnal
-        - check-success=e2e
-        - check-success=docker
+        - check-success = linters
+        - check-success = unit
+        - check-success = functionnal
+        - check-success = e2e
+        - check-success = docker
   - name: default
     queue_conditions:
       - and: *CheckRuns
-      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
+      - schedule = Mon-Fri 09:00-17:30[Europe/Paris]
 ```
 
 ## Sharing Configuration Sections
@@ -39,8 +39,8 @@ place to put redundant YAML anchors:
 ```yaml
 shared:
   my_ci: &common_checks
-    - check-success=ci-one
-    - check-success=ci-two
+    - check-success = ci-one
+    - check-success = ci-two
 
 queue_rules:
   - name: hotfix
@@ -49,7 +49,7 @@ queue_rules:
   - name: default
     queue_conditions:
       - and: *my_ci
-      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
+      - schedule = Mon-Fri 09:00-17:30[Europe/Paris]
 ```
 
 ## Extending Configuration Files
@@ -81,10 +81,11 @@ extends: organization/shared-config
 pull_request_rules:
   - name: additional rule specific to this repository
     conditions:
-      - base=main
+      - base = main
     actions:
       label:
-        add: ["repository-specific"]
+        add:
+          - repository-specific
 ```
 
 :::caution

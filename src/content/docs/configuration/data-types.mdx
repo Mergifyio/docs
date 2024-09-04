@@ -59,7 +59,7 @@ regular expressions.
 pull_request_rules:
   - name: add python label if a Python file is modified
     conditions:
-      - files~=\.py$
+      - files ~= \.py$
     actions:
       label:
         add:
@@ -67,8 +67,8 @@ pull_request_rules:
 
   - name: automatic merge for main when the title does not contain “WIP” (ignoring case)
     conditions:
-      - base=main
-      - -title~=(?i)wip
+      - base = main
+      - -title ~= (?i)wip
     actions:
       merge:
         method: merge
@@ -114,8 +114,8 @@ Supported formats:
 ```yaml
 - name: end of life version 10.0
   conditions:
-    - base=stable/10.0
-    - updated-at<=2021-04-05
+    - base = stable/10.0
+    - updated-at <= 2021-04-05
   actions:
     comment:
       message: |
@@ -142,7 +142,7 @@ database](https://www.iana.org/time-zones).
 ```yaml
 - name: merge except on new year day
   conditions:
-    - current-datetime!=2023-01-01T00:00/2023-01-01T23:59[Europe/Paris]
+    - current-datetime != 2023-01-01T00:00/2023-01-01T23:59[Europe/Paris]
   actions:
     merge:
 ```
@@ -182,7 +182,7 @@ translated to `updated-at >= 2020-06-04T00:00:00`.
 ```yaml
 - name: close stale pull request
   conditions:
-    - base=main
+    - base = main
     - -closed
     - updated-at < 14 days 3 hours 2 minutes ago
   actions:
@@ -215,16 +215,16 @@ You can also use those aliases:
 priority_rules:
   - name: my hotfix priority rule
     conditions:
-      - base=main
-      - label=hotfix
-      - check-success=linters
+      - base = main
+      - label = hotfix
+      - check-success = linters
     priority: high
 
   - name: my low priority rule
     conditions:
-      - base=main
-      - label=low
-      - check-success=linters
+      - base = main
+      - label = low
+      - check-success = linters
     priority: 550
 ```
 

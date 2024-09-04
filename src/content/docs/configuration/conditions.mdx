@@ -61,7 +61,7 @@ strings, numbers, or booleans, depending on the attribute being evaluated.
 
 For example, consider the following condition:
 
-`#approved-reviews-by>=2`
+`#approved-reviews-by >= 2`
 
 In this condition:
 
@@ -199,7 +199,7 @@ Here is a list of the available operators:
 For example, let's consider a condition that requires a pull request to have
 a specific label:
 
-`label=bugfix`
+`label = bugfix`
 
 In this condition:
 
@@ -221,37 +221,37 @@ For example, the `label` attribute is a list of string containing the names
 of the label attached to a pull request. With a pull request whose labels are
 `(bug, work-in-progress)`, then:
 
-- `label=work-in-progress` is **true** because there is a label named
+- `label = work-in-progress` is **true** because there is a label named
   `work-in-progress`.
 
-- `label=enhancement` is **false** because there is no label named
+- `label = enhancement` is **false** because there is no label named
   `enhancement`.
 
-- `label!=work-in-progress` is **false** because there is a label named
+- `label != work-in-progress` is **false** because there is a label named
   `work-in-progress`.
 
-- `label~=^work` is **true** because there is a label matching the regular
+- `label ~= ^work` is **true** because there is a label matching the regular
   expression `^work`.
 
-- `-label~=^work` is **false** because there is a label matching the regular
+- `-label ~= ^work` is **false** because there is a label matching the regular
    expression `^work` but the condition is reversed with the `-` prefix.
 
 The same applies for the `files` attribute — which contains the list of
 modified files:
 
-- `files=README` is **true** if the file `README` is modified in the pull
+- `files = README` is **true** if the file `README` is modified in the pull
   request.
 
-- `files!=README` is **true** if the file `README` is not modified in the pull
+- `files != README` is **true** if the file `README` is not modified in the pull
   request.
 
-- `files~=^src/` is **true** if any files in the `src` directory is modified in
+- `files ~= ^src/` is **true** if any files in the `src` directory is modified in
   the pull request.
 
-- `-files~=^src/` is **true** if none of the files that are modified are in the
+- `-files ~= ^src/` is **true** if none of the files that are modified are in the
   `src` directory.
 
-- `files~=^(README.md|CONTRIBUTING.md)$` is **true** if the file `README.md`
+- `files ~= ^(README.md|CONTRIBUTING.md)$` is **true** if the file `README.md`
   **or** `CONTRIBUTING.md` is modified in the pull requests.
 
 ### Examples with Operators
@@ -264,7 +264,7 @@ pull request:
 ```yaml
 - name: Rule for milestone "v1.0"
   conditions:
-    - milestone="v1.0"
+    - milestone = v1.0
   actions:
     # Your actions here
 ```
@@ -279,7 +279,7 @@ modified in the pull request is less than or equal to 50:
 ```yaml
 - name: Rule for small changes
   conditions:
-    - "#files<=50"
+    - "#files <= 50"
   actions:
     # Your actions here
 ```
@@ -293,7 +293,7 @@ have the specified labels:
 ```yaml
 - name: Rule when not a bug
   conditions:
-    - label!=bug
+    - label != bug
   actions:
     # Your actions here
 ```
@@ -321,8 +321,8 @@ pull_request_rules:
   - name: Merge when all conditions are met
     conditions:
       - and:
-        - "#approved-reviews-by>=2"
-        - "check-success=test job"
+        - "#approved-reviews-by >= 2"
+        - "check-success = test job"
     actions:
       merge:
         method: merge
@@ -345,8 +345,8 @@ pull_request_rules:
   - name: Merge when either condition is met
     conditions:
       - or:
-        - "#approved-reviews-by>=2"
-        - "check-success=test job"
+        - "#approved-reviews-by >= 2"
+        - "check-success = test job"
     actions:
       merge:
         method: merge
