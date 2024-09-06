@@ -39,8 +39,8 @@ your Mergify rules. Here's a simple example:
 pull_request_rules:
   - name: Automatically merge when Jenkins build succeeds
     conditions:
-      - check-success=continuous-integration/jenkins/pr-merge  # Change this to match your Jenkins check name
-      - "#approved-reviews-by>=1"
+      - check-success = continuous-integration/jenkins/pr-merge  # Change this to match your Jenkins check name
+      - "#approved-reviews-by >= 1"
     actions:
       merge:
         method: merge

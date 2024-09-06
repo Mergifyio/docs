@@ -56,29 +56,29 @@ Here’s a simplified example where Rush has split a project into `projectA`,
 partition_rules:
   - name: projectA
     conditions:
-      - files~=^apps/projectA
+      - files ~= ^apps/projectA
 
   - name: projectB
     conditions:
-      - files~=^apps/projectB
+      - files ~= ^apps/projectB
 
   - name: projectC
     conditions:
-      - files~=^apps/projectC
+      - files ~= ^apps/projectC
 
 queue_rules:
   - name: default
     merge_conditions:
       - and:
         - or:
-          - partition-name!=projectA
-          - check-success=ciA
+          - partition-name != projectA
+          - check-success = ciA
         - or:
-          - partition-name!=projectB
-          - check-success=ciB
+          - partition-name != projectB
+          - check-success = ciB
         - or:
-          - partition-name!=projectC
-          - check-success=ciC
+          - partition-name != projectC
+          - check-success = ciC
 ```
 
 In this configuration:

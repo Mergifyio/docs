@@ -34,8 +34,8 @@ your Mergify rules. Here's a simple example:
 pull_request_rules:
   - name: Automatically merge when TeamCity build succeeds
     conditions:
-      - check-success=TeamCity  # Change this to match your TeamCity check name
-      - "#approved-reviews-by>=1"
+      - check-success = TeamCity  # Change this to match your TeamCity check name
+      - "#approved-reviews-by >= 1"
     actions:
       merge:
         method: merge

@@ -50,12 +50,12 @@ configuration:
 pull_request_rules:
   - name: Automatically merge when GitHub Actions jobs succeed
     conditions:
-       - check-success=changelog_sync
-       - check-success=actionlint
-       - check-success=docker-onpremise
-       - check-success=docker-saas
-       - check-success=docker-label
-       - check-success=add-linear-author-as-reviewer
+       - check-success = changelog_sync
+       - check-success = actionlint
+       - check-success = docker-onpremise
+       - check-success = docker-saas
+       - check-success = docker-label
+       - check-success = add-linear-author-as-reviewer
     actions:
       merge:
         method: merge

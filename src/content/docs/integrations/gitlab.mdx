@@ -47,8 +47,8 @@ An illustrative example would be:
 pull_request_rules:
   - name: Auto-merge when GitLab CI build is successful
     conditions:
-      - check-success=gitlab/ci-pipeline  # Adjust this to match your GitLab CI check name
-      - "#approved-reviews-by>=1"
+      - check-success = gitlab/ci-pipeline  # Adjust this to match your GitLab CI check name
+      - "#approved-reviews-by >= 1"
     actions:
       merge:
         method: merge

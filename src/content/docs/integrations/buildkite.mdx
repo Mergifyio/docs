@@ -45,8 +45,8 @@ Here's a simple example:
 pull_request_rules:
   - name: Automatically merge when Buildkite build succeeds
     conditions:
-      - check-success=buildkite/github-test  # Change this to match your Buildkite check name
-      - "#approved-reviews-by>=1"
+      - check-success = buildkite/github-test  # Change this to match your Buildkite check name
+      - "#approved-reviews-by >= 1"
     actions:
       merge:
         method: merge

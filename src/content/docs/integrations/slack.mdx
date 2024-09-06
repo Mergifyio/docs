@@ -43,8 +43,8 @@ fails and the label is "hotfix":
 pull_request_rules:
   - name: Notify author on CI failure for hotfixes
     conditions:
-      - "#check-failure>0"
-      - "label=hotfix"
+      - "#check-failure > 0"
+      - "label = hotfix"
     actions:
       comment:
         message: "@{{author}} :warning: The CI failed on this hotfix PR. Please review the issues and address them."
