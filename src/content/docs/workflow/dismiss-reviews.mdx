@@ -31,8 +31,8 @@ main branch with a "re-review" label:
 pull_request_rules:
   - name: dismiss reviews when new commits are pushed, if the label "re-review" is present
     conditions:
-      - base=main
-      - label=re-review
+      - base = main
+      - label = re-review
     actions:
       dismiss_reviews:
 ```
@@ -46,8 +46,8 @@ their code:
 pull_request_rules:
   - name: remove outdated reviews for non trusted authors
     conditions:
-      - base=main
-      - author!=@mytrustedteam
+      - base = main
+      - author != @mytrustedteam
     actions:
       dismiss_reviews:
 ```
@@ -62,7 +62,7 @@ changes:
 pull_request_rules:
   - name: remove reviews from the bot when the PR is updated
     conditions:
-      - base=main
+      - base = main
     actions:
       dismiss_reviews:
         approved:
@@ -81,7 +81,7 @@ snippet:
 pull_request_rules:
   - name: dismiss reviews when review is requested
     conditions:
-      - base=main
+      - base = main
     actions:
       dismiss_reviews:
         approved: from_requested_reviewers

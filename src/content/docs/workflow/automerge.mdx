@@ -50,8 +50,8 @@ steps:
    pull_request_rules:
      - name: Automatic merge when CI passes and reviews approve
        conditions:
-         - "#approved-reviews-by>=1"
-         - check-success=CI # replace "CI" with the name of your CI status check
+         - "#approved-reviews-by >= 1"
+         - check-success = CI # replace "CI" with the name of your CI status check
        actions:
          merge:
            method: merge
@@ -114,10 +114,10 @@ conditions:
 
 **Do not** use conditions such as:
 
-- `#check-failure=0`, because this will be true as soon as the pull request is
-  created and before any service report its status (see point 2. above).
+- `#check-failure = 0`, because this will be true as soon as the pull request
+  is created and before any service report its status (see point 2. above).
 
-- `check-success~=build` while expecting this to wait for "all" status checks
+- `check-success ~= build` while expecting this to wait for "all" status checks
   that have `build` in their name (see point 1. and 2.above).
 
 Such conditions won't do what you want them to do.
@@ -141,8 +141,8 @@ meet certain criteria. Here's how you can set this up:
    pull_request_rules:
      - name: Automatic merge when CI passes and reviews approve
        conditions:
-         - "#approved-reviews-by>=2"
-         - check-success=CI # replace "CI" with the name of your CI status check
+         - "#approved-reviews-by >= 2"
+         - check-success = CI # replace "CI" with the name of your CI status check
        actions:
          merge:
            method: merge
@@ -156,9 +156,9 @@ meet certain criteria. Here's how you can set this up:
    pull_request_rules:
      - name: Automatic merge when CI passes and reviews approve, unless 'do-not-merge' label is present
        conditions:
-         - "#approved-reviews-by>=2"
-         - check-success=CI # replace "CI" with the name of your CI status check
-         - label!=do-not-merge
+         - "#approved-reviews-by >= 2"
+         - check-success = CI # replace "CI" with the name of your CI status check
+         - label != do-not-merge
        actions:
          merge:
            method: merge
@@ -186,15 +186,15 @@ Here's an example of how this might look in your Mergify configuration file:
 pull_request_rules:
   - name: Automatic merge when CI passes and reviews approve
     conditions:
-      - "#approved-reviews-by>=2"
-      - check-success=CI # replace "CI" with the name of your CI status check
+      - "#approved-reviews-by >= 2"
+      - check-success = CI # replace "CI" with the name of your CI status check
     actions:
       queue:
         merge_method: merge
 ```
 
 In this case, when a pull request meets the conditions
-(`#approved-reviews-by>=2` and `check-success=CI`), it is added to the merge
+(`#approved-reviews-by >= 2` and `check-success = CI`), it is added to the merge
 queue. Once it's at the front of the queue, Mergify will automatically merge it
 into the target branch and then move on to the next pull request in the queue.
 

@@ -24,8 +24,8 @@ requests are reviewed in your repository.
 pull_request_rules:
   - name: automatic approval
     conditions:
-      - check-success=myfirstCIname
-      - check-success=mysecondCIname
+      - check-success = myfirstCIname
+      - check-success = mysecondCIname
     actions:
       review:
         type: APPROVE
@@ -51,7 +51,7 @@ pull request created by `dependabot` with a rule such as:
 pull_request_rules:
   - name: automatic approval for Dependabot pull requests
     conditions:
-      - author=dependabot[bot]
+      - author = dependabot[bot]
     actions:
       review:
         type: APPROVE

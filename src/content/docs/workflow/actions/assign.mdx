@@ -36,7 +36,7 @@ Below is an example of how to use the `assign` action:
 pull_request_rules:
   - name: assign PR to a user
     conditions:
-      - "#files=1"
+      - "#files = 1"
     actions:
       assign:
         add_users:
@@ -53,7 +53,7 @@ to its author:
 pull_request_rules:
   - name: assign PR to its author
     conditions:
-      - "#files=1"
+      - "#files = 1"
     actions:
       assign:
         add_users:

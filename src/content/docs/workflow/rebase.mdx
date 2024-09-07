@@ -53,7 +53,7 @@ You can write an automation rule that does exactly this for you:
 pull_request_rules:
   - name: continuously rebase pull requests when it's labeled with `rebase`
     conditions:
-      - label=rebase
+      - label = rebase
     actions:
       rebase:
 ```
@@ -67,7 +67,7 @@ the rebase is done:
 pull_request_rules:
   - name: rebase pull requests once when it's labeled with `rebase`
     conditions:
-      - label=rebase
+      - label = rebase
     actions:
       rebase: {}
       label:
@@ -86,8 +86,8 @@ commits. For example:
 pull_request_rules:
   - name: rebase pull request when it's more than 10 commits behind main
     conditions:
-      - base=main
-      - "#commits-behind>=10"
+      - base = main
+      - "#commits-behind >= 10"
     actions:
       rebase:
 ```
@@ -115,8 +115,8 @@ would only be done during a certain time frame, once a day.
 pull_request_rules:
   - name: rebase pull requests in the morning
     conditions:
-      - base=main
-      - "schedule=Mon-Fri 08:00-09:00[US/Pacific]"
+      - base = main
+      - "schedule = Mon-Fri 08:00-09:00[US/Pacific]"
     actions:
       rebase:
 ```

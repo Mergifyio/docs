@@ -30,7 +30,7 @@ To limit backport commands for pull requests coming from the `main` branch:
 commands_restrictions:
   backport:
     conditions:
-      - base=main
+      - base = main
 ```
 
 To limit backport commands usage to a specific team (or user):
@@ -39,7 +39,7 @@ To limit backport commands usage to a specific team (or user):
 commands_restrictions:
   backport:
     conditions:
-      - sender=@team
+      - sender = @team
 ```
 
 To limit backport commands for users with a specific permission on the
@@ -49,7 +49,7 @@ repository.
 commands_restrictions:
   backport:
     conditions:
-      - sender-permission>=write
+      - sender-permission >= write
 ```
 
 ## Default Restrictions

@@ -47,21 +47,21 @@ the partition(s) where the PR should be added.
 partition_rules:
   - name: projectA
     conditions:
-      - files~=^projectA/
+      - files ~= ^projectA/
 
   - name: projectB
     conditions:
-      - files~=^projectB/
+      - files ~= ^projectB/
 
 queue_rules:
   - name: default
     queue_conditions:
       - or:
-        - partition-name!=projectA
-        - check-success=ciA
+        - partition-name != projectA
+        - check-success = ciA
       - or:
-        - partition-name!=projectB
-        - check-success=ciB
+        - partition-name != projectB
+        - check-success = ciB
 ```
 
 {/* FIXME: screenshot! */}
@@ -88,21 +88,21 @@ partition_rules:
 
   - name: projectA
     conditions:
-      - files~=^projectA/
+      - files ~= ^projectA/
 
   - name: projectB
     conditions:
-      - files~=^projectB/
+      - files ~= ^projectB/
 
 queue_rules:
   - name: default
     queue_conditions:
       - or:
-        - partition-name!=projectA
-        - check-success=ciA
+        - partition-name != projectA
+        - check-success = ciA
       - or:
-        - partition-name!=projectB
-        - check-success=ciB
+        - partition-name != projectB
+        - check-success = ciB
 ```
 
 During this migration phase, if you manually merge a PR, Mergify will evaluate

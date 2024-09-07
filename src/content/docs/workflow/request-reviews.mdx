@@ -26,7 +26,7 @@ and then requests reviews from `user1`, `user2`, and `team1`.
 pull_request_rules:
   - name: request review from users and team when pull request is labeled with `review`
     conditions:
-      - label=review
+      - label = review
     actions:
       request_reviews:
         users:
@@ -48,7 +48,7 @@ Assign a Python expert to review changes in Python files.
 pull_request_rules:
   - name: ask jd to review changes on python files
     conditions:
-      - files~=\.py$
+      - files ~= \.py$
     actions:
       request_reviews:
         users:
@@ -63,7 +63,7 @@ For security-focused pull requests, you might want specialized teams to review.
 pull_request_rules:
   - name: ask the security teams to review security labeled PR
     conditions:
-      - label=security
+      - label = security
     actions:
       request_reviews:
         teams:
@@ -82,7 +82,7 @@ labeled as `review`.
 pull_request_rules:
   - name: randomly ask two members for review
     conditions:
-      - label=review
+      - label = review
     actions:
       request_reviews:
         users:
@@ -102,7 +102,7 @@ first. If changes affect critical components, senior members step in.
 pull_request_rules:
   - name: junior review for all PRs
     conditions:
-      - base=main
+      - base = main
     actions:
       request_reviews:
         users:
@@ -111,8 +111,8 @@ pull_request_rules:
 
   - name: senior review for critical components
     conditions:
-      - base=main
-      - files~=^critical/
+      - base = main
+      - files ~= ^critical/
     actions:
       request_reviews:
         users:
@@ -128,7 +128,7 @@ database-related files, request a review from the database expert.
 pull_request_rules:
   - name: database expert review for database-related changes
     conditions:
-      - files~=^database/
+      - files ~= ^database/
     actions:
       request_reviews:
         users:
@@ -144,7 +144,7 @@ overwhelmed.
 pull_request_rules:
   - name: balanced review assignment
     conditions:
-      - label=review
+      - label = review
     actions:
       request_reviews:
         users:
@@ -164,7 +164,7 @@ are changed, it's beneficial to get insights from another team.
 pull_request_rules:
   - name: cross-team review for core changes
     conditions:
-      - files~=^core/
+      - files ~= ^core/
     actions:
       request_reviews:
         teams:
@@ -182,8 +182,8 @@ team members.
 pull_request_rules:
   - name: escalate review after 48 hours of inactivity
     conditions:
-      - pushed-at>2 days
-      - "#review-requested=0"
+      - pushed-at > 2 days
+      - "#review-requested = 0"
     actions:
       request_reviews:
         users:
@@ -200,7 +200,7 @@ Allow authors to trigger specific domain reviews by adding labels.
 pull_request_rules:
   - name: on-demand database expert review
     conditions:
-      - label=request-db-review
+      - label = request-db-review
     actions:
       request_reviews:
         teams:
@@ -216,7 +216,7 @@ guidance.
 pull_request_rules:
   - name: mentor review for new dev
     conditions:
-      - author=newdev
+      - author = newdev
     actions:
       request_reviews:
         users:
@@ -232,7 +232,7 @@ review the changes.
 pull_request_rules:
   - name: multi-team review for critical changes
     conditions:
-      - files~=^critical/
+      - files ~= ^critical/
     actions:
       request_reviews:
         teams:
@@ -248,7 +248,7 @@ PRs marked as urgent get reviewed by a dedicated quick response team.
 pull_request_rules:
   - name: urgent review request
     conditions:
-      - label=urgent
+      - label = urgent
     actions:
       request_reviews:
         teams:
