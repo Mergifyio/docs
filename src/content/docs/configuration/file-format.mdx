@@ -110,17 +110,23 @@ the merge queue](/merge-queue/partitions).
 ### Defaults
 
 The `defaults` section provides a means to set configuration values that act as
-fallbacks for actions executed by both [pull request rules](/workflow/) and
-[commands](/commands). Instead of defining the same options repeatedly for
-different rules, you can specify them once in the defaults section. If a
-particular option is directly defined under `pull_request_rules`, it will take
-precedence; otherwise, the system resorts to the values defined in defaults.
+fallbacks for:
+- Actions executed by both [pull request rules](/workflow/) and [commands](/commands)
+- Configuration options for [queue rules](/merge-queue/)
+
+Instead of defining the same options repeatedly for different rules, you can specify
+them once in the defaults section. If a particular option is directly defined under
+`pull_request_rules` or `queue_rules`, it will take precedence; otherwise, the system
+resorts to the values defined in the `defaults` section.
 
 ```yaml
 defaults:
   actions:
     comment:
       bot_account: Autobot
+
+  queue_rule:
+    batch_size: 10
 
 pull_request_rules:
   - name: comment with default
@@ -129,6 +135,14 @@ pull_request_rules:
     actions:
       comment:
         message: I 💙 Mergify
+
+queue_rules:
+  - name: default
+    allow_inplace_checks: False
+
+  - name: default with smaller batch
+    allow_inplace_checks: False
+    batch_size: 2
 ```
 
 This configuration is equivalent to:
@@ -143,11 +157,22 @@ pull_request_rules:
         message: I 💙 Mergify
         bot_account: Autobot
 
+queue_rules:
+  - name: default
+    allow_inplace_checks: False
+    batch_size: 10
+
+  - name: default with smaller batch
+    allow_inplace_checks: False
+    batch_size: 2
 ```
 
 In the example, the `bot_account` value is taken from the `defaults` section,
 simplifying the `pull_request_rules` and ensuring consistent behavior across
 different rules.
+The same behavior applies for the `batch_size` option of the `queue_rules`, the
+default value of `10` gets applied to the queue rule `default` but not for the
+queue rule `default with smaller batch`, because it already has `batch_size: 2`.
 
 ### Shared
 
