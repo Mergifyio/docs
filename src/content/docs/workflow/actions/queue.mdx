@@ -24,7 +24,7 @@ checks](/merge-queue/speculative-checks), [batches](/merge-queue/batches), etc.
 pull_request_rules:
   - name: put PRs in queue
     conditions:
-      - base=main
+      - base = main
     actions:
       queue:
 ```
@@ -39,16 +39,16 @@ placed in the production queue. The pull request still needs to match the
 pull_request_rules:
   - name: put PRs in queue (rebase)
     conditions:
-      - base=main
-      - label=rebase
+      - base = main
+      - label = rebase
     actions:
       queue:
         merge_method: rebase
 
   - name: put PRs in queue (merge)
     conditions:
-      - base=main
-      - label!=rebase
+      - base = main
+      - label != rebase
     actions:
       queue:
         merge_method: merge

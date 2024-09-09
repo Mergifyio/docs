@@ -23,7 +23,7 @@ pull_request_rules:
   - name: delete head branch after merge if the label "cleanup" is present
     conditions:
       - merged
-      - "label=cleanup"
+      - label = cleanup
     actions:
       delete_head_branch:
 ```

@@ -24,7 +24,7 @@ let's say `do_not_touch.txt`, you could write a rule such as:
 pull_request_rules:
   - name: disallow changing a file
     conditions:
-      - files=do_not_touch.txt
+      - files = do_not_touch.txt
     actions:
       close:
         message: No PR can touch this file.

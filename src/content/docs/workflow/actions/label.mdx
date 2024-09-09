@@ -23,7 +23,7 @@ workflow more organized and efficient.
 pull_request_rules:
   - name: add "WIP" label when the title contains "WIP"
     conditions:
-      - title~=WIP
+      - title ~= WIP
     actions:
       label:
         toggle:
@@ -65,7 +65,7 @@ This rule toggle a label based on the failure status of a CI system.
 pull_request_rules:
   - name: toggle labels based on CI state
     conditions:
-      - check-failure=CI
+      - check-failure = CI
     actions:
       label:
         toggle:

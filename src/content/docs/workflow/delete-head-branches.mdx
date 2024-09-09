@@ -83,7 +83,7 @@ pull_request_rules:
   - name: delete doc-related branches post-merge
     conditions:
       - merged
-      - "files~=\.md$"
+      - "files ~= \.md$"
     actions:
       delete_head_branch:
 ```

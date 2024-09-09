@@ -38,8 +38,8 @@ behind their base branch, for example:
 pull_request_rules:
   - name: automatic update of pull requests where more 5 commits behind
     conditions:
-      - base=main
-      - "#commits-behind>5"
+      - base = main
+      - "#commits-behind > 5"
     actions:
       update:
 ```
@@ -57,7 +57,7 @@ pull_request_rules:
   - name: automatic update for PR marked as “keep-up-to-date“
     conditions:
       - -draft # filter-out draft PRs
-      - label="keep-up-to-date"
+      - label = keep-up-to-date
     actions:
       update:
 ```

@@ -54,7 +54,7 @@ Below is an example of how to use the `backport` action:
 pull_request_rules:
   - name: backport patches to the release branch and assign to original author
     conditions:
-      - label=backport
+      - label = backport
     actions:
       backport:
         branches:
@@ -76,7 +76,7 @@ Here's an example:
 pull_request_rules:
   - name: backport patches to the release branch
     conditions:
-      - label=backport
+      - label = backport
     actions:
       backport:
         branches:
@@ -85,10 +85,10 @@ pull_request_rules:
 
   - name: automatically merge backport if they pass tests
     conditions:
-      - author=mergify[bot]
-      - base~=^mergify/bp/
-      - head~=^release-1.
-      - check-success=continuous-integration
+      - author = mergify[bot]
+      - base ~= ^mergify/bp/
+      - head ~= ^release-1.
+      - check-success = continuous-integration
     actions:
       merge:
         method: merge
@@ -107,7 +107,7 @@ commits has been cherry-picked, you can implement the same thing with Mergify:
 pull_request_rules:
   - name: backport patches to the stable branch
     conditions:
-      - label=backport
+      - label = backport
     actions:
       backport:
         body: |

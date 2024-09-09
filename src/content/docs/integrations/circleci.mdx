@@ -38,8 +38,8 @@ your Mergify rules. Here's a simple example:
 pull_request_rules:
   - name: Automatically merge when CircleCI build succeeds
     conditions:
-      - "check-success=ci/circleci: test"  # Change this to match your CircleCI check name
-      - "#approved-reviews-by>=1"
+      - "check-success = ci/circleci: test"  # Change this to match your CircleCI check name
+      - "#approved-reviews-by >= 1"
     actions:
       merge:
         method: merge

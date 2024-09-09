@@ -137,8 +137,8 @@ queue_rules:
   - name: default
     speculative_checks: 3
     merge_conditions:
-      - "#approved-reviews-by>=2"
-      - check-success=Travis CI - Pull Request
+      - "#approved-reviews-by >= 2"
+      - check-success = test
 ```
 
 In the above example, Mergify will embark up to 3 PRs together for speculative

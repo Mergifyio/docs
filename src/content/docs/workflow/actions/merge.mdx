@@ -36,7 +36,7 @@ they could be bypassed.
 (see
 [branch_protection_injection_mode](/configuration/file-format/#queue-rules).
 For example, if you request your pull request to be approved by at least
-one person, Mergify will inject the `#approved-reviews-by>=1` condition.
+one person, Mergify will inject the `#approved-reviews-by >= 1` condition.
 
 <Image src={branchProtectionConditionsScreenshot} alt="Mergify Branch Protection Condition Injection" />
 
@@ -120,8 +120,8 @@ pull request that has passed its CI checks and has at least 2 approved reviews.
 pull_request_rules:
   - name: automatic merge when CI checks pass and at least 2 approved reviews
     conditions:
-      - check-success=test
-      - "#approved-reviews-by>=2"
+      - check-success = test
+      - "#approved-reviews-by >= 2"
     actions:
       merge:
         method: squash
@@ -139,8 +139,8 @@ attributes of the pull request to build the content of the commit message.
 pull_request_rules:
   - name: automatic merge when CI checks pass and at least 2 approved reviews
     conditions:
-      - check-success=test
-      - "#approved-reviews-by>=2"
+      - check-success = test
+      - "#approved-reviews-by >= 2"
     actions:
       merge:
         method: squash
@@ -168,8 +168,8 @@ message of a pull request:
 pull_request_rules:
   - name: automatic merge when CI checks pass and at least 2 approved reviews
     conditions:
-      - check-success=test
-      - "#approved-reviews-by>=2"
+      - check-success = test
+      - "#approved-reviews-by >= 2"
     actions:
       merge:
         method: squash

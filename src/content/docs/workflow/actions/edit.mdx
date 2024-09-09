@@ -25,7 +25,7 @@ for review.
 pull_request_rules:
   - name: convert to draft
     conditions:
-      - "#check-failure>0"
+      - "#check-failure > 0"
     actions:
       edit:
         draft: true

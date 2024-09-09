@@ -47,11 +47,11 @@ Here is a glimpse into the structure of a priority rule:
 priority_rules:
   - name: high priority
     conditions:
-      - label=urgent
+      - label = urgent
     priority: high
   - name: low priority
     conditions:
-      - label=refactor
+      - label = refactor
     priority: low
 ```
 
@@ -141,18 +141,18 @@ priority order in the queue.
 queue_rules:
   - name: default
     merge_conditions:
-      - "#approved-reviews-by>=2"
-      - check-success=TeamCity
+      - "#approved-reviews-by >= 2"
+      - check-success = TeamCity
     allow_checks_interruption: false
 
 priority_rules:
   - name: urgent
     conditions:
-      - label=urgent
+      - label = urgent
     priority: high
   - name: normal
     conditions:
-      - label=normal
+      - label = normal
     priority: low
 ```
 
@@ -180,7 +180,7 @@ For example:
 priority_rules:
   - name: extremely urgent
     conditions:
-      - label=critical
+      - label = critical
     priority: 5000
 ```
 
@@ -197,11 +197,11 @@ distinguish between a general set of important tasks (assigned a keyword like
 priority_rules:
   - name: important task
     conditions:
-      - label=important
+      - label = important
     priority: high
   - name: critical task
     conditions:
-      - label=critical
+      - label = critical
     priority: 5000
 ```
 
@@ -224,7 +224,7 @@ Here's an example that gives high priority to pull requests that modify the
 priority_rules:
   - name: core changes
     conditions:
-      - files~=^src/
+      - files ~= ^src/
     priority: high
 ```
 
