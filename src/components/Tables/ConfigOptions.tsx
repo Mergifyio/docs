@@ -51,6 +51,11 @@ function getTypeLink(ref: string): string | undefined {
 	return undefined;
 }
 
+function getItemFromSchema(schema: object, path: string): object {
+	const refPath = path.replace('#', ''); // Clean the path
+	return jsonpointer.get(schema, refPath);
+}
+
 /**
  * Resolves a JSON Schema item, following $refs until a complete type is found.
  * @param schema - The root JSON schema.
@@ -59,12 +64,8 @@ function getTypeLink(ref: string): string | undefined {
  */
 export function resolveSchema(schema: object, item: object): object {
 	if (item.$ref) {
-		// Resolve the $ref using jsonpointer
-		const refPath = item.$ref.replace('#', ''); // Clean the $ref path
-		const resolvedItem = jsonpointer.get(schema, refPath);
-
 		// Recursively resolve if the resolved item is another $ref
-		return resolveSchema(schema, resolvedItem);
+		return resolveSchema(schema, getItemFromSchema(schema, item.$ref));
 	} else {
 		// Return the item if it's a complete definition (not a $ref)
 		return item;
@@ -72,7 +73,7 @@ export function resolveSchema(schema: object, item: object): object {
 }
 
 function getTypeDescription(ref: object): string {
-	return resolveSchema(configSchema, ref).description;
+	return getItemFromSchema(configSchema, resolveSchema(configSchema, ref)).description;
 }
 
 export function getValueType(definition: any): React.ReactElement {
