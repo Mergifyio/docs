@@ -596,6 +596,11 @@
         "priority": {
           "description": "The priority of the pull request.",
           "$ref": "#/$defs/Priority"
+        },
+        "allow_checks_interruption": {
+          "type": "boolean",
+          "description": "Allow interrupting the ongoing checks when the pull request entering the queue has a higher priority than the queued one(s). If set to `false`, a pull request with higher priority will be inserted just after the pull requests that have checks running.",
+          "default": true
         }
       }
     },
@@ -853,7 +858,8 @@
           "description": "Branch protections conditions injection mode to use.\n- `queue` will inject branch protections conditions as required conditions for queuing and merging pull requests.\n- `merge` will inject branch protections conditions as required conditions only for merging pull requests.\n- `none` will disable branch protections. This mode is supported only on queues using a `merge_bot_account` with admin rights."
         },
         "allow_checks_interruption": {
-          "description": "Allow interrupting the ongoing checks when a pull request with higher priority enters in the queue. If false, pull request with higher priority will be inserted just after the pull requests that have checks running.",
+          "deprecated": true,
+          "description": "This attribute is deprecated in favor of `allow_checks_interruption` in the `priority_rules` at the top-level of the Mergify configuration file.\nAllow interrupting the ongoing checks when a pull request with higher priority enters in the queue. If false, pull request with higher priority will be inserted just after the pull requests that have checks running.",
           "type": "boolean",
           "default": true
         },
@@ -892,7 +898,8 @@
           "$ref": "#/$defs/Template"
         },
         "disallow_checks_interruption_from_queues": {
-          "description": "The list of higher priorities queue that are not allowed to interrupt the ongoing checks of this queue.",
+          "deprecated": true,
+          "description": "This attribute is deprecated in favor of `allow_checks_interruption` in the `priority_rules` at the top-level of the Mergify configuration file.\nThe list of higher priorities queue that are not allowed to interrupt the ongoing checks of this queue.",
           "$ref": "#/$defs/StringSet"
         },
         "draft_bot_account": {
