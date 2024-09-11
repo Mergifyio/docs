@@ -265,9 +265,10 @@ queue_rules:
 
 :::
 
-## Handling Batch Failure
+## Handling Batch Failure or Timeout
 
-When a batch fails, Mergify does not remove all its pull requests from the
+When a batch fails, or when the checks time out with the option
+`checks_timeout` on, Mergify does not remove all its pull requests from the
 queue. Instead, it takes additional steps to identify the problematic pull
 request and remove it from the queue.
 
