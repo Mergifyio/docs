@@ -121,8 +121,8 @@ export function getValueType(definition: any): React.ReactElement {
 				</a>
 			);
 		} else valueType = typeDescription;
-	} else if ('anyOf' in definition || 'oneOf' in definition) {
-		const def: any[] = definition.anyOf || definition.oneOf;
+	} else if ('anyOf' in definition || 'oneOf' in definition || 'allOf' in definition) {
+		const def: any[] = definition.anyOf || definition.oneOf || definition.allOf;
 		valueType = (
 			<>
 				{def.map((item: any, index) => {
