@@ -11,6 +11,7 @@ import mergeAfterBody from "../../images/merge-protections/merge-after.png"
 import dependsOnBody from "../../images/merge-protections/depends-on.png"
 import scheduleFreezeScreen from "../../images/merge-protections/schedule-freeze.png"
 import commentScreen from "../../images/merge-protections/schedule-freeze.png"
+import configurationChangedCheckBody from "../../images/merge-protections/configuration-changed-check.png"
 
 [GitHub's branch
 protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
@@ -93,6 +94,15 @@ You can use the `Merge-After` pull request header to merge a pull request after
 a certain date using our [timestamp format](/configuration/data-types#timestamp).
 
 <Image src={mergeAfterBody} alt="Using Merge-After in the pull request body on GitHub"/>
+
+### Mergify Configuration Changed
+
+This built-in rule prevents users from merging breaking configuration changes. If Mergify detects a change
+in the configuration, the pull request will need to validate the `Configuration changed` check.
+
+This rule is automatically added to your repository when you enable Merge Protections.
+
+<Image src={configurationChangedCheckBody} alt="Merge Configuration Changed check in the rules summary"/>
 
 ## Adding New Rules
 
