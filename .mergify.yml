@@ -66,7 +66,7 @@ queue_rules:
       - or:
           - and:
               - author=mergify-ci-bot
-              - head~=^(configuration-spec|openapi-types)-sync$
+              - head = json-schema-types-sync
               - "title~=^chore: sync"
           - and:
               - author=mergify-ci-bot
