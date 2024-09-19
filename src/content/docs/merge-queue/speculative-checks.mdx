@@ -30,12 +30,12 @@ set them up.
 
 The speculative checks functionality operates by grouping multiple pull
 requests together based on their order in the queue and the
-`speculative_checks` value set in your `queue_rules`. These PRs are then tested
+`max_parallel_checks` value set in your Mergify configuration file. These PRs are then tested
 together in a speculative manner, meaning they are combined and tested as if
 they were going to be merged.
 
 Consider a situation where you have 5 pull requests (PR #1 to PR #5) and
-`speculative_checks` is set to 3. In this case, Mergify would create three
+`max_parallel_checks` is set to 3. In this case, Mergify would create three
 temporary PRs:
 
 - Temporary PR #1: Combines PR #1
@@ -125,17 +125,18 @@ failures.
 
 ## Configuring Speculative Checks
 
-Configuring speculative checks requires the use of the `speculative_checks`
-setting in your `queue_rules`. The value for `speculative_checks` determines
+Configuring speculative checks requires the use of the `max_parallel_checks`
+setting in your Mergify configuration file. The value for `max_parallel_checks` determines
 the maximum number of PRs that can be embarked together for speculative
 checking.
 
 Here's a sample configuration:
 
 ```yaml
+max_parallel_checks: 3
+
 queue_rules:
   - name: default
-    speculative_checks: 3
     merge_conditions:
       - "#approved-reviews-by >= 2"
       - check-success = test
@@ -147,7 +148,7 @@ simply dictates the maximum number of PRs that can be scheduled together for
 simultaneous testing.
 
 Remember, speculative checks are optional and the use of this feature depends
-on your specific project needs. You may need to adjust the `speculative_checks`
+on your specific project needs. You may need to adjust the `max_parallel_checks`
 value depending on the CI resources available and the typical size and
 complexity of PRs in your project.
 
@@ -202,8 +203,8 @@ block the merge.
 ### Parallel Checks Limit
 
 You can set the number of parallel speculative checks by adjusting the
-`speculative_checks` value in `queue_rules`. The number can range from 1 to 20,
-depending on your requirements and available CI resources.
+`max_parallel_checks` value at the root of your Mergify configuration file.
+The value can range from 1 to 128, depending on your requirements and available CI resources.
 
 ### Queued PR Changes
 
