@@ -72,6 +72,13 @@
     "extends": {
       "type": "string"
     },
+    "max_parallel_checks": {
+      "type": "integer",
+      "description": "The maximum number of checks to run in parallel for the merge queue. Must be between 1 and 128.",
+      "default": 1,
+      "minimum": 1,
+      "maximum": 128
+    },
     "queue_rules": {
       "type": "array",
       "items": {
@@ -912,7 +919,7 @@
           "$ref": "#/$defs/Template"
         },
         "merge_method": {
-          "description": "Merge method to use. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to false.",
+          "description": "Merge method to use. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to false. Using this would also implicitely limit the number of `max_parallel_checks` to 1.",
           "$ref": "#/$defs/MergeMethod"
         },
         "priority_rules": {
@@ -938,7 +945,8 @@
           "default": "mergify/merge-queue/"
         },
         "speculative_checks": {
-          "description": "The maximum number of checks to run in parallel in the queue. Must be between 1 and 20.",
+          "description": "This attribute is deprecated in favor of `max_parallel_checks` at the top level of the Mergify configuration file.\nThe maximum number of checks to run in parallel in the queue. Must be between 1 and 20.",
+          "deprecated": true,
           "type": "number",
           "default": 1,
           "minimum": 1,
