@@ -133,7 +133,8 @@ checking.
 Here's a sample configuration:
 
 ```yaml
-max_parallel_checks: 3
+merge_queue:
+  max_parallel_checks: 3
 
 queue_rules:
   - name: default
@@ -203,7 +204,8 @@ block the merge.
 ### Parallel Checks Limit
 
 You can set the number of parallel speculative checks by adjusting the
-`max_parallel_checks` value at the root of your Mergify configuration file.
+`max_parallel_checks` value in the `merge_queue` section, at the root of your
+Mergify configuration file.
 The value can range from 1 to 128, depending on your requirements and available CI resources.
 
 ### Queued PR Changes
