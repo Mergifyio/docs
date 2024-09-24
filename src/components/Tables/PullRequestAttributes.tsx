@@ -24,7 +24,7 @@ export default function PullRequestAttributes({ staticAttributes }: Props) {
 				{attributes
 					.sort((a, b) => (a.key > b.key ? 1 : -1))
 					.map((attr) => {
-						const valueType = getValueType(attr);
+						const valueType = getValueType(configSchema, attr);
 
 						return (
 							<tr key={attr.key}>

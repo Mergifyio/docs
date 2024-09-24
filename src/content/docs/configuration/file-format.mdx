@@ -72,7 +72,7 @@ The top-level key `pull_request_rules` allows to automate your workflow by
 writing rules that execute actions. It must be a list of dictionary with the
 following keys:
 
-<OptionsTable name="PullRequestRule" />
+<OptionsTable def="PullRequestRuleModel" />
 
 Example:
 
@@ -93,14 +93,14 @@ pull_request_rules:
 The top-level key `queue_rules` allows to define the rules that reign over your
 [merge queues](/merge-queue).
 
-<OptionsTable name="QueueRule" />
+<OptionsTable def="QueueRuleModel" />
 
 ### Priority Rules
 
 The top-level key `priority rules` allows to define the rules that will determine
 which [priority](/merge-queue/priority) a pull request has when entering your merge queue.
 
-<OptionsTable name="PriorityRule" />
+<OptionsTable def="PriorityRuleModel" />
 
 ### Partition Rules
 
@@ -108,7 +108,7 @@ The top-level key `partition_rules` allows to split your repositories into
 independent partitions. This is especially useful when using a [monorepo with
 the merge queue](/merge-queue/partitions).
 
-<OptionsTable name="PartitionRule" />
+<OptionsTable def="PartitionRuleModel" />
 
 ### Defaults
 
@@ -190,8 +190,6 @@ settings from another repository, aiding in consistency and reducing
 duplication. This is achieved by using the `extends` keyword at the top of your
 configuration file and specifying the source repository. See [Extending
 Configuration Files](/configuration/sharing#extending-configuration-files).
-
-{/* <OptionsTable name="Extend" /> */}
 
 ## JSON Schema Specification
 

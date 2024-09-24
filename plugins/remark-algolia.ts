@@ -81,8 +81,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 					const action = element.attributes.find(
 						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'action'
 					).value;
-					const actionOptions =
-						configSchema?.$defs?.Actions?.properties?.[action]?.properties;
+					const actionOptions = configSchema?.$defs?.[action]?.properties;
 
 					tables.push({
 						node: JSON.stringify(element),
