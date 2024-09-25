@@ -86,7 +86,7 @@ export function getValueType(definition: any): React.ReactElement {
 			typeLink = getTypeLink(definition.items.$ref);
 			typeDescription = getTypeDescription(definition.items.$ref);
 		} else {
-			typeDescription = definition.items.type;
+			typeDescription = getValueType(definition.items);
 		}
 
 		if (typeLink !== undefined) {
@@ -99,11 +99,7 @@ export function getValueType(definition: any): React.ReactElement {
 				</>
 			);
 		} else {
-			valueType = (
-				<div
-					dangerouslySetInnerHTML={{ __html: renderMarkdown(`\`list of ${typeDescription}\``) }}
-				/>
-			);
+			valueType = <>list of {typeDescription}</>;
 		}
 	} else if (definition.$ref !== undefined) {
 		const typeLink = getTypeLink(definition.$ref);
