@@ -4,7 +4,6 @@ description: Set limitations on who can execute specific Mergify commands.
 ---
 
 import OptionsTable from '../../../components/Tables/OptionsTable';
-import { RootOptionsTable } from '../../../components/Tables/OptionsTable';
 
 Mergify commands can be a powerful tool to control and manage pull requests.
 However, in some scenarios, you might want to restrict who can use these
@@ -54,8 +53,8 @@ commands_restrictions:
 
 ## Default Restrictions
 
-<RootOptionsTable name="commands_restrictions" />
+<OptionsTable def="CommandsRestrictionsRulesModel" />
 
 ### Command Restriction Format
 
-<OptionsTable name="CommandRestriction" />
+<OptionsTable def="CommandRestrictionsModel" />

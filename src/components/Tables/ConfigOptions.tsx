@@ -1,6 +1,6 @@
 import React from 'react';
 import jsonpointer from 'jsonpointer';
-import configSchema from '../../../public/mergify-configuration-schema.json';
+import configSchema from '../../../public/mergify-configuration-schema-future-version.json';
 import { renderMarkdown } from './utils';
 
 const valueTypeLinks: { [key: string]: string } = {
@@ -14,12 +14,17 @@ const valueTypeLinks: { [key: string]: string } = {
 	Commit: '/configuration/data-types#commit',
 	CommitAuthor: '/configuration/data-types#commit-author',
 	RuleCondition: '/configuration/conditions',
+	ListOfRuleConditions: '/configuration/conditions',
+	CommandRestrictionsConditionsModel: '/configuration/conditions',
+	PullRequestRuleConditionsModel: '/configuration/conditions',
+	QueueRuleMergeConditionsModel: '/configuration/conditions',
+	PriorityRuleConditionsModel: '/configuration/conditions',
 	Duration: '/configuration/data-types#duration',
 	Schedule: '/configuration/data-types#schedule',
 	PriorityRule: '/merge-queue/priority#how-to-define-priority-rules',
-	GitHubActionsWorkflow: '/workflow/actions/github_actions#workflow-action',
-	GitHubActionsWorkflowDispatch: '/workflow/actions/github_actions#workflow-action-dispatch',
-	CommandRestriction: '/commands/restrictions#command-restriction-format',
+	GhaActionModelWorkflow: '/workflow/actions/github_actions#workflow-action',
+	GhaActionModelDispatch: '/workflow/actions/github_actions#workflow-action-dispatch',
+	CommandRestrictionsModel: '/commands/restrictions#command-restriction-format',
 	QueueDequeueReason: '/configuration/data-types#queue-dequeue-reason',
 	ReportModeArray: '/configuration/data-types#report-modes',
 };
@@ -29,6 +34,10 @@ export interface OptionDefinition {
 	default: string | boolean;
 	deprecated?: boolean;
 	$ref: any;
+}
+
+export interface Def {
+	def: keyof typeof configSchema.$defs;
 }
 
 /** We need to strip <em> tags when highlighted by algolia */
@@ -71,22 +80,21 @@ export function resolveSchema(schema: object, item: object): object {
 	}
 }
 
-function getTypeDescription(ref: object): string {
-	return getItemFromSchema(configSchema, resolveSchema(configSchema, ref)).description;
+function getType(schema: object, ref: object): string {
+	return getItemFromSchema(schema, resolveSchema(schema, ref));
 }
 
-export function getValueType(definition: any): React.ReactElement {
+export function getValueType(schema: object, definition: any): React.ReactElement {
 	let valueType = null;
-
 	if (definition.type === 'array') {
 		let typeLink: string;
 		let typeDescription: string;
 
 		if ('$ref' in definition.items) {
 			typeLink = getTypeLink(definition.items.$ref);
-			typeDescription = getTypeDescription(definition.items.$ref);
+			typeDescription = getType(schema, definition.items.$ref).title;
 		} else {
-			typeDescription = getValueType(definition.items);
+			typeDescription = getValueType(schema, definition.items);
 		}
 
 		if (typeLink !== undefined) {
@@ -105,7 +113,7 @@ export function getValueType(definition: any): React.ReactElement {
 		const typeLink = getTypeLink(definition.$ref);
 		const typeDescription = (
 			<div
-				dangerouslySetInnerHTML={{ __html: renderMarkdown(getTypeDescription(definition.$ref)) }}
+				dangerouslySetInnerHTML={{ __html: renderMarkdown(getType(schema, definition.$ref).title) }}
 			/>
 		);
 
@@ -133,7 +141,7 @@ export function getValueType(definition: any): React.ReactElement {
 
 					return (
 						<>
-							{getValueType(item)}
+							{getValueType(schema, item)}
 							{separator}
 						</>
 					);

@@ -1,17 +1,11 @@
-import configSchema from '../../../public/mergify-configuration-schema.json';
+import configSchema from '../../../public/mergify-configuration-schema-future-version.json';
 
-import { OptionDefinition } from './ConfigOptions';
+import { OptionDefinition, Def } from './ConfigOptions';
 import { OptionsTableBase } from './OptionsTable';
 
-interface Props {
-	/** Action's name to retrieve its options */
-	action: keyof typeof configSchema.$defs.Actions.properties;
-}
-
-export default function ActionOptionsTable({ action }: Props) {
-	const options = configSchema.$defs.Actions.properties[action].properties as {
+export default function ActionOptionsTable({ def }: Def) {
+	const options = configSchema.$defs[def].properties as {
 		[optionKey: string]: OptionDefinition;
 	};
-
-	return OptionsTableBase(options);
+	return OptionsTableBase(configSchema, options);
 }

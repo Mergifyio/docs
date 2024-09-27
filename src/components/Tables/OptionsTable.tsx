@@ -1,41 +1,17 @@
 import * as yaml from 'js-yaml';
 
-import configSchema from '../../../public/mergify-configuration-schema.json';
+import configSchema from '../../../public/mergify-configuration-schema-future-version.json';
 
-import { getValueType, OptionDefinition, resolveSchema } from './ConfigOptions';
+import { getValueType, OptionDefinition } from './ConfigOptions';
 import { renderMarkdown } from './utils';
 import Badge from '../Badge/Badge';
 
-type ObjectWithProperties<T> = {
-	properties: T;
-};
-type KeysWithProperties<T> = {
-	[K in keyof T]: T[K] extends ObjectWithProperties<any> ? K : never;
-}[keyof T];
-
-interface Props {
-	/** Name to retrieve its options */
-	name: KeysWithProperties<typeof configSchema.$defs>;
-	options?: { [optionKey: string]: OptionDefinition };
+export default function OptionsTable({ def }: Def) {
+	const options = configSchema.$defs[def].properties;
+	return OptionsTableBase(configSchema, options as any);
 }
 
-interface RootProps {
-	/** Name to retrieve its options */
-	name: KeysWithProperties<typeof configSchema.properties>;
-}
-
-export function RootOptionsTable({ name }: RootProps) {
-	const def = resolveSchema(configSchema, configSchema.properties[name]);
-	return OptionsTableBase(def.properties);
-}
-
-export default function OptionsTable({ name }: Props) {
-	const options = configSchema.$defs[name].properties;
-
-	return OptionsTableBase(options as any);
-}
-
-export function OptionsTableBase(options: OptionDefinition) {
+export function OptionsTableBase(schema: object, options: OptionDefinition) {
 	const hasDefaultValue = (definition: OptionDefinition) => definition.default !== undefined;
 
 	const shouldHideDefaultColumn = Object.entries(options).every(
@@ -56,52 +32,57 @@ export function OptionsTableBase(options: OptionDefinition) {
 				</tr>
 			</thead>
 			<tbody>
-				{Object.entries(options).map(([optionKey, definition]) => {
-					const valueType = getValueType(definition);
-					const { deprecated } = definition;
+				{Object.entries(options)
+					.sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+					.map(([optionKey, definition]) => {
+						const valueType = getValueType(schema, definition);
 
-					return (
-						<>
-							<tr style={{ position: 'relative' }}>
-								<td style={{ whiteSpace: 'nowrap' }}>
-									<code>{optionKey}</code>
-								</td>
-								<td>{valueType}</td>
-								{!shouldHideDefaultColumn && (
-									<td>
-										{hasDefaultValue(definition) && (
-											<pre>
-												<code
-													dangerouslySetInnerHTML={{
-														__html: yaml.dump(definition.default, {
-															noCompatMode: true,
-															lineWidth: -1,
-															quotingType: '"',
-															noRefs: true,
-														}),
-													}}
-												/>
-											</pre>
-										)}
+						const { deprecated } = definition;
+
+						return (
+							<>
+								<tr style={{ position: 'relative' }}>
+									<td style={{ whiteSpace: 'nowrap' }}>
+										<code>{optionKey}</code>
 									</td>
-								)}
-								{!shouldHideDeprecatedColumn && <td>{deprecated && <Badge>deprecated</Badge>}</td>}
-							</tr>
-							{definition.description !== undefined && (
-								<tr>
-									{/* FIXME: don't hardcode the border color like that */}
-									<td {...({ colSpan: shouldHideDefaultColumn ? '3' : '4' } as any)}>
-										<div
-											dangerouslySetInnerHTML={{
-												__html: renderMarkdown(definition.description),
-											}}
-										/>
-									</td>
+									<td>{valueType}</td>
+									{!shouldHideDefaultColumn && (
+										<td>
+											{hasDefaultValue(definition) && (
+												<pre>
+													<code
+														dangerouslySetInnerHTML={{
+															__html: yaml.dump(definition.default, {
+																noCompatMode: true,
+																lineWidth: -1,
+																quotingType: '"',
+																noRefs: true,
+															}),
+														}}
+													/>
+												</pre>
+											)}
+										</td>
+									)}
+									{!shouldHideDeprecatedColumn && (
+										<td>{deprecated && <Badge>deprecated</Badge>}</td>
+									)}
 								</tr>
-							)}
-						</>
-					);
-				})}
+								{definition.description !== undefined && (
+									<tr>
+										{/* FIXME: don't hardcode the border color like that */}
+										<td {...({ colSpan: shouldHideDefaultColumn ? '3' : '4' } as any)}>
+											<div
+												dangerouslySetInnerHTML={{
+													__html: renderMarkdown(definition.description),
+												}}
+											/>
+										</td>
+									</tr>
+								)}
+							</>
+						);
+					})}
 			</tbody>
 		</table>
 	);
