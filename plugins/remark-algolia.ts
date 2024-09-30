@@ -17,11 +17,16 @@ interface PageData {
 
 async function savePageToAlgolia(pageData: PageData) {
 	if (process.env.NODE_ENV !== 'production') return;
+	if (!process.env.ALGOLIA_WRITE_KEY) {
+		console.info('No Algolia write key found, skipping indexing');
+		return;
+	}
+		
 	console.info('Starting indexing on algolia...');
 
 	const client = algoliasearch(process.env.PUBLIC_ALGOLIA_APP_ID, process.env.ALGOLIA_WRITE_KEY);
 	const index = client.initIndex(process.env.PUBLIC_ALGOLIA_INDEX_NAME);
-
+	
 	console.info(`Indexing page: ${pageData.objectID}`);
 	await index.saveObject(pageData);
 }

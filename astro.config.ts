@@ -65,7 +65,7 @@ export default defineConfig({
 		smartypants: false,
 		remarkPlugins: [
 			remarkGraphvizPlugin(),
-			...(process.env.ALGOLIA_WRITE_KEY ? [remarkAlgolia()] : []),
+			remarkAlgolia(),
 			[
 				remarkSmartypants,
 				{
