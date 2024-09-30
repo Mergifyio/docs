@@ -1,4 +1,5 @@
 import { visit } from 'unist-util-visit';
+import futureConfigSchema from '../public/mergify-configuration-schema-future-version.json';
 import configSchema from '../public/mergify-configuration-schema.json';
 import { toString } from 'mdast-util-to-string';
 import algoliasearch from 'algoliasearch';
@@ -55,11 +56,12 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 		visit(tree, 'mdxJsxFlowElement', (element) => {
 			switch (element.name) {
 				case 'OptionsTable':
-					const name = element.attributes.find(
-						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'name'
+					const def = element.attributes.find(
+						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'def'
 					).value;
-					const optionsTableData = configSchema?.$defs?.[name]?.properties;
-
+					
+					const optionsTableData = futureConfigSchema?.$defs?.[def as string]?.properties;
+					
 					tables.push({
 						node: JSON.stringify(element),
 						data: JSON.stringify(optionsTableData),
@@ -78,10 +80,10 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 					break;
 
 				case 'ActionOptionsTable':
-					const action = element.attributes.find(
-						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'action'
+					const actionDef = element.attributes.find(
+						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'def'
 					).value;
-					const actionOptions = configSchema?.$defs?.[action]?.properties;
+					const actionOptions = configSchema?.$defs?.[actionDef as string]?.properties;
 
 					tables.push({
 						node: JSON.stringify(element),
