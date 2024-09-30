@@ -26,7 +26,6 @@ async function savePageToAlgolia(pageData: PageData) {
 
 	const client = algoliasearch(process.env.PUBLIC_ALGOLIA_APP_ID, process.env.ALGOLIA_WRITE_KEY);
 	const index = client.initIndex(process.env.PUBLIC_ALGOLIA_INDEX_NAME);
-	
 	console.info(`Indexing page: ${pageData.objectID}`);
 	await index.saveObject(pageData);
 }
