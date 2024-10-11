@@ -1,6 +1,6 @@
 import * as yaml from 'js-yaml';
 
-import configSchema from '../../../public/mergify-configuration-schema-future-version.json';
+import configSchema from '../../../public/mergify-configuration-schema.json';
 
 import { getValueType, OptionDefinition } from './ConfigOptions';
 import { renderMarkdown } from './utils';

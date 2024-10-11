@@ -1,32 +1,20 @@
 import React from 'react';
 import jsonpointer from 'jsonpointer';
-import configSchema from '../../../public/mergify-configuration-schema-future-version.json';
+import configSchema from '../../../public/mergify-configuration-schema.json';
 import { renderMarkdown } from './utils';
 
 const valueTypeLinks: { [key: string]: string } = {
-	TemplateArray: '/configuration/data-types#template',
-	UserArray: '/configuration/data-types#template',
 	Template: '/configuration/data-types#template',
-	LabelArray: '/configuration/data-types#template',
-	Timestamp: '/configuration/data-types#timestamp',
-	TimestampOrRelativeTimestamp: '/configuration/data-types#timestamp',
-	TimestampOrTimestampInterval: '/configuration/data-types#timestamp-interval',
 	Commit: '/configuration/data-types#commit',
 	CommitAuthor: '/configuration/data-types#commit-author',
-	RuleCondition: '/configuration/conditions',
 	ListOfRuleConditions: '/configuration/conditions',
 	CommandRestrictionsConditionsModel: '/configuration/conditions',
 	PullRequestRuleConditionsModel: '/configuration/conditions',
 	QueueRuleMergeConditionsModel: '/configuration/conditions',
 	PriorityRuleConditionsModel: '/configuration/conditions',
-	Duration: '/configuration/data-types#duration',
-	Schedule: '/configuration/data-types#schedule',
-	PriorityRule: '/merge-queue/priority#how-to-define-priority-rules',
 	GhaActionModelWorkflow: '/workflow/actions/github_actions#workflow-action',
 	GhaActionModelDispatch: '/workflow/actions/github_actions#workflow-action-dispatch',
 	CommandRestrictionsModel: '/commands/restrictions#command-restriction-format',
-	QueueDequeueReason: '/configuration/data-types#queue-dequeue-reason',
-	ReportModeArray: '/configuration/data-types#report-modes',
 	GitHubRepositoryPermission: '/configuration/data-types#github-repository-permissions',
 };
 

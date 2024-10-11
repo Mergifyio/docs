@@ -1,5 +1,5 @@
 import { visit } from 'unist-util-visit';
-import configSchema from '../public/mergify-configuration-schema-future-version.json';
+import configSchema from '../public/mergify-configuration-schema.json';
 import { toString } from 'mdast-util-to-string';
 import algoliasearch from 'algoliasearch';
 import type * as unified from 'unified';
