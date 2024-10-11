@@ -63,9 +63,9 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 					const def = element.attributes.find(
 						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'def'
 					).value;
-					
+
 					const optionsTableData = futureConfigSchema?.$defs?.[def as string]?.properties;
-					
+
 					tables.push({
 						node: JSON.stringify(element),
 						data: JSON.stringify(optionsTableData),
@@ -74,8 +74,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 					break;
 
 				case 'PullRequestAttributesTable':
-					const pullRequestAttributes = configSchema?.$defs?.PullRequestAttribute?.enum;
-
+			    const pullRequestAttributes = futureConfigSchema.$defs.PullRequestAttributes.properties;
 					tables.push({
 						node: JSON.stringify(element),
 						data: JSON.stringify(pullRequestAttributes),

@@ -1,14 +1,14 @@
-import configSchema from '../../../public/mergify-configuration-schema.json';
+import configSchema from '../../../public/mergify-configuration-schema-future-version.json';
 import { getValueType } from './ConfigOptions';
 
 import { renderMarkdown } from './utils';
 
 interface Props {
-	staticAttributes: typeof configSchema.$defs.PullRequestAttribute.enum;
+	staticAttributes: keyof typeof configSchema.$defs.PullRequestAttributes.properties;
 }
 
 export default function PullRequestAttributes({ staticAttributes }: Props) {
-	const attributes = staticAttributes ?? configSchema?.$defs?.PullRequestAttribute?.enum ?? [];
+	const attributes = staticAttributes ?? configSchema.$defs.PullRequestAttributes.properties;
 
 	return (
 		<table>
@@ -21,18 +21,18 @@ export default function PullRequestAttributes({ staticAttributes }: Props) {
 				</tr>
 			</thead>
 			<tbody>
-				{attributes
-					.sort((a, b) => (a.key > b.key ? 1 : -1))
-					.map((attr) => {
-						const valueType = getValueType(configSchema, attr);
+				{Object.entries(attributes)
+					.sort(([keyA, _valueA], [keyB, _valueB]) => (keyA > keyB ? 1 : -1))
+					.map(([key, value]) => {
+						const valueType = getValueType(configSchema, value);
 
 						return (
-							<tr key={attr.key}>
+							<tr key={key}>
 								<td>
-									<code>{attr.key}</code>
+									<code>{key}</code>
 								</td>
 								<td>{valueType}</td>
-								<td dangerouslySetInnerHTML={{ __html: renderMarkdown(attr.description) }} />
+								<td dangerouslySetInnerHTML={{ __html: renderMarkdown(value.description) }} />
 							</tr>
 						);
 					})}

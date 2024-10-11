@@ -27,6 +27,7 @@ const valueTypeLinks: { [key: string]: string } = {
 	CommandRestrictionsModel: '/commands/restrictions#command-restriction-format',
 	QueueDequeueReason: '/configuration/data-types#queue-dequeue-reason',
 	ReportModeArray: '/configuration/data-types#report-modes',
+	GitHubRepositoryPermission: '/configuration/data-types#github-repository-permissions',
 };
 
 export interface OptionDefinition {
