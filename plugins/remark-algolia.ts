@@ -1,6 +1,5 @@
 import { visit } from 'unist-util-visit';
-import futureConfigSchema from '../public/mergify-configuration-schema-future-version.json';
-import configSchema from '../public/mergify-configuration-schema.json';
+import configSchema from '../public/mergify-configuration-schema-future-version.json';
 import { toString } from 'mdast-util-to-string';
 import algoliasearch from 'algoliasearch';
 import type * as unified from 'unified';
@@ -64,7 +63,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 						(attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'def'
 					).value;
 
-					const optionsTableData = futureConfigSchema?.$defs?.[def as string]?.properties;
+					const optionsTableData = configSchema?.$defs?.[def as string]?.properties;
 
 					tables.push({
 						node: JSON.stringify(element),
@@ -74,7 +73,7 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 					break;
 
 				case 'PullRequestAttributesTable':
-			    const pullRequestAttributes = futureConfigSchema.$defs.PullRequestAttributes.properties;
+			    const pullRequestAttributes = configSchema.$defs.PullRequestAttributes.properties;
 					tables.push({
 						node: JSON.stringify(element),
 						data: JSON.stringify(pullRequestAttributes),
