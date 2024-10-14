@@ -4,7 +4,6 @@ import configSchema from '../../../public/mergify-configuration-schema.json';
 import { renderMarkdown } from './utils';
 
 const valueTypeLinks: { [key: string]: string } = {
-	Template: '/configuration/data-types#template',
 	Commit: '/configuration/data-types#commit',
 	CommitAuthor: '/configuration/data-types#commit-author',
 	ListOfRuleConditions: '/configuration/conditions',
@@ -16,6 +15,10 @@ const valueTypeLinks: { [key: string]: string } = {
 	GhaActionModelDispatch: '/workflow/actions/github_actions#workflow-action-dispatch',
 	CommandRestrictionsModel: '/commands/restrictions#command-restriction-format',
 	GitHubRepositoryPermission: '/configuration/data-types#github-repository-permissions',
+};
+
+const valueTypeFormatLinks: { [key: string]: string } = {
+	template: '/configuration/data-types#template',
 };
 
 export interface OptionDefinition {
@@ -160,6 +163,15 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
 				})}
 			</>
 		);
+	} else if ('format' in definition) {
+		const formatLink = valueTypeFormatLinks[definition.format];
+		if (formatLink !== undefined) {
+			valueType = (
+				<a color="primary" style={{ textDecoration: 'underline' }} href={formatLink}>
+					{definition.format}
+				</a>
+			);
+		}
 	} else {
 		valueType = <HighlightCode>{definition.type}</HighlightCode>;
 	}
