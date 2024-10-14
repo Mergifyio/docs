@@ -19,6 +19,8 @@ const valueTypeLinks: { [key: string]: string } = {
 
 const valueTypeFormatLinks: { [key: string]: string } = {
 	template: '/configuration/data-types#template',
+	'date-time': '/configuration/data-types#timestamp',
+	duration: '/configuration/data-types#duration',
 };
 
 export interface OptionDefinition {
