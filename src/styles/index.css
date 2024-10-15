@@ -359,6 +359,10 @@ code {
 	background-color: var(--theme-divider);
 }
 
+.theme-dark g#logo {
+	fill: white;
+}
+
 thead {
 	font-family: var(--font-body);
 	text-transform: uppercase;
