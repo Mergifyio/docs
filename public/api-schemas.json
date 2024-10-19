@@ -1598,10 +1598,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The opaque cursor of the current page. Must be extracted for RFC 5988 pagination links to get first/previous/next/last pages",
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages",
               "title": "Cursor"
             },
-            "description": "The opaque cursor of the current page. Must be extracted for RFC 5988 pagination links to get first/previous/next/last pages"
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages"
           },
           {
             "name": "per_page",
@@ -4421,10 +4421,18 @@
         ],
         "title": "CiIssuesTokenResponse"
       },
-      "Cursor": {
+      "Cursor_int_": {
         "properties": {
-          "_value": {
-            "title": " Value"
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
           },
           "forward": {
             "type": "boolean",
@@ -4433,10 +4441,10 @@
         },
         "type": "object",
         "required": [
-          "_value",
+          "value",
           "forward"
         ],
-        "title": "Cursor"
+        "title": "Cursor[int]"
       },
       "EventAssign": {
         "properties": {
