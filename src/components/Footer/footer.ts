@@ -35,16 +35,12 @@ export const productCategory: Category = {
 	title: 'Products',
 	links: [
 		{
-			text: 'Workflow Automation',
-			href: 'https://mergify.com/workflow-automation',
+			text: 'Merge Protections',
+			href: 'https://mergify.com/product/merge-protections',
 		},
 		{
 			text: 'Merge Queue',
-			href: 'https://mergify.com/merge-queue',
-		},
-		{
-			text: 'Integrations',
-			href: 'https://mergify.com/integrations',
+			href: 'https://mergify.com/product/merge-queue',
 		},
 		{
 			text: 'Pricing',
@@ -61,14 +57,6 @@ export const communityCategory: Category = {
 			href: 'https://docs.mergify.com',
 		},
 		{
-			text: 'Changelog',
-			href: 'https://changelog.mergify.com/',
-		},
-		{
-			text: 'Service Status',
-			href: 'https://status.mergify.com/',
-		},
-		{
 			text: 'Blog',
 			href: 'https://blog.mergify.com',
 		},
@@ -77,8 +65,8 @@ export const communityCategory: Category = {
 			href: 'https://slack.mergify.com',
 		},
 		{
-			text: 'Convince Your Manager',
-			href: 'https://mergify.com/convince-your-manager',
+			text: 'Discussions',
+			href: 'https://github.com/Mergifyio/mergify/discussions',
 		},
 	],
 };
@@ -87,12 +75,12 @@ export const helpCategory: Category = {
 	title: 'Help',
 	links: [
 		{
-			text: 'Slack',
-			href: 'https://slack.mergify.com',
+			text: 'Service Status',
+			href: 'https://status.mergify.com/',
 		},
 		{
-			text: 'Discussions',
-			href: 'https://github.com/Mergifyio/mergify/discussions',
+			text: 'Changelog',
+			href: 'https://changelog.mergify.com/',
 		},
 		{
 			text: 'Terms of Service',
