@@ -4694,6 +4694,20 @@
             ],
             "title": "Failure Id"
           },
+          "failure_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Ids"
+          },
           "job_name": {
             "type": "string",
             "title": "Job Name"
@@ -4721,6 +4735,7 @@
           "ci_issue_long_id",
           "timestamp",
           "failure_id",
+          "failure_ids",
           "job_name",
           "job_url",
           "job_completed_at"
@@ -4819,6 +4834,20 @@
             ],
             "title": "Failure Id"
           },
+          "failure_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Ids"
+          },
           "job_name": {
             "type": "string",
             "title": "Job Name"
@@ -4846,6 +4875,7 @@
           "ci_issue_long_id",
           "timestamp",
           "failure_id",
+          "failure_ids",
           "job_name",
           "job_url",
           "job_completed_at"
@@ -5158,6 +5188,20 @@
             ],
             "title": "Failure Id"
           },
+          "failure_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Ids"
+          },
           "job_name": {
             "type": "string",
             "title": "Job Name"
@@ -5185,6 +5229,7 @@
           "ci_issue_long_id",
           "timestamp",
           "failure_id",
+          "failure_ids",
           "job_name",
           "job_url",
           "job_completed_at"
