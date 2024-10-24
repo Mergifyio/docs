@@ -1237,14 +1237,17 @@
       "additionalProperties": false,
       "properties": {
         "name": {
+          "description": "The name of the rule",
           "title": "Name",
           "type": "string"
         },
         "if": {
-          "$ref": "#/$defs/MergeProtectionRuleConditionsModel"
+          "$ref": "#/$defs/MergeProtectionRuleConditionsModel",
+          "description": "The conditions to check before applying the rule"
         },
         "success_conditions": {
-          "$ref": "#/$defs/MergeProtectionRuleConditionsModel"
+          "$ref": "#/$defs/MergeProtectionRuleConditionsModel",
+          "description": "The conditions to check to validate the rule"
         },
         "description": {
           "anyOf": [
@@ -1256,6 +1259,7 @@
             }
           ],
           "default": null,
+          "description": "A description of the rule",
           "title": "Description"
         }
       },
