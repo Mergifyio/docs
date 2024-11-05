@@ -4,35 +4,45 @@ description: Learn how you can monitor Mergify using Datadog.
 ---
 
 import { Image } from "astro:assets"
-import datadogDashboadScreenshot from "../../images/integrations/datadog/dashboard.png"
-import Button from '../../../components/Button.astro';
+import datadogDashboardScreenshot from "../../images/integrations/datadog/dashboard.png"
 import datadogLogo from "../../images/integrations/datadog/logo.svg"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+import IntegrationPageScreenshot from "../../images/integrations/datadog/integration.png"
+import DDIntegrationPageScreenshot from "../../images/integrations/datadog/datadog-integration.png"
+import DDIntegrationDetailsPageScreenshot from "../../images/integrations/datadog/datadog-integration-details.png"
 
-<IntegrationLogo src={datadogLogo} alt="DataDog logo"/>
+<IntegrationLogo src={datadogLogo} alt="Datadog logo"/>
 
 Mergify now seamlessly integrates with Datadog, enabling you to monitor your
 automation workflows and gain actionable insights from your development
 process. This integration empowers teams with metrics from Mergify, all
 visualized in your Datadog dashboard.
 
+You can refer to [Datadog documentation if
+needed](https://docs.datadoghq.com/integrations/mergify_oauth/).
+
 ## Getting Started
 
-Before diving into the features, you'll need to set up the integration:
+Before diving into the features, you'll need to set up the integration.
 
-<Button href="https://docs.datadoghq.com/integrations/mergify/" colorScheme='blue' 
-style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: '2em', display: 'block'}}>
-  Deploy Mergify plugin for Datadog agent
-</Button>
+1. Connect to Mergify dashboard and go to [`Integrations →
+   Datadog`](https://dashboard.mergify.com/integrations/datadog).
+   <Image src={IntegrationPageScreenshot} alt="Mergify Integration page"/>
+
+2. Follow the instructions to connect your Datadog account to Mergify.
+   <Image src={DDIntegrationPageScreenshot} alt="Mergify Datadog Integration page"/>
+
+3. Edit the list of repositories and branches that you want to monitor.
+   <Image src={DDIntegrationDetailsPageScreenshot} alt="Mergify Datadog Integration page details"/>
 
 ## Features and Benefits
 
 ### Real-Time Monitoring
 
+<Image src={datadogDashboardScreenshot} alt="Datadog dashboard with Mergify's metrics"/>
+
 Monitor your Mergify activity in real-time. Track the number of pull requests
 queued, and any issues or bugs that arise during the check process.
-
-<Image src={datadogDashboadScreenshot} alt="Datadog dashboard with mergify's metrics"/>
 
 ### Customizable Dashboards
 
