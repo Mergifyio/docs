@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { GoGitPullRequest } from 'react-icons/go';
-import { TbPackages, TbCrystalBall } from 'react-icons/tb';
+import { TbPackages } from 'react-icons/tb';
+import { TiFlowParallel } from 'react-icons/ti';
 import NumberInput from './NumberInput';
 import './MergeQueueCalculator.scss';
 import Stat from './Stat';
@@ -79,8 +80,8 @@ function MergeQueueCalculator() {
 						<div className="stats">
 							<Stat
 								helperText="PR tested concurrently"
-								icon={TbCrystalBall}
-								label="Optimal speculative checks"
+								icon={TiFlowParallel}
+								label="Optimal parallel checks"
 								stat={speculativeChecks}
 							/>
 							<Stat

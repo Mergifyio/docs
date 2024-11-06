@@ -50,7 +50,8 @@ import {
 	SiRenovatebot,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
-import { TbCrystalBall, TbPackages, TbBike, TbGitBranch } from 'react-icons/tb';
+import { TbPackages, TbBike, TbGitBranch } from 'react-icons/tb';
+import { TiFlowParallel } from 'react-icons/ti';
 
 import { v5 } from 'uuid';
 import MergeQueueIcon from '../components/MergeQueueIcon.astro';
@@ -153,9 +154,9 @@ const navItems: NavItem[] = [
 			{ title: 'Pause', path: '/merge-queue/pause', icon: FaRegCirclePause },
 			{ title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
 			{
-				title: 'Speculative Checks',
-				path: '/merge-queue/speculative-checks',
-				icon: TbCrystalBall,
+				title: 'Parallel Checks',
+				path: '/merge-queue/parallel-checks',
+				icon: TiFlowParallel,
 			},
 			{ title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
 			{ title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },

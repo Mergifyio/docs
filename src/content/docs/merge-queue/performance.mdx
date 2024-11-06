@@ -43,11 +43,11 @@ Based on this trade-off, there are 3 scenarios that you can choose from:
   time.
 
 - **Reliable and Fast:** If you aim to reduce latency and maximize throughput
-  without considering CI costs, enable **[speculative
-  checks](/merge-queue/speculative-checks)**. This feature lets Mergify test
-  pull requests in parallel, predicting potential merges and executing CI runs
-  simultaneously. Speculative checks can slightly increase CI cost: there might
-  be certain scenarios that are tested and whose results won't be used if a pull
+  without considering CI costs, enable **[parallel speculative
+  checks](/merge-queue/parallel-checks)**. This feature lets Mergify test pull
+  requests in parallel, predicting potential merges and executing CI runs
+  simultaneously. Parallel checks can slightly increase CI cost: there might be
+  certain scenarios that are tested and whose results won't be used if a pull
   request ahead in the queue fails.
 
 - **Cheap and Fast:** By using [batch mode](/merge-queue/batches), you can merge
@@ -55,21 +55,21 @@ Based on this trade-off, there are 3 scenarios that you can choose from:
   request that are not tested individually. There is therefore a theoretical
   risk than a hidden failure is merged, while the whole batch passes the CI.
   
-You can also combine speculative checks and batching to achieve a balanced
-approach between reliability, cheapness, and velocity. This configuration
-offers a mix of both strategies, allowing you to test multiple batches of
-requests concurrently.
+You can also combine parallel speculative checks and batching to achieve a
+balanced approach between reliability, cheapness, and velocity. This
+configuration offers a mix of both strategies, allowing you to test multiple
+batches of requests concurrently.
 
-### Determining the Right Configuration for Speculative Checks and Batching
+### Determining the Right Configuration for Parallel Checks and Batching
 
 Optimizing the performance of your merge queue involves fine-tuning the number
-of speculative checks and the size of batches. The right configuration balances
+of parallel checks and the size of batches. The right configuration balances
 throughput, latency, and CI resource consumption. Here's a guide to help you
 determine the optimal settings:
 
 1. **Expected Merge Throughput**: Analyze your historical data to gauge the
    average number of merges per hour or per day. This will help set a benchmark
-   for speculative checks and batch size, ensuring that pull requests are
+   for parallel checks and batch size, ensuring that pull requests are
    processed at the desired rate.
 
 2. **Queue Latency**: Consider the typical wait time in the queue for a PR. Aim
@@ -83,18 +83,18 @@ determine the optimal settings:
    queue remains effective during high activity periods.
 
 4. **CI Resource Availability**: Evaluate the resources allocated to your CI
-   environment. If resources are abundant, you can lean towards higher
-   speculative checks. Conversely, if resources are limited, consider a
-   conservative approach to ensure that CI doesn't become a bottleneck.
+   environment. If resources are abundant, you can lean towards higher parallel
+   checks. Conversely, if resources are limited, consider a conservative
+   approach to ensure that CI doesn't become a bottleneck.
 
 5. **CI Job Duration**: The execution time of CI jobs can significantly
    influence your choice. Faster CI jobs might permit a higher number of
-   speculative checks, as potential reruns won't lead to major delays. On the
+   parallel checks, as potential reruns won't lead to major delays. On the
    other hand, longer CI jobs necessitate a more conservative setting.
 
 6. **Stability of Changes**: Reflect on the typical quality of pull requests in
    your repository. For repositories with a high rate of stable PRs, you might
-   increase speculative checks or batch sizes. However, for those with frequent
+   increase parallel checks or batch sizes. However, for those with frequent
    unstable PRs, a conservative approach might be more suitable.
 
 7. **Team Size & Activity Patterns**: The size of your team and their activity
@@ -104,7 +104,7 @@ determine the optimal settings:
    performance.
 
 8. **Feedback Loop for Developers**: Ensure that the chosen configuration
-   promotes a quick feedback loop. While speculative checks and batching can
+   promotes a quick feedback loop. While parallel checks and batching can
    enhance queue performance, they shouldn't delay critical feedback to
    developers about the state of their PR.
 
@@ -145,7 +145,7 @@ process.
 :::note
   - This calculator optimizes CI usage and throughput but not latency. 
     If you want to further optimize latency, you need to increase 
-    the number of speculative checks.
+    the number of parallel checks.
 
   - The average latency computing assumes that the number of PR merged per hour 
     enters the queue at the beginning of the hour.

@@ -126,28 +126,30 @@ With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
 
-## Batch Merging and Speculative Checks
+## Batch Merging and Parallel Checks
 
-Batch merging and speculative checks are two powerful features that work in
+Batch merging and parallel checks are two powerful features that work in
 synergy to improve the efficiency of your merge queue.
 
 Batch merging allows Mergify to test multiple pull requests together as a
 single unit, reducing the amount of time waiting for individual pull request
-tests to complete. On the other hand, [speculative checks](/merge-queue/speculative-checks)
+tests to complete. On the other hand, [parallel checks](/merge-queue/parallel-checks)
 allow for multiple batches to be tested in parallel, further speeding up the
 merge process.
 
 When both these features are enabled, Mergify creates multiple batches of pull
 requests (according to the `batch_size` option) and then runs tests on several
-of these batches at the same time (as defined by the `speculative_checks`
+of these batches at the same time (as defined by the `parallel_checks`
 option). If any pull request within a batch fails, [Mergify identifies the
 culprit through a binary search, removes it from the queue, and continues
 processing the rest of the queue](#handling-batch-failure).
 
 ```yaml
+merge_queue:
+  max_parallel_check: 2
+
 queue_rules:
   - name: default
-    speculative_checks: 2
     batch_size: 3
     ...
 ```
@@ -157,13 +159,13 @@ to 3 pull requests, and test them in parallel.
 
 Combining these two features allows you to optimize the throughput of your
 merge queue. You can increase the batch size to merge more pull requests
-concurrently, while also increasing the number of speculative checks to test
+concurrently, while also increasing the number of parallel checks to test
 more batches in parallel. This minimizes idle time and makes full use of your
 CI resources.
 
 Suppose your queue has 7 pull requests waiting, and your CI pipeline takes
 about 10 minutes to complete. If you set `batch_size` to 3 and
-`speculative_checks` to 2, Mergify would create 2 batches, each containing 3
+`max_parallel_checks` to 2, Mergify would create 2 batches, each containing 3
 pull requests. These batches are then tested in parallel.
 
 ```dot class="graph"
@@ -277,13 +279,13 @@ This is how it works:
 1. **Splitting the batch**: If a batch fails, all subsequent batches are deemed
    to fail as well, are canceled and put back into the queue. The system splits
    the failed batch to isolate the problematic pull request. The size of these
-   new batches is determined by the `speculative_checks` parameter. By default,
-   the batch is split into two; however, if `speculative_checks` is set to a
-   value greater than 1, it dictates the number of batches the failed batch
-   should be divided into.
+   new batches is determined by the `max_parallel_checks` parameter. By
+   default, the batch is split into two; however, if `max_parallel_checks` is
+   set to a value greater than 1, it dictates the number of batches the failed
+   batch should be divided into.
 
 2. **Testing the new batches**: After splitting, the first new batch is
-   immediately retested, while others are queued. If `speculative_checks` is
+   immediately retested, while others are queued. If `max_parallel_checks` is
    greater than 1, the system will also test subsequent batch split at the same
    time. This continues until the split is done.
 
@@ -310,8 +312,8 @@ combination of them. Mergify learned that the combination
 `[PR1 + PR2 + PR3 + PR4 + PR5 + PR6]` does not work; it now needs to test parts
 of this combination.
 
-With `speculative_checks` set to 3, the system will aim to split the batch into
-3 parts:
+With `max_parallel_checks` set to 3, the system will aim to split the batch
+into 3 parts:
 
 - First part: `[PR1 + PR2]`
 - Second part: `[PR1 + PR2 + PR3 + PR4]`
@@ -323,7 +325,7 @@ With `speculative_checks` set to 3, the system will aim to split the batch into
 :::
 
 The system will immediately retest the different parts since the number of
-splits matches the number of speculative checks allowed.
+splits matches the number of parallel checks allowed.
 
 If the first part `[PR1 + PR2]` passes, the system will merge it.
 
@@ -336,9 +338,9 @@ contains a single pull request.
 
 ## Important Considerations
 
-While using batch merging and speculative checks together can significantly
-speed up your merge queue processing, it's crucial to consider the following
-points for an optimal setup:
+While using batch merging and parallel checks together can significantly speed
+up your merge queue processing, it's crucial to consider the following points
+for an optimal setup:
 
 ### Branch Protection Settings
 
@@ -348,9 +350,9 @@ disabled. If your team requires a linear history, you can set the queue option
 `merge_method: rebase`.
 
 This does not mean that Mergify will test outdated PRs, but it will merge the
-original pull requests once its speculative checks are finished. The original
-PR won't be up-to-date according to GitHub, which means using this setting
-would block the merge.
+original pull requests once its parallel checks are finished. The original PR
+won't be up-to-date according to GitHub, which means using this setting would
+block the merge.
 
 ### Queued PR Changes
 
