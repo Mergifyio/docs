@@ -26,17 +26,15 @@ Check the `merge_conditions` in the `queue_rules` from your Mergify
 configuration. If these conditions aren't met, Mergify won't be able to merge
 the temporary pull requests.
 
-### Problem: Merge Process is Slow Despite Speculative Checks
+### Problem: Merge Process is Slow Despite Parallel Checks
 
-This could be due to various reasons. Your `speculative_checks` number might be
+This could be due to various reasons. Your `parallel_checks` number might be
 too low, causing fewer PRs to be tested together. Alternatively, your
 continuous integration might be the bottleneck. Check the capacity of your CI
-system; you might need to scale it up to handle the load from speculative
-checks.
+system; you might need to scale it up to handle the load from parallel checks.
 
-Remember, the primary goal of speculative checks is to reduce the overall time
-to merge all PRs. It does not necessarily decrease the time to merge a single
-PR.
+Remember, the primary goal of parallel checks is to reduce the overall time to
+merge all PRs. It does not necessarily decrease the time to merge a single PR.
 
 You can check the [performance](/merge-queue/performance) page for more insight
 on merge queue performances.

@@ -50,7 +50,8 @@ import {
 	SiRenovatebot,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
-import { TbCrystalBall, TbPackages, TbBike, TbGitBranch } from 'react-icons/tb';
+import { TbPackages, TbBike, TbGitBranch } from 'react-icons/tb';
+import { TiFlowParallel } from 'react-icons/ti';
 
 import { v5 } from 'uuid';
 import MergeQueueIcon from '../components/MergeQueueIcon.astro';
@@ -145,17 +146,17 @@ const navItems: NavItem[] = [
 		icon: MergeQueueIcon,
 		children: [
 			{ title: 'Introduction', path: '/merge-queue', icon: FaRegLightbulb },
-		        { title: 'Setup', path: '/merge-queue/setup', icon: FaGear },
-                        { title: 'Queue Rules', path: '/merge-queue/rules', icon: BiSolidCoinStack },
+			{ title: 'Setup', path: '/merge-queue/setup', icon: FaGear },
+			{ title: 'Queue Rules', path: '/merge-queue/rules', icon: BiSolidCoinStack },
 			{ title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: SlRefresh },
 			{ title: 'Priority', path: '/merge-queue/priority', icon: FaTrafficLight },
 			{ title: 'Freeze', path: '/merge-queue/freeze', icon: FaSnowflake },
 			{ title: 'Pause', path: '/merge-queue/pause', icon: FaRegCirclePause },
 			{ title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
 			{
-				title: 'Speculative Checks',
-				path: '/merge-queue/speculative-checks',
-				icon: TbCrystalBall,
+				title: 'Parallel Checks',
+				path: '/merge-queue/parallel-checks',
+				icon: TiFlowParallel,
 			},
 			{ title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
 			{ title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
