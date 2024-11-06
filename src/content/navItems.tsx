@@ -145,12 +145,12 @@ const navItems: NavItem[] = [
 		icon: MergeQueueIcon,
 		children: [
 			{ title: 'Introduction', path: '/merge-queue', icon: FaRegLightbulb },
-			{ title: 'Setup', path: '/merge-queue/setup', icon: FaGear },
+		        { title: 'Setup', path: '/merge-queue/setup', icon: FaGear },
+                        { title: 'Queue Rules', path: '/merge-queue/rules', icon: BiSolidCoinStack },
 			{ title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: SlRefresh },
 			{ title: 'Priority', path: '/merge-queue/priority', icon: FaTrafficLight },
 			{ title: 'Freeze', path: '/merge-queue/freeze', icon: FaSnowflake },
 			{ title: 'Pause', path: '/merge-queue/pause', icon: FaRegCirclePause },
-			{ title: 'Multiple Queues', path: '/merge-queue/multi', icon: BiSolidCoinStack },
 			{ title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
 			{
 				title: 'Speculative Checks',
