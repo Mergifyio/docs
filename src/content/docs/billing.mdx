@@ -31,15 +31,15 @@ utilizing GitHub Enterprise Server (GHES).
 
 ## User Accounting Modes
 
-### Active User-Based Billing
+### Contributor-Based Billing
 
 Many enterprise solutions charge per user, irrespective of actual usage. At
 Mergify, we firmly believe in billing you only for what you actively use.
 
-This is why our billing system operates on the principle of active users.
+This is why our billing system operates on the principle of contributors.
 Here's how it works:
 
-- An active user is any individual who **engages in activities on a
+- A contributor is any individual who **engages in activities on a
   repository**. This includes opening, closing, commenting, pushing or
   reviewing a pull request.
 
@@ -47,18 +47,18 @@ Here's how it works:
   repositories.
 
 - The system uses a 30-day sliding window approach. This means a user is
-  regarded as *active* for 30 days from their last activity. Post this period,
-  if no further activity is detected, they are no longer considered active for
-  billing purposes.
+  regarded as a contributor for 30 days from their last activity. Post this
+  period, if no further activity is detected, they are no longer considered
+  active for billing purposes.
 
-- Usage is prorated to the day: if a user is seen active during 48 days, the
-  system only bills for precisely 48 days — not 2 entire months.
+- Usage is prorated to the day: if a contributor is seen active during 48 days,
+  the system only bills for precisely 48 days — not 2 entire months.
 
-#### Estimating Active Users
+#### Estimating Contributors
 
-If you don't know the number of active users that Mergify might count, you can
-use <DownloadLink href="/mergify-count-active-users.py">this
-script</DownloadLink> to estimate the number of active users over the last 30
+If you don't know the number of contributors that Mergify might count, you can
+use <DownloadLink href="/mergify-count-contributors.py">this
+script</DownloadLink> to estimate the number of contributors over the last 30
 days.
 
 1. Go to
@@ -72,7 +72,7 @@ days.
 3. Install [`requests`](https://pypi.python.org/pypi/requests) on your system
    by running `python3 -m pip install requests`;
 
-4. Run the script with `python3 mergify-count-active-users.py <repo1-url>
+4. Run the script with `python3 mergify-count-contributors.py <repo1-url>
    <repo2-url> etc`, passing the list of repositories where Mergify will be
    deployed.
 
@@ -165,7 +165,7 @@ for the rest of the month.
 
 The latter part of the invoice projects your charges for the next billing
 cycle, such as from Jul 14th to Aug 14th. This charge is based on the current
-number of active users. If there's a change in this user count during this
+number of contributors. If there's a change in this user count during this
 period, the subsequent invoice will account for this, similar to the real-time
 adjustment mentioned earlier.
 
@@ -175,4 +175,4 @@ adjustment mentioned earlier.
 </figure>
 
 By understanding these two sections, you can more easily interpret and
-anticipate how changes in your active users influence your Mergify charges.
+anticipate how changes in your contributors influence your Mergify charges.
