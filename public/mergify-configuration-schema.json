@@ -2261,7 +2261,7 @@
           },
           "default": null,
           "deprecated": true,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `speculative_checks > 1, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `max_parallel_checks > 1, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
           "title": "Merge Method"
         },
         "merge_bot_account": {
@@ -2321,7 +2321,7 @@
           },
           "default": null,
           "deprecated": true,
-          "description": "Method to use to update the pull request with its base\nbranch when the speculative check is done in place. Possible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nThis option overrides the value defined in the queue rules section of the configuration.\nThe default is rebase when the `merge_method` is `fast-forward`.",
+          "description": "Method to use to update the pull request with its base\nbranch when the check is done in place. Possible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nThis option overrides the value defined in the queue rules section of the configuration.\nThe default is rebase when the `merge_method` is `fast-forward`.",
           "title": "Update Method"
         },
         "commit_message_template": {
@@ -2536,7 +2536,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `max_parallel_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
           "title": "Merge Method"
         },
         "autosquash": {
@@ -2559,7 +2559,7 @@
             }
           ],
           "default": null,
-          "description": "Method to use to update the pull request with its base branch when the speculative check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nThis option overrides the value defined in the queue rules section of the configuration.\nThe default is rebase when the `merge_method` is `fast-forward`.",
+          "description": "Method to use to update the pull request with its base branch when the check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nThis option overrides the value defined in the queue rules section of the configuration.\nThe default is rebase when the `merge_method` is `fast-forward`.",
           "title": "Update Method"
         },
         "commit_message_template": {
@@ -2799,7 +2799,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `speculative_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `max_parallel_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
           "title": "Merge Method"
         },
         "autosquash": {
@@ -2822,7 +2822,7 @@
             }
           ],
           "default": null,
-          "description": "Method to use to update the pull request with its base branch when the speculative check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nThis option overrides the value defined in the queue rules section of the configuration.\nThe default is rebase when the `merge_method` is `fast-forward`.",
+          "description": "Method to use to update the pull request with its base branch when the check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nThis option overrides the value defined in the queue rules section of the configuration.\nThe default is rebase when the `merge_method` is `fast-forward`.",
           "title": "Update Method"
         },
         "commit_message_template": {
