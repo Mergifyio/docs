@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# This scripts counts the number of active users for repositories over the last 30 days.
+# This scripts counts the number of contributors for repositories over the last 30 days.
 # See https://docs.mergify.com/billing/ for context.
 #
 # Keep in mind that this is not 100% accurate, but gives a ballpark estimate.
@@ -8,7 +8,7 @@
 # You can install requests by running:
 # $ pip install requests
 # then run this script with
-# $ python3 mergify-count-active-users <url of your repo>
+# $ python3 mergify-count-contributors <url of your repo>
 
 import collections
 import requests
@@ -147,7 +147,7 @@ def main(repos):
         print(f" -> Found {nb_active_prs} PRs since {SINCE_DATE}")
         for i, pr in enumerate(active_prs):
             print(
-                f"  -> Retrieving active users for #{pr['number']} {i + 1}/{nb_active_prs}"
+                f"  -> Retrieving contributors for #{pr['number']} {i + 1}/{nb_active_prs}"
             )
             active_users_per_repo[repo] |= get_users_from_pr(api_endpoint, repo, pr)
 
