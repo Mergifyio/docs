@@ -3,17 +3,36 @@ title: Using Slack with Mergify
 description: Learn how you can send Slack notifications.
 ---
 
+import { Image } from "astro:assets"
 import slackLogo from "../../images/integrations/slack/logo.svg"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+import mqCommentSlack from "../../images/integrations/slack/mq-comment.png"
 
 <IntegrationLogo src={slackLogo} alt="Slack logo"/>
 
-While there isn't a direct integration between Mergify and Slack, you can still
-achieve notifications in Slack based on Mergify actions by leveraging the
-GitHub to Slack integration. Here's a step-by-step guide on how you can set it
-up:
+Mergify offers a native integration with Slack, allowing you to receive events
+from your Merge Queue directly in one or multiple Slack channels. This
+integration helps you stay updated on your merge activities without leaving
+Slack. Here's how you can set it up:
 
-## Setting Up GitHub-Slack Integration
+To receive Merge Queue events directly in Slack:
+1. Go to your Mergify dashboard.
+2. Navigate to Integrations → Slack.
+3. Follow the prompts to connect your Slack workspace.
+4. Select the Slack channel where you want to receive Merge Queue notifications.
+
+<Image src={mqCommentSlack} alt="Merge Queue activity on Slack" />
+
+With this setup, you'll get real-time updates about your Merge Queue, keeping
+your team informed and enabling quicker responses to any issues.
+
+## Using GitHub-Slack Integration with Mergify
+
+In addition to the native integration, you can also receive Slack notifications
+based on Mergify actions by leveraging the GitHub to Slack integration. Here's
+a step-by-step guide:
+
+### Setting Up GitHub-Slack Integration
 
 1. Go to [Slack's GitHub Integration page](https://slack.github.com/).
 
@@ -30,11 +49,11 @@ up:
 Now that the Slack-GitHub integration is complete, let's see how you can use
 Mergify to mention a user, which will then notify them on Slack.
 
-## Using Mergify's Comment Action with Slack Notifications
+### Using Mergify's Comment Action with Slack Notifications
 
-The primary idea is to use Mergify's `comment` action to mention the PR author,
-leveraging GitHub's mention feature. This mention will be forwarded to Slack,
-notifying the mentioned user.
+The primary idea is to use Mergify's (`comment`)[/workflow/actions/comment/]
+action to mention the PR author, leveraging GitHub's mention feature. This
+mention will be forwarded to Slack, notifying the mentioned user.
 
 Here's an example of a Mergify configuration that comments on a PR if a CI
 fails and the label is "hotfix":
@@ -52,9 +71,9 @@ pull_request_rules:
 
 In the above rule:
 
-- We're checking if there are any CI failures with `#check-failure>0`.
+- We're checking if there are any CI failures with `#check-failure > 0`.
 
-- We're also ensuring that the PR has a label 'hotfix'.
+- We're also ensuring that the PR has the label `hotfix`.
 
 - If both conditions are met, Mergify will leave a comment mentioning the PR
   author using `@{{author}}`. This mention will trigger a notification in Slack
