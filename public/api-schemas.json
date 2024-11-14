@@ -1164,17 +1164,6 @@
         ],
         "parameters": [
           {
-            "name": "number",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "description": "The pull request number",
-              "title": "Number"
-            },
-            "description": "The pull request number"
-          },
-          {
             "name": "owner",
             "in": "path",
             "required": true,
@@ -1200,6 +1189,18 @@
               "title": "Repository"
             },
             "description": "The name of the repository"
+          },
+          {
+            "name": "number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "The pull request number",
+              "title": "Number"
+            },
+            "description": "The pull request number"
           }
         ],
         "requestBody": {
