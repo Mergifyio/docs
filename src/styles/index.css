@@ -333,6 +333,12 @@ code {
 	word-break: break-word;
 }
 
+code[class^='language-'] {
+	display: inline-block;
+	padding: 15px 10px;
+	width: 100%;
+}
+
 /*RTL Fix Code dir for inline code*/
 [dir='rtl'] code {
 	unicode-bidi: plaintext;
