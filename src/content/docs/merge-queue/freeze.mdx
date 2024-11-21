@@ -7,6 +7,16 @@ import { Image } from "astro:assets"
 import freezeButtonScreenshot from "../../images/merge-queue/freeze/freeze-button.png"
 import unfreezeButtonScreenshot from "../../images/merge-queue/freeze/unfreeze-button.png"
 
+:::caution
+
+    Queue freeze and its API are deprecated in favor of either the [queue pause](/merge-queue/pause)
+    or the [scheduled freezes](/merge-protections/#scheduling-freezes).
+    The Merge Queue freeze API will be removed on 31st March 2025.
+    For more details, you can check out the [migration to queue pause API](/merge-queue/pause#migration-from-the-deprecated-queue-freeze-api)
+    or the [scheduled freezes](/merge-protections/#scheduling-freezes) feature
+
+:::
+
 In the life cycle of software development and deployment, there can be times
 when it is necessary to halt the merging of pull requests. Perhaps there's an
 ongoing incident in the production environment, and it is crucial to control
