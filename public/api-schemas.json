@@ -129,6 +129,7 @@
         "summary": "Freezes merge queue",
         "description": "Freezes the merge of the requested queue and the queues following it",
         "operationId": "create_queue_freeze_repos__owner___repository__queue__queue_name__freeze_put",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -220,6 +221,7 @@
         "summary": "Unfreeze merge queue",
         "description": "Unfreeze the specified merge queue",
         "operationId": "delete_queue_freeze_repos__owner___repository__queue__queue_name__freeze_delete",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -294,6 +296,7 @@
         "summary": "Get queue freeze data",
         "description": "Checks if the queue is frozen and get the queue freeze data",
         "operationId": "get_queue_freeze_repos__owner___repository__queue__queue_name__freeze_get",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -377,6 +380,7 @@
         "summary": "Get the list of frozen queues",
         "description": "Get the list of frozen queues inside the requested repository",
         "operationId": "get_list_queue_freeze_repos__owner___repository__queues_freezes_get",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -9043,12 +9047,18 @@
             "format": "date-time",
             "title": "Pause Date",
             "description": "The date and time of the freeze"
+          },
+          "allow_checks_to_run": {
+            "type": "boolean",
+            "title": "Allow Checks To Run",
+            "description": "Whether or not merge queue speculative checks will be created for the duration of the queue pause"
           }
         },
         "type": "object",
         "required": [
           "reason",
-          "pause_date"
+          "pause_date",
+          "allow_checks_to_run"
         ],
         "title": "QueuePause"
       },
@@ -9059,6 +9069,12 @@
             "maxLength": 255,
             "title": "Reason",
             "description": "The reason of the queue pause"
+          },
+          "allow_checks_to_run": {
+            "type": "boolean",
+            "title": "Allow Checks To Run",
+            "description": "Whether or not merge queue speculative checks should still be created for the duration of the queue pause",
+            "default": false
           }
         },
         "type": "object",

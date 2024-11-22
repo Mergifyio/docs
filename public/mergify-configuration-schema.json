@@ -2069,6 +2069,14 @@
           "description": "The GitHub login of the command author.",
           "title": "Sender",
           "type": "string"
+        },
+        "updates": {
+          "description": "The list of updates done on an opened pull request.",
+          "items": {
+            "$ref": "#/$defs/PullRequestHeadShaHistoryDict"
+          },
+          "title": "Updates",
+          "type": "array"
         }
       },
       "required": [
@@ -2140,9 +2148,28 @@
         "queue-merge-started-at",
         "schedule",
         "sender-permission",
-        "sender"
+        "sender",
+        "updates"
       ],
       "title": "PullRequestAttributes",
+      "type": "object"
+    },
+    "PullRequestHeadShaHistoryDict": {
+      "properties": {
+        "head-sha": {
+          "title": "Head sha",
+          "type": "string"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "head-sha",
+        "timestamp"
+      ],
+      "title": "PullRequestHeadShaHistoryDict",
       "type": "object"
     },
     "PullRequestRuleConditionsModel": {
