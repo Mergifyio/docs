@@ -15,42 +15,15 @@ they are up-to-date and control their processing based on their priority.
 
 ## Examples
 
-### Simple Queue
-
 ```yaml
 pull_request_rules:
   - name: put PRs in queue
     conditions:
-      - base = main
+      - label = queue-me
     actions:
       queue:
 ```
 
-In this example, any pull request that is based on the main branch will be
-placed in the production queue. The pull request still needs to match the
+In this example, any pull request that has the label `queue-me` will be
+automatically queued. The pull request still needs to match the
 `queue_conditions` defined in the queue to enter the queue.
-
-### Choosing the Merge Method
-
-```yaml
-pull_request_rules:
-  - name: put PRs in queue (rebase)
-    conditions:
-      - base = main
-      - label = rebase
-    actions:
-      queue:
-        merge_method: rebase
-
-  - name: put PRs in queue (merge)
-    conditions:
-      - base = main
-      - label != rebase
-    actions:
-      queue:
-        merge_method: merge
-```
-
-In this example, any pull request that has the label `rebase` will enter the
-queue with a `merge_method` set to `rebase`, ensuring it's merged via rebase.
-Whereas all the other pull requests will be merged using the `merge` method.
