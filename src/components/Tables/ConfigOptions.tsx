@@ -165,6 +165,8 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
 				})}
 			</>
 		);
+	} else if ('const' in definition) {
+		valueType = <HighlightCode>{definition.const}</HighlightCode>;
 	} else if ('format' in definition) {
 		const formatLink = valueTypeFormatLinks[definition.format];
 		if (formatLink !== undefined) {
