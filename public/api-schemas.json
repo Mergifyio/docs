@@ -4494,9 +4494,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.assign"
-            ],
             "const": "action.assign",
             "title": "Type"
           },
@@ -4584,9 +4581,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.backport"
-            ],
             "const": "action.backport",
             "title": "Type"
           },
@@ -4650,9 +4644,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ci_issue.created"
-            ],
             "const": "ci_issue.created",
             "title": "Type"
           },
@@ -4790,9 +4781,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ci_issue.linked"
-            ],
             "const": "ci_issue.linked",
             "title": "Type"
           },
@@ -4930,9 +4918,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ci_issue.merged"
-            ],
             "const": "ci_issue.merged",
             "title": "Type"
           },
@@ -5040,9 +5025,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ci_issue.renamed"
-            ],
             "const": "ci_issue.renamed",
             "title": "Type"
           },
@@ -5144,9 +5126,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ci_issue.reopened"
-            ],
             "const": "ci_issue.reopened",
             "title": "Type"
           },
@@ -5284,9 +5263,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ci_issue.resolved"
-            ],
             "const": "ci_issue.resolved",
             "title": "Type"
           },
@@ -5378,9 +5354,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "ci_issue.unresolved"
-            ],
             "const": "ci_issue.unresolved",
             "title": "Type"
           },
@@ -5472,9 +5445,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.close"
-            ],
             "const": "action.close",
             "title": "Type"
           },
@@ -5551,9 +5521,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.comment"
-            ],
             "const": "action.comment",
             "title": "Type"
           },
@@ -5630,9 +5597,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.copy"
-            ],
             "const": "action.copy",
             "title": "Type"
           },
@@ -5719,9 +5683,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.delete_head_branch"
-            ],
             "const": "action.delete_head_branch",
             "title": "Type"
           },
@@ -5798,9 +5759,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.dismiss_reviews"
-            ],
             "const": "action.dismiss_reviews",
             "title": "Type"
           },
@@ -5880,9 +5838,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.edit"
-            ],
             "const": "action.edit",
             "title": "Type"
           },
@@ -5959,9 +5914,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.github_actions"
-            ],
             "const": "action.github_actions",
             "title": "Type"
           },
@@ -6056,9 +6008,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.label"
-            ],
             "const": "action.label",
             "title": "Type"
           },
@@ -6146,9 +6095,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.merge"
-            ],
             "const": "action.merge",
             "title": "Type"
           },
@@ -6230,9 +6176,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.post_check"
-            ],
             "const": "action.post_check",
             "title": "Type"
           },
@@ -6319,9 +6262,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.queue.change"
-            ],
             "const": "action.queue.change",
             "title": "Type"
           },
@@ -6413,9 +6353,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.queue.checks_end"
-            ],
             "const": "action.queue.checks_end",
             "title": "Type"
           },
@@ -6587,9 +6524,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.queue.checks_start"
-            ],
             "const": "action.queue.checks_start",
             "title": "Type"
           },
@@ -6703,9 +6637,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.queue.enter"
-            ],
             "const": "action.queue.enter",
             "title": "Type"
           },
@@ -6810,9 +6741,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "queue.freeze.create"
-            ],
             "const": "queue.freeze.create",
             "title": "Type"
           },
@@ -6903,9 +6831,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "queue.freeze.delete"
-            ],
             "const": "queue.freeze.delete",
             "title": "Type"
           },
@@ -6986,9 +6911,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "queue.freeze.update"
-            ],
             "const": "queue.freeze.update",
             "title": "Type"
           },
@@ -7079,9 +7001,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.queue.leave"
-            ],
             "const": "action.queue.leave",
             "title": "Type"
           },
@@ -7199,9 +7118,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.queue.merged"
-            ],
             "const": "action.queue.merged",
             "title": "Type"
           },
@@ -7297,9 +7213,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "queue.pause.create"
-            ],
             "const": "queue.pause.create",
             "title": "Type"
           },
@@ -7380,9 +7293,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "queue.pause.delete"
-            ],
             "const": "queue.pause.delete",
             "title": "Type"
           },
@@ -7458,9 +7368,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "queue.pause.update"
-            ],
             "const": "queue.pause.update",
             "title": "Type"
           },
@@ -7544,9 +7451,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.rebase"
-            ],
             "const": "action.rebase",
             "title": "Type"
           }
@@ -7610,9 +7514,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.refresh"
-            ],
             "const": "action.refresh",
             "title": "Type"
           }
@@ -7673,9 +7574,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.request_reviews"
-            ],
             "const": "action.request_reviews",
             "title": "Type"
           },
@@ -7766,9 +7664,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.requeue"
-            ],
             "const": "action.requeue",
             "title": "Type"
           }
@@ -7829,9 +7724,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.review"
-            ],
             "const": "action.review",
             "title": "Type"
           },
@@ -7932,9 +7824,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "scheduled_freeze.create"
-            ],
             "const": "scheduled_freeze.create",
             "title": "Type"
           },
@@ -8020,9 +7909,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "scheduled_freeze.delete"
-            ],
             "const": "scheduled_freeze.delete",
             "title": "Type"
           },
@@ -8113,9 +7999,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "scheduled_freeze.update"
-            ],
             "const": "scheduled_freeze.update",
             "title": "Type"
           },
@@ -8208,9 +8091,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.squash"
-            ],
             "const": "action.squash",
             "title": "Type"
           }
@@ -8274,9 +8154,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.unqueue"
-            ],
             "const": "action.unqueue",
             "title": "Type"
           }
@@ -8340,9 +8217,6 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "action.update"
-            ],
             "const": "action.update",
             "title": "Type"
           }
