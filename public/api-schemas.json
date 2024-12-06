@@ -4253,16 +4253,16 @@
           "state": {
             "type": "string",
             "enum": [
-              "success",
               "failure",
               "error",
               "cancelled",
-              "skipped",
               "action_required",
               "timed_out",
               "pending",
               "neutral",
-              "stale"
+              "skipped",
+              "stale",
+              "success"
             ],
             "title": "State",
             "description": "The global state of the checks"
@@ -8646,16 +8646,16 @@
           "state": {
             "type": "string",
             "enum": [
-              "success",
               "failure",
               "error",
               "cancelled",
-              "skipped",
               "action_required",
               "timed_out",
               "pending",
               "neutral",
-              "stale"
+              "skipped",
+              "stale",
+              "success"
             ],
             "title": "State",
             "description": "Check state"
@@ -9306,16 +9306,16 @@
           "state": {
             "type": "string",
             "enum": [
-              "success",
               "failure",
               "error",
               "cancelled",
-              "skipped",
               "action_required",
               "timed_out",
               "pending",
               "neutral",
-              "stale"
+              "skipped",
+              "stale",
+              "success"
             ],
             "title": "State"
           },
@@ -9773,16 +9773,16 @@
           "state": {
             "type": "string",
             "enum": [
-              "success",
               "failure",
               "error",
               "cancelled",
-              "skipped",
               "action_required",
               "timed_out",
               "pending",
               "neutral",
-              "stale"
+              "skipped",
+              "stale",
+              "success"
             ],
             "title": "State",
             "description": "The global state of the checks"
