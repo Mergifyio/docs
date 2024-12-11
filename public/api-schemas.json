@@ -4165,6 +4165,17 @@
             ],
             "title": "Provider",
             "default": "none"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch"
           }
         },
         "type": "object",
