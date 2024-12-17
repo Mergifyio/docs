@@ -719,6 +719,7 @@
                           "position": 1,
                           "priority": 100,
                           "effective_priority": 100,
+                          "priority_alias": "low",
                           "partition_name": "__default__",
                           "queue_rule": {
                             "name": "default",
@@ -767,6 +768,7 @@
                           "position": 1,
                           "priority": 100,
                           "effective_priority": 100,
+                          "priority_alias": "low",
                           "partition_name": "__default__",
                           "queue_rule": {
                             "name": "default",
@@ -3982,6 +3984,341 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/scheduled_freeze": {
+      "get": {
+        "tags": [
+          "scheduled_freeze"
+        ],
+        "summary": "Get scheduled freezes",
+        "description": "Get all the ongoing or scheduled freezes for the repository specified in the path",
+        "operationId": "get_scheduled_freezes_repos__owner___repository__scheduled_freeze_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetScheduledFreezesResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "scheduled_freeze"
+        ],
+        "summary": "Create a scheduled freeze",
+        "description": "Create a scheduled freeze for the repository specified in the path",
+        "operationId": "create_scheduled_freeze_repos__owner___repository__scheduled_freeze_post",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateScheduledQueueFreezePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledFreezeObjectResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repository}/scheduled_freeze/{freeze_id}": {
+      "patch": {
+        "tags": [
+          "scheduled_freeze"
+        ],
+        "summary": "Update a scheduled freeze",
+        "description": "Update an existing scheduled freeze on the repository specified in the path",
+        "operationId": "update_scheduled_freeze_repos__owner___repository__scheduled_freeze__freeze_id__patch",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "freeze_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The scheduled freeze `id`",
+              "title": "Freeze Id"
+            },
+            "description": "The scheduled freeze `id`"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateScheduledFreezePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledFreezeObjectResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "The scheduled freeze `start`, `timezone` and `matching_conditions` attributes cannot be updated, because the scheduled freeze has already started"
+          },
+          "404": {
+            "description": "The scheduled freeze with the given id does not exist"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "scheduled_freeze"
+        ],
+        "summary": "Delete a scheduled freeze",
+        "description": "Delete an existing scheduled freeze on the repository specified in the path",
+        "operationId": "delete_scheduled_freeze_repos__owner___repository__scheduled_freeze__freeze_id__delete",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "freeze_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The scheduled freeze `id`",
+              "title": "Freeze Id"
+            },
+            "description": "The scheduled freeze `id`"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/DeleteScheduledFreezePayload"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Input Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The scheduled freeze with the given id does not exist"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/products/{owner}": {
       "get": {
         "tags": [
@@ -4437,6 +4774,69 @@
         ],
         "title": "CiIssuesTokenResponse"
       },
+      "CreateScheduledQueueFreezePayload": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "description": "The reason for the scheduled freeze."
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start",
+            "description": "When the scheduled freeze begins (date and time in ISO 8601 format without TZ). Begins now if the attribute is null."
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End",
+            "description": "When the scheduled freeze ends (date and time in ISO 8601 format without TZ)."
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "description": "Timezone where the freeze is expected to happen."
+          },
+          "matching_conditions": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Matching Conditions",
+            "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze."
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason",
+          "start",
+          "timezone",
+          "matching_conditions"
+        ],
+        "title": "CreateScheduledQueueFreezePayload"
+      },
       "Cursor_int_": {
         "properties": {
           "value": {
@@ -4461,6 +4861,20 @@
           "forward"
         ],
         "title": "Cursor[int]"
+      },
+      "DeleteScheduledFreezePayload": {
+        "properties": {
+          "delete_reason": {
+            "type": "string",
+            "title": "Delete Reason",
+            "description": "The reason for the deletion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "delete_reason"
+        ],
+        "title": "DeleteScheduledFreezePayload"
       },
       "EventAssign": {
         "properties": {
@@ -8407,6 +8821,22 @@
         ],
         "title": "EventsResponse"
       },
+      "GetScheduledFreezesResponse": {
+        "properties": {
+          "scheduled_freezes": {
+            "items": {
+              "$ref": "#/components/schemas/ScheduledFreezeObjectResponse"
+            },
+            "type": "array",
+            "title": "Scheduled Freezes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scheduled_freezes"
+        ],
+        "title": "GetScheduledFreezesResponse"
+      },
       "GitHubRepositoriesResponse": {
         "properties": {
           "repositories": {
@@ -8468,13 +8898,13 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
-      "MatchingConditionsDict": {
+      "MatchingConditionsDict-Input": {
         "properties": {
           "and": {
             "items": {
               "anyOf": [
                 {
-                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
                 },
                 {
                   "type": "string"
@@ -8488,7 +8918,7 @@
             "items": {
               "anyOf": [
                 {
-                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
                 },
                 {
                   "type": "string"
@@ -8502,7 +8932,55 @@
             "items": {
               "anyOf": [
                 {
-                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Not"
+          }
+        },
+        "type": "object",
+        "title": "MatchingConditionsDict"
+      },
+      "MatchingConditionsDict-Output": {
+        "properties": {
+          "and": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "And"
+          },
+          "or": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Or"
+          },
+          "not": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
                 },
                 {
                   "type": "string"
@@ -9272,7 +9750,7 @@
             "items": {
               "anyOf": [
                 {
-                  "$ref": "#/components/schemas/MatchingConditionsDict"
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
                 },
                 {
                   "type": "string"
@@ -9292,6 +9770,64 @@
           "matching_conditions"
         ],
         "title": "ScheduledFreezeEventLogAttributes"
+      },
+      "ScheduledFreezeObjectResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "matching_conditions": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Matching Conditions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "reason",
+          "start",
+          "end",
+          "timezone",
+          "matching_conditions"
+        ],
+        "title": "ScheduledFreezeObjectResponse"
       },
       "Serialized": {
         "properties": {
@@ -9461,6 +9997,70 @@
         ],
         "title": "TimeToMergeResponse"
       },
+      "UpdateScheduledFreezePayload": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "description": "The reason for the scheduled freeze."
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start",
+            "description": "When the scheduled freeze begins (date and time in ISO 8601 format without TZ). Can only be updated if the scheduled freeze has not yet begun. Begins now if the attribute is null."
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End",
+            "description": "When the scheduled freeze ends (date and time in ISO 8601 format without TZ)."
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "description": "Timezone where the freeze is expected to happen."
+          },
+          "matching_conditions": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Matching Conditions",
+            "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze. Can only be updated if the scheduled freeze has not yet begun."
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason",
+          "start",
+          "end",
+          "timezone",
+          "matching_conditions"
+        ],
+        "title": "UpdateScheduledFreezePayload"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -9591,6 +10191,11 @@
             "title": "Effective Priority",
             "description": "The effective priority of this pull request"
           },
+          "priority_alias": {
+            "type": "string",
+            "title": "Priority Alias",
+            "description": "The priority textual value of this pull request"
+          },
           "queue_rule": {
             "$ref": "#/components/schemas/QueueRule",
             "description": "The queue rule associated to this pull request"
@@ -9632,6 +10237,7 @@
           "position",
           "priority",
           "effective_priority",
+          "priority_alias",
           "queue_rule",
           "queued_at",
           "mergeability_check",
@@ -9661,6 +10267,11 @@
             "type": "integer",
             "title": "Effective Priority",
             "description": "The effective priority of this pull request"
+          },
+          "priority_alias": {
+            "type": "string",
+            "title": "Priority Alias",
+            "description": "The priority textual value of this pull request"
           },
           "queue_rule": {
             "$ref": "#/components/schemas/QueueRule",
@@ -9720,6 +10331,7 @@
           "position",
           "priority",
           "effective_priority",
+          "priority_alias",
           "queue_rule",
           "queued_at",
           "speculative_check_pull_request",
