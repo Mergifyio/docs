@@ -7,7 +7,6 @@ shared:
       {{ body }}
     allow_inplace_checks: true
     merge_method: squash
-    speculative_checks: 5
   CheckRuns: &CheckRuns
     - check-success=lint
     - check-success=test
@@ -59,7 +58,6 @@ queue_rules:
   - name: lowprio
     <<: *DefaultQueueOptions
     merge_method: merge
-    speculative_checks: 1
     queue_conditions:
       - and: *CheckRuns
       - "#commits=1"
@@ -104,3 +102,6 @@ pull_request_rules:
       request_reviews:
         teams:
           - devs
+
+merge_queue:
+  max_parallel_checks: 5
