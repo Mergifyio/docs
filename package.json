@@ -53,7 +53,7 @@
     "remark-directive": "^3.0.0",
     "remark-frontmatter": "^5.0.0",
     "remark-preset-lint-markdown-style-guide": "^6.0.0",
-    "typescript": "^5.6.3",
+    "typescript": "^5.7.2",
     "unified": "^11.0.5",
     "unist-util-remove": "^4.0.0",
     "unist-util-visit": "^5.0.0",
