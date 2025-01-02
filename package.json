@@ -84,7 +84,7 @@
     "dotenv": "^16.4.5",
     "framer-motion": "^11.15.0",
     "github-slugger": "^2.0.0",
-    "jsdoc-api": "^9.3.1",
+    "jsdoc-api": "^9.3.4",
     "jsonpointer": "^5.0.1",
     "minimatch": "^10.0.1",
     "nanostores": "^0.11.3",
