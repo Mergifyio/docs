@@ -4233,6 +4233,101 @@
         "summary": "Delete a scheduled freeze",
         "description": "Delete an existing scheduled freeze on the repository specified in the path",
         "operationId": "delete_scheduled_freeze_repos__owner___repository__scheduled_freeze__freeze_id__delete",
+        "deprecated": true,
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "freeze_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The scheduled freeze `id`",
+              "title": "Freeze Id"
+            },
+            "description": "The scheduled freeze `id`"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/DeleteScheduledFreezePayload"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Input Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The scheduled freeze with the given id does not exist"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repository}/scheduled_freeze/{freeze_id}/delete": {
+      "post": {
+        "tags": [
+          "scheduled_freeze"
+        ],
+        "summary": "Delete a scheduled freeze",
+        "description": "Delete an existing scheduled freeze on the repository specified in the path",
+        "operationId": "delete_scheduled_freeze_repos__owner___repository__scheduled_freeze__freeze_id__delete_post",
         "security": [
           {
             "ApplicationAuth": []
