@@ -36,15 +36,13 @@ function TableOfContents({ headings, slug }: TableOfContentsProps) {
 	);
 }
 
-interface Props extends AlgoliaResult {}
-
 export default function Preview({
 	_highlightResult,
 	_snippetResult,
 	tables,
 	objectID,
 	headings,
-}: Props) {
+}: AlgoliaResult) {
 	const slug = objectID.substring(0, objectID.indexOf('.mdx'));
 
 	return (
@@ -82,6 +80,7 @@ export default function Preview({
 					margin: '8px 0',
 					color: 'var(--theme-text-light)',
 				}}
+				// eslint-disable-next-line: @typescript-eslint/no-unused-expressions
 				dangerouslySetInnerHTML={{ __html: _snippetResult?.excerpt?.value ?? '' }}
 			/>
 			{_highlightResult?.tables
