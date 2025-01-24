@@ -32,8 +32,10 @@ function useAlgoliaSearch(query: string, open: boolean) {
 			setResults(response);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		open && search();
+		if (open) {
+			// eslint-disable-next-line @typescript-eslint/no-floating-promises
+			search();
+		}
 	}, [query, open]);
 
 	return results;
