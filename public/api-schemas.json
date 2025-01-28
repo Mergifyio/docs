@@ -4665,13 +4665,11 @@
         ],
         "title": "CreateScheduledQueueFreezePayload"
       },
-      "Cursor_int_": {
+      "Cursor_TypeVar_": {
         "properties": {
           "value": {
             "anyOf": [
-              {
-                "type": "integer"
-              },
+              {},
               {
                 "type": "null"
               }
@@ -4688,7 +4686,7 @@
           "value",
           "forward"
         ],
-        "title": "Cursor[int]"
+        "title": "Cursor[TypeVar]"
       },
       "DeleteScheduledFreezePayload": {
         "properties": {
