@@ -530,6 +530,7 @@
         "summary": "Unpause merge queue",
         "description": "Unpause the merge queue of the requested repository",
         "operationId": "delete_queue_pause_repos__owner___repository__queue_pause_delete",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -637,6 +638,71 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The merge queue is not currently paused on this repository"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repository}/queue/pause/delete": {
+      "post": {
+        "tags": [
+          "queues"
+        ],
+        "summary": "Unpause merge queue",
+        "description": "Unpause the merge queue of the requested repository",
+        "operationId": "delete_queue_pause_repos__owner___repository__queue_pause_delete_post",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "403": {
             "description": "Forbidden"
@@ -8694,7 +8760,7 @@
             "items": {
               "type": "string",
               "enum": [
-                "ci_issues",
+                "ci_insights",
                 "merge_protections",
                 "workflow_automation",
                 "merge_queue"
@@ -10416,8 +10482,8 @@
       "description": "Operations with badges."
     },
     {
-      "name": "ci_issues",
-      "description": "Operations with failed ci issues."
+      "name": "ci_insights",
+      "description": "Operations with ci insights."
     },
     {
       "name": "eventlogs",
