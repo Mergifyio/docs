@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-# This scripts counts the number of contributors for repositories over the last 30 days.
+# This script counts the number of contributors for repositories over the last 30 days.
+#
 # See https://docs.mergify.com/billing/ for context.
 #
-# Keep in mind that this is not 100% accurate, but gives a ballpark estimate.
+# Keep in mind that this is not 100% accurate but gives a ballpark estimate.
 #
 # You'll need Python 3 and requests for this to work.
 # You can install requests by running:
 # $ pip install requests
-# then run this script with
+# then run this script with:
 # $ python3 mergify-count-contributors <url of your repo>
 
 import collections
@@ -18,14 +19,12 @@ from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
 LOOKBACK_WINDOW = timedelta(days=30)
+SINCE_DATE = datetime.now() - LOOKBACK_WINDOW
 
 HEADERS = {
     "Authorization": f"token {os.environ.get('GITHUB_TOKEN')}",
     "Accept": "application/vnd.github.v3+json",
 }
-
-# Assuming "active" means created in the last N days
-SINCE_DATE = datetime.now() - LOOKBACK_WINDOW
 
 
 def get_api_and_repo_name_from_url(url):
@@ -46,8 +45,7 @@ def _requests_get(*args, **kwargs):
         )
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        print("E: Unable to request GitHub, error below:")
-        print(e.json())
+        print("E: Unable to request GitHub: {e}")
         raise
     else:
         return response
@@ -90,6 +88,7 @@ def get_active_prs_for_repo(api_endpoint, repo_name):
 
 
 def is_user_ignored(user):
+    """Determine if a user should be ignored (bots, system users)."""
     return (
         user["id"] <= 0
         or user["login"].endswith("[bot]")
@@ -99,6 +98,7 @@ def is_user_ignored(user):
 
 
 def get_users_from_pr(api_endpoint, repo_name, pr):
+    """Extract all active users from a PR: creator, reviewers, commenters, and label changers."""
     users = set()
 
     # Get PR creator
@@ -134,10 +134,37 @@ def get_users_from_pr(api_endpoint, repo_name, pr):
             if not is_user_ignored(comment["user"]):
                 users.add(comment["user"]["login"])
 
+    try:
+        # Get users from the timeline
+        users |= get_users_from_timeline(api_endpoint, repo_name, pr["number"])
+    except Exception:
+        print("W: Unable to retrieve PR timeline, ignoring")
+
+    return users
+
+
+def get_users_from_timeline(api_endpoint, repo_name, pr_number):
+    """Extract users who added or removed labels from a PR timeline."""
+    users = set()
+
+    timeline_events = _requests_get(
+        f"{api_endpoint}/repos/{repo_name}/issues/{pr_number}/timeline",
+        params={"per_page": 100},
+        headers=HEADERS,
+    )
+    timeline_events.raise_for_status()
+
+    for event in timeline_events.json():
+        if event.get("event") in {"labeled", "unlabeled"}:
+            actor = event.get("actor")
+            if actor and not is_user_ignored(actor):
+                users.add(actor["login"])
+
     return users
 
 
 def main(repos):
+    """Main function to fetch active users per repository."""
     active_users_per_repo = collections.defaultdict(set)
 
     for api_endpoint, repo in (get_api_and_repo_name_from_url(url) for url in repos):
