@@ -65,7 +65,7 @@
     "@astrojs/check": "^0.3.1",
     "@astrojs/react": "^4.1.2",
     "@astrojs/vue": "^4.5.3",
-    "@chakra-ui/react": "^3.2.2",
+    "@chakra-ui/react": "^3.6.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/ibm-plex-mono": "^5.1.1",
