@@ -530,7 +530,6 @@
         "summary": "Unpause merge queue",
         "description": "Unpause the merge queue of the requested repository",
         "operationId": "delete_queue_pause_repos__owner___repository__queue_pause_delete",
-        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
