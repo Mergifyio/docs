@@ -49,7 +49,7 @@ export function OptionsTableBase(schema: object, options: OptionDefinition) {
 									{!shouldHideDefaultColumn && (
 										<td>
 											{hasDefaultValue(definition) && (
-												<pre>
+												<pre style={{ whiteSpace: 'pre-wrap' }}>
 													<code
 														dangerouslySetInnerHTML={{
 															__html: yaml.dump(definition.default, {
