@@ -47,7 +47,7 @@ import {
 	SiCircleci,
 	SiBuildkite,
 	SiGitlab,
-	SiRenovatebot,
+	SiRenovate,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
 import { TbPackages, TbBike, TbGitBranch } from 'react-icons/tb';
@@ -215,7 +215,7 @@ const navItems: NavItem[] = [
 			{ title: 'Graphite', path: '/integrations/graphite', icon: BsStack },
 			{ title: 'Rush', path: '/integrations/rush', icon: TbBike },
 			{ title: 'Dependabot', path: '/integrations/dependabot', icon: SiDependabot },
-			{ title: 'Renovate', path: '/integrations/renovate', icon: SiRenovatebot },
+			{ title: 'Renovate', path: '/integrations/renovate', icon: SiRenovate },
 			{ title: 'Snyk', path: '/integrations/snyk', icon: SiSnyk },
 		],
 	},
