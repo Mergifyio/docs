@@ -9643,6 +9643,14 @@
             },
             "type": "array",
             "title": "Unsuccessful Checks"
+          },
+          "pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Pull Request Numbers"
           }
         },
         "type": "object",
@@ -9653,7 +9661,8 @@
           "checks_conclusion",
           "checks_started_at",
           "checks_ended_at",
-          "unsuccessful_checks"
+          "unsuccessful_checks",
+          "pull_request_numbers"
         ],
         "title": "SpeculativeCheckPullRequest"
       },
