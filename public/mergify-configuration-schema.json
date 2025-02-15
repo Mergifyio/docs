@@ -1212,13 +1212,6 @@
           "default": null,
           "description": "Template to use as the commit message when using the merge or squash merge method.",
           "title": "Commit Message Template"
-        },
-        "allow_merging_configuration_change": {
-          "default": true,
-          "deprecated": true,
-          "description": "Allow merging the Mergify configuration file. *This option does not do anything and is only present for backward compatibility.*",
-          "title": "Allow Merging Configuration Change",
-          "type": "boolean"
         }
       },
       "title": "MergeActionModel",
@@ -2401,13 +2394,6 @@
           "description": "Allow merging the Mergify configuration file. *This option does not do anything and is only present for backward compatibility.*",
           "title": "Allow Merging Configuration Change",
           "type": "boolean"
-        },
-        "autosquash": {
-          "default": true,
-          "deprecated": true,
-          "description": "This option is relevant only if you do in place checks and if you use the `rebase` option of the update_method. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`.",
-          "title": "Autosquash",
-          "type": "boolean"
         }
       },
       "title": "QueueActionModel",
@@ -2664,23 +2650,6 @@
           "title": "Disallow Checks Interruption From Queues",
           "type": "array"
         },
-        "allow_checks_interruption": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `allow_checks_interruption` attribute in the `queue_rules` section. This option must now be set at the top level of the configuration file in the `priority_rules` section.**\n> This option will be removed in a future version.\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules",
-            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `allow_checks_interruption` attribute in the `queue_rules` section. This option must now be set at the top level of the configuration file in the `priority_rules` section.**\n> This option will be removed on January 31st, 2025.\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules"
-          },
-          "default": null,
-          "deprecated": true,
-          "title": "Allow Checks Interruption"
-        },
         "name": {
           "title": "Name",
           "type": "string"
@@ -2921,23 +2890,6 @@
           "maxItems": 50,
           "title": "Disallow Checks Interruption From Queues",
           "type": "array"
-        },
-        "allow_checks_interruption": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `allow_checks_interruption` attribute in the `queue_rules` section. This option must now be set at the top level of the configuration file in the `priority_rules` section.**\n> This option will be removed in a future version.\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules",
-            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `allow_checks_interruption` attribute in the `queue_rules` section. This option must now be set at the top level of the configuration file in the `priority_rules` section.**\n> This option will be removed on January 31st, 2025.\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules"
-          },
-          "default": null,
-          "deprecated": true,
-          "title": "Allow Checks Interruption"
         }
       },
       "title": "QueueRuleModelForDefaults",
