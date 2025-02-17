@@ -1562,11 +1562,6 @@
           "description": "The review decision. This indicates if `CODEOWNERS` have reviewed the pull request when the `Require Review from Code Owners` branch protection rule is enabled.",
           "title": "Branch protection review decision"
         },
-        "queue-frozen": {
-          "description": "Whether the pull request is in a queue that is frozen.",
-          "title": "Queue frozen",
-          "type": "boolean"
-        },
         "number": {
           "description": "The pull request number.",
           "minimum": 0,
@@ -1716,18 +1711,6 @@
           ],
           "description": "The name of the queue containing the pull request.",
           "title": "Queue name"
-        },
-        "queue-freeze-reason": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The reason for the queue containing the pull request to be frozen.",
-          "title": "Queue freeze reason"
         },
         "queue-partition-name": {
           "anyOf": [
@@ -2100,7 +2083,6 @@
         "linear-history",
         "conflict",
         "branch-protection-review-decision",
-        "queue-frozen",
         "number",
         "queue-position",
         "author",
@@ -2117,7 +2099,6 @@
         "repository-full-name",
         "queue-dequeue-reason",
         "queue-name",
-        "queue-freeze-reason",
         "queue-partition-name",
         "assignee",
         "label",
