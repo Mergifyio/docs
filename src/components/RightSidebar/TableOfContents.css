@@ -103,8 +103,8 @@
 	border-radius: 0.5rem;
 	padding: 0.5rem 0;
 	font-size: var(--theme-text-sm);
-	background: linear-gradient(var(--theme-bg-offset), var(--theme-bg-offset)),
-		var(--theme-bg-gradient);
+	background:
+		linear-gradient(var(--theme-bg-offset), var(--theme-bg-offset)), var(--theme-bg-gradient);
 	transform: translateY(calc(-0.5rem - 0.5 * var(--header-bottom-padding)));
 }
 
