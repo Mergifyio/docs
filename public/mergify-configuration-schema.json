@@ -2404,15 +2404,6 @@
     "QueueRuleModel": {
       "additionalProperties": false,
       "properties": {
-        "priority_rules": {
-          "$ref": "#/$defs/PriorityRulesModel",
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `priority_rules` attribute in the `queue_rules` section. The priority rules must now be set at the top level of the configuration file.**\n> This option will be removed in a future version.\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules",
-            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `priority_rules` attribute in the `queue_rules` section. The priority rules must now be set at the top level of the configuration file.**\nThis option will be removed on January 31st, 2025\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules"
-          },
-          "deprecated": true,
-          "description": "*This attribute is deprecated in favor of `priority_rules` at the top level of the Mergify configuration file.* The list of priority rules a pull request can match in order to be prioritized when added to a queue. The rule with the highest priority value wins."
-        },
         "queue_conditions": {
           "$ref": "#/$defs/QueueRuleMergeConditionsModel",
           "description": "The list of conditions that needs to match to queue the pull request."
@@ -2645,15 +2636,6 @@
     "QueueRuleModelForDefaults": {
       "additionalProperties": false,
       "properties": {
-        "priority_rules": {
-          "$ref": "#/$defs/PriorityRulesModel",
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `priority_rules` attribute in the `queue_rules` section. The priority rules must now be set at the top level of the configuration file.**\n> This option will be removed in a future version.\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules",
-            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `priority_rules` attribute in the `queue_rules` section. The priority rules must now be set at the top level of the configuration file.**\nThis option will be removed on January 31st, 2025\n> For more information: https://docs.mergify.com/configuration/file-format/#priority-rules"
-          },
-          "deprecated": true,
-          "description": "*This attribute is deprecated in favor of `priority_rules` at the top level of the Mergify configuration file.* The list of priority rules a pull request can match in order to be prioritized when added to a queue. The rule with the highest priority value wins."
-        },
         "queue_conditions": {
           "$ref": "#/$defs/QueueRuleMergeConditionsModel",
           "description": "The list of conditions that needs to match to queue the pull request."

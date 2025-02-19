@@ -3287,6 +3287,176 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/batch_size": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get the checks batch size",
+        "description": "Batch size of the checks running on queues by intervals of time",
+        "operationId": "get_stats_batch_size_repos__owner___repository__stats_batch_size_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Base reference(s) of the pull requests",
+              "title": "Base Ref"
+            },
+            "description": "Base reference(s) of the pull requests"
+          },
+          {
+            "name": "partition_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Partition name(s) of the pull requests",
+              "title": "Partition Name"
+            },
+            "description": "Partition name(s) of the pull requests"
+          },
+          {
+            "name": "queue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Merge queue rule name(s) of the pull requests",
+              "title": "Queue Name"
+            },
+            "description": "Merge queue rule name(s) of the pull requests"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date, default 1 day before end_at",
+              "title": "Start At"
+            },
+            "description": "Get the stats until this date, default 1 day before end_at"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date, default now",
+              "title": "End At"
+            },
+            "description": "Get the stats from this date, default now"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchSizeResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/partitions": {
       "get": {
         "tags": [
@@ -4119,6 +4289,88 @@
           "base_refs"
         ],
         "title": "BaseRefsResponse"
+      },
+      "BatchSizeGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/BatchSizeInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "partition_name",
+          "queue_name",
+          "stats"
+        ],
+        "title": "BatchSizeGroupResponse"
+      },
+      "BatchSizeInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "avg_batch_size": {
+            "type": "number",
+            "title": "Avg Batch Size"
+          },
+          "max_batch_size": {
+            "type": "integer",
+            "title": "Max Batch Size"
+          },
+          "min_batch_size": {
+            "type": "integer",
+            "title": "Min Batch Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "avg_batch_size",
+          "max_batch_size",
+          "min_batch_size"
+        ],
+        "title": "BatchSizeInInterval"
+      },
+      "BatchSizeResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/BatchSizeGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "BatchSizeResponse"
       },
       "Branch": {
         "properties": {
