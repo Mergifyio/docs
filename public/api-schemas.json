@@ -10373,6 +10373,10 @@
       "description": "Operations with queues."
     },
     {
+      "name": "repositories",
+      "description": "Operation with repositories."
+    },
+    {
       "name": "repository_rulesets",
       "description": "Operation with repository rulesets."
     },
