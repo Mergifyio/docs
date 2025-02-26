@@ -23,7 +23,7 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "^22.13.1",
     "@types/viz.js": "^2.1.5",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.24.1",
     "astro": "^4.16.18",
     "astro-auto-import": "^0.4.4",
