@@ -2615,6 +2615,11 @@
           "title": "Update Bot Account"
         },
         "disallow_checks_interruption_from_queues": {
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `disallow_checks_interruption_from_queues` attribute in the `queue_rules` section. It has been replaced in favor of using `priority_rules` at the top-level of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/priority/",
+            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `disallow_checks_interruption_from_queues` attribute in the `queue_rules` section. It has been replaced in favor of using `priority_rules` at the top-level of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/priority/"
+          },
+          "deprecated": true,
           "items": {
             "type": "string"
           },
@@ -2847,6 +2852,11 @@
           "title": "Update Bot Account"
         },
         "disallow_checks_interruption_from_queues": {
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `disallow_checks_interruption_from_queues` attribute in the `queue_rules` section. It has been replaced in favor of using `priority_rules` at the top-level of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/priority/",
+            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `disallow_checks_interruption_from_queues` attribute in the `queue_rules` section. It has been replaced in favor of using `priority_rules` at the top-level of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/priority/"
+          },
+          "deprecated": true,
           "items": {
             "type": "string"
           },
