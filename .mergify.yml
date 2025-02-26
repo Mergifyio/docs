@@ -77,8 +77,6 @@ queue_rules:
     batch_size: 7
     batch_max_wait_time: 5min
     queue_branch_merge_method: fast-forward
-    disallow_checks_interruption_from_queues:
-      - default
     commit_message_template:
 
 pull_request_rules:
