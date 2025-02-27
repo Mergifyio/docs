@@ -1284,6 +1284,23 @@
       "title": "MergeProtectionRulesModel",
       "type": "array"
     },
+    "MergeProtectionsModel": {
+      "additionalProperties": false,
+      "properties": {
+        "reporting_method": {
+          "default": "check-runs",
+          "description": "The merge protection reporting method",
+          "enum": [
+            "check-runs",
+            "deployments"
+          ],
+          "title": "Reporting Method",
+          "type": "string"
+        }
+      },
+      "title": "MergeProtectionsModel",
+      "type": "object"
+    },
     "MergeQueueModel": {
       "additionalProperties": false,
       "properties": {
@@ -3173,6 +3190,9 @@
     },
     "merge_queue": {
       "$ref": "#/$defs/MergeQueueModel"
+    },
+    "merge_protections_settings": {
+      "$ref": "#/$defs/MergeProtectionsModel"
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
