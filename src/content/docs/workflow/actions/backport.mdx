@@ -119,3 +119,21 @@ pull_request_rules:
         branches:
           - stable
 ```
+
+### Impersonating the Original Author
+
+If you want to create a backport impersonating the original pull request
+author, you can configure the default `backport` actions parameter to use a
+`bot_account` with the original pull request author account.
+
+```yaml
+defaults:
+  actions:
+    backport:
+      bot_account: {{ author }}
+```
+
+:::note
+  Pull request author will need to log at least once in the Mergify dashboard
+  for a pull request to be created on their behalf.
+:::
