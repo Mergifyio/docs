@@ -1,0 +1,34 @@
+---
+title: Integrating GitHub with Mergify
+description: Managing Mergify GitHub installation.
+---
+
+import { Image } from "astro:assets"
+import githubLogo from "../../images/integrations/github/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+import githubIntegScreenshot from"../../images/integrations/github/integrations.png"
+
+<IntegrationLogo src={githubLogo} alt="GitHub logo"/>
+
+Mergify is fully integrated with GitHub and many functionalities requires
+Mergify to be installed on your repositories.
+
+## Configuring Enabled Products
+
+You can configure the products that are enabled on your GitHub repositories by
+clicking on `Integrations` and then on `GitHub / Configure`.
+
+<Image src={githubIntegScreenshot} alt="GitHub Integration"/>
+
+First, this screens allows you to define which products are enabled by default
+for new repositories where the Mergify GitHub App is installed.
+
+Then, you can add repositories by clicking on `Add Repository` and installing
+the Mergify GitHub App on them.
+
+:::note
+  Adding repository requires GitHub admin privileges.
+:::
+
+Finally, you can enable or disable any product for any repositories by checking
+the box and saving the result.

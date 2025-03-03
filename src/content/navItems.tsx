@@ -21,7 +21,6 @@ import {
 import { FaShieldAlt, FaHome, FaRegListAlt } from 'react-icons/fa';
 import {
 	FaStairs,
-	FaCirclePlay,
 	FaRegLightbulb,
 	FaGear,
 	FaTrafficLight,
@@ -42,6 +41,7 @@ import {
 	SiSnyk,
 	SiDependabot,
 	SiTeamcity,
+	SiGithub,
 	SiGithubactions,
 	SiJenkins,
 	SiCircleci,
@@ -66,7 +66,6 @@ export type NavItem = {
 
 const navItems: NavItem[] = [
 	{ title: 'Home', path: '/', icon: FaHome },
-	{ title: 'Getting Started', path: '/getting-started', icon: FaCirclePlay },
 	{
 		title: 'Merge Protections',
 		path: '/merge-protections',
@@ -204,6 +203,7 @@ const navItems: NavItem[] = [
 		icon: BsPlugin,
 		path: '/integrations',
 		children: [
+			{ title: 'GitHub', path: '/integrations/github', icon: SiGithub },
 			{ title: 'GitHub Actions', path: '/integrations/gha', icon: SiGithubactions },
 			{ title: 'CircleCI', path: '/integrations/circleci', icon: SiCircleci },
 			{ title: 'Jenkins', path: '/integrations/jenkins', icon: SiJenkins },

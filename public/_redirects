@@ -55,3 +55,4 @@
 /workflow/schedule-merge /merge-protections 301
 /merge-queue/speculative-checks /merge-queue/parallel-checks 301
 /merge-queue/speculative-checks/ /merge-queue/parallel-checks 301
+/getting-started /integrations/github 301
