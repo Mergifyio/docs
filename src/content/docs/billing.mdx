@@ -5,7 +5,7 @@ description: Understand how Mergify fair billing works.
 
 import DownloadLink from '../../components/DownloadLink.astro';
 import { Image } from "astro:assets"
-import UsageScreenshot from "../images/billing/usage.png"
+import PlanScreenshot from "../images/billing/plan.png"
 import InvoicePreviousPeriod from "../images/billing/invoice-previous-period.png"
 import InvoiceNextPeriod from "../images/billing/invoice-next-period.png"
 
@@ -15,19 +15,55 @@ billing system functions:
 
 ## Plans Overview
 
-We offer multiple plans tailored to provide various features. At present, we
-primarily offer two distinct plans:
-
-- **Advanced Plan**: giving access to all our features.
-
-- **Enterprise Plan**: An on-premise plan specifically designed for those
-utilizing GitHub Enterprise Server (GHES).
+Mergify offers flexible pricing with three tiers to match your CI/CD automation
+needs.
 
 :::note
-  We had previously offered other plans, but currently, these two are our main
-  available. If you want to migrate to another plan, see [Switching or
-  Cancelling Plans](#switching-or-cancelling-plans).
+  We had previously offered other plans, however, these are our only available
+  now. If you want to migrate to another plan, see [Switching or Cancelling
+  Plans](#switching-or-cancelling-plans).
 :::
+
+### Free Plan (Limited Features)
+
+Ideal for teams getting started with CI/CD automation. This plan includes:
+- Workflow Automation: Automate merges, labels, and rebases.
+- Merge Protection: Enforce rules and freeze policies.
+- Merge Queue: Batch and prioritize merges.
+- CI Insights: Basic job and test analytics, 24 hours data retention.
+
+👉 No cost, [get started instantly](https://dashboard.mergify.com)!
+
+### Paid Plan (Advanced Features, Per-Seat Pricing)
+
+Our Paid Plan offers flexibility by allowing you to subscribe to individual
+products based on your needs. Instead of a bundled package, you can choose
+specific features that enhance your CI/CD workflows:
+
+- Workflow Automation: Private repository support.
+
+- Merge Protection: Scheduled merges & freeze management.
+
+- Merge Queue: Smart prioritization, parallel checks, partitions, API access.
+
+- CI Insights: 30-day data retention, flaky test detection, complete test
+  analytics, quarantine.
+
+Each product is billed separately, giving you full control over your
+subscription. You only pay for what you use, ensuring a cost-effective solution
+tailored to your CI/CD requirements.
+
+### Enterprise Plan (On-Premise & GHES Support)
+
+For organizations requiring on-premise deployment and dedicated support.
+Includes:
+
+- Advanced Support
+- On-Premise Deployment
+- GitHub Enterprise Server (GHES) Support
+
+[Schedule a call](http://calendly.com/mergify/demo) to discuss Enterprise
+solutions.
 
 ## User Accounting Modes
 
@@ -80,7 +116,7 @@ The script will run and print its progress. It can take several minutes for the
 script to complete depending on the number of repositories scanned and the
 number of active pull requests they have.
 
-:::warning
+:::caution
   This script provides an **approximate estimate** of the number of users that
   Mergify might consider active. It does not fully replicate the internal logic
   used by Mergify to count active users, so discrepancies may exist. This
@@ -110,9 +146,9 @@ Mergify does not require an annual subscription (except for the Enterprise
 plan), but offer substantial discount if you buy users in advance for a
 12-months period.
 
-An annual subscription allows you to buy a base of number of seats (users) at
-the start of the year. If your usage goes beyond the pre-purchased seats,
-additional seats are billed monthly, prorated to the exact day of use.
+An annual subscription allows you to buy a base of number of seats (users) per
+product at the start of the year. If your usage goes beyond the pre-purchased
+seats, additional seats are billed monthly, prorated to the exact day of use.
 
 For example, let's say you have purchased a annual license for 100 users. If
 your number of users increases to 110 users during 45 days, you will be
@@ -125,10 +161,14 @@ invoiced for 10 extra users over 45 days.
 
 ## Checking Current Usage
 
-You can check your current usage by going through [Mergify
-dashboard](https://dashboard.mergify.com) and clicking on the Usage panel.
+You can check your current usage by going through [Mergify dashboard
+settings](https://dashboard.mergify.com/settings) and clicking on the Usage
+panel..
 
-<Image src={UsageScreenshot} alt="Mergify usage panel"/>
+<Image src={PlanScreenshot} alt="Mergify settings panel"/>
+
+You can then click on the number of contributors to get the list of active
+users for each product.
 
 :::note
   This is not available for the **Enterprise** plan.
