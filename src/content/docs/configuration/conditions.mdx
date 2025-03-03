@@ -358,6 +358,28 @@ reviews or if the `test job` check passes.
 Combining conditions using logical operators can help you create more
 sophisticated rules tailored to your repository's workflow and requirements.
 
+### The `not` Operator
+
+The `not` operator is used to negate a block of conditions such that if a
+condition is true, it becomes false. In Mergify rules, the `not` operator is
+represented by using the `not` keyword and specifying the underlying condition
+block with `or` or `and`.
+
+Example
+
+```yaml
+pull_request_rules:
+  - name: Merge when both condition are not met
+    conditions:
+      - not:
+          and:
+            - "#approved-reviews-by >= 2"
+            - "check-success = test job"
+    actions:
+      merge:
+        method: merge
+```
+
 ## Testing and Debugging Conditions
 
 When crafting conditions for your Mergify rules, it's essential to test and
