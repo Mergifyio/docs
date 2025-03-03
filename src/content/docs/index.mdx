@@ -9,7 +9,7 @@ import CommunityButton from '../../components/CommunityButton.astro';
 import { BiBadgeCheck, BiCut} from 'react-icons/bi';
 import {SiSlack, SiGithub, SiX, SiYoutube, SiLinkedin} from 'react-icons/si';
 import {SlRefresh, SlSpeedometer} from 'react-icons/sl';
-import {MdMonitorHeart, MdScheduleSend} from 'react-icons/md';
+import {MdMonitorHeart, MdScheduleSend, MdOutlineLightbulb} from 'react-icons/md';
 import {GoGitMerge, GoCodeReview} from 'react-icons/go';
 import {BsPatchQuestion, BsRocket, BsPlugin, BsStack, BsRobot, BsCommand} from 'react-icons/bs';
 import {BiSolidCoinStack, BiRuler} from 'react-icons/bi';
@@ -21,6 +21,7 @@ import {AiOutlinePartition, AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi
 import {LiaShareAltSolid} from 'react-icons/lia';
 import {FiType} from 'react-icons/fi';
 import {IoIosRemoveCircleOutline} from 'react-icons/io';
+import { GrTest } from "react-icons/gr";
 
 Welcome to Mergify Documentation. 
 Explore our guides and examples on how to integrate Mergify.
@@ -37,6 +38,26 @@ Define advanced rules to prevent your pull requests from being merged.
   >
     Prevent pull request merge based on advanced conditions.
   </Docset>
+</DocsetGrid>
+
+## CI Insights
+
+<DocsetGrid>
+  <Docset
+    title="Using CI Insights"
+    path="/ci-insights"
+    icon={MdOutlineLightbulb}
+  >
+    Overview of CI Insights functionalities.
+  </Docset>
+  <Docset
+    title="Configuring Test Frameworks"
+    path="/ci-insights/tests"
+    icon={GrTest}
+  >
+    Configuring tests reports for CI Insights.
+  </Docset>
+
 </DocsetGrid>
 
 ## Workflow Automation
