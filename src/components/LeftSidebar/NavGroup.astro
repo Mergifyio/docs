@@ -52,12 +52,18 @@ const { navGroup, currentPageMatch } = Astro.props as Props;
 			super();
 
 			const uuid = this.dataset.uuid;
-			const navState = JSON.parse(window.localStorage.getItem('navState'));
-			const isOpen = navState[uuid];
+			const storedNavState = window.localStorage.getItem('navState');
+			let isOpen = false;
+			if (storedNavState !== null) {
+				const navState = JSON.parse(storedNavState);
+				isOpen = navState[uuid];
+			}
+
 			const navGroupDetails = this.querySelector(`[data-uuid="${uuid}"] > details`);
 			const navGroupTitle = this.querySelector(
 				`[data-uuid="${uuid}"] > details > .nav-group-title`
 			);
+
 			if (isOpen) {
 				navGroupDetails.setAttribute('open', '');
 			} else {
@@ -65,8 +71,12 @@ const { navGroup, currentPageMatch } = Astro.props as Props;
 			}
 
 			navGroupTitle.addEventListener('click', () => {
-				const navState = JSON.parse(window.localStorage.getItem('navState'));
-				navState[uuid] = !navState[uuid];
+				const storedNavState = window.localStorage.getItem('navState');
+				let navState = { uuid: true };
+				if (storedNavState !== null) {
+					navState = JSON.parse(storedNavState);
+					navState[uuid] = !navState[uuid];
+				}
 				window.localStorage.setItem('navState', JSON.stringify({ ...navState }));
 			});
 		}

@@ -18,23 +18,3 @@ const { currentPageMatch } = Astro.props as Props;
 		)
 	)
 }
-
-<script>
-	import navItems, { NavItem } from '~/content/navItems';
-	import { flattenNavItems } from '~/util/flattenNavItems';
-
-	const navGroups = flattenNavItems(navItems).filter((el: NavItem) => el.children);
-	const initialNavState = navGroups.reduce(
-		(acc: any, group) => ({
-			...acc,
-			[group.id as string]: true,
-		}),
-		{}
-	);
-
-	const navState = window.localStorage.getItem('navState');
-
-	if (!navState) {
-		window.localStorage.setItem('navState', JSON.stringify(initialNavState));
-	}
-</script>
