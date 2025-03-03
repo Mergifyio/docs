@@ -119,3 +119,16 @@ pull_request_rules:
         branches:
           - stable
 ```
+
+### Impersonating the Original Author
+
+If you want to create a backport impersonating the original pull request
+author, you can configure the default `backport` actions parameter to use a
+`bot_account` with the original pull request author account.
+
+```yaml
+defaults:
+  actions:
+    backport:
+      bot_account: {{ author }}
+```
