@@ -70,7 +70,7 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/ibm-plex-mono": "^5.1.1",
     "@fontsource/poppins": "^5.1.1",
-    "@fontsource/source-sans-pro": "^5.1.0",
+    "@fontsource/source-sans-pro": "^5.2.5",
     "@nanostores/preact": "^0.5.2",
     "@scalar/api-reference": "^1.25.119",
     "@types/react": "^19.0.10",
