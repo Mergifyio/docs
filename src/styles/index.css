@@ -333,7 +333,7 @@ code {
 	word-break: break-word;
 }
 
-code[class^='language-'] {
+pre > code {
 	display: inline-block;
 	padding: 15px 10px;
 	width: 100%;
