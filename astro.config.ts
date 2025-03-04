@@ -1,13 +1,13 @@
 import mdx from '@astrojs/mdx';
 import { defineConfig } from 'astro/config';
 import AutoImport from 'astro-auto-import';
+import { astroExpressiveCode } from 'astro-expressive-code';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkSmartypants from 'remark-smartypants';
 import { asideAutoImport, astroAsides } from './integrations/astro-asides';
 import { youtubeAutoImport, astroYoutubeEmbeds } from './integrations/astro-youtube-embed';
 import { ScalarApiReference } from './integrations/scalar-api-reference';
-import { astroDocsExpressiveCode } from './integrations/expressive-code';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
 import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
@@ -36,8 +36,13 @@ export default defineConfig({
 		}),
 		astroAsides(),
 		astroYoutubeEmbeds(),
-		astroDocsExpressiveCode(),
-		mdx(),
+        astroExpressiveCode({
+            themes: ['slack-ochin', 'slack-dark'],
+        }),
+		mdx({
+            syntaxHighlight: 'shiki',
+            shikiConfig: { themes: {light:'slack-ochin', dark: 'slack-dark'}}
+        }),
 		react({
 			include: ['react-icons', 'Tables'],
 		}),
