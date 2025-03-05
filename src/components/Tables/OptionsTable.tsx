@@ -2,16 +2,22 @@ import * as yaml from 'js-yaml';
 
 import configSchema from '../../../public/mergify-configuration-schema.json';
 
-import { getValueType, OptionDefinition } from './ConfigOptions';
+import {
+	ConfigSchema,
+	getValueType,
+	OptionDefinition,
+	Def,
+	OptionDefinitionProperties,
+} from './ConfigOptions';
 import { renderMarkdown } from './utils';
 import Badge from '../Badge/Badge';
 
 export default function OptionsTable({ def }: Def) {
-	const options = configSchema.$defs[def].properties;
-	return OptionsTableBase(configSchema, options as any);
+	const options = (configSchema as unknown as ConfigSchema).$defs[def].properties;
+	return OptionsTableBase(configSchema, options);
 }
 
-export function OptionsTableBase(schema: object, options: OptionDefinition) {
+export function OptionsTableBase(schema: object, options: OptionDefinitionProperties) {
 	const hasDefaultValue = (definition: OptionDefinition) => definition.default !== undefined;
 
 	const shouldHideDefaultColumn = Object.entries(options).every(

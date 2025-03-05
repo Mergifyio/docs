@@ -5,6 +5,12 @@ export type Heading = {
 	value: string;
 };
 
+// copied from @algolia/client-search as the type is not exported
+declare type SnippetMatch = {
+	readonly value: string;
+	readonly matchLevel: 'none' | 'partial' | 'full';
+};
+
 export type Page = {
 	objectID: string;
 	title: string;
@@ -15,6 +21,7 @@ export type Page = {
 		content: string | null;
 	}[];
 	headings: Heading[];
+	excerpt?: SnippetMatch;
 };
 
 export type AlgoliaResult = SearchResponse<Page>['hits'][number];

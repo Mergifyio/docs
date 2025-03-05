@@ -1,7 +1,12 @@
 import React from 'react';
 
+import configSchema from '../../public/mergify-configuration-schema.json';
 import { MdxNodeJsxElement } from '../@types/mdxast';
-import { OptionDefinition } from '~/components/Tables/ConfigOptions';
+import {
+	OptionDefinition,
+	OptionDefinitionProperties,
+	resolveSchema,
+} from '~/components/Tables/ConfigOptions';
 import { OptionsTableBase } from '~/components/Tables/OptionsTable';
 import PullRequestAttributesTable from '~/components/Tables/PullRequestAttributes';
 
@@ -116,15 +121,26 @@ export function renderMdxTable(table: TableType) {
 
 	switch (node.name) {
 		case 'OptionsTable': {
-			return OptionsTableBase(onlyHighlightedOptions as any);
+			const options = resolveSchema(
+				configSchema,
+				onlyHighlightedOptions
+			) as OptionDefinitionProperties;
+			return OptionsTableBase(configSchema, options);
 		}
 
 		case 'PullRequestAttributesTable': {
-			return <PullRequestAttributesTable staticAttributes={onlyHighlightedOptions} />;
+			console.log(onlyHighlightedOptions);
+			const attributes =
+				onlyHighlightedOptions as keyof typeof configSchema.$defs.PullRequestAttributes.properties;
+			return <PullRequestAttributesTable staticAttributes={attributes} />;
 		}
 
 		case 'ActionOptionsTable': {
-			return OptionsTableBase(onlyHighlightedOptions as any);
+			const options = resolveSchema(
+				configSchema,
+				onlyHighlightedOptions
+			) as OptionDefinitionProperties;
+			return OptionsTableBase(configSchema, options);
 		}
 	}
 
