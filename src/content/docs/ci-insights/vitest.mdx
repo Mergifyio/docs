@@ -1,0 +1,92 @@
+---
+title: Vitest Integration with CI Insights
+description: Report your test results from Vitest to CI Insights
+---
+
+import vitestLogo from "../../images/ci-insights/vitest/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={vitestLogo} alt="Vitest logo"/>
+
+This guide shows how to configure [Vitest](https://vitest.dev/) to produce
+JUnit reports and upload them to CI Insights within a GitHub Actions workflow.
+
+## 1. Generate a JUnit Report with Vitest
+
+By default, Vitest doesn't generate JUnit-format test results. You need to
+enable it in your `vite.config.ts` or `vitest.config.ts`.
+
+This is [documenteded on vitest
+website](https://vitest.dev/guide/reporters#junit-reporter).
+
+For example:
+
+```javascript
+export default defineConfig(({ mode }) => {
+  return {
+    test: {
+      reporters: ['default', 'junit'],
+      outputFile: './junit.xml',
+      includeConsoleOutput: true,
+    },
+  };
+});
+```
+
+Key Options:
+
+- `reporters: ['default', 'junit']`: Tells Vitest to generate JUnit reports
+alongside the standard console output.
+
+- `outputFile: './junit.xml'`: Sets the path where Vitest writes the test
+  results (you can rename or relocate as you prefer).
+
+- `includeConsoleOutput: true`: Ensures console logs are captured in the final
+  report.
+
+## 2. Update Your GitHub Actions Workflow
+
+Once you have the JUnit file produced by Vitest, add a step to upload these
+results to **CI Insights** via the `mergifyio/gha-mergify-ci` action.
+
+In the workflow file where vitest is launched, after running `npm run test` (or
+similar), include a step like:
+
+```yaml
+- name: Mergify CI Upload
+  if: success() || failure()
+  uses: mergifyio/gha-mergify-ci@v4
+  with:
+    token: ${{ secrets.MERGIFY_TOKEN }}
+    report_paths: src/junit.xml
+```
+
+Key Points:
+
+- `if: success() || failure()`: Runs the upload step even if tests
+  fail, ensuring **CI Insights** has the full report.
+
+- `report_paths: src/junit.xml`: Points to where your JUnit file is located.
+  Make sure it matches the `outputFile` path you set in Vitest (e.g.,
+  `./junit.xml`).
+
+## 3. Verify and Review in CI Insights
+
+After pushing these changes:
+1. Your GitHub Actions workflow will run tests with Vitest.
+2. Vitest generates junit.xml.
+3. The Mergify CI action uploads that file to CI Insights.
+
+You can then see your test results, including failures and flaky tests,
+directly in the CI Insights dashboard.
+
+## Troubleshooting Tips
+
+- File Paths: Double-check that `outputFile` in Vitest matches the path used in
+  `report_paths`.
+
+- Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
+  Actions secrets [as explained in the docs]((/ci-insights#enabling-ci-insights-for-github)).
+
+- Workflow Conditions: If your step is not running, confirm the if condition is
+  actually triggered in your job.

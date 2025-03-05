@@ -1,0 +1,92 @@
+---
+title: CI Insights
+description: Optimize your CI run time, catch flaky tests, and give developers actionable insights so your team ships code faster.
+---
+
+import { Image } from "astro:assets"
+import MainScreenshot from "../../images/ci-insights/main.png"
+import TokenScreenshot from "../../images/ci-insights/token.png"
+import GHSecretsScreenshot from "../../images/ci-insights/gh-secrets.png"
+import {
+  SiPytest,
+  SiGithub,
+  SiCypress,
+  SiVitest,
+  SiGo,
+} from 'react-icons/si';
+import Docset from '../../../components/DocsetGrid/Docset.astro';
+import DocsetGrid from '../../../components/DocsetGrid/DocsetGrid.astro';
+
+CI Insights helps you monitor your pipelines, detect flaky tests, and optimize
+your CI efficiency. This guide walks you through enabling CI Insights via
+GitHub and covers basic configuration steps.
+
+:::note
+  If you do not see CI Insights in your dashboard, this means you are not part
+  of our *Early Access* program. Feel free to [apply for early
+  access](https://forms.mergify.com/ci-insights-early-access).
+:::
+
+## Enabling CI Insights for GitHub
+
+1. Enable CI Insights on your repositories by visiting the [GitHub Integration
+   page](https://dashboard.mergify.com/integrations/github)
+   ([docs](/integrations/github)).
+
+2. In order to upload your test results, you'll need to [configure your
+   test](#test-framework-configuration). Before doing so, makes sure you set
+   your `MERGIFY_TOKEN` in GitHub in your GitHub Actions secrets.
+
+   To find your token in the Mergify dashboard, go to `Settings` and then `CI
+   Insights`:
+
+   <Image src={TokenScreenshot} alt="CI Insights Token" />
+
+   Once you copy it, you'll need to paste it to into your secrets:
+
+   <Image src={GHSecretsScreenshot} alt="GitHub Actions Secrets" />
+
+   This token will be used to upload test reports. See below to configure them.
+
+3. Click on `CI Insights` in the navigation bar from Mergify dashboard. You
+   should see your first GitHub Actions job run here.
+
+   <Image src={MainScreenshot} alt="CI Insights" />
+
+## Test Framework Configuration
+
+CI Insights currently supports many tests framework allowing you get more
+details about your test runs. Each framework requires a quick setup to ensure
+test results are captured correctly. Refer to the dedicated pages for your
+specific framework to configure and verify your test output.
+
+<DocsetGrid>
+  <Docset
+    title="Pytest"
+    path="/ci-insights/pytest"
+    icon={SiPytest}
+  >
+    Integration Pytest with CI Insights.
+  </Docset>
+    <Docset
+    title="Go"
+    path="/ci-insights/Golang"
+    icon={SiGo}
+  >
+    Integration Go with CI Insights.
+  </Docset>
+  <Docset
+    title="Cypress"
+    path="/ci-insights/cypress"
+    icon={SiCypress}
+  >
+    Integration Cypress with CI Insights.
+  </Docset>
+  <Docset
+    title="Vitest"
+    path="/ci-insights/vitest"
+    icon={SiVitest}
+  >
+    Integration Vitest with CI Insights.
+  </Docset>
+</DocsetGrid>
