@@ -5,7 +5,13 @@ const { title, path } = Astro.props;
 <div class="container">
 	<a href={path}>
 		<h4>
-			{!!Astro.props.icon && <Astro.props.icon />}
+			{
+				!!Astro.props.icon && (
+					<div class="docset-icon">
+						<Astro.props.icon />
+					</div>
+				)
+			}
 			<span>{title}</span>
 		</h4>
 	</a>
@@ -29,7 +35,9 @@ const { title, path } = Astro.props;
 		display: flex;
 		align-items: center;
 
-		svg {
+		.docset-icon {
+			display: flex;
+			align-items: center;
 			margin-right: 8px;
 		}
 	}

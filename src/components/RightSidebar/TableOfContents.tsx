@@ -1,5 +1,5 @@
-import type { ComponentChildren, JSX } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import type { ReactNode, JSX, SyntheticEvent } from 'react';
+import { useEffect, useState } from 'react';
 import type { TocItem } from '../../util/generateToc';
 import { unescape } from '../../util/html-entities';
 import './TableOfContents.css';
@@ -20,11 +20,11 @@ const TableOfContents = ({ toc = [], labels, isMobile }: Props) => {
 	const [open, setOpen] = useState(!isMobile);
 	const onThisPageID = 'on-this-page-heading';
 
-	const Container = ({ children }: { children: ComponentChildren }) => {
+	const Container = ({ children }: { children: ReactNode }) => {
 		return isMobile ? (
 			<details
 				{...{ open }}
-				onToggle={(e: JSX.TargetedEvent<HTMLDetailsElement>) => setOpen(e.currentTarget.open)}
+				onToggle={(e: SyntheticEvent<HTMLDetailsElement>) => setOpen(e.currentTarget.open)}
 				className="toc-mobile-container"
 			>
 				{children}
@@ -94,7 +94,7 @@ const TableOfContents = ({ toc = [], labels, isMobile }: Props) => {
 		return () => headingsObserver.disconnect();
 	}, []);
 
-	const onLinkClick = (e: JSX.TargetedMouseEvent<HTMLAnchorElement>) => {
+	const onLinkClick = (e: SyntheticEvent<HTMLAnchorElement>) => {
 		if (!isMobile) return;
 		setOpen(false);
 		setCurrentHeading({
