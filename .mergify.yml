@@ -7,22 +7,37 @@ shared:
       {{ body }}
     allow_inplace_checks: true
     merge_method: squash
-  CheckRuns: &CheckRuns
-    - check-success=lint
-    - check-success=test
-    - or:
-        - label = ignore-broken-links
-        - check-success = test-broken-links
-    - or:
-        - check-success=Cloudflare Pages
-        # fork can't have the preview build
-        - "-head-repo-full-name~=^Mergifyio/"
 
-queue_rules:
-  - name: hotfix
-    <<: *DefaultQueueOptions
-    queue_conditions:
-      - or:
+merge_protections:
+  - name: 🤖 Continuous Integration
+    if:
+      - label != hotfix
+    success_conditions:
+      - and: &CheckRuns
+          - check-success = lint
+          - check-success = test
+          - or:
+              - label = ignore-broken-links
+              - check-success = test-broken-links
+          - or:
+              - check-success=Cloudflare Pages
+              # fork can't have the preview build
+              - "-head-repo-full-name~=^Mergifyio/"
+
+  - name: 👀 Review Requirements
+    if:
+      - label != hotfix
+    success_conditions:
+      - or: &DefaultReviewCond
+          - "#approved-reviews-by >= 2"
+          - author = dependabot[bot]
+          - author = mergify-ci-bot
+
+  - name: 🧑‍🚒 Hotfix Review Requirements
+    if:
+      - label = hotfix
+    success_conditions:
+      - or: &HotfixReviewCond
           # Author is engineering manager, we allow with one review
           - and:
               - author=@eng-mgr
@@ -36,9 +51,17 @@ queue_rules:
                   - and:
                       - title~=^(revert|fix)
                       - "#approved-reviews-by>=1"
-      - label=hotfix
-      - "#changes-requested-reviews-by=0"
-      - "#review-requested=0"
+
+          - or: *DefaultReviewCond
+
+      # yamllint disable-line rule:line-length
+      - body ~= (Fix|Related).* (INC-\d+|https:\/\/github\.com\/Mergifyio\/docs\/security\/dependabot\/\d+)
+
+queue_rules:
+  - name: hotfix
+    <<: *DefaultQueueOptions
+    queue_conditions:
+      - label = hotfix
     merge_conditions:
       - and: *CheckRuns
 
@@ -46,13 +69,7 @@ queue_rules:
     <<: *DefaultQueueOptions
     queue_conditions:
       - and: *CheckRuns
-      - "#approved-reviews-by>=2"
-      - "#changes-requested-reviews-by=0"
-      - "#review-threads-unresolved=0"
-      - "#review-requested=0"
-      - label!=manual merge
     merge_conditions:
-      - and: *CheckRuns
       - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
 
   - name: lowprio
@@ -72,7 +89,6 @@ queue_rules:
               - "title~=^chore: bump"
           - author=dependabot[bot]
     merge_conditions:
-      - and: *CheckRuns
       - schedule=Mon-Fri 09:00-17:00[Europe/Paris]
     batch_size: 7
     batch_max_wait_time: 5min
@@ -82,6 +98,7 @@ queue_rules:
 pull_request_rules:
   - name: automatic merge
     conditions:
+      - label != manual merge
       - base=main
     actions:
       queue:
