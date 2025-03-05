@@ -14,6 +14,11 @@ interface PageData {
 	description: string;
 }
 
+type AstroFrontmatter = {
+	title: string;
+	description: string;
+}
+
 async function savePageToAlgolia(pageData: PageData) {
 	if (process.env.NODE_ENV !== 'production') return;
 	if (!process.env.ALGOLIA_WRITE_KEY) {
@@ -105,12 +110,15 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
 			}
 		});
 
+        const astroData = file.data.astro as { 
+            frontmatter:  AstroFrontmatter
+        };
 		savePageToAlgolia({
 			headings,
 			tables,
 			objectID: getPath(file.history[0]),
 			excerpt: getExcerpt(tree),
-			...file.data.astro.frontmatter,
+			...astroData.frontmatter,
 		});
 	};
 

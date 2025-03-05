@@ -23,11 +23,33 @@ const valueTypeFormatLinks: { [key: string]: string } = {
 	duration: '/configuration/data-types#duration',
 };
 
+export type OptionDefinitionRef = string;
+
+export interface OptionDefinitionProperties {
+	title: string;
+	type: string;
+	$ref: OptionDefinitionRef;
+	[optionKey: string]: any;
+}
+
 export interface OptionDefinition {
 	description: string;
 	default: string | boolean;
 	deprecated?: boolean;
-	$ref: any;
+	type: string;
+	title: string;
+	name: string;
+	$ref: OptionDefinitionRef;
+	properties: OptionDefinitionProperties;
+}
+
+export type DefName = keyof typeof configSchema.$defs;
+
+export interface ConfigSchema {
+	title: string;
+	type: string;
+	$defs: { [key in DefName]: OptionDefinition };
+	properties: { string: OptionDefinitionProperties };
 }
 
 export interface Def {
@@ -53,7 +75,7 @@ function getTypeLink(ref: string): string | undefined {
 	return undefined;
 }
 
-function getItemFromSchema(schema: object, path: string): object {
+function getItemFromSchema(schema: object, path: OptionDefinitionRef): OptionDefinition {
 	const refPath = path.replace('#', ''); // Clean the path
 	return jsonpointer.get(schema, refPath);
 }
@@ -65,28 +87,29 @@ function getItemFromSchema(schema: object, path: string): object {
  * @returns The fully resolved schema item.
  */
 export function resolveSchema(schema: object, item: object): object {
-	if (item.$ref) {
+	if ((item as any).$ref) {
 		// Recursively resolve if the resolved item is another $ref
-		return resolveSchema(schema, getItemFromSchema(schema, item.$ref));
+		return resolveSchema(schema, getItemFromSchema(schema, (item as OptionDefinition).$ref));
 	} else {
 		// Return the item if it's a complete definition (not a $ref)
 		return item;
 	}
 }
 
-function getType(schema: object, ref: object): string {
-	return getItemFromSchema(schema, resolveSchema(schema, ref));
+function getTitle(schema: object, ref: OptionDefinitionRef): string {
+	const item = getItemFromSchema(schema, ref);
+	return item?.title || item?.name || '';
 }
 
 export function getValueType(schema: object, definition: any): React.ReactElement {
 	let valueType = null;
 	if (definition.type === 'array') {
 		let typeLink: string;
-		let typeDescription: string;
+		let typeDescription: string | React.ReactElement;
 
 		if ('$ref' in definition.items) {
 			typeLink = getTypeLink(definition.items.$ref);
-			typeDescription = getType(schema, definition.items.$ref).title;
+			typeDescription = getTitle(schema, definition.items.$ref);
 		} else {
 			typeDescription = getValueType(schema, definition.items);
 		}
@@ -107,7 +130,7 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
 		const typeLink = getTypeLink(definition.$ref);
 		const typeDescription = (
 			<div
-				dangerouslySetInnerHTML={{ __html: renderMarkdown(getType(schema, definition.$ref).title) }}
+				dangerouslySetInnerHTML={{ __html: renderMarkdown(getTitle(schema, definition.$ref)) }}
 			/>
 		);
 

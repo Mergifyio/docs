@@ -1,4 +1,4 @@
-import type { Root } from 'hast';
+import type { Root, } from 'hast';
 import { toHtml } from 'hast-util-to-html';
 import type { Transformer } from 'unified';
 import { walk } from 'unist-util-walker';
@@ -22,7 +22,7 @@ export function rehypeOptimizeStatic(): Transformer<Root, Root> {
 		// The current collapsible element stack while traversing the tree
 		const elementStack: Node[] = [];
 
-		walk(tree, {
+		walk(tree as Node, {
 			enter(node) {
 				// @ts-expect-error test tagName naively
 				const isHeading = node.tagName && headingRe.test(node.tagName);
