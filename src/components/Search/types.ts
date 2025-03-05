@@ -11,15 +11,23 @@ declare type SnippetMatch = {
 	readonly matchLevel: 'none' | 'partial' | 'full';
 };
 
+export type PageTable = {
+	node: string;
+	data?: {
+		matchLevel?: 'none' | 'partial' | 'full';
+		value?: string;
+	};
+	content?: {
+		matchLevel?: 'none' | 'partial' | 'full';
+		value?: string;
+	};
+};
+
 export type Page = {
 	objectID: string;
 	title: string;
 	description: string;
-	tables: {
-		node: string;
-		data: string | null;
-		content: string | null;
-	}[];
+	tables: PageTable[];
 	headings: Heading[];
 	excerpt?: SnippetMatch;
 };

@@ -1,7 +1,8 @@
 import GithubSlugger from 'github-slugger';
 import { renderMdxTable } from '../../util/mdxast';
 
-import { AlgoliaResult, Heading } from './types';
+import { AlgoliaResult, Heading, PageTable } from './types';
+import extractResultValue from './utils';
 
 type HighlightHeading = NonNullable<NonNullable<AlgoliaResult['_highlightResult']>['headings']>;
 
@@ -61,7 +62,7 @@ export default function Preview({
 		>
 			<a
 				href={slug}
-				dangerouslySetInnerHTML={{ __html: _highlightResult?.title?.value ?? '' }}
+				dangerouslySetInnerHTML={{ __html: extractResultValue(_highlightResult?.value) }}
 				style={{
 					lineHeight: 1.2,
 					fontSize: '2.25rem',
@@ -71,9 +72,7 @@ export default function Preview({
 				style={{
 					fontSize: '1.25rem',
 				}}
-				dangerouslySetInnerHTML={{
-					__html: _highlightResult?.description?.value ?? '',
-				}}
+				dangerouslySetInnerHTML={{ __html: extractResultValue(_highlightResult?.title) }}
 			/>
 			<div
 				style={{
@@ -81,9 +80,9 @@ export default function Preview({
 					color: 'var(--theme-text-light)',
 				}}
 				// eslint-disable-next-line: @typescript-eslint/no-unused-expressions
-				dangerouslySetInnerHTML={{ __html: _snippetResult?.excerpt?.value ?? '' }}
+				dangerouslySetInnerHTML={{ __html: extractResultValue(_snippetResult?.excerpt) }}
 			/>
-			{_highlightResult?.tables
+			{(_highlightResult?.tables as unknown as PageTable[])
 				?.filter(
 					(el) =>
 						el?.data?.matchLevel !== 'none' || (el?.content && el.content.matchLevel !== 'none')
