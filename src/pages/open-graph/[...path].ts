@@ -5,7 +5,7 @@ import { allPages } from '~/content';
 const paths = process.env.SKIP_OG ? [] : allPages;
 
 /** An object mapping file paths to file metadata. */
-const pages = Object.fromEntries(paths.map(({ id, slug, data }) => [id, { data, slug }]));
+const pages = Object.fromEntries(paths.map(({ id, data }) => [id, { data, id }]));
 
 export const { getStaticPaths, GET } = OGImageRoute({
 	param: 'path',
