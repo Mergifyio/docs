@@ -22,13 +22,12 @@ export const youtubeAutoImport: Record<string, [string, string][]> = {
 function remarkYoutubeEmbed(): unified.Plugin<[], mdast.Root> {
 	const transformer: unified.Transformer<mdast.Root> = (tree) => {
 		visit(tree, (node, index, parent) => {
-			// @ts-expect-error Possibly infinite type instantiation we can’t do anything about.
 			if (!parent || index === null || node.type !== 'leafDirective' || node.name !== 'youtube')
 				return;
 			let title: string | undefined;
 
 			remove(node, (child) => {
-				if (child.data?.directiveLabel) {
+				if ((child.data as { directiveLabel?: string })?.directiveLabel) {
 					if ('children' in child && 'value' in child.children[0]) {
 						title = child.children[0].value;
 					}
@@ -40,7 +39,7 @@ function remarkYoutubeEmbed(): unified.Plugin<[], mdast.Root> {
 			parent.children[index] = makeComponentNode(
 				YoutubeTagname,
 				{ attributes: { title, video: node.attributes.v } },
-				...node.children
+				...node.children as mdast.BlockContent[]
 			);
 		});
 	};

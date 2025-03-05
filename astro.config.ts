@@ -1,5 +1,6 @@
 import mdx from '@astrojs/mdx';
 import { defineConfig } from 'astro/config';
+import { RemarkPlugin } from '@astrojs/markdown-remark';
 import AutoImport from 'astro-auto-import';
 import { astroExpressiveCode } from 'astro-expressive-code';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -68,7 +69,7 @@ export default defineConfig({
 			remarkGraphvizPlugin(),
 			remarkAlgolia(),
 			[
-				remarkSmartypants,
+				remarkSmartypants as RemarkPlugin,
 				{
 					dashes: false,
 				},
