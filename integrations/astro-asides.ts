@@ -47,7 +47,7 @@ function remarkAsides(): unified.Plugin<[], mdast.Root> {
 			// title prop, and remove the paragraph from children.
 			let title: string | undefined;
 			remove(node, (child) => {
-				if (child.data?.directiveLabel) {
+				if ((child.data as { directiveLabel?: string })?.directiveLabel) {
 					if ('children' in child && 'value' in child.children[0]) {
 						title = child.children[0].value;
 					}
@@ -59,7 +59,7 @@ function remarkAsides(): unified.Plugin<[], mdast.Root> {
 			parent.children[index] = makeComponentNode(
 				AsideTagname,
 				{ attributes: { type, title } },
-				...node.children
+				...node.children as mdast.BlockContent[]
 			);
 		});
 	};
