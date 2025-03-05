@@ -1,0 +1,90 @@
+---
+title: pytest Integration with CI Insights
+description: Report your test results from pytest to CI Insights
+---
+
+import pytestLogo from "../../images/ci-insights/pytest/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={pytestLogo} alt="Pytest logo"/>
+
+This guide explains how to integrate Pytest with CI Insights using the
+`pytest-mergify` plugin. Once installed, test results are automatically
+uploaded to CI Insights without any extra workflow changes.
+
+## 1. Installation
+
+You need to install the
+[`pytest-mergify`](https://pypi.python.org/pypi/pytest-mergify) plugin to
+automatically upload your
+test results to **CI Insights**. This can be done in different way depending on
+your way of managing your Python dependencies. Below are a few examples:
+
+:::note
+  Ensure your CI Insights token is set up as explained in the [installation
+  docs](/ci-insights#enabling-ci-insights-for-github).
+:::
+
+### Pip / Requirements File
+
+`pip install pytest-mergify`
+
+Or add `pytest-mergify` to your `requirements.txt`.
+
+### `setup.py`
+
+```python
+setup(
+    name="your-package",
+    ...
+    install_requires=[
+        ...
+    ],
+    extras_require={
+        "dev": ["pytest-mergify"]
+    },
+    ...
+)
+```
+
+Make sure those dependencies are installed when running your tests.
+
+### `setup.cfg`
+
+```config
+[options.extras_require]
+dev =
+    pytest-mergify
+```
+
+Make sure those dependencies are installed when running your tests.
+
+### Poetry
+
+```bash
+poetry add --group dev pytest-mergify
+```
+
+## 2. Modify Your Workflow
+
+Your workflow should run your test as usual while exporting the secret
+`MERGIFY_TOKEN` as an environment variable. You'll need to add the following
+code to the GitHub Actions step running your tests:
+
+```yaml
+env:
+  MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+```
+
+For example:
+
+```yaml
+- name: Run Tests 🧪
+  env:
+    MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+  run: pytest
+```
+
+The plugin collects your test results and sends them to CI Insights. Check the
+CI Insights dashboard afterward to view execution metrics, detect flaky tests,
+and gather actionable feedback.
