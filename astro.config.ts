@@ -1,5 +1,4 @@
 import mdx from '@astrojs/mdx';
-import preact from '@astrojs/preact';
 import { defineConfig } from 'astro/config';
 import AutoImport from 'astro-auto-import';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -34,9 +33,6 @@ export default defineConfig({
 	integrations: [
 		AutoImport({
 			imports: [asideAutoImport, youtubeAutoImport],
-		}),
-		preact({
-			compat: true,
 		}),
 		astroAsides(),
 		astroYoutubeEmbeds(),
