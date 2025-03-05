@@ -1,15 +1,15 @@
 import { SearchResponse } from '@algolia/client-search';
-import algoliasearch from 'algoliasearch/lite';
+import { algoliasearch } from 'algoliasearch';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 
 import Results from './Results';
-import { Page } from './types';
+import { AlgoliaResult, Page } from './types';
 import Modal from '../Modal/Modal';
 import './Search.scss';
 
 function useAlgoliaSearch(query: string, open: boolean) {
-	const [results, setResults] = useState<SearchResponse<Page>>();
+	const [results, setResults] = useState<AlgoliaResult[]>();
 
 	useEffect(() => {
 		const search = async () => {
@@ -17,27 +17,33 @@ function useAlgoliaSearch(query: string, open: boolean) {
 				import.meta.env.PUBLIC_ALGOLIA_APP_ID as string,
 				import.meta.env.PUBLIC_ALGOLIA_SEARCH_KEY as string
 			);
-			const pagesIndex = searchClient.initIndex(import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME);
-			const response = await pagesIndex.search<Page>(query, {
-				attributesToHighlight: [
-					'title',
-					'description',
-					'excerpt',
-					'headings.value',
-					'tables.data',
-					'tables.content',
+			const response = await searchClient.search<Page>({
+				requests: [
+					{
+						indexName: import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME,
+						query: query,
+						attributesToHighlight: [
+							'title',
+							'description',
+							'excerpt',
+							'headings.value',
+							'tables.data',
+							'tables.content',
+						],
+						attributesToSnippet: ['excerpt:40'],
+					},
 				],
-				attributesToSnippet: ['excerpt:40'],
 			});
-			setResults(response);
+			setResults((response.results[0] as SearchResponse<Page>)?.hits);
 		};
 
-		if (open) {
+		if (open && query && query.length > 3) {
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			search();
 		}
 	}, [query, open]);
 
+	console.log(results);
 	return results;
 }
 
@@ -109,7 +115,7 @@ export default function SearchBar() {
 					/>
 				</div>
 				<hr style={{ margin: '8px 0' }} />
-				{searchResults?.hits && <Results results={searchResults?.hits} />}
+				{searchResults && <Results results={searchResults} />}
 			</Modal>
 		</div>
 	);
