@@ -8,6 +8,21 @@ shared:
     allow_inplace_checks: true
     merge_method: squash
 
+
+priority_rules:
+  - name: hotfix
+    priority: high
+    conditions:
+      - label = hotfix
+
+  - name: automated updates
+    priority: low
+    conditions:
+      - or:
+          - author = mergify-ci-bot
+          - author = dependabot[bot]
+
+
 merge_protections:
   - name: 🤖 Continuous Integration
     if:
