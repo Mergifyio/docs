@@ -15,7 +15,7 @@
     "@actions/core": "^1.11.1",
     "@astrojs/mdx": "^3.1.9",
     "@astrojs/sitemap": "^3.2.1",
-    "@babel/core": "^7.26.8",
+    "@babel/core": "^7.26.9",
     "@types/hast": "^3.0.4",
     "@types/html-escaper": "^3.0.4",
     "@types/js-yaml": "^4.0.9",
