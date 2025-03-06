@@ -1,17 +1,18 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
 import { allPages } from '~/content';
 import MainLayout from '~/layouts/MainLayout.astro';
 
 export async function getStaticPaths() {
 	return allPages.map((page) => {
-		return { params: { slug: page.slug }, props: page };
+		return { params: { slug: page.id }, props: page };
 	});
 }
 
 export type Props = CollectionEntry<'docs'>;
-const { data, render } = Astro.props;
-const { Content, headings } = await render();
+const { data } = Astro.props;
+const { Content, headings } = await render(Astro.props);
 ---
 
 <MainLayout content={data} headings={headings}>

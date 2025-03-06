@@ -1,10 +1,11 @@
 {
   "exclude": ["dist", "public/scalar-api-reference.js"],
+  "include": [".astro/types.d.ts", "**/*"],
   "compilerOptions": {
     "esModuleInterop": true,
     "module": "es2022",
     "target": "ES2022",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowJs": true,
     "baseUrl": ".",
