@@ -5,6 +5,7 @@ import { BsArrowReturnLeft } from 'react-icons/bs';
 import Preview from './PageDetails';
 import { AlgoliaResult } from './types';
 import classNames from 'classnames';
+import extractResultValue from './utils';
 
 interface PageResultProps extends AlgoliaResult {
 	onHover: () => void;
@@ -31,13 +32,11 @@ function PageResult({ objectID, _highlightResult, onHover, active }: PageResultP
 			<div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 				<div
 					className="result-title"
-					dangerouslySetInnerHTML={{ __html: _highlightResult?.title?.value ?? '' }}
+					dangerouslySetInnerHTML={{ __html: extractResultValue(_highlightResult?.title) }}
 				/>
 				<p
 					className="result-description"
-					dangerouslySetInnerHTML={{
-						__html: _highlightResult?.description?.value ?? '',
-					}}
+					dangerouslySetInnerHTML={{ __html: extractResultValue(_highlightResult?.title) }}
 					style={{
 						textOverflow: 'ellipsis',
 						whiteSpace: 'nowrap',
