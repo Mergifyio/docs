@@ -67,7 +67,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/ibm-plex-mono": "^5.1.1",
-    "@fontsource/poppins": "^5.1.1",
+    "@fontsource/poppins": "^5.2.5",
     "@fontsource/source-sans-pro": "^5.2.5",
     "@nanostores/react": "^0.8.4",
     "@scalar/api-reference": "^1.25.119",
