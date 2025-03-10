@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit';
 import configSchema from '../public/mergify-configuration-schema.json';
 import { toString } from 'mdast-util-to-string';
-import algoliasearch from 'algoliasearch';
+import { algoliasearch } from 'algoliasearch';
 import type * as unified from 'unified';
 import type * as mdast from 'mdast';
 
@@ -29,9 +29,8 @@ async function savePageToAlgolia(pageData: PageData) {
 	console.info('Starting indexing on algolia...');
 
 	const client = algoliasearch(process.env.PUBLIC_ALGOLIA_APP_ID, process.env.ALGOLIA_WRITE_KEY);
-	const index = client.initIndex(process.env.PUBLIC_ALGOLIA_INDEX_NAME);
 	console.info(`Indexing page: ${pageData.objectID}`);
-	await index.saveObject(pageData);
+	await client.saveObject({indexName: process.env.PUBLIC_ALGOLIA_INDEX_NAME, body: pageData as any});
 }
 
 function getPath(path: string) {
