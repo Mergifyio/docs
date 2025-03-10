@@ -4658,29 +4658,6 @@
         ],
         "title": "CreateScheduledQueueFreezePayload"
       },
-      "Cursor_TypeVar_": {
-        "properties": {
-          "value": {
-            "anyOf": [
-              {},
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Value"
-          },
-          "forward": {
-            "type": "boolean",
-            "title": "Forward"
-          }
-        },
-        "type": "object",
-        "required": [
-          "value",
-          "forward"
-        ],
-        "title": "Cursor[TypeVar]"
-      },
       "DeleteScheduledFreezePayload": {
         "properties": {
           "delete_reason": {
@@ -8225,16 +8202,12 @@
           "size": {
             "type": "integer",
             "title": "Size",
-            "metadata": {
-              "description": "The number of items in this page"
-            }
+            "description": "The number of items in this page"
           },
           "per_page": {
             "type": "integer",
             "title": "Per Page",
-            "metadata": {
-              "description": "The number of items per page"
-            }
+            "description": "The number of items per page"
           },
           "events": {
             "items": {
