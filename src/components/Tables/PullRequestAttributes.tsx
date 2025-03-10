@@ -28,11 +28,14 @@ export default function PullRequestAttributes({ staticAttributes }: Props) {
 
 						return (
 							<tr key={key}>
-								<td>
+								<td style={{ whiteSpace: 'nowrap' }}>
 									<code>{key}</code>
 								</td>
 								<td>{valueType}</td>
-								<td dangerouslySetInnerHTML={{ __html: renderMarkdown(value.description) }} />
+								<td
+									dangerouslySetInnerHTML={{ __html: renderMarkdown(value.description) }}
+									style={{ width: '100%' }}
+								/>
 							</tr>
 						);
 					})}
