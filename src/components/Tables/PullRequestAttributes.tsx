@@ -12,7 +12,6 @@ export default function PullRequestAttributes({ staticAttributes }: Props) {
 
 	return (
 		<table>
-			<caption>Pull Request Attributes</caption>
 			<thead>
 				<tr>
 					<th>Attribute name</th>
