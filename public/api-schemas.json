@@ -1871,6 +1871,27 @@
             "description": "Merge queue name(s) of the pull requests"
           },
           {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
             "name": "start_at",
             "in": "query",
             "required": false,
@@ -2333,6 +2354,27 @@
             "description": "Name of the merge queue(s) for the pull requests"
           },
           {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
             "name": "start_at",
             "in": "query",
             "required": false,
@@ -2510,6 +2552,30 @@
               "title": "Queue Name"
             },
             "description": "Name of the merge queue(s) for the pull requests"
+          },
+          {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "strip_whitespace": true
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
           },
           {
             "name": "start_at",
@@ -2691,6 +2757,30 @@
             "description": "Name of the merge queue(s) for the pull requests"
           },
           {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "strip_whitespace": true
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
             "name": "start_at",
             "in": "query",
             "required": false,
@@ -2868,6 +2958,27 @@
               "title": "Queue Name"
             },
             "description": "Name of the merge queue(s) for the pull requests"
+          },
+          {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
           },
           {
             "name": "start_at",
@@ -3049,6 +3160,27 @@
             "description": "Name of the merge queue(s) for the pull requests"
           },
           {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
             "name": "start_at",
             "in": "query",
             "required": false,
@@ -3219,6 +3351,27 @@
             "description": "Merge queue name(s) of the pull requests"
           },
           {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
             "name": "start_at",
             "in": "query",
             "required": false,
@@ -3387,6 +3540,27 @@
               "title": "Queue Name"
             },
             "description": "Merge queue rule name(s) of the pull requests"
+          },
+          {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
           },
           {
             "name": "start_at",
@@ -4301,6 +4475,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/BatchSizeInInterval"
@@ -4314,6 +4499,7 @@
           "base_ref",
           "partition_name",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "BatchSizeGroupResponse"
@@ -4503,6 +4689,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/RuntimeInInterval"
@@ -4516,6 +4713,7 @@
           "base_ref",
           "partition_name",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "CIRuntimeGroupResponse"
@@ -4566,6 +4764,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "$ref": "#/components/schemas/QueueChecksOutcome"
           }
@@ -4575,6 +4784,7 @@
           "base_ref",
           "partition_name",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "ChecksOutcomeGroupResponse"
@@ -6513,6 +6723,17 @@
             "type": "string",
             "title": "Partition Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "size": {
             "type": "integer",
             "title": "Size"
@@ -6526,6 +6747,7 @@
         "required": [
           "queue_name",
           "partition_name",
+          "priority_rule_name",
           "size",
           "running_checks"
         ],
@@ -6665,6 +6887,17 @@
             "type": "string",
             "title": "Partition Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "position": {
             "anyOf": [
               {
@@ -6697,6 +6930,7 @@
           "abort_status",
           "branch",
           "partition_name",
+          "priority_rule_name",
           "position",
           "queue_name",
           "queued_at",
@@ -6784,6 +7018,17 @@
             ],
             "title": "Partition Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "position": {
             "type": "integer",
             "title": "Position"
@@ -6809,6 +7054,7 @@
         "required": [
           "branch",
           "partition_name",
+          "priority_rule_name",
           "position",
           "queue_name",
           "queued_at",
@@ -6909,6 +7155,17 @@
               }
             ],
             "title": "Partition Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
           }
         },
         "type": "object",
@@ -6917,7 +7174,8 @@
           "branch",
           "position",
           "queued_at",
-          "partition_name"
+          "partition_name",
+          "priority_rule_name"
         ],
         "title": "EventQueueEnterMetadata"
       },
@@ -7022,6 +7280,17 @@
           "seconds_waiting_for_freeze": {
             "type": "integer",
             "title": "Seconds Waiting For Freeze"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
           }
         },
         "type": "object",
@@ -7034,7 +7303,8 @@
           "partition_name",
           "queued_at",
           "seconds_waiting_for_schedule",
-          "seconds_waiting_for_freeze"
+          "seconds_waiting_for_freeze",
+          "priority_rule_name"
         ],
         "title": "EventQueueLeaveMetadata"
       },
@@ -7122,6 +7392,17 @@
             "type": "string",
             "format": "date-time",
             "title": "Queued At"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
           }
         },
         "type": "object",
@@ -7129,7 +7410,8 @@
           "branch",
           "partition_names",
           "queue_name",
-          "queued_at"
+          "queued_at",
+          "priority_rule_name"
         ],
         "title": "EventQueueMergedMetadata"
       },
@@ -8552,6 +8834,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/MergedInInterval"
@@ -8565,6 +8858,7 @@
           "base_ref",
           "partition_names",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "MergedGroupResponse"
@@ -8945,6 +9239,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/QueueSizeInInterval"
@@ -8958,6 +9263,7 @@
           "base_ref",
           "partition_name",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "QueueSizeGroupResponse"
@@ -9075,6 +9381,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/RunningChecksInInterval"
@@ -9088,6 +9405,7 @@
           "base_ref",
           "partition_name",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "RunningChecksGroupResponse"
@@ -9911,6 +10229,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/mergify_engine__web__api__statistics__average_queue_time__QueueTimeInInterval"
@@ -9924,6 +10253,7 @@
           "base_ref",
           "partition_name",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "QueueTimeGroupResponse"
@@ -9983,6 +10313,17 @@
             "type": "string",
             "title": "Queue Name"
           },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/mergify_engine__web__api__statistics__total_queue_time__QueueTimeInInterval"
@@ -9996,6 +10337,7 @@
           "base_ref",
           "partition_name",
           "queue_name",
+          "priority_rule_name",
           "stats"
         ],
         "title": "QueueTimeGroupResponse"
