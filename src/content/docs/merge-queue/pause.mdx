@@ -44,27 +44,6 @@ You can also pause the merge queues programmatically using the [Mergify
 API](/api-usage). For detailed steps on how to achieve this, refer to our API
 documentation.
 
-#### Migration from the deprecated queue freeze API
-
-The Merge Queue freeze API has been deprecated and will be removed on 31st March 2025.
-The feature that it provided is now covered by differents parts of Mergify,
-depending on your use case.
-
-##### Freeze for a single queue rule
-
-If you were using freeze for a partial freeze of a single queue rule (with or without cascading),
-you should now to rely on [Merge Protections](/merge-protections) to avoid pull requests entering
-the merge queue entirely.
-
-##### Freeze for the whole queue
-
-If you were freezing the entire merge queue, you can now leverage the Pause feature instead.
-It now exposes an extra argument `allow_checks_to_run` which define whether the checks should be
-doone in the queue while paused (default to `false`).
-To mimic the behaviour of the deprecated freeze API, set this parameter to `true`.
-In either case, nothing will be merged until the pause is removed from the repository.
-For more details about this endpoint, you can check out the [API reference](/api).
-
 ## Typical Use Cases
 
 ### CI Incidents
@@ -77,9 +56,8 @@ the merge queues.
 ### Non-CI Incidents
 
 If an incident is unrelated to the CI, like a production issue, but you wish to
-halt merging while allowing checks to run, then the [freeze feature](/merge-queue/freeze) is
-a more suitable choice. "Freezing" simply halts merges, letting checks and
-other actions proceed.
+halt merging while allowing checks to run, then the [scheduled freeze feature](/merge-protections/#scheduling-freezes)
+is a more suitable choice.
 
 ## Benefits of Using the Pause Feature
 
