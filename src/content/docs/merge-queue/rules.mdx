@@ -3,6 +3,15 @@ title: Using Queues Rules
 description: Learn how to implement queues rules and route your pull requests.
 ---
 
+::: caution
+    On June 30th, 2025 the implicit priority that queue rules had, based on their order
+    in the `queue_rules` section of the Mergify configuration file, will be removed in favor
+    of using [priority rules](/merge-queue/priority).
+    This will impact you only if you have more than 1 queue rule. If you do, a transformation
+    pull request will automatically be created to help you make the required change in your
+    configuration.
+:::
+
 In larger projects with a high volume of pull requests, managing merges can
 become a complex task. This is where Mergify's multiple queues feature can be a
 game-changer. It enables you to have finer control over the merge process by
