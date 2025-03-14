@@ -64,7 +64,7 @@ your configuration file file and specify the repository name from which you
 want to include the configuration.
 
 ```yaml
-extends: organization/shared-config
+extends: shared-config
 ```
 
 :::caution
@@ -76,7 +76,7 @@ The configuration from the specified repository will be loaded and applied
 before the one in the current repository. Here's an example:
 
 ```yaml
-extends: organization/shared-config
+extends: shared-config
 
 pull_request_rules:
   - name: additional rule specific to this repository
