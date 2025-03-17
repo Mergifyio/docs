@@ -2561,7 +2561,7 @@
           "title": "Merge Method"
         },
         "autosquash": {
-          "default": true,
+          "default": false,
           "description": "This option is relevant only if you do in place checks and if you use the `rebase` option of the update_method. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`.",
           "title": "Autosquash",
           "type": "boolean"
@@ -2798,7 +2798,7 @@
           "title": "Merge Method"
         },
         "autosquash": {
-          "default": true,
+          "default": false,
           "description": "This option is relevant only if you do in place checks and if you use the `rebase` option of the update_method. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`.",
           "title": "Autosquash",
           "type": "boolean"
