@@ -58,7 +58,7 @@ similar), include a step like:
   uses: mergifyio/gha-mergify-ci@v6
   with:
     token: ${{ secrets.MERGIFY_TOKEN }}
-    report_paths: src/junit.xml
+    report_path: src/junit.xml
 ```
 
 Key Points:
@@ -66,7 +66,7 @@ Key Points:
 - `if: success() || failure()`: Runs the upload step even if tests
   fail, ensuring **CI Insights** has the full report.
 
-- `report_paths: src/junit.xml`: Points to where your JUnit file is located.
+- `report_path: src/junit.xml`: Points to where your JUnit file is located.
   Make sure it matches the `outputFile` path you set in Vitest (e.g.,
   `./junit.xml`).
 
@@ -83,7 +83,7 @@ directly in the CI Insights dashboard.
 ## Troubleshooting Tips
 
 - File Paths: Double-check that `outputFile` in Vitest matches the path used in
-  `report_paths`.
+  `report_path`.
 
 - Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
   Actions secrets [as explained in the docs]((/ci-insights#enabling-ci-insights-for-github)).
