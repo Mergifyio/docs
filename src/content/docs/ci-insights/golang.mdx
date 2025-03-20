@@ -46,7 +46,7 @@ For example, in your workflow file:
   uses: mergifyio/gha-mergify-ci@v6
   with:
     token: ${{ secrets.MERGIFY_TOKEN }}
-    report_paths: junit.xml
+    report_path: junit.xml
 ```
 
 ## 3. Verify and Review in CI Insights
@@ -63,7 +63,7 @@ dashboard](https://dashboard.mergify.com/ci-insights/jobs).
 ## Troubleshooting Tips
 
 - File Paths: Double-check that the JUnit output file matches the path used in
-  `report_paths`.
+  `report_path`.
 
 - Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
   Actions secrets [as explained in the
