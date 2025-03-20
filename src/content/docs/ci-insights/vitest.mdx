@@ -55,7 +55,7 @@ similar), include a step like:
 ```yaml
 - name: Mergify CI Upload
   if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v4
+  uses: mergifyio/gha-mergify-ci@v6
   with:
     token: ${{ secrets.MERGIFY_TOKEN }}
     report_paths: src/junit.xml
