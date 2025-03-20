@@ -43,7 +43,7 @@ For example, in your workflow file:
 
 - name: Mergify CI Upload
   if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v4
+  uses: mergifyio/gha-mergify-ci@v6
   with:
     token: ${{ secrets.MERGIFY_TOKEN }}
     report_paths: junit.xml
