@@ -326,7 +326,6 @@ code {
 	--padding-block: 0.2rem;
 	font-family: var(--font-mono);
 	font-size: 0.85em;
-	color: var(--theme-code-inline-text);
 	background-color: var(--theme-code-inline-bg);
 	margin: calc(var(--padding-block) * -1) 0;
 	border-radius: var(--border-radius);
@@ -337,6 +336,7 @@ pre > code {
 	display: inline-block;
 	padding: 15px 10px;
 	width: 100%;
+	background-color: var(--theme-code-bg);
 }
 
 /*RTL Fix Code dir for inline code*/
