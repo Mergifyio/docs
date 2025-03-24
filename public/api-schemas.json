@@ -9267,6 +9267,10 @@
       "description": "Operations with merge protections."
     },
     {
+      "name": "orgs",
+      "description": "Operation with organizations."
+    },
+    {
       "name": "products",
       "description": "Operations with products."
     },
