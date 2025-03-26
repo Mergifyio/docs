@@ -24,7 +24,6 @@ import {
 	FaRegLightbulb,
 	FaGear,
 	FaTrafficLight,
-	FaSnowflake,
 	FaMoneyBill1,
 	FaRegCirclePause,
 	FaUserShield,
@@ -173,7 +172,6 @@ const navItems: NavItem[] = [
 			{ title: 'Queue Rules', path: '/merge-queue/rules', icon: BiSolidCoinStack },
 			{ title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: SlRefresh },
 			{ title: 'Priority', path: '/merge-queue/priority', icon: FaTrafficLight },
-			{ title: 'Freeze', path: '/merge-queue/freeze', icon: FaSnowflake },
 			{ title: 'Pause', path: '/merge-queue/pause', icon: FaRegCirclePause },
 			{ title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
 			{
