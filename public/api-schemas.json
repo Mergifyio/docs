@@ -4494,6 +4494,7 @@
         "properties": {
           "reason": {
             "type": "string",
+            "maxLength": 10000,
             "title": "Reason",
             "description": "The reason for the scheduled freeze."
           },
@@ -8624,6 +8625,7 @@
         "properties": {
           "reason": {
             "type": "string",
+            "maxLength": 10000,
             "title": "Reason",
             "description": "The reason for the scheduled freeze."
           },
