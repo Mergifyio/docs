@@ -4,8 +4,7 @@ description: Smoothly transition to Mergify while optimizing the merge queue and
 ---
 
 import { Image } from "astro:assets";
-import bpSettingsScreenshot from "../../images/merge-queue/deploy/bp-settings.png"
-import bpRuleScreenshot from "../../images/merge-queue/deploy/bp-rule.png"
+import bpDashboardScreenshot from "../../images/merge-queue/deploy/dashboard.png"
 
 Deploying and transitioning to Mergify's Merge Queue involves two potential
 phases, each corresponding to different organizational preferences and maturity
@@ -18,7 +17,7 @@ with the tool:
 
 2. **Exclusive Mergify Merge Phase**: In this phase, organizations can choose
    to enforce that only Mergify merges the pull requests, leveraging GitHub
-   Branch Protection settings. This ensures a more streamlined, organized, and
+   rulesets. This ensures a more streamlined, organized, and
    automated approach to merging.
 
 None of those phases are mandatory, and they are defined here mostly as
@@ -72,25 +71,20 @@ transitioning gradually, ensuring minimal disruption to existing workflows.
 ### Enforcing Mergify for Merging
 
 Once the team is comfortable with Mergify, you can choose to enforce Mergify
-exclusively for merging pull requests through GitHub Branch Protection
-settings.
+exclusively for merging pull requests through GitHub rulesets.
 
 ### Steps to Enforce Exclusive Mergify Merges
 
-1. **Go to Repository Settings**: Navigate to `Settings` in your repository and
-   locate the `Branches` section.
+1. **Go to Merge Queue Deploy**: Navigate to `Merge Queue` in your Mergify
+   dashboard and locate the `Deploy` section.
 
-   <Image src={bpSettingsScreenshot} alt="Showing branch protections settings in GitHub"/>
+   <Image src={bpDashboardScreenshot} alt="Deploy screen from Mergify dashboad"/>
 
-2. **Create/Add a Branch Protection Rule**: Click on `Add rule` and configure
-   the rule for the branch you wish to protect, typically `main` or `master`.
+2. **Follow the instructions**: Configure your ruleset according to the
+   instructions.
 
-3. **Configure Status Checks**: Under the rule, enable `Restrict who can push
-   to match branches` and add Mergify as the authorized user.
-
-   <Image src={bpRuleScreenshot} alt="Showing adding rule popup on GitHub"/>
-
-4. **Save Changes**: After configuring, click `Create` or `Save changes`.
+3. **Verify your ruleset configuration**: Click on the verification button to
+   make sure your configuration is correct.
 
 ## Handling the Improbable: What to Do in the Event of a Mergify Outage
 
@@ -121,14 +115,14 @@ Remember:
   your workflow remains uninterrupted.
 
 - **Admin privileges remain supreme**: In instances where Mergify is the only
-  authorized application to merge, administrators can still override branch
-  protection settings and enforce a merge. Your admin privileges grant you the
-  autonomy to take the necessary actions.
+  authorized application to merge, administrators can still override rulesets
+  and enforce a merge. Your admin privileges grant you the autonomy to take the
+  necessary actions.
 
-- **Branch protection flexibility**: If needed, branch protection can be
-  temporarily disabled, allowing your engineering team to merge pull requests
-  manually and bypass the merge queue. This is a contingency to ensure your
-  operations don't stall, even for a moment.
+- **Ruleset flexibility**: If needed, rulesets can be temporarily disabled,
+  allowing your engineering team to merge pull requests manually and bypass the
+  merge queue. This is a contingency to ensure your operations don't stall,
+  even for a moment.
 
 ## Conclusion
 
