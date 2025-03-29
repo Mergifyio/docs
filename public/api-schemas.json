@@ -5713,6 +5713,7 @@
                 "type": "string",
                 "enum": [
                   "PR_DEQUEUED",
+                  "PR_DEQUEUED_FROM_PARTITION",
                   "PR_AHEAD_DEQUEUED",
                   "PR_AHEAD_FAILED_TO_MERGE",
                   "PR_WITH_HIGHER_PRIORITY_QUEUED",
@@ -7944,6 +7945,12 @@
             "type": "integer",
             "title": "Pr Dequeued",
             "description": "Pull request has been dequeued",
+            "default": 0
+          },
+          "PR_DEQUEUED_FROM_PARTITION": {
+            "type": "integer",
+            "title": "Pr Dequeued From Partition",
+            "description": "Pull request has been dequeued from a partition",
             "default": 0
           },
           "PR_QUEUED_TWICE": {
