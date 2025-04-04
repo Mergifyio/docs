@@ -99,7 +99,7 @@
     "remark-gfm": "^4.0.1",
     "remark-lint-maximum-line-length": "^4.1.1",
     "remark-smartypants": "^3.0.2",
-    "sass": "^1.86.0",
+    "sass": "^1.86.3",
     "uuid": "^11.1.0",
     "viz.js": "^2.1.2",
     "vue": "^3.5.13"
