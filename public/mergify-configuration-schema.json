@@ -1880,6 +1880,22 @@
           "title": "Commits unverified",
           "type": "array"
         },
+        "deployment-success": {
+          "description": "The list of deployments that successfully passed for the pull request.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Deployment success",
+          "type": "array"
+        },
+        "deployment-failure": {
+          "description": "The list of deployments that failed for the pull request.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Deployment failure",
+          "type": "array"
+        },
         "review-threads-resolved": {
           "description": "The list of bodies associated to review threads that are marked as resolved by GitHub.",
           "items": {
@@ -2144,6 +2160,8 @@
         "check",
         "check-stale",
         "commits-unverified",
+        "deployment-success",
+        "deployment-failure",
         "review-threads-resolved",
         "review-threads-unresolved",
         "files",
