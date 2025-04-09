@@ -3,6 +3,12 @@ import MainLayout from '../layouts/MainLayout.astro';
 import { Content, getHeadings, frontmatter } from '../content/docs/index.mdx';
 ---
 
-<MainLayout content={frontmatter} headings={getHeadings()}>
+<MainLayout
+	content={{
+		title: frontmatter.title,
+		description: frontmatter.description,
+	}}
+	headings={getHeadings()}
+>
 	<Content />
 </MainLayout>

@@ -98,7 +98,7 @@ const TableOfContents = ({ toc = [], labels, isMobile }: Props) => {
 		if (!isMobile) return;
 		setOpen(false);
 		setCurrentHeading({
-			slug: e.currentTarget.getAttribute('href').replace('#', ''),
+			slug: e.currentTarget.getAttribute('href')?.replace('#', '') ?? '',
 			text: e.currentTarget.textContent || '',
 		});
 	};

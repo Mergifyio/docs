@@ -1,8 +1,20 @@
 {
-  "exclude": ["dist", "public/scalar-api-reference.js"],
-  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": [
+    "dist",
+    "public/scalar-api-reference.js",
+    "public/make-scrollable-code-focusable.js",
+    "public/sw.js",
+    "node_modules",
+  ],
+  "include": [
+    ".astro/types.d.ts",
+    "src"
+  ],
   "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": true,
     "esModuleInterop": true,
+    "strictNullChecks": true,
     "module": "es2022",
     "target": "ES2022",
     "moduleResolution": "bundler",
@@ -10,9 +22,11 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": [
+        "src/*"
+      ]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
-  }
+  },
 }

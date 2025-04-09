@@ -9,7 +9,8 @@ export interface Props {
 const { currentPageMatch, navItem } = Astro.props as Props;
 const isHomepage = navItem.path === '/';
 const isHomepageMatch = isHomepage && currentPageMatch === '';
-const isPageMatch = !isHomepage && currentPageMatch.endsWith(removeLeadingSlash(navItem.path));
+const isPageMatch =
+	!isHomepage && currentPageMatch.endsWith(removeLeadingSlash(navItem.path ?? ''));
 ---
 
 <li class="nav-link">
