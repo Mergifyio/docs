@@ -43,7 +43,6 @@ function useAlgoliaSearch(query: string, open: boolean) {
 		}
 	}, [query, open]);
 
-	console.log(results);
 	return results;
 }
 
