@@ -129,7 +129,6 @@ export function renderMdxTable(table: TableType) {
 		}
 
 		case 'PullRequestAttributesTable': {
-			console.log(onlyHighlightedOptions);
 			const attributes =
 				onlyHighlightedOptions as keyof typeof configSchema.$defs.PullRequestAttributes.properties;
 			return <PullRequestAttributesTable staticAttributes={attributes} />;
