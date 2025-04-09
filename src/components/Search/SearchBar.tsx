@@ -75,11 +75,11 @@ export default function SearchBar() {
 			}
 		};
 
-		button.addEventListener('click', openModal);
+		button?.addEventListener('click', openModal);
 		window.addEventListener('keypress', openModalKeypress);
 
 		return () => {
-			button.removeEventListener('click', openModal);
+			button?.removeEventListener('click', openModal);
 			window.removeEventListener('keypress', openModalKeypress);
 		};
 	}, []);

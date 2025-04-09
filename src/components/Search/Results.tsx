@@ -105,9 +105,9 @@ export default function Results({ results }: ResultsProps) {
 				return newFocused;
 			});
 		} else if (e.key === 'Enter') {
-			const slug = focusedPage.objectID.substring(0, focusedPage.objectID.indexOf('.mdx'));
+			const slug = focusedPage?.objectID.substring(0, focusedPage.objectID.indexOf('.mdx'));
 
-			if (focusedPage) window.location.replace(slug);
+			if (focusedPage) window.location.replace(slug ?? '');
 		}
 	};
 

@@ -16,7 +16,11 @@ interface TableType {
 	content: string | null;
 }
 
-export function stripHtmlFromkeys(jsonObject: { [s: string]: unknown }): { [s: string]: unknown } {
+type JSONObject = Record<string, unknown>;
+
+export function stripHtmlFromkeys(jsonObject: JSONObject | null): JSONObject {
+	console.log('stripHtmlFromkeys', jsonObject);
+
 	let stripped = {};
 	if (typeof jsonObject === 'string') {
 		return jsonObject;
@@ -25,7 +29,7 @@ export function stripHtmlFromkeys(jsonObject: { [s: string]: unknown }): { [s: s
 	if (Array.isArray(jsonObject)) {
 		stripped = jsonObject.map(stripHtmlFromkeys);
 	} else {
-		Object.entries(jsonObject).forEach(([key, value]) => {
+		Object.entries(jsonObject ?? {}).forEach(([key, value]) => {
 			const strippedKey = key.replace(/<\/?em>/g, '');
 
 			if (Array.isArray(value)) {
@@ -65,7 +69,7 @@ function extractHighlightsFromText(text: string | null): string[] {
 	const highlights: string[] = [];
 
 	const regex = /<em>(.*?)<\/em>/g;
-	let match: RegExpExecArray;
+	let match: RegExpExecArray | null;
 
 	while ((match = regex.exec(text)) !== null) {
 		highlights.push(match[1]);
@@ -131,7 +135,7 @@ export function renderMdxTable(table: TableType) {
 		case 'PullRequestAttributesTable': {
 			console.log(onlyHighlightedOptions);
 			const attributes =
-				onlyHighlightedOptions as keyof typeof configSchema.$defs.PullRequestAttributes.properties;
+				onlyHighlightedOptions as typeof configSchema.$defs.PullRequestAttributes.properties;
 			return <PullRequestAttributesTable staticAttributes={attributes} />;
 		}
 

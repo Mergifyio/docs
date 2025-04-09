@@ -8,11 +8,11 @@ interface Props {
 
 export default function NumberInput({ label, onChange, value, min, max }: Props) {
 	const handleIncrement = () => {
-		onChange(value + 1 > max ? value : value + 1);
+		onChange(value + 1 > (max ?? Infinity) ? value : value + 1);
 	};
 
 	const handleDecrement = () => {
-		onChange(value - 1 < min ? value : value - 1);
+		onChange(value - 1 < (min ?? -Infinity) ? value : value - 1);
 	};
 
 	return (

@@ -11,7 +11,7 @@ export interface Props {
 const { content, canonicalURL } = Astro.props;
 const ogImageUrl = getOgImageUrl(canonicalURL.pathname);
 const imageSrc = ogImageUrl;
-const canonicalImageSrc = new URL(imageSrc, Astro.site);
+const canonicalImageSrc = imageSrc ? new URL(imageSrc, Astro.site) : undefined;
 const imageAlt = imageSrc === ogImageUrl ? '' : "Mergify's logo with text Docs on blue background";
 const siteDescription =
 	'Learn how to use Mergify, the powerful pull request automation tool that helps teams merge code faster and more safely. Automate your entire pull request workflow, from code review to deployment, and save time and frustration.';

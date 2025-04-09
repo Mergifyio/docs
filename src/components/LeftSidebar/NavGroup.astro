@@ -54,7 +54,11 @@ const { navGroup, currentPageMatch } = Astro.props as Props;
 			const uuid = this.dataset.uuid;
 			const storedNavState = window.localStorage.getItem('navState');
 			let isOpen = false;
-			if (storedNavState !== null) {
+			if (!uuid) {
+				console.warn('No uuid found for nav-group');
+				return;
+			}
+			if (storedNavState !== null && uuid) {
 				const navState = JSON.parse(storedNavState);
 				isOpen = navState[uuid];
 			}
@@ -65,12 +69,12 @@ const { navGroup, currentPageMatch } = Astro.props as Props;
 			);
 
 			if (isOpen) {
-				navGroupDetails.setAttribute('open', '');
+				navGroupDetails?.setAttribute('open', '');
 			} else {
-				navGroupDetails.removeAttribute('open');
+				navGroupDetails?.removeAttribute('open');
 			}
 
-			navGroupTitle.addEventListener('click', () => {
+			navGroupTitle?.addEventListener('click', () => {
 				const storedNavState = window.localStorage.getItem('navState');
 				let navState = { uuid: true };
 				if (storedNavState !== null) {

@@ -28,19 +28,23 @@ function remarkYoutubeEmbed(): unified.Plugin<[], mdast.Root> {
 
 			remove(node, (child) => {
 				if ((child.data as { directiveLabel?: string })?.directiveLabel) {
-					if ('children' in child && 'value' in child.children[0]) {
-						title = child.children[0].value;
+					if ('children' in child && 'value' in (child.children as any)[0]) {
+						title = (child.children as any)[0].value;
 					}
 					return true;
 				}
 			});
 
-			// Replace this node with the aside component it represents.
-			parent.children[index] = makeComponentNode(
-				YoutubeTagname,
-				{ attributes: { title, video: node.attributes.v } },
-				...node.children as mdast.BlockContent[]
-			);
+			if (index !== undefined) {
+				// Replace this node with the aside component it represents.
+				parent.children[index] = makeComponentNode(
+					YoutubeTagname,
+					{ attributes: { title, video: node.attributes?.v } },
+					...node.children as mdast.BlockContent[]
+				);
+			} else {
+				throw new Error('Youtube directive has no parent');
+			}
 		});
 	};
 
