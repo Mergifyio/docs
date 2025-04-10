@@ -54,10 +54,18 @@ When the attribute is a list, comparison operators behave as if "any" is used on
 the list, meaning the condition will return true if any element of the list
 matches the given operator and value.
 
+For example:
+```yaml
+# This is true as long as of the item in `check-success` has the name `test`.
+- check-success = test
+# This is true if one of the modified files starts with foo/
+- files ~= ^foo/
+```
+
 ### Values
 
 Values are the reference points used to evaluate the attribute. They can be
-strings, numbers, or booleans, depending on the attribute being evaluated.
+strings, numbers, or Booleans, depending on the attribute being evaluated.
 
 For example, consider the following condition:
 
@@ -78,6 +86,16 @@ In this condition:
 
 Understanding the structure of a condition is crucial for creating effective
 Mergify rules that cater to your specific needs and requirements.
+
+When an attribute is a Boolean, it can only be used on its own or negated using
+the `-` operator:
+
+```yaml
+# This is true if the PR is merged
+- merged
+# This true if the PR is opened
+- -closed
+```
 
 ## Attributes List
 
