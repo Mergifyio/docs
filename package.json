@@ -73,7 +73,7 @@
     "@nanostores/react": "^0.8.4",
     "@scalar/api-reference": "^1.28.14",
     "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.1",
+    "@types/react-dom": "^19.1.2",
     "@types/uuid": "^10.0.0",
     "@viz-js/viz": "^3.12.0",
     "algoliasearch": "^5.23.3",
