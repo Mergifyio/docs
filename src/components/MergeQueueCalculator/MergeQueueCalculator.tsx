@@ -8,14 +8,14 @@ import './MergeQueueCalculator.scss';
 import Stat from './Stat';
 
 function MergeQueueCalculator() {
-	const [ciTime, setCiTime] = useState(30);
-	const [prPerHour, setPrPerHour] = useState(10);
-	const [ciUsagePct, setCiUsagePct] = useState(100);
-	const [successRatio, setSuccessRatio] = useState(98);
-	const [throughput, setThroughput] = useState(null);
-	const [speculativeChecks, setSpeculativeChecks] = useState(null);
-	const [batchSize, setBatchSize] = useState(null);
-	const [latency, setLatency] = useState(null);
+	const [ciTime, setCiTime] = useState<number>(30);
+	const [prPerHour, setPrPerHour] = useState<number>(10);
+	const [ciUsagePct, setCiUsagePct] = useState<number>(100);
+	const [successRatio, setSuccessRatio] = useState<number>(98);
+	const [throughput, setThroughput] = useState<number | null>(null);
+	const [speculativeChecks, setSpeculativeChecks] = useState<number | null>(null);
+	const [batchSize, setBatchSize] = useState<number | null>(null);
+	const [latency, setLatency] = useState<number | null>(null);
 
 	const calculate = () => {
 		const calculatedBatchSize = Math.ceil(100 / ciUsagePct);

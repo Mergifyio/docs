@@ -2,7 +2,7 @@ import { IconType } from 'react-icons';
 
 interface Props {
 	label: string;
-	stat: number;
+	stat: number | null;
 	helperText: string;
 	icon: IconType;
 }
@@ -15,7 +15,7 @@ export default function Stat({ helperText, label, stat, ...props }: Props) {
 				{label}
 			</label>
 			<div style={{ display: 'flex', alignItems: 'flex-end', margin: '8px 0', gap: 12 }}>
-				<h3 style={{ margin: 0 }}>{stat}</h3>
+				<h3 style={{ margin: 0 }}>{stat ?? 0}</h3>
 				<span style={{ color: 'var(--theme-text-light)' }}>{helperText}</span>
 			</div>
 		</div>

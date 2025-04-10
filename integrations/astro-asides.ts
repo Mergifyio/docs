@@ -48,19 +48,23 @@ function remarkAsides(): unified.Plugin<[], mdast.Root> {
 			let title: string | undefined;
 			remove(node, (child) => {
 				if ((child.data as { directiveLabel?: string })?.directiveLabel) {
-					if ('children' in child && 'value' in child.children[0]) {
-						title = child.children[0].value;
+					if ('children' in child && 'value' in (child.children as any)[0]) {
+						title = (child.children as any)[0].value;
 					}
 					return true;
 				}
 			});
 
-			// Replace this node with the aside component it represents.
-			parent.children[index] = makeComponentNode(
-				AsideTagname,
-				{ attributes: { type, title } },
-				...node.children as mdast.BlockContent[]
-			);
+			if (index !== undefined ) {
+				// Replace this node with the aside component it represents.
+				parent.children[index] = makeComponentNode(
+					AsideTagname,
+					{ attributes: { type, title } },
+					...node.children as mdast.BlockContent[]
+				);
+			} else {
+				throw new Error('Invalid index for parent node');
+			}
 		});
 	};
 

@@ -4,7 +4,7 @@ import { getValueType } from './ConfigOptions';
 import { renderMarkdown } from './utils';
 
 interface Props {
-	staticAttributes: keyof typeof configSchema.$defs.PullRequestAttributes.properties;
+	staticAttributes: typeof configSchema.$defs.PullRequestAttributes.properties;
 }
 
 export default function PullRequestAttributes({ staticAttributes }: Props) {
