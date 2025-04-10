@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import jsonpointer from 'jsonpointer';
 import configSchema from '../../../public/mergify-configuration-schema.json';
 import { renderMarkdown } from './utils';
@@ -69,6 +69,9 @@ function getTypeLink(ref: string): string | undefined {
 		const refPath = splitRefPath(ref);
 		const refId = refPath.at(-1);
 
+		if (!refId) {
+			return undefined;
+		}
 		return valueTypeLinks[refId];
 	}
 
@@ -101,11 +104,11 @@ function getTitle(schema: object, ref: OptionDefinitionRef): string {
 	return item?.title || item?.name || '';
 }
 
-export function getValueType(schema: object, definition: any): React.ReactElement {
-	let valueType = null;
+export function getValueType(schema: object, definition: any): React.ReactElement | null {
+	let valueType: ReactElement | null = null;
 	if (definition.type === 'array') {
-		let typeLink: string;
-		let typeDescription: string | React.ReactElement;
+		let typeLink: string | undefined;
+		let typeDescription: string | React.ReactElement | null;
 
 		if ('$ref' in definition.items) {
 			typeLink = getTypeLink(definition.items.$ref);

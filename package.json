@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "tsc && astro build",
     "cf-build": "./cf-build.sh",
     "test": "vitest",
     "preview": "astro preview",
@@ -15,6 +15,7 @@
     "@actions/core": "^1.11.1",
     "@astrojs/mdx": "^4.2.3",
     "@astrojs/sitemap": "^3.3.0",
+    "@astrojs/ts-plugin": "^1.10.4",
     "@babel/core": "^7.26.10",
     "@types/hast": "^3.0.4",
     "@types/html-escaper": "^3.0.4",

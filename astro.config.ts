@@ -14,7 +14,7 @@ import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
 import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
 import react from '@astrojs/react';
 import { remarkGraphvizPlugin } from './plugins/remark-graphviz';
-import dotenv from 'dotenv';
+import dotenv, { DotenvPopulateInput } from 'dotenv';
 import vue from '@astrojs/vue';
 import sitemap from '@astrojs/sitemap';
 import { remarkAlgolia } from './plugins/remark-algolia';
@@ -22,7 +22,7 @@ import { remarkAlgolia } from './plugins/remark-algolia';
 dotenv.config({
 	path: `.env.${process.env.NODE_ENV}`,
 });
-dotenv.populate(process.env, {
+dotenv.populate(process.env as DotenvPopulateInput, {
 	PUBLIC_ALGOLIA_APP_ID: '81GKA2I1R0',
 	PUBLIC_ALGOLIA_INDEX_NAME: 'docs-pages-dev',
 	PUBLIC_ALGOLIA_SEARCH_KEY: '6fce1b6d8ccf82a6601a169c0167c0e3',

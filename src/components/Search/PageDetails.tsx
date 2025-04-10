@@ -89,9 +89,9 @@ export default function Preview({
 				)
 				.map((table, index) =>
 					renderMdxTable({
-						data: table?.data?.value,
+						data: table?.data?.value ?? '',
 						node: tables[index].node,
-						content: table?.content?.value,
+						content: table?.content?.value ?? '',
 					})
 				)}
 			{_highlightResult?.headings && (
