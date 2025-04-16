@@ -8085,6 +8085,7 @@
             "description": "The name of the queue rule"
           },
           "config": {
+            "additionalProperties": true,
             "type": "object",
             "description": "The configuration of the queue rule"
           }
