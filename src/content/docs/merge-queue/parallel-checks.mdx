@@ -179,6 +179,9 @@ underway, Mergify resets the process. The checks start over again with the
 updated base branch. This ensures that the merged code will be up-to-date with
 the latest version of the base branch.
 
+You can disable this behavior by settings `reset_on_external_merge: never` in
+your configuration file.
+
 In all these scenarios, the parallel checks process is dynamic and adjusts
 itself to the changes, ensuring that the merged code meets the criteria defined
 in the `queue_rules`.
