@@ -28,8 +28,8 @@ value can be between 1 and 10,000.
 
 When a pull request is added to a queue, each priority rule is evaluated
 against its conditions. This assessment determines where the pull request will
-be placed in the queue. If multiple rules match the pull request, the one with
-the highest priority value is chosen.
+be placed in the queue. If multiple rules match the pull request, the first matching
+one will be used.
 
 :::note
 
@@ -111,8 +111,7 @@ The textual priorities have the following numerical values:
 :::note
 
   Remember that a pull request can match multiple rules. In such cases, Mergify
-  picks the rule with the highest priority value. So it's a good idea to define
-  your rules considering all possible scenarios.
+  picks the first matching rule, in the order they are defined in your config.
 
 :::
 
@@ -242,10 +241,6 @@ several reasons:
 
 - Check the conditions of the priority rule. Ensure that the pull request
   matches the conditions specified in the priority rule.
-
-- The priority rule could be overridden by another rule with a higher priority.
-  Remember, if a pull request matches multiple rules, the rule with the highest
-  priority will be retained.
 
 - There might be an error in the syntax or formatting of your Mergify
   configuration file. Be sure to verify the syntax and structure of your
