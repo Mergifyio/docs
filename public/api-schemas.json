@@ -7547,13 +7547,26 @@
             },
             "type": "array",
             "title": "Products"
+          },
+          "current_user_permission": {
+            "type": "string",
+            "enum": [
+              "none",
+              "read",
+              "triage",
+              "write",
+              "maintain",
+              "admin"
+            ],
+            "title": "Current User Permission"
           }
         },
         "type": "object",
         "required": [
           "id",
           "name",
-          "products"
+          "products",
+          "current_user_permission"
         ],
         "title": "GitHubRepository"
       },
