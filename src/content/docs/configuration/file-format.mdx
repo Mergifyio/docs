@@ -53,9 +53,6 @@ different aspect of Mergify:
 - [`priority_rules`](#priority-rules) configures the [priorities for the Merge
   Queue](/merge-queue/priority);
 
-- [`partition_rules`](#partition-rules) configures [monorepository support in
-  the merge queue](/merge-queue/partitions);
-
 - [`commands_restrictions`](/commands/restrictions) configures who is able to
   run commands;
 
@@ -111,14 +108,6 @@ The top-level key `priority rules` allows to define the rules that will determin
 which [priority](/merge-queue/priority) a pull request has when entering your merge queue.
 
 <OptionsTable def="PriorityRuleModel" />
-
-### Partition Rules
-
-The top-level key `partition_rules` allows to split your repositories into
-independent partitions. This is especially useful when using a [monorepo with
-the merge queue](/merge-queue/partitions).
-
-<OptionsTable def="PartitionRuleModel" />
 
 ### Defaults
 
