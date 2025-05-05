@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { IconType } from 'react-icons';
-import {
-	AiOutlinePartition,
-	AiOutlineDeploymentUnit,
-	AiOutlineFile,
-	AiOutlineApi,
-} from 'react-icons/ai';
+import { AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi } from 'react-icons/ai';
 import { BiBadgeCheck, BiSolidCoinStack, BiRuler, BiCut } from 'react-icons/bi';
 import {
 	BsRobot,
@@ -53,7 +48,7 @@ import {
 	SiVitest,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
-import { TbPackages, TbBike, TbGitBranch } from 'react-icons/tb';
+import { TbPackages, TbGitBranch } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
 import { GrTest } from 'react-icons/gr';
 
@@ -181,7 +176,6 @@ const navItems: NavItem[] = [
 			},
 			{ title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
 			{ title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
-			{ title: 'Partitions', path: '/merge-queue/partitions', icon: AiOutlinePartition },
 			{ title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
 			{ title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
 			{ title: 'Troubleshooting', path: '/merge-queue/troubleshooting', icon: FaBug },
@@ -235,7 +229,6 @@ const navItems: NavItem[] = [
 			{ title: 'Datadog', path: '/integrations/datadog', icon: SiDatadog },
 			{ title: 'Slack', path: '/integrations/slack', icon: SiSlack },
 			{ title: 'Graphite', path: '/integrations/graphite', icon: BsStack },
-			{ title: 'Rush', path: '/integrations/rush', icon: TbBike },
 			{ title: 'Dependabot', path: '/integrations/dependabot', icon: SiDependabot },
 			{ title: 'Renovate', path: '/integrations/renovate', icon: SiRenovate },
 			{ title: 'Snyk', path: '/integrations/snyk', icon: SiSnyk },
