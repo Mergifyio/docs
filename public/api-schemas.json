@@ -1221,8 +1221,7 @@
                 {
                   "type": "string",
                   "minLength": 1,
-                  "maxLength": 255,
-                  "strip_whitespace": true
+                  "maxLength": 255
                 },
                 {
                   "type": "null"
@@ -1809,9 +1808,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -1833,9 +1832,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -1857,9 +1856,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -1879,8 +1878,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2009,9 +2011,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2033,9 +2035,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2057,9 +2059,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2079,8 +2081,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2209,9 +2214,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2233,9 +2238,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2257,9 +2262,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2281,9 +2286,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2412,9 +2417,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2436,9 +2441,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2460,9 +2465,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2484,9 +2489,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2615,9 +2620,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2639,9 +2644,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2663,9 +2668,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2685,8 +2690,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2815,9 +2823,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2839,9 +2847,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2863,9 +2871,9 @@
                   "items": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 255,
-                    "strip_whitespace": true
-                  }
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -2885,8 +2893,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
