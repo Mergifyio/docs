@@ -20,11 +20,6 @@ automatically upload your
 test results to **CI Insights**. This can be done in different way depending on
 your way of managing your Python dependencies. Below are a few examples:
 
-:::note
-  Ensure your CI Insights token is set up as explained in the [installation
-  docs](/ci-insights#enabling-ci-insights-for-github).
-:::
-
 ### Pip / Requirements File
 
 `pip install pytest-mergify`
@@ -66,6 +61,11 @@ poetry add --group dev pytest-mergify
 ```
 
 ## 2. Modify Your Workflow
+
+:::note
+  Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
+  docs](/ci-insights#enabling-ci-insights-for-github).
+:::
 
 Your workflow should run your test as usual while exporting the secret
 `MERGIFY_TOKEN` as an environment variable. You'll need to add the following
