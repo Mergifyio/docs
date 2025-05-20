@@ -34,31 +34,31 @@ GitHub and covers basic configuration steps.
    ([docs](/integrations/github)).
 
 2. In order to upload your test results, you'll need to [configure your
-   test](#test-framework-configuration). Before doing so, makes sure you set
-   your `MERGIFY_TOKEN` in GitHub in your GitHub Actions secrets.
+   test](#test-framework-configuration). Before doing so, make sure you set
+   your `MERGIFY_TOKEN` in GitHub Actions secrets.
 
-   To find your token in the Mergify dashboard, go to `Settings` and then `CI
+   To find your token in the Mergify dashboard, go to `Settings` > `CI
    Insights`:
 
    <Image src={TokenScreenshot} alt="CI Insights Token" />
 
-   Once you copy it, you'll need to paste it to into your secrets:
+   Once copied, paste it into your GitHub Actions secrets:
 
    <Image src={GHSecretsScreenshot} alt="GitHub Actions Secrets" />
 
-   This token will be used to upload test reports. See below to configure them.
+   This token will be used to upload test reports.
 
-3. Click on `CI Insights` in the navigation bar from Mergify dashboard. You
-   should see your first GitHub Actions job run here.
+3. Click on `CI Insights` in the Mergify dashboard navigation.
+   You should start seeing your GitHub Actions job runs appear:
 
    <Image src={MainScreenshot} alt="CI Insights" />
 
 ## Test Framework Configuration
 
-CI Insights currently supports many tests framework allowing you get more
-details about your test runs. Each framework requires a quick setup to ensure
-test results are captured correctly. Refer to the dedicated pages for your
-specific framework to configure and verify your test output.
+CI Insights supports many test frameworks and captures test-level data from them.
+Each framework requires a quick setup to ensure test results are parsed and uploaded properly.
+
+Refer to the dedicated page for your specific framework to configure and verify your test output.
 
 <DocsetGrid>
   <Docset
@@ -66,27 +66,27 @@ specific framework to configure and verify your test output.
     path="/ci-insights/pytest"
     icon={SiPytest}
   >
-    Integration Pytest with CI Insights.
+    Integrate Pytest with CI Insights.
   </Docset>
-    <Docset
+  <Docset
     title="Go"
     path="/ci-insights/golang"
     icon={SiGo}
   >
-    Integration Go with CI Insights.
+    Integrate Go with CI Insights.
   </Docset>
   <Docset
     title="Cypress"
     path="/ci-insights/cypress"
     icon={SiCypress}
   >
-    Integration Cypress with CI Insights.
+    Integrate Cypress with CI Insights.
   </Docset>
   <Docset
     title="Vitest"
     path="/ci-insights/vitest"
     icon={SiVitest}
   >
-    Integration Vitest with CI Insights.
+    Integrate Vitest with CI Insights.
   </Docset>
 </DocsetGrid>
