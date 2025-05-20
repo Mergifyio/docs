@@ -5726,7 +5726,7 @@
                   "PR_DEQUEUED",
                   "PR_DEQUEUED_FROM_PARTITION",
                   "PR_AHEAD_DEQUEUED",
-                  "PR_AHEAD_FAILED_TO_MERGE",
+                  "BATCH_AHEAD_FAILED",
                   "PR_WITH_HIGHER_PRIORITY_QUEUED",
                   "PR_QUEUED_TWICE",
                   "SPECULATIVE_CHECK_NUMBER_REDUCED",
@@ -7954,9 +7954,9 @@
             "description": "A pull request ahead in the queue has been dequeued.",
             "default": 0
           },
-          "PR_AHEAD_FAILED_TO_MERGE": {
+          "BATCH_AHEAD_FAILED": {
             "type": "integer",
-            "title": "Pr Ahead Failed To Merge",
+            "title": "Batch Ahead Failed",
             "description": "A pull request ahead in the queue failed to get merged.",
             "default": 0
           },
