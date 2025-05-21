@@ -1,5 +1,5 @@
 ---
-title: pytest Integration with CI Insights
+title: Pytest Integration with CI Insights
 description: Report your test results from pytest to CI Insights
 ---
 
@@ -16,13 +16,15 @@ uploaded to CI Insights without any extra workflow changes.
 
 You need to install the
 [`pytest-mergify`](https://pypi.python.org/pypi/pytest-mergify) plugin to
-automatically upload your
-test results to **CI Insights**. This can be done in different way depending on
-your way of managing your Python dependencies. Below are a few examples:
+automatically upload your test results to **CI Insights**. This can be done in
+different ways depending on your Python dependency setup. Below are a few
+examples:
 
 ### Pip / Requirements File
 
-`pip install pytest-mergify`
+```bash
+pip install pytest-mergify
+```
 
 Or add `pytest-mergify` to your `requirements.txt`.
 
@@ -67,8 +69,8 @@ poetry add --group dev pytest-mergify
   docs](/ci-insights#enabling-ci-insights-for-github).
 :::
 
-Your workflow should run your test as usual while exporting the secret
-`MERGIFY_TOKEN` as an environment variable. You'll need to add the following
+Your workflow should run your tests as usual while exporting the secret
+`MERGIFY_TOKEN` as an environment variable. You’ll need to add the following
 code to the GitHub Actions step running your tests:
 
 ```yaml
@@ -85,6 +87,37 @@ For example:
   run: pytest
 ```
 
-The plugin collects your test results and sends them to CI Insights. Check the
-CI Insights dashboard afterward to view execution metrics, detect flaky tests,
-and gather actionable feedback.
+The plugin collects your test results and sends them to CI Insights.
+
+Check the CI Insights dashboard afterward to view execution metrics, detect
+flaky tests, and gather actionable feedback.
+
+## 3. Using with Tox
+
+If you’re using [Tox](https://tox.wiki/) to manage test environments, you can
+still use `pytest-mergify` by passing the `MERGIFY_TOKEN` and the rest of the
+CI environment variable into the test environment.
+
+In your GitHub Actions workflow:
+
+```yaml
+- name: Run Tox Tests
+  env:
+    MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+  run: tox
+```
+
+In your `tox.ini`, make sure the plugin is included in your testenv dependencies:
+
+```ini
+[testenv]
+# You need to pass the MERGIFY_*, CI, GITHUB_*, etc variables
+passenv = *
+deps =
+    pytest
+    pytest-mergify
+commands = pytest
+```
+
+If you’re using multiple environments (e.g. `py38`, `py39`, etc.), the plugin
+will work for all of them as long as the token is set correctly.
