@@ -102,6 +102,26 @@ The top-level key `queue_rules` allows to define the rules that reign over your
 
 <OptionsTable def="QueueRuleModel" />
 
+### Working around the `allow_inplace_checks` attribute deprecation
+
+As the `allow_inplace_checks` attribute is deprecated, different choices are available.
+
+1. If you want to merge your pull requests without the generation of draft PRs, you can leverage
+   the [Workflow Automation](/workflow/) feature with the [rebase](/workflow/actions/rebase/)
+   and [merge](/workflow/actions/merge/) actions. This way, once a pull request validates your rules,
+   you can directly rebase and merge it.
+
+2. If draft PRs are not an issue for you, but you want to preserve you commit history by avoiding merge commit shas,
+   you can setup your merge queue to use the `fast-forward` mode for the attribute `merge_method`.
+   This way, the merge queue will keep the linearity of your commit history.
+   See the `queue_rules` [documentation](/configuration/file-format/#queue-rules) for more details.
+
+3. If draft PRs are not an issue for you, but you want to limit their amount, you can choose to leverage
+   the `batch_size` and `speculative_checks` attributes in your `queue_rules`.
+   See the `queue_rules` [documentation](/configuration/file-format/#queue-rules) for more details.
+
+For any further questions, feel free to <a href="mailto:support@mergify.com">Contact our support</a>.
+
 ### Priority Rules
 
 The top-level key `priority rules` allows to define the rules that will determine
