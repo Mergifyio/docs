@@ -3,6 +3,70 @@ import '../styles/api.css';
 ---
 
 <body>
-	<script is:inline id="api-reference" data-url="/api-schemas.json"></script>
+	<script is:inline>
+		/**
+		 * The MatchingConditionsDict-* are recursive schemas which make the api reference crash
+		 * This script fetches the api-schemas.json file, modifies the MatchingConditionsDict schemas
+		 * to create a limited version that only includes the 'and', 'or', and 'not' properties,
+		 * and injects it into the page as a script tag.
+		 * This allows scalar-api-reference.js to use the limited version without crashing.
+		 * The original schemas are still available in the api-schemas.json file.
+		 */
+		(async () => {
+			const apiSchemasUrl = '/api-schemas.json';
+			try {
+				const response = await fetch(apiSchemasUrl);
+				let apiSchemas = await response.json();
+
+				apiSchemas.components.schemas['MatchingConditionsDict-Input'] = JSON.parse(
+					JSON.stringify(apiSchemas.components.schemas['MatchingConditionsDict-Input']).replaceAll(
+						'#/components/schemas/MatchingConditionsDict-Input',
+						'#/components/schemas/MatchingConditionsDict-Limited'
+					)
+				);
+				apiSchemas.components.schemas['MatchingConditionsDict-Output'] = JSON.parse(
+					JSON.stringify(apiSchemas.components.schemas['MatchingConditionsDict-Output']).replaceAll(
+						'#/components/schemas/MatchingConditionsDict-Output',
+						'#/components/schemas/MatchingConditionsDict-Limited'
+					)
+				);
+				apiSchemas.components.schemas['MatchingConditionsDict-Limited'] = {
+					properties: {
+						and: {
+							items: {
+								type: 'string',
+							},
+							type: 'array',
+							title: 'And',
+						},
+						or: {
+							items: {
+								type: 'string',
+							},
+							type: 'array',
+							title: 'Or',
+						},
+						not: {
+							items: {
+								type: 'string',
+							},
+							type: 'array',
+							title: 'Not',
+						},
+					},
+					type: 'object',
+					title: 'MatchingConditionsDict-Limited',
+				};
+
+				// Inject the modified JSON into the page for scalar-api-reference.js
+				const modifiedDataScript = document.createElement('script');
+				modifiedDataScript.id = 'api-reference';
+				modifiedDataScript.textContent = JSON.stringify(apiSchemas);
+				document.body.appendChild(modifiedDataScript);
+			} catch (error) {
+				console.error('Error fetching or modifying API schemas:', error);
+			}
+		})();
+	</script>
 	<script is:inline src="/scalar-api-reference.js" charset="utf-8"></script>
 </body>
