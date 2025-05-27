@@ -63,7 +63,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^4.3.0",
-    "@astrojs/vue": "^5.0.13",
+    "@astrojs/vue": "^5.1.0",
     "@chakra-ui/react": "^3.19.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
