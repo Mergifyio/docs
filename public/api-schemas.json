@@ -4037,62 +4037,6 @@
           }
         }
       }
-    },
-    "/products/{owner}": {
-      "get": {
-        "tags": [
-          "products"
-        ],
-        "summary": "List GitHub repositories with enabled produtcs",
-        "description": "List GitHub repositories with at least one product enabled",
-        "operationId": "list_github_repositories_and_products_products__owner__get",
-        "security": [
-          {
-            "ApplicationAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GitHubRepositoriesResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -7519,67 +7463,6 @@
           "scheduled_freezes"
         ],
         "title": "GetScheduledFreezesResponse"
-      },
-      "GitHubRepositoriesResponse": {
-        "properties": {
-          "repositories": {
-            "items": {
-              "$ref": "#/components/schemas/GitHubRepository"
-            },
-            "type": "array",
-            "title": "Repositories"
-          }
-        },
-        "type": "object",
-        "required": [
-          "repositories"
-        ],
-        "title": "GitHubRepositoriesResponse"
-      },
-      "GitHubRepository": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "products": {
-            "items": {
-              "type": "string",
-              "enum": [
-                "ci_insights",
-                "merge_protections",
-                "workflow_automation",
-                "merge_queue"
-              ]
-            },
-            "type": "array",
-            "title": "Products"
-          },
-          "current_user_permission": {
-            "type": "string",
-            "enum": [
-              "none",
-              "read",
-              "triage",
-              "write",
-              "maintain",
-              "admin"
-            ],
-            "title": "Current User Permission"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name",
-          "products",
-          "current_user_permission"
-        ],
-        "title": "GitHubRepository"
       },
       "HTTPValidationError": {
         "properties": {
