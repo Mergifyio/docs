@@ -63,10 +63,13 @@ import '../styles/api.css';
 				modifiedDataScript.id = 'api-reference';
 				modifiedDataScript.textContent = JSON.stringify(apiSchemas);
 				document.body.appendChild(modifiedDataScript);
+
+				var script = document.createElement('script');
+				script.src = '/scalar-api-reference.js';
+				document.body.appendChild(script);
 			} catch (error) {
 				console.error('Error fetching or modifying API schemas:', error);
 			}
 		})();
 	</script>
-	<script is:inline src="/scalar-api-reference.js" charset="utf-8"></script>
 </body>
