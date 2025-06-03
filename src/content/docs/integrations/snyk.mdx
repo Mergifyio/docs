@@ -84,7 +84,7 @@ For example, you could set up a merge queue to batch those PRs 10 by 10:
 
 ```yaml
 queue_rules:
-  # If you have other queues defined, add this at the end so it is processed last
+  # If you have other queue rules defined, add this at the end so it is processed last
   - name: dep-update
     batch_size: 10
     # Wait for up to 30 minutes for the batch to fill up
