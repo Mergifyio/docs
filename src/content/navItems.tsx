@@ -42,15 +42,15 @@ import {
 	SiBuildkite,
 	SiGitlab,
 	SiRenovate,
-	SiPytest,
-	SiGo,
-	SiCypress,
-	SiVitest,
+	// SiPytest,
+	// SiGo,
+	// SiCypress,
+	// SiVitest,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
 import { TbPackages, TbGitBranch } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
-import { GrTest } from 'react-icons/gr';
+// import { GrTest } from 'react-icons/gr';
 
 import { v5 } from 'uuid';
 import MergeQueueIcon from '../components/MergeQueueIcon.astro';
@@ -76,17 +76,17 @@ const navItems: NavItem[] = [
 		icon: MdOutlineLightbulb,
 		children: [
 			{ title: 'Using CI Insights', path: '/ci-insights', icon: MdOutlineLightbulb },
-			{
-				title: 'Tests Frameworks',
-				path: '/ci-insights#test-framework-configuration',
-				icon: GrTest,
-				children: [
-					{ title: 'pytest', path: '/ci-insights/pytest', icon: SiPytest },
-					{ title: 'Go', path: '/ci-insights/golang', icon: SiGo },
-					{ title: 'Cypress', path: '/ci-insights/cypress', icon: SiCypress },
-					{ title: 'Vitest', path: '/ci-insights/vitest', icon: SiVitest },
-				],
-			},
+			// {
+			// 	title: 'Tests Frameworks',
+			// 	path: '/ci-insights#test-framework-configuration',
+			// 	icon: GrTest,
+			// 	children: [
+			// 		{ title: 'pytest', path: '/ci-insights/pytest', icon: SiPytest },
+			// 		{ title: 'Go', path: '/ci-insights/golang', icon: SiGo },
+			// 		{ title: 'Cypress', path: '/ci-insights/cypress', icon: SiCypress },
+			// 		{ title: 'Vitest', path: '/ci-insights/vitest', icon: SiVitest },
+			// 	],
+			// },
 		],
 	},
 	{
