@@ -135,14 +135,7 @@ To implement this with Mergify, you'll need to:
    `mergify/merge-queue/` by default (see `queue_branch_prefix` in
    [`queue_rules`](/configuration/file-format/#queue-rules)).
 
-2. Configure Mergify to create a new branch for each pull request in the queue.
-
-   By default, Mergify has an optimized behavior that does not always create a
-   new branch for every PR in the queue. You need to set `allow_inplace_checks`
-   to `false` in your queue definition inside the
-   [`queue_rules`](/configuration/file-format/#queue-rules)) section.
-
-3. Adjust your Mergify configuration to act based on the outcomes of these test
+2. Adjust your Mergify configuration to act based on the outcomes of these test
    groups.
 
    This is typically done by setting the right `queue_conditions` and
@@ -194,7 +187,6 @@ The Mergify configuration should looks like:
 ```yaml
 queue_rules
   - name: default
-    allow_inplace_checks: false
     queue_conditions:
       - check-success = unit-tests
     merge_conditions:
