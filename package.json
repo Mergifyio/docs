@@ -85,7 +85,7 @@
     "github-slugger": "^2.0.0",
     "jsdoc-api": "^9.3.4",
     "jsonpointer": "^5.0.1",
-    "minimatch": "^10.0.2",
+    "minimatch": "^10.0.3",
     "nanostores": "^1.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.1.0",
