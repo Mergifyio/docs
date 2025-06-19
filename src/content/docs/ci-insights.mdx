@@ -21,13 +21,18 @@ CI Insights helps you monitor your pipelines, detect flaky tests, and optimize
 your CI efficiency. This guide walks you through enabling CI Insights via
 GitHub and covers basic configuration steps.
 
+:::note
+  If you do not see CI Insights in your dashboard, this means you are not part
+  of our *Early Access* program. Feel free to [apply for early
+  access](https://forms.mergify.com/ci-insights-early-access).
+:::
+
 ## Enabling CI Insights for GitHub
 
 1. Enable CI Insights on your repositories by visiting the [GitHub Integration
    page](https://dashboard.mergify.com/integrations/github)
    ([docs](/integrations/github)).
 
-{/*
 2. In order to upload your test results, you'll need to [configure your
    test](#test-framework-configuration). Before doing so, make sure you set
    your `MERGIFY_TOKEN` in GitHub Actions secrets.
@@ -42,14 +47,12 @@ GitHub and covers basic configuration steps.
    <Image src={GHSecretsScreenshot} alt="GitHub Actions Secrets" />
 
    This token will be used to upload test reports.
-*/}
 
-2. Click on `CI Insights` in the Mergify dashboard navigation.
+3. Click on `CI Insights` in the Mergify dashboard navigation.
    You should start seeing your GitHub Actions job runs appear:
 
    <Image src={MainScreenshot} alt="CI Insights" />
 
-{/*
 ## Test Framework Configuration
 
 CI Insights supports many test frameworks and captures test-level data from them.
@@ -87,4 +90,3 @@ Refer to the dedicated page for your specific framework to configure and verify 
     Integrate Vitest with CI Insights.
   </Docset>
 </DocsetGrid>
-*/}
