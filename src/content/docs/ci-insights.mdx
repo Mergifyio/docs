@@ -4,7 +4,8 @@ description: Optimize your CI run time, catch flaky tests, and give developers a
 ---
 
 import { Image } from "astro:assets"
-import MainScreenshot from "../images/ci-insights/main.png"
+import JobsScreenshot from "../images/ci-insights/jobs.png"
+import TestsScreenshot from "../images/ci-insights/tests.png"
 import TokenScreenshot from "../images/ci-insights/token.png"
 import GHSecretsScreenshot from "../images/ci-insights/gh-secrets.png"
 import {
@@ -17,7 +18,7 @@ import {
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 
-CI Insights helps you monitor your pipelines, detect flaky tests, and optimize
+CI Insights helps you monitor your pipelines, detect flaky tests and jobs, and optimize
 your CI efficiency. This guide walks you through enabling CI Insights via
 GitHub and covers basic configuration steps.
 
@@ -26,6 +27,45 @@ GitHub and covers basic configuration steps.
   of our *Early Access* program. Feel free to [apply for early
   access](https://forms.mergify.com/ci-insights-early-access).
 :::
+
+## Understanding CI Insights
+
+CI Insights provides monitoring and analysis for two key components of your CI pipeline:
+
+### Jobs
+
+Jobs are the individual tasks that run as part of your CI pipeline (e.g.,
+build, test, deploy steps). CI Insights tracks job-level metrics and health
+status.
+
+<Image src={JobsScreenshot} alt="CI Insights Jobs" />
+
+### Tests
+
+Tests are the individual test cases that run within your test suites. CI
+Insights captures detailed test-level data to help identify problematic test
+cases.
+
+<Image src={TestsScreenshot} alt="CI Insights Tests" />
+
+### Health Status
+
+For each job and test, CI Insights computes a health status based on the last 10 runs:
+
+- **Healthy**: The job or test works fine and produces consistent results
+- **Broken**: The job or test consistently fails and needs attention
+- **Flaky**: The job or test is unstable and its outcome is not reliable
+
+This health status helps you quickly identify which components of your CI pipeline need attention.
+
+### Flaky Detection
+
+CI Insights automatically detects flaky behavior in both jobs and tests using the same criteria:
+
+A **flaky job** or **flaky test** is one that has 2 different conclusions on
+the same SHA1. For example, if a job or test runs twice on the same commit and
+once fails while the other succeeds, it's considered flaky because the outcome
+is not consistent with the same code.
 
 ## Enabling CI Insights for GitHub
 
@@ -51,7 +91,7 @@ GitHub and covers basic configuration steps.
 3. Click on `CI Insights` in the Mergify dashboard navigation.
    You should start seeing your GitHub Actions job runs appear:
 
-   <Image src={MainScreenshot} alt="CI Insights" />
+   <Image src={JobsScreenshot} alt="CI Insights Jobs" />
 
 ## Test Framework Configuration
 
