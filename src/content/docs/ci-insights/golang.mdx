@@ -6,7 +6,7 @@ description: Report your test results from Go tests to CI Insights
 import golangLogo from "../../images/ci-insights/golang/logo.svg"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
-<IntegrationLogo src={golangLogo} alt="Golang logo"/>
+<IntegrationLogo src={golangLogo} alt="Golang logo" />
 
 This guide shows how to generate JUnit reports from your Go tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
@@ -33,8 +33,8 @@ gotestsum --junitfile junit.xml
 ## 2. Update Your GitHub Actions Workflow
 
 :::note
-  Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-  docs](/ci-insights#enabling-ci-insights-for-github).
+Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
+docs](/ci-insights#enabling-ci-insights-for-github).
 :::
 
 After generating the JUnit report, add a step to upload the results to CI
@@ -54,9 +54,41 @@ For example, in your workflow file:
     report_path: junit.xml
 ```
 
+If you use a job matrix in your workflow (e.g., to test across multiple
+versions), ensure you set the job\_name input (or MERGIFY\_JOB\_NAME
+environment variable) so CI Insights can properly distinguish reports for each
+matrix job.
+
+For example, with:
+
+```yaml
+jobs:
+  example_matrix:
+    strategy:
+      matrix:
+        version: [10, 12, 14]
+```
+
+Your upload step should look like:
+
+```yaml
+- name: Mergify CI Upload
+  if: success() || failure()
+  uses: mergifyio/gha-mergify-ci@v6
+  with:
+    token: ${{ secrets.MERGIFY_TOKEN }}
+    job_name: example_matrix (${{ matrix.version }})
+    report_path: junit.xml
+```
+
+:::tip
+Setting job\_name helps CI Insights group and display reports correctly for each matrix variation.
+:::
+
 ## 3. Verify and Review in CI Insights
 
 After pushing these changes:
+
 1. Your GitHub Actions workflow will execute your Go tests.
 2. A JUnit report (junit.xml) is generated.
 3. The Mergify CI action uploads the report to CI Insights.
@@ -72,7 +104,7 @@ dashboard](https://dashboard.mergify.com/ci-insights/jobs).
 
 - Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
   Actions secrets [as explained in the
-  docs]((/ci-insights#enabling-ci-insights-for-github)).
+  docs](\(/ci-insights#enabling-ci-insights-for-github\)).
 
 - Workflow Conditions: If your step is not running, confirm the if condition is
   actually triggered in your job.
