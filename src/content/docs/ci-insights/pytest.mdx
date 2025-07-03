@@ -6,7 +6,7 @@ description: Report your test results from pytest to CI Insights
 import pytestLogo from "../../images/ci-insights/pytest/logo.svg"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
-<IntegrationLogo src={pytestLogo} alt="Pytest logo"/>
+<IntegrationLogo src={pytestLogo} alt="Pytest logo" />
 
 This guide explains how to integrate Pytest with CI Insights using the
 `pytest-mergify` plugin. Once installed, test results are automatically
@@ -65,8 +65,8 @@ poetry add --group dev pytest-mergify
 ## 2. Modify Your Workflow
 
 :::note
-  Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-  docs](/ci-insights#enabling-ci-insights-for-github).
+Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
+docs](/ci-insights#enabling-ci-insights-for-github).
 :::
 
 Your workflow should run your tests as usual while exporting the secret
@@ -121,3 +121,22 @@ commands = pytest
 
 If you’re using multiple environments (e.g. `py38`, `py39`, etc.), the plugin
 will work for all of them as long as the token is set correctly.
+
+If you’re running multiple Tox environments (e.g., py38, py39, etc.), we
+recommend setting the MERGIFY\_JOB\_NAME environment variable to identify each
+environment’s report in CI Insights:
+
+In your GitHub Actions workflow:
+
+```yaml
+- name: Run Tox Tests
+  env:
+    MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+    MERGIFY_JOB_NAME: tox-${{ matrix.python-version }}
+  run: tox
+```
+
+:::tip
+Use MERGIFY\_JOB\_NAME to make reports clearer in CI Insights, especially when
+running multiple Tox environments or using a matrix.
+:::

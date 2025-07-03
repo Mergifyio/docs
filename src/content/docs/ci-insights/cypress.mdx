@@ -6,7 +6,7 @@ description: Report your test results from Cypress to CI Insights
 import cypressLogo from "../../images/ci-insights/cypress/logo.svg"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
-<IntegrationLogo src={cypressLogo} alt="Cypress logo"/>
+<IntegrationLogo src={cypressLogo} alt="Cypress logo" />
 
 This guide shows how to configure [Cypress](https://www.cypress.io/) to produce
 JUnit reports and upload them to CI Insights within a GitHub Actions workflow.
@@ -39,8 +39,8 @@ both have JUnit generated while keeping the standard output.
 ## 2. Update Your GitHub Actions Workflow
 
 :::note
-  Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-  docs](/ci-insights#enabling-ci-insights-for-github).
+Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
+docs](/ci-insights#enabling-ci-insights-for-github).
 :::
 
 Once you have the JUnit file produced by Cypress, add a step to upload these
@@ -67,9 +67,41 @@ Key Points:
   Make sure it matches the `outputFile` path you set in Cypress (e.g.,
   `./cypress/results/junit-*.xml`).
 
+If you use a job matrix in your workflow (e.g., to test across multiple
+versions), ensure you set the job\_name input (or MERGIFY\_JOB\_NAME
+environment variable) so CI Insights can properly distinguish reports for each
+matrix job.
+
+For example, with:
+
+```yaml
+jobs:
+  example_matrix:
+    strategy:
+      matrix:
+        version: [10, 12, 14]
+```
+
+Your upload step should look like:
+
+```yaml
+- name: Mergify CI Upload
+  if: success() || failure()
+  uses: mergifyio/gha-mergify-ci@v6
+  with:
+    token: ${{ secrets.MERGIFY_TOKEN }}
+    job_name: example_matrix (${{ matrix.version }})
+    report_path: cypress/results/junit*.xml
+```
+
+:::tip
+Setting job\_name helps CI Insights group and display reports correctly for each matrix variation.
+:::
+
 ## 3. Verify and Review in CI Insights
 
 After pushing these changes:
+
 1. Your GitHub Actions workflow will run tests with Cypress.
 2. Cypress generates JUnit files.
 3. The Mergify CI action uploads that file to CI Insights.
@@ -84,7 +116,7 @@ directly in the CI Insights dashboard.
 
 - Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
   Actions secrets [as explained in the
-  docs]((/ci-insights#enabling-ci-insights-for-github)).
+  docs](\(/ci-insights#enabling-ci-insights-for-github\)).
 
 - Workflow Conditions: If your step is not running, confirm the if condition is
   actually triggered in your job.
