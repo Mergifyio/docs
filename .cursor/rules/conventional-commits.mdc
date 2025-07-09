@@ -1,0 +1,166 @@
+---
+description: Enforce Conventional Commits specification for all commits and pull requests
+globs: 
+alwaysApply: true
+---
+
+# Conventional Commits Guidelines
+
+When creating commits, suggesting commit messages, or creating pull requests, ALWAYS follow the Conventional Commits specification strictly.
+
+## Commit Message Format
+
+Every commit message MUST follow this exact format:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+## Commit Types (REQUIRED)
+
+You MUST use one of these commit types:
+
+- `feat`: A new feature
+- `fix`: A bug fix  
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `build`: Changes that affect the build system or external dependencies
+- `ci`: Changes to CI configuration files and scripts
+- `chore`: Other changes that don't modify src or test files
+- `revert`: Reverts a previous commit
+
+## Scope (OPTIONAL)
+
+The scope should be the name of the affected component, module, or area. Keep it concise and meaningful.
+
+### Good scope examples:
+- `feat(auth): add OAuth2 support`
+- `fix(api): handle null values in user endpoint`
+- `docs(readme): update installation instructions`
+- `refactor(database): optimize query performance`
+
+## Description (REQUIRED)
+
+The description MUST:
+- Use the imperative, present tense: "change" not "changed" nor "changes"
+- NOT capitalize the first letter
+- NOT include a period (.) at the end
+- Be concise (max 50 characters recommended, 72 absolute max)
+- Complete the sentence: "If applied, this commit will..."
+
+### Good descriptions:
+- ✅ `add user authentication`
+- ✅ `fix memory leak in data processing`
+- ✅ `update dependencies to latest versions`
+
+### Bad descriptions:
+- ❌ `Added user authentication` (past tense)
+- ❌ `Fix memory leak.` (has period)
+- ❌ `Updates dependencies` (wrong tense)
+- ❌ `Fixed bug` (too vague)
+
+## Body (OPTIONAL)
+
+The body should:
+- Use the imperative, present tense
+- Explain the motivation for the change
+- Contrast with previous behavior
+- Wrap lines at 72 characters
+- Be separated from the description by a blank line
+
+## Footer (OPTIONAL)
+
+The footer should:
+- Reference issues: `Fixes #123`, `Closes #456`, `Resolves #789`
+- Note breaking changes: Start with `BREAKING CHANGE:`
+- Be separated from the body by a blank line
+
+## Complete Examples
+
+### Simple feature commit:
+```
+feat: implement user profile page
+```
+
+### Bug fix with scope:
+```
+fix(auth): prevent token expiration during active session
+```
+
+### Feature with body:
+```
+feat(payment): add support for cryptocurrency payments
+
+Integrate with multiple blockchain networks to allow users
+to pay with Bitcoin, Ethereum, and other major cryptocurrencies.
+This includes wallet connection and transaction verification.
+```
+
+### Breaking change with footer:
+```
+feat(api)!: restructure user endpoint responses
+
+Standardize all API responses to use consistent envelope
+format with data, error, and metadata fields.
+
+BREAKING CHANGE: API responses now wrap data in a 'data' 
+field instead of returning it at the root level. Clients 
+must update to access response.data instead of response.
+
+Fixes #234
+```
+
+### Revert commit:
+```
+revert: feat(payments): add cryptocurrency support
+
+This reverts commit abc123def456. The cryptocurrency
+integration is causing performance issues in production
+that need to be addressed before re-implementing.
+```
+
+## Pull Request Guidelines
+
+Pull request titles MUST follow the same conventional commit format:
+- Use appropriate type prefix
+- Include scope when relevant  
+- Keep title under 72 characters
+- Use imperative mood
+
+### PR Title Examples:
+- ✅ `feat(ui): implement dark mode toggle`
+- ✅ `fix: resolve race condition in data sync`
+- ✅ `docs: add API migration guide`
+- ❌ `Updated UI components` (no type, past tense)
+- ❌ `BUGFIX: Fixed the login issue` (wrong format)
+
+## Critical Rules for Implementation
+
+1. **NEVER suggest non-conventional formats** - Always use the exact format specified above
+2. **NEVER use past tense** - Always use imperative mood
+3. **NEVER capitalize the description** - First letter must be lowercase
+4. **NEVER add periods to descriptions** - No punctuation at the end
+5. **ALWAYS pick the most accurate type** - Don't use `chore` when `fix` is more appropriate
+6. **ALWAYS be specific** - Vague commits like "fix bug" or "update code" are not acceptable
+
+## Validation Checklist
+
+Before suggesting any commit message, verify:
+- [ ] Has a valid type from the allowed list
+- [ ] Description is in imperative mood
+- [ ] Description starts with lowercase letter
+- [ ] No period at the end of description  
+- [ ] Description clearly explains what the commit does
+- [ ] Scope is appropriate (if used)
+- [ ] Body provides context (if needed)
+- [ ] Footer references issues (if applicable)
+- [ ] Breaking changes are clearly marked
+
+When helping users write commits, actively guide them to follow these conventions and explain why each rule matters for maintaining a clean, parseable git history.
