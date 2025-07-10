@@ -2371,7 +2371,7 @@
         },
         "allow_inplace_checks": {
           "default": true,
-          "description": "Allow to update or rebase the original pull request to check its mergeability when first in the queue and not part of a batch or speculative check.",
+          "description": "Allow to update or rebase the original pull request to check its mergeability when first in the queue and not part of a batch (see: `batch_size`) or speculative check (see: `max_parallel_checks`).",
           "title": "Allow Inplace Checks",
           "type": "boolean"
         },
