@@ -2354,19 +2354,6 @@
           "title": "Branch Protection Injection Mode",
           "type": "string"
         },
-        "speculative_checks": {
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `speculative_checks` attribute in the `queue_rules` section. It has been replaced in favor of `max_parallel_checks` in the `merge_queue` section of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/speculative-checks/",
-            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `speculative_checks` attribute in the `queue_rules` section. It has been replaced in favor of `max_parallel_checks` in the `merge_queue` section of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/speculative-checks/"
-          },
-          "default": 1,
-          "deprecated": true,
-          "description": "The maximum number of checks to run in parallel in the queue. Must be between 1 and 128.",
-          "maximum": 128,
-          "minimum": 1,
-          "title": "Speculative Checks",
-          "type": "integer"
-        },
         "batch_size": {
           "default": 1,
           "description": "The maximum number of pull requests per speculative check in the queue. Must be between 1 and 128.",
@@ -2577,19 +2564,6 @@
           ],
           "title": "Branch Protection Injection Mode",
           "type": "string"
-        },
-        "speculative_checks": {
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `speculative_checks` attribute in the `queue_rules` section. It has been replaced in favor of `max_parallel_checks` in the `merge_queue` section of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/speculative-checks/",
-            "deprecated_summary_saas_mode": "\n:bangbang: **Action Required** :bangbang:\n> **The configuration uses the deprecated `speculative_checks` attribute in the `queue_rules` section. It has been replaced in favor of `max_parallel_checks` in the `merge_queue` section of the configuration.\n> For more information: https://docs.mergify.com/merge-queue/speculative-checks/"
-          },
-          "default": 1,
-          "deprecated": true,
-          "description": "The maximum number of checks to run in parallel in the queue. Must be between 1 and 128.",
-          "maximum": 128,
-          "minimum": 1,
-          "title": "Speculative Checks",
-          "type": "integer"
         },
         "batch_size": {
           "default": 1,
