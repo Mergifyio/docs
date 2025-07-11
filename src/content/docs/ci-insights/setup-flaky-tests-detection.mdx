@@ -1,0 +1,86 @@
+---
+title: Setup Flaky Tests Detection
+description: Configure your GitHub Actions workflow to run tests multiple times and detect flaky tests using CI Insights.
+---
+
+## How Flaky Tests Are Detected
+
+To effectively detect flaky tests, CI Insights requires multiple runs of the same test suite on the same SHA. This means you need to run your CI pipeline multiple times against the same commit to gather enough data points for flaky detection.
+
+**Key Requirements for Flaky Detection:**
+- Multiple CI runs on the same SHA1 (commit)
+- At least 2 runs with different outcomes (pass/fail) to identify flakiness
+- Consistent test reporting across runs
+
+## Running Multiple CI Runs for Flaky Detection
+
+The most effective way to detect flaky tests is to run your CI pipeline multiple times on the same commit. Here's how you can modify your existing pull request workflow to enable flaky detection:
+
+```yaml
+name: CI
+
+on:
+  pull_request:
+  schedule:
+    # Run flaky detection every 6 hours on main branch
+    - cron: '0 */6 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      # Run tests 5 times on schedule, once on pull_request
+      RUN_COUNT: ${{ github.event_name == 'schedule' && 5 || 1 }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      # Modified: Run tests multiple times for flaky detection
+      - name: Run tests
+        run: |
+          # Run the test suite based on RUN_COUNT
+          for i in $(seq $RUN_COUNT); do
+            echo "Running test suite - attempt $i of $RUN_COUNT"
+            
+            # Run your test command with unique output file
+            npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
+          done
+          
+      # Modified: Upload all test results to CI Insights
+      - name: Upload test results
+        if: always()
+        uses: mergifyio/gha-mergify-ci@v6
+        with:
+          token: ${{ secrets.MERGIFY_TOKEN }}
+          report_path: test-results-*.xml
+```
+
+**Key changes to enable flaky detection:**
+
+1. **Added schedule trigger**: Run flaky detection every 6 hours automatically
+2. **Conditional test runs**: Use `RUN_COUNT` environment variable to run tests 5 times on schedule, once on pull requests
+3. **Dynamic loop**: Use `seq $RUN_COUNT` to run tests the appropriate number of times
+4. **Separate XML outputs**: Each test run generates its own XML file (`test-results-1.xml`, `test-results-2.xml`, etc.)
+5. **Upload all results**: Use `test-results-*.xml` pattern to upload all XML files at once
+
+This approach ensures that:
+- **Pull requests run quickly**: Tests run only once on PR events to avoid slowing down development
+- **Scheduled runs detect flaky tests**: 5 test runs on scheduled runs provide flaky detection data
+- **All test runs appear under the same job name** in CI Insights for proper comparison
+- **CI Insights can compare outcomes** across the 5 runs on the same SHA to identify flaky tests
+
+**Benefits:**
+- No performance impact on pull request workflows
+- Automatic flaky detection on main branch via scheduled runs
+- Maintains existing CI workflow functionality
+
+
