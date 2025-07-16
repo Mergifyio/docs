@@ -81,7 +81,7 @@
     "cheerio": "^1.1.0",
     "classnames": "^2.5.1",
     "dotenv": "^17.2.0",
-    "framer-motion": "^12.23.5",
+    "framer-motion": "^12.23.6",
     "github-slugger": "^2.0.0",
     "jsdoc-api": "^9.3.4",
     "jsonpointer": "^5.0.1",
