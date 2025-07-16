@@ -8758,6 +8758,10 @@
       "description": "Operations with pull requests."
     },
     {
+      "name": "quarantine",
+      "description": "Operations with ci tests quarantine."
+    },
+    {
       "name": "queues",
       "description": "Operations with queues."
     },
