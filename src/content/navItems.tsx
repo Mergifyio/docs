@@ -76,6 +76,7 @@ const navItems: NavItem[] = [
 		icon: MdOutlineLightbulb,
 		children: [
 			{ title: 'Using CI Insights', path: '/ci-insights', icon: MdOutlineLightbulb },
+			{ title: 'Flaky Test Detection', path: '/ci-insights/flaky-test-detection', icon: FaBug },
 			{
 				title: 'Tests Frameworks',
 				path: '/ci-insights#test-framework-configuration',
