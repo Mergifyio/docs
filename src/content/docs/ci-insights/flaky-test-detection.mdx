@@ -1,0 +1,240 @@
+---
+title: Flaky Test Detection
+description: Set up automated flaky test detection to identify unreliable tests in your CI pipeline and improve test suite reliability.
+---
+
+import { Image } from "astro:assets"
+
+Flaky test detection helps you identify tests that produce inconsistent results
+on the same code, allowing you to improve the reliability of your test suite
+and reduce false positives in your CI pipeline.
+
+## Understanding Flaky Tests
+
+A **flaky test** is one that has different conclusions on the same SHA1. For
+example, if a test runs twice on the same commit and once fails while the other
+succeeds, it's considered flaky because the outcome is not consistent with the
+same code.
+
+Flaky tests are problematic because they:
+
+- Create false positives that block legitimate deployments
+- Reduce confidence in your test suite
+- Waste developer time investigating non-issues
+- Can mask real bugs when they fail intermittently
+
+## How Flaky Detection Works
+
+Flaky test detection works by running your test suite multiple times on the
+same commit. When tests produce different results (pass/fail) across these runs
+on identical code, they are flagged as flaky. This approach helps identify
+tests that are unreliable and may cause false positives or negatives in your CI
+pipeline.
+
+## Setting Up Flaky Test Detection
+
+To effectively detect flaky tests, you need to run the same tests multiple
+times on the same code (identified by the SHA1 of the repository). This section
+explains how to set up your CI to systematically detect flaky tests.
+
+### Prerequisites
+
+Before setting up flaky test detection, ensure you have:
+
+1. [Enabled CI Insights](/ci-insights#enabling-ci-insights-for-github)
+   for your repository
+
+2. Set up your `MERGIFY_TOKEN` in GitHub Actions secrets
+
+3. Configured test integration (e.g., `pytest-mergify` or `mergify cli upload`)
+   for your test framework
+
+### GitHub Actions Setup
+
+The recommended approach is to use a scheduled workflow that runs your test
+suite multiple times on the default branch. Here's an example configuration
+that runs tests twice daily with 5 parallel executions:
+
+```yaml
+name: Continuous Integration
+on:
+  pull_request:
+  schedule:
+    - cron: '0 */12 * * 1-5'  # Every 12 hours, Monday to Friday
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        run: [1, 2, 3, 4, 5]  # Run the same tests 5 times in parallel
+      fail-fast: false  # Don't cancel other runs if one fails
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup your environment
+        # Add your specific setup steps here (Python, Node.js, etc.)
+
+      - name: Run Tests
+        env:
+          MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+          RUN_COUNT: 5  # Number of times to run each test
+        run: |
+          # Run your test suite multiple times to detect flakiness
+          set +e
+          failed=0
+          for i in $(seq "$RUN_COUNT"); do
+            # Replace this with your actual test command
+            # Examples:
+            # pytest tests/
+            # npm test
+            # go test ./...
+            your-test-command
+            exit_code=$?
+            if [ $exit_code -ne 0 ]; then
+              failed=1
+            fi
+          done
+          exit $failed
+```
+
+```yaml
+name: CI
+on:
+  pull_request:
+  schedule:
+    - cron: '0 */12 * * 1-5'  # Every 12 hours, Monday to Friday
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup your environment
+        # Add your specific setup steps here (Python, Node.js, etc.)
+
+      # Modified: Run tests multiple times for flaky detection
+      - name: Run tests
+        env:
+          # Run tests 5 times on schedule, once on pull_request
+          RUN_COUNT: ${{ github.event_name == 'schedule' && 5 || 1 }}
+        run: |
+          # Run the test suite based on RUN_COUNT
+          for i in $(seq $RUN_COUNT); do
+            echo "Running test suite - attempt $i of $RUN_COUNT"
+
+            # Run your test command with unique output file, e.g.:
+            # npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
+          done
+
+      # Upload all test results to CI Insights
+      - name: Upload test results
+        if: always()
+        uses: mergifyio/gha-mergify-ci@v6
+        with:
+          token: ${{ secrets.MERGIFY_TOKEN }}
+          report_path: test-results-*.xml
+```
+
+### Configuration Tips
+
+- **Frequency**: Running twice daily (every 12 hours) provides a good balance
+  between detection accuracy and resource usage
+
+- **Parallel Execution**: Use matrix strategy to run multiple test executions
+  simultaneously
+
+- **fail-fast: false**: Ensure all test runs complete even if some fail
+
+- **Default Branch Only**: Focus on the default branch where flaky tests have
+  the most impact
+
+- **Weekday Schedule**: The example runs Monday to Friday (`1-5`) to avoid
+  running when no changes are made on the code
+
+### Key Environment Variables
+
+- `MERGIFY_TOKEN`: Required for uploading test results to CI Insights
+- `RUN_COUNT`: Number of times to execute each test within a single job
+
+## Interpreting Flaky Test Results
+
+Once your flaky test detection is running, CI Insights will analyze the results
+and identify patterns:
+
+### In the CI Insights Dashboard
+
+1. **Tests View**: Navigate to the Tests section in CI Insights to see tests flagged as flaky
+2. **Consistency Metrics**: View the success/failure ratio for each test across multiple runs
+3. **Timeline Analysis**: See when flakiness was first detected and how it trends over time
+4. **Impact Assessment**: Understand which tests are causing the most CI instability
+
+### What to Look For
+
+- **High Flakiness Rate**: Tests that fail inconsistently across runs on the same commit
+- **Recent Flakiness**: Newly introduced flaky behavior that may indicate recent code changes
+- **Critical Path Tests**: Flaky tests in important workflows that could block deployments
+- **Patterns**: Flakiness that occurs under specific conditions (time of day, load, etc.)
+
+### Taking Action
+
+When flaky tests are identified:
+
+1. **Prioritize by Impact**: Focus on tests that affect critical workflows
+   first
+
+2. **Investigate Root Causes**: Look for timing issues, external dependencies,
+   or race conditions
+
+3. **Improve Test Reliability**: Add proper waits, mocks, or test isolation
+
+4. **Monitor Progress**: Use CI Insights to verify that fixes reduce flakiness
+   over time
+
+## Common Causes of Flaky Tests
+
+Understanding common causes can help you fix flaky tests more effectively:
+
+### Timing Issues
+
+- **Race conditions**: Tests that depend on timing between operations
+
+- **Insufficient waits**: Tests that don't wait long enough for operations to
+  complete
+
+- **Timeouts**: Tests with hardcoded timeouts that may vary in different
+  environments
+
+### External Dependencies
+
+- **Network calls**: Tests that make real HTTP requests
+- **Database state**: Tests that depend on specific database state
+- **File system**: Tests that read/write files without proper cleanup
+
+### Test Isolation
+
+- **Shared state**: Tests that affect each other's state
+- **Order dependencies**: Tests that only pass when run in a specific order
+- **Resource conflicts**: Tests competing for the same resources
+
+### Environment Variations
+
+- **System load**: Tests sensitive to CPU or memory usage
+- **Date/time dependencies**: Tests that depend on current time
+- **Random data**: Tests using non-deterministic random values
+
+## Best Practices for Reliable Tests
+
+To prevent flaky tests:
+
+1. **Use deterministic data**: Replace random values with fixed test data
+2. **Mock external dependencies**: Isolate tests from network, database, and file system
+3. **Implement proper waits**: Use explicit waits instead of fixed sleeps
+4. **Clean up after tests**: Ensure each test starts with a clean state
+5. **Make tests independent**: Each test should be able to run in isolation
+6. **Use stable selectors**: In UI tests, use reliable element selectors
+7. **Handle async operations**: Properly wait for asynchronous operations to complete
