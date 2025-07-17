@@ -1,62 +1,154 @@
 ---
 title: Using Slack with Mergify
-description: Learn how you can send Slack notifications.
+description: Learn how you can send Slack notifications for Merge Queue events, CI Insights, and pull request activities.
 ---
 
 import { Image } from "astro:assets"
 import slackLogo from "../../images/integrations/slack/logo.svg"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 import mqCommentSlack from "../../images/integrations/slack/mq-comment.png"
+import ciInsightsConfig from "../../images/integrations/slack/ci-insights.png"
 
 <IntegrationLogo src={slackLogo} alt="Slack logo"/>
 
-Mergify offers a native integration with Slack, allowing you to receive events
-from your Merge Queue directly in one or multiple Slack channels. This
-integration helps you stay updated on your merge activities without leaving
-Slack. Here's how you can set it up:
+Mergify offers comprehensive Slack integration, allowing you to receive
+notifications about your development workflow directly in Slack. You can get
+updates about Merge Queue activities, CI job completions, and pull request
+events, keeping your team informed without leaving Slack.
 
-To receive Merge Queue events directly in Slack:
-1. Go to your Mergify dashboard.
-2. Navigate to Integrations → Slack.
-3. Follow the prompts to connect your Slack workspace.
-4. Select the Slack channel where you want to receive Merge Queue notifications.
+## Setting Up the Mergify Slack Integration
+
+Before configuring specific notifications, you need to connect your Slack workspace to Mergify:
+
+1. Go to your Mergify dashboard
+2. Navigate to **Integrations → Slack**
+3. Follow the prompts to connect your Slack workspace
+4. Authorize the Mergify app for your Slack workspace
+
+Once connected, you can configure different types of notifications based on your team's needs.
+
+## Merge Queue Notifications
+
+Get real-time updates about your Merge Queue activities directly in Slack channels.
+
+Merge Queue notifications include:
+- Pull requests entering the queue
+- Pull requests being merged
+- Queue failures and retries
+- Pull requests being removed from the queue
+
+To set up Merge Queue notifications:
+
+1. In your Mergify dashboard, go to **Integrations → Slack**
+2. Select the Slack channel where you want to receive Merge Queue notifications
+3. Choose the repositories you want to monitor
+4. Configure notification preferences (all events or specific events only)
 
 <Image src={mqCommentSlack} alt="Merge Queue activity on Slack" />
 
-With this setup, you'll get real-time updates about your Merge Queue, keeping
-your team informed and enabling quicker responses to any issues.
+Those notifications are useful for:
 
-## Using GitHub-Slack Integration with Mergify
+- **Team Coordination**: Keep the entire team informed about merge activities
+- **Release Management**: Monitor critical merges during release periods
+- **Debugging**: Quickly identify when and why queue operations fail
 
-In addition to the native integration, you can also receive Slack notifications
-based on Mergify actions by leveraging the GitHub to Slack integration. Here's
-a step-by-step guide:
+## CI Insights Notifications
+
+[Mergify's CI Insights](/ci-insights) can send Slack notifications about CI job
+completions, allowing your team to stay informed about build statuses, test
+failures, and deployment activities.
+
+CI Insights notifications include:
+- **Repository and Branch**: Which repository and branch the job ran on
+- **Job Information**: Job name, pipeline name, and duration
+- **Status**: Success, failure, cancellation with appropriate emoji
+- **Commit Details**: Commit SHA and message
+- **Links**: Direct links to the job logs and commit in GitHub
+- **Flaky Detection**: Indication if a job was flagged as flaky
+
+To configure CI Insights Slack notifications:
+
+1. **Enable CI Insights**: Make sure you have [CI Insights enabled](/ci-insights) for your repositories
+2. **Configure Notifications**: In your Mergify dashboard, navigate to **Integrations → Slack**
+3. **Set Up Rules**: Configure notification rules based on your criteria
+
+<Image src={ciInsightsConfig} alt="Slack integration with CI Insights" />
+
+### Notification Criteria
+
+You can filter notifications based on:
+
+- **Repository**: Specific repositories to monitor
+- **Job Name**: Specific jobs within your CI pipeline
+- **Pipeline Name**: Specific workflows or pipelines
+- **Branch Name**: Target specific branches (main, release branches, etc.)
+- **Job Conclusion**: Success, failure, cancelled, or any combination
+
+### Example Configurations
+
+#### Critical Failures Only
+Monitor failures on main branch for production-related jobs:
+- Repository: `your-org/your-repo`
+- Branch: `main`
+- Job Conclusion: `failure`
+- Job Name: `deploy`, `security-scan`, `integration-tests`
+
+#### Release Monitoring
+Monitor all activities on release branches:
+- Repository: `your-org/your-repo`  
+- Branch: `release/*`
+- Job Conclusion: `failure`, `success`
+
+#### Test Failure Alerts
+Alert on any test failures across all branches:
+- Repository: `your-org/your-repo`
+- Job Conclusion: `failure`
+- Job Name: `*test*`
+
+### Best Practices
+
+1. **Start Broad, Then Narrow**: Begin with broader notifications and gradually
+   add filters to reduce noise
+
+2. **Use Separate Channels**: Consider different Slack channels for different
+   types of notifications (e.g., #ci-failures, #deployments, #security-alerts)
+
+3. **Focus on Critical Paths**: Prioritize notifications for jobs that affect
+   production deployments or security
+
+4. **Monitor Flaky Tests**: Set up specific notifications for flaky test
+   detection to improve test reliability
+
+5. **Team-Specific Filters**: Configure different notification rules for
+   different teams based on their responsibilities
+
+## Pull Request Notifications via GitHub-Slack Integration
+
+In addition to native Mergify notifications, you can also receive Slack
+notifications based on Mergify actions by leveraging the GitHub to Slack
+integration.
 
 ### Setting Up GitHub-Slack Integration
 
-1. Go to [Slack's GitHub Integration page](https://slack.github.com/).
+1. Go to [Slack's GitHub Integration page](https://slack.github.com/)
 
-2. Click on the 'Add to Slack' button.
+2. Click on the `Add to Slack` button
 
 3. Invite the GitHub app to the channel you want. Refer to the
    [documentation](https://github.com/integrations/slack/blob/master/README.md)
-   for more details.
+   for more details
 
 4. Make sure you subscribe to the repositories [to receive the
    mentions](https://github.com/integrations/slack/blob/master/README.md#mentions)
-   as private message for the GitHub Slack app.
-
-Now that the Slack-GitHub integration is complete, let's see how you can use
-Mergify to mention a user, which will then notify them on Slack.
+   as private message for the GitHub Slack app
 
 ### Using Mergify's Comment Action with Slack Notifications
 
-The primary idea is to use Mergify's (`comment`)[/workflow/actions/comment/]
-action to mention the PR author, leveraging GitHub's mention feature. This
-mention will be forwarded to Slack, notifying the mentioned user.
+You can use Mergify's [comment action](/workflow/actions/comment/) to mention
+users in PR comments, which will trigger Slack notifications if the user has
+GitHub integrated with Slack.
 
-Here's an example of a Mergify configuration that comments on a PR if a CI
-fails and the label is "hotfix":
+Here's an example that notifies the PR author when CI fails on hotfix PRs:
 
 ```yaml
 pull_request_rules:
@@ -69,16 +161,36 @@ pull_request_rules:
         message: "@{{author}} :warning: The CI failed on this hotfix PR. Please review the issues and address them."
 ```
 
-In the above rule:
+This rule:
+- Checks for CI failures with `#check-failure > 0`
+- Ensures the PR has the `hotfix` label
+- Comments mentioning the PR author using `@{{author}}`
+- Triggers a Slack notification if the author has GitHub-Slack integration enabled
 
-- We're checking if there are any CI failures with `#check-failure > 0`.
+### Use Cases
 
-- We're also ensuring that the PR has the label `hotfix`.
+- **Critical PR Alerts**: Notify authors about urgent issues with hotfix or
+  release PRs
 
-- If both conditions are met, Mergify will leave a comment mentioning the PR
-  author using `@{{author}}`. This mention will trigger a notification in Slack
-  if the author has their GitHub integrated with Slack.
+- **Review Requests**: Automatically mention reviewers when PRs are ready
 
-By setting up this flow, you can ensure that critical PRs, like those labeled
-"hotfix", receive immediate attention from their authors, even if they're
-primarily monitoring Slack.
+- **Status Updates**: Keep stakeholders informed about important PR milestones
+
+## Troubleshooting
+
+If you're not receiving expected notifications:
+
+1. **Check Integration Status**: Verify that Slack integration is properly
+   connected in your Mergify dashboard
+
+2. **Review Notification Settings**: Ensure your notification rules are
+   correctly configured
+
+3. **Verify Channel Permissions**: Make sure the Mergify Slack app has
+   permission to post in your target channels
+
+4. **Test with Broader Filters**: Temporarily use broader criteria to confirm
+   the integration is working
+
+5. **Check Repository Access**: Ensure Mergify has access to the repositories
+   you want to monitor
