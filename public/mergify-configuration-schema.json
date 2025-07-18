@@ -1296,6 +1296,12 @@
           ],
           "title": "Reporting Method",
           "type": "string"
+        },
+        "post_comment": {
+          "default": true,
+          "description": "Whether to post merge protection status comments on pull requests",
+          "title": "Post Comment",
+          "type": "boolean"
         }
       },
       "title": "MergeProtectionsModel",
