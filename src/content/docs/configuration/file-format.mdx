@@ -41,7 +41,8 @@ different aspect of Mergify:
 - [`pull_request_rules`](#pull-request-rules) configures [Automation
   Workflow](/workflow/);
 
-- [`merge_protections`](#merge-protections) configures [Merge
+- [`merge_protections`](#merge-protections) and
+  [`merge_protections_settings`](#merge-protections) configures [Merge
   Protections](/merge-protections/);
 
 - [`queue_rules`](#queue-rules) configures the [Merge
@@ -94,6 +95,11 @@ The top-level key `merge_protections` allows to protect your merge by adding a
 list of rules that must match before allowing the pull request to be merged.
 
 <OptionsTable def="MergeProtectionRuleModel" />
+
+The top-level key `merge_protections_settings` allows to configure the
+behavior of Merge Protections
+
+<OptionsTable def="MergeProtectionsModel" />
 
 ### Merge Queue
 
