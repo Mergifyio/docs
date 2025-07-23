@@ -21,7 +21,7 @@
     "@types/html-escaper": "^3.0.4",
     "@types/js-yaml": "^4.0.9",
     "@types/mdast": "^4.0.4",
-    "@types/node": "^24.0.15",
+    "@types/node": "^24.1.0",
     "@types/viz.js": "^2.1.5",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
