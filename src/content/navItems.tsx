@@ -66,11 +66,6 @@ export type NavItem = {
 const navItems: NavItem[] = [
 	{ title: 'Home', path: '/', icon: FaHome },
 	{
-		title: 'Merge Protections',
-		path: '/merge-protections',
-		icon: FaUserShield,
-	},
-	{
 		title: 'CI Insights',
 		path: '/ci-insights',
 		icon: MdOutlineLightbulb,
@@ -88,6 +83,34 @@ const navItems: NavItem[] = [
 					{ title: 'Vitest', path: '/ci-insights/vitest', icon: SiVitest },
 				],
 			},
+		],
+	},
+	{
+		title: 'Merge Protections',
+		path: '/merge-protections',
+		icon: FaUserShield,
+	},
+	{
+		title: 'Merge Queue',
+		icon: MergeQueueIcon,
+		children: [
+			{ title: 'Introduction', path: '/merge-queue', icon: FaRegLightbulb },
+			{ title: 'Setup', path: '/merge-queue/setup', icon: FaGear },
+			{ title: 'Queue Rules', path: '/merge-queue/rules', icon: BiSolidCoinStack },
+			{ title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: SlRefresh },
+			{ title: 'Priority', path: '/merge-queue/priority', icon: FaTrafficLight },
+			{ title: 'Pause', path: '/merge-queue/pause', icon: FaRegCirclePause },
+			{ title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
+			{
+				title: 'Parallel Checks',
+				path: '/merge-queue/parallel-checks',
+				icon: TiFlowParallel,
+			},
+			{ title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
+			{ title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
+			{ title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
+			{ title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
+			{ title: 'Troubleshooting', path: '/merge-queue/troubleshooting', icon: FaBug },
 		],
 	},
 	{
@@ -159,29 +182,7 @@ const navItems: NavItem[] = [
 			},
 		],
 	},
-	{
-		title: 'Merge Queue',
-		icon: MergeQueueIcon,
-		children: [
-			{ title: 'Introduction', path: '/merge-queue', icon: FaRegLightbulb },
-			{ title: 'Setup', path: '/merge-queue/setup', icon: FaGear },
-			{ title: 'Queue Rules', path: '/merge-queue/rules', icon: BiSolidCoinStack },
-			{ title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: SlRefresh },
-			{ title: 'Priority', path: '/merge-queue/priority', icon: FaTrafficLight },
-			{ title: 'Pause', path: '/merge-queue/pause', icon: FaRegCirclePause },
-			{ title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
-			{
-				title: 'Parallel Checks',
-				path: '/merge-queue/parallel-checks',
-				icon: TiFlowParallel,
-			},
-			{ title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
-			{ title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
-			{ title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
-			{ title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
-			{ title: 'Troubleshooting', path: '/merge-queue/troubleshooting', icon: FaBug },
-		],
-	},
+
 	{
 		title: 'Commands',
 		icon: BsCommand,
