@@ -23,6 +23,7 @@ import {
 	FaRegCirclePause,
 	FaUserShield,
 	FaBug,
+	FaRotateRight,
 } from 'react-icons/fa6';
 import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
@@ -72,6 +73,7 @@ const navItems: NavItem[] = [
 		children: [
 			{ title: 'Using CI Insights', path: '/ci-insights', icon: MdOutlineLightbulb },
 			{ title: 'Flaky Test Detection', path: '/ci-insights/flaky-test-detection', icon: FaBug },
+			{ title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: FaRotateRight },
 			{
 				title: 'Tests Frameworks',
 				path: '/ci-insights#test-framework-configuration',
