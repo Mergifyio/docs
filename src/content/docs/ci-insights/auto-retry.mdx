@@ -1,0 +1,78 @@
+---
+title: Auto-Retry
+description: Automatically retry failed CI jobs to reduce false negatives caused by flaky tests and transient failures.
+---
+
+import { Image } from "astro:assets"
+import ruleConfig from "../../images/ci-insights/auto-retry/rule.png"
+
+CI Insights Auto-Retry helps reduce false negatives in your CI pipeline by
+automatically retrying failed jobs that may have failed due to flaky tests or
+transient issues. This feature improves the reliability of your CI process
+while providing insights into which jobs are consistently problematic.
+
+## How Auto-Retry Works
+
+When a CI job fails, Auto-Retry analyzes the failure based on configurable
+rules to determine if it should be retried.
+
+### Retry Process
+
+1. **Detection**: Auto-Retry monitors workflow runs for job failures
+
+2. **Rule Evaluation**: When jobs fail, the system evaluates them against your
+configured retry rules
+
+3. **Wait for Completion**: If any job matches a retry rule, Auto-Retry waits
+   for the entire workflow to complete
+
+4. **Workflow Retry**: Once complete, the entire workflow is retried,
+   re-running all failed jobs
+
+5. **Success Preservation**: Previously successful jobs are not re-executed
+
+:::note
+Due to GitHub API limitations, Auto-Retry works at the workflow
+level. When a job matches a retry rule, the entire workflow is retried,
+re-running all failed jobs while preserving successful ones.
+:::
+
+## Benefits
+
+- **Reduced False Negatives**: Automatically handle transient failures that
+  don't represent real code issues
+
+- **Improved Developer Experience**: Fewer interruptions from flaky test
+  failures
+
+- **Better CI Reliability**: More consistent build results across your pipeline
+
+- **Data-Driven Insights**: Track which jobs are frequently retried to identify
+  systematic issues
+
+- **Time Savings**: Reduce manual retry actions and faster feedback loops
+
+## Configuration
+
+Auto-Retry uses a rule-based system to determine which workflow runs should be
+retried. Rules are evaluated against individual jobs, but retries occur at the
+workflow level.
+
+### Basic Setup
+
+To enable Auto-Retry for your repositories:
+
+1. Navigate to your Mergify dashboard
+2. Go to **CI Insights** → **Auto-Retry**
+3. Select the repositories you want to enable Auto-Retry for
+4. Configure your retry rules
+
+<Image src={ruleConfig} alt="CI Insights retry rule configuration" />
+
+### Retry Rules
+
+Auto-Retry rules define when a workflow should be retried based on job
+failures. Each rule specifies:
+
+- **Conditions**: When the job failure should trigger a workflow retry
+- **Number of retries**: Maximum number of retries and timing constraints
