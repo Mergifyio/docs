@@ -76,7 +76,7 @@
     "@types/react-dom": "^19.1.6",
     "@types/uuid": "^10.0.0",
     "@viz-js/viz": "^3.16.0",
-    "algoliasearch": "^5.34.1",
+    "algoliasearch": "^5.35.0",
     "canvas-confetti": "^1.9.3",
     "cheerio": "^1.1.2",
     "classnames": "^2.5.1",
