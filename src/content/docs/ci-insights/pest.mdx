@@ -1,0 +1,162 @@
+---
+title: Pest Integration with CI Insights
+description: Report your test results from Pest tests to CI Insights
+---
+
+import pestLogo from "../../images/ci-insights/pest/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={pestLogo} alt="Pest logo"/>
+
+This guide shows how to generate JUnit reports from your Pest tests and upload
+them to **CI Insights** using a GitHub Actions workflow.
+
+## 1. Generate a JUnit Report with Pest
+
+Pest is built on top of PHPUnit and supports JUnit XML reports through PHPUnit's
+logging capabilities. You can configure Pest to output JUnit reports using
+command-line options or configuration files.
+
+### Using Command Line Options
+
+```bash
+./vendor/bin/pest --log-junit junit.xml
+```
+
+### Using Pest Configuration
+
+Add the logging configuration to your `phpunit.xml` or `phpunit.xml.dist` (Pest uses PHPUnit's configuration):
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <junit outputFile="junit.xml"/>
+    </logging>
+</phpunit>
+```
+
+Then run:
+
+```bash
+./vendor/bin/pest
+```
+
+### Using Composer Scripts
+
+You can also add a script to your `composer.json`:
+
+```json
+{
+    "scripts": {
+        "test": "pest --log-junit junit.xml"
+    }
+}
+```
+
+Then run:
+
+```bash
+composer test
+```
+
+### Using Pest Configuration File
+
+You can also configure logging in your `Pest.php` file:
+
+```php
+<?php
+
+use Pest\TestSuite;
+
+TestSuite::getInstance()->log('junit', 'junit.xml');
+```
+
+## 2. Update Your GitHub Actions Workflow
+
+:::note
+Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
+docs](/ci-insights#enabling-ci-insights-for-github).
+:::
+
+After generating the JUnit report, add a step to upload the results to CI
+Insights using the mergifyio/gha-mergify-ci action.
+
+For example, in your workflow file:
+
+```yaml
+- name: Run Pest Tests and Generate JUnit Report
+  run: ./vendor/bin/pest --log-junit junit.xml
+
+- name: Mergify CI Upload
+  if: success() || failure()
+  uses: mergifyio/gha-mergify-ci@v6
+  with:
+    token: ${{ secrets.MERGIFY_TOKEN }}
+    report_path: junit.xml
+```
+
+If you use a job matrix in your workflow (e.g., to test across multiple
+versions), ensure you set the job\_name input (or MERGIFY\_JOB\_NAME
+environment variable) so CI Insights can properly distinguish reports for each
+matrix job.
+
+For example, with:
+
+```yaml
+jobs:
+  example_matrix:
+    strategy:
+      matrix:
+        version: [10, 12, 14]
+```
+
+Your upload step should look like:
+
+```yaml
+- name: Mergify CI Upload
+  if: success() || failure()
+  uses: mergifyio/gha-mergify-ci@v6
+  with:
+    token: ${{ secrets.MERGIFY_TOKEN }}
+    job_name: example_matrix (${{ matrix.version }})
+    report_path: junit.xml
+```
+
+:::tip
+Setting job\_name helps CI Insights group and display reports correctly for each matrix variation.
+:::
+
+## 3. Verify and Review in CI Insights
+
+After pushing these changes:
+
+1. Your GitHub Actions workflow will execute your Pest tests.
+2. A JUnit report (junit.xml) is generated.
+3. The Mergify CI action uploads the report to CI Insights.
+
+You can then review your test results, including any failures or flaky tests,
+directly in the [CI Insights
+dashboard](https://dashboard.mergify.com/ci-insights/jobs).
+
+## Troubleshooting Tips
+
+- File Paths: Double-check that the JUnit output file matches the path used in
+  `report_path`.
+
+- Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
+  Actions secrets [as explained in the
+  docs](\(/ci-insights#enabling-ci-insights-for-github\)).
+
+- Workflow Conditions: If your step is not running, confirm the if condition is
+  actually triggered in your job.
+
+- Pest Configuration: Ensure Pest is properly installed via Composer and the
+  logging configuration is correct in your PHPUnit configuration file.

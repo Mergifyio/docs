@@ -1,0 +1,7 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <rect width="64" height="64" fill="#366DA8" />
+    <text x="32" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="10"
+        font-weight="bold" fill="white">PHP</text>
+    <text x="32" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="10"
+        font-weight="bold" fill="white">Unit</text>
+</svg>
