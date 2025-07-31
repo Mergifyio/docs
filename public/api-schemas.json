@@ -50,6 +50,12 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
           }
         },
         "security": [
@@ -114,6 +120,12 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
           },
           "422": {
             "description": "The configuration file is invalid."
@@ -190,15 +202,11 @@
           "404": {
             "description": "The pause does not exist"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       },
@@ -253,15 +261,11 @@
           "404": {
             "description": "The merge queue is not currently paused on this repository"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       },
@@ -323,15 +327,11 @@
           "404": {
             "description": "The merge queue is not currently paused on this repository"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -388,15 +388,11 @@
           "404": {
             "description": "The merge queue is not currently paused on this repository"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -562,15 +558,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -669,15 +664,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -744,15 +738,11 @@
           "404": {
             "description": "Not found"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -819,15 +809,11 @@
           "404": {
             "description": "Not found"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -882,15 +868,11 @@
           "404": {
             "description": "Not found"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -973,15 +955,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -1052,15 +1033,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -1134,15 +1114,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -1384,15 +1363,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -1494,15 +1472,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -1697,15 +1674,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -1900,15 +1876,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -2103,15 +2078,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -2306,15 +2280,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -2509,15 +2482,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -2712,15 +2684,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -2903,15 +2874,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -3094,15 +3064,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -3167,15 +3136,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -3236,15 +3204,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       },
@@ -3313,15 +3280,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -3404,21 +3370,17 @@
           "403": {
             "description": "Forbidden"
           },
-          "400": {
-            "description": "The scheduled freeze `start`, `timezone` and `matching_conditions` attributes cannot be updated, because the scheduled freeze has already started"
-          },
           "404": {
             "description": "The scheduled freeze with the given id does not exist"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
+          },
+          "400": {
+            "description": "The scheduled freeze `start`, `timezone` and `matching_conditions` attributes cannot be updated, because the scheduled freeze has already started"
           }
         }
       },
@@ -3503,15 +3465,11 @@
           "404": {
             "description": "The scheduled freeze with the given id does not exist"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -3597,15 +3555,11 @@
           "404": {
             "description": "The scheduled freeze with the given id does not exist"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -7036,19 +6990,6 @@
         ],
         "title": "GetScheduledFreezesResponse"
       },
-      "HTTPValidationError": {
-        "properties": {
-          "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
-            "type": "array",
-            "title": "Detail"
-          }
-        },
-        "type": "object",
-        "title": "HTTPValidationError"
-      },
       "MatchingConditionsDict-Input": {
         "properties": {
           "and": {
@@ -8162,39 +8103,6 @@
           "matching_conditions"
         ],
         "title": "UpdateScheduledFreezePayload"
-      },
-      "ValidationError": {
-        "properties": {
-          "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Location"
-          },
-          "msg": {
-            "type": "string",
-            "title": "Message"
-          },
-          "type": {
-            "type": "string",
-            "title": "Error Type"
-          }
-        },
-        "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
-        "title": "ValidationError"
       },
       "mergify_engine__signals__SpeculativeCheckPullRequest": {
         "properties": {
