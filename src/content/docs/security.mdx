@@ -217,12 +217,7 @@ Restrictions](/commands/restrictions/) for changing the default.
 [GitHub allows to configure the list of IP adresses](https://docs.github.com/en/apps/maintaining-github-apps/managing-allowed-ip-addresses-for-a-github-app)
 that a GitHub App is allowed to use to access GitHub.
 
-Mergify services do not use a single static IP address. Therefore, you must
-allow the AWS EC2 `us-east-1` IP addresses.
+Mergify services use the following IP addresses:
 
-This list can be retrieved on [AWS website](https://docs.aws.amazon.com/vpc/latest/userguide/aws-ip-ranges.html)
-or via this command:
-
-```bash
-curl -s https://ip-ranges.amazonaws.com/ip-ranges.json -o- | jq -r '.prefixes[] | select(.region=="us-east-1" and .service=="EC2") | .ip_prefix'
-```
+- 34.121.26.35/32
+- 34.45.103.142/32
