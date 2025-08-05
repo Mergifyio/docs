@@ -13,7 +13,7 @@ import {
 	BsRocket,
 	BsStack,
 } from 'react-icons/bs';
-import { FaShieldAlt, FaHome, FaRegListAlt } from 'react-icons/fa';
+import { FaShieldAlt, FaHome, FaRegListAlt, FaRadiation } from 'react-icons/fa';
 import {
 	FaStairs,
 	FaRegLightbulb,
@@ -82,6 +82,7 @@ const navItems: NavItem[] = [
 			{ title: 'Using CI Insights', path: '/ci-insights', icon: MdOutlineLightbulb },
 			{ title: 'Flaky Test Detection', path: '/ci-insights/flaky-test-detection', icon: FaBug },
 			{ title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: FaRotateRight },
+			{ title: 'Quarantine', path: '/ci-insights/quarantine', icon: FaRadiation },
 			{
 				title: 'Test Frameworks',
 				path: '/ci-insights#test-framework-configuration',

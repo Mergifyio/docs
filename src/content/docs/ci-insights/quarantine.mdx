@@ -1,0 +1,29 @@
+---
+title: Quarantine
+description: Ignore problematic tests in your CI
+---
+
+The Quarantine feature lets you isolate broken or flaky tests in your CI pipeline without removing them entirely.
+Once a test is quarantined via the Mergify dashboard, it will still run in your CI — but its failure
+will be ignored for the purposes of blocking merges or marking a pipeline as failed.
+
+This helps you keep your CI green while maintaining full visibility into test reliability and ongoing issues.
+
+## How Quarantine Works
+
+When you quarantine a test in the Mergify dashboard, its future executions will continue to be collected by
+[CI Insights](/ci-insights/), but your CI will ignore failures.
+
+This avoids pipeline disruption while still surfacing issues in the UI and keeping historical data intact.
+
+Quarantined tests must still be uploaded appropriately using one of the supported CI integrations.
+To ensure the correct setup, refer to [the documentation for your test framework](/ci-insights/#test-framework-configuration).
+
+## Adding and removing tests from quarantine
+
+### From The Mergify Dashboard
+
+The ["Tests" view of CI Insights](https://dashboard.mergify.com/ci-insights/tests) on the dashboard contains the list of
+tests that were retrieve from the CI Insights integration.
+Clicking on a test in this list will bring you to the "Test Details" view of the test,
+which will allowyou to add or remove a test from quarantine.
