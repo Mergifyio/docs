@@ -1,0 +1,166 @@
+---
+title: Minitest Integration with CI Insights
+description: Report your test results from Minitest tests to CI Insights
+---
+
+import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
+import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
+import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
+
+This guide shows how to generate JUnit reports from your Minitest tests and upload
+them to **CI Insights** using a GitHub Actions workflow.
+
+## 1. Generate a JUnit Report with Minitest
+
+Minitest doesn't have built-in JUnit support, but you can use third-party
+plugins to generate JUnit XML reports.
+
+### Using minitest-junit
+
+Install the `minitest-junit` gem:
+
+```ruby
+# Gemfile
+group :test do
+  gem 'minitest-junit'
+end
+```
+
+Then run:
+
+```bash
+bundle install
+```
+
+Require the gem in your test helper:
+
+```ruby
+# test/test_helper.rb
+require 'minitest/junit'
+```
+
+Run tests with JUnit output:
+
+```bash
+JUNIT_OUTPUT_DIR=. bundle exec ruby -Itest test/**/*_test.rb
+```
+
+### Using minitest-reporters
+
+Install the `minitest-reporters` gem which includes JUnit support:
+
+```ruby
+# Gemfile
+group :test do
+  gem 'minitest-reporters'
+end
+```
+
+Then run:
+
+```bash
+bundle install
+```
+
+Configure it in your test helper:
+
+```ruby
+# test/test_helper.rb
+require 'minitest/reporters'
+
+Minitest::Reporters.use! [
+  Minitest::Reporters::DefaultReporter.new,
+  Minitest::Reporters::JUnitReporter.new('junit.xml')
+]
+```
+
+### Using Rake Task
+
+Create a Rake task for running tests with JUnit output:
+
+```ruby
+# Rakefile
+require 'rake/testtask'
+
+Rake::TestTask.new(:test_junit) do |t|
+  t.libs << 'test'
+  t.test_files = FileList['test/**/*_test.rb']
+  ENV['JUNIT_OUTPUT_DIR'] = '.'
+end
+```
+
+Then run:
+
+```bash
+bundle exec rake test_junit
+```
+
+### Using Command Line Configuration
+
+You can also run Minitest with JUnit configuration directly:
+
+```bash
+bundle exec ruby -Itest -rminitest/junit test/**/*_test.rb
+```
+
+Set the output directory with environment variable:
+
+```bash
+JUNIT_OUTPUT_DIR=. bundle exec ruby -Itest -rminitest/junit test/**/*_test.rb
+```
+
+## 2. Update Your GitHub Actions Workflow
+
+:::note
+Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
+docs](/ci-insights#enabling-ci-insights-for-github).
+:::
+
+After generating the JUnit report, add a step to upload the results to CI
+Insights using the `mergifyio/gha-mergify-ci` action.
+
+For example, in your workflow file:
+
+```yaml
+- name: Run Minitest Tests and Generate JUnit Report
+  env:
+    JUNIT_OUTPUT_DIR: .
+  run: bundle exec ruby -Itest -rminitest/junit test/**/*_test.rb
+```
+
+<MergifyCIUploadStep reportPath="junit.xml" />
+
+Using `minitest-reporters` approach:
+
+```yaml
+- name: Run Minitest Tests and Generate JUnit Report
+  run: bundle exec rake test
+```
+
+<MergifyCIUploadStep reportPath="junit.xml" />
+<MergifyCIUploadStepMatrix reportPath="junit.xml" />
+
+## 3. Verify and Review in CI Insights
+
+After pushing these changes:
+
+1. Your GitHub Actions workflow will execute your Minitest tests.
+2. A JUnit report (junit.xml) is generated.
+3. The Mergify CI action uploads the report to CI Insights.
+
+You can then review your test results, including any failures or flaky tests,
+directly in the [CI Insights
+dashboard](https://dashboard.mergify.com/ci-insights/jobs).
+
+## Troubleshooting Tips
+
+<ul>
+  <li>
+    Gem Installation: Ensure the chosen JUnit gem (`minitest-junit` or `minitest-reporters`) is properly installed and
+    required.
+  </li>
+
+  <li>Environment Variables: Make sure `JUNIT_OUTPUT_DIR` is set correctly when using minitest-junit.</li>
+
+  <CommonTroubleshootingTips />
+</ul>
