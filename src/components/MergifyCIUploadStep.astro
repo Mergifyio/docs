@@ -1,0 +1,30 @@
+---
+import { Code } from 'astro:components';
+
+export interface Props {
+	reportPath: string;
+}
+const { reportPath } = Astro.props;
+---
+
+<Code
+	code={`- name: Mergify CI Upload
+  if: success() || failure()
+  uses: mergifyio/gha-mergify-ci@v8
+  with:
+    token: \${{ secrets.MERGIFY_TOKEN }}
+    report_path: ${reportPath}`}
+	lang="yaml"
+	theme="slack-ochin"
+/>
+<p>Key Points:</p>
+<ul>
+	<li>
+		<Code code={`if: success() || failure()`} inline lang="yaml" theme="slack-ochin" />: Runs the
+		upload step even if tests fail, ensuring <strong>CI Insights</strong> has the full report.
+	</li>
+	<li>
+		<Code code={`report_path: ${reportPath}`} inline lang="yaml" theme="slack-ochin" />: Points to
+		where your JUnit file is located. Make sure it matches the path you set in your CI job.
+	</li>
+</ul>

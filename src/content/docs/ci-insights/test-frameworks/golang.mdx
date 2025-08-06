@@ -3,10 +3,13 @@ title: Go Integration with CI Insights
 description: Report your test results from Go tests to CI Insights
 ---
 
-import golangLogo from "../../images/ci-insights/golang/logo.svg"
-import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+import golangLogo from "../../../images/ci-insights/golang/logo.svg"
+import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
+import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
+import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
+import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 
-<IntegrationLogo src={golangLogo} alt="Golang logo"/>
+<IntegrationLogo src={golangLogo} alt="Golang logo" />
 
 This guide shows how to generate JUnit reports from your Go tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
@@ -45,45 +48,10 @@ For example, in your workflow file:
 ```yaml
 - name: Run Go Tests and Generate JUnit Report
   run: go test -v ./... 2>&1 | go-junit-report > junit.xml
-
-- name: Mergify CI Upload
-  if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v6
-  with:
-    token: ${{ secrets.MERGIFY_TOKEN }}
-    report_path: junit.xml
 ```
 
-If you use a job matrix in your workflow (e.g., to test across multiple
-versions), ensure you set the job\_name input (or MERGIFY\_JOB\_NAME
-environment variable) so CI Insights can properly distinguish reports for each
-matrix job.
-
-For example, with:
-
-```yaml
-jobs:
-  example_matrix:
-    strategy:
-      matrix:
-        version: [10, 12, 14]
-```
-
-Your upload step should look like:
-
-```yaml
-- name: Mergify CI Upload
-  if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v6
-  with:
-    token: ${{ secrets.MERGIFY_TOKEN }}
-    job_name: example_matrix (${{ matrix.version }})
-    report_path: junit.xml
-```
-
-:::tip
-Setting job\_name helps CI Insights group and display reports correctly for each matrix variation.
-:::
+<MergifyCIUploadStep reportPath="junit.xml" />
+<MergifyCIUploadStepMatrix reportPath="junit.xml" />
 
 ## 3. Verify and Review in CI Insights
 
@@ -99,12 +67,6 @@ dashboard](https://dashboard.mergify.com/ci-insights/jobs).
 
 ## Troubleshooting Tips
 
-- File Paths: Double-check that the JUnit output file matches the path used in
-  `report_path`.
-
-- Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
-  Actions secrets [as explained in the
-  docs](\(/ci-insights#enabling-ci-insights-for-github\)).
-
-- Workflow Conditions: If your step is not running, confirm the if condition is
-  actually triggered in your job.
+<ul>
+  <CommonTroubleshootingTips />
+</ul>
