@@ -1,0 +1,43 @@
+---
+import { Code } from 'astro:components';
+
+export interface Props {
+	reportPath: string;
+}
+const { reportPath } = Astro.props;
+---
+
+<p>
+	If you use a job matrix in your workflow (e.g., to test across multiple versions), ensure you set
+	the <code>job_name</code> input (or <code>MERGIFY_JOB_NAME</code> environment variable) so <strong
+		>CI Insights</strong
+	> can properly distinguish reports for each matrix job.
+</p>
+<p>For example, with:</p>
+<Code
+	code={`jobs:
+  example_matrix:
+    strategy:
+      matrix:
+        version: [10, 12, 14]`}
+	lang="yaml"
+	theme="slack-ochin"
+/>
+<p>Your upload step should look like:</p>
+<Code
+	code={`- name: Mergify CI Upload
+  if: success() || failure()
+  uses: mergifyio/gha-mergify-ci@v8
+  with:
+    job_name: example_matrix (\${{ matrix.version }})
+    token: \${{ secrets.MERGIFY_TOKEN }}
+    report_path: ${reportPath}`}
+	lang="yaml"
+	theme="slack-ochin"
+/>
+<aside>
+	<p>
+		Setting <code>job_name</code> helps <strong>CI Insights</strong> group and display reports correctly
+		for each matrix variation.
+	</p>
+</aside>
