@@ -1,0 +1,128 @@
+---
+title: NUnit Integration with CI Insights
+description: Report your test results from NUnit tests to CI Insights
+---
+
+import CommonTroubleshootingTips from './_common-troubleshooting-tips.mdx'
+import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
+import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
+
+This guide shows how to generate JUnit reports from your NUnit tests and upload
+them to **CI Insights** using a GitHub Actions workflow.
+
+## 1. Generate a JUnit Report with NUnit
+
+NUnit can generate JUnit-compatible XML reports using the built-in test adapter
+and various loggers available for `dotnet test`.
+
+### Using dotnet test with JUnit Logger
+
+Install the JUnit test logger:
+
+```bash
+dotnet add package JunitXml.TestLogger
+```
+
+Run tests with JUnit output:
+
+```bash
+dotnet test --logger "junit;LogFilePath=junit.xml"
+```
+
+### Using NUnit Console Runner
+
+If you're using the NUnit Console Runner directly:
+
+```bash
+nunit3-console.exe your-test.dll --result=junit.xml;format=junit
+```
+
+### Using NUnit Test Adapter
+
+Add the NUnit test adapter to your test project:
+
+```xml
+<PackageReference Include="NUnit" Version="3.13.3" />
+<PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+<PackageReference Include="JunitXml.TestLogger" Version="6.1.0" />
+```
+
+Then run:
+
+```bash
+dotnet test --logger junit
+```
+
+### Using Multiple Test Result Formats
+
+You can generate multiple formats simultaneously:
+
+```bash
+dotnet test --logger "console;verbosity=detailed" --logger "junit;LogFilePath=junit.xml" --logger "trx;LogFileName=results.trx"
+```
+
+### Using NUnit with Custom Settings
+
+You can also configure test settings in a `.runsettings` file:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <LoggerRunSettings>
+    <Loggers>
+      <Logger friendlyName="junit" enabled="true">
+        <Configuration>
+          <LogFilePath>junit.xml</LogFilePath>
+        </Configuration>
+      </Logger>
+    </Loggers>
+  </LoggerRunSettings>
+</RunSettings>
+```
+
+Then run:
+
+```bash
+dotnet test --settings test.runsettings
+```
+
+## 2. Update Your GitHub Actions Workflow
+
+:::note
+Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
+docs](/ci-insights#enabling-ci-insights-for-github).
+:::
+
+After generating the JUnit report, add a step to upload the results to CI
+Insights using the mergifyio/gha-mergify-ci action.
+
+For example, in your workflow file:
+
+```yaml
+- name: Run NUnit Tests and Generate JUnit Report
+  run: dotnet test --logger "junit;LogFilePath=junit.xml"
+```
+
+<MergifyCIUploadStep reportPath="junit.xml" />
+<MergifyCIUploadStepMatrix reportPath="junit.xml" />
+
+## 3. Verify and Review in CI Insights
+
+After pushing these changes:
+
+1. Your GitHub Actions workflow will execute your NUnit tests.
+2. A JUnit report (junit.xml) is generated.
+3. The Mergify CI action uploads the report to CI Insights.
+
+You can then review your test results, including any failures or flaky tests,
+directly in the [CI Insights
+dashboard](https://dashboard.mergify.com/ci-insights/jobs).
+
+## Troubleshooting Tips
+
+<ul>
+  <li>Test Adapter: Ensure both NUnit and NUnit3TestAdapter packages are properly referenced in your test project.</li>
+  <li>Logger Package: Make sure the JunitXml.TestLogger package is installed and compatible with your .NET version.</li>
+
+  <CommonTroubleshootingTips />
+</ul>

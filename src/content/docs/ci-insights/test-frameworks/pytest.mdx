@@ -3,8 +3,8 @@ title: Pytest Integration with CI Insights
 description: Report your test results from pytest to CI Insights
 ---
 
-import pytestLogo from "../../images/ci-insights/pytest/logo.svg"
-import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+import pytestLogo from "../../../images/ci-insights/pytest/logo.svg"
+import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 
 <IntegrationLogo src={pytestLogo} alt="Pytest logo" />
 
@@ -123,7 +123,7 @@ If you’re using multiple environments (e.g. `py38`, `py39`, etc.), the plugin
 will work for all of them as long as the token is set correctly.
 
 If you’re running multiple Tox environments (e.g., py38, py39, etc.), we
-recommend setting the MERGIFY\_JOB\_NAME environment variable to identify each
+recommend setting the `MERGIFY_JOB_NAME` environment variable to identify each
 environment’s report in CI Insights:
 
 In your GitHub Actions workflow:
@@ -137,6 +137,6 @@ In your GitHub Actions workflow:
 ```
 
 :::tip
-Use MERGIFY\_JOB\_NAME to make reports clearer in CI Insights, especially when
+Use `MERGIFY_JOB_NAME` to make reports clearer in CI Insights, especially when
 running multiple Tox environments or using a matrix.
 :::

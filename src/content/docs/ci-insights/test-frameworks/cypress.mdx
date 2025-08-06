@@ -3,8 +3,11 @@ title: Cypress Integration with CI Insights
 description: Report your test results from Cypress to CI Insights
 ---
 
-import cypressLogo from "../../images/ci-insights/cypress/logo.svg"
-import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+import cypressLogo from "../../../images/ci-insights/cypress/logo.svg"
+import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
+import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
+import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
+import CommonTroubleshootingTips from './_common-troubleshooting-tips.mdx'
 
 <IntegrationLogo src={cypressLogo} alt="Cypress logo" />
 
@@ -49,54 +52,8 @@ results to **CI Insights** via the `mergifyio/gha-mergify-ci` action.
 In the workflow file where Cypress is launched, after running `npm run
 test:cypress` (or similar), include a step like:
 
-```yaml
-- name: Mergify CI Upload
-  if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v6
-  with:
-    token: ${{ secrets.MERGIFY_TOKEN }}
-    report_path: cypress/results/junit*.xml
-```
-
-Key Points:
-
-- `if: success() || failure()`: Runs the upload step even if tests
-  fail, ensuring **CI Insights** has the full report.
-
-- `report_path: src/junit.xml`: Points to where your JUnit file is located.
-  Make sure it matches the `outputFile` path you set in Cypress (e.g.,
-  `./cypress/results/junit-*.xml`).
-
-If you use a job matrix in your workflow (e.g., to test across multiple
-versions), ensure you set the job\_name input (or MERGIFY\_JOB\_NAME
-environment variable) so CI Insights can properly distinguish reports for each
-matrix job.
-
-For example, with:
-
-```yaml
-jobs:
-  example_matrix:
-    strategy:
-      matrix:
-        version: [10, 12, 14]
-```
-
-Your upload step should look like:
-
-```yaml
-- name: Mergify CI Upload
-  if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v6
-  with:
-    token: ${{ secrets.MERGIFY_TOKEN }}
-    job_name: example_matrix (${{ matrix.version }})
-    report_path: cypress/results/junit*.xml
-```
-
-:::tip
-Setting job\_name helps CI Insights group and display reports correctly for each matrix variation.
-:::
+<MergifyCIUploadStep reportPath="cypress/results/junit*.xml" />
+<MergifyCIUploadStepMatrix reportPath="cypress/results/junit*.xml" />
 
 ## 3. Verify and Review in CI Insights
 
@@ -111,12 +68,6 @@ directly in the CI Insights dashboard.
 
 ## Troubleshooting Tips
 
-- File Paths: Double-check that `mochaFile` in Cypress matches the path used in
-  `report_path`.
-
-- Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub
-  Actions secrets [as explained in the
-  docs](\(/ci-insights#enabling-ci-insights-for-github\)).
-
-- Workflow Conditions: If your step is not running, confirm the if condition is
-  actually triggered in your job.
+<ul>
+  <CommonTroubleshootingTips />
+</ul>
