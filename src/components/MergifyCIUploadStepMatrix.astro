@@ -1,6 +1,8 @@
 ---
 import { Code } from 'astro:components';
 
+import Aside from '~/components/Aside.astro';
+
 export interface Props {
 	reportPath: string;
 }
@@ -35,9 +37,9 @@ const { reportPath } = Astro.props;
 	lang="yaml"
 	theme="slack-ochin"
 />
-<aside>
+<Aside type="tip">
 	<p>
 		Setting <code>job_name</code> helps <strong>CI Insights</strong> group and display reports correctly
 		for each matrix variation.
 	</p>
-</aside>
+</Aside>
