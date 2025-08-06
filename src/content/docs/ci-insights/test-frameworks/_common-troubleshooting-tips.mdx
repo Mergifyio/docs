@@ -1,0 +1,4 @@
+<li>The CLI provides information about the upload. Check the logs in GitHub Actions.</li>
+<li>File Paths: Double-check that the output file matches the path used in `report_path`.</li>
+<li>Permissions: Make sure the `MERGIFY_TOKEN` is valid and setup in your GitHub Actions secrets [as explained in the docs](/ci-insights#enabling-ci-insights-for-github).</li>
+<li>Workflow Conditions: If your step is not running, confirm the if condition is actually triggered in your job.</li>
