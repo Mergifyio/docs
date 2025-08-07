@@ -5,6 +5,7 @@ description: Report your test results from Go tests to CI Insights
 
 import golangLogo from "../../../images/ci-insights/golang/logo.svg"
 import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
+import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
@@ -47,11 +48,14 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run Go Tests and Generate JUnit Report
+  continue-on-error: true
   run: go test -v ./... 2>&1 | go-junit-report > junit.xml
 ```
 
 <MergifyCIUploadStep reportPath="junit.xml" />
 <MergifyCIUploadStepMatrix reportPath="junit.xml" />
+
+<GhaMergifyCiQuarantineSetup />
 
 ## 3. Verify and Review in CI Insights
 
