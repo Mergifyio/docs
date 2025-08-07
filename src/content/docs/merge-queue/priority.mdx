@@ -139,21 +139,22 @@ queue_rules:
     merge_conditions:
       - "#approved-reviews-by >= 2"
       - check-success = TeamCity
-    allow_checks_interruption: false
 
 priority_rules:
   - name: urgent
     conditions:
       - label = urgent
     priority: high
+    allow_checks_interruption: false
+
   - name: normal
     conditions:
       - label = normal
     priority: low
 ```
 
-In this configuration, `allow_checks_interruption` is set to `false`. This
-means if a pull request with the `urgent` label (which has a higher priority)
+In this configuration, `allow_checks_interruption` is set to `false` for the `urgent` priority.
+This means if a pull request with the `urgent` label (which has a higher priority)
 enters the queue, it will not interrupt the checks running on a pull request
 with the `normal` label. Instead, it will wait for the `normal` pull request's
 checks to complete before starting its own checks.
