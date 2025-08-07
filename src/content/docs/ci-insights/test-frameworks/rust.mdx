@@ -8,6 +8,7 @@ import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 import CommonTroubleshootingTips from './_common-troubleshooting-tips.mdx'
+import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 
 <IntegrationLogo src={rustLogo} alt="Rust logo" />
 
@@ -84,6 +85,7 @@ For example, in your workflow file:
   uses: taiki-e/install-action@nextest
 
 - name: Run Rust Tests and Generate JUnit Report
+  continue-on-error: true
   run: cargo nextest run --message-format junit --output-file junit.xml
 ```
 
@@ -96,11 +98,14 @@ Alternative approach using cargo2junit:
   uses: taiki-e/install-action@cargo2junit
 
 - name: Run Rust Tests and Generate JUnit Report
+  continue-on-error: true
   run: cargo test -- --nocapture 2>&1 | cargo2junit > junit.xml
 ```
 
 <MergifyCIUploadStep reportPath="junit.xml" />
 <MergifyCIUploadStepMatrix reportPath="junit.xml" />
+
+<GhaMergifyCiQuarantineSetup />
 
 ## 3. Verify and Review in CI Insights
 

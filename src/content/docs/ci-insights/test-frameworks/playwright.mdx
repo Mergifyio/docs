@@ -5,6 +5,7 @@ description: Report your test results from Playwright tests to CI Insights
 
 import playwrightLogo from "../../../images/ci-insights/playwright/logo.svg"
 import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
+import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
@@ -65,11 +66,14 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run Playwright Tests and Generate JUnit Report
+  continue-on-error: true
   run: npx playwright test --reporter=list --reporter=junit:junit.xml
 ```
 
 <MergifyCIUploadStep reportPath="junit.xml" />
 <MergifyCIUploadStepMatrix reportPath="junit.xml" />
+
+<GhaMergifyCiQuarantineSetup />
 
 ## 3. Verify and Review in CI Insights
 

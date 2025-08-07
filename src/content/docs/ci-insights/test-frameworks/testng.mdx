@@ -4,6 +4,7 @@ description: Report your test results from TestNG tests to CI Insights
 ---
 
 import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
+import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 
@@ -89,6 +90,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run TestNG Tests and Generate JUnit Report
+  continue-on-error: true
   run: mvn test
 ```
 
@@ -98,11 +100,14 @@ For Gradle projects:
 
 ```yaml
 - name: Run TestNG Tests and Generate JUnit Report
+  continue-on-error: true
   run: ./gradlew test
 ```
 
 <MergifyCIUploadStep  reportPath="build/test-results/test/*.xml" />
 <MergifyCIUploadStepMatrix reportPath="build/test-results/test/*.xml" />
+
+<GhaMergifyCiQuarantineSetup />
 
 ## 3. Verify and Review in CI Insights
 

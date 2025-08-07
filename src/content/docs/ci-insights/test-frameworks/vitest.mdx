@@ -5,6 +5,7 @@ description: Report your test results from Vitest to CI Insights
 
 import vitestLogo from "../../../images/ci-insights/vitest/logo.svg"
 import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
+import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
@@ -63,6 +64,8 @@ similar), include a step like:
 <MergifyCIUploadStep reportPath="src/junit.xml" />
 
 <MergifyCIUploadStepMatrix reportPath="src/junit.xml" />
+
+<GhaMergifyCiQuarantineSetup />
 
 ## 3. Verify and Review in CI Insights
 
