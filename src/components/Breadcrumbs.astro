@@ -1,0 +1,153 @@
+---
+import navItems from '../content/navItems';
+import { removeLeadingSlash, removeTrailingSlash } from '../util';
+
+const currentPath = removeTrailingSlash(Astro.url.pathname);
+
+function normalize(path: string) {
+	if (!path) return '';
+	return '/' + removeLeadingSlash(removeTrailingSlash(path));
+}
+
+type Item = (typeof navItems)[number];
+
+interface TrailEntry {
+	title: string;
+	path?: string;
+}
+
+const trails = new Map<string, TrailEntry[]>();
+
+function build(itemList: Item[], parentTrail: TrailEntry[] = []) {
+	for (const item of itemList) {
+		const trail = [...parentTrail, { title: item.title, path: item.path }];
+		if (item.path) {
+			const n = normalize(item.path);
+			if (!trails.has(n)) trails.set(n, trail);
+		}
+		if (item.children) build(item.children as Item[], trail);
+	}
+}
+
+build(navItems as Item[]);
+
+let matchedTrail: TrailEntry[] = [];
+for (const [p, t] of trails.entries()) {
+	if (currentPath === p || (currentPath.startsWith(p + '/') && p.length > 1)) {
+		if (p.length > (matchedTrail[matchedTrail.length - 1]?.path?.length || 0)) {
+			matchedTrail = t;
+		}
+	}
+}
+
+if (matchedTrail.length >= 2) {
+	const filtered: TrailEntry[] = [];
+	for (const entry of matchedTrail) {
+		if (
+			filtered.length &&
+			normalize(filtered[filtered.length - 1].path || '') === normalize(entry.path || '')
+		)
+			continue;
+		filtered.push(entry);
+	}
+	matchedTrail = filtered;
+}
+---
+
+{
+	matchedTrail.length > 0 && (
+		<nav aria-label="Breadcrumb" class="breadcrumbs" data-breadcrumb>
+			<ol>
+				<li class="crumb-home">
+					<a href="/">Home</a>
+				</li>
+				{matchedTrail.map((t, i) => (
+					<li class={i === matchedTrail.length - 1 ? 'current' : undefined}>
+						{i < matchedTrail.length - 1 && t.path ? (
+							<a href={t.path}>{t.title}</a>
+						) : (
+							<span aria-current="page">{t.title}</span>
+						)}
+					</li>
+				))}
+			</ol>
+		</nav>
+	)
+}
+
+<style>
+	/* Reset to a minimal, brand-aligned inline breadcrumb */
+	.breadcrumbs {
+		letter-spacing: 0.02em; /* slightly tighter at larger size */
+		font-weight: 500;
+		margin: 0 0 1rem;
+		color: var(--theme-text-lighter);
+		line-height: 1.35;
+	}
+	.theme-dark .breadcrumbs {
+		color: var(--theme-text-light);
+	}
+
+	.breadcrumbs ol {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0; /* removed gap to control spacing purely via separator */
+		padding: 0;
+		margin: 0;
+		align-items: center;
+	}
+	.breadcrumbs li {
+		display: inline-flex;
+		align-items: center;
+		max-width: 22ch; /* was 18ch */
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+	/* Separator */
+	.breadcrumbs li + li:before {
+		content: '>';
+		font-weight: 600;
+		opacity: 0.45;
+		margin: 0 0.45rem; /* symmetric spacing */
+		color: var(--theme-text-light);
+	}
+	.theme-dark .breadcrumbs li + li:before {
+		color: var(--theme-text-lighter);
+	}
+
+	.breadcrumbs a {
+		text-decoration: none;
+		color: var(--theme-accent);
+		transition:
+			color 0.15s ease,
+			opacity 0.15s ease;
+	}
+	.breadcrumbs a:hover {
+		color: var(--theme-accent-secondary);
+	}
+	.breadcrumbs a:active {
+		opacity: 0.75;
+	}
+	.breadcrumbs a:focus-visible {
+		outline: 2px solid var(--theme-accent);
+		outline-offset: 2px;
+		border-radius: 3px;
+	}
+
+	.breadcrumbs li.current span {
+		color: var(--theme-text);
+		font-weight: 600;
+	}
+	.theme-dark .breadcrumbs li.current span {
+		color: #fff;
+	}
+
+	/* Narrow viewports wrap gracefully */
+	@media (max-width: 34rem) {
+		.breadcrumbs li {
+			max-width: 100%;
+		}
+	}
+</style>
