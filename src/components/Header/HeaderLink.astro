@@ -22,5 +22,23 @@ const { href, icon } = Astro.props as Props;
 		font-size: var(--theme-text-md);
 		color: var(--theme-text-light);
 		white-space: nowrap;
+		margin-right: 0.75rem; /* ensure space between consecutive header links */
+		padding: 0 10px; /* slightly tighter overall */
+	}
+	.header-btn:last-of-type .button {
+		margin-right: 0;
+	}
+	.header-btn .button a {
+		gap: 0.5rem;
+	}
+	.header-btn .button svg {
+		width: 16px;
+		height: 16px;
+	}
+
+	@media (max-width: 87em) {
+		.header-btn .button {
+			margin-right: 0.5rem;
+		}
 	}
 </style>

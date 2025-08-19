@@ -116,8 +116,8 @@
 :root,
 ::backdrop {
 	color-scheme: light;
-	--theme-accent: hsla(var(--color-orange), 1);
-	--theme-accent-secondary: #b83280;
+	--theme-accent: var(--color-mergify-blue-darker);
+	--theme-accent-secondary: var(--color-mergify-blue);
 	--theme-dim: hsla(var(--color-gray-70), 1);
 	--theme-dim-light: hsla(var(--color-gray-80), 1);
 	--theme-dim-lighter: hsla(var(--color-gray-90), 1);
@@ -363,9 +363,8 @@
 	--chakra-colors-primary: #2388c2;
 	/* We lighten-up the orange in dark mode, to help with link contrast. */
 	--color-orange: var(--color-base-orange), 60%;
-	--theme-accent-opacity: 0.4;
-	--theme-accent: hsla(var(--color-orange), 1);
-	--theme-accent-secondary: #f687b3;
+	--theme-accent: var(--color-mergify-blue);
+	--theme-accent-secondary: var(--color-mergify-blue-light);
 	--theme-text-accent: hsla(var(--color-orange), 1);
 	--theme-dim: hsla(var(--color-gray-90), 0.3);
 	--theme-dim-light: hsla(var(--color-gray-90), 0.2);
