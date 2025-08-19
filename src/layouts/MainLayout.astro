@@ -6,6 +6,7 @@ import PageContent from '../components/PageContent/PageContent.astro';
 import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
 import TableOfContents from '../components/RightSidebar/TableOfContents';
 import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 export interface Props {
 	content: CollectionEntry<'docs'>['data'];
@@ -18,6 +19,13 @@ const { content, headings } = Astro.props;
 <BaseLayout {...Astro.props}>
 	<RightSidebar slot="secondary-sidebar" {...{ content, headings }} />
 	<PageContent {...{ content }}>
+		{
+			Astro.url.pathname !== '/' && (
+				<Fragment slot="before-title">
+					<Breadcrumbs />
+				</Fragment>
+			)
+		}
 		{
 			headings && (
 				<Fragment slot="before-article">
