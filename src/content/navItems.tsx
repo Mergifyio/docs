@@ -24,12 +24,14 @@ import {
 	FaUserShield,
 	FaBug,
 	FaRotateRight,
+	FaRegCircleCheck,
+	FaUserPlus,
+	FaCircleXmark,
 } from 'react-icons/fa6';
 import { FiType } from 'react-icons/fi';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
-import { IoIosRemoveCircleOutline } from 'react-icons/io';
 import { LiaShareAltSolid } from 'react-icons/lia';
-import { MdMonitorHeart, MdOutlineLightbulb } from 'react-icons/md';
+import { MdMonitorHeart, MdOutlineLightbulb, MdOutlineRateReview } from 'react-icons/md';
 import {
 	SiSlack,
 	SiDatadog,
@@ -57,7 +59,7 @@ import {
 	SiRuby,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
-import { TbPackages, TbGitBranch } from 'react-icons/tb';
+import { TbPackages, TbGitBranch, TbMessageX } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
 import { GrTest } from 'react-icons/gr';
 
@@ -154,7 +156,7 @@ const navItems: NavItem[] = [
 					{
 						title: 'Dismiss Reviews',
 						path: '/workflow/dismiss-reviews',
-						icon: IoIosRemoveCircleOutline,
+						icon: TbMessageX,
 					},
 					{ title: 'Rebasing PRs', path: '/workflow/rebase', icon: TbGitBranch },
 				],
@@ -164,36 +166,40 @@ const navItems: NavItem[] = [
 				icon: BsRocket,
 				path: '/workflow/actions',
 				children: [
-					{ title: 'Assign', path: '/workflow/actions/assign' },
-					{ title: 'Backport', path: '/workflow/actions/backport' },
-					{ title: 'Close', path: '/workflow/actions/close' },
-					{ title: 'Copy', path: '/workflow/actions/copy' },
-					{ title: 'Comment', path: '/workflow/actions/comment' },
-					{ title: 'Delete Head Branch', path: '/workflow/actions/delete_head_branch' },
+					{ title: 'Assign', path: '/workflow/actions/assign', icon: FaUserPlus },
+					{ title: 'Backport', path: '/workflow/actions/backport', icon: TbGitBranch },
+					{ title: 'Close', path: '/workflow/actions/close', icon: FaCircleXmark },
+					{ title: 'Copy', path: '/workflow/actions/copy', icon: LiaShareAltSolid },
+					{ title: 'Comment', path: '/workflow/actions/comment', icon: FaRegListAlt },
+					{
+						title: 'Delete Head Branch',
+						path: '/workflow/actions/delete_head_branch',
+						icon: BiCut,
+					},
 					{
 						title: 'Dismiss Reviews',
 						path: '/workflow/actions/dismiss_reviews',
-						icon: IoIosRemoveCircleOutline,
+						icon: TbMessageX,
 					},
-					{ title: 'Edit', path: '/workflow/actions/edit' },
+					{ title: 'Edit', path: '/workflow/actions/edit', icon: FiType },
 					{
 						title: 'GitHub Actions',
 						path: '/workflow/actions/github_actions',
 						icon: SiGithubactions,
 					},
-					{ title: 'Label', path: '/workflow/actions/label' },
-					{ title: 'Merge', path: '/workflow/actions/merge' },
-					{ title: 'Post Check', path: '/workflow/actions/post_check' },
-					{ title: 'Queue', path: '/workflow/actions/queue' },
-					{ title: 'Rebase', path: '/workflow/actions/rebase' },
+					{ title: 'Label', path: '/workflow/actions/label', icon: BiBadgeCheck },
+					{ title: 'Merge', path: '/workflow/actions/merge', icon: GoGitMerge },
+					{ title: 'Post Check', path: '/workflow/actions/post_check', icon: FaRegCircleCheck },
+					{ title: 'Queue', path: '/workflow/actions/queue', icon: MergeQueueIcon },
+					{ title: 'Rebase', path: '/workflow/actions/rebase', icon: TbGitBranch },
 					{
 						title: 'Request Reviews',
 						path: '/workflow/actions/request_reviews',
 						icon: GoCodeReview,
 					},
-					{ title: 'Review', path: '/workflow/actions/review' },
-					{ title: 'Update', path: '/workflow/actions/update' },
-					{ title: 'Squash', path: '/workflow/actions/squash' },
+					{ title: 'Review', path: '/workflow/actions/review', icon: MdOutlineRateReview },
+					{ title: 'Update', path: '/workflow/actions/update', icon: TbGitBranch },
+					{ title: 'Squash', path: '/workflow/actions/squash', icon: BiSolidCoinStack },
 				],
 			},
 		],
