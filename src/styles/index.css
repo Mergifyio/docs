@@ -71,12 +71,58 @@ body {
 	font-family: var(--font-body) !important;
 	font-size: 18px;
 	line-height: 1.5;
+	max-width: 100%;
+}
+
+main.layout #main-content > :first-child h1:first-of-type::after {
+	content: '';
+	display: block;
+	margin-top: 0.75rem;
+	width: 72px;
+	height: 4px;
+	border-radius: 2px;
+	background: var(--brand-gradient);
+}
+
+.content > section {
+	max-width: 1000px;
+}
+
+/* Remove paragraph-specific constraint (cleanup) */
+.content > section p {
+	max-width: none;
+}
+
+@media (min-width: 72em) {
+	.content > section {
+		max-width: 1000px;
+	}
 }
 
 a {
 	text-decoration: none;
 	color: var(--color-mergify-blue-darker);
 	text-decoration-color: var(--color-mergify-blue-darker);
+	background-image: var(--theme-link-underline);
+	background-size: 0% 2px;
+	background-repeat: no-repeat;
+	background-position: 0 100%;
+	transition:
+		background-size var(--theme-link-transition),
+		color var(--theme-link-transition);
+}
+
+a:hover,
+a:focus-visible {
+	color: var(--theme-accent);
+	background-image: var(--theme-link-underline-active);
+	background-size: 100% 2px;
+}
+
+a:focus-visible {
+	outline: 2px solid var(--theme-accent);
+	outline-offset: 2px;
+	border-radius: 2px;
 }
 
 nav ul {
@@ -256,12 +302,6 @@ p,
 small,
 .text_small {
 	font-size: 0.833rem;
-}
-
-a {
-	text-underline-offset: 0.08em;
-	align-items: center;
-	gap: 0.5rem;
 }
 
 article > section :is(ul, ol) > * + * {
@@ -645,4 +685,44 @@ hr {
 	border: none;
 	border-bottom: 1px solid var(--theme-border-color);
 	border-right: 1px solid var(--theme-border-color);
+}
+
+pre,
+code[class*='language-'] {
+	border-radius: var(--brand-radius-md);
+}
+
+pre {
+	position: relative;
+	padding: 1rem 1.25rem;
+	background: linear-gradient(180deg, var(--theme-code-bg), rgba(0, 0, 0, 0.02));
+	box-shadow:
+		0 1px 2px rgba(0, 0, 0, 0.08),
+		0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+/* Inline code */
+:not(pre) > code:not([class*='language']) {
+	background: var(--theme-code-inline-bg);
+	padding: 0.15rem 0.4rem;
+	border-radius: var(--brand-radius-sm);
+	font-size: 0.85em;
+}
+
+/* Sidebar nav active styling improvements (class guesses) */
+:global(nav .active) > a,
+:global(nav a[aria-current='page']) {
+	background: var(--brand-gradient);
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	font-weight: 600;
+}
+
+/* Asides adjustments placeholder: refine later */
+:global(aside.content) {
+	border-inline-start: none;
+	border-radius: var(--brand-radius-md);
+	background: linear-gradient(135deg, var(--color-mergify-blue-light), #fff);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
