@@ -79,7 +79,7 @@ const navItems: NavItem[] = [
 		path: '/ci-insights',
 		icon: MdOutlineLightbulb,
 		children: [
-			{ title: 'Using CI Insights', path: '/ci-insights', icon: MdOutlineLightbulb },
+			{ title: 'Overview', path: '/ci-insights', icon: MdOutlineLightbulb },
 			{ title: 'Flaky Test Detection', path: '/ci-insights/flaky-test-detection', icon: FaBug },
 			{ title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: FaRotateRight },
 			{ title: 'Quarantine', path: '/ci-insights/quarantine', icon: FaRadiation },
@@ -112,11 +112,6 @@ const navItems: NavItem[] = [
 		],
 	},
 	{
-		title: 'Merge Protections',
-		path: '/merge-protections',
-		icon: FaUserShield,
-	},
-	{
 		title: 'Merge Queue',
 		icon: MergeQueueIcon,
 		children: [
@@ -127,11 +122,7 @@ const navItems: NavItem[] = [
 			{ title: 'Priority', path: '/merge-queue/priority', icon: FaTrafficLight },
 			{ title: 'Pause', path: '/merge-queue/pause', icon: FaRegCirclePause },
 			{ title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
-			{
-				title: 'Parallel Checks',
-				path: '/merge-queue/parallel-checks',
-				icon: TiFlowParallel,
-			},
+			{ title: 'Parallel Checks', path: '/merge-queue/parallel-checks', icon: TiFlowParallel },
 			{ title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
 			{ title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
 			{ title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
@@ -139,6 +130,7 @@ const navItems: NavItem[] = [
 			{ title: 'Troubleshooting', path: '/merge-queue/troubleshooting', icon: FaBug },
 		],
 	},
+	{ title: 'Merge Protections', path: '/merge-protections', icon: FaUserShield },
 	{
 		title: 'Workflow Automation',
 		icon: BsGear,
@@ -150,17 +142,14 @@ const navItems: NavItem[] = [
 				path: '/workflow/writing-your-first-rule',
 				icon: BiRuler,
 			},
+			{ title: 'Rule Syntax', path: '/workflow/rule-syntax', icon: BsPatchQuestion },
 			{
 				title: 'Use Cases',
 				icon: BsLightbulb,
 				children: [
 					{ title: 'Automatic Merge', path: '/workflow/automerge', icon: GoGitMerge },
 					{ title: 'Request Reviews', path: '/workflow/request-reviews', icon: GoCodeReview },
-					{
-						title: 'Delete Head Branches',
-						path: '/workflow/delete-head-branches',
-						icon: BiCut,
-					},
+					{ title: 'Delete Head Branches', path: '/workflow/delete-head-branches', icon: BiCut },
 					{
 						title: 'Dismiss Reviews',
 						path: '/workflow/dismiss-reviews',
@@ -208,7 +197,16 @@ const navItems: NavItem[] = [
 			},
 		],
 	},
-
+	{
+		title: 'Rule Engine',
+		icon: BsBook,
+		children: [
+			{ title: 'Configuration File', path: '/configuration/file-format', icon: AiOutlineFile },
+			{ title: 'Conditions', path: '/configuration/conditions', icon: BsPatchQuestion },
+			{ title: 'Data Types', path: '/configuration/data-types', icon: FiType },
+			{ title: 'Sharing Configuration', path: '/configuration/sharing', icon: LiaShareAltSolid },
+		],
+	},
 	{
 		title: 'Commands',
 		icon: BsCommand,
@@ -227,19 +225,11 @@ const navItems: NavItem[] = [
 		],
 	},
 	{
-		title: 'Technical Reference',
-		icon: BsBook,
+		title: 'API',
+		icon: AiOutlineApi,
 		children: [
-			{ title: 'Configuration File', path: '/configuration/file-format', icon: AiOutlineFile },
-			{
-				title: 'Sharing Configuration',
-				path: '/configuration/sharing',
-				icon: LiaShareAltSolid,
-			},
-			{ title: 'Conditions', path: '/configuration/conditions', icon: BsPatchQuestion },
-			{ title: 'Data Types', path: '/configuration/data-types', icon: FiType },
-			{ title: 'API Usage', path: '/api-usage', icon: AiOutlineApi },
-			{ title: 'API Reference', path: '/api/', icon: FaRegListAlt },
+			{ title: 'Usage', path: '/api-usage', icon: AiOutlineApi },
+			{ title: 'Reference', path: '/api/', icon: FaRegListAlt },
 		],
 	},
 	{
@@ -262,11 +252,7 @@ const navItems: NavItem[] = [
 			{ title: 'Snyk', path: '/integrations/snyk', icon: SiSnyk },
 		],
 	},
-	{
-		title: 'Stacks',
-		icon: BsStack,
-		path: '/stacks',
-	},
+	{ title: 'Stacks', path: '/stacks', icon: BsStack },
 	{ title: 'Security', path: '/security', icon: FaShieldAlt },
 	{ title: 'Badge', path: '/badge', icon: BiBadgeCheck },
 	{ title: 'Billing', path: '/billing', icon: FaMoneyBill1 },
