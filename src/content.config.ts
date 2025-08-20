@@ -12,6 +12,7 @@ const docs = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string(),
+		suppressTitle: z.boolean().optional(),
 	}),
 });
 

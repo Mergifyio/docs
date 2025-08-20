@@ -10,6 +10,7 @@ const title = content.title
 	.replace('@astrojs/', '<span class="scope">@astrojs/</span><wbr>')
 	.replaceAll('-', '&#8288;-&#8288;');
 const description = content.description;
+const suppressTitle = content.suppressTitle;
 ---
 
 <div dir={'ltr'} lang={'en'}>
@@ -30,11 +31,11 @@ const description = content.description;
 		<section class="main-section">
 			<header>
 				<slot name="before-title" />
-				<h1 class="content-title" id="overview" set:html={title} />
-				<h2 class="content-subtitle" set:html={description} />
+				{!suppressTitle && <h1 class="content-title" id="overview" set:html={title} />}
+				{!suppressTitle && <h2 class="content-subtitle" set:html={description} />}
 				<slot name="after-title" />
 			</header>
-			<hr class="divider" />
+			{!suppressTitle && <hr class="divider" />}
 			<slot />
 		</section>
 	</article>
