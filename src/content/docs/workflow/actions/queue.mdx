@@ -5,9 +5,15 @@ description: Put your pull request into the merge queue.
 
 import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
 
-The `queue` action allows you to put a pull request into a [merge
-queue](/merge-queue). By placing pull requests in a queue, you can make sure
+The `queue` action allows you to put a pull request into the [merge
+queue](/merge-queue). By placing pull requests in the queue, you can make sure
 they are up-to-date and control their processing based on their priority.
+
+If your queue rule has [`autoqueue:
+true`](/merge-queue/rules#autoqueueing-pull-requests), matching pull requests
+are added automatically and you usually do not need this action. Use the action
+when you want explicit, rule‑driven or conditional enqueueing beyond what
+`queue_conditions` express.
 
 ## Parameters
 
