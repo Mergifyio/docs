@@ -1,367 +1,198 @@
 ---
 title: Mergify Documentation
 description: Explore & learn Mergify
+suppressTitle: true
 ---
 
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import CommunityButton from '../../components/CommunityButton.astro';
-import { BiBadgeCheck, BiCut} from 'react-icons/bi';
-import {SiSlack, SiGithub, SiX, SiYoutube, SiLinkedin} from 'react-icons/si';
-import {SlRefresh, SlSpeedometer} from 'react-icons/sl';
-import {MdMonitorHeart, MdScheduleSend, MdOutlineLightbulb} from 'react-icons/md';
-import {GoGitMerge, GoCodeReview} from 'react-icons/go';
-import {BsPatchQuestion, BsRocket, BsPlugin, BsStack, BsRobot, BsCommand} from 'react-icons/bs';
-import {BiSolidCoinStack, BiRuler} from 'react-icons/bi';
-import {TbPackages, TbGitBranch} from 'react-icons/tb';
-import { TiFlowParallel } from "react-icons/ti";
-import {FaUserShield, FaStairs, FaRegLightbulb, FaGear, FaTrafficLight, FaSnowflake, FaMoneyBill1, FaRegCirclePause, FaBug} from 'react-icons/fa6';
-import {FaShieldAlt, FaRegListAlt} from 'react-icons/fa';
-import {AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi} from 'react-icons/ai';
-import {LiaShareAltSolid} from 'react-icons/lia';
-import {FiType} from 'react-icons/fi';
-import {IoIosRemoveCircleOutline} from 'react-icons/io';
-import { GrTest } from "react-icons/gr";
+import { MdOutlineLightbulb, MdMonitorHeart } from 'react-icons/md';
+import { GoGitMerge, GoCodeReview } from 'react-icons/go';
+import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStack } from 'react-icons/bs';
+import { BiRuler, BiBadgeCheck, BiCut, BiSolidCoinStack } from 'react-icons/bi';
+import { TbPackages, TbGitBranch } from 'react-icons/tb';
+import { TiFlowParallel } from 'react-icons/ti';
+import { FaUserShield, FaRegLightbulb, FaGear, FaTrafficLight, FaRegCirclePause, FaBug, FaMoneyBill1 } from 'react-icons/fa6';
+import { FaShieldAlt } from 'react-icons/fa';
+import { AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi } from 'react-icons/ai';
+import { LiaShareAltSolid } from 'react-icons/lia';
+import { FiType } from 'react-icons/fi';
+import MergeQueueIcon from '../../components/MergeQueueIcon.astro';
+import { SiSlack, SiGithub, SiX, SiYoutube, SiLinkedin } from 'react-icons/si';
+import { IoIosRemoveCircleOutline } from 'react-icons/io';
+import { GrTest } from 'react-icons/gr';
+import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
 
-Welcome to Mergify Documentation. 
-Explore our guides and examples on how to integrate Mergify.
+{/* ---------------- HERO ---------------- */}
 
-## Merge Protections
+<div class="home-hero">
+  <div class="hero-inner">
+    <h1>Mergify Documentation</h1>
+    <p class="tagline">Ship faster with healthier CI, safer merges, and powerful workflow automation.</p>
+    <div class="quick-links">
+      <a href="/ci-insights" class="ql">CI Insights</a>
+      <a href="/merge-queue" class="ql">Merge Queue</a>
+      <a href="/workflow" class="ql">Workflow Automation</a>
+      <a href="/merge-protections" class="ql">Merge Protections</a>
+    </div>
+  </div>
+</div>
 
-Define advanced rules to prevent your pull requests from being merged.
-
-<DocsetGrid>
-  <Docset
-    title="Enabling Merge Protections"
-    path="/merge-protections"
-    icon={FaUserShield}
-  >
-    Prevent pull request merge based on advanced conditions.
-  </Docset>
-</DocsetGrid>
+{/* -------------- PRODUCT SECTIONS -------------- */}
 
 ## CI Insights
 
-<DocsetGrid>
-  <Docset
-    title="Using CI Insights"
-    path="/ci-insights"
-    icon={MdOutlineLightbulb}
-  >
-    Overview of CI Insights functionalities.
-  </Docset>
-  <Docset
-    title="Configuring Test Frameworks"
-    path="/ci-insights/#test-framework-configuration"
-    icon={GrTest}
-  >
-    Configuring tests reports for CI Insights.
-  </Docset>
-
-</DocsetGrid>
-
-## Workflow Automation
-
-Automate your GitHub pull requests workflow.
+Insights & automation to make your test suite lean and reliable.
 
 <DocsetGrid>
-  <Docset
-    title="Introducing Workflow Automation"
-    path="/workflow"
-    icon={BsRobot}
-  >
-    An overview of Mergify Workflow Automation and its capabilities to supercharge your pull request process.
+  <Docset title="Overview" path="/ci-insights" icon={MdOutlineLightbulb}>What CI Insights gives you.</Docset>
+  <Docset title="Flaky Test Detection" path="/ci-insights/flaky-test-detection" icon={FaBug}>
+    Surface inconsistent tests & jobs.
   </Docset>
-  <Docset
-    title="Writing Your First Rule"
-    path="/workflow/writing-your-first-rule"
-    icon={BiRuler}
-  >
-    Write your first automation rule using Mergify workflow automation.
+  <Docset title="Auto‑Retry" path="/ci-insights/auto-retry" icon={SlRefresh}>
+    Automatic transient failure retries.
   </Docset>
-  <Docset
-    title="Actions"
-    path="/workflow/actions"
-    icon={BsRocket}
-  >
-    A complete list of actions you can use with Mergify.
+  <Docset title="Quarantine" path="/ci-insights/quarantine" icon={FaRegCirclePause}>
+    Isolate noisy tests to unblock merges.
   </Docset>
-</DocsetGrid>
-
-### Workflow Automation Use Cases
-
-Discover a list of use cases that you can leverage with Mergify. Get inspired
-and adapt it to your own needs.
-
-<DocsetGrid>
-  <Docset
-    title="Automatic Merge"
-    path="/workflow/automerge"
-    icon={GoGitMerge}
-  >
-    Merge your pull requests as soon as they are ready.
-  </Docset>
-  <Docset
-    title="Request Reviews"
-    path="/workflow/request-reviews"
-    icon={GoCodeReview}
-  >
-    Enhance your review workflow with customized, efficient, and dynamic review assignments tailored to your needs.
-  </Docset>
-  <Docset
-    title="Delete Head Branches"
-    path="/workflow/delete-head-branches"
-    icon={BiCut}
-  >
-    How to automatically delete head branches.
-  </Docset>
-  <Docset
-    title="Dismiss Reviews"
-    path="/workflow/dismiss-reviews"
-    icon={IoIosRemoveCircleOutline}
-  >
-    Optimize your pull request workflow, tailoring review dismissal to specific scenarios and users.
-  </Docset>
-  <Docset
-    title="Rebasing Pull Requests"
-    path="/workflow/rebase"
-    icon={TbGitBranch}
-  >
-    Bring your pull requests up-to-date with their base branch automatically.
+  <Docset title="Test Frameworks" path="/ci-insights#test-framework-configuration" icon={GrTest}>
+    Configure report upload.
   </Docset>
 </DocsetGrid>
 
 ## Merge Queue
+Deterministic, parallel, and resource‑aware merging.
 
 <DocsetGrid>
-  <Docset
-    title="Introduction to Merge Queue"
-    path="/merge-queue"
-    icon={FaRegLightbulb}
-  >
-    Understand what merge queue is and how to use them.
+  <Docset title="Introduction" path="/merge-queue" icon={FaRegLightbulb}>
+    Core concepts & guarantees.
   </Docset>
-  <Docset
-    title="Setting Up Your First Merge Queue"
-    path="/merge-queue/setup"
-    icon={FaGear}
-  >
-    Implement your first merge queue.
+  <Docset title="Setup" path="/merge-queue/setup" icon={FaGear}>
+    Enable & configure your first queue.
   </Docset>
-  <Docset
-    title="Using Queue Rules"
-    path="/merge-queue/rules"
-    icon={BiSolidCoinStack}
-  >
-    Learn how to implement merge queue rules and route your pull requests.
+  <Docset title="Queue Rules" path="/merge-queue/rules" icon={BiSolidCoinStack}>
+    Route PRs & define policies.
   </Docset>
-  <Docset
-    title="Pull Request Lifecycle"
-    path="/merge-queue/lifecycle"
-    icon={SlRefresh}
-  >
-    Understand the lifecycle of a pull request before and once it enters a merge queue.
+  <Docset title="Lifecycle" path="/merge-queue/lifecycle" icon={SlRefresh}>
+    From enqueue to merge.
   </Docset>
-  <Docset
-    title="Using Priorities"
-    path="/merge-queue/priority"
-    icon={FaTrafficLight}
-  >
-    Learn how to order your pull requests in the queue by priority.
+  <Docset title="Priority" path="/merge-queue/priority" icon={FaTrafficLight}>
+    Order critical work first.
   </Docset>
-  <Docset
-    title="Pause"
-    path="/merge-queue/pause"
-    icon={FaRegCirclePause}
-  >
-    Understand the pause feature of Mergify's merge queue and how it can be utilized during CI incidents.
+  <Docset title="Parallel Checks" path="/merge-queue/parallel-checks" icon={TiFlowParallel}>
+    Batch compatible PR tests.
   </Docset>
-  <Docset
-    title="Performance"
-    path="/merge-queue/performance"
-    icon={SlSpeedometer}
-  >
-    Optimizing your merge queue for maximum efficiency.
+  <Docset title="Performance" path="/merge-queue/performance" icon={SlSpeedometer}>
+    Throughput & optimization tips.
   </Docset>
-  <Docset
-    title="Parallel Checks"
-    path="/merge-queue/parallel-checks"
-    icon={TiFlowParallel}
-  >
-    Accelerates the merging process by testing the compatibility of multiple queued pull requests in parallel.
+  <Docset title="Batches" path="/merge-queue/batches" icon={TbPackages}>
+    Increase velocity with batches.
   </Docset>
-  <Docset
-    title="Batches"
-    path="/merge-queue/batches"
-    icon={TbPackages}
-  >
-    Increase your merge queue throughput and decrease your CI usage.
+  <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon={FaTrafficLight}>
+    Fast + full validation strategy.
   </Docset>
-  <Docset
-    title="Two-Step CI"
-    path="/merge-queue/two-step"
-    icon={FaStairs}
-  >
-    Run essential tests on every PR and comprehensive tests before merging, optimizing CI time and resources.
+  <Docset title="Deployment" path="/merge-queue/deploy" icon={AiOutlineDeploymentUnit}>
+    Adopt safely in production.
   </Docset>
-  <Docset
-    title="Deployment"
-    path="/merge-queue/deploy"
-    icon={AiOutlineDeploymentUnit}
-  >
-    Smoothly transition to Mergify while optimizing the merge queue and potentially moving to Mergify exclusive merges.
+  <Docset title="Monitoring" path="/merge-queue/monitoring" icon={MdMonitorHeart}>
+    Key metrics & dashboards.
   </Docset>
-  <Docset
-    title="Monitoring"
-    path="/merge-queue/monitoring"
-    icon={MdMonitorHeart}
-  >
-    Monitor key metrics of your merge queue to optimize throughput and reduce
-    latency, ensuring a streamlined development cycle.
-  </Docset>
-  <Docset
-    title="Troubleshooting"
-    path="/merge-queue/troubleshooting"
-    icon={FaBug}
-  >
-    Solutions for troubleshooting common issues with Mergify's merge queue to
-    ensure smooth and efficient pull request processing.
+  <Docset title="Troubleshooting" path="/merge-queue/troubleshooting" icon={FaBug}>
+    Solve common issues.
   </Docset>
 </DocsetGrid>
 
-## Technical Reference
-
-Detailed documentation about every part of Mergify.
+## Workflow Automation
+Expressive rule engine & rich actions to eliminate manual toil.
 
 <DocsetGrid>
-  <Docset
-    title="Configuration File Format"
-    path="/configuration/file-format"
-    icon={AiOutlineFile}
-  >
-    Details of the configuration file format.
+  <Docset title="Overview" path="/workflow" icon={BsRobot}>
+    What you can automate.
   </Docset>
-  <Docset
-    title="Sharing Configuration"
-    path="/configuration/sharing"
-    icon={LiaShareAltSolid}
-  >
-    Share and reuse configuration pieces in your configuration.
+  <Docset title="First Rule" path="/workflow/writing-your-first-rule" icon={BiRuler}>
+    Create your first automation.
   </Docset>
-  <Docset
-    title="Conditions"
-    path="/configuration/conditions"
-    icon={BsPatchQuestion}
-  >
-    Everything you need to know when writing your conditions.
+  <Docset title="Actions" path="/workflow/actions" icon={BsRocket}>
+    Full action catalog.
   </Docset>
-  <Docset
-    title="Configuration Data Types"
-    path="/configuration/data-types"
-    icon={FiType}
-  >
-    Details of the data types found in the configuration.
+  <Docset title="Automatic Merge" path="/workflow/automerge" icon={GoGitMerge}>
+    Merge when policy satisfied.
   </Docset>
- <Docset
-    title="Commands"
-    path="/commands"
-    icon={BsCommand}
-  >
-    Complete list of commands you can use with Mergify.
+  <Docset title="Request Reviews" path="/workflow/request-reviews" icon={GoCodeReview}>
+    Smart reviewer assignment.
   </Docset>
-  <Docset
-    title="API Usage"
-    path="/api-usage"
-    icon={AiOutlineApi}
-  >
-    Integrate with Mergify using its API.
+  <Docset title="Dismiss Reviews" path="/workflow/dismiss-reviews" icon={IoIosRemoveCircleOutline}>
+    Invalidate outdated approvals.
   </Docset>
-  <Docset
-    title="API Reference"
-    path="/api"
-    icon={FaRegListAlt}
-  >
-   Complete Mergify API reference.
+  <Docset title="Delete Branches" path="/workflow/delete-head-branches" icon={BiCut}>
+    Keep repo tidy automatically.
+  </Docset>
+  <Docset title="Rebase PRs" path="/workflow/rebase" icon={TbGitBranch}>
+    Keep branches current.
   </Docset>
 </DocsetGrid>
 
-## Other
+## Merge Protections
+Advanced guardrails before code lands.
 
 <DocsetGrid>
- <Docset
-    title="Integrations"
-    path="/integrations"
-    icon={BsPlugin}
-  >
-    Integration with other systems.
-  </Docset>
-  <Docset
-    title="Stacks"
-    path="/stacks"
-    icon={BsStack}
-  >
-    How to create and manage stacked PRs.
-  </Docset>
-  <Docset
-    title="Badge"
-    path="/badge"
-    icon={BiBadgeCheck}
-  >
-    Display your Mergify usage publicly.
-  </Docset>
-  <Docset
-    title="Security"
-    path="/security"
-    icon={FaShieldAlt}
-  >
-    Learn more about the applications permissions and Mergify's security obsession.
-  </Docset>
-  <Docset
-    title="Billing"
-    path="/billing"
-    icon={FaMoneyBill1}
-  >
-    How Mergify billing works.
+  <Docset title="Overview" path="/merge-protections" icon={FaUserShield}>
+    Protection capabilities.
   </Docset>
 </DocsetGrid>
 
-<div style={{
-  display: 'flex', 
-  flexDirection: 'column', 
-  justifyContent: 'center', 
-  paddingTop: '16px', 
-  gap: '16px', 
-  textAlign: 'center', 
-  margin: '0 auto', 
-  maxWidth: '50%',
-  marginTop: '24px'
-}}>
+## Reference & Platform
 
-### Join our Community 💬
+<DocsetGrid>
+  <Docset title="Configuration File" path="/configuration/file-format" icon={AiOutlineFile}>
+    YAML structure & semantics.
+  </Docset>
+  <Docset title="Conditions" path="/configuration/conditions" icon={BsPatchQuestion}>
+    Filter syntax details.
+  </Docset>
+  <Docset title="Data Types" path="/configuration/data-types" icon={FiType}>
+    All supported value kinds.
+  </Docset>
+  <Docset title="Sharing Configuration" path="/configuration/sharing" icon={LiaShareAltSolid}>
+    Reuse config across repos.
+  </Docset>
+  <Docset title="Commands" path="/commands" icon={BsCommand}>
+    ChatOps style commands.
+  </Docset>
+  <Docset title="API Usage" path="/api-usage" icon={AiOutlineApi}>
+    Authenticate & call the API.
+  </Docset>
+  <Docset title="API Reference" path="/api" icon={AiOutlineApi}>
+    Endpoint reference.
+  </Docset>
+  <Docset title="Integrations" path="/integrations" icon={BsPlugin}>
+    CI & ecosystem hooks.
+  </Docset>
+  <Docset title="Stacks" path="/stacks" icon={BsStack}>
+    Stacked PR workflow.
+  </Docset>
+  <Docset title="Badge" path="/badge" icon={BiBadgeCheck}>
+    Public project badge.
+  </Docset>
+  <Docset title="Security" path="/security" icon={FaShieldAlt}>
+    Security & permissions.
+  </Docset>
+  <Docset title="Billing" path="/billing" icon={FaMoneyBill1}>
+    Plans & billing model.
+  </Docset>
+</DocsetGrid>
 
-We love hearing from you! Here are a few ways you can connect with us and other Mergify community members.
+{/* -------------- COMMUNITY -------------- */}
 
-<div style={{display: 'flex', justifyContent: 'center', gap: '8px'}}>
-  <CommunityButton
-    href="https://github.com/Mergifyio/mergify/discussions"
-    icon={SiGithub}
-  />
-  <CommunityButton
-    href="https://www.youtube.com/@mergifyio"
-    icon={SiYoutube}
-  />
-  <CommunityButton
-    href="https://slack.mergify.com"
-    icon={SiSlack}
-  />
-  <CommunityButton
-    href="https://x.com/mergifyio"
-    icon={SiX}
-  />
-  <CommunityButton
-    href="https://www.linkedin.com/company/mergify/"
-    icon={SiLinkedin}
-  />
-</div>
-
-</div>
+<section class="community">
+  <h2>Join our Community 💬</h2>
+  <p>Share feedback, ask questions, and see what other teams build with Mergify.</p>
+  <div class="community-buttons">
+    <CommunityButton href="https://github.com/Mergifyio/mergify/discussions" icon={SiGithub} />
+    <CommunityButton href="https://www.youtube.com/@mergifyio" icon={SiYoutube} />
+    <CommunityButton href="https://slack.mergify.com" icon={SiSlack} />
+    <CommunityButton href="https://x.com/mergifyio" icon={SiX} />
+    <CommunityButton href="https://www.linkedin.com/company/mergify/" icon={SiLinkedin} />
+  </div>
+</section>
