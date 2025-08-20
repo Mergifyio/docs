@@ -1,9 +1,9 @@
 import './Badge.css';
 
 interface Props {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function Badge({ children }: Props) {
-	return <span className="badge">{children}</span>;
+  return <span className="badge">{children}</span>;
 }

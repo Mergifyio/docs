@@ -1,10 +1,10 @@
 ---
 import { removeLeadingSlash, removeTrailingSlash } from '../../util';
-import SidebarContent from './SidebarContent.astro';
 import ThemeToggleButton from '../Header/ThemeToggleButton';
+import SidebarContent from './SidebarContent.astro';
 
 export interface Props {
-	currentPage: string;
+  currentPage: string;
 }
 
 const { currentPage } = Astro.props as Props;

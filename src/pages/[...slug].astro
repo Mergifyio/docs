@@ -5,9 +5,9 @@ import { allPages } from '~/content';
 import MainLayout from '~/layouts/MainLayout.astro';
 
 export async function getStaticPaths() {
-	return allPages.map((page) => {
-		return { params: { slug: page.id }, props: page };
-	});
+  return allPages.map((page) => {
+    return { params: { slug: page.id }, props: page };
+  });
 }
 
 export type Props = CollectionEntry<'docs'>;

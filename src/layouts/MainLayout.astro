@@ -1,16 +1,16 @@
 ---
-import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 import generateToc from '~/util/generateToc';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import PageContent from '../components/PageContent/PageContent.astro';
 import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
 import TableOfContents from '../components/RightSidebar/TableOfContents';
 import BaseLayout from './BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 export interface Props {
-	content: CollectionEntry<'docs'>['data'];
-	headings: MarkdownHeading[];
+  content: CollectionEntry<'docs'>['data'];
+  headings: MarkdownHeading[];
 }
 
 const { content, headings } = Astro.props;
