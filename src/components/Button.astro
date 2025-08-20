@@ -1,28 +1,28 @@
 ---
 export interface Props {
-	colorScheme:
-		| 'whiteAlpha'
-		| 'blackAlpha'
-		| 'gray'
-		| 'red'
-		| 'orange'
-		| 'yellow'
-		| 'green'
-		| 'teal'
-		| 'blue'
-		| 'cyan'
-		| 'purple'
-		| 'pink'
-		| 'linkedin'
-		| 'facebook'
-		| 'messenger'
-		| 'whatsapp'
-		| 'twitter'
-		| 'telegram';
-	style?: string;
-	href?: string;
-	icon: Function;
-	variant?: 'ghost' | 'solid';
+  colorScheme:
+    | 'whiteAlpha'
+    | 'blackAlpha'
+    | 'gray'
+    | 'red'
+    | 'orange'
+    | 'yellow'
+    | 'green'
+    | 'teal'
+    | 'blue'
+    | 'cyan'
+    | 'purple'
+    | 'pink'
+    | 'linkedin'
+    | 'facebook'
+    | 'messenger'
+    | 'whatsapp'
+    | 'twitter'
+    | 'telegram';
+  style?: string;
+  href?: string;
+  icon: Function;
+  variant?: 'ghost' | 'solid';
 }
 const { colorScheme, style, href, icon, variant = 'solid' } = Astro.props as Props;
 ---

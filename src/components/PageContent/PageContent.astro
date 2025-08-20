@@ -1,14 +1,14 @@
 ---
 import { CollectionEntry } from 'astro:content';
 export interface Props {
-	content: CollectionEntry<'docs'>['data'];
+  content: CollectionEntry<'docs'>['data'];
 }
 
 const { content } = Astro.props;
 // We wrap `@astrojs/` in a span to style it separately on integration pages.
 const title = content.title
-	.replace('@astrojs/', '<span class="scope">@astrojs/</span><wbr>')
-	.replaceAll('-', '&#8288;-&#8288;');
+  .replace('@astrojs/', '<span class="scope">@astrojs/</span><wbr>')
+  .replaceAll('-', '&#8288;-&#8288;');
 const description = content.description;
 const suppressTitle = content.suppressTitle;
 ---

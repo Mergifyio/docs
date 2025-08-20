@@ -2,8 +2,8 @@
 import type { NavItem } from '~/content/navItems';
 import NavLink from './NavLink.astro';
 export interface Props {
-	navGroup: NavItem;
-	currentPageMatch: string;
+  navGroup: NavItem;
+  currentPageMatch: string;
 }
 
 const { navGroup, currentPageMatch } = Astro.props as Props;
