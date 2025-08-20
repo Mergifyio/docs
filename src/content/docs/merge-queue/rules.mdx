@@ -62,3 +62,43 @@ queue_rules:
     ...
     batch_size: 5
 ```
+
+## Auto‑Queueing Pull Requests
+
+You can automatically enqueue pull requests that satisfy a queue rule's
+`queue_conditions` by setting the `autoqueue` flag to `true` (default is
+`false`). When `autoqueue: true` the pull request is added to the merge queue
+as soon as it matches `queue_conditions`. No pull request rule with a `queue`
+action or manual [`queue` command](/commands/queue) is required.
+
+This ensures PRs are enqueued consistently & immediately, reduing latency
+between validation success and scheduling.
+
+Example:
+
+```yaml
+queue_rules:
+  - name: urgent
+    autoqueue: true
+    queue_conditions:
+      - label = urgent
+    merge_conditions:
+      - check-success = myci
+
+  - name: default
+    autoqueue: false
+    queue_conditions:
+      - check-success = myci
+    batch_size: 5
+```
+
+With this configuration, any PR carrying `label = urgent` is enqueued instantly
+(even before CI finishes, if you omit that check from `queue_conditions`),
+while standard PRs enter only manually after CI succeeds.
+
+Set `autoqueue: false` (or omit it) if you want enqueueing to be explicit, for
+example:
+- Allow contributors to opt‑in manually via the [`queue`
+  command](/commands/queue)
+
+- Gate queueing behind an internal custom workflow step
