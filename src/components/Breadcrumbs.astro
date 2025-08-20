@@ -5,52 +5,52 @@ import { removeLeadingSlash, removeTrailingSlash } from '../util';
 const currentPath = removeTrailingSlash(Astro.url.pathname);
 
 function normalize(path: string) {
-	if (!path) return '';
-	return '/' + removeLeadingSlash(removeTrailingSlash(path));
+  if (!path) return '';
+  return '/' + removeLeadingSlash(removeTrailingSlash(path));
 }
 
 type Item = (typeof navItems)[number];
 
 interface TrailEntry {
-	title: string;
-	path?: string;
+  title: string;
+  path?: string;
 }
 
 const trails = new Map<string, TrailEntry[]>();
 
 function build(itemList: Item[], parentTrail: TrailEntry[] = []) {
-	for (const item of itemList) {
-		const trail = [...parentTrail, { title: item.title, path: item.path }];
-		if (item.path) {
-			const n = normalize(item.path);
-			if (!trails.has(n)) trails.set(n, trail);
-		}
-		if (item.children) build(item.children as Item[], trail);
-	}
+  for (const item of itemList) {
+    const trail = [...parentTrail, { title: item.title, path: item.path }];
+    if (item.path) {
+      const n = normalize(item.path);
+      if (!trails.has(n)) trails.set(n, trail);
+    }
+    if (item.children) build(item.children as Item[], trail);
+  }
 }
 
 build(navItems as Item[]);
 
 let matchedTrail: TrailEntry[] = [];
 for (const [p, t] of trails.entries()) {
-	if (currentPath === p || (currentPath.startsWith(p + '/') && p.length > 1)) {
-		if (p.length > (matchedTrail[matchedTrail.length - 1]?.path?.length || 0)) {
-			matchedTrail = t;
-		}
-	}
+  if (currentPath === p || (currentPath.startsWith(p + '/') && p.length > 1)) {
+    if (p.length > (matchedTrail[matchedTrail.length - 1]?.path?.length || 0)) {
+      matchedTrail = t;
+    }
+  }
 }
 
 if (matchedTrail.length >= 2) {
-	const filtered: TrailEntry[] = [];
-	for (const entry of matchedTrail) {
-		if (
-			filtered.length &&
-			normalize(filtered[filtered.length - 1].path || '') === normalize(entry.path || '')
-		)
-			continue;
-		filtered.push(entry);
-	}
-	matchedTrail = filtered;
+  const filtered: TrailEntry[] = [];
+  for (const entry of matchedTrail) {
+    if (
+      filtered.length &&
+      normalize(filtered[filtered.length - 1].path || '') === normalize(entry.path || '')
+    )
+      continue;
+    filtered.push(entry);
+  }
+  matchedTrail = filtered;
 }
 ---
 

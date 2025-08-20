@@ -2,15 +2,15 @@
 import type { NavItem } from '~/content/navItems';
 import { removeLeadingSlash } from '~/util';
 export interface Props {
-	currentPageMatch: string;
-	navItem: NavItem;
+  currentPageMatch: string;
+  navItem: NavItem;
 }
 
 const { currentPageMatch, navItem } = Astro.props as Props;
 const isHomepage = navItem.path === '/';
 const isHomepageMatch = isHomepage && currentPageMatch === '';
 const isPageMatch =
-	!isHomepage && currentPageMatch.endsWith(removeLeadingSlash(navItem.path ?? ''));
+  !isHomepage && currentPageMatch.endsWith(removeLeadingSlash(navItem.path ?? ''));
 ---
 
 <li class="nav-link">

@@ -4,12 +4,9 @@
     "public/scalar-api-reference.js",
     "public/make-scrollable-code-focusable.js",
     "public/sw.js",
-    "node_modules",
+    "node_modules"
   ],
-  "include": [
-    ".astro/types.d.ts",
-    "src"
-  ],
+  "include": [".astro/types.d.ts", "src"],
   "compilerOptions": {
     "skipLibCheck": true,
     "noEmit": true,
@@ -22,11 +19,9 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "src/*"
-      ]
+      "~/*": ["src/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
-  },
+  }
 }

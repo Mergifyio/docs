@@ -9,7 +9,9 @@
     "cf-build": "./cf-build.sh",
     "test": "vitest",
     "preview": "astro preview",
-    "check": "astro check && eslint . && prettier --check src"
+    "format": "biome format --write .",
+    "format:check": "biome format src integrations plugins scripts",
+    "check": "astro check && eslint . && biome check ."
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
@@ -17,6 +19,7 @@
     "@astrojs/sitemap": "^3.5.0",
     "@astrojs/ts-plugin": "^1.10.4",
     "@babel/core": "^7.28.3",
+    "@biomejs/biome": "^2.2.0",
     "@types/hast": "^3.0.4",
     "@types/html-escaper": "^3.0.4",
     "@types/js-yaml": "^4.0.9",
@@ -45,8 +48,6 @@
     "mdast-util-mdx-jsx": "^3.2.0",
     "mdast-util-to-hast": "^13.2.0",
     "mdast-util-to-string": "^4.0.0",
-    "prettier": "^3.6.2",
-    "prettier-plugin-astro": "^0.14.1",
     "rehype": "^13.0.1",
     "remark": "^15.0.1",
     "remark-directive": "^4.0.0",
