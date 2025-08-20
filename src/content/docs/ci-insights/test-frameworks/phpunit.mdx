@@ -11,7 +11,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 This guide shows how to generate JUnit reports from your PHPUnit tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with PHPUnit
+## Generate a JUnit Report with PHPUnit
 
 PHPUnit has built-in support for JUnit XML reports. You can configure PHPUnit
 to output JUnit reports using command-line options or configuration files.
@@ -66,7 +66,7 @@ Then run:
 composer test
 ```
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -89,7 +89,7 @@ For example, in your workflow file:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 

@@ -15,7 +15,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 This guide shows how to generate JUnit reports from your Jest tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with Jest
+## Generate a JUnit Report with Jest
 
 Jest has built-in support for JUnit XML reports. You can configure Jest to
 output JUnit reports by updating your Jest configuration or using command-line
@@ -56,7 +56,7 @@ You can also set the output file location:
 JEST_JUNIT_OUTPUT_DIR=. JEST_JUNIT_OUTPUT_NAME=junit.xml npx jest --reporters=default --reporters=jest-junit
 ```
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -82,7 +82,7 @@ For example, in your workflow file:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 

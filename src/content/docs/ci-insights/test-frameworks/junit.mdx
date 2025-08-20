@@ -11,7 +11,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 This guide shows how to generate JUnit reports from your JUnit tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with JUnit
+## Generate a JUnit Report with JUnit
 
 JUnit naturally generates XML reports that are compatible with the JUnit format
 expected by CI Insights. You can configure your build tool to output these
@@ -62,7 +62,7 @@ Run tests with:
 
 The JUnit XML reports will be generated in `build/test-results/test/`.
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -96,7 +96,7 @@ For Gradle projects:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 

@@ -11,7 +11,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 This guide shows how to generate JUnit reports from your Minitest tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with Minitest
+## Generate a JUnit Report with Minitest
 
 Minitest doesn't have built-in JUnit support, but you can use third-party
 plugins to generate JUnit XML reports.
@@ -110,7 +110,7 @@ Set the output directory with environment variable:
 JUNIT_OUTPUT_DIR=. bundle exec ruby -Itest -rminitest/junit test/**/*_test.rb
 ```
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -144,7 +144,7 @@ Using `minitest-reporters` approach:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 
