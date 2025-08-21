@@ -15,7 +15,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 This guide shows how to configure [Vitest](https://vitest.dev/) to produce
 JUnit reports and upload them to CI Insights within a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with Vitest
+## Generate a JUnit Report with Vitest
 
 By default, Vitest doesn't generate JUnit-format test results. You need to
 enable it in your `vite.config.ts` or `vitest.config.ts`.
@@ -48,7 +48,7 @@ Key Options:
 - `includeConsoleOutput: true`: Ensures console logs are captured in the final
   report.
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -67,7 +67,7 @@ similar), include a step like:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 

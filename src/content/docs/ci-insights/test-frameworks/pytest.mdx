@@ -12,7 +12,7 @@ This guide explains how to integrate Pytest with CI Insights using the
 `pytest-mergify` plugin. Once installed, test results are automatically
 uploaded to CI Insights without any extra workflow changes.
 
-## 1. Installation
+## Installation
 
 You need to install the
 [`pytest-mergify`](https://pypi.python.org/pypi/pytest-mergify) plugin to
@@ -62,7 +62,7 @@ Make sure those dependencies are installed when running your tests.
 poetry add --group dev pytest-mergify
 ```
 
-## 2. Modify Your Workflow
+## Modify Your Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -92,7 +92,7 @@ The plugin collects your test results and sends them to CI Insights.
 Check the CI Insights dashboard afterward to view execution metrics, detect
 flaky tests, and gather actionable feedback.
 
-## 3. Using with Tox
+## Using with Tox
 
 If you’re using [Tox](https://tox.wiki/) to manage test environments, you can
 still use `pytest-mergify` by passing the `MERGIFY_TOKEN` and the rest of the
