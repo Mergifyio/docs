@@ -1,0 +1,50 @@
+---
+title: Built‑in Merge Protections
+description: "Protections available out of the box: Depends-On, Merge-After, Configuration Changed."
+---
+
+import { Image } from "astro:assets"
+import dependsOnBody from "../../images/merge-protections/depends-on.png"
+import mergeAfterBody from "../../images/merge-protections/merge-after.png"
+
+## Overview
+
+These protections are automatically interpreted—no scripting required. You can
+enable/disable them individually in the dashboard.
+
+## Depends-On
+
+Block merging until specified pull requests are merged.
+
+Declare dependencies in the PR body:
+
+```yaml
+Depends-On: #123
+Depends-On: https://github.com/org/repo/pull/123
+Depends-On: org/repo#123
+```
+
+<Image src={dependsOnBody} alt="Using Depends-On in the pull request body on GitHub" />
+
+Rules:
+- All referenced PRs must be in repositories with Mergify enabled
+- They must belong to the same organization
+- Cycles are ignored (a PR depending on itself or circular chains)
+
+Use cases:
+- Feature split across multiple repos
+- Schema then implementation
+- Chained refactors
+
+## Merge-After
+
+Delay merging until a future time using a header in the PR description:
+
+```yaml
+Merge-After: 2025-09-01T09:00:00Z
+```
+
+Supports the standard [timestamp format](/configuration/data-types#timestamp).
+Useful for coordinated releases or off-peak deploy windows.
+
+<Image src={mergeAfterBody} alt="Using Merge-After in the pull request body on GitHub" />

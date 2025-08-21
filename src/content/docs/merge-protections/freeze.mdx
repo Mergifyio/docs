@@ -1,0 +1,51 @@
+---
+title: Scheduling Freezes
+description: Temporarily block merging during maintenance, release, or blackout windows.
+---
+
+import { Image } from "astro:assets"
+import scheduleFreezeScreen from "../../images/merge-protections/schedule-freeze.png"
+import newScheduleFreezeScreen from "../../images/merge-protections/new-freeze.png"
+
+## When to Use a Freeze
+
+Use freezes to coordinate:
+- Critical release stabilization
+- High-traffic events where deploy risk must be minimized
+- End-of-quarter / audit windows
+- Incident response (manual immediate freeze)
+
+## Creating a Scheduled Freeze
+
+<Image src={scheduleFreezeScreen} alt="Scheduled Freezes" />
+
+In the dashboard under Merge Protections → Freezes:
+1. Click `Schedule a Freeze`
+
+2. Define start / end (UTC)
+
+3. Add matching conditions: by default the freeze applies to every pull
+   requests, but you can limit its impact with this field
+
+4. Save; active freezes appear in the list
+
+<Image src={newScheduleFreezeScreen} alt="New Scheduled Freeze" />
+
+During a freeze, the protection check fails with a clear message unless an
+override condition is met (see below).
+
+## Manual Instant Freeze
+
+Use the `Freeze Merges Now` action for immediate blocking. You can later
+unfreeze manually.
+
+## Allowing Exceptions
+
+Create a rule with a success condition that grants override, e.g.:
+
+```yaml
+- label != hotfix
+```
+
+Then apply the `hotfix` label (manually or via automation) to bypass the freeze
+for a specific PR.

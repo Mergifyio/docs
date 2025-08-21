@@ -1,144 +1,56 @@
 ---
+# This is the new landing page for Merge Protections after split
+# (frontmatter title intentionally left same for nav purposes)
 title: Merge Protections
 description: Go beyond GitHub's native branch protections and craft custom, advanced rules using Mergify.
 ---
 
 import { Image } from "astro:assets"
 import mainScreen from "../images/merge-protections/main-screen.png"
-import bpScreen from "../images/merge-protections/branch-protections.png"
-import requiredChecksScreen from "../images/merge-protections/required-check.png"
-import mergeAfterBody from "../images/merge-protections/merge-after.png"
-import dependsOnBody from "../images/merge-protections/depends-on.png"
-import scheduleFreezeScreen from "../images/merge-protections/schedule-freeze.png"
-import commentScreen from "../images/merge-protections/schedule-freeze.png"
-import configurationChangedCheckBody from "../images/merge-protections/configuration-changed-check.png"
+import commentScreen from "../images/merge-protections/comment.png"
 
-[GitHub's branch
-protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
-and
-[rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
-are foundational, but their customizations are somewhat limited.
+> Mergify Merge Protections extend GitHub's native Branch Protections & Rulesets with fine‑grained, dynamic rules.
 
-For more advanced or specific scenarios, Mergify's Merge Protections can step
-in, enabling you to define nuanced conditions that cater to your project's
-unique needs. This flexibility means you can design branch protection rules
-that the native system simply can't handle.
+## Overview
 
-## Why Mergify Over Native GitHub Branch Protection and Rulesets?
+Merge Protections let you:
 
-1. **Advanced Conditions**: Mergify supports a vast array of conditions, which
-   means you can create extremely specific rules based on any of the pull
-   request metadata.
+- Enforce advanced success criteria on pull requests (title patterns, labels,
+  CI signals, file changes, authorship, etc.)
 
-2. **Dependencies**: Leverage dependencies between pull requests.
+- Express dependencies between pull requests (block merge until others are
+  merged)
 
-3. **Scheduled Merges**: Make sure merges are done on the right time.
+- Schedule when merges may occur (or enforce freezes)
 
-4. **Freeze**: Schedule one-time or recurring total or partial freeze for your
-   repository.
-
-## Enabling Merge Protections
-
-Merge protections can be configured directly from your
-[dashboard](https://dashboard.mergify.com) by clicking on the `Merge
-Protections` link in the sidebar.
-
-<Image src={mainScreen} alt="Mergify Merge Protections" />
-
-Once enabled on your repository, Mergify will post a check entitled `Mergify
-Merge Protections` on your pull requests. You need to ensure this checks is
-required in your branch protection settings or in your rulesets.
-
-<Image src={bpScreen} alt="GitHub Branch Protection" />
-
-Once `Mergify Merge Protections` is required in your repository rules, it will
-be marked as enforced in your GitHub checks and will prevent any pull request
-to be merged if does not match your conditions.
-
-<Image src={requiredChecksScreen} alt="GitHub required cheks" />
-
-Mergify will also post an update as a comment on pull requests, including
-details of the matching protections.
+- Provide consistent, explainable feedback via a single required check
 
 <Image src={commentScreen} alt="Merge Protections comment" />
 
-## Built-in Protections
+## Why Use Merge Protections Instead of Only GitHub Rulesets?
 
-Mergify provides multiple built-in protections that are available
-out-of-the-box.
+| Capability | GitHub Native | Mergify Merge Protections |
+| ---------- | ------------- | ------------------------- |
+| Conditional logic (complex AND/OR on PR metadata) | No | Extensive |
+| Depends‑On relationships | ❌ | ✅ |
+| Time / schedule based merge windows | ❌ | ✅ |
+| Repository freeze (manual or scheduled) | ❌ | ✅ |
+| Single composite check gate | Partial | ✅ |
 
-### Depends-On
+## How They Work
 
-The Depends-On protection prevents pull request to be merged if the dependent
-pull requests are not yet merged.
+1. You enable Merge Protections in the dashboard.
+2. A single check `Mergify Merge Protections` appears on every PR.
+3. Your protection rules determine whether that check passes.
+4. You mark the check as Required in GitHub Branch Protection / Rulesets.
+5. PRs cannot merge unless all active protection rules succeed.
 
-To use this feature, you simply need to list pull request dependencies in the
-pull request body using one of the following format:
+## Next Steps
 
-```yaml
-Depends-On: #123
-Depends-On: https://github.com/myorg/myrepo/pull/123
-Depends-On: myorg/myrepo#123
-```
+The feature is composed of several building blocks documented in dedicated pages:
 
-<Image src={dependsOnBody} alt="Using Depends-On in the pull request body on GitHub"/>
-
-A pull request can depends on any other pull request if both those conditions
-are matched:
-- Mergify is enabled on the target repository;
-- The repository is part of the same organization.
-
-### Merge-After
-
-You can use the `Merge-After` pull request header to merge a pull request after
-a certain date using our [timestamp format](/configuration/data-types#timestamp).
-
-<Image src={mergeAfterBody} alt="Using Merge-After in the pull request body on GitHub"/>
-
-### Mergify Configuration Changed
-
-This built-in rule prevents users from merging breaking configuration changes. If Mergify detects a change
-in the configuration, the pull request will need to validate the `Configuration changed` check.
-
-This rule is automatically added to your repository when you enable Merge Protections.
-
-<Image src={configurationChangedCheckBody} alt="Merge Configuration Changed check in the rules summary"/>
-
-## Adding New Rules
-
-You can add any new rule by clicking on the `New Rule` button and using a
-template or writing from scratch.
-
-The format of the rules is as follow:
-
-```yaml
-name: <name of your rule>
-description: <description of your rule>
-if: <list of conditions that the pull request needs to match to see the rule applied>
-success_conditions: <list of conditions that needs to match for the check to be a success>
-```
-
-You can refer to [the format of the conditions](/configuration/conditions/) for
-more details.
-
-For example, to check that your pull request targeting the `main` branch
-follows the conventional commit convention you can write:
-
-```yaml
-name: Enforce conventional commit
-description: Make sure that we follow https://www.conventionalcommits.org/en/v1.0.0/
-if:
-  - base = main
-success_conditions:
-  - "title ~= ^(fix|feat|docs|style|refactor|perf|test|build|ci|chore|revert)(?:\(.+\))?:"
-```
-
-## Scheduling Freezes
-
-If you want to prevent pull request to be merged during certain periods, you
-can create scheduled freezes on your repository.
-
-<Image src={scheduleFreezeScreen} alt="Scheduled Freezes" />
-
-You can also freeze your repository instantly by clicking on "Freeze Merges
-Now".
+- [Enabling & Configuration](/merge-protections/setup)
+- [Built‑in Protections](/merge-protections/builtin)
+- [Custom Rules](/merge-protections/custom-rules)
+- [Scheduling Freezes](/merge-protections/freeze)
+- [Examples & Patterns](/merge-protections/examples)
