@@ -24,175 +24,180 @@ import { IoIosRemoveCircleOutline } from 'react-icons/io';
 import { GrTest } from 'react-icons/gr';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
 
-{/* ---------------- HERO ---------------- */}
+<div id="home">
+  {/* ---------------- HERO ---------------- */}
 
-<div class="home-hero">
-  <div class="hero-inner">
-    <h1>Mergify Documentation</h1>
-    <p class="tagline">Ship faster with healthier CI, safer merges, and powerful workflow automation.</p>
-    <div class="quick-links">
-      <a href="/ci-insights" class="ql">CI Insights</a>
-      <a href="/merge-queue" class="ql">Merge Queue</a>
-      <a href="/workflow" class="ql">Workflow Automation</a>
-      <a href="/merge-protections" class="ql">Merge Protections</a>
+  <div class="home-hero">
+    <div class="hero-inner">
+      <h1 class="content-title">Mergify Documentation</h1>
+      <p class="tagline content-subtitle">
+        Ship faster with healthier CI, safer merges, and powerful workflow
+        automation.
+      </p>
+      <div class="quick-links">
+        <a href="/ci-insights" class="ql">CI Insights</a>
+        <a href="/merge-queue" class="ql">Merge Queue</a>
+        <a href="/workflow" class="ql">Workflow Automation</a>
+        <a href="/merge-protections" class="ql">Merge Protections</a>
+      </div>
     </div>
   </div>
+
+  {/* -------------- PRODUCT SECTIONS -------------- */}
+
+  <h2 class="home-title">CI Insights</h2>
+
+  Insights & automation to make your test suite lean and reliable.
+
+  <DocsetGrid>
+    <Docset title="Overview" path="/ci-insights" icon={MdOutlineLightbulb}>What CI Insights gives you.</Docset>
+    <Docset title="Flaky Test Detection" path="/ci-insights/flaky-test-detection" icon={FaBug}>
+      Surface inconsistent tests & jobs.
+    </Docset>
+    <Docset title="Auto‑Retry" path="/ci-insights/auto-retry" icon={SlRefresh}>
+      Automatic transient failure retries.
+    </Docset>
+    <Docset title="Quarantine" path="/ci-insights/quarantine" icon={FaRegCirclePause}>
+      Isolate noisy tests to unblock merges.
+    </Docset>
+    <Docset title="Test Frameworks" path="/ci-insights#test-framework-configuration" icon={GrTest}>
+      Configure report upload.
+    </Docset>
+  </DocsetGrid>
+
+  <h2 class="home-title">Merge Queue</h2>
+  Deterministic, parallel, and resource‑aware merging.
+
+  <DocsetGrid>
+    <Docset title="Introduction" path="/merge-queue" icon={FaRegLightbulb}>
+      Core concepts & guarantees.
+    </Docset>
+    <Docset title="Setup" path="/merge-queue/setup" icon={FaGear}>
+      Enable & configure your first queue.
+    </Docset>
+    <Docset title="Queue Rules" path="/merge-queue/rules" icon={BiSolidCoinStack}>
+      Route PRs & define policies.
+    </Docset>
+    <Docset title="Lifecycle" path="/merge-queue/lifecycle" icon={SlRefresh}>
+      From enqueue to merge.
+    </Docset>
+    <Docset title="Priority" path="/merge-queue/priority" icon={FaTrafficLight}>
+      Order critical work first.
+    </Docset>
+    <Docset title="Parallel Checks" path="/merge-queue/parallel-checks" icon={TiFlowParallel}>
+      Batch compatible PR tests.
+    </Docset>
+    <Docset title="Performance" path="/merge-queue/performance" icon={SlSpeedometer}>
+      Throughput & optimization tips.
+    </Docset>
+    <Docset title="Batches" path="/merge-queue/batches" icon={TbPackages}>
+      Increase velocity with batches.
+    </Docset>
+    <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon={FaTrafficLight}>
+      Fast + full validation strategy.
+    </Docset>
+    <Docset title="Deployment" path="/merge-queue/deploy" icon={AiOutlineDeploymentUnit}>
+      Adopt safely in production.
+    </Docset>
+    <Docset title="Monitoring" path="/merge-queue/monitoring" icon={MdMonitorHeart}>
+      Key metrics & dashboards.
+    </Docset>
+    <Docset title="Troubleshooting" path="/merge-queue/troubleshooting" icon={FaBug}>
+      Solve common issues.
+    </Docset>
+  </DocsetGrid>
+
+  <h2 class="home-title">Workflow Automation</h2>
+  Expressive rule engine & rich actions to eliminate manual toil.
+
+  <DocsetGrid>
+    <Docset title="Overview" path="/workflow" icon={BsRobot}>
+      What you can automate.
+    </Docset>
+    <Docset title="First Rule" path="/workflow/writing-your-first-rule" icon={BiRuler}>
+      Create your first automation.
+    </Docset>
+    <Docset title="Actions" path="/workflow/actions" icon={BsRocket}>
+      Full action catalog.
+    </Docset>
+    <Docset title="Automatic Merge" path="/workflow/automerge" icon={GoGitMerge}>
+      Merge when policy satisfied.
+    </Docset>
+    <Docset title="Request Reviews" path="/workflow/request-reviews" icon={GoCodeReview}>
+      Smart reviewer assignment.
+    </Docset>
+    <Docset title="Dismiss Reviews" path="/workflow/dismiss-reviews" icon={IoIosRemoveCircleOutline}>
+      Invalidate outdated approvals.
+    </Docset>
+    <Docset title="Delete Branches" path="/workflow/delete-head-branches" icon={BiCut}>
+      Keep repo tidy automatically.
+    </Docset>
+    <Docset title="Rebase PRs" path="/workflow/rebase" icon={TbGitBranch}>
+      Keep branches current.
+    </Docset>
+  </DocsetGrid>
+
+  <h2 class="home-title">Merge Protections</h2>
+  Advanced guardrails before code lands.
+
+  <DocsetGrid>
+    <Docset title="Overview" path="/merge-protections" icon={FaUserShield}>
+      Protection capabilities.
+    </Docset>
+  </DocsetGrid>
+
+  <h2 class="home-title">Reference & Platform</h2>
+
+  <DocsetGrid>
+    <Docset title="Configuration File" path="/configuration/file-format" icon={AiOutlineFile}>
+      YAML structure & semantics.
+    </Docset>
+    <Docset title="Conditions" path="/configuration/conditions" icon={BsPatchQuestion}>
+      Filter syntax details.
+    </Docset>
+    <Docset title="Data Types" path="/configuration/data-types" icon={FiType}>
+      All supported value kinds.
+    </Docset>
+    <Docset title="Sharing Configuration" path="/configuration/sharing" icon={LiaShareAltSolid}>
+      Reuse config across repos.
+    </Docset>
+    <Docset title="Commands" path="/commands" icon={BsCommand}>
+      ChatOps style commands.
+    </Docset>
+    <Docset title="API Usage" path="/api-usage" icon={AiOutlineApi}>
+      Authenticate & call the API.
+    </Docset>
+    <Docset title="API Reference" path="/api" icon={AiOutlineApi}>
+      Endpoint reference.
+    </Docset>
+    <Docset title="Integrations" path="/integrations" icon={BsPlugin}>
+      CI & ecosystem hooks.
+    </Docset>
+    <Docset title="Stacks" path="/stacks" icon={BsStack}>
+      Stacked PR workflow.
+    </Docset>
+    <Docset title="Badge" path="/badge" icon={BiBadgeCheck}>
+      Public project badge.
+    </Docset>
+    <Docset title="Security" path="/security" icon={FaShieldAlt}>
+      Security & permissions.
+    </Docset>
+    <Docset title="Billing" path="/billing" icon={FaMoneyBill1}>
+      Plans & billing model.
+    </Docset>
+  </DocsetGrid>
+
+  {/* -------------- COMMUNITY -------------- */}
+
+  <section class="community">
+    <h2 class="home-title">Join our Community 💬</h2>
+    <p>Share feedback, ask questions, and see what other teams build with Mergify.</p>
+    <div class="community-buttons">
+      <CommunityButton href="https://github.com/Mergifyio/mergify/discussions" icon={SiGithub} />
+      <CommunityButton href="https://www.youtube.com/@mergifyio" icon={SiYoutube} />
+      <CommunityButton href="https://slack.mergify.com" icon={SiSlack} />
+      <CommunityButton href="https://x.com/mergifyio" icon={SiX} />
+      <CommunityButton href="https://www.linkedin.com/company/mergify/" icon={SiLinkedin} />
+    </div>
+  </section>
 </div>
-
-{/* -------------- PRODUCT SECTIONS -------------- */}
-
-## CI Insights
-
-Insights & automation to make your test suite lean and reliable.
-
-<DocsetGrid>
-  <Docset title="Overview" path="/ci-insights" icon={MdOutlineLightbulb}>What CI Insights gives you.</Docset>
-  <Docset title="Flaky Test Detection" path="/ci-insights/flaky-test-detection" icon={FaBug}>
-    Surface inconsistent tests & jobs.
-  </Docset>
-  <Docset title="Auto‑Retry" path="/ci-insights/auto-retry" icon={SlRefresh}>
-    Automatic transient failure retries.
-  </Docset>
-  <Docset title="Quarantine" path="/ci-insights/quarantine" icon={FaRegCirclePause}>
-    Isolate noisy tests to unblock merges.
-  </Docset>
-  <Docset title="Test Frameworks" path="/ci-insights#test-framework-configuration" icon={GrTest}>
-    Configure report upload.
-  </Docset>
-</DocsetGrid>
-
-## Merge Queue
-Deterministic, parallel, and resource‑aware merging.
-
-<DocsetGrid>
-  <Docset title="Introduction" path="/merge-queue" icon={FaRegLightbulb}>
-    Core concepts & guarantees.
-  </Docset>
-  <Docset title="Setup" path="/merge-queue/setup" icon={FaGear}>
-    Enable & configure your first queue.
-  </Docset>
-  <Docset title="Queue Rules" path="/merge-queue/rules" icon={BiSolidCoinStack}>
-    Route PRs & define policies.
-  </Docset>
-  <Docset title="Lifecycle" path="/merge-queue/lifecycle" icon={SlRefresh}>
-    From enqueue to merge.
-  </Docset>
-  <Docset title="Priority" path="/merge-queue/priority" icon={FaTrafficLight}>
-    Order critical work first.
-  </Docset>
-  <Docset title="Parallel Checks" path="/merge-queue/parallel-checks" icon={TiFlowParallel}>
-    Batch compatible PR tests.
-  </Docset>
-  <Docset title="Performance" path="/merge-queue/performance" icon={SlSpeedometer}>
-    Throughput & optimization tips.
-  </Docset>
-  <Docset title="Batches" path="/merge-queue/batches" icon={TbPackages}>
-    Increase velocity with batches.
-  </Docset>
-  <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon={FaTrafficLight}>
-    Fast + full validation strategy.
-  </Docset>
-  <Docset title="Deployment" path="/merge-queue/deploy" icon={AiOutlineDeploymentUnit}>
-    Adopt safely in production.
-  </Docset>
-  <Docset title="Monitoring" path="/merge-queue/monitoring" icon={MdMonitorHeart}>
-    Key metrics & dashboards.
-  </Docset>
-  <Docset title="Troubleshooting" path="/merge-queue/troubleshooting" icon={FaBug}>
-    Solve common issues.
-  </Docset>
-</DocsetGrid>
-
-## Workflow Automation
-Expressive rule engine & rich actions to eliminate manual toil.
-
-<DocsetGrid>
-  <Docset title="Overview" path="/workflow" icon={BsRobot}>
-    What you can automate.
-  </Docset>
-  <Docset title="First Rule" path="/workflow/writing-your-first-rule" icon={BiRuler}>
-    Create your first automation.
-  </Docset>
-  <Docset title="Actions" path="/workflow/actions" icon={BsRocket}>
-    Full action catalog.
-  </Docset>
-  <Docset title="Automatic Merge" path="/workflow/automerge" icon={GoGitMerge}>
-    Merge when policy satisfied.
-  </Docset>
-  <Docset title="Request Reviews" path="/workflow/request-reviews" icon={GoCodeReview}>
-    Smart reviewer assignment.
-  </Docset>
-  <Docset title="Dismiss Reviews" path="/workflow/dismiss-reviews" icon={IoIosRemoveCircleOutline}>
-    Invalidate outdated approvals.
-  </Docset>
-  <Docset title="Delete Branches" path="/workflow/delete-head-branches" icon={BiCut}>
-    Keep repo tidy automatically.
-  </Docset>
-  <Docset title="Rebase PRs" path="/workflow/rebase" icon={TbGitBranch}>
-    Keep branches current.
-  </Docset>
-</DocsetGrid>
-
-## Merge Protections
-Advanced guardrails before code lands.
-
-<DocsetGrid>
-  <Docset title="Overview" path="/merge-protections" icon={FaUserShield}>
-    Protection capabilities.
-  </Docset>
-</DocsetGrid>
-
-## Reference & Platform
-
-<DocsetGrid>
-  <Docset title="Configuration File" path="/configuration/file-format" icon={AiOutlineFile}>
-    YAML structure & semantics.
-  </Docset>
-  <Docset title="Conditions" path="/configuration/conditions" icon={BsPatchQuestion}>
-    Filter syntax details.
-  </Docset>
-  <Docset title="Data Types" path="/configuration/data-types" icon={FiType}>
-    All supported value kinds.
-  </Docset>
-  <Docset title="Sharing Configuration" path="/configuration/sharing" icon={LiaShareAltSolid}>
-    Reuse config across repos.
-  </Docset>
-  <Docset title="Commands" path="/commands" icon={BsCommand}>
-    ChatOps style commands.
-  </Docset>
-  <Docset title="API Usage" path="/api-usage" icon={AiOutlineApi}>
-    Authenticate & call the API.
-  </Docset>
-  <Docset title="API Reference" path="/api" icon={AiOutlineApi}>
-    Endpoint reference.
-  </Docset>
-  <Docset title="Integrations" path="/integrations" icon={BsPlugin}>
-    CI & ecosystem hooks.
-  </Docset>
-  <Docset title="Stacks" path="/stacks" icon={BsStack}>
-    Stacked PR workflow.
-  </Docset>
-  <Docset title="Badge" path="/badge" icon={BiBadgeCheck}>
-    Public project badge.
-  </Docset>
-  <Docset title="Security" path="/security" icon={FaShieldAlt}>
-    Security & permissions.
-  </Docset>
-  <Docset title="Billing" path="/billing" icon={FaMoneyBill1}>
-    Plans & billing model.
-  </Docset>
-</DocsetGrid>
-
-{/* -------------- COMMUNITY -------------- */}
-
-<section class="community">
-  <h2>Join our Community 💬</h2>
-  <p>Share feedback, ask questions, and see what other teams build with Mergify.</p>
-  <div class="community-buttons">
-    <CommunityButton href="https://github.com/Mergifyio/mergify/discussions" icon={SiGithub} />
-    <CommunityButton href="https://www.youtube.com/@mergifyio" icon={SiYoutube} />
-    <CommunityButton href="https://slack.mergify.com" icon={SiSlack} />
-    <CommunityButton href="https://x.com/mergifyio" icon={SiX} />
-    <CommunityButton href="https://www.linkedin.com/company/mergify/" icon={SiLinkedin} />
-  </div>
-</section>

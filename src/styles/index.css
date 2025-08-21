@@ -53,55 +53,27 @@ body {
   flex-direction: column;
   min-height: 100vh;
   font-family: var(--font-body) !important;
-  font-size: 18px;
-  line-height: 1.5;
   max-width: 100%;
   background: var(--theme-bg);
-}
-
-main.layout #main-content > :first-child h1:first-of-type::after {
-  content: "";
-  display: block;
-  margin-top: 0.75rem;
-  width: 72px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--brand-gradient);
 }
 
 .content > section {
   max-width: 1000px;
 }
 
-/* Remove paragraph-specific constraint (cleanup) */
-.content > section p {
-  max-width: none;
-}
-
-@media (min-width: 72em) {
-  .content > section {
-    max-width: 1000px;
-  }
-}
-
 a {
-  text-decoration: none;
   color: var(--color-mergify-blue-darker);
-  text-decoration-color: var(--color-mergify-blue-darker);
-  background-image: var(--theme-link-underline);
-  background-size: 0% 2px;
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  transition:
-    background-size var(--theme-link-transition),
-    color var(--theme-link-transition);
+  text-decoration: none;
 }
 
 a:hover,
 a:focus-visible {
   color: var(--theme-accent);
-  background-image: var(--theme-link-underline-active);
-  background-size: 100% 2px;
+}
+
+a:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 0.25em;
 }
 
 a:focus-visible {
@@ -113,6 +85,7 @@ a:focus-visible {
 nav ul {
   list-style: none;
   padding: 0;
+  line-height: 1.5;
 }
 
 .content > section > * + *,
@@ -143,14 +116,6 @@ nav ul {
   padding-inline-start: 1.5em;
 }
 
-/* Typography */
-:is(h1, h2, h3, h4, h5, h6),
-.content > section > .heading-wrapper {
-  margin-bottom: 1rem;
-  font-weight: bold;
-  line-height: 1.3;
-}
-
 :is(h1, h2, h3, h4, h5, h6) + *,
 .content > section > .heading-wrapper + * {
   margin-top: 0;
@@ -174,46 +139,6 @@ nav ul {
 :is(h1, h2, h3, h4, h5, h6, .heading-wrapper)
   + :is(h1, h2, h3, h4, h5, h6, .heading-wrapper):not(:first-child) {
   margin-top: 0;
-}
-
-:is(h1, h2, h3, h4, h5) code {
-  --border-radius: 4px;
-  --padding-block: 0.1rem;
-  --padding-inline: 0.4rem;
-  font-weight: 400;
-}
-
-h1 {
-  font-size: 2.5rem;
-  /* 40px */
-  font-weight: 900;
-}
-
-@media (min-width: 37.75em) {
-  h1 {
-    font-size: 3rem;
-    /* 48px */
-  }
-}
-
-h2 {
-  font-size: 1.875rem;
-  /* 30px */
-}
-
-h3 {
-  font-size: 1.5rem;
-  /* 24px */
-}
-
-h4 {
-  font-size: 1.25rem;
-  /* 20px */
-}
-
-h5 {
-  font-size: 1rem;
-  /* 16px */
 }
 
 .heading-wrapper {
@@ -274,40 +199,12 @@ h5 {
   opacity: 1;
 }
 
-p,
-.content ul,
-.content ol {
+.content {
   line-height: 1.75;
-}
-
-.content ul {
-  color: var(--theme-text-light);
-}
-
-small,
-.text_small {
-  font-size: 0.833rem;
-}
-
-article > section :is(ul, ol) > * + * {
-  margin-top: 0.25rem;
-}
-
-article > section nav :is(ul, ol) > * + * {
-  margin-top: inherit;
 }
 
 article > section li > :is(p, pre, .expressive-code, blockquote):not(:first-child) {
   margin-top: 1rem;
-}
-
-article > section nav :is(ul, ol) {
-  padding-inline-start: inherit;
-}
-
-article > section nav {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
 }
 
 article > section ::marker {
@@ -328,16 +225,6 @@ a > code {
   position: relative;
   color: var(--theme-text-accent);
   text-underline-offset: var(--padding-block);
-}
-
-a:hover,
-a:focus {
-  text-decoration: underline;
-}
-
-a:focus {
-  outline: 2px solid currentColor;
-  outline-offset: 0.25em;
 }
 
 strong {
@@ -362,16 +249,6 @@ pre > code {
   padding: 15px 10px;
   width: 100%;
   background-color: var(--theme-code-bg);
-}
-
-/*RTL Fix Code dir for inline code*/
-[dir="rtl"] code {
-  unicode-bidi: plaintext;
-}
-
-/*RTL Fix Arrows*/
-[dir="rtl"] .toc-mobile-container svg {
-  transform: rotateY(180deg);
 }
 
 .content kbd {
@@ -689,28 +566,6 @@ a.current-header-link {
     will-change: transform;
   }
 }
-section.why,
-section.popular,
-section.community {
-  margin-top: 3rem;
-}
-section.why ul {
-  line-height: 1.5;
-  padding-left: 1.1rem;
-}
-section.popular ul {
-  list-style: disc;
-  padding-left: 1.25rem;
-  line-height: 1.55;
-}
-section.popular a {
-  text-decoration: none;
-  color: var(--theme-accent);
-}
-section.popular a:hover {
-  color: var(--theme-accent-secondary);
-  text-decoration: underline;
-}
 .community-buttons {
   display: flex;
   gap: 0.5rem;
@@ -791,11 +646,6 @@ hr {
   border-right: 1px solid var(--theme-border-color);
 }
 
-pre,
-code[class*="language-"] {
-  border-radius: var(--brand-radius-md);
-}
-
 pre {
   position: relative;
   padding: 1rem 1.25rem;
@@ -809,26 +659,7 @@ pre {
 :not(pre) > code:not([class*="language"]) {
   background: var(--theme-code-inline-bg);
   padding: 0.15rem 0.4rem;
-  border-radius: var(--brand-radius-sm);
   font-size: 0.85em;
-}
-
-/* Sidebar nav active styling improvements (class guesses) */
-:global(nav .active) > a,
-:global(nav a[aria-current="page"]) {
-  background: var(--brand-gradient);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  font-weight: 600;
-}
-
-/* Asides adjustments placeholder: refine later */
-:global(aside.content) {
-  border-inline-start: none;
-  border-radius: var(--brand-radius-md);
-  background: linear-gradient(135deg, var(--color-mergify-blue-light), #fff);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /* Override: rectangular ghost buttons for hero quick links (no pills) */
@@ -864,4 +695,51 @@ pre {
 .home-hero .quick-links .ql:focus-visible {
   outline: 2px solid var(--color-mergify-blue-darker);
   outline-offset: 2px;
+}
+
+.content-title {
+  font-family: var(--font-brand);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 0.5em;
+}
+
+.content-subtitle {
+  font-family: var(--font-brand);
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.main-content.h2,
+.main-content.h3,
+.main-content.h4,
+.main-content.h5,
+.main-content.h6 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 21px;
+  letter-spacing: 0;
+}
+
+header .nav-wrapper {
+  height: 100%;
+}
+
+.content {
+  counter-reset: h2-section;
+}
+
+.content h2:not(.content-subtitle) {
+  counter-increment: h2-section;
+  position: relative;
+}
+
+.content h2:not(.content-subtitle, .home-title)::before {
+  content: counter(h2-section);
+  font-weight: 500;
+  margin-right: 0.55rem;
+  color: var(--theme-text-lighter);
+  opacity: 0.6;
 }
