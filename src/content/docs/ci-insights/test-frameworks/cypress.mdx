@@ -15,7 +15,7 @@ import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 This guide shows how to configure [Cypress](https://www.cypress.io/) to produce
 JUnit reports and upload them to CI Insights within a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with Cypress
+## Generate a JUnit Report with Cypress
 
 By default, Cypress doesn't generate JUnit-format test results. You need to
 enable it in your `cypress.config.ts` file.
@@ -40,7 +40,7 @@ both have JUnit generated while keeping the standard output.
    }
    ```
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -58,7 +58,7 @@ test:cypress` (or similar), include a step like:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 

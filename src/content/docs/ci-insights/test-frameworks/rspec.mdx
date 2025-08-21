@@ -15,7 +15,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 This guide shows how to generate JUnit reports from your RSpec tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with RSpec
+## Generate a JUnit Report with RSpec
 
 RSpec supports JUnit XML output through the built-in JUnit formatter. You can
 configure RSpec to output JUnit reports using command-line options or
@@ -88,7 +88,7 @@ Then run:
 bundle exec rake spec_junit
 ```
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -111,7 +111,7 @@ For example, in your workflow file:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 

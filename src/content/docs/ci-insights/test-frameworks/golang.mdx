@@ -15,7 +15,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 This guide shows how to generate JUnit reports from your Go tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
 
-## 1. Generate a JUnit Report with Go Tests
+## Generate a JUnit Report with Go Tests
 
 By default, `go test` does not output JUnit-format reports. To generate one,
 pipe the verbose test output into a tool like
@@ -34,7 +34,7 @@ go test -v ./... 2>&1 | go-junit-report > junit.xml
 gotestsum --junitfile junit.xml
 ```
 
-## 2. Update Your GitHub Actions Workflow
+## Update Your GitHub Actions Workflow
 
 :::note
 Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
@@ -57,7 +57,7 @@ For example, in your workflow file:
 
 <GhaMergifyCiQuarantineSetup />
 
-## 3. Verify and Review in CI Insights
+## Verify and Review in CI Insights
 
 After pushing these changes:
 
