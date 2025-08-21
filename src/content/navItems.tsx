@@ -23,6 +23,7 @@ import {
   FaRegCirclePause,
   FaRegLightbulb,
   FaRotateRight,
+  FaSnowflake,
   FaStairs,
   FaTrafficLight,
   FaUserPlus,
@@ -133,7 +134,19 @@ const navItems: NavItem[] = [
       { title: 'Troubleshooting', path: '/merge-queue/troubleshooting', icon: FaBug },
     ],
   },
-  { title: 'Merge Protections', path: '/merge-protections', icon: FaUserShield },
+  {
+    title: 'Merge Protections',
+    path: '/merge-protections',
+    icon: FaUserShield,
+    children: [
+      { title: 'Overview', path: '/merge-protections', icon: FaRegLightbulb },
+      { title: 'Setup', path: '/merge-protections/setup', icon: FaGear },
+      { title: 'Built‑in Protections', path: '/merge-protections/builtin', icon: FaUserShield },
+      { title: 'Custom Rules', path: '/merge-protections/custom-rules', icon: BiRuler },
+      { title: 'Freezes', path: '/merge-protections/freeze', icon: FaSnowflake },
+      { title: 'Examples', path: '/merge-protections/examples', icon: BsLightbulb },
+    ],
+  },
   {
     title: 'Workflow Automation',
     icon: BsGear,

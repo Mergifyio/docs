@@ -1,0 +1,83 @@
+---
+title: Writing Custom Merge Protection Rules
+description: Define fine-grained success conditions evaluated by the Mergify Merge Protections check.
+---
+
+## Rule Structure
+
+Each rule consists of:
+
+```yaml
+name: <human readable name>
+description: <purpose / context>
+if:                       # list (YAML array) of conditions activating the rule
+  - <condition>
+success_conditions:       # list of conditions that must all pass for success
+  - <condition>
+```
+
+Evaluation:
+- If all `if` conditions are true, the rule becomes **active**.
+- If **active**, all `success_conditions` must be true for the rule to **succeed**.
+- A failing active rule fails the overall `Mergify Merge Protections` check.
+
+Inactive rules are ignored (not shown as failing).
+
+## Condition Language
+
+The same rich expression system used by Workflow Automation applies. See:
+- [Conditions Reference](/configuration/conditions)
+- [Data Types](/configuration/data-types)
+
+Common condition patterns:
+
+| Goal | Example Condition |
+| ---- | ----------------- |
+| Target specific branch | `base = main` |
+| Enforce title prefix | `title ~= ^^feat:` |
+| Require label | `label = security-reviewed` |
+| Match file changes | `files ~= ^src/` |
+| Require author team | `author = @security-team` |
+| Require check success | `check-success = ci/build` |
+
+## Examples
+
+### Conventional Commits
+```yaml
+name: Conventional commits
+if:
+  - base = main
+success_conditions:
+  - "title ~= ^(fix|feat|docs|style|refactor|perf|test|build|ci|chore|revert)(?:\(.+\))?:"
+```
+
+### Require Design Review for UI Changes
+```yaml
+name: UI Design Review
+if:
+  - files ~= "^ui/"
+success_conditions:
+  - label = design-approved
+```
+
+### Ensure Security Label if touching Auth Code
+```yaml
+name: Auth Security Review
+if:
+  - files ~= ^auth/
+success_conditions:
+  - label = security-reviewed
+```
+
+## Tips
+
+- Keep rules focused; split unrelated concerns.
+- Prefer positive success conditions over large negative patterns.
+- Use naming conventions for clarity (e.g. Prefix groups: `Title /`, `Security /`).
+- Periodically prune obsolete rules to reduce evaluation noise.
+
+## Advanced Strategies
+
+Combine Merge Protections with [Workflow Automation](/workflow/) (e.g.,
+auto-labeling) so that protections depend on labels automatically applied from
+code context.

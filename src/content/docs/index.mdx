@@ -9,11 +9,11 @@ import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import CommunityButton from '../../components/CommunityButton.astro';
 import { MdOutlineLightbulb, MdMonitorHeart } from 'react-icons/md';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
-import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStack } from 'react-icons/bs';
+import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStack, BsLightbulb } from 'react-icons/bs';
 import { BiRuler, BiBadgeCheck, BiCut, BiSolidCoinStack } from 'react-icons/bi';
 import { TbPackages, TbGitBranch } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
-import { FaUserShield, FaRegLightbulb, FaGear, FaTrafficLight, FaRegCirclePause, FaBug, FaMoneyBill1 } from 'react-icons/fa6';
+import { FaUserShield, FaRegLightbulb, FaGear, FaTrafficLight, FaRegCirclePause, FaBug, FaMoneyBill1, FaSnowflake } from 'react-icons/fa6';
 import { FaShieldAlt } from 'react-icons/fa';
 import { AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi } from 'react-icons/ai';
 import { LiaShareAltSolid } from 'react-icons/lia';
@@ -143,6 +143,24 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
   <DocsetGrid>
     <Docset title="Overview" path="/merge-protections" icon={FaUserShield}>
       Protection capabilities.
+    </Docset>
+    <Docset title="Setup" path="/merge-protections/setup" icon={FaGear}>
+      Enable and mark check required.
+    </Docset>
+    <Docset title="Built‑in Protections" path="/merge-protections/builtin" icon={FaUserShield}>
+      Depends-On, Merge-After, config safety.
+    </Docset>
+    <Docset title="Custom Rules" path="/merge-protections/custom-rules" icon={BiRuler}>
+      Define granular success logic.
+    </Docset>
+    <Docset title="Freezes" path="/merge-protections/freeze" icon={FaSnowflake}>
+      Schedule or trigger merge freezes.
+    </Docset>
+    <Docset title="Examples" path="/merge-protections/examples" icon={BsLightbulb}>
+      Common rule recipes.
+    </Docset>
+    <Docset title="Troubleshooting" path="/merge-protections/troubleshooting" icon={FaBug}>
+      Diagnose protection issues.
     </Docset>
   </DocsetGrid>
 

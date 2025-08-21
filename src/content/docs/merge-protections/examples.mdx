@@ -1,0 +1,60 @@
+---
+title: Merge Protection Examples & Patterns
+description: Practical rule recipes for common compliance, quality, and coordination needs.
+---
+
+## Title Quality Gate
+```yaml
+name: Title Minimum Length
+if:
+  - base = main
+success_conditions:
+  - "#title > 15"
+```
+
+## Require Linked Issue for Features
+```yaml
+name: Issue Linked
+if:
+  - label = feature
+success_conditions:
+  - title ~= #[0-9]+
+```
+
+## Disallow WIP in Title
+```yaml
+name: No WIP Titles
+if:
+  - title ~= (?i)wip
+success_conditions:
+  - label = allow-wip
+```
+
+## Enforce Changelog Entry When Touching Package
+```yaml
+name: Changelog Update
+if:
+  - files ~= ^package/
+success_conditions:
+  - files ~= CHANGELOG.md
+```
+
+## Require Security Review for Sensitive Paths
+```yaml
+name: Sensitive Code Review
+if:
+  - files ~= "^(secrets/|encryption/|auth/)"
+success_conditions:
+  - label = security-reviewed
+```
+
+## Author Blocklist
+```yaml
+name: Block Temp Bot
+if:
+  - author = temp-bulk-bot
+success_conditions:
+  - label = automation-approved
+```
+
+Feel free to combine & adapt. Keep rules minimal and targeted.

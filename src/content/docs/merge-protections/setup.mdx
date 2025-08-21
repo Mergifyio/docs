@@ -1,0 +1,37 @@
+---
+title: Enabling & Configuring Merge Protections
+description: How to enable Merge Protections and make the required check effective.
+---
+
+import { Image } from "astro:assets"
+import mainScreen from "../../images/merge-protections/main-screen.png"
+import bpScreen from "../../images/merge-protections/branch-protections.png"
+import requiredChecksScreen from "../../images/merge-protections/required-check.png"
+
+## Enable in the Dashboard
+
+1. Go to the [Mergify dashboard](https://dashboard.mergify.com)
+2. Click the `Merge Protections` section
+3. Select your repository
+4. Enable the feature and create rules
+
+<Image src={mainScreen} alt="Mergify Merge Protections" />
+
+## Make the Check Required
+
+Enabling inserts a check named `Mergify Merge Protections` on each pull request. Mark it as required:
+
+- GitHub Branch Protection: Settings → Branches → Add/Edit rule → Require status checks → select `Mergify Merge Protections`
+- GitHub Rulesets: Settings → Rules → Select ruleset → Add required status check → `Mergify Merge Protections`
+
+<Image src={requiredChecksScreen} alt="GitHub required checks" />
+<Image src={bpScreen} alt="GitHub Branch Protection" />
+
+Once required, the check blocks merges whenever any active protection fails and
+explains why in its output & a summary comment.
+
+## Updating Rules
+
+- Safe to edit live; re-evaluations happen automatically.
+- Renaming a rule only changes display text; logic is defined by the condition blocks.
+- Remove obsolete rules to keep explanations short.
