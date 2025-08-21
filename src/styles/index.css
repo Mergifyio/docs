@@ -47,22 +47,6 @@ html {
   background: var(--theme-bg-gradient-bottom);
 }
 
-/*
-	Use a pseudo-element to add a gradient background that covers the entire viewport.
-	Using a regular fixed background does not work properly on mobile browsers like iOS Safari.
-*/
-body::before {
-  content: "";
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -999;
-  background: var(--theme-bg);
-}
-
 body {
   color: var(--theme-text);
   display: flex;
@@ -72,6 +56,7 @@ body {
   font-size: 18px;
   line-height: 1.5;
   max-width: 100%;
+  background: var(--theme-bg);
 }
 
 main.layout #main-content > :first-child h1:first-of-type::after {
