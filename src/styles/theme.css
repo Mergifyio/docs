@@ -116,7 +116,7 @@
 :root,
 ::backdrop {
   color-scheme: light;
-  --theme-accent: var(--color-mergify-blue-darker);
+  --theme-accent: var(--color-mergify-blue);
   --theme-accent-secondary: var(--color-mergify-blue);
   --theme-dim: hsla(var(--color-gray-70), 1);
   --theme-dim-light: hsla(var(--color-gray-80), 1);
