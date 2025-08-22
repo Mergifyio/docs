@@ -16,6 +16,75 @@ example, if a test runs twice on the same commit and once fails while the other
 succeeds, it's considered flaky because the outcome is not consistent with the
 same code.
 
+Below is a simplified visualization of flakiness: two executions of the same
+tests on the exact same commit (same SHA1) produce different results. This
+inconsistency is what flags the test as flaky.
+
+```dot class="graph"
+strict digraph flaky {
+  rankdir=LR;
+  fontname="sans-serif";
+  node [style=filled, shape=box, fontname="sans-serif", color="black", fontcolor="black"];
+  edge [color="black", fontname="sans-serif"];
+
+  // Non-flaky example (third commit, consistent FAIL results)
+  subgraph cluster_commit3 {
+    label="Commit SHA1 ghi789";
+    fontname="sans-serif";
+    color="#999999";
+    style=dashed;
+    commit3 [label="test_something\n(SHA1 ghi789)", shape=oval, fillcolor="#C9E7F8"];
+  }
+
+  commit3 -> run5 [label="Run #1", arrowhead=normal];
+  commit3 -> run6 [label="Run #2", arrowhead=normal];
+  run5 [label="Tests FAIL", fillcolor="#F8C9C9"];
+  run6 [label="Tests FAIL", fillcolor="#F8C9C9"];
+  {rank=same; run5; run6}
+  stable2 [label="Consistent\n(Not Flaky)", shape=note, fillcolor="#D8F0FF"];
+  run5 -> stable2 [style=dashed, arrowhead=none];
+  run6 -> stable2 [style=dashed, arrowhead=none];
+
+  // Non-flaky example (different commit, consistent PASS results)
+  subgraph cluster_commit2 {
+    label="Commit SHA1 def456";
+    fontname="sans-serif";
+    color="#999999";
+    style=dashed;
+    commit2 [label="test_something\n(SHA1 def456)", shape=oval, fillcolor="#C9E7F8"];
+  }
+
+  commit2 -> run3 [label="Run #1", arrowhead=normal];
+  commit2 -> run4 [label="Run #2", arrowhead=normal];
+  run3 [label="Tests PASS", fillcolor="#B7F5C1"];
+  run4 [label="Tests PASS", fillcolor="#B7F5C1"];
+  {rank=same; run3; run4}
+  stable [label="Consistent\n(Not Flaky)", shape=note, fillcolor="#D8F0FF"];
+  run3 -> stable [style=dashed, arrowhead=none];
+  run4 -> stable [style=dashed, arrowhead=none];
+
+
+  // Flaky example (same commit, differing results)
+  subgraph cluster_commit1 {
+    label="Commit SHA1 abc123";
+    fontname="sans-serif";
+    color="#999999";
+    style=dashed;
+    commit1 [label="test_something2\n(SHA1 abc123)", shape=oval, fillcolor="#C9E7F8"];
+  }
+
+  commit1 -> run1 [label="Run #1", arrowhead=normal];
+  commit1 -> run2 [label="Run #2", arrowhead=normal];
+  run1 [label="Tests PASS", fillcolor="#B7F5C1"];
+  run2 [label="Tests FAIL", fillcolor="#F8C9C9"];
+  {rank=same; run1; run2}
+  detector [label="Flagged as\nflaky", shape=note, fillcolor="#FFE9B3"];
+  run1 -> detector [style=dashed, arrowhead=none];
+  run2 -> detector [style=dashed, arrowhead=none];
+
+}
+```
+
 Flaky tests are problematic because they:
 
 - Create false positives that block legitimate deployments
