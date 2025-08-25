@@ -4,6 +4,8 @@ description: Optimize your CI run time, catch flaky tests, and give developers a
 ---
 
 import { Image } from "astro:assets"
+import JenkinsInstallation from "../images/ci-insights/jenkins-installation.png"
+import JenkinsConfiguration from "../images/ci-insights/jenkins-configuration.png"
 import JobsScreenshot from "../images/ci-insights/jobs.png"
 import TestsScreenshot from "../images/ci-insights/tests.png"
 import TokenScreenshot from "../images/ci-insights/token.png"
@@ -71,7 +73,7 @@ is not consistent with the same code.
 To set up systematic flaky test detection in your CI pipeline, see our
 dedicated [Flaky Test Detection guide](/ci-insights/flaky-test-detection).
 
-## Enabling CI Insights for GitHub
+## Enabling CI Insights for GitHub Actions
 
 1. Enable CI Insights on your repositories by visiting the [GitHub Integration
    page](https://dashboard.mergify.com/integrations/github)
@@ -94,6 +96,58 @@ dedicated [Flaky Test Detection guide](/ci-insights/flaky-test-detection).
 
 3. Click on `CI Insights` in the Mergify dashboard navigation.
    You should start seeing your GitHub Actions job runs appear:
+
+   <Image src={JobsScreenshot} alt="CI Insights Jobs" />
+
+## Enabling CI Insights for Jenkins
+
+1. Enable CI Insights on your repositories by visiting the [GitHub Integration
+   page](https://dashboard.mergify.com/integrations/github)
+   ([docs](/integrations/github)).
+
+2. Install and configure the [Mergify Jenkins plugin](https://plugins.jenkins.io/mergify/):
+
+   **Installation:**
+   - Go to `Manage Jenkins` → `Manage Plugins`
+   - Select the `Available` tab
+   - Search for `Mergify` and select the checkbox next to `Mergify Plugin`
+   - Install the plugin using one of the install buttons at the bottom
+   - To verify installation, search for `Mergify Plugin` on the `Installed` tab
+
+   <Image src={JenkinsInstallation} alt="CI Insights Jenkins installation" />
+
+   **Configuration:**
+   After installation, you need to add the Mergify CI Insights API Key for each GitHub organization you want to support.
+   Go to `Manage Jenkins` → `Configure System` and configure the Mergify plugin with your API keys.
+
+   <Image src={JenkinsConfiguration} alt="CI Insights Jenkins configuration" />
+
+   **Note**: It's highly recommended to set the GitHub project URL for each job
+   if you're not using the [GitHub Branch Source plugin](https://plugins.jenkins.io/github-branch-source/).
+   This ensures proper correlation between Jenkins jobs and GitHub repositories.
+
+3. Configure your Jenkins pipeline job with the `MERGIFY_TOKEN` environment variable.
+   First, get your token from the Mergify dashboard by going to `Settings` > `CI
+   Insights`:
+
+   <Image src={TokenScreenshot} alt="CI Insights Token" />
+
+   Then add the token to Jenkins credentials and configure your pipeline to use it:
+
+   ```groovy
+   pipeline {
+       agent any
+       environment {
+           MERGIFY_TOKEN = credentials('MERGIFY_TOKEN')
+       }
+       ...
+   }
+   ```
+
+   Make sure to store your Mergify token as a Jenkins credential with the ID `MERGIFY_TOKEN`.
+
+4. Click on `CI Insights` in the Mergify dashboard navigation.
+   You should start seeing your Jenkins job runs appear:
 
    <Image src={JobsScreenshot} alt="CI Insights Jobs" />
 
