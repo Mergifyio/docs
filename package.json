@@ -16,7 +16,7 @@
   "devDependencies": {
     "@actions/core": "^1.11.1",
     "@astrojs/mdx": "^4.3.4",
-    "@astrojs/sitemap": "^3.5.0",
+    "@astrojs/sitemap": "^3.5.1",
     "@astrojs/ts-plugin": "^1.10.4",
     "@babel/core": "^7.28.3",
     "@biomejs/biome": "^2.2.0",
