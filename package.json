@@ -19,7 +19,7 @@
     "@astrojs/sitemap": "^3.5.0",
     "@astrojs/ts-plugin": "^1.10.4",
     "@babel/core": "^7.28.3",
-    "@biomejs/biome": "^2.2.0",
+    "@biomejs/biome": "^2.2.2",
     "@types/hast": "^3.0.4",
     "@types/html-escaper": "^3.0.4",
     "@types/js-yaml": "^4.0.9",
