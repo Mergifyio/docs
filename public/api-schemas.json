@@ -3076,78 +3076,6 @@
         }
       }
     },
-    "/repos/{owner}/{repository}/partitions": {
-      "get": {
-        "tags": [
-          "queues"
-        ],
-        "summary": "Get all the partitions",
-        "description": "Get the list of pull requests queued in each merge queue, organized by partition name",
-        "operationId": "repository_partitions_repos__owner___repository__partitions_get",
-        "security": [
-          {
-            "ApplicationAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          },
-          {
-            "name": "repository",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository"
-            },
-            "description": "The name of the repository"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BranchPartitions"
-                  },
-                  "title": "Response Repository Partitions Repos  Owner   Repository  Partitions Get"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          }
-        }
-      }
-    },
     "/repos/{owner}/{repository}/scheduled_freeze": {
       "get": {
         "tags": [
@@ -3766,32 +3694,6 @@
           "name"
         ],
         "title": "Branch"
-      },
-      "BranchPartitions": {
-        "properties": {
-          "branch_name": {
-            "type": "string",
-            "title": "Branch Name",
-            "description": ""
-          },
-          "partitions": {
-            "additionalProperties": {
-              "items": {
-                "$ref": "#/components/schemas/mergify_engine__web__api__partitions__index__PullRequestQueued"
-              },
-              "type": "array"
-            },
-            "type": "object",
-            "title": "Partitions",
-            "description": "A dictionary containing partition names as keys and, as a value of those key, the list of pull requests queued in the partition. If partition are not used in this repository, the default partition name used will be `__default__`."
-          }
-        },
-        "type": "object",
-        "required": [
-          "branch_name",
-          "partitions"
-        ],
-        "title": "BranchPartitions"
       },
       "BriefMergeabilityCheck": {
         "properties": {
@@ -7173,6 +7075,102 @@
         ],
         "title": "MergedInInterval"
       },
+      "PullRequestQueued": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Number",
+            "description": "The number of the pull request"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position",
+            "description": "The position of the pull request in the queue. The first pull request in the queue is at position 0"
+          },
+          "priority": {
+            "type": "integer",
+            "title": "Priority",
+            "description": "The priority of this pull request"
+          },
+          "effective_priority": {
+            "type": "integer",
+            "title": "Effective Priority",
+            "description": "The effective priority of this pull request"
+          },
+          "priority_alias": {
+            "type": "string",
+            "title": "Priority Alias",
+            "description": "The priority textual value of this pull request"
+          },
+          "queue_rule": {
+            "$ref": "#/components/schemas/QueueRule",
+            "description": "The queue rule associated to this pull request"
+          },
+          "queued_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Queued At",
+            "description": "The timestamp when the pull requested has entered in the queue"
+          },
+          "speculative_check_pull_request": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/mergify_engine__web__api__queues__index__SpeculativeCheckPullRequest"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Use `mergeability_check` instead",
+            "deprecated": true
+          },
+          "mergeability_check": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BriefMergeabilityCheck"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Information about the mergeability check currently processed"
+          },
+          "estimated_time_of_merge": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Time Of Merge",
+            "description": "The estimated timestamp when this pull request will be merged"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name",
+            "description": "The name of the partition, if any, in which the pull request is queued"
+          }
+        },
+        "type": "object",
+        "required": [
+          "number",
+          "position",
+          "priority",
+          "effective_priority",
+          "priority_alias",
+          "queue_rule",
+          "queued_at",
+          "speculative_check_pull_request",
+          "mergeability_check",
+          "estimated_time_of_merge",
+          "partition_name"
+        ],
+        "title": "PullRequestQueued"
+      },
       "Queue": {
         "properties": {
           "branch": {
@@ -7181,7 +7179,7 @@
           },
           "pull_requests": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__web__api__queues__index__PullRequestQueued"
+              "$ref": "#/components/schemas/PullRequestQueued"
             },
             "type": "array",
             "title": "Pull Requests",
@@ -8186,179 +8184,6 @@
           "pull_request_numbers"
         ],
         "title": "SpeculativeCheckPullRequest"
-      },
-      "mergify_engine__web__api__partitions__index__PullRequestQueued": {
-        "properties": {
-          "number": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Number",
-            "description": "The number of the pull request"
-          },
-          "position": {
-            "type": "integer",
-            "title": "Position",
-            "description": "The position of the pull request in the queue. The first pull request in the queue is at position 0"
-          },
-          "priority": {
-            "type": "integer",
-            "title": "Priority",
-            "description": "The priority of this pull request"
-          },
-          "effective_priority": {
-            "type": "integer",
-            "title": "Effective Priority",
-            "description": "The effective priority of this pull request"
-          },
-          "priority_alias": {
-            "type": "string",
-            "title": "Priority Alias",
-            "description": "The priority textual value of this pull request"
-          },
-          "queue_rule": {
-            "$ref": "#/components/schemas/QueueRule",
-            "description": "The queue rule associated to this pull request"
-          },
-          "queued_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Queued At",
-            "description": "The timestamp when the pull requested has entered in the queue"
-          },
-          "mergeability_check": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/BriefMergeabilityCheck"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Information about the mergeability check currently processed"
-          },
-          "estimated_time_of_merge": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Estimated Time Of Merge",
-            "description": "The estimated timestamp when this pull request will be merged"
-          }
-        },
-        "type": "object",
-        "required": [
-          "number",
-          "position",
-          "priority",
-          "effective_priority",
-          "priority_alias",
-          "queue_rule",
-          "queued_at",
-          "mergeability_check",
-          "estimated_time_of_merge"
-        ],
-        "title": "PullRequestQueued"
-      },
-      "mergify_engine__web__api__queues__index__PullRequestQueued": {
-        "properties": {
-          "number": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Number",
-            "description": "The number of the pull request"
-          },
-          "position": {
-            "type": "integer",
-            "title": "Position",
-            "description": "The position of the pull request in the queue. The first pull request in the queue is at position 0"
-          },
-          "priority": {
-            "type": "integer",
-            "title": "Priority",
-            "description": "The priority of this pull request"
-          },
-          "effective_priority": {
-            "type": "integer",
-            "title": "Effective Priority",
-            "description": "The effective priority of this pull request"
-          },
-          "priority_alias": {
-            "type": "string",
-            "title": "Priority Alias",
-            "description": "The priority textual value of this pull request"
-          },
-          "queue_rule": {
-            "$ref": "#/components/schemas/QueueRule",
-            "description": "The queue rule associated to this pull request"
-          },
-          "queued_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Queued At",
-            "description": "The timestamp when the pull requested has entered in the queue"
-          },
-          "speculative_check_pull_request": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/mergify_engine__web__api__queues__index__SpeculativeCheckPullRequest"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Use `mergeability_check` instead",
-            "deprecated": true
-          },
-          "mergeability_check": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/BriefMergeabilityCheck"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Information about the mergeability check currently processed"
-          },
-          "estimated_time_of_merge": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Estimated Time Of Merge",
-            "description": "The estimated timestamp when this pull request will be merged"
-          },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name",
-            "description": "The name of the partition, if any, in which the pull request is queued"
-          }
-        },
-        "type": "object",
-        "required": [
-          "number",
-          "position",
-          "priority",
-          "effective_priority",
-          "priority_alias",
-          "queue_rule",
-          "queued_at",
-          "speculative_check_pull_request",
-          "mergeability_check",
-          "estimated_time_of_merge",
-          "partition_name"
-        ],
-        "title": "PullRequestQueued"
       },
       "mergify_engine__web__api__queues__index__SpeculativeCheckPullRequest": {
         "properties": {
