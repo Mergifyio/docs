@@ -4,6 +4,9 @@ description: Set up automated flaky test detection to identify unreliable tests 
 ---
 
 import { Image } from "astro:assets"
+import Docset from '../../../components/DocsetGrid/Docset.astro'
+import DocsetGrid from '../../../components/DocsetGrid/DocsetGrid.astro'
+import { SiGithubactions, SiJenkins } from 'react-icons/si'
 
 Flaky test detection helps you identify tests that produce inconsistent results
 on the same code, allowing you to improve the reliability of your test suite
@@ -102,133 +105,14 @@ pipeline.
 
 ## Setting Up Flaky Test Detection
 
-To effectively detect flaky tests, you need to run the same tests multiple
-times on the same code (identified by the SHA1 of the repository). This section
-explains how to set up your CI to systematically detect flaky tests.
+See CI‑specific setup guides:
 
-### Prerequisites
-
-Before setting up flaky test detection, ensure you have:
-
-1. [Enabled CI Insights](/ci-insights#enabling-ci-insights-for-github)
-   for your repository
-
-2. Set up your `MERGIFY_TOKEN` in GitHub Actions secrets
-
-3. Configured test integration (e.g., `pytest-mergify` or `mergify cli upload`)
-   for your test framework
-
-### GitHub Actions Setup
-
-The recommended approach is to use a scheduled workflow that runs your test
-suite multiple times on the default branch. Here's an example configuration
-that runs tests twice daily with 5 parallel executions:
-
-```yaml
-name: Continuous Integration
-on:
-  pull_request:
-  schedule:
-    - cron: '0 */12 * * 1-5'  # Every 12 hours, Monday to Friday
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        run: [1, 2, 3, 4, 5]  # Run the same tests 5 times in parallel
-      fail-fast: false  # Don't cancel other runs if one fails
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup your environment
-        # Add your specific setup steps here (Python, Node.js, etc.)
-
-      - name: Run Tests
-        env:
-          MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
-          RUN_COUNT: 5  # Number of times to run each test
-        run: |
-          # Run your test suite multiple times to detect flakiness
-          set +e
-          failed=0
-          for i in $(seq "$RUN_COUNT"); do
-            # Replace this with your actual test command
-            # Examples:
-            # pytest tests/
-            # npm test
-            # go test ./...
-            your-test-command
-            exit_code=$?
-            if [ $exit_code -ne 0 ]; then
-              failed=1
-            fi
-          done
-          exit $failed
-```
-
-```yaml
-name: CI
-on:
-  pull_request:
-  schedule:
-    - cron: '0 */12 * * 1-5'  # Every 12 hours, Monday to Friday
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup your environment
-        # Add your specific setup steps here (Python, Node.js, etc.)
-
-      # Modified: Run tests multiple times for flaky detection
-      - name: Run tests
-        env:
-          # Run tests 5 times on schedule, once on pull_request
-          RUN_COUNT: ${{ github.event_name == 'schedule' && 5 || 1 }}
-        run: |
-          # Run the test suite based on RUN_COUNT
-          for i in $(seq $RUN_COUNT); do
-            echo "Running test suite - attempt $i of $RUN_COUNT"
-
-            # Run your test command with unique output file, e.g.:
-            # npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
-          done
-
-      # Upload all test results to CI Insights
-      - name: Upload test results
-        if: always()
-        uses: mergifyio/gha-mergify-ci@v6
-        with:
-          token: ${{ secrets.MERGIFY_TOKEN }}
-          report_path: test-results-*.xml
-```
-
-### Configuration Tips
-
-- **Frequency**: Running twice daily (every 12 hours) provides a good balance
-  between detection accuracy and resource usage
-
-- **Parallel Execution**: Use matrix strategy to run multiple test executions
-  simultaneously
-
-- **fail-fast: false**: Ensure all test runs complete even if some fail
-
-- **Default Branch Only**: Focus on the default branch where flaky tests have
-  the most impact
-
-- **Weekday Schedule**: The example runs Monday to Friday (`1-5`) to avoid
-  running when no changes are made on the code
-
-### Key Environment Variables
-
-- `MERGIFY_TOKEN`: Required for uploading test results to CI Insights
-- `RUN_COUNT`: Number of times to execute each test within a single job
+<DocsetGrid>
+  <Docset title="GitHub Actions"
+          path="/ci-insights/setup/github-actions#setting-up-flaky-test-detection" icon={SiGithubactions}>
+    Configure scheduled/matrix or looping runs and upload reports.
+  </Docset>
+</DocsetGrid>
 
 ## Interpreting Flaky Test Results
 
