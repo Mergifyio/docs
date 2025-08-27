@@ -87,7 +87,19 @@ const navItems: NavItem[] = [
       { title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: FaRotateRight },
       { title: 'Quarantine', path: '/ci-insights/quarantine', icon: FaRadiation },
       {
-        title: 'Test Frameworks',
+        title: 'CI Setup',
+        icon: FaGear,
+        children: [
+          {
+            title: 'GitHub Actions',
+            path: '/ci-insights/setup/github-actions',
+            icon: SiGithubactions,
+          },
+          { title: 'Jenkins', path: '/ci-insights/setup/jenkins', icon: SiJenkins },
+        ],
+      },
+      {
+        title: 'Test Frameworks Setup',
         path: '/ci-insights#test-framework-configuration',
         icon: GrTest,
         children: [
