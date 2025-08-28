@@ -231,6 +231,19 @@ detailed description of the problem and guidance on how to fix it. Be sure to
 address any errors or warnings to ensure optimal performance and avoid
 potential issues.
 
+### Validate Locally With Pre-Commit
+
+To catch issues before pushing, you can validate your configuration locally
+using [Mergify's pre-commit hook](https://github.com/Mergifyio/mergify-pre-commit). Add this to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/Mergifyio/mergify-pre-commit
+    rev: 1.0.0
+    hooks:
+      - id: validate-mergify-config
+```
+
 ### Troubleshooting
 
 If you encounter issues or unexpected behavior with your Mergify configuration
