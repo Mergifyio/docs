@@ -35,12 +35,20 @@ export const productCategory: Category = {
   title: 'Products',
   links: [
     {
-      text: 'Merge Protections',
-      href: 'https://mergify.com/product/merge-protections',
+      text: 'CI Insights',
+      href: 'https://mergify.com/product/ci-insights',
     },
     {
       text: 'Merge Queue',
       href: 'https://mergify.com/product/merge-queue',
+    },
+    {
+      text: 'Merge Protections',
+      href: 'https://mergify.com/product/merge-protections',
+    },
+    {
+      text: 'Workflow Automation',
+      href: 'https://mergify.com/product/workflow-automation',
     },
     {
       text: 'Pricing',
