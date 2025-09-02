@@ -60,6 +60,8 @@ The recommended approach is to use a scheduled workflow that runs your test
 suite multiple times on the default branch. Here's an example configuration
 that runs tests twice daily with 5 parallel executions:
 
+- Example with native integration (e.g. `pytest-mergify`)
+
 ```yaml
 name: Continuous Integration
 on:
@@ -86,12 +88,7 @@ jobs:
           set +e
           failed=0
           for i in $(seq "$RUN_COUNT"); do
-            # Replace this with your actual test command
-            # Examples:
-            # pytest tests/
-            # npm test
-            # go test ./...
-            your-test-command
+            pytest tests/
             exit_code=$?
             if [ $exit_code -ne 0 ]; then
               failed=1
@@ -99,6 +96,8 @@ jobs:
           done
           exit $failed
 ```
+
+- Examples with `mergify cli upload` integration
 
 ```yaml
 name: CI
