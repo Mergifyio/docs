@@ -163,7 +163,11 @@ pipeline {
 - **Weekday Schedule**: The example runs Monday to Friday (`1-5`) to avoid
   running when no changes are made on the code
 
+- **Job name**: Ensure the job name is the same as the one running tests on your pull request,
+  allowing CI-Insights to identify them. It can be overriden with `MERGIFY_JOB_NAME` if needed.
+
 ### Key Environment Variables
 
 - `MERGIFY_TOKEN`: Required for uploading test results to CI Insights
 - `RUN_COUNT`: Number of times to execute each test within a single job
+- `MERGIFY_JOB_NAME`: The job name reported to CI Insights
