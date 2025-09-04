@@ -66,7 +66,7 @@ export const communityCategory: Category = {
     },
     {
       text: 'Blog',
-      href: 'https://blog.mergify.com',
+      href: 'https://mergify.com/blog',
     },
     {
       text: 'Slack',
