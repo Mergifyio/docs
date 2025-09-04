@@ -61,3 +61,109 @@ import JobsScreenshot from "../../../images/ci-insights/jobs.png"
 
    <Image src={JobsScreenshot} alt="CI Insights Jobs" />
 
+## Setting Up Flaky Test Detection
+
+To effectively detect flaky tests, you need to run the same tests multiple
+times on the same code (identified by the SHA1 of the repository). This section
+explains how to set up your CI to systematically detect flaky tests.
+
+### Prerequisites
+
+Before setting up flaky test detection, ensure you have:
+
+1. Enabled [CI Insights](#enabling-ci-insights-for-jenkins) for your repository
+
+2. Set up your `MERGIFY_TOKEN` in Jenkins Credentials.
+
+3. Configured test integration (e.g., `pytest-mergify` or `mergify cli upload`)
+   for your test framework
+
+### Jenkins job Setup
+
+The recommended approach is to use a scheduled job that runs your test
+suite multiple times on the default branch. Here's an example configuration
+that runs tests twice daily with 5 parallel executions:
+
+- Example with native integration (e.g. `pytest-mergify`)
+
+```jenkins
+pipeline {
+  agent any
+  environment {
+      MERGIFY_TOKEN = credentials('MERGIFY_TOKEN')
+      RUN_COUNT = '5'
+  }
+  triggers {
+    cron('0 H/12 * * 1-5')  // Every 12 hours, Monday to Friday
+  }
+
+  stages {
+    stage('Test') {
+      steps {
+        sh '''
+          # Run your test suite multiple times to detect flakiness
+          set +e
+          failed=0
+          for i in $(seq "$RUN_COUNT"); do
+            pytest tests/
+            exit_code=$?
+            if [ $exit_code -ne 0 ]; then
+              failed=1
+            fi
+          done
+          exit $failed
+        '''
+      }
+    }
+  }
+}
+```
+
+- Examples with `mergify cli upload` integration
+
+```jenkins
+pipeline {
+  agent any
+  environment {
+      MERGIFY_TOKEN = credentials('MERGIFY_TOKEN')
+      RUN_COUNT = '5'
+  }
+  triggers {
+    cron('0 H/12 * * 1-5')  // Every 12 hours, Monday to Friday
+  }
+
+  stages {
+    stage('Test') {
+      steps {
+        sh '''
+          # Run your test suite multiple times to detect flakiness
+          set +e
+          for i in $(seq "$RUN_COUNT"); do
+            pytest tests/
+            # Run your test command with unique output file, e.g.:
+            # npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
+          done
+          set -e
+          mergify ci junit-process test-results-*.xml
+        '''
+      }
+    }
+  }
+}
+```
+
+### Configuration Tips
+
+- **Frequency**: Running twice daily (every 12 hours) provides a good balance
+  between detection accuracy and resource usage
+
+- **Default Branch Only**: Focus on the default branch where flaky tests have
+  the most impact
+
+- **Weekday Schedule**: The example runs Monday to Friday (`1-5`) to avoid
+  running when no changes are made on the code
+
+### Key Environment Variables
+
+- `MERGIFY_TOKEN`: Required for uploading test results to CI Insights
+- `RUN_COUNT`: Number of times to execute each test within a single job
