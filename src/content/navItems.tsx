@@ -61,7 +61,7 @@ import {
   SiVitest,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
-import { TbGitBranch, TbMessageX, TbPackages } from 'react-icons/tb';
+import { TbBulldozer, TbGitBranch, TbMessageX, TbPackages } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
 
 import { v5 } from 'uuid';
@@ -282,6 +282,15 @@ const navItems: NavItem[] = [
       { title: 'Dependabot', path: '/integrations/dependabot', icon: SiDependabot },
       { title: 'Renovate', path: '/integrations/renovate', icon: SiRenovate },
       { title: 'Snyk', path: '/integrations/snyk', icon: SiSnyk },
+    ],
+  },
+  {
+    title: 'Migrate to Mergify',
+    path: '/migrate',
+    icon: FaStairs,
+    children: [
+      { title: 'Overview', path: '/migrate', icon: FaRegLightbulb },
+      { title: 'From Bulldozer', path: '/migrate/bulldozer', icon: TbBulldozer },
     ],
   },
   { title: 'Stacks', path: '/stacks', icon: BsStack },
