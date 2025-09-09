@@ -1,0 +1,96 @@
+---
+title: Migrate from Bulldozer to Mergify
+description: Map Bulldozer configuration and behaviors to Mergify rules and merge queue.
+---
+
+[Bulldozer](https://github.com/palantir/bulldozer) focuses on automerging pull
+requests based on labels, reviews, and status checks. Mergify covers that and
+more, with a powerful rule engine and a production‑grade merge queue.
+
+This page shows a practical, minimal‑diff path to move from Bulldozer to
+Mergify.
+
+:::tip[Need help?]
+
+We’ve migrated many teams from Bulldozer. [Reach
+out](mailto:support@mergify.com) and we’ll review your Bulldozer configuration
+and propose an equivalent Mergify setup.
+
+:::
+
+## Typical Migration Plan
+
+1. Keep your labels and branch protections as‑is
+2. Translate Bulldozer settings to one or two Mergify rules
+3. Start with a dry‑run or low‑impact setup and expand gradually
+
+## Common Bulldozer config → Mergify
+
+Example Bulldozer snippet:
+
+```yaml
+merge:
+  trigger:
+    label: ["merge when ready"]
+    branch_patterns: ["feature/.*"]
+  method: squash
+  required_statuses:
+    - "ci/circleci: ete-tests"
+```
+
+Equivalent Mergify:
+
+```yaml title=.mergify.yml
+pull_request_rules:
+  - name: Automerge when ready
+    conditions:
+      - label = merge when ready
+      - head ~= ^feature/
+      - "check-success = ci/circleci: ete-tests"
+    actions:
+      merge:
+        method: squash
+```
+
+Notes:
+- Checks map to `check-success = <name>` (or `check-skipped`, `check-neutral`)
+- Required labels map to `label = <name>` conditions
+- Approvals map to review count or specific reviewers
+
+## Enabling the Merge Queue (optional but recommended)
+
+If you rely on Bulldozer plus manual rebases to keep PRs up‑to‑date, [Mergify’s
+Merge Queue](/merge-queue) removes that toil — with even more optimizations.
+
+Add a queue rule and switch to queueing instead of immediate merge:
+
+```yaml title=.mergify.yml
+queue_rules:
+  - name: default
+    autoqueue: true
+    queue_conditions:
+      - base = main
+      - check-success = ci
+```
+
+- The queue keeps PRs updated and merges them only after passing on the latest
+  version of the base branch
+
+- You can set [priorities](/merge-queue/priority),
+  [batches](/merge-queue/batches), and [parallel
+  checks](/merge-queue/parallel-checks) later
+
+## Feature parity quick table
+
+- Merge methods: squash/merge/rebase → supported
+
+- Delete branch after merge → [`delete_head_branch`
+  action](/workflow/actions/delete_head_branch)
+
+- Rebase/update before merge →
+  [`rebase`](/workflow/actions/rebase)/[`update`](/workflow/actions/update)
+  actions or merge queue `update_method`
+
+- Require labels → conditions `label = `
+
+- Restrict by authors/paths → conditions `author =`, `files ~=`, etc.
