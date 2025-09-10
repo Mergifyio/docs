@@ -81,6 +81,7 @@ jobs:
 
       - name: Run Tests
         env:
+          MERGIFY_TEST_FLAKY_DETECTION: "true"
           MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
           RUN_COUNT: 5  # Number of times to run each test
         run: |
@@ -135,6 +136,7 @@ jobs:
         if: always()
         uses: mergifyio/gha-mergify-ci@v6
         with:
+          flaky_test_detection: true
           token: ${{ secrets.MERGIFY_TOKEN }}
           report_path: test-results-*.xml
 ```
@@ -155,6 +157,7 @@ jobs:
 
 ### Key Environment Variables
 
+- `MERGIFY_TEST_FLAKY_DETECTION`: To tell CI Insights that flaky test detection is enabled
 - `MERGIFY_TOKEN`: Required for uploading test results to CI Insights
 - `RUN_COUNT`: Number of times to execute each test within a single job
 - `MERGIFY_JOB_NAME`: The job name reported to CI Insights
