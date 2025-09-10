@@ -1,0 +1,75 @@
+---
+title: Migrate from Bors‑NG to Mergify
+description: Map Bors‑NG try/staging queues and permissions to Mergify rules and Merge Queue.
+---
+import borsLogo from "../../images/migrate/bors/bors-logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={borsLogo} alt="Bors logo"/>
+
+Bors‑NG orchestrates a “try → staging → master” flow with batch testing and
+ordered merges. Mergify offers a production‑grade Merge Queue with similar
+guarantees plus flexible rules.
+
+:::tip[Need help?]
+
+We've migrated many teams from Bors‑NG. [Reach out](mailto:support@mergify.com)
+and we’ll review your Bors‑NG configuration and propose an equivalent Mergify
+setup.
+
+:::
+
+## Typical Migration Plan
+
+- Keep your branch protection and checks
+- Define one queue rule in `.mergify.yml`
+- Replace `bors r+` approvals with `@mergify queue` command
+
+## Concepts mapping
+
+- `bors r+` approval → `@mergify queue` command
+- batch size → Mergify batches with configurable size
+- priority → Mergify queue priorities
+
+## Minimal equivalent configuration
+
+Queue and rule that enqueue on approval and pass checks:
+
+```yaml title=.mergify.yml
+queue_rules:
+  - name: default
+    batch_size: 1
+    queue_conditions:
+      - base = main
+      - check-success = ci
+      - "#approved-reviews-by>=1"
+```
+
+:::tip
+Use `batch_size > 1` to emulate Bors batches.
+:::
+
+## Emulating “try” builds
+
+If you relied on `bors try` to validate speculative changes, you can keep a
+lightweight CI workflow triggered by a label or comment
+
+## Batches and priorities
+
+Increase throughput with batches and prioritize urgent PRs:
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size: 3
+    queue_conditions:
+      - base = main
+      - check-success = ci
+      - "#approved-reviews-by>=1"
+
+priority_rules:
+  - name: urgent
+    conditions:
+      - label = urgent
+    priority: high
+```

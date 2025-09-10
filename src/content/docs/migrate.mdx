@@ -6,6 +6,7 @@ description: Guides to migrate from popular tools and bots to Mergify.
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import { TbBulldozer } from 'react-icons/tb';
+import { BsRobot } from 'react-icons/bs';
 
 Thinking about switching? Pick your current tool below to see how to migrate to Mergify with minimal friction.
 
@@ -14,6 +15,9 @@ Thinking about switching? Pick your current tool below to see how to migrate to 
 <DocsetGrid>
 		<Docset title="Bulldozer" path="/migrate/bulldozer" icon={TbBulldozer}>
 		Move from Bulldozer’s automerge to Mergify rules and Merge Queue.
+	</Docset>
+	<Docset title="Bors‑NG" path="/migrate/bors-ng" icon={BsRobot}>
+		Replace Bors queues and try/staging flows with Mergify Merge Queue.
 	</Docset>
 </DocsetGrid>
 
