@@ -1,0 +1,135 @@
+---
+title: Migrate from GitHub Merge Queue to Mergify
+description: Technical mapping of GitHub Merge Queue concepts to Mergify with added capabilities.
+---
+import githubLogo from "../../images/integrations/github/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={githubLogo} alt="GitHub logo"/>
+
+GitHub's native Merge Queue ensures each PR is tested against the latest base
+before merging. Migrating to Mergify keeps that guarantee while adding
+fine‑grained policies, batching strategies, real CI efficiency insights, and
+queue observability (latency, throughput, bottlenecks) in one system.
+
+This guide shows a minimal, incremental migration—no rewrites, keep your branch
+protections and required checks exactly as they are.
+
+:::tip[Need help?]
+
+We've migrated many teams from GitHub Merge Queue. [Reach
+out](mailto:support@mergify.com) and we’ll review your GitHub configuration and
+propose an equivalent Mergify setup, plus quick wins (batching, priorities,
+etc).
+
+:::
+
+## When to move beyond GitHub Merge Queue
+
+Choose Mergify if you need any of:
+
+- Multiple queue policies (e.g., different batch sizes / update methods per
+  directory or label)
+
+- Conditional enqueue rules (labels, file globs, author, commit message, path
+  ownership)
+
+- Explicit priorities (interactive hotfix elevation)
+
+- Parallel speculative checks (reduce head‑of‑line blocking)
+
+- Batching by size / count with automatic fallback
+
+- Queue metrics: wait time, success ratio, batch efficiency, test amplification
+
+- Integrated workflow actions (label, rebase, backport, deployment gating)
+  without extra bots
+
+## Concept mapping
+
+While Mergify offers more features, here is a mapping of existing GitHub Merge
+Queue features:
+
+| GitHub Merge Queue | Mergify |
+| ------------------- | ------- |
+| Single queue per protected branch | One or more `queue_rules` with conditions |
+| Merge Group (= test head + base) | Batch / virtual merge reference |
+| Required status checks | `queue_conditions` using `check-success = <name>` |
+| Strict update before merge | `update_method` (merge/rebase) + automatic refresh |
+
+## Minimal equivalent configuration
+
+If today you rely on a protected `main` with a GitHub Merge Queue, there is no
+needed configuration. Mergify automatically injects your ruleset or branch
+protections into the queue system. Simply type [`@mergify
+queue`](/commands/queue) to queue a pull request.
+
+This reproduces the same invariant: every PR merged only after re‑validation on
+the latest `main`.
+
+## Batching & parallelism
+
+Increase throughput by validating multiple PRs together. Start conservatively:
+
+```yaml
+queue_rules:
+  - name: main
+    batch_size: 2
+```
+
+If a batch fails, Mergify automatically reduces scope and isolates the culprit
+PRs without manual intervention.
+
+## Priorities
+
+Enable urgent hotfix merges without draining the whole queue using
+[priorities](/merge-queue/priority):
+
+```yaml
+priority_rules:
+  - name: critical
+    conditions:
+      - label = hotfix
+    priority: high
+```
+
+Apply a `hotfix` label; those PRs jump ahead while fairness is preserved.
+
+## Observability & reporting
+
+Mergify exposes:
+
+- Queue length & wait time trends
+- Batch efficiency (merged PRs per CI cycle)
+- Flaky / slow check impact (integrates with CI Insights)
+- Per‑PR timeline: enqueue → validation start → merge
+
+Use this data to tune batch size, break down monolithic checks, or add
+two‑step CI (fast + full) to shorten average cycle time.
+
+## Incremental migration strategy
+
+1. If needed, add the `.mergify.yml` configuration file with a `queue_rules`
+   block (leave GitHub Merge Queue enabled)
+
+2. Queue a low‑risk PR using `@mergify queue`
+
+3. Compare timing & merge behavior
+
+4. Disable GitHub Merge Queue once satisfied and rely solely on Mergify
+
+5. Layer in batching, priorities, additional rules
+
+Rollback is trivial: toggle GitHub’s native queue back on; no destructive state.
+
+## FAQ
+
+**Does Mergify require removing branch protections?** No. Keep them; Mergify
+works with them. Just avoid duplicate required contexts (same check listed in
+both branch protection and queue conditions is fine—no double run).
+
+**Do I lose the merge squash/rebase options?** No. Configure `merge_method` per
+rule; you can still vary merge strategies across PR subsets.
+
+**Is there vendor lock‑in?** Config is a single YAML file; removal falls back
+to native GitHub behavior immediately.
