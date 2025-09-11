@@ -90,6 +90,7 @@ that runs tests twice daily with 5 parallel executions:
 pipeline {
   agent any
   environment {
+      MERGIFY_TEST_FLAKY_DETECTION = "true"
       MERGIFY_TOKEN = credentials('MERGIFY_TOKEN')
       RUN_COUNT = '5'
   }
@@ -125,6 +126,7 @@ pipeline {
 pipeline {
   agent any
   environment {
+      MERGIFY_TEST_FLAKY_DETECTION = "true"
       MERGIFY_TOKEN = credentials('MERGIFY_TOKEN')
       RUN_COUNT = '5'
   }
@@ -168,6 +170,7 @@ pipeline {
 
 ### Key Environment Variables
 
+- `MERGIFY_TEST_FLAKY_DETECTION`: To tell CI Insights that flaky test detection is enabled
 - `MERGIFY_TOKEN`: Required for uploading test results to CI Insights
 - `RUN_COUNT`: Number of times to execute each test within a single job
 - `MERGIFY_JOB_NAME`: The job name reported to CI Insights
