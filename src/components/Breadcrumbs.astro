@@ -105,6 +105,15 @@ if (matchedTrail.length >= 2) {
 		text-overflow: ellipsis;
 		overflow: hidden;
 	}
+	/* Let the final (current page) crumb show fully and wrap if needed */
+	.breadcrumbs li.current {
+		max-width: none;
+		white-space: normal;
+		overflow: visible;
+		text-overflow: unset;
+		/* Allow wrapping across lines while keeping inline separator layout */
+		display: inline; /* revert to inline so long titles wrap naturally */
+	}
 	/* Separator */
 	.breadcrumbs li + li:before {
 		content: '>';
