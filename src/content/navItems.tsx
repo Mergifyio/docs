@@ -292,6 +292,7 @@ const navItems: NavItem[] = [
       { title: 'Overview', path: '/migrate', icon: FaRegLightbulb },
       { title: 'From Bulldozer', path: '/migrate/bulldozer', icon: TbBulldozer },
       { title: 'From Bors‑NG', path: '/migrate/bors-ng', icon: BsRobot },
+      { title: 'From GitHub Merge Queue', path: '/migrate/github-merge-queue', icon: SiGithub },
     ],
   },
   { title: 'Stacks', path: '/stacks', icon: BsStack },

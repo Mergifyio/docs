@@ -7,6 +7,7 @@ import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import { TbBulldozer } from 'react-icons/tb';
 import { BsRobot } from 'react-icons/bs';
+import { SiGithub } from 'react-icons/si';
 
 Thinking about switching? Pick your current tool below to see how to migrate to Mergify with minimal friction.
 
@@ -18,6 +19,9 @@ Thinking about switching? Pick your current tool below to see how to migrate to 
 	</Docset>
 	<Docset title="Bors‑NG" path="/migrate/bors-ng" icon={BsRobot}>
 		Replace Bors queues and try/staging flows with Mergify Merge Queue.
+	</Docset>
+	<Docset title="GitHub Merge Queue" path="/migrate/github-merge-queue" icon={SiGithub}>
+		Extend GitHub Merge Queue with automation, batching & observability.
 	</Docset>
 </DocsetGrid>
 
