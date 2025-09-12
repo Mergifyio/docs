@@ -21,21 +21,26 @@ export const { getStaticPaths, GET } = OGImageRoute({
         path: './src/logo-mergify-black.png',
         size: [250],
       },
+      // Use a subtle grayscale background to complement the black logo
       bgGradient: [
-        [129, 192, 228],
-        [82, 169, 218],
+        [245, 245, 245],
+        [220, 220, 220],
       ],
       font: {
         title: {
           size: 78,
           families: ['Source Sans Pro'],
           weight: 'ExtraBold',
+          // Black text for readability on the light gray background
+          color: [0, 0, 0],
         },
         description: {
           size: 45,
           lineHeight: 1.25,
           families: ['Source Sans Pro'],
           weight: 'Normal',
+          // Black text for readability on the light gray background
+          color: [0, 0, 0],
         },
       },
       fonts: [
