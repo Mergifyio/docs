@@ -49,9 +49,10 @@ exit() { slack_message "*Deployment (${CF_PAGES_BRANCH}/${CF_PAGES_COMMIT_SHA}/$
 conclusion="failure" emoji="💥"
 trap exit EXIT
 
-
-if [[ ${CF_PAGES_BRANCH} == preview/* ]]; then
-    export SITE_URL="$CF_PAGES_URL"
+# For any non-main branch, use the Cloudflare preview URL as SITE_URL so absolute links (canonical, og:image, etc.)
+# point to the correct preview host instead of the production domain.
+if [[ ${CF_PAGES_BRANCH} != main && -n "$CF_PAGES_URL" ]]; then
+  export SITE_URL="$CF_PAGES_URL"
 fi
 
 astro build 2>&1 | tee -a build.log
