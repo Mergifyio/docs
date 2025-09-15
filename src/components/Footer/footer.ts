@@ -24,10 +24,6 @@ export const companyCategory: Category = {
       text: 'Customers',
       href: 'https://mergify.com/customers',
     },
-    {
-      text: 'Media Kit',
-      href: 'https://pitch.com/public/e6899bfc-fbc7-4172-8aef-a85d31778646',
-    },
   ],
 };
 
