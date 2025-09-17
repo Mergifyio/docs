@@ -74,7 +74,7 @@
     "@scalar/api-reference": "^1.35.6",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
-    "@types/uuid": "^10.0.0",
+    "@types/uuid": "^11.0.0",
     "@viz-js/viz": "^3.17.0",
     "algoliasearch": "^5.37.0",
     "canvas-confetti": "^1.9.3",
