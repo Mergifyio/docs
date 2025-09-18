@@ -69,7 +69,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/ibm-plex-mono": "^5.2.6",
-    "@fontsource/poppins": "^5.2.6",
+    "@fontsource/poppins": "^5.2.7",
     "@nanostores/react": "^1.0.0",
     "@scalar/api-reference": "^1.35.6",
     "@types/react": "^19.1.13",
