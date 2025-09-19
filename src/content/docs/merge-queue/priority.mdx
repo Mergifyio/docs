@@ -5,12 +5,6 @@ description: Learn how to order your pull requests in the queue by priority.
 
 import OptionsTable from '../../../components/Tables/OptionsTable';
 
-In the realm of software development, the ability to effectively prioritize
-tasks is a critical skill that can greatly improve efficiency and productivity.
-When dealing with multiple pull requests, it becomes imperative to properly
-prioritize them to ensure a smooth and efficient merging process. That's where
-Mergify's priority rules come into play.
-
 Priority rules are an optional but highly useful feature in Mergify's arsenal.
 They offer you a more refined control over how your pull requests are ordered
 within a queue. By applying these rules, you can assign priorities to pull
@@ -33,8 +27,8 @@ one will be used.
 
 :::note
 
-  If no priority rules matches, Mergify assignes the `medium` priority to a
-  pull request. This is the default and is not configurable.
+  If no priority rules matches, Mergify assigns the `medium` priority to a
+  pull request. This is not configurable.
 
 :::
 
@@ -56,7 +50,7 @@ In the above configuration:
 
 - Two priority rules, `high priority` and `low priority`, are defined.
 
-- Each rule contains conditions (`label=urgent` and `label=refactor`,
+- Each rule contains conditions (`label = urgent` and `label = refactor`,
   respectively) which, if met, apply a certain priority to the pull request
   (`high` or `low`). Pull requests that match no priority rules get assigned to
   `medium` priority.
@@ -119,9 +113,8 @@ The textual priorities have the following numerical values:
 
 The `allow_checks_interruption` option plays a critical role in managing the
 sequence of pull requests within the merge queue. When set to `true`, which is
-the default setting, this option allows the interruption of ongoing [parallel
-checks](/merge-queue/parallel-checks) if a pull request with higher priority
-enters the queue.
+the default setting, this option allows the interruption of ongoing checks if a
+pull request with higher priority enters the queue.
 
 In practice, this means that if a high priority pull request is added to the
 queue, Mergify can stop the checks on the current pull request in order to
@@ -153,11 +146,11 @@ priority_rules:
     priority: low
 ```
 
-In this configuration, `allow_checks_interruption` is set to `false` for the `urgent` priority.
-This means if a pull request with the `urgent` label (which has a higher priority)
-enters the queue, it will not interrupt the checks running on a pull request
-with the `normal` label. Instead, it will wait for the `normal` pull request's
-checks to complete before starting its own checks.
+In this configuration, `allow_checks_interruption` is set to `false` for the
+`urgent` priority. This means if a pull request with the `urgent` label (which
+has a higher priority) enters the queue, it will not interrupt the checks
+running on a pull request with the `normal` label. Instead, it will wait for
+the `normal` pull request's checks to complete before starting its own checks.
 
 ## Advanced Priority Rule Usage
 
