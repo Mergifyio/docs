@@ -7,112 +7,55 @@ import { Image } from "astro:assets"
 import queueCommandScreenshot from "../../images/merge-queue/setup/queue-command.png"
 import queueStatusScreenshot from "../../images/merge-queue/setup/queue-status.png"
 
-Mergify's Merge Queue is a powerful feature that helps you streamline and
-manage your pull request (PR) merging process more efficiently.
+Mergify’s Merge Queue automates and secures your PR merging process. It ensures
+each PR meets all conditions (status checks, branch rules, reviews, etc.)
+before merging, so your main branch stays stable — without manual tracking or
+coordination.
 
-The Merge Queue works by ensuring each PR meets all defined conditions before
-it's merged. It checks for PR status, branch conditions, approval reviews, and
-other set criteria, ensuring that your main branch is always stable and free of
-bugs that might occur due to unreviewed code. Furthermore, by managing PRs
-queue, Mergify eliminates the need for manual tracking and merging, freeing up
-your team to focus on what's essential — building quality software.
-
-In this guide, we'll walk you through the process of setting up your first
-Merge Queue, explain how to add PRs to it, and show you how to configure the
-conditions that the PRs must meet before being merged. Whether you're new to
-Mergify or looking to make your process more efficient, this guide will give
-you the knowledge you need to leverage the power of Merge Queue.
-
-## Understanding the Default Merge Queue
-
-Mergify provides a default merge queue named `default` for every repository as
-soon as you set up Mergify. This queue works out-of-the-box and uses your
-repository's [branch protection
-settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
-defined in GitHub.
-
-For instance, if you have branch protection rules that require passing CI
-checks before merging, the `default` merge queue respects these rules. It means
-Mergify will only merge pull requests that pass these checks and are in the
-`default` queue.
-
-Understanding this default queue is essential as it forms the basis of how
-Mergify handles your pull requests, ensuring a streamlined and orderly merge
-process.
-
+:::note
 For more details about merge queues and their functions, you can refer to our
 [merge queue introduction](./).
+:::
 
-## Configuring the Merge Queue Rules
+## Default Merge Queue
 
-To have a more refined control over the PRs entering the merge queue and when
-they get merged, you can set up `queue_rules` in your Mergify configuration
-file. These two constructs allow you to define custom conditions that should be
-met before a PR is added to the queue (`queue_conditions`) and when it can be
-merged (`merge_conditions`).
-
-Here is an example of how you can use `queue_rules`:
-
-```yaml
-queue_rules:
-  - name: default
-    queue_conditions:
-      - check-success = mycijob
-      - "#approved-reviews-by >= 1"
-```
-
-In this example, a PR can enter the `default` queue when the CI named `mycijob`
-has passed, and if the pull request has been approved by at least one
-contributor. If that's the not the case, the PR won't get queued.
-
-The default for Mergify is to allow any PR to be queued.
-
-The `merge_conditions` defines the condition required to get a PR merged once
-it has entered the queue. Mergify injects all [branch protection
+Every repo connected to Mergify gets a queue automatically. By default, it
+respects your GitHub [branch protection
 settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
-defined by GitHub, so there's no need to repeat them. You can however, add more
-if you want, or only rely on Mergify for setting up those conditions:
-
-```yaml
-queue_rules:
-  - name: default
-    queue_conditions:
-      - check-success = mycijob
-      - "#approved-reviews-by >= 1"
-    merge_conditions:
-      - check-success = mycijob-extra
-```
-
-If a PR stops matching its `queue_conditions`, it will be removed from the
-queue. That means there is no need to repeat the `queue_conditions` in the
-`merge_conditions` as they are implicit.
+and
+[rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets).
 
 ## Adding a Pull Request to the Merge Queue
 
-Once you have your merge queue rules set up, you can manually add a PR to the
-merge queue. To do this, use [the `queue` command](/commands/queue). This will
-add your PR to the specified merge queue, or to the merge queue matching the
-right `queue_conditions`.
+To add a pull request to the merge queue, use [the `queue`
+command](/commands/queue). This adds your PR to the merge queue as long as it
+matches the queue conditions.
 
 <Image src={queueCommandScreenshot} alt="Mergify queue command" />
 
 Remember, the PR will only be merged once the conditions defined in the
 `merge_conditions` field are met.
 
-If you prefer, you can ask Mergify to automatically queue pull requests that
-are ready using workflow automation.
+You can also [configure Mergify to automatically queue pull requests that are
+ready](rules/#autoqueueing-pull-requests).
 
-{/* FIXME: add how to do this. */}
+## Configuring the Merge Queue Rules
+
+To have a more refined control over the PRs entering the merge queue and when
+they get merged, you can configure multiple queue rules in your Mergify
+configuration file. This allows to define custom conditions that should be met
+before a PR is added to the queue (`queue_conditions`) and when it can be
+merged (`merge_conditions`).
+
+See [queue rules](rules/).
 
 ## Monitoring Your Merge Queue
 
-After you've added Pull Requests to your merge queue, you will want to monitor
-its status to understand the progression of your PRs. This can be done directly
-from the Mergify dashboard. In the "Repository" section, you will see a "Merge
-Queue" tab. Clicking on it will show you the current state of your merge
-queue.
+After you've added pull requests to your merge queue, you want to monitor its
+status to understand the progression of your PRs. This can be done directly
+from the [Mergify dashboard](http://dashboard.mergify.com).
 
-<Image src={queueStatusScreenshot} alt="Mergify queue status" />
+<Image src={queueStatusScreenshot} alt="Mergify Queue Status" />
 
 Here, you can view all the PRs in the queue and their current statuses. PRs
 that are waiting for their `merge_conditions` to be met are marked as pending,

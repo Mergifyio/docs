@@ -3,65 +3,75 @@ title: Using Queue Rules
 description: Learn how to implement queue rules and route your pull requests.
 ---
 
+import OptionsTable from '../../../components/Tables/OptionsTable';
+
 In larger projects with a high volume of pull requests, managing merges can
-become a complex task. This is where Mergify's multiple queue rules feature can
-be a game-changer. It enables you to have finer control over the merge process
-by categorizing pull requests based on any criteria you define.
+become complex. This is where **Mergify's multiple queue rules** feature
+becomes a game-changer: it enables you to have finer control over the merge
+process by categorizing pull requests based on any criteria you define.
 
-Queue rules allow you to organize your pull requests merge process into
-separate templates, each with its own merge configuration.
+Queue rules let you organize your PR merge process into separate templates,
+each with its own merge configuration.
 
-## Understanding Queue Rules
+With queue rules, you can:
 
-Mergify's queue rules system is a powerful tool for managing a large number of
-pull requests. In essence, it allows you to create different merge processes,
-each with its unique configuration.
+- Define multiple queues for different categories of PRs (e.g. dependencies vs.
+  features).
+
+- Control merge methods (merge, squash, rebase) per queue.
+
+- Adjust batching behavior (batch size, max wait time).
+
+- Apply custom conditions for queuing and merging (labels, branch targets, CI
+  checks, file paths, etc.).
+
+- Use autoqueue to automatically add matching PRs to the right queue.
 
 ## Configuring Queue Rules
 
-Multiple queue rules in Mergify can be configured using the `queue_rules`
-configuration in your YAML configuration file. Each queue rule should be
-identified by a unique name and can have different configurations. Here is a
-step-by-step guide on how to set up multiple queue rules and some configuration
-options that you can use.
-
-1. **Define Your Queue Rules**: Start by identifying the different queue rules
-   you need. This could be based on your project's requirements, the type of
-   pull requests, or the teams working on them. Write your
-   [`queue_conditions`](/merge-queue/lifecycle#adding-a-pull-request-to-the-merge-queue)
-   accordingly.
+Multiple queue rules are defined under the `queue_rules` key in your
+configuration file. Each rule needs a unique `name` and can have different
+configurations.
 
 ```yaml
 queue_rules:
   - name: urgent
-    # This can be queued before CI finishes its first run if the PR has the urgent label
+    # Can be queued early if the PR has the urgent label
     queue_conditions:
       - label = urgent
-    # We still want the CI to pass to merge the PR
+    # Still requires CI to pass before merge
     merge_conditions:
       - check-success = myci
-  - name: standard
-    # CI is needed for queueing and merging the PR
+
+  - name: default
+    # Requires CI both for queueing and merging
     queue_conditions:
       - check-success = myci
 ```
 
-   In this example, pull requests with the `urgent` label will be queued using
-   the `urgent` queue rule before the first CI even finished, making sure the
-   PR is updated and scheduled as soon as possible.
+## Configuration Options
 
-2. **Configure Each Queue Rule**: For each queue rule, you can specify
-   different configurations like `batch_size`.
+The top-level key `queue_rules` allows you to define the rules that reign over
+your [merge queue](/merge-queue).
 
-```yaml
-queue_rules:
-  - name: urgent
-    ...
-    batch_size: 2
-  - name: standard
-    ...
-    batch_size: 5
-```
+Here are all the available fields you can configure for a queue rule:
+
+<OptionsTable def="QueueRuleModel" />
+
+## Queue vs. Merge Conditions
+
+- **`queue_conditions`** → Requirements for a PR to be *accepted into the
+  queue*. Example: a label, a CI check, or a branch filter.
+
+- **`merge_conditions`** → Requirements for a PR to be *merged once it reaches
+  the front of the queue*. Example: all CI checks passed, required approvals.
+
+This separation lets you schedule PRs early (e.g. based on labels) while still
+enforcing stricter checks before merge. This can be used to implement [two-step
+CI](two-step).
+
+You can find more details about the [lifecycle of pull request in the
+documentation](/merge-queue/lifecycle#lifecycle-of-a-pull-request-in-the-merge-queue).
 
 ## Auto‑Queueing Pull Requests
 
