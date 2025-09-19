@@ -16,45 +16,46 @@ guide dives deep into how you can tune your merge queue to strike the right
 balance, ensuring a fast, cost-efficient, and reliable merging process tailored
 to your team's needs.
 
-### The Trade-offs: Reliability, Cheapness, and Velocity (RCV Theorem)
+### The Trade-offs: Reliability, Cost, and Velocity (RCV Theorem)
 
 Before making any decision in configuring your merge queue, you need to
 understand the trade-off that needs to be done. In the world of merging, three
 critical properties influence the effectiveness of a merge queue:
 
 1. **Reliability:** Ensure merges are accurate and won't cause issues.
-2. **Cheapness:** Minimize the number of CI jobs executed.
-3. **Velocity:** Increase throughput and decrease latency.
+2. **Cost:** The number of CI jobs executed.
+3. **Velocity:** Throughput and latency of your merges.
 
 Similar to the [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) for
 data stores, you can only optimize two of these properties simultaneously. This
-is what we term the **RCV Theorem**.
+is what we term the **RCV theorem**.
 
 <figure style={{ maxWidth: '66%', margin: 'auto' }}>
-   <Image src={rcvDiagram} alt="RCV Theorem"/>
+   <Image src={rcvDiagram} alt="RCV theorem"/>
 </figure>
 
-Based on this trade-off, there are 3 scenarios that you can choose from:
+Based on this trade-off, there are 3 scenarios that you can optimize for:
 
-- **Reliable and Cheap:** This is the standard behavior, where each pull
-  request is validated sequentially, ensuring reliability at a minimal CI cost.
-  As every pull request is tested one after the other, there is no room for
-  wasted CI time. However, this scenario is slow as only one PR is tested at a
-  time.
-
-- **Reliable and Fast:** If you aim to reduce latency and maximize throughput
-  without considering CI costs, enable **[parallel speculative
+- **Reliability and Velocity:** This is the standard behavior.
+  This aims to reduce latency and maximize throughput without considering CI
+  costs by enabling **[parallel speculative
   checks](/merge-queue/parallel-checks)**. This feature lets Mergify test pull
   requests in parallel, predicting potential merges and executing CI runs
   simultaneously. Parallel checks can slightly increase CI cost: there might be
   certain scenarios that are tested and whose results won't be used if a pull
   request ahead in the queue fails.
 
-- **Cheap and Fast:** By using [batch mode](/merge-queue/batches), you can merge
-  groups of pull requests simultaneously. This reduces CI runs but merges pull
-  request that are not tested individually. There is therefore a theoretical
-  risk than a hidden failure is merged, while the whole batch passes the CI.
-  
+- **Reliability and Cost:** In that case, each pull request is validated
+  sequentially, ensuring reliability at a minimal CI cost. As every pull
+  request is tested one after the other, there is no room for wasted CI time.
+  However, this scenario is slow as only one PR is tested at a time.
+
+- **Velocity and Cost:** By using [batch mode](/merge-queue/batches), you can
+  merge groups of pull requests simultaneously. This reduces CI runs but merges
+  pull request that are not tested individually. There is therefore a
+  theoretical risk that a hidden failure is merged, while the whole batch
+  passes the CI.
+
 You can also combine parallel speculative checks and batching to achieve a
 balanced approach between reliability, cheapness, and velocity. This
 configuration offers a mix of both strategies, allowing you to test multiple
@@ -124,8 +125,8 @@ optimal settings tailored to your team's workflow. Here's how to use it:
    Integration to validate a change.
 
 2. **Estimated CI success ratio in %**: Provide an estimate of how often your
-   CI process returns a successful result. For instance, if your CI passes 90
-   out of 100 times on average, you'd input 90%.
+   CI process returns a successful result. For instance, if your CI passes 95
+   out of 100 times on average, you'd input 95%.
 
 3. **Desired PRs to merge per hour**: Set your target for how many pull
    requests you'd like to merge within an hour at minimum.
@@ -142,6 +143,7 @@ configuration for your merge queue, ensuring an efficient and seamless merging
 process.
 
 <MergeQueueCalculator client:only="react"/>
+
 :::note
   - This calculator optimizes CI usage and throughput but not latency. 
     If you want to further optimize latency, you need to increase 
