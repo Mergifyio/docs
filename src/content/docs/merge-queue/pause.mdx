@@ -21,8 +21,8 @@ When you pause the merge queue:
    organized and ready for when operations resume.
 
 3. **Stops Scheduling and Actions**: After pausing the merge queue, Mergify
-   will not schedule new checks, update, or merge pull requests. Pull requests
-   can enter the queue but won't be acted upon.
+   will not schedule new checks or merge pull requests. Pull requests can enter
+   the queue but won't be acted upon.
 
 4. **Cancel Running Checks**: As soon as the queue is paused, Mergify cancels
    any running checks and waits for the queue to be resumed.
@@ -40,8 +40,7 @@ the queue.
 ### Using the API
 
 You can also pause the merge queue programmatically using the [Mergify
-API](/api-usage). For detailed steps on how to achieve this, refer to our API
-documentation.
+API](/api-usage).
 
 ## Typical Use Cases
 
@@ -55,8 +54,8 @@ the merge queue.
 ### Non-CI Incidents
 
 If an incident is unrelated to the CI, like a production issue, but you wish to
-halt merging while allowing checks to run, then the [scheduled freeze feature](/merge-protections/#scheduling-freezes)
-is a more suitable choice.
+halt merging while allowing checks to run, then the [scheduled freeze
+feature](/merge-protections/#scheduling-freezes) is a more suitable choice.
 
 ## Benefits of Using the Pause Feature
 
