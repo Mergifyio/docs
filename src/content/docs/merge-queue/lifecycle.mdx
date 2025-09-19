@@ -22,33 +22,23 @@ scenarios such as requeueing and dequeueing PRs.
 
 ## Adding a Pull Request to the Merge Queue
 
-A pull request can be added to the merge queue either manually or through a
-pull request rule using Mergify's workflow automation. Here's an overview of
-the process:
+A pull request can be added to the merge queue either manually or
+automatically. Here's an overview of the process:
 
-1. **Manual addition:** A pull request can be manually added to the merge queue
+- **Manual addition:** A pull request can be manually added to the merge queue
    using the [`@mergifyio queue` command](/commands/queue).
 
-2. **Automated addition:** A pull request can also be [automatically added to
-   the merge queue](/workflow/automerge#automatic-merge-and-queues) based on
-   the rules defined in the `pull_request_rules` section of your [Mergify
-   configuration file](/configuration/file-format#pull-request-rules).
+- **Automated addition:** A pull request can also be [automatically added to
+   the merge queue](/merge-queue/rules/#autoqueueing-pull-requests).
 
-3. **Meeting queue conditions:** Before a pull request can be added to the
-   merge queue, it must meet certain conditions, specified under
-   `queue_conditions` in your `queue_rules`. These conditions might include
-   requirements such as passing all checks, having a certain number of approved
-   reviews, or having specific labels.
+Before a pull request can be added to the merge queue, it must meet certain
+conditions, specified under `queue_conditions` in your [`queue_rules`](rules).
+These conditions might include requirements such as passing all checks, having
+a certain number of approved reviews, or having specific labels.
 
-4. **Entering the queue:** Once a pull request meets the specified queue
-   conditions, it is added to the end of the merge queue. However, [priority
-   rules](/merge-queue/priority) can be used to alter its position in the queue.
-
-Please note that, by default, only one pull request is processed at a time to
-ensure that each pull request is tested against the most recent state of the
-base branch. You can test multiple pull requests at once by using
-[batches](/merge-queue/batches) or in advance by using [parallel
-checks](/merge-queue/parallel-checks).
+Once a pull request meets the specified queue conditions, it is added to the
+end of the merge queue. However, [priority rules](/merge-queue/priority) can be
+used to alter its position in the queue.
 
 ```dot class="graph"
 strict digraph {
@@ -57,10 +47,10 @@ strict digraph {
     node [style=filled, shape=circle, fontcolor="black", fontname="sans-serif";];
     edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
 
-    Dequeued -> Queueing [label="    `queue` or `requeue`    \n    command or action    "];
+    Dequeued -> Queueing [label="    `queue` or `requeue`    \n    command or autoqueue    "];
     Queueing -> Queued [label="Matches\n`queue_conditions`"];
 
-    Queued -> Dequeued [label="Unmatches\n    `queue_conditions`   \nor\n `dequeue` command    "]
+    Queued -> Dequeued [label="    Unmatches\n    `queue_conditions`   \nor\n    `dequeue` command    "]
     Queued -> Validating [label="Reaches\n    top of the queue    "]
     Validating -> Merged [label="Matches\n    `merge_conditions`    "];
     Validating -> Dequeued [label="Unmatches\n    `queue_conditions` \nor\n    `dequeue` command     \nor\nfails to match\n`merge_conditions`"];
@@ -89,10 +79,10 @@ the queue.
 
 3. **Validating the pull request:** When a pull request is next in line, it
    enters the validation phase. During this phase, the Mergify engine will
-   update it with the base branch. But before the actual merge happens, it will
-   check that the `merge_conditions` specified in the configuration file are
-   satisfied. This ensures that only pull requests that meet the necessary
-   conditions are merged.
+   temporarily merge it with the base branch, re-triggering the CI system.
+   Before the actual merge happens, it will check that the `merge_conditions`
+   specified in the configuration file are satisfied. This ensures that only
+   pull requests that meet the necessary conditions are merged.
 
 4. **Merge success or failure:**
 
@@ -101,47 +91,11 @@ the queue.
 
    - If the merge is not successful, the pull request is removed from the
      queue. This could be due to various reasons, such as conflicts with the
-     base branch or failure of some checks.
-
-Remember that while a pull request is in the queue, its status and position can
-be monitored, and if necessary, it can be manually requeued or dequeued — which
-we will explore in the following sections.
-
-## Validation Checks and Updates
-
-When a pull request enters the merge queue, Mergify performs a series of
-validation checks to ensure that the pull request is ready to be merged. These
-checks are based on the `merge_conditions` specified in the [Mergify
-configuration file](/configuration/file-format). The checks can include
-verifying that required reviews are complete, certain labels are applied, the
-build is successful, or any custom conditions that you've specified.
-
-Before validating any of the `merge_conditions`, Mergify will update the pull
-request with the latest changes from the base branch before attempting to
-merge. This is done to ensure that the pull request is always up-to-date with
-the base branch and that the merging will not introduce any conflicts. Mergify
-uses the `update` action to achieve this by default, merging the base branch in
-the pull request. You can change this behavior using [the `update_method`
-option](/configuration/file-format#queue-rules).
-
-If the pull request cannot be updated due to conflicts that can't be resolved
-automatically, it will be removed from the queue, and you will be notified to
-manually resolve the conflicts and requeue the pull request.
-
-In case any of the `queue_conditions` stop being true during the update,
-Mergify will also stop the merge process. For example, if a new commit is
-pushed to the base branch that makes a test on the pull request fail, the pull
-request would be removed from the queue. In such situations, the issues need to
-be addressed and the pull request has to be requeued once all checks pass
-again.
-
-This process ensures that your codebase is kept clean and that only fully
-validated and up-to-date pull requests make it to your main branch.
+     base branch or a check failure.
 
 ## Removing a Pull Request from the Merge Queue
 
-A pull request can be removed or "dequeued" from the merge queue in a couple of
-ways:
+A pull request can be removed from the merge queue in a couple of ways:
 
 1. **Non-compliance with `queue_conditions`:** If a pull request no longer
    meets the `queue_conditions` specified in the Mergify configuration file,
@@ -157,7 +111,7 @@ ways:
 
 Please note, a pull request removed from the queue with the `dequeue` command
 will not rejoin the queue automatically — it will need to be manually re-added
-to the queue, either by re-applying the `queue` command or by re-satisfying the
+to the queue by re-applying the `queue` command and by re-satisfying the
 `queue_conditions`.
 
 These methods provide granular control over your merge queue, ensuring that
@@ -201,28 +155,28 @@ every pull request is ready to be merged when it's time.
 At times, you might find it necessary to requeue a pull request. This could
 happen when a pull request is removed from the queue because it failed to meet
 the `merge_conditions` of the queue it was in. This typically happens when a
-check failed because a flaky test; the PR is
-removed from the queue whereas it might have been mergeable.
+check failed because a flaky test; the PR is removed from the queue whereas it
+might have been mergeable.
 
 In that case, the PR might be re-added to the merge queue to try again by
-triggering the
-`@mergifyio requeue` command, which will reset its status to a neutral state so
-Mergify is happy to retry it.
-
-To requeue a pull request, you can use the `@mergifyio requeue` command in the
-pull request conversation. Once issued, the command will place the pull request
-back in the merge queue according to the queue's `queue_conditions`.
-
-On the other hand, if you manually dequeued a pull request using the
-`@mergifyio dequeue`
-command, you will need to use the `@mergifyio queue` command to put back the PR
-in a queue matching its `queue_conditions`.
+triggering the `@mergifyio requeue` command, which will reset its status to a
+neutral state so Mergify is happy to retry it. Once issued, the command will
+place the pull request back in the merge queue according to the queue's
+`queue_conditions`.
 
 ## Base Branch Updates
 
 The merge queue tests pull requests against the latest version of the base
-branch. Therefore, if a new commit is pushed to the base branch, Mergify resets
-the process and starts over with the updated base branch.
+branch. Therefore, if a new commit is pushed manually to the base branch,
+Mergify resets the process and starts over with the updated base branch.
+
+This can be disabled by setting `reset_on_external_merge: never` in your
+configuration file:
+
+```yaml
+merge_queue:
+  reset_on_external_merge: never
+```
 
 ## Monitoring the Status of PRs in the Merge Queue
 
