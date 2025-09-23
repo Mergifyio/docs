@@ -75,7 +75,7 @@ export default function SearchBar() {
           !!active &&
           (active.tagName === 'INPUT' ||
             active.tagName === 'TEXTAREA' ||
-            (active as HTMLElement).isContentEditable === true);
+            active.isContentEditable === true);
         if (!isTypingTarget) {
           e.preventDefault();
           openModal();
