@@ -4,192 +4,134 @@ description: Accelerates the merging process by testing the compatibility of mul
 ---
 
 import { Image } from "astro:assets"
-import specChecksDetailsScreenshot from "../../images/merge-queue/parallel-checks/spec-checks-details.png"
 import specChecksListScreenshot from "../../images/merge-queue/parallel-checks/spec-checks-list.png"
 
-In the context of software development, waiting for pull requests (PRs) to
-merge one after another can be time-consuming, especially when each one needs
-to pass through continuous integration (CI) pipelines. This is where
-**Parallel Checks** come into play.
-
-Parallel checks, as part of Mergify's queuing feature, facilitate the
-simultaneous testing of multiple PRs to speed up the merging process. They test
-a set of PRs together to ensure compatibility before committing them to the
-main branch.
-
-At its core, parallel checks aim to hasten the PR merging process by
-proactively identifying potential merge conflicts or test failures, thereby
-saving valuable development time. This introduction will guide you in grasping
-the concept of parallel checks, their functionality, and the optimal way to
-set them up.
+Parallel Checks let Mergify test multiple queued pull requests together so you
+ship faster. Mergify creates temporary draft PRs that represent cumulative
+merges (PR#1), (PR#1+PR#2), (PR#1+PR#2+PR#3), runs CI on them in parallel, then
+merges the original PRs once checks pass.
 
 ## How Parallel Checks Work
 
-The parallel checks functionality operates by grouping multiple pull requests
-together based on their order in the queue and the `max_parallel_checks` value
-set in your Mergify configuration file. These PRs are then tested together in a
-speculative manner, meaning they are combined and tested as if they were going
-to be merged.
+Mergify groups PRs by their position in the queue and the `max_parallel_checks`
+value. It creates draft PRs that speculatively combine changes and runs your CI
+on each in parallel. For example, with PR #1–#5 and `max_parallel_checks: 3`,
+Mergify creates:
 
-Consider a situation where you have 5 pull requests (PR #1 to PR #5) and
-`max_parallel_checks` is set to 3. In this case, Mergify would create three
-temporary PRs:
-
-- Temporary PR #1: Combines PR #1
-- Temporary PR #2: Combines PR #1 and PR #2
-- Temporary PR #3: Combines PR #1, PR #2, and PR #3
+- Draft #1: PR #1
+- Draft #2: PR #1 + PR #2
+- Draft #3: PR #1 + PR #2 + PR #3
 
 ```dot class="graph"
 strict digraph g {
-    rankdir="LR"
-    node [group="pr", shape=box, style="rounded,filled", fillcolor="#53A9DB", fillcolor="#28A744", fontcolor=white, fontname="sans-serif"]
-    edge [fontname="sans-serif", arrowhead=inv];
-    fontname="sans-serif";
+  rankdir=LR;
+  fontname="sans-serif";
+  fontsize=10;
+  nodesep=0.4;
+  ranksep=0.6;
 
-    subgraph cluster_mergequeue {
-        label = "Merge Queue"
-        style="filled,rounded,striped"
-        fillcolor="#C9E7F8:#2A6F96"
-        fontcolor=white
-        fontsize="9pt"
+  // Default styles
+  node [shape=box, style="rounded,filled", fillcolor="#6B7280", fontcolor=white, fontname="sans-serif", margin="0.2,0.1"]
+  edge [color="#374151", arrowsize=0.6, penwidth=1.2, fontname="sans-serif"];
 
-        subgraph cluster_specmerge {
-            label="Speculative Merge"
-            style="rounded,filled"
-            fillcolor="#53A9DB"
-            fontcolor=white
-            fontsize="9pt"
-            pr1 [label="PR #1"]
-            pr2 [label="PR #2"]
-            pr3 [label="PR #3"]
-            pr1 -> pr2;
-            pr2 -> pr3;
-        }
+  subgraph cluster_mergequeue {
+    label = "Merge Queue";
+    style="rounded,filled";
+    fillcolor="#1CB893";
+    color="#00000";
+    fontcolor="#000000";
+    fontsize=10;
 
-        pr4 [label="PR #4"]
-        pr5 [label="PR #5"]
-        pr3 ->pr4;
-        pr4 ->pr5;
+    subgraph cluster_specmerge {
+      label="Currently tested (in parallel)";
+      // Add a bit of padding around labels inside draft nodes
+      node [];
+      style="rounded";
+      color="#000";
+      fontcolor="#000";
+      pr1 [label="PR #1", fillcolor="#347D39"]
+      pr2 [label="PR #2", fillcolor="#347D39"]
+      pr3 [label="PR #3", fillcolor="#347D39"]
+      pr1 -> pr2;
+      pr2 -> pr3;
     }
 
-    subgraph cluster_mergetrain {
-        label = "Speculative Checks"
-        fillcolor="#067ABD"
-        style="filled"
-        fontcolor=white
-        fontsize="9pt"
-        traincar1 [label=" PR#1 "]
-        traincar2 [label=" PR#1 + PR #2 "]
-        traincar3 [label=" PR#1 + PR #2 + PR #3 "]
-    }
+    pr4 [label="PR #4", fillcolor="#347D39"]
+    pr5 [label="PR #5", fillcolor="#347D39"]
+    pr3 -> pr4;
+    pr4 -> pr5;
+  }
 
-    edge [arrowhead=normal]
-    pr1:s -> traincar1:w
-    pr2:s -> traincar2:w
-    pr3:s -> traincar3:w
+  subgraph cluster_specchecks {
+    label = "Currently Tested\n(in Parallel)";
+    labelloc="t";
+    labeljust="c";
+    style="rounded,filled";
+    fillcolor="#374151";
+    color="#1CB893";
+    fontcolor="black";
+    fontsize=11;
 
-    subgraph ci {
-        // CI connections
-        ci [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#034870", fontcolor=white, penwidth=1.5]
-        edge [arrowhead=none, style=dashed, arrowsize=0.5, arrowtail=normal, color="#DBAB0A", dir=both, penwidth=1, fontcolor="#DBAB0A"];
-        traincar1 -> ci;
-        traincar2 -> ci;
-        traincar3 -> ci;
-    }
+    traincar1 [label="Draft #1\nPR #1", fontcolor=black, fillcolor="grey"]
+    traincar2 [label="Draft #2\nPR #1 + #2", fontcolor=black, fillcolor="grey"]
+    traincar3 [label="Draft #3\nPR #1 + #2 + #3", fontcolor=black, fillcolor="grey"]
+  }
+
+  // Map queue to drafts
+  pr1 -> traincar1 [color="#374151"];
+  pr2 -> traincar2 [color="#374151"];
+  pr3 -> traincar3 [color="#374151"];
+
+  // CI
+  ci [label="Continuous\nIntegration", shape=box, style="rounded,filled", fillcolor="#111827", fontcolor=white]
+  traincar1 -> ci [style=dashed, color="#9CA3AF"];
+  traincar2 -> ci [style=dashed, color="#9CA3AF"];
+  traincar3 -> ci [style=dashed, color="#9CA3AF"];
+
+  { rank=same; traincar1; traincar2; traincar3; }
 }
 
 ```
 
-These temporary PRs are created to facilitate parallel testing via your
-continuous integration (CI) pipelines. The goal is to validate the merged
-outcome of every PR in the queue in advance, ensuring they meet the
-`queue_rules` merge conditions. If any of the PRs fails, it is removed from the
-queue, identifying it as the source of the failure.
+This validates the combined outcome ahead of time against your `queue_rules`.
+If a draft fails, Mergify removes the culprit PR from the queue and continues
+with the rest.
 
 <Image src={specChecksListScreenshot} alt="Mergify parallel checks" />
 
-The result is an efficient PR processing workflow that ensures rapid and
-successful merges while minimizing the risk of merge conflicts and test
-failures.
-
-<Image src={specChecksDetailsScreenshot} alt="Mergify parallel checks details" />
+The result: fewer head‑of‑line stalls, faster merges, and earlier detection of
+incompatibilities.
 
 :::note
-  Mergify does not merge the temporary draft PRs, but rather merges the
-  original PR once they pass the speculative checks. It is possible to merge
-  the draft PR themselves — see [Merging the Draft PRs](#merging-the-draft-prs).
+  Mergify merges the original PRs, not the temporary drafts. If you prefer
+  merging the draft PRs instead, see [Merging the Draft
+  PRs](/merge-queue/batches#merging-the-draft-prs).
 :::
 
 ## Configuring Parallel Checks
 
-Configuring parallel checks requires the use of the `max_parallel_checks`
-setting in your Mergify configuration file. The value for `max_parallel_checks`
-determines the maximum number of PRs that can be embarked together for parallel
-checking.
-
-Here's a sample configuration:
+Set `merge_queue.max_parallel_checks` to control how many speculative checks run at once:
 
 ```yaml
 merge_queue:
   max_parallel_checks: 3
-
-queue_rules:
-  - name: default
-    merge_conditions:
-      - "#approved-reviews-by >= 2"
-      - check-success = test
 ```
+This example runs up to 3 speculative checks simultaneously. Tune this number
+to match your CI capacity and typical PR size/complexity.
 
-In the above example, Mergify will embark up to 3 PRs together for parallel
-checking. Note that this doesn't mean that only 3 PRs will be in the queue — it
-simply dictates the maximum number of PRs that can be scheduled together for
-simultaneous testing.
+## When Things Change
 
-Remember, parallel checks are optional and the use of this feature depends on
-your specific project needs. You may need to adjust the `max_parallel_checks`
-value depending on the CI resources available and the typical size and
-complexity of PRs in your project.
+Parallel Checks adapt automatically as your code and rules evolve:
 
-## Handling Issues with Parallel Checks
+- Failed checks: Mergify removes the failing PR and continues with the rest.
 
-When parallel checks are underway, certain issues can lead to changes in the
-way the PRs are being processed. Here's what happens in the event of various
-issues.
+- PR or rule changes: affected PRs are re-evaluated and re-embarked in order.
 
-### Failed Checks
-
-If any of the embarked PRs fail the checks defined in `merge_conditions`, that
-PR is removed from the queue. The checks are then re-run on the remaining PRs.
-
-### Changes to Queue Rules or PRs
-
-If an embarked PR no longer matches the `queue_conditions`, it is removed from
-the queue. Similarly, all PRs embarked after the removed PR are also
-disembarked and re-embarked according to their new order in the queue, making
-Mergify launches new checks.
-
-This situation can occur when there are changes to the PR itself (such as a new
-commit or a change in labels) or changes to the `queue_conditions`. In either
-case, the queue is updated and the speculative check process is restarted.
-
-### New Commit on the Base Branch
-
-If a new commit is pushed to the base branch while parallel checks are
-underway, Mergify resets the process. The checks start over again with the
-updated base branch. This ensures that the merged code will be up-to-date with
-the latest version of the base branch.
-
-You can disable this behavior by settings `reset_on_external_merge: never` in
-your configuration file.
-
-In all these scenarios, the parallel checks process is dynamic and adjusts
-itself to the changes, ensuring that the merged code meets the criteria defined
-in the `queue_rules`.
+- Base branch updates: checks restart on the new base; configurable via
+  `reset_on_external_merge` — see [Lifecycle: Base Branch
+  Updates](/merge-queue/lifecycle#base-branch-updates).
 
 ## Important Considerations
-
-While parallel checks can greatly speed up the merging process, there are a few
-important considerations to keep in mind when using this feature:
 
 ### Branch Protection Settings
 
@@ -202,23 +144,9 @@ original pull requests once its parallel checks is finished. The original PR
 won't be up-to-date according to GitHub, which means using this setting would
 block the merge.
 
-### Parallel Checks Limit
+### Tuning parallel checks
 
-You can set the number of parallel speculative checks by adjusting the
-`max_parallel_checks` value in the `merge_queue` section, at the root of your
-Mergify configuration file. The value can range from 1 to 128, depending on
-your requirements and available CI resources.
-
-### Queued PR Changes
-
-Remember that changes to PRs or the queue can disrupt the parallel checks
-process. If a PR is updated or changed in a way that it no longer meets the
-`queue_rules`, it will be removed from the queue, and the order of checks will
-be updated. In such cases, the process resets, and the remaining PRs are
-rechecked in their new order.
-
-### Transferring Labels
-
-import LabelCopier from  './_mergify-merge-queue-labels-copier.mdx'
-
-<LabelCopier />
+Adjust `max_parallel_checks` to balance throughput and CI usage. Higher values
+increase concurrency; choose a value your CI can handle reliably. For deeper
+guidance and trade‑offs (including batching), see [Merge queue
+performance](/merge-queue/performance).
