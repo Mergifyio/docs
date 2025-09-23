@@ -298,6 +298,17 @@ Note that this system is completely automatic and there is no need to
 intervene. The number of maximum splits can be controlled by
 [`batch_max_failure_resolution_attempts`](/configuration/file-format#queue-rules).
 
+:::note
+
+Mergify optimizes batching while always respecting queue priorities.
+When a batch is being assembled and its maximum size is not yet reached, 
+Mergify checks whether another pull request with the same queue rule can be 
+added—even if it appears later in the queue.
+If such a match is found, it is included in the batch to save an entire CI cycle and
+speed up merges, while still honoring all rules and priority ordering.
+
+:::
+
 ### Batch Failure Scenario Example
 
 Let's assume that we have a batch of 6 pull requests: `[PR1 + PR2 + PR3 + PR4 +
