@@ -69,7 +69,7 @@ export default function SearchBar() {
     };
     const openModalKeydown = (e: KeyboardEvent) => {
       // Use keydown (not deprecated keypress) and prevent default so '/' isn't typed into the input.
-      if (e.key === '/' && !e.altKey && !e.ctrlKey && !e.metaKey) {
+      if (e.key === '/' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
         const active = document.activeElement as HTMLElement | null;
         const isTypingTarget =
           !!active &&
