@@ -109,6 +109,16 @@ The textual priorities have the following numerical values:
 
 :::
 
+:::note
+
+    Priority is always the first criterion when selecting pull requests for batching.
+    Mergify picks PRs strictly in priority order and only after that may look ahead to 
+    find additional PRs with the same queue rule to complete the batch.
+    This ensures that higher-priority pull requests are never delayed, while still 
+    allowing the system to optimize CI usage and reduce merge time.
+
+:::
+
 ## Managing Check Interruptions Based on Priority
 
 The `allow_checks_interruption` option plays a critical role in managing the
