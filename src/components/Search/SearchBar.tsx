@@ -67,18 +67,28 @@ export default function SearchBar() {
     const openModal = () => {
       setOpen(true);
     };
-    const openModalKeypress = (e: KeyboardEvent) => {
-      if (e.key === '/') {
-        openModal();
+    const openModalKeydown = (e: KeyboardEvent) => {
+      // Use keydown (not deprecated keypress) and prevent default so '/' isn't typed into the input.
+      if (e.key === '/' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+        const active = document.activeElement as HTMLElement | null;
+        const isTypingTarget =
+          !!active &&
+          (active.tagName === 'INPUT' ||
+            active.tagName === 'TEXTAREA' ||
+            active.isContentEditable === true);
+        if (!isTypingTarget) {
+          e.preventDefault();
+          openModal();
+        }
       }
     };
 
     button?.addEventListener('click', openModal);
-    window.addEventListener('keypress', openModalKeypress);
+    window.addEventListener('keydown', openModalKeydown);
 
     return () => {
       button?.removeEventListener('click', openModal);
-      window.removeEventListener('keypress', openModalKeypress);
+      window.removeEventListener('keydown', openModalKeydown);
     };
   }, []);
 
