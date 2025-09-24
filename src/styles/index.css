@@ -638,6 +638,13 @@ svg.graph {
   margin-right: auto;
   margin-bottom: 1em;
   width: 80%;
+  background: none !important;
+}
+
+/* Graphviz draws a background polygon as the first child of g.graph; make it transparent */
+svg.graph > g.graph > polygon {
+  fill: none !important;
+  stroke: none !important;
 }
 
 hr {
