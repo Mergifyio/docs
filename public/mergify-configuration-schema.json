@@ -1327,6 +1327,19 @@
           ],
           "title": "Reset On External Merge",
           "type": "string"
+        },
+        "queued_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "queued",
+          "description": "The label to add on pull requests when they are added to the merge queue.",
+          "title": "Queued Label"
         }
       },
       "title": "MergeQueueModel",
