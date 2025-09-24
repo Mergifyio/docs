@@ -9,7 +9,14 @@ export interface Props {
 const { navGroup, currentPageMatch } = Astro.props as Props;
 ---
 
-<li class:list={['nav-group', 'active']}>
+<li class:list={{
+	'nav-group': true,
+	'active': true,
+	'nav-group-merge-queue': navGroup.path?.startsWith('/merge-queue'),
+	'nav-group-ci-insights': navGroup.path?.startsWith('/ci-insights'),
+	'nav-group-merge-protections': navGroup.path?.startsWith('/merge-protections'),
+	'nav-group-workflow': navGroup.path?.startsWith('/workflow')
+}}>
 	<nav-group data-uuid={navGroup.id}>
 		<details>
 			<summary class="nav-group-title">

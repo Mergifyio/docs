@@ -112,7 +112,12 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 		</style>
 	</head>
 
-	<body>
+	<body class:list={{
+			'section-merge-queue': currentPage.startsWith('/merge-queue'),
+			'section-ci-insights': currentPage.startsWith('/ci-insights'),
+			'section-merge-protections': currentPage.startsWith('/merge-protections'),
+			'section-workflow': currentPage.startsWith('/workflow')
+	}}>
 		<Header currentPage={currentPage} />
 		<main class="layout">
 			<aside id="left-sidebar" class="sidebar">
