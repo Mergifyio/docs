@@ -468,6 +468,138 @@ a.header-link:focus {
   }
 }
 
+body {
+  /* Set a section-specific accent for product pages */
+  --section-merge-queue-accent: #1db793;
+  --section-merge-queue-accent-bg: rgba(29, 183, 147, 0.15);
+  --section-ci-insights-accent: #4f5ce1;
+  --section-ci-insights-accent-bg: rgba(79, 92, 225, 0.15);
+  --section-merge-protections-accent: #52ade6;
+  --section-merge-protections-accent-bg: rgba(82, 173, 230, 0.15);
+  --section-workflow-accent: #e62474;
+  --section-workflow-accent-bg: rgba(230, 36, 116, 0.15);
+}
+
+/* Merge Queue section: override ToC highlight color */
+/* Default (non-hover) left border color for ToC items on MQ pages */
+body.section-merge-queue .header-link {
+  /* Slightly translucent to appear lighter than the accent */
+  border-inline-start-color: var(--section-merge-queue-accent-bg);
+}
+
+/* Hover/focus line color in the ToC */
+body.section-merge-queue .header-link:hover,
+body.section-merge-queue .header-link:focus,
+body.section-merge-queue .header-link:focus-within {
+  border-inline-start-color: var(--section-merge-queue-accent);
+}
+
+/* Active/current header link background for better visibility (optional, keeps existing bg) */
+body.section-merge-queue a.current-header-link {
+  /* Keep bg but bump left border to accent to reinforce highlight */
+  border-inline-start-color: var(--section-merge-queue-accent);
+  /* Use a subtle color highlight background for the active heading */
+  background-color: var(--section-merge-queue-accent-bg);
+}
+
+/* Left sidebar navbar: apply tint only to the Merge Queue group, on any page */
+#left-sidebar .nav-group-merge-queue .nav-link a:hover,
+#left-sidebar .nav-group-merge-queue .nav-link a:focus {
+  background-color: var(--section-merge-queue-accent-bg);
+}
+
+#left-sidebar .nav-group-merge-queue .nav-link a[aria-current="page"] {
+  background-color: var(--section-merge-queue-accent-bg);
+}
+
+/* CI Insights section: ToC and nav colors */
+
+/* Default (non-hover) left border color for ToC items on CI Insights pages */
+body.section-ci-insights .header-link {
+  border-inline-start-color: var(--section-ci-insights-accent-bg);
+}
+
+/* Hover/focus line color in the ToC */
+body.section-ci-insights .header-link:hover,
+body.section-ci-insights .header-link:focus,
+body.section-ci-insights .header-link:focus-within {
+  border-inline-start-color: var(--section-ci-insights-accent);
+}
+
+/* Current header link background */
+body.section-ci-insights a.current-header-link {
+  border-inline-start-color: var(--section-ci-insights-accent);
+  background-color: var(--section-ci-insights-accent-bg);
+}
+
+/* Left sidebar navbar: apply tint only to the CI Insights group, on any page */
+#left-sidebar .nav-group-ci-insights .nav-link a:hover,
+#left-sidebar .nav-group-ci-insights .nav-link a:focus {
+  background-color: var(--section-ci-insights-accent-bg);
+}
+
+#left-sidebar .nav-group-ci-insights .nav-link a[aria-current="page"] {
+  background-color: var(--section-ci-insights-accent-bg);
+}
+
+/* Merge Protections section: ToC and nav colors */
+/* Default (non-hover) left border color for ToC items on Merge Protections pages */
+body.section-merge-protections .header-link {
+  border-inline-start-color: var(--section-merge-protections-accent-bg);
+}
+
+/* Hover/focus line color in the ToC */
+body.section-merge-protections .header-link:hover,
+body.section-merge-protections .header-link:focus,
+body.section-merge-protections .header-link:focus-within {
+  border-inline-start-color: var(--section-merge-protections-accent);
+}
+
+/* Current header link background */
+body.section-merge-protections a.current-header-link {
+  border-inline-start-color: var(--section-merge-protections-accent);
+  background-color: var(--section-merge-protections-accent-bg);
+}
+
+/* Left sidebar navbar: apply tint only to the Merge Protections group, on any page */
+#left-sidebar .nav-group-merge-protections .nav-link a:hover,
+#left-sidebar .nav-group-merge-protections .nav-link a:focus {
+  background-color: var(--section-merge-protections-accent-bg);
+}
+
+#left-sidebar .nav-group-merge-protections .nav-link a[aria-current="page"] {
+  background-color: var(--section-merge-protections-accent-bg);
+}
+
+/* Workflow Automation section: ToC and nav colors */
+/* Default (non-hover) left border color for ToC items on Workflow pages */
+body.section-workflow .header-link {
+  border-inline-start-color: var(--section-workflow-accent-bg);
+}
+
+/* Hover/focus line color in the ToC */
+body.section-workflow .header-link:hover,
+body.section-workflow .header-link:focus,
+body.section-workflow .header-link:focus-within {
+  border-inline-start-color: var(--section-workflow-accent);
+}
+
+/* Current header link background */
+body.section-workflow a.current-header-link {
+  border-inline-start-color: var(--section-workflow-accent);
+  background-color: var(--section-workflow-accent-bg);
+}
+
+/* Left sidebar navbar: apply tint only to the Workflow Automation group, on any page */
+#left-sidebar .nav-group-workflow .nav-link a:hover,
+#left-sidebar .nav-group-workflow .nav-link a:focus {
+  background-color: var(--section-workflow-accent-bg);
+}
+
+#left-sidebar .nav-group-workflow .nav-link a[aria-current="page"] {
+  background-color: var(--section-workflow-accent-bg);
+}
+
 /* Highlight TOC header link matching the current scroll position */
 a.current-header-link {
   background-color: var(--theme-bg-hover);
