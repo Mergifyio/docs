@@ -1,0 +1,24 @@
+---
+title: Adding a label when a PR is queued
+description: Control the label your Merge Queue adds to pull requests when they are queued.
+---
+
+By default, Mergify adds the `queued` label to pull requests when they are added to the merge queue.
+Mergify will also remove the label when pull requests are dequeued or merged.
+
+This default behavior can be modified through the use of the `queued_label` attribute
+under the `merge_queue` configuration section in your Mergify configuration file.
+
+You can customize this behavior by specifying a different label in your Mergify configuration file:
+
+```yaml
+merge_queue:
+  queued_label: "my-custom-label"
+```
+
+You can also disable the addition of any label by setting the `queued_label` attribute to `null`:
+
+```yaml
+merge_queue:
+  queued_label: null
+```
