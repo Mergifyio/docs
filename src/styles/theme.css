@@ -128,9 +128,9 @@
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-light: var(--chakra-colors-blackAlpha-800);
   --theme-text-lighter: var(--chakra-colors-blackAlpha-700);
-  --theme-bg: white;
+  --theme-bg: #f9fafb;
   --theme-bg-gradient-top: var(--theme-bg);
-  --theme-bg-gradient-bottom: white;
+  --theme-bg-gradient-bottom: var(--theme-bg);
   --theme-bg-hover: var(--color-mergify-blue-light);
   --theme-bg-offset: hsla(var(--color-blue), 0.1);
   --theme-bg-accent: hsla(var(--color-blue), var(--theme-accent-opacity));
@@ -375,10 +375,13 @@
   --theme-text: hsla(var(--color-gray-90), 1);
   --theme-text-light: var(--chakra-colors-whiteAlpha-800);
   --theme-text-lighter: var(--chakra-colors-whiteAlpha-700);
-  --theme-bg: #1a202c;
+  --theme-bg: #24292e;
   --theme-bg-hover: var(--color-mergify-blue-dark);
   --theme-bg-offset: #0008;
   --theme-backdrop-overlay: hsla(var(--color-gray-10), 0.8);
+  /* Ensure gradients resolve to the dark background in dark mode */
+  --theme-bg-gradient-top: var(--theme-bg);
+  --theme-bg-gradient-bottom: var(--theme-bg);
   --theme-code-inline-bg: var(--chakra-colors-gray-700);
   --theme-code-inline-text: #f687b3;
   --theme-code-bg: var(--chakra-colors-gray-700);
