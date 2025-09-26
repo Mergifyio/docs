@@ -27,12 +27,12 @@ export interface Props {
 const { colorScheme, style, href, icon, variant = 'solid' } = Astro.props as Props;
 ---
 
-<button class:list={['button', `button-${colorScheme}`, variant]} {style}>
+<div role="presentation" class:list={['button', `button-${colorScheme}`, variant]} {style}>
 	<a href={href} target="_blank">
 		{icon && <Astro.props.icon />}
 		<slot />
 	</a>
-</button>
+</div>
 
 <style is:global lang="scss">
 	.button {
