@@ -5560,6 +5560,23 @@
               }
             ],
             "title": "Priority Rule Name"
+          },
+          "conditions_evaluation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/mergify_engine__rules__conditions__QueueConditionEvaluationResult__Serialized"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "checks": {
+            "items": {
+              "$ref": "#/components/schemas/mergify_engine__queue__merge_train__checks__QueueCheck__Serialized"
+            },
+            "type": "array",
+            "title": "Checks"
           }
         },
         "type": "object",
@@ -5573,7 +5590,9 @@
           "queued_at",
           "seconds_waiting_for_schedule",
           "seconds_waiting_for_freeze",
-          "priority_rule_name"
+          "priority_rule_name",
+          "conditions_evaluation",
+          "checks"
         ],
         "title": "EventQueueLeaveMetadata"
       },
@@ -7869,65 +7888,6 @@
         ],
         "title": "ScheduledFreezeObjectResponse"
       },
-      "Serialized": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "description": {
-            "type": "string",
-            "title": "Description"
-          },
-          "url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Url"
-          },
-          "state": {
-            "type": "string",
-            "enum": [
-              "failure",
-              "error",
-              "cancelled",
-              "action_required",
-              "timed_out",
-              "pending",
-              "neutral",
-              "skipped",
-              "stale",
-              "success"
-            ],
-            "title": "State"
-          },
-          "avatar_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Avatar Url"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "description",
-          "url",
-          "state",
-          "avatar_url"
-        ],
-        "title": "Serialized"
-      },
       "SimulatorPayload": {
         "properties": {
           "mergify_yml": {
@@ -8102,6 +8062,205 @@
         ],
         "title": "UpdateScheduledFreezePayload"
       },
+      "mergify_engine__queue__merge_train__checks__QueueCheck__Serialized": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "failure",
+              "error",
+              "cancelled",
+              "action_required",
+              "timed_out",
+              "pending",
+              "neutral",
+              "skipped",
+              "stale",
+              "success"
+            ],
+            "title": "State"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "url",
+          "state",
+          "avatar_url"
+        ],
+        "title": "Serialized"
+      },
+      "mergify_engine__rules__conditions__QueueConditionEvaluationResult__Evaluation__Serialized": {
+        "properties": {
+          "pull_request": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Pull Request"
+          },
+          "match": {
+            "type": "boolean",
+            "title": "Match"
+          },
+          "evaluation_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluation Error"
+          },
+          "related_checks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Related Checks"
+          },
+          "next_evaluation_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Evaluation At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pull_request",
+          "match",
+          "evaluation_error",
+          "related_checks",
+          "next_evaluation_at"
+        ],
+        "title": "Serialized"
+      },
+      "mergify_engine__rules__conditions__QueueConditionEvaluationResult__Serialized": {
+        "properties": {
+          "match": {
+            "type": "boolean",
+            "title": "Match"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "is_label_user_input": {
+            "type": "boolean",
+            "title": "Is Label User Input"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "attribute_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attribute Name"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator"
+          },
+          "schedule": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule"
+          },
+          "subconditions": {
+            "items": {
+              "$ref": "#/components/schemas/mergify_engine__rules__conditions__QueueConditionEvaluationResult__Serialized"
+            },
+            "type": "array",
+            "title": "Subconditions"
+          },
+          "evaluations": {
+            "items": {
+              "$ref": "#/components/schemas/mergify_engine__rules__conditions__QueueConditionEvaluationResult__Evaluation__Serialized"
+            },
+            "type": "array",
+            "title": "Evaluations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "match",
+          "label",
+          "is_label_user_input",
+          "description",
+          "attribute_name",
+          "operator",
+          "schedule",
+          "subconditions",
+          "evaluations"
+        ],
+        "title": "Serialized"
+      },
       "mergify_engine__signals__SpeculativeCheckPullRequest": {
         "properties": {
           "number": {
@@ -8158,7 +8317,7 @@
           },
           "unsuccessful_checks": {
             "items": {
-              "$ref": "#/components/schemas/Serialized"
+              "$ref": "#/components/schemas/mergify_engine__queue__merge_train__checks__QueueCheck__Serialized"
             },
             "type": "array",
             "title": "Unsuccessful Checks"
