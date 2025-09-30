@@ -2390,7 +2390,7 @@
         },
         "allow_inplace_checks": {
           "default": true,
-          "description": "Allow to update or rebase the original pull request to check its mergeability when first in the queue and not part of a batch (see: `batch_size`) or speculative check (see: `max_parallel_checks`).",
+          "description": "Deprecated: this value is computed automatically. In-place checks are enabled only when:\n- `max_parallel_checks == 1`\n- every queue has `batch_size == 1`\n- every queue CI is single-step (no extra `merge_conditions`; either empty or identical to `queue_conditions`)",
           "title": "Allow Inplace Checks",
           "type": "boolean"
         },
@@ -2607,7 +2607,7 @@
         },
         "allow_inplace_checks": {
           "default": true,
-          "description": "Allow to update or rebase the original pull request to check its mergeability when first in the queue and not part of a batch (see: `batch_size`) or speculative check (see: `max_parallel_checks`).",
+          "description": "Deprecated: this value is computed automatically. In-place checks are enabled only when:\n- `max_parallel_checks == 1`\n- every queue has `batch_size == 1`\n- every queue CI is single-step (no extra `merge_conditions`; either empty or identical to `queue_conditions`)",
           "title": "Allow Inplace Checks",
           "type": "boolean"
         },
