@@ -133,6 +133,37 @@ Parallel Checks adapt automatically as your code and rules evolve:
 
 ## Important Considerations
 
+### In‑place checks (no drafts)
+
+Mergify runs checks directly on the original pull request (instead of using
+temporary draft PRs) only when of the following are true:
+
+- `queue_rules[*].batch_size = 1`
+
+- `merge_queue.max_parallel_checks = 1`
+
+- No two‑step CI is configured (i.e., no separate `merge_conditions` beyond
+  `queue_conditions` in your queue rules)
+
+- Optionally, set `update_bot_account` to avoid in‑place updates blocked 
+  by GitHub for security reasons (e.g., PRs from forks that modify workflows, 
+  or PRs opened by other bots)
+
+Example configuration enabling in‑place checks:
+
+```yaml
+merge_queue:
+  max_parallel_checks: 1
+
+queue_rules:
+  - name: default
+    batch_size: 1
+    # use a single set of checks (no two‑step split between queue vs merge)
+    queue_conditions:
+      - check-success = ci
+    update_bot_account: my-org-bot
+```
+
 ### Branch Protection Settings
 
 Parallel checks operate by creating temporary pull requests, which merge
