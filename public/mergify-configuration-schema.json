@@ -2390,6 +2390,7 @@
         },
         "allow_inplace_checks": {
           "default": true,
+          "deprecated": true,
           "description": "Deprecated: this value is computed automatically. In-place checks are enabled only when:\n- `max_parallel_checks == 1`\n- every queue has `batch_size == 1`\n- every queue CI is single-step (no extra `merge_conditions`; either empty or identical to `queue_conditions`)",
           "title": "Allow Inplace Checks",
           "type": "boolean"
@@ -2607,6 +2608,7 @@
         },
         "allow_inplace_checks": {
           "default": true,
+          "deprecated": true,
           "description": "Deprecated: this value is computed automatically. In-place checks are enabled only when:\n- `max_parallel_checks == 1`\n- every queue has `batch_size == 1`\n- every queue CI is single-step (no extra `merge_conditions`; either empty or identical to `queue_conditions`)",
           "title": "Allow Inplace Checks",
           "type": "boolean"
