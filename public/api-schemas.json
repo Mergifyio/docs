@@ -76,6 +76,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -144,6 +147,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -220,6 +226,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -279,6 +288,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -347,6 +359,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -408,6 +423,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -581,6 +599,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -888,6 +909,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -978,6 +1002,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -1056,6 +1083,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -1137,6 +1167,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -1386,6 +1419,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -1495,6 +1531,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -1697,6 +1736,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -1899,6 +1941,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -2101,6 +2146,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -2303,6 +2351,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -2505,6 +2556,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -2707,6 +2761,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -2897,6 +2954,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -3087,6 +3147,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -3153,6 +3216,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -3231,6 +3297,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -3323,6 +3392,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -3413,6 +3485,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "CIIssuesAccountAuth": []
           }
         ],
         "parameters": [
@@ -3500,8 +3575,9 @@
           "type": {
             "type": "string",
             "enum": [
-              "user",
-              "application"
+              "application",
+              "ci_issues_account",
+              "user"
             ],
             "title": "Type"
           },
@@ -8607,6 +8683,10 @@
     },
     "securitySchemes": {
       "ApplicationAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "CIIssuesAccountAuth": {
         "type": "http",
         "scheme": "bearer"
       }
