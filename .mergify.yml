@@ -5,7 +5,6 @@ shared:
       {{ title }} (#{{ number }})
 
       {{ body }}
-    allow_inplace_checks: true
     merge_method: squash
 
 
@@ -52,7 +51,7 @@ merge_protections:
     if:
       - label = hotfix
     success_conditions:
-      - or: &HotfixReviewCond
+      - or:
           # Author is engineering manager, we allow with one review
           - and:
               - author=@eng-mgr
