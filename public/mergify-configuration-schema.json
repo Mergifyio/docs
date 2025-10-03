@@ -1760,18 +1760,6 @@
           "description": "The name of the queue containing the pull request.",
           "title": "Queue name"
         },
-        "queue-partition-name": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The name of the partitions the pull request is queued in.",
-          "title": "Queue partition name"
-        },
         "assignee": {
           "description": "The list of GitHub user or team login that are assigned to the pull request. Team logins are prefixed with the `@` character and must belong to the repository organization.",
           "items": {
@@ -2163,7 +2151,6 @@
         "repository-full-name",
         "queue-dequeue-reason",
         "queue-name",
-        "queue-partition-name",
         "assignee",
         "label",
         "review-requested",
