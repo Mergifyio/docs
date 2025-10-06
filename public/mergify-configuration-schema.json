@@ -1310,6 +1310,12 @@
     "MergeQueueModel": {
       "additionalProperties": false,
       "properties": {
+        "parallel_batches": {
+          "default": false,
+          "description": "When enabled, multiple pull requests can be tested and merged in parallel, without strictly rebasing each on the latest base. This improves throughput and reduces queue time, at the cost of strict freshness guarantees.",
+          "title": "Parallel Batches",
+          "type": "boolean"
+        },
         "max_parallel_checks": {
           "default": 5,
           "description": "The maximum number of speculative checks allowed to run at the same time. Setting this value to 1 disables speculative checks.",
