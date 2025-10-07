@@ -1,4 +1,4 @@
-import configSchema from '../../../public/mergify-configuration-schema.json';
+import configSchema from '../../util/sanitizedConfigSchema';
 
 import { ConfigSchema, Def } from './ConfigOptions';
 import { OptionsTableBase } from './OptionsTable';
