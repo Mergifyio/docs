@@ -69,7 +69,7 @@
     "@fontsource/poppins": "^5.2.7",
     "@nanostores/react": "^1.0.0",
     "@scalar/api-reference": "^1.37.0",
-    "@types/react": "^19.1.16",
+    "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
     "@types/uuid": "^11.0.0",
     "@viz-js/viz": "^3.20.0",
