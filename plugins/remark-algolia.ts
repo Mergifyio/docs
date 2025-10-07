@@ -6,7 +6,7 @@ import { visit } from 'unist-util-visit';
 import configSchema from '../src/util/sanitizedConfigSchema';
 
 interface PageData {
-  headings: Array<{ value: string; depth: number }>;
+  headings: Heading[];
   tables: any[];
   objectID: string;
   excerpt: string;
@@ -19,19 +19,33 @@ type AstroFrontmatter = {
   description: string;
 };
 
+type AlgoliaTable = {
+  node: string;
+  data: string | null;
+  content: string | null;
+};
+
+type Heading = {
+  value: string;
+  depth: number;
+};
+
 async function savePageToAlgolia(pageData: PageData) {
   if (process.env.NODE_ENV !== 'production') return;
-  if (!process.env.ALGOLIA_WRITE_KEY) {
-    console.info('No Algolia write key found, skipping indexing');
+  const appId = process.env.PUBLIC_ALGOLIA_APP_ID;
+  const writeKey = process.env.ALGOLIA_WRITE_KEY;
+  const indexName = process.env.PUBLIC_ALGOLIA_INDEX_NAME;
+  if (!writeKey || !appId || !indexName) {
+    console.info('Missing Algolia env vars, skipping indexing');
     return;
   }
 
   console.info('Starting indexing on algolia...');
 
-  const client = algoliasearch(process.env.PUBLIC_ALGOLIA_APP_ID, process.env.ALGOLIA_WRITE_KEY);
+  const client = algoliasearch(appId, writeKey);
   console.info(`Indexing page: ${pageData.objectID}`);
   await client.saveObject({
-    indexName: process.env.PUBLIC_ALGOLIA_INDEX_NAME,
+    indexName: indexName,
     body: pageData as any,
   });
 }
@@ -53,17 +67,17 @@ function getExcerpt(tree: mdast.Root) {
 
 export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
   const transformer: unified.Transformer<mdast.Root> = async (tree, file) => {
-    const tables = [];
-    const headings = [];
+    const tables: AlgoliaTable[] = [];
+    const headings: Heading[] = [];
 
-    visit(tree, 'heading', (heading) => {
+    visit(tree, 'heading', (heading: mdast.Heading) => {
       headings.push({
         depth: heading.depth,
         value: toString(heading),
       });
     });
 
-    visit(tree, 'mdxJsxFlowElement', (element) => {
+    visit(tree, 'mdxJsxFlowElement', (element: any) => {
       switch (element.name) {
         case 'OptionsTable':
           const def = element.attributes.find(
