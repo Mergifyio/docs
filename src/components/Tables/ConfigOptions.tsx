@@ -1,6 +1,6 @@
 import jsonpointer from 'jsonpointer';
 import React, { ReactElement } from 'react';
-import configSchema from '../../../public/mergify-configuration-schema.json';
+import configSchema from '../../util/sanitizedConfigSchema';
 import { renderMarkdown } from './utils';
 
 const valueTypeLinks: { [key: string]: string } = {

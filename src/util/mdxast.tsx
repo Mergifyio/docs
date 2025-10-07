@@ -6,8 +6,8 @@ import {
 } from '~/components/Tables/ConfigOptions';
 import { OptionsTableBase } from '~/components/Tables/OptionsTable';
 import PullRequestAttributesTable from '~/components/Tables/PullRequestAttributes';
-import configSchema from '../../public/mergify-configuration-schema.json';
 import { MdxNodeJsxElement } from '../@types/mdxast';
+import configSchema from './sanitizedConfigSchema';
 
 interface TableType {
   node: string;
