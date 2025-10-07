@@ -3,7 +3,7 @@ import type * as mdast from 'mdast';
 import { toString } from 'mdast-util-to-string';
 import type * as unified from 'unified';
 import { visit } from 'unist-util-visit';
-import configSchema from '../public/mergify-configuration-schema.json';
+import configSchema from '../src/util/sanitizedConfigSchema';
 
 interface PageData {
   headings: Array<{ value: string; depth: number }>;
