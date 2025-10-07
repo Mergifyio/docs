@@ -5,18 +5,37 @@ import '../styles/api.css';
 <body>
 	<script is:inline>
 		/**
-		 * The MatchingConditionsDict-* are recursive schemas which make the api reference crash
-		 * This script fetches the api-schemas.json file, modifies the MatchingConditionsDict schemas
-		 * to create a limited version that only includes the 'and', 'or', and 'not' properties,
-		 * and injects it into the page as a script tag.
-		 * This allows scalar-api-reference.js to use the limited version without crashing.
-		 * The original schemas are still available in the api-schemas.json file.
+		 * This script tweaks the OpenAPI spec before rendering the API reference:
+		 * - limits recursive MatchingConditionsDict-* schemas to prevent crashes
+		 * - hides selected fields from the docs (see hiddenFields)
+		 *
+		 * It fetches /api-schemas.json, applies the changes, then injects the
+		 * result into the page for scalar-api-reference.js to consume. The original
+		 * schemas on disk remain unchanged.
 		 */
 		(async () => {
 			const apiSchemasUrl = '/api-schemas.json';
 			try {
 				const response = await fetch(apiSchemasUrl);
 				let apiSchemas = await response.json();
+
+				// Helper to deep-remove a specific key from any object/array
+				const deepRemoveKey = (value, keyToRemove) => {
+					if (Array.isArray(value)) {
+						for (const item of value) deepRemoveKey(item, keyToRemove);
+						return value;
+					}
+					if (value && typeof value === 'object') {
+						if (Object.prototype.hasOwnProperty.call(value, keyToRemove)) {
+							delete value[keyToRemove];
+						}
+						for (const k of Object.keys(value)) deepRemoveKey(value[k], keyToRemove);
+					}
+					return value;
+				};
+
+				// Fields to hide everywhere in the rendered documentation
+				const hiddenFields = ['autosquash'];
 
 				apiSchemas.components.schemas['MatchingConditionsDict-Input'] = JSON.parse(
 					JSON.stringify(apiSchemas.components.schemas['MatchingConditionsDict-Input']).replaceAll(
@@ -57,6 +76,9 @@ import '../styles/api.css';
 					type: 'object',
 					title: 'MatchingConditionsDict-Limited',
 				};
+
+				// Apply field hiding after other schema tweaks
+				for (const field of hiddenFields) deepRemoveKey(apiSchemas, field);
 
 				// Inject the modified JSON into the page for scalar-api-reference.js
 				const modifiedDataScript = document.createElement('script');
