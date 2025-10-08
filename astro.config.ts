@@ -17,7 +17,6 @@ import { ScalarApiReference } from './integrations/scalar-api-reference';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
 import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
-import { remarkAlgolia } from './plugins/remark-algolia';
 import { remarkGraphvizPlugin } from './plugins/remark-graphviz';
 
 dotenv.config({
@@ -69,7 +68,6 @@ export default defineConfig({
     smartypants: false,
     remarkPlugins: [
       remarkGraphvizPlugin(),
-      remarkAlgolia(),
       [
         remarkSmartypants as RemarkPlugin,
         {
