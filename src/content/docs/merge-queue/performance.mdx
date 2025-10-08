@@ -180,6 +180,96 @@ held up by lengthy CI processes for every minor PR update. Instead, the more
 extensive tests are reserved for when PRs are about to be merged, providing a
 balance between speed and code quality.
 
+## Combining Batch Merging and Parallel Checks
+
+[Batch merging](/merge-queue/batches) and [parallel
+checks](/merge-queue/parallel-checks) are two powerful features that work in
+synergy to improve the efficiency of your merge queue.
+
+Batch merging allows Mergify to test multiple pull requests together as a
+single unit, reducing the amount of time waiting for individual pull request
+tests to complete. On the other hand, [parallel
+checks](/merge-queue/parallel-checks) allow for multiple batches to be tested
+in parallel, further speeding up the merge process.
+
+When both these features are enabled, Mergify creates multiple batches of pull
+requests (according to the `batch_size` option) and then runs tests on several
+of these batches at the same time (as defined by the `parallel_checks`
+option). If any pull request within a batch fails, [Mergify identifies the
+culprit through a binary search, removes it from the queue, and continues
+processing the rest of the queue](#handling-batch-failure).
+
+```yaml
+merge_queue:
+  max_parallel_check: 2
+
+queue_rules:
+  - name: default
+    batch_size: 3
+    ...
+```
+
+In the above example, Mergify will create up to 2 batches, each containing up
+to 3 pull requests, and test them in parallel.
+
+Combining these two features allows you to optimize the throughput of your
+merge queue. You can increase the batch size to merge more pull requests
+concurrently, while also increasing the number of parallel checks to test
+more batches in parallel. This minimizes idle time and makes full use of your
+CI resources.
+
+Suppose your queue has 7 pull requests waiting, and your CI pipeline takes
+about 10 minutes to complete. If you set `batch_size` to 3 and
+`max_parallel_checks` to 2, Mergify would create 2 batches, each containing 3
+pull requests. These batches are then tested in parallel.
+
+```dot class="graph"
+strict digraph {
+    fontname="sans-serif";
+    rankdir="LR";
+    label="Merge Queue"
+
+    node [style=filled, shape=circle, fontcolor="white", fontname="sans-serif"];
+    edge [color="#374151", arrowhead=none, fontname="sans-serif", arrowhead=normal];
+
+    subgraph cluster_batch_1 {
+        style="rounded,filled";
+        color="#1CB893";
+        fillcolor="#1CB893";
+        fontcolor="#000000";
+        node [style=filled, color="black", fillcolor="#347D39", fontcolor="white"];
+        PR3 -> PR4;
+        PR4 -> PR5;
+        PR5 -> PR6;
+        label = "Batch 2";
+
+        subgraph cluster_batch_0 {
+            style="rounded,filled";
+            color="#1CB893";
+            fillcolor="#1CB893";
+            fontcolor="#000000";
+            node [style=filled, color="black", fillcolor="#347D39", fontcolor="white"];
+            PR1 -> PR2;
+            PR2 -> PR3;
+            label = "Batch 1";
+        }
+    }
+
+    PR6 -> PR7;
+    PR7 -> PR8;
+    PR8 [label="…", fillcolor="#347D39"];
+
+    CI [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#111827", fontcolor=white, shape=rectangle]
+    edge [arrowhead=none, style=dashed, arrowtail=normal, color="#9CA3AF", dir=both, fontcolor="#9CA3AF", fontsize="6pt"];
+    PR3 -> CI;
+    PR6 -> CI;
+}
+```
+
+With this configuration, even if your CI time is 10 minutes, you can merge the
+first 6 pull requests in only 10 minutes, as opposed to the 1 hour it would
+typically take to test each pull request individually.
+
 ### Concluding Thoughts
 
 Mergify provides a range of configurations to tailor your CI budget and merge

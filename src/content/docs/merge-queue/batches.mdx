@@ -5,7 +5,7 @@ description: Increase your merge queue throughput and decrease your CI usage.
 
 import { Image } from "astro:assets"
 import batchesScreenshot from "../../images/merge-queue/batches/batches-dashboard.png"
-import requiredPRbypassScreenshot from "../../images/merge-queue/batches/batches-dashboard.png"
+import requiredPRbypassScreenshot from "../../images/merge-queue/batches/mergify-required-pull-request-bypass.png"
 
 Mergify's batch merging feature is a powerful tool that enhances productivity
 and efficiency in your development workflow. Instead of merging pull requests
@@ -14,14 +14,14 @@ merging allows you to combine and merge multiple pull requests at once.
 
 The batch merging process works by setting a `batch_size` option on your merge
 queue. This option determines the number of pull requests that Mergify will
-combine into a single draft pull request. The draft pull request is then
-validated by your Continuous Integration (CI) system. If the CI validation
-passes, Mergify merges all the pull requests in the batch and closes the draft
-pull request.
+check at the same time using your CI. If the CI validation passes, Mergify
+merges all the pull requests in the batch and closes the draft pull request it
+created to test.
 
 If a failure occurs, Mergify identifies the problematic pull request(s)
 automatically and removes them from the queue, allowing the rest of the queue
-to be processed as usual.
+to be processed as usual (see [Handling Batch
+Failures](#handling-batch-failure-or-timeout)).
 
 This feature is especially useful for large-scale projects with many pull
 requests to merge, as it can significantly reduce the time required to merge
@@ -53,13 +53,15 @@ strict digraph {
     rankdir="LR";
     label="Merge Queue"
 
-    node [style=filled, shape=circle, fontcolor="black", fontname="sans-serif"];
-    edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
+    node [style=filled, shape=circle, fontcolor="white", fontname="sans-serif"];
+    edge [color="#374151", arrowhead=none, fontname="sans-serif", arrowhead=normal];
 
     subgraph cluster_batch_0 {
-        style=filled;
-        color=lightcyan;
-        node [style=filled, color=black, fillcolor=white];
+        style="rounded,filled";
+        color="#1CB893";
+        fillcolor="#1CB893";
+        fontcolor="#000000";
+        node [style=filled, color="black", fillcolor="#347D39", fontcolor="white"];
         PR1 -> PR2;
         PR2 -> PR3;
         label = "Batch 1";
@@ -67,21 +69,13 @@ strict digraph {
 
     PR3 -> PR4;
     PR4 -> PR5;
-    PR5 [label="…"];
+    PR5 [label="…", fillcolor="#347D39"];
 
-    CI [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#034870", fontcolor=white, shape=rectangle]
-    edge [arrowhead=none, style=dashed, arrowtail=normal, color="#DBAB0A", dir=both, fontcolor="#DBAB0A", fontsize="6pt"];
+    CI [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#111827", fontcolor=white, shape=rectangle]
+    edge [arrowhead=none, style=dashed, arrowtail=normal, color="#9CA3AF", dir=both, fontcolor="#9CA3AF", fontsize="6pt"];
     PR3 -> CI;
 }
 ```
-
-In case the draft pull request fails CI validation, it means one or more pull
-requests in the batch have introduced changes that are causing the failure.
-Mergify handles this scenario by using a binary search method to identify the
-failing pull request. It does this by systematically reducing the batch size
-and re-running the CI checks until it finds the problematic pull request. Once
-found, the failing pull request is removed from the queue and the rest of the
-pull requests are processed as usual.
 
 This batch merging process allows multiple pull requests to be validated and
 merged more efficiently than if they were handled individually.
@@ -122,93 +116,6 @@ queue_rules:
 With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
-
-## Batch Merging and Parallel Checks
-
-Batch merging and parallel checks are two powerful features that work in
-synergy to improve the efficiency of your merge queue.
-
-Batch merging allows Mergify to test multiple pull requests together as a
-single unit, reducing the amount of time waiting for individual pull request
-tests to complete. On the other hand, [parallel checks](/merge-queue/parallel-checks)
-allow for multiple batches to be tested in parallel, further speeding up the
-merge process.
-
-When both these features are enabled, Mergify creates multiple batches of pull
-requests (according to the `batch_size` option) and then runs tests on several
-of these batches at the same time (as defined by the `parallel_checks`
-option). If any pull request within a batch fails, [Mergify identifies the
-culprit through a binary search, removes it from the queue, and continues
-processing the rest of the queue](#handling-batch-failure).
-
-```yaml
-merge_queue:
-  max_parallel_check: 2
-
-queue_rules:
-  - name: default
-    batch_size: 3
-    ...
-```
-
-In the above example, Mergify will create up to 2 batches, each containing up
-to 3 pull requests, and test them in parallel.
-
-Combining these two features allows you to optimize the throughput of your
-merge queue. You can increase the batch size to merge more pull requests
-concurrently, while also increasing the number of parallel checks to test
-more batches in parallel. This minimizes idle time and makes full use of your
-CI resources.
-
-Suppose your queue has 7 pull requests waiting, and your CI pipeline takes
-about 10 minutes to complete. If you set `batch_size` to 3 and
-`max_parallel_checks` to 2, Mergify would create 2 batches, each containing 3
-pull requests. These batches are then tested in parallel.
-
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    label="Merge Queue"
-
-    node [style=filled, shape=circle, fontcolor="black", fontname="sans-serif"];
-    edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
-
-    subgraph cluster_batch_1 {
-        style=filled;
-        color=lightblue;
-        node [style=filled, color=black, fillcolor=white];
-        PR3 -> PR4;
-        PR4 -> PR5;
-        PR5 -> PR6;
-        label = "Batch 2";
-
-        subgraph cluster_batch_0 {
-            style=filled;
-            color=lightcyan;
-            node [style=filled, color=black, fillcolor=white];
-            PR1 -> PR2;
-            PR2 -> PR3;
-            label = "Batch 1";
-        }
-    }
-
-    PR6 -> PR7;
-    PR7 -> PR8;
-    PR8 [label="…"];
-
-    CI [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#034870", fontcolor=white, shape=rectangle]
-    edge [arrowhead=none, style=dashed, arrowtail=normal, color="#DBAB0A", dir=both, fontcolor="#DBAB0A", fontsize="6pt"];
-    PR3 -> CI;
-    PR6 -> CI;
-}
-```
-
-With this configuration, even if your CI time is 10 minutes, you can merge the
-first 6 pull requests in only 10 minutes, as opposed to the 1 hour it would
-typically take to test each pull request individually.
-
-Check out our [performance page](/merge-queue/performance) for more information.
 
 ## Merging the Draft PRs
 
@@ -369,9 +276,3 @@ PR is updated or changed in a way that it no longer meets the `queue_rules`, it
 will be removed from the queue, and the order of checks will be updated. In
 such cases, the process resets, and the remaining PRs are rechecked in their
 new order.
-
-### Transferring Labels
-
-import LabelCopier from  './_mergify-merge-queue-labels-copier.mdx'
-
-<LabelCopier />
