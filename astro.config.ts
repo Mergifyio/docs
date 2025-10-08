@@ -10,6 +10,7 @@ import dotenv, { DotenvPopulateInput } from 'dotenv';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkSmartypants from 'remark-smartypants';
+import { AlgoliaUpdateIndex } from './integrations/algolia-update-index';
 import { asideAutoImport, astroAsides } from './integrations/astro-asides';
 import { astroYoutubeEmbeds, youtubeAutoImport } from './integrations/astro-youtube-embed';
 import { ScalarApiReference } from './integrations/scalar-api-reference';
@@ -54,6 +55,7 @@ export default defineConfig({
       priority: 0.7,
     }),
     ScalarApiReference(),
+    AlgoliaUpdateIndex(),
   ],
   scopedStyleStrategy: 'where',
   compressHTML: false,
