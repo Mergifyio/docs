@@ -11,7 +11,7 @@ interface PageResultProps extends AlgoliaResult {
 }
 
 function PageResult({ objectID, _highlightResult, onHover, active }: PageResultProps) {
-  const slug = objectID.substring(0, objectID.indexOf('.mdx'));
+  const slug = objectID.startsWith('/') ? objectID : `/${objectID}`;
   return (
     <a
       className={classNames({ 'page-result': true, active })}
@@ -103,9 +103,13 @@ export default function Results({ results }: ResultsProps) {
         return newFocused;
       });
     } else if (e.key === 'Enter') {
-      const slug = focusedPage?.objectID.substring(0, focusedPage.objectID.indexOf('.mdx'));
+      const slug = focusedPage?.objectID
+        ? focusedPage.objectID.startsWith('/')
+          ? focusedPage.objectID
+          : `/${focusedPage.objectID}`
+        : '/';
 
-      if (focusedPage) window.location.replace(slug ?? '');
+      if (focusedPage) window.location.replace(slug);
     }
   };
 

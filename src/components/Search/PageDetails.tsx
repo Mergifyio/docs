@@ -44,7 +44,7 @@ export default function Preview({
   objectID,
   headings,
 }: AlgoliaResult) {
-  const slug = objectID.substring(0, objectID.indexOf('.mdx'));
+  const slug = objectID.startsWith('/') ? objectID : `/${objectID}`;
 
   return (
     <div
