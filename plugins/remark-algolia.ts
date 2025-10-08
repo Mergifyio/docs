@@ -1,11 +1,17 @@
-import { algoliasearch } from 'algoliasearch';
+/*
+Remark plugins run while compiling each page's Markdown/MDX, operating on the Markdown AST (mdast).
+This plugin collects all the pages data and stores it in a global variable.
+A higher-level integration will push them to Algolia.
+*/
 import type * as mdast from 'mdast';
 import { toString } from 'mdast-util-to-string';
 import type * as unified from 'unified';
 import { visit } from 'unist-util-visit';
 import configSchema from '../src/util/sanitizedConfigSchema';
 
-interface PageData {
+const collectedPages: PageData[] = [];
+
+export interface PageData {
   headings: Heading[];
   tables: any[];
   objectID: string;
@@ -30,32 +36,12 @@ type Heading = {
   depth: number;
 };
 
-async function savePageToAlgolia(pageData: PageData) {
-  if (process.env.NODE_ENV !== 'production') return;
-  const appId = process.env.PUBLIC_ALGOLIA_APP_ID;
-  const writeKey = process.env.ALGOLIA_WRITE_KEY;
-  const indexName = process.env.PUBLIC_ALGOLIA_INDEX_NAME;
-  if (!writeKey || !appId || !indexName) {
-    console.info('Missing Algolia env vars, skipping indexing');
-    return;
-  }
-
-  console.info('Starting indexing on algolia...');
-
-  const client = algoliasearch(appId, writeKey);
-  console.info(`Indexing page: ${pageData.objectID}`);
-  await client.saveObject({
-    indexName: indexName,
-    body: pageData as any,
-  });
-}
-
 function getPath(path: string) {
   return path.slice(path.indexOf('/docs/') + 5, path.length);
 }
 
-/** Naive excerpt which concatenate every paragraph node to string */
 function getExcerpt(tree: mdast.Root) {
+  /** Naive excerpt which concatenate every paragraph node to string */
   const excerpt: string[] = [];
 
   visit(tree, 'paragraph', (node) => {
@@ -129,7 +115,8 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
     const astroData = file.data.astro as {
       frontmatter: AstroFrontmatter;
     };
-    savePageToAlgolia({
+
+    collectedPages.push({
       headings,
       tables,
       objectID: getPath(file.history[0]),
@@ -141,4 +128,8 @@ export function remarkAlgolia(): unified.Plugin<[], mdast.Root> {
   return function attacher() {
     return transformer;
   };
+}
+
+export function getCollectedAlgoliaPages(): PageData[] {
+  return collectedPages;
 }
