@@ -1,35 +1,36 @@
-import { SearchResponse } from '@algolia/client-search';
+import { HighlightResult, SearchResponse } from '@algolia/client-search';
 
-export type Heading = {
-  depth: string;
-  value: string;
+export type Hierarchy = {
+  lvl0: string | null;
+  lvl1: string | null;
+  lvl2: string | null;
+  lvl3: string | null;
 };
 
-// copied from @algolia/client-search as the type is not exported
-declare type SnippetMatch = {
-  readonly value: string;
-  readonly matchLevel: 'none' | 'partial' | 'full';
-};
-
-export type PageTable = {
-  node: string;
-  data?: {
-    matchLevel?: 'none' | 'partial' | 'full';
-    value?: string;
-  };
-  content?: {
-    matchLevel?: 'none' | 'partial' | 'full';
-    value?: string;
-  };
-};
-
-export type Page = {
+// Base record structure (what gets indexed in Algolia)
+export interface AlgoliaRecord {
   objectID: string;
-  title: string;
-  description: string;
-  tables: PageTable[];
-  headings: Heading[];
-  excerpt?: SnippetMatch;
+  url: string;
+  type: 'page' | 'H1' | 'H2' | 'H3';
+  pageTitle: string;
+  hierarchy: Hierarchy;
+  html: string;
+  text: string;
+  properties: string[];
+  category: string;
+  pageDescription: string;
+}
+
+// Search result type (base record + Algolia-added fields)
+export type AlgoliaSearchResult = AlgoliaRecord & {
+  _highlightResult?: {
+    text?: HighlightResult;
+    hierarchy?: {
+      lvl1?: HighlightResult;
+      lvl2?: HighlightResult;
+      lvl3?: HighlightResult;
+    };
+  };
 };
 
-export type AlgoliaResult = SearchResponse<Page>['hits'][number];
+export type AlgoliaResult = SearchResponse<AlgoliaSearchResult>['hits'][number];

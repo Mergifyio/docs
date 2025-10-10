@@ -10,8 +10,27 @@ interface PageResultProps extends AlgoliaResult {
   active: boolean;
 }
 
-function PageResult({ objectID, _highlightResult, onHover, active }: PageResultProps) {
-  const slug = objectID.startsWith('/') ? objectID : `/${objectID}`;
+function PageResult({
+  url,
+  pageTitle,
+  hierarchy,
+  type,
+  _highlightResult,
+  onHover,
+  active,
+  objectID,
+}: PageResultProps) {
+  const displayUrl = url.startsWith('/') ? `/${url}` : url.startsWith('#') ? url : `/${url}`;
+
+  // Build breadcrumb string - show all hierarchy levels that exist
+  const breadcrumb = [hierarchy.lvl0, hierarchy.lvl1, hierarchy.lvl2, hierarchy.lvl3]
+    .filter(Boolean)
+    .join(' › ');
+
+  // For page type, show page title; for headings, show the heading text from hierarchy
+  const displayTitle =
+    type === 'page' ? pageTitle : hierarchy.lvl3 || hierarchy.lvl2 || hierarchy.lvl1 || pageTitle;
+
   return (
     <a
       className={classNames({ 'page-result': true, active })}
@@ -24,25 +43,36 @@ function PageResult({ objectID, _highlightResult, onHover, active }: PageResultP
         cursor: 'pointer',
       }}
       onMouseOver={onHover}
-      href={slug}
+      href={displayUrl}
       id={objectID}
     >
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div
+        style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', gap: 4 }}
+      >
         <div
           className="result-title"
-          dangerouslySetInnerHTML={{ __html: extractResultValue(_highlightResult?.title) }}
+          dangerouslySetInnerHTML={{
+            __html:
+              extractResultValue(_highlightResult?.hierarchy?.lvl3) ||
+              extractResultValue(_highlightResult?.hierarchy?.lvl2) ||
+              extractResultValue(_highlightResult?.hierarchy?.lvl1) ||
+              displayTitle,
+          }}
         />
         <p
           className="result-description"
-          dangerouslySetInnerHTML={{ __html: extractResultValue(_highlightResult?.title) }}
           style={{
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             width: '100%',
             margin: 0,
+            fontSize: '0.875rem',
+            color: 'var(--theme-text-light)',
           }}
-        />
+        >
+          {breadcrumb}
+        </p>
       </div>
       {active && <BsArrowReturnLeft />}
     </a>
@@ -103,11 +133,14 @@ export default function Results({ results }: ResultsProps) {
         return newFocused;
       });
     } else if (e.key === 'Enter') {
-      const slug = focusedPage?.objectID
-        ? focusedPage.objectID.startsWith('/')
-          ? focusedPage.objectID
-          : `/${focusedPage.objectID}`
-        : '/';
+      let slug = '/';
+      if (focusedPage?.url) {
+        slug = focusedPage.url.startsWith('/')
+          ? focusedPage.url
+          : focusedPage.url.startsWith('#')
+            ? focusedPage.url
+            : `/${focusedPage.url}`;
+      }
 
       if (focusedPage) window.location.replace(slug);
     }
