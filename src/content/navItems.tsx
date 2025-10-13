@@ -143,7 +143,6 @@ const navItems: NavItem[] = [
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
-      { title: 'Troubleshooting', path: '/merge-queue/troubleshooting', icon: FaBug },
     ],
   },
   {
