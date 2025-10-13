@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import Modal from '../Modal/Modal';
 import Results from './Results';
-import { AlgoliaResult, Page } from './types';
+import { AlgoliaResult, AlgoliaSearchResult } from './types';
 import './Search.scss';
 
 function useAlgoliaSearch(query: string, open: boolean) {
@@ -16,24 +16,17 @@ function useAlgoliaSearch(query: string, open: boolean) {
         import.meta.env.PUBLIC_ALGOLIA_APP_ID as string,
         import.meta.env.PUBLIC_ALGOLIA_SEARCH_KEY as string
       );
-      const response = await searchClient.search<Page>({
+      const response = await searchClient.search<AlgoliaSearchResult>({
         requests: [
           {
             indexName: import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME,
             query: query,
-            attributesToHighlight: [
-              'title',
-              'description',
-              'excerpt',
-              'headings.value',
-              'tables.data',
-              'tables.content',
-            ],
-            attributesToSnippet: ['excerpt:40'],
+            attributesToHighlight: [],
+            exactOnSingleWordQuery: 'word',
           },
         ],
       });
-      setResults((response.results[0] as SearchResponse<Page>)?.hits);
+      setResults((response.results[0] as SearchResponse<AlgoliaSearchResult>)?.hits);
     };
 
     if (open && query && query.length > 3) {
