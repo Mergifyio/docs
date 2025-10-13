@@ -32,7 +32,7 @@
     "astro-auto-import": "^0.4.5",
     "astro-eslint-parser": "^1.2.2",
     "astro-expressive-code": "^0.41.3",
-    "astro-og-canvas": "^0.7.1",
+    "astro-og-canvas": "^0.7.2",
     "canvaskit-wasm": "^0.40.0",
     "eslint": "^8.57.0",
     "eslint-mdx": "^3.6.2",
