@@ -1284,7 +1284,7 @@
       "title": "MergeProtectionRulesModel",
       "type": "array"
     },
-    "MergeProtectionsModel": {
+    "MergeProtections": {
       "additionalProperties": false,
       "properties": {
         "reporting_method": {
@@ -1304,10 +1304,10 @@
           "type": "boolean"
         }
       },
-      "title": "MergeProtectionsModel",
+      "title": "MergeProtections",
       "type": "object"
     },
-    "MergeQueueModel": {
+    "MergeQueue": {
       "additionalProperties": false,
       "properties": {
         "max_parallel_checks": {
@@ -1342,7 +1342,7 @@
           "title": "Queued Label"
         }
       },
-      "title": "MergeQueueModel",
+      "title": "MergeQueue",
       "type": "object"
     },
     "NegationCondition": {
@@ -3072,10 +3072,10 @@
       "$ref": "#/$defs/PriorityRulesModel"
     },
     "merge_queue": {
-      "$ref": "#/$defs/MergeQueueModel"
+      "$ref": "#/$defs/MergeQueue"
     },
     "merge_protections_settings": {
-      "$ref": "#/$defs/MergeProtectionsModel"
+      "$ref": "#/$defs/MergeProtections"
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
