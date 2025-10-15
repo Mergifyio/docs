@@ -80,14 +80,7 @@ queue_rules:
     merge_conditions:
       - and: *CheckRuns
 
-  - name: default
-    <<: *DefaultQueueOptions
-    queue_conditions:
-      - and: *CheckRuns
-    merge_conditions:
-      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
-
-  - name: lowprio
+  - name: automated updates
     <<: *DefaultQueueOptions
     merge_method: merge
     queue_conditions:
@@ -109,6 +102,13 @@ queue_rules:
     batch_max_wait_time: 5min
     queue_branch_merge_method: fast-forward
     commit_message_template:
+
+  - name: default
+    <<: *DefaultQueueOptions
+    queue_conditions:
+      - and: *CheckRuns
+    merge_conditions:
+      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
 
 pull_request_rules:
   - name: automatic merge
