@@ -24,7 +24,3 @@ updates:
       prefix: ci
       prefix-development: ci
       include: scope
-    groups:
-      rollup:
-        patterns:
-          - "@rollup/*"
