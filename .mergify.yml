@@ -29,6 +29,7 @@ merge_protections:
     success_conditions:
       - and: &CheckRuns
           - check-success = lint
+          - check-success = build
           - check-success = test
           - or:
               - label = ignore-broken-links
