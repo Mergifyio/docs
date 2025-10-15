@@ -42,23 +42,73 @@ used to alter its position in the queue.
 
 ```dot class="graph"
 strict digraph {
-    fontname="sans-serif";
+    fontname="Inter, system-ui, sans-serif";
+    rankdir="TB";
+    bgcolor="#FAFBFC";
 
-    node [style=filled, shape=circle, fontcolor="black", fontname="sans-serif";];
-    edge [color="black", arrowhead=none, fontname="sans-serif", arrowhead=normal];
+    // Global node and edge styling
+    node [
+        style="filled,rounded",
+        shape=rect,
+        fontcolor="black",
+        fontname="Inter, system-ui, sans-serif",
+        fontsize=12,
+        margin=0.25,
+        penwidth=2,
+        width=2.8,
+        height=0.9
+    ];
 
-    Dequeued -> Queueing [label="    `queue` or `requeue`    \n    command or autoqueue    "];
-    Queueing -> Queued [label="Matches\n`queue_conditions`"];
+    edge [
+        color="#7C3AED",
+        arrowhead=normal,
+        fontname="Inter, system-ui, sans-serif",
+        fontsize=9,
+        penwidth=2
+    ];
 
-    Queued -> Dequeued [label="    Unmatches\n    `queue_conditions`   \nor\n    `dequeue` command    "]
-    Queued -> Validating [label="Reaches\n    top of the queue    "]
-    Validating -> Merged [label="Matches\n    `merge_conditions`    "];
-    Validating -> Dequeued [label="Unmatches\n    `queue_conditions` \nor\n    `dequeue` command     \nor\nfails to match\n`merge_conditions`"];
+    Dequeued [
+        label="⚪ Dequeued",
+        fillcolor="#F3F4F6",
+        color="#9CA3AF",
+        fontcolor="#4B5563"
+    ];
 
-    Validating [fillcolor="#DCAB07"];
-    Queueing [fillcolor="#DCAB07"];
-    Queued [fillcolor="#1b5e20", fontcolor="white"]
-    Merged [fillcolor="#814edf", fontcolor="white"];
+    Queueing [
+        label="⏳ Queueing",
+        fillcolor="#FFF4ED",
+        color="#FF8A3D",
+        fontcolor="#C2410C"
+    ];
+
+    Queued [
+        label="📋 Queued",
+        fillcolor="#EDE9FE",
+        color="#8B5CF6",
+        fontcolor="#5B21B6"
+    ];
+
+    Validating [
+        label="🔍 Validating",
+        fillcolor="#DBEAFE",
+        color="#3B82F6",
+        fontcolor="#1E40AF"
+    ];
+
+    Merged [
+        label="✅ Merged",
+        fillcolor="#D1FAE5",
+        color="#10B981",
+        fontcolor="#065F46"
+    ];
+
+    // Transitions with detailed labels
+    Dequeued -> Queueing [label="  queue/requeue command\n  or autoqueue  "];
+    Queueing -> Queued [label="  matches\n  queue_conditions  "];
+    Queued -> Dequeued [label="  unmatches queue_conditions\n  or dequeue command  "];
+    Queued -> Validating [label="  reaches top\n  of the queue  "];
+    Validating -> Merged [label="  matches\n  merge_conditions  "];
+    Validating -> Dequeued [label="  unmatches queue_conditions\n  or dequeue command\n  or fails merge_conditions  "];
 }
 ```
 
