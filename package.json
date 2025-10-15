@@ -97,8 +97,7 @@
     "remark-smartypants": "^3.0.2",
     "sass": "^1.93.2",
     "uuid": "^13.0.0",
-    "viz.js": "^2.1.2",
-    "vue": "^3.5.22"
+    "viz.js": "^2.1.2"
   },
   "remarkConfig": {
     "settings": {
