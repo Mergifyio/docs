@@ -2996,6 +2996,7 @@
       "type": "string"
     },
     "Scopes": {
+      "additionalProperties": false,
       "properties": {
         "source": {
           "anyOf": [
