@@ -68,7 +68,7 @@
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/poppins": "^5.2.7",
     "@nanostores/react": "^1.0.0",
-    "@scalar/api-reference": "^1.38.0",
+    "@scalar/api-reference": "^1.38.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/uuid": "^11.0.0",
