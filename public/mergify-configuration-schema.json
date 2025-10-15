@@ -995,6 +995,28 @@
       "title": "EditActionModel",
       "type": "object"
     },
+    "FileFilters": {
+      "properties": {
+        "include": {
+          "description": "Glob patterns of files to include for this scope. Empty means 'include everything' before exclusions. Examples: ('src/**/*.py', 'Makefile')",
+          "items": {
+            "type": "string"
+          },
+          "title": "Include",
+          "type": "array"
+        },
+        "exclude": {
+          "description": "Glob patterns of files to exclude from this scope. Evaluated after `include` and takes precedence. Examples: ('**/tests/**', '*.md')",
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclude",
+          "type": "array"
+        }
+      },
+      "title": "FileFilters",
+      "type": "object"
+    },
     "GhaActionModel": {
       "additionalProperties": false,
       "properties": {
@@ -1340,6 +1362,16 @@
           "default": "queued",
           "description": "The label to add on pull requests when they are added to the merge queue.",
           "title": "Queued Label"
+        },
+        "mode": {
+          "default": "serial",
+          "description": "Defines how the merge queue schedules pull requests.\n- `serial`: PRs are tested cumulatively.\n- `parallel`: PRs whose scopes don't overlap are tested in parallel.\n",
+          "enum": [
+            "serial",
+            "parallel"
+          ],
+          "title": "Mode",
+          "type": "string"
         }
       },
       "title": "MergeQueue",
@@ -2963,6 +2995,77 @@
       "title": "RuleConditionModel",
       "type": "string"
     },
+    "Scopes": {
+      "properties": {
+        "source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceFiles"
+            },
+            {
+              "$ref": "#/$defs/SourceManual"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where scopes come from. `files` uses file-pattern rules (`gha-mergify-ci-scopes` must have been setup on your pull request); `manual` uses scopes sent via API or `mergify scopes-send`; `None` disables scoping.",
+          "title": "Source"
+        },
+        "merge_queue_scope": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "merge-queue",
+          "description": "Optional scope name automatically applied to merge queue PRs. Set to `None` to disable.",
+          "title": "Merge Queue Scope"
+        }
+      },
+      "title": "Scopes",
+      "type": "object"
+    },
+    "SourceFiles": {
+      "properties": {
+        "files": {
+          "description": "Mapping of scope name to its file filters. A file belongs to a scope if it matches the scope's `include` patterns and not its `exclude` patterns.",
+          "patternProperties": {
+            "^[A-Za-z0-9_-]+$": {
+              "$ref": "#/$defs/FileFilters"
+            }
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Files",
+          "type": "object"
+        }
+      },
+      "required": [
+        "files"
+      ],
+      "title": "SourceFiles",
+      "type": "object"
+    },
+    "SourceManual": {
+      "properties": {
+        "manual": {
+          "description": "Scopes are manually sent via API or `mergify scopes-send`",
+          "title": "Manual",
+          "type": "null"
+        }
+      },
+      "required": [
+        "manual"
+      ],
+      "title": "SourceManual",
+      "type": "object"
+    },
     "SquashActionModel": {
       "additionalProperties": false,
       "properties": {
@@ -3052,6 +3155,9 @@
     },
     "defaults": {
       "$ref": "#/$defs/DefaultsRulesModel"
+    },
+    "scopes": {
+      "$ref": "#/$defs/Scopes"
     },
     "commands_restrictions": {
       "$ref": "#/$defs/CommandsRestrictionsRulesModel"
