@@ -17,7 +17,7 @@
     "@actions/core": "^1.11.1",
     "@astrojs/mdx": "^4.3.7",
     "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/ts-plugin": "^1.10.4",
+    "@astrojs/ts-plugin": "^1.10.5",
     "@babel/core": "^7.28.4",
     "@biomejs/biome": "^2.2.6",
     "@types/hast": "^3.0.4",
