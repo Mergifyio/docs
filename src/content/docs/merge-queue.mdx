@@ -49,14 +49,103 @@ With a merge queue, there is no longer a need for engineers to participate in a
 engineers to focus on their core development tasks, while maintaining a steady,
 efficient, and error-free integration flow.
 
-### Understanding The Problem: A Real-world Example
+## The Three Pillars of an Effective Merge Workflow
 
-Let's consider a situation with a having a pull request ready to merge.
+While preventing broken main branches is crucial, a merge queue can optimize
+your entire development workflow across three fundamental dimensions:
 
-#### Step 1: PR Passes CI
+### 1. Reliability
+
+**The Problem:** When multiple pull requests are ready to merge simultaneously,
+each may pass CI individually, but merging one can create incompatibilities
+with the others. A PR validated against an outdated main branch might break the
+build when actually merged, even though it passed all checks.
+
+**The Solution:** A merge queue ensures every change is validated against the
+actual state of the main branch before merging. Each PR is updated with the
+latest changes and re-tested, guaranteeing that only compatible, validated code
+makes it into your main branch.
+
+See [Understanding The Reliability Problem](#understanding-the-reliability-problem)
+below for a detailed example of how this issue occurs and how merge queues
+prevent it.
+
+### 2. Velocity (Performance)
+
+**The Problem:** Without a merge queue, you can merge PRs quickly (just click
+merge on 10 PRs every morning), but when something breaks on the main branch,
+the recovery process is slow and disruptive. You need to investigate which PR
+caused the issue, revert it, and get the main branch healthy again, all while
+blocking other developers from merging or deploying.
+
+**The Solution:** A basic merge queue solves the reliability issue (see
+[Reliability](#1-reliability) above) but introduces a new challenge: sequential
+testing creates a bottleneck. To maintain high velocity while keeping the
+reliability guarantee, a merge queue can use:
+
+- **[Parallel speculative checks](/merge-queue/parallel-checks)**: Test
+  multiple PRs simultaneously, predicting which will merge successfully and
+  running their CI in parallel. This maintains the speed of "just click merge"
+  without the risk of broken builds.
+
+- **[Two-step CI workflows](/merge-queue/two-step)**: Run lightweight tests on
+  every PR update, but save expensive comprehensive tests for when the PR
+  actually enters the merge queue. This reduces wasted CI time on PRs that
+  aren't ready to merge yet.
+
+These strategies help high-velocity teams maintain rapid development pace while
+ensuring compliance and code quality, giving you the speed without the recovery
+pain.
+
+### 3. Cost Optimization
+
+**The Problem:** CI resources are expensive. Running full test suites on every
+PR update, especially when PRs get repeatedly updated before merging, can
+quickly consume significant compute resources and budget.
+
+**The Solution:** A merge queue enables several cost-saving strategies:
+
+- **[Batch merging](/merge-queue/batches)**: Combine multiple PRs into a single
+  batch and test them together. Instead of running CI separately for 5 PRs, run
+  it once for all 5 together, drastically reducing CI usage.
+
+- **[Two-step CI](/merge-queue/two-step)**: Move expensive tests (like E2E
+  tests) to run only in the merge queue instead of on every PR update. Since
+  PRs often get updated multiple times before merging—or may never merge at
+  all—this can dramatically reduce CI costs while actually improving reliability
+  by ensuring those critical tests run against the real merge state.
+
+With these strategies, you can significantly reduce CI costs compared to running
+all tests on every PR update, while simultaneously gaining better reliability
+guarantees.
+
+### Finding Your Balance
+
+The key insight is that you can't optimize all three dimensions simultaneously.
+As detailed in our [performance guide](/merge-queue/performance), this is
+similar to the CAP theorem in distributed systems—you typically need to
+prioritize two of the three:
+
+- **Reliability + Velocity**: Maximum speed with guaranteed correctness (higher
+  CI costs)
+
+- **Reliability + Cost**: Minimal CI usage with guaranteed correctness (slower
+  merges)
+
+- **Velocity + Cost**: Fast, efficient merges with slightly relaxed guarantees
+  (e.g., using batching)
+
+Mergify's merge queue is highly configurable, allowing you to find the right
+balance for your team's specific needs and constraints.
+
+## Understanding The Reliability Problem
+
+Let's consider a situation with a pull request ready to merge.
+
+### Step 1: PR Passes CI
 
 The developer made their changes on their feature branches. They've pushed
-their changes, and their pull request have successfully passed all CI checks.
+their changes, and their pull request has successfully passed all CI checks.
 The CI pipeline has validated that their changes are compatible with the main
 branch, and everything seems ready to merge.
 
@@ -126,7 +215,7 @@ strict digraph g {
 }
 ```
 
-#### Step 2: Main Branch Gets a New Commit
+### Step 2: Main Branch Gets a New Commit
 
 Meanwhile, a second developer merges another change into the main branch. This
 change doesn't conflict with the previous pull request at the code level, so
@@ -207,7 +296,7 @@ incompatible.
 test has been added and won't pass with this new code, a file or a component
 has been renamed, etc.
 
-#### Step 3: Merging the PR Would Fail the CI
+### Step 3: Merging the PR Would Fail the CI
 
 If the pull request gets merged now, it will create a failure in the main
 branch because its changes are not compatible with the latest commit from the
@@ -520,73 +609,3 @@ strict digraph g {
 
 }
 ```
-
-## When to Use A Merge Queue
-
-Determining when to use a merge queue largely depends on your team's
-development practices, the complexity of your project, and the rate of incoming
-pull requests. Here are some common scenarios where a merge queue can be
-beneficial:
-
-- **High Volume of Pull Requests**: if your project is receiving a large number
-of pull requests, it can be challenging to keep track of which PRs are ready
-for merging and which ones need further checks or updates. A merge queue
-automates this process, ensuring that only validated and up-to-date PRs are
-merged.
-
-- **Complex Projects**: for complex projects with multiple dependencies, a
-small change can potentially have significant effects. Running updated CI
-checks on each PR in a merge queue ensures that all changes are compatible with
-the other changes.
-
-- **Agile Teams**: teams that practice Agile methodologies such as continuous
-integration and continuous deployment (CI/CD) can benefit significantly from a
-merge queue. By automating the testing and merging process, a merge queue helps
-maintain the pace of continuous delivery while ensuring code quality.
-
-- **Teams with Varying Time Zones**: if your team members are distributed
-across various time zones, coordinating PR reviews and merges can be tricky.
-With a merge queue, PRs can be merged in an orderly manner as they pass checks,
-regardless of who is currently online.
-
-- **Prioritizing Important Pull Requests**: sometimes, you have important pull
-requests that should be merged before others, irrespective of the order in
-which they were created. With a merge queue, you can prioritize these important
-PRs to be merged as soon as they pass their CI checks.
-
-In summary, a merge queue can be a valuable tool for any team looking to
-streamline their development process, improve code quality, and maintain a
-healthy main branch. With Mergify's merge queue, you can automate this entire
-process, making your team more productive and your project more robust.
-
-## Benefits of Using A Merge Queue
-
-A merge queue offer a multitude of benefits that can greatly enhance the
-efficiency and quality of your software development process. Here are some key
-advantages:
-
-- **Ensures Codebase Stability**: by merging only up-to-date and CI-checked
-PRs, a merge queue significantly reduce the risk of introducing bugs or
-conflicts into your codebase, thus enhancing its stability.
-
-- **Saves Time and Reduces Manual Labor**: a merge queue automate the process of
-testing and merging PRs, saving developers from the tedious task of constantly
-updating and checking their PRs. This allows them to focus more on writing
-quality code and less on administrative tasks.
-
-- **Optimizes Resource Usage**: a merge queue minimize the use of CI resources
-by avoiding unnecessary checks on PRs that are not up-to-date with the main
-branch. Usage of advanced options such as [batches](/merge-queue/batches).
-
-- **Enhances Collaboration**: a merge queue promote a more collaborative
-environment where developers don't need to compete to get their PRs merged.
-Instead, they can confidently work knowing that their PRs will be handled
-fairly and efficiently.
-
-- **Streamlines Workflow**: by automatically handling PR updates and merges, a
-merge queue streamlines the software development workflow. This makes the
-process smoother, faster, and less prone to human error.
-
-In essence, a merge queue can significantly boost your team's productivity and
-the quality of your product, making them a worthwhile addition to your
-development toolbox.
