@@ -248,7 +248,7 @@ pre > code {
   display: inline-block;
   padding: 15px 10px;
   width: 100%;
-  background-color: var(--theme-code-bg);
+  background-color: transparent;
 }
 
 .content kbd {
@@ -778,10 +778,9 @@ hr {
 pre {
   position: relative;
   padding: 1rem 1.25rem;
-  background: linear-gradient(180deg, var(--theme-code-bg), rgba(0, 0, 0, 0.02));
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
+  background: var(--theme-code-bg);
+  border: 1px solid var(--theme-border-color);
+  border-radius: 8px;
 }
 
 /* Inline code */
