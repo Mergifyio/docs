@@ -2379,7 +2379,7 @@
         },
         "merge_conditions": {
           "$ref": "#/$defs/QueueRuleMergeConditionsModel",
-          "description": "The list of conditions to match to get the queued pull request merged. This automatically includes the `queue_conditions`. In case of speculative merge pull request, the merge conditions starting by check- are evaluated against the temporary pull request instead of the original one."
+          "description": "The list of conditions to match to get the queued pull request merged. In case of draft pull request, the merge conditions for checks are evaluated against the temporary pull request instead of the original one."
         },
         "branch_protection_injection_mode": {
           "default": "queue",
@@ -2597,7 +2597,7 @@
         },
         "merge_conditions": {
           "$ref": "#/$defs/QueueRuleMergeConditionsModel",
-          "description": "The list of conditions to match to get the queued pull request merged. This automatically includes the `queue_conditions`. In case of speculative merge pull request, the merge conditions starting by check- are evaluated against the temporary pull request instead of the original one."
+          "description": "The list of conditions to match to get the queued pull request merged. In case of draft pull request, the merge conditions for checks are evaluated against the temporary pull request instead of the original one."
         },
         "branch_protection_injection_mode": {
           "default": "queue",
