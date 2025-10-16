@@ -78,7 +78,6 @@
     "jsonpointer": "^5.0.1",
     "react": "^19.0.0",
     "react-icons": "^5.5.0",
-    "react-modal": "^3.16.3",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-format": "^5.0.1",
     "rehype-raw": "^7.0.0",
