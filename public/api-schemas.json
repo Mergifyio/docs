@@ -7018,18 +7018,7 @@
             "title": "Or"
           },
           "not": {
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Not"
+            "$ref": "#/components/schemas/MatchingConditionsDict-Input"
           }
         },
         "type": "object",
@@ -7066,18 +7055,7 @@
             "title": "Or"
           },
           "not": {
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Not"
+            "$ref": "#/components/schemas/MatchingConditionsDict-Output"
           }
         },
         "type": "object",
