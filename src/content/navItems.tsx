@@ -141,6 +141,7 @@ const navItems: NavItem[] = [
       { title: 'Parallel Checks', path: '/merge-queue/parallel-checks', icon: TiFlowParallel },
       { title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
+      { title: 'Monorepo', path: '/merge-queue/monorepo', icon: BsStack },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
     ],
