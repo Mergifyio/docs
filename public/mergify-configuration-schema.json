@@ -1363,6 +1363,19 @@
           "description": "The label to add on pull requests when they are added to the merge queue.",
           "title": "Queued Label"
         },
+        "dequeued_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "dequeued",
+          "description": "The label to add on pull requests when they are removed from the merge queue.",
+          "title": "Dequeued Label"
+        },
         "mode": {
           "default": "serial",
           "description": "Defines how the merge queue schedules pull requests.\n- `serial`: PRs are tested cumulatively.\n- `parallel`: PRs whose scopes don't overlap are tested in parallel.\n",
