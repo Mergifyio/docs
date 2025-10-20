@@ -2510,7 +2510,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `max_parallel_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on draft PR (`max_parallel_checks > 1`, or `batch_size > 1`, or two-step CI).",
           "title": "Merge Method"
         },
         "autosquash": {
@@ -2728,7 +2728,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on queues with `max_parallel_checks > 1`, `batch_size > 1`, or with `allow_inplace_checks` set to `false`.",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on draft PR (`max_parallel_checks > 1`, or `batch_size > 1`, or two-step CI).",
           "title": "Merge Method"
         },
         "autosquash": {
