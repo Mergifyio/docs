@@ -7502,6 +7502,7 @@
         "properties": {
           "reason": {
             "type": "string",
+            "maxLength": 255,
             "title": "Reason",
             "description": "The reason of the queue pause"
           },
