@@ -4,6 +4,7 @@ import { AiOutlineApi, AiOutlineDeploymentUnit, AiOutlineFile } from 'react-icon
 import { BiBadgeCheck, BiCut, BiRuler, BiSolidCoinStack } from 'react-icons/bi';
 import {
   BsBook,
+  BsBoxes,
   BsCommand,
   BsGear,
   BsLightbulb,
@@ -141,6 +142,7 @@ const navItems: NavItem[] = [
       { title: 'Parallel Checks', path: '/merge-queue/parallel-checks', icon: TiFlowParallel },
       { title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
+      { title: 'Monorepo', path: '/merge-queue/monorepo', icon: BsBoxes },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
     ],
