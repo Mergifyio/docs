@@ -1,0 +1,259 @@
+---
+title: Monorepo
+description: Optimize merge queue batching for monorepos with scopes.
+---
+
+In monorepo environments, not every pull request affects the entire codebase. Running all tests for
+every change wastes time and CI resources. Mergify's **scopes** feature allows you to intelligently
+batch pull requests based on which parts of your codebase they modify, dramatically improving merge
+queue efficiency.
+
+## Understanding Scopes
+
+Scopes define discrete areas of your monorepo (like packages, services, or components). When a pull
+request is created, Mergify automatically determines which scopes are affected and uses this
+information to optimize batching.
+
+Scopes can be determined in several ways depending on your project's needs:
+
+- **File patterns**: Match file paths to identify affected scopes (currently supported)
+
+- **Build system integration**: Support for tools like Bazel, Nx, Turborepo, and others that
+  can provide scope information based on dependency graphs and build targets
+
+This flexibility allows you to use the approach that best fits your monorepo's architecture and
+existing tooling.
+
+### The Batching Challenge in Monorepos
+
+Without scopes, Mergify batches pull requests together regardless of what they change. This means:
+
+- A Python service change and a JavaScript frontend change might be batched together
+- Both sets of tests run even though they're completely independent
+- If one fails, both PRs are affected by the batch split process
+
+With scopes, Mergify can:
+
+- Batch together PRs that affect the same scopes (e.g., multiple Python changes)
+- Keep independent changes in separate batches
+- Reduce unnecessary CI runs for unrelated parts of your codebase
+
+## Configuring Scopes
+
+Define scopes in your `.mergify.yml` configuration file using file patterns:
+
+```yaml
+scopes:
+  source:
+    files:
+      python-api:
+        includes:
+          - api/**/*.py
+          - libs/shared/**/*.py
+      frontend:
+        includes:
+          - web/**/*.js
+          - web/**/*.jsx
+          - web/**/*.ts
+          - web/**/*.tsx
+      docs:
+        includes:
+          - docs/**/*.md
+          - docs/**/*.mdx
+
+queue_rules:
+  - name: default
+    batch_size: 5
+```
+
+In this example:
+- Changes to Python files in `api/` or `libs/shared/` get the `python-api` scope
+- Changes to frontend files in `web/` get the `frontend` scope
+- Documentation changes get the `docs` scope
+
+:::tip
+Mergify will intelligently batch PRs with overlapping scopes together. For example, if PR1 affects
+`python-api` and PR2 affects both `python-api` and `frontend`, they'll be batched together since
+they share a common scope.
+:::
+
+## Setting Up CI with Scopes
+
+To leverage scopes in your CI workflow, use the
+[gha-mergify-ci](https://github.com/Mergifyio/gha-mergify-ci) GitHub Action. This action detects
+which scopes are affected by a pull request and allows you to run only the relevant tests.
+
+### GitHub Actions Integration
+
+Here's a complete example showing how to set up scope-aware CI:
+
+```yaml
+name: Continuous Integration
+on:
+  pull_request:
+
+jobs:
+  scopes:
+    runs-on: ubuntu-24.04
+    outputs:
+      python-api: ${{ fromJSON(steps.scopes.outputs.scopes).python-api }}
+      frontend: ${{ fromJSON(steps.scopes.outputs.scopes).frontend }}
+      docs: ${{ fromJSON(steps.scopes.outputs.scopes).docs }}
+      merge-queue: ${{ fromJSON(steps.scopes.outputs.scopes).merge-queue }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Get PR scopes
+        id: scopes
+        uses: Mergifyio/gha-mergify-ci@v9
+        with:
+          action: scopes
+          token: ${{ secrets.MERGIFY_TOKEN }}
+
+  python-tests:
+    if: ${{ needs.scopes.outputs.python-api == 'true' }}
+    needs: scopes
+    uses: ./.github/workflows/python-tests.yaml
+    secrets: inherit
+
+  frontend-tests:
+    if: ${{ needs.scopes.outputs.frontend == 'true' }}
+    needs: scopes
+    uses: ./.github/workflows/frontend-tests.yaml
+    secrets: inherit
+
+  docs-tests:
+    if: ${{ needs.scopes.outputs.docs == 'true' }}
+    needs: scopes
+    uses: ./.github/workflows/docs-tests.yaml
+    secrets: inherit
+
+  integration-tests:
+    if: ${{ needs.scopes.outputs.merge-queue == 'true' }}
+    needs: scopes
+    uses: ./.github/workflows/integration-tests.yaml
+    secrets: inherit
+
+  alls-green:
+    if: ${{ !cancelled() }}
+    needs:
+      - python-tests
+      - frontend-tests
+      - docs-tests
+      - integration-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all jobs succeeded
+        uses: re-actors/alls-green@release/v1
+        with:
+          allowed-skips: ${{ toJSON(needs) }}
+          jobs: ${{ toJSON(needs) }}
+```
+
+### Key Components
+
+1. **Scopes Job**: Detects which scopes are affected and outputs boolean values
+
+2. **Conditional Jobs**: Each test suite runs only if its scope is affected
+
+3. **Integration Tests**: The special `merge-queue` scope is automatically set to `true` when
+   running in the merge queue context
+
+4. **Alls-Green**: Aggregates all job results, handling skipped jobs correctly
+
+## The Merge Queue Scope
+
+The `gha-mergify-ci` action automatically provides a special `merge-queue` scope that returns `true`
+only when running in a merge queue context (on temporary merge queue branches).
+
+This is useful for:
+
+- **Integration tests** that only need to run before merging
+- **End-to-end tests** that are expensive and should only run on final batches
+- **Deployment validation** that needs to happen before code reaches the main branch
+
+```yaml
+integration-tests:
+  if: ${{ needs.scopes.outputs.merge-queue == 'true' }}
+  needs: scopes
+  runs-on: ubuntu-22.04
+  steps:
+    - uses: actions/checkout@v5
+    - name: Run expensive integration tests
+      run: npm run test:integration
+```
+
+## Important Behaviors
+
+### Scope Detection is PR-Specific
+
+The `gha-mergify-ci` action only analyzes files changed by the specific pull request, **not** files
+from other PRs in the merge queue batch. This ensures:
+
+- Each PR's scopes reflect only its own changes
+- Batching decisions remain consistent even as the queue changes
+- Tests run for the correct scopes regardless of what else is in the batch
+
+### Path Filtering vs Scopes
+
+GitHub Actions offers path filtering (`on.pull_request.paths`), but it has critical limitations in
+merge queue scenarios:
+
+```yaml
+# ❌ Don't use path filtering for merge queues
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+```
+
+**Problems with path filtering:**
+
+- When a job doesn't run, you can't distinguish between "filtered out" and "CI failed to start"
+
+- Required status checks fail if jobs are skipped due to filtering
+
+- In merge queues, you don't want to skip tests on PR2 just because PR1 in the batch modified
+  different files
+
+**✅ Use scopes instead:**
+
+- Jobs always run but can conditionally skip work based on scope detection
+- Status checks always report (success or skipped)
+- Merge queue batching respects scope boundaries
+
+## Example: Multi-Language Monorepo
+
+Here's a real-world example for a monorepo with Python, JavaScript, and Go services:
+
+```yaml
+scopes:
+  source:
+    files:
+      python-api:
+        includes:
+          - services/api/**/*.py
+          - libs/python/**/*.py
+      user-service:
+        includes:
+          - services/users/**/*.go
+      frontend:
+        includes:
+          - apps/web/**/*.{js,jsx,ts,tsx}
+      shared-config:
+        includes:
+          - config/**/*
+          - docker/**/*
+
+queue_rules:
+  - name: default
+    batch_size: 8
+    batch_max_wait_time: 5 min
+```
+
+With this configuration:
+- PRs affecting only `frontend` will batch together
+
+- PRs affecting `python-api` will batch together
+
+- PRs affecting `shared-config` will batch with everything (since config affects all
+  services)

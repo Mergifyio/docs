@@ -9,7 +9,7 @@ import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import CommunityButton from '../../components/CommunityButton.astro';
 import { MdOutlineLightbulb, MdMonitorHeart } from 'react-icons/md';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
-import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStack, BsLightbulb } from 'react-icons/bs';
+import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStack, BsLightbulb, BsBoxes } from 'react-icons/bs';
 import { BiRuler, BiBadgeCheck, BiCut, BiSolidCoinStack } from 'react-icons/bi';
 import { TbPackages, TbGitBranch } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
@@ -95,6 +95,9 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
     </Docset>
     <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon={FaTrafficLight}>
       Fast + full validation strategy.
+    </Docset>
+    <Docset title="Monorepo" path="/merge-queue/monorepo" icon={BsBoxes}>
+      Optimization for large repositories.
     </Docset>
     <Docset title="Deployment" path="/merge-queue/deploy" icon={AiOutlineDeploymentUnit}>
       Adopt safely in production.
