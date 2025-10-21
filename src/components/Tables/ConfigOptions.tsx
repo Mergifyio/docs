@@ -211,6 +211,6 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
 
 export function HighlightCode(props: any) {
   const { children } = props;
-  // eslint-disable-next-line react/no-danger
+
   return <code dangerouslySetInnerHTML={{ __html: children }} />;
 }
