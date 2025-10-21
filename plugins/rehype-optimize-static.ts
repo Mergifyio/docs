@@ -4,7 +4,7 @@ import type { Transformer } from 'unified';
 import { walk } from 'unist-util-walker';
 
 // accessing untyped hast and mdx types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 type Node = any;
 
 const headingRe = /h([0-6])/;
