@@ -30,7 +30,6 @@ function useAlgoliaSearch(query: string, open: boolean) {
     };
 
     if (open && query && query.length > 3) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       search();
     }
   }, [query, open]);

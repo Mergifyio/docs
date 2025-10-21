@@ -221,7 +221,6 @@ export const renderMdxRawTable = (
   }
 
   if (node.type === 'text') {
-    // eslint-disable-next-line react/no-danger
     const highlightedText = highlightText(node.value, highlights);
     const isHighlight = highlightedText.includes('<em>');
 

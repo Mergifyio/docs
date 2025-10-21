@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { IconType } from 'react-icons';
 import { AiOutlineApi, AiOutlineDeploymentUnit, AiOutlineFile } from 'react-icons/ai';
 import { BiBadgeCheck, BiCut, BiRuler, BiSolidCoinStack } from 'react-icons/bi';
