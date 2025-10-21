@@ -61,7 +61,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.5",
     "@astrojs/react": "^4.4.0",
     "@astrojs/vue": "^5.1.1",
     "@fontsource/ibm-plex-mono": "^5.2.7",
