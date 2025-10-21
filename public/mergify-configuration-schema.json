@@ -873,6 +873,7 @@
       "type": "object"
     },
     "DisabledDict": {
+      "additionalProperties": false,
       "properties": {
         "reason": {
           "title": "Reason",
@@ -2894,7 +2895,6 @@
             },
             {
               "additionalProperties": {
-                "default": 1,
                 "maximum": 65535,
                 "minimum": 1,
                 "type": "integer"
@@ -2916,7 +2916,6 @@
             },
             {
               "additionalProperties": {
-                "default": 1,
                 "maximum": 65535,
                 "minimum": 1,
                 "type": "integer"
@@ -2938,7 +2937,6 @@
             },
             {
               "additionalProperties": {
-                "default": 1,
                 "maximum": 65535,
                 "minimum": 1,
                 "type": "integer"
