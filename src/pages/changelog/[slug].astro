@@ -1,0 +1,334 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import { formatDate, formatDateHuman } from '../../util/changelog';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('changelog');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'changelog'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, description, date, tags } = entry.data;
+---
+
+<MainLayout content={{ title, description: description || '', suppressTitle: false }} breadcrumbTitle={title}>
+  <article class="changelog-entry">
+    <header class="entry-header">
+      <div class="header-meta">
+        <time datetime={formatDate(date)} class="date">{formatDateHuman(date)}</time>
+      </div>
+      {tags && tags.length > 0 && (
+        <ul class="tag-list" role="list" aria-label="Categories">
+          {tags.map(tag => (
+            <li><span class="tag">{tag}</span></li>
+          ))}
+        </ul>
+      )}
+    </header>
+
+    <div class="entry-content">
+      <Content />
+    </div>
+
+    <footer class="entry-footer">
+      <a href="/changelog/" class="back-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Changelog
+      </a>
+    </footer>
+  </article>
+</MainLayout>
+
+<style>
+  .changelog-entry {
+    max-width: 75ch;
+  }
+
+  /* Header section */
+  .entry-header {
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .header-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .date {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--chakra-colors-gray-700);
+    letter-spacing: 0.01em;
+    background: var(--chakra-colors-gray-100);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--chakra-colors-gray-200);
+    display: inline-block;
+  }
+
+  .theme-dark .date {
+    background: var(--chakra-colors-gray-800);
+    color: var(--chakra-colors-gray-100);
+    border-color: var(--chakra-colors-gray-700);
+  }
+
+  .tag-list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 50em) {
+    .entry-header {
+      grid-template-columns: 1fr;
+    }
+
+    .tag-list {
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+  }
+
+  .tag {
+    background: var(--chakra-colors-gray-100);
+    color: var(--chakra-colors-gray-700);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--chakra-colors-gray-200);
+  }
+
+  .theme-dark .tag {
+    background: var(--chakra-colors-gray-700);
+    color: var(--chakra-colors-gray-200);
+    border-color: var(--chakra-colors-gray-600);
+  }
+
+  .entry-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+    color: var(--theme-text);
+    letter-spacing: -0.02em;
+  }
+
+  @media (max-width: 50em) {
+    .entry-title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--theme-text-light);
+    margin: 0;
+    font-weight: 400;
+  }
+
+  @media (max-width: 50em) {
+    .lead {
+      font-size: 1.125rem;
+    }
+  }
+
+  /* Content section */
+  .entry-content {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--theme-text);
+  }
+
+  .entry-content :global(h2) {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .entry-content :global(h3) {
+    margin-top: 2rem;
+    margin-bottom: 0.875rem;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .entry-content :global(p) {
+    margin-bottom: 1.25rem;
+  }
+
+  .entry-content :global(ul),
+  .entry-content :global(ol) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.75rem;
+  }
+
+  .entry-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .entry-content :global(li > p) {
+    margin-bottom: 0.5rem;
+  }
+
+  .entry-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .theme-dark .entry-content :global(img) {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .entry-content :global(code) {
+    background: var(--theme-code-inline-bg);
+    color: var(--theme-code-inline-text);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: var(--font-mono);
+  }
+
+  .entry-content :global(pre) {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    background: var(--theme-code-bg);
+    border: 1px solid var(--theme-border-color);
+  }
+
+  .entry-content :global(pre code) {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.875rem;
+  }
+
+  .entry-content :global(blockquote) {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    border-left: 4px solid var(--chakra-colors-gray-300);
+    background: var(--chakra-colors-gray-50);
+    color: var(--theme-text-light);
+    font-style: italic;
+  }
+
+  .theme-dark .entry-content :global(blockquote) {
+    border-left-color: var(--chakra-colors-gray-600);
+    background: var(--chakra-colors-gray-800);
+  }
+
+  .entry-content :global(a) {
+    color: var(--theme-text);
+    text-decoration: underline;
+    text-decoration-color: var(--chakra-colors-gray-300);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.2s;
+  }
+
+  .entry-content :global(a:hover) {
+    text-decoration-color: var(--chakra-colors-gray-600);
+  }
+
+  .entry-content :global(hr) {
+    margin: 2.5rem 0;
+    border: none;
+    border-top: 1px solid var(--theme-border-color);
+  }
+
+  /* Spacing adjustments */
+  .entry-content > :global(*:first-child) {
+    margin-top: 0;
+  }
+
+  .entry-content > :global(*:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Footer */
+  .entry-footer {
+    margin-top: 4rem;
+  }
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--chakra-colors-gray-700);
+    background: var(--chakra-colors-gray-100);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--chakra-colors-gray-200);
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .back-button:hover {
+    background: var(--chakra-colors-gray-700);
+    color: #fff;
+    border-color: var(--chakra-colors-gray-700);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .back-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .back-button svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .theme-dark .back-button {
+    background: var(--chakra-colors-gray-700);
+    color: var(--chakra-colors-gray-200);
+    border-color: var(--chakra-colors-gray-600);
+  }
+
+  .theme-dark .back-button:hover {
+    background: var(--chakra-colors-gray-600);
+    color: #fff;
+    border-color: var(--chakra-colors-gray-500);
+  }
+</style>

@@ -16,6 +16,7 @@ export default [
       'node_modules/**',
       '.github/**',
       'public/scalar-api-reference.js',
+      'src/content/changelog/',
     ],
   },
 
