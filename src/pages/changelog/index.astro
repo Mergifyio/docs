@@ -1,0 +1,426 @@
+---
+import { getCollection } from 'astro:content';
+import { FaSlack } from 'react-icons/fa';
+import { HiRss } from 'react-icons/hi';
+import MainLayout from '../../layouts/MainLayout.astro';
+import { formatDate, groupByYearMonth, sortChangelog } from '../../util/changelog';
+
+const entries = sortChangelog(await getCollection('changelog'));
+const grouped = groupByYearMonth(entries);
+const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+
+const title = 'Changelog';
+const description = 'Latest product updates from Mergify.';
+---
+
+<MainLayout content={{ title, description, suppressTitle: false }}>
+    <div class="changelog-header">
+      <div class="search-wrap">
+        <label for="search" class="sr-only">Search changelog</label>
+        <input id="search" type="search" placeholder="Search changes..." aria-label="Search changelog" />
+      </div>
+      <a href="/changelog/rss.xml" class="rss-button" aria-label="Subscribe to RSS feed">
+        <HiRss />
+        Subscribe via RSS
+      </a>
+    </div>
+
+    <div class="slack-subscribe">
+      <div class="slack-content">
+        <FaSlack className="slack-icon" />
+        <span class="slack-text">Stay updated on Slack! Subscribe to get changelog updates in your workspace:</span>
+      </div>
+      <div class="slack-command">
+        <code id="slack-command-text">{`/feed subscribe ${import.meta.env.SITE}/changelog/rss.xml`}</code>
+        <button id="copy-slack-command" class="copy-btn" aria-label="Copy Slack command">
+          <span class="copy-icon">📋</span>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="tag-pills tag-pills-row" id="tag-pills" aria-label="Tag filter">
+      <button data-tag="" class="pill active" aria-pressed="true">All</button>
+      {Array.from(new Set(entries.flatMap(e => e.data.tags))).sort().map(tag => (
+        <button data-tag={tag} class="pill" aria-pressed="false">{tag}</button>
+      ))}
+    </div>
+  {years.map(year => {
+    const months = Object.keys(grouped[year]).sort((a, b) => {
+      // Sort months in reverse chronological order
+      const dateA = new Date(`${a} 1, ${year}`);
+      const dateB = new Date(`${b} 1, ${year}`);
+      return dateB.getTime() - dateA.getTime();
+    });
+
+    return (
+      <section class="year" data-year={year}>
+        <h2 class="no-counter year-heading">{year}</h2>
+        {months.map(month => (
+          <div class="month-group">
+            <h3 class="month-heading">{month}</h3>
+            <ul class="entry-list" role="list">
+              {grouped[year][month].map(entry => (
+                <li class="entry" data-tags={entry.data.tags.join(',')} data-title={entry.data.title.toLowerCase()}>
+                  <div class="row">
+                    <div class="col date-tags">
+                      <time datetime={formatDate(entry.data.date)} class="date">{formatDate(entry.data.date)}</time>
+                      {entry.data.tags.length ? (
+                        <ul class="tag-list" aria-label="Tags">
+                          {entry.data.tags.map(t => <li><span class="tag" data-tag={t}>{t}</span></li>)}
+                        </ul>
+                      ) : null}
+                    </div>
+                    <div class="col content-col">
+                      <h3 class="title"><a href={`/changelog/${entry.slug}/`}>{entry.data.title}</a></h3>
+                      {entry.data.description && <p class="summary">{entry.data.description}</p>}
+                    </div>
+                    <div class="col more-col">
+                      <a class="read-more" href={`/changelog/${entry.slug}/`} aria-label={`Read full entry: ${entry.data.title}`}>Read →</a>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    );
+  })}
+  <p id="no-results" hidden>No matching entries.</p>
+  <script>
+    const search = document.getElementById('search') as HTMLInputElement | null;
+    const pillBar = document.getElementById('tag-pills');
+    const entries = Array.from(document.querySelectorAll<HTMLElement>('.entry'));
+    const noResults = document.getElementById('no-results');
+    let activeTag = '';
+
+    function applyFilter() {
+      if (!search || !noResults) return;
+      const q = (search.value || '').trim().toLowerCase();
+      let visibleCount = 0;
+      entries.forEach(el => {
+        const tags = (el.getAttribute('data-tags')||'').split(',').filter(Boolean);
+        const title = el.getAttribute('data-title') || '';
+        const matchesTag = !activeTag || tags.includes(activeTag);
+        const matchesSearch = !q || title.includes(q);
+        const show = matchesTag && matchesSearch;
+        el.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
+      noResults.hidden = visibleCount !== 0;
+    }
+
+    if (pillBar) {
+      pillBar.addEventListener('click', (e) => {
+        if (!e.target) return;
+        const btn = (e.target as HTMLElement).closest('button[data-tag]');
+        if (!btn) return;
+        activeTag = (btn as HTMLButtonElement).dataset.tag || '';
+        pillBar.querySelectorAll('button[data-tag]').forEach(b => {
+          const on = (b === btn);
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        applyFilter();
+      });
+    }
+
+    if (search) {
+      search.addEventListener('input', applyFilter);
+    }
+
+    // Copy Slack command functionality
+    const copyBtn = document.getElementById('copy-slack-command');
+    const commandText = document.getElementById('slack-command-text');
+
+    if (copyBtn && commandText) {
+      copyBtn.addEventListener('click', async () => {
+        const text = commandText.textContent || '';
+        try {
+          await navigator.clipboard.writeText(text);
+          const copyTextSpan = copyBtn.querySelector('.copy-text');
+          if (copyTextSpan) {
+            const originalText = copyTextSpan.textContent;
+            copyTextSpan.textContent = 'Copied!';
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+              copyTextSpan.textContent = originalText;
+              copyBtn.classList.remove('copied');
+            }, 2000);
+          }
+        } catch (err) {
+          console.error('Failed to copy:', err);
+        }
+      });
+    }
+  </script>
+  <style>
+    .cl-header { margin-bottom: 2rem; }
+    .changelog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .search-wrap {
+      flex: 1;
+      max-width: 400px;
+    }
+    .lead {
+      color: var(--theme-text-light);
+      margin: 0;
+      font-size: 1rem;
+    }
+    #search { width: 100%; padding: .6rem .75rem; border: 1px solid var(--theme-border-color); border-radius: .6rem; font: inherit; background: var(--theme-bg); }
+    #search:focus { outline: 2px solid var(--theme-accent); outline-offset: 2px; }
+    .rss-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--chakra-colors-gray-700);
+      background: var(--chakra-colors-gray-100);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--chakra-colors-gray-200);
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .rss-button:hover {
+      background: var(--chakra-colors-gray-700);
+      color: #fff;
+      border-color: var(--chakra-colors-gray-700);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+    .rss-button:active {
+      transform: translateY(0);
+    }
+    .rss-button svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    .theme-dark .rss-button {
+      background: var(--chakra-colors-gray-700);
+      color: var(--chakra-colors-gray-200);
+      border-color: var(--chakra-colors-gray-600);
+    }
+    .theme-dark .rss-button:hover {
+      background: var(--chakra-colors-gray-600);
+      color: #fff;
+      border-color: var(--chakra-colors-gray-500);
+    }
+
+  .slack-subscribe {
+    background: var(--theme-bg-offset);
+    border: 1px solid var(--theme-border-color);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .slack-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .slack-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: var(--theme-text);
+  }
+
+  .slack-text {
+    font-size: 0.9rem;
+    color: var(--theme-text);
+    font-weight: 500;
+  }
+
+  .slack-command {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--theme-code-inline-bg);
+    border: 1px solid var(--theme-border-color);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .slack-command code {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--theme-code-inline-text);
+    background: transparent;
+    padding: 0;
+    border: none;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--chakra-colors-gray-700);
+    color: #fff;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .copy-btn:hover {
+    background: var(--chakra-colors-gray-600);
+  }
+
+  .copy-btn.copied {
+    background: #10b981;
+  }
+
+  .copy-icon {
+    font-size: 0.9rem;
+  }
+
+  .tag-pills { display: flex; flex-wrap: wrap; gap: .65rem; }
+  .tag-pills-row { margin-top: 1rem; }
+  .pill { border: 1px solid var(--theme-border-color); background: var(--chakra-colors-gray-100); color: var(--chakra-colors-gray-700); padding: .5rem .95rem; border-radius: 999px; font-size: .85rem; font-weight: 600; cursor: pointer; line-height: 1; transition: background .15s, color .15s, border-color .15s, transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    .pill:hover { background: var(--chakra-colors-gray-200); }
+  .pill.active { background: var(--chakra-colors-gray-700); color: #fff; border-color: var(--chakra-colors-gray-700); box-shadow: 0 2px 4px rgba(0,0,0,0.12); }
+  .pill:active { transform: translateY(1px); }
+
+  /* Product-specific pill colors */
+  .pill[data-tag="Workflow Automation"] {
+    background: var(--section-workflow-accent-bg);
+    color: var(--section-workflow-accent);
+    border-color: var(--section-workflow-accent);
+  }
+
+  .pill[data-tag="Workflow Automation"]:hover {
+    background: var(--section-workflow-accent);
+    color: #fff;
+  }
+
+  .pill[data-tag="Workflow Automation"].active {
+    background: var(--section-workflow-accent);
+    color: #fff;
+    border-color: var(--section-workflow-accent);
+  }
+
+  .pill[data-tag="Merge Queue"] {
+    background: var(--section-merge-queue-accent-bg);
+    color: var(--section-merge-queue-accent);
+    border-color: var(--section-merge-queue-accent);
+  }
+
+  .pill[data-tag="Merge Queue"]:hover {
+    background: var(--section-merge-queue-accent);
+    color: #fff;
+  }
+
+  .pill[data-tag="Merge Queue"].active {
+    background: var(--section-merge-queue-accent);
+    color: #fff;
+    border-color: var(--section-merge-queue-accent);
+  }
+
+  .pill[data-tag="CI Insights"] {
+    background: var(--section-ci-insights-accent-bg);
+    color: var(--section-ci-insights-accent);
+    border-color: var(--section-ci-insights-accent);
+  }
+
+  .pill[data-tag="CI Insights"]:hover {
+    background: var(--section-ci-insights-accent);
+    color: #fff;
+  }
+
+  .pill[data-tag="CI Insights"].active {
+    background: var(--section-ci-insights-accent);
+    color: #fff;
+    border-color: var(--section-ci-insights-accent);
+  }
+
+  .pill[data-tag="Merge Protections"] {
+    background: var(--section-merge-protections-accent-bg);
+    color: var(--section-merge-protections-accent);
+    border-color: var(--section-merge-protections-accent);
+  }
+
+  .pill[data-tag="Merge Protections"]:hover {
+    background: var(--section-merge-protections-accent);
+    color: #fff;
+  }
+
+  .pill[data-tag="Merge Protections"].active {
+    background: var(--section-merge-protections-accent);
+    color: #fff;
+    border-color: var(--section-merge-protections-accent);
+  }
+  /* Disable global automatic numbering for year headings (global rule targets .content h2) */
+  .content section.year > h2.no-counter { counter-increment: none !important; }
+  .content section.year > h2.no-counter::before { content: none !important; }
+  .year { margin-bottom: 3rem; }
+  .year-heading { font-size: 1.75rem; margin-bottom: 1.5rem; }
+  .month-group { margin-bottom: 2rem; }
+  .month-heading {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--theme-text-light);
+    margin: 0 0 1rem 0;
+    padding-left: 1.25rem;
+  }
+  .entry-list { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--theme-border-color); }
+  .entry { position: relative; margin: 0; padding: 1.1rem 0 1.1rem 1.25rem; border-bottom: 1px solid var(--theme-border-color); }
+  .entry:last-child { border-bottom: 0; }
+  .entry::before { content: ''; position: absolute; left: -6px; top: 1.4rem; width: 10px; height: 10px; background: var(--chakra-colors-gray-400); border-radius: 50%; box-shadow: 0 0 0 2px var(--theme-bg); }
+  .row { display: grid; gap: .75rem; align-items: flex-start; }
+  @media (min-width: 50em) { .row { grid-template-columns: 10rem 1fr auto; } }
+  .date-tags { display: flex; flex-direction: column; gap: .5rem; align-items: flex-start; }
+  .date { font-size: .65rem; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--theme-text-lighter); background: var(--theme-bg-offset); padding: 2px 6px; border-radius: 4px; width: fit-content; }
+  .tag-list { list-style: none; display: flex; flex-direction: column; gap: .35rem; padding: 0; margin: 0; }
+  .tag-list li { margin: 0; padding: 0; display: block; line-height: 1; }
+  .tag { background: var(--chakra-colors-gray-100); color: var(--chakra-colors-gray-700); font-size: .55rem; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; display: inline-block; line-height: 1; }
+
+  /* Product-specific label colors */
+  .tag[data-tag="Workflow Automation"] {
+    background: var(--section-workflow-accent-bg);
+    color: var(--section-workflow-accent);
+  }
+
+  .tag[data-tag="Merge Queue"] {
+    background: var(--section-merge-queue-accent-bg);
+    color: var(--section-merge-queue-accent);
+  }
+
+  .tag[data-tag="CI Insights"] {
+    background: var(--section-ci-insights-accent-bg);
+    color: var(--section-ci-insights-accent);
+  }
+
+  .tag[data-tag="Merge Protections"] {
+    background: var(--section-merge-protections-accent-bg);
+    color: var(--section-merge-protections-accent);
+  }
+  .title { font-size: 1rem; margin: 0 0 .25rem; line-height: 1.25; }
+  .title a { text-decoration: none; color: var(--theme-text); }
+  .title a:hover { text-decoration: underline; color: var(--chakra-colors-gray-700); }
+  .summary { font-size: .8rem; margin: 0; color: var(--theme-text-light); line-height: 1.35; }
+  .more-col { align-self: center; }
+  .read-more { font-size: .75rem; text-decoration: none; font-weight: 600; padding: .35rem .65rem; border-radius: .5rem; background: var(--chakra-colors-gray-100); color: var(--chakra-colors-gray-700); transition: background .15s, color .15s; }
+  .read-more:hover { background: var(--chakra-colors-gray-700); color: #fff; }
+    #no-results { text-align: center; font-size: .875rem; margin: 3rem 0; }
+  </style>
+</MainLayout>
