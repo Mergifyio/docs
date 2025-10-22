@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           cache: npm
-          node-version: 20
+          node-version-file: .node-version
 
       - name: Lint
         run: |
@@ -52,7 +52,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           cache: npm
-          node-version: 20
+          node-version-file: .node-version
 
       - name: Test
         run: |
@@ -70,7 +70,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           cache: npm
-          node-version: 20
+          node-version-file: .node-version
 
       - name: Build
         run: |
