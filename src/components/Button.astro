@@ -38,15 +38,17 @@ const { colorScheme, style, href, icon, variant = 'solid' } = Astro.props as Pro
 	.button {
 		border-radius: 4px;
 		font-size: large;
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 		padding: 0 16px;
 		cursor: pointer;
+		width: fit-content;
 	}
 	.button a {
 		display: flex;
 		align-items: center;
 		color: inherit;
+		text-decoration: none;
 	}
 
 	@mixin generate-button-styles($colorSchemes) {
