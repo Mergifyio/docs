@@ -7,6 +7,7 @@ import { Image } from "astro:assets"
 import mainScreen from "../../images/merge-protections/main-screen.png"
 import bpScreen from "../../images/merge-protections/branch-protections.png"
 import requiredChecksScreen from "../../images/merge-protections/required-check.png"
+import deployScreenshot from "../../images/merge-protections/deploy.png"
 
 ## Enable in the Dashboard
 
@@ -17,14 +18,44 @@ import requiredChecksScreen from "../../images/merge-protections/required-check.
 
 <Image src={mainScreen} alt="Mergify Merge Protections" />
 
+## Reporting Method: check-runs vs deployments
+
+You can configure how Merge Protections report their status to GitHub using the
+`reporting_method` option in your configuration. This controls whether the
+protection status appears as a GitHub Check Run or as a Deployment.
+
+- `check-runs` (default): Reports the protection status as a standard GitHub
+  check on the pull request. This is the most common and compatible method.
+
+  <Image src={requiredChecksScreen} alt="GitHub required checks" />
+
+- `deployments`: Reports the protection status as a GitHub Deployment. This can
+  be useful if your workflow or compliance requirements rely on deployment
+  status.
+
+  <Image src={deployScreenshot} alt="Merge Protections deploy success" />
+
+Example configuration:
+```yaml
+merge_protections_settings:
+    reporting_method: check-runs  # or deployments
+    # Post a comment with details about required rules
+    post_comment: true
+```
+
+Choose the method that best fits your integration and compliance needs.
+
 ## Make the Check Required
 
-Enabling inserts a check named `Mergify Merge Protections` on each pull request. Mark it as required:
+Enabling inserts a check named `Mergify Merge Protections` on each pull
+request. Mark it as required, either as a checks or deployment:
 
-- GitHub Branch Protection: Settings → Branches → Add/Edit rule → Require status checks → select `Mergify Merge Protections`
-- GitHub Rulesets: Settings → Rules → Select ruleset → Add required status check → `Mergify Merge Protections`
+- GitHub Branch Protection: Settings → Branches → Add/Edit rule → Require
+  status checks / deployment to succeed → select `Mergify Merge Protections`
 
-<Image src={requiredChecksScreen} alt="GitHub required checks" />
+- GitHub Rulesets: Settings → Rules → Select ruleset → Add required status
+  check / deployment to succeed → `Mergify Merge Protections`
+
 <Image src={bpScreen} alt="GitHub Branch Protection" />
 
 Once required, the check blocks merges whenever any active protection fails and
