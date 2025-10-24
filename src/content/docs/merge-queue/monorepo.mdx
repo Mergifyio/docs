@@ -145,7 +145,7 @@ jobs:
       - name: Verify all jobs succeeded
         uses: Mergifyio/gha-mergify-ci@v9
         with:
-          action: wait-jobsc
+          action: wait-jobs
           jobs: ${{ toJSON(needs) }}
 ```
 
