@@ -2,6 +2,7 @@
 title: Implementing a Two-Step CI with Mergify
 description: Run essential tests on every PR and comprehensive tests before merging, optimizing CI time and resources.
 ---
+import Youtube from '../../../components/Youtube.astro'
 
 As your codebase grows, so does your test suite. What once took minutes can
 balloon into hour-long CI runs that slow down development and drain resources.
@@ -12,6 +13,8 @@ Two-step CI is a strategy that separates your test suite into two phases—fast
 preliminary checks that run on every commit, and comprehensive validation that
 runs only before merging. Combined with Mergify's merge queue, this approach
 can dramatically reduce CI time and costs while maintaining code quality.
+
+<Youtube video="2mVymDFMaMk" title="Using two-step CI"/>
 
 ## Implementing Two-Step CI
 
