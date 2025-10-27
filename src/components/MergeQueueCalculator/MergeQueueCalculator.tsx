@@ -51,7 +51,12 @@ function MergeQueueCalculator() {
       const steps = Math.ceil(Math.log2(calculatedBatchSize));
       const pBatchFails = 1 - Math.pow(s, calculatedBatchSize);
       const expectedExtraRuns = pBatchFails * steps;
-      checkTimeWithFailure += expectedExtraRuns * (ciTime / s);
+      // Account for parallel execution of extra runs
+      const parallelism = Math.max(
+        1,
+        Math.ceil(prPerHour / (60 / (ciTime / s)) / calculatedBatchSize)
+      );
+      checkTimeWithFailure += (expectedExtraRuns / parallelism) * (ciTime / s);
     }
 
     let calculatedSpeculativeChecks = prPerHour / (60 / checkTimeWithFailure) / calculatedBatchSize;
