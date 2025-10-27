@@ -6,6 +6,7 @@ description: Implement your first merge queue.
 import { Image } from "astro:assets"
 import queueCommandScreenshot from "../../images/merge-queue/setup/queue-command.png"
 import queueStatusScreenshot from "../../images/merge-queue/setup/queue-status.png"
+import Youtube from '../../../components/Youtube.astro'
 
 Mergify’s Merge Queue automates and secures your PR merging process. It ensures
 each PR meets all conditions (status checks, branch rules, reviews, etc.)
@@ -26,6 +27,8 @@ and
 [rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets).
 
 ## Adding a Pull Request to the Merge Queue
+
+<Youtube video="2mVymDFMaMk" title="Add a PR to the merge queue"/>
 
 To add a pull request to the merge queue, use [the `queue`
 command](/commands/queue). This adds your PR to the merge queue as long as it
