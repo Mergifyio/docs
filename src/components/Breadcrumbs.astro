@@ -40,6 +40,18 @@ for (const [p, t] of trails.entries()) {
   }
 }
 
+// Handle dynamic changelog entries
+if (currentPath.startsWith('/changelog/') && currentPath !== '/changelog') {
+  // This is a specific changelog entry page
+  matchedTrail = [{ title: 'Changelog', path: '/changelog' }];
+
+  // Add the current page title from props if available
+  const { breadcrumbTitle } = Astro.props as { breadcrumbTitle?: string };
+  if (breadcrumbTitle) {
+    matchedTrail.push({ title: breadcrumbTitle });
+  }
+}
+
 if (matchedTrail.length >= 2) {
   const filtered: TrailEntry[] = [];
   for (const entry of matchedTrail) {

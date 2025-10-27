@@ -4,13 +4,14 @@ import Button from '../Button.astro';
 export interface Props {
   icon: Function;
   href: string;
+  target?: string;
 }
 
-const { href, icon } = Astro.props as Props;
+const { href, icon, target } = Astro.props as Props;
 ---
 
 <div class="header-btn">
-	<Button colorScheme="blue" variant="ghost" icon={icon} href={href}>
+	<Button colorScheme="blue" variant="ghost" icon={icon} href={href} target={target}>
 		<slot />
 	</Button>
 </div>

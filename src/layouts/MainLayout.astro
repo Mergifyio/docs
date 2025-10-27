@@ -10,10 +10,11 @@ import BaseLayout from './BaseLayout.astro';
 
 export interface Props {
   content: CollectionEntry<'docs'>['data'];
-  headings: MarkdownHeading[];
+  headings?: MarkdownHeading[];
+  breadcrumbTitle?: string;
 }
 
-const { content, headings } = Astro.props;
+const { content, headings, breadcrumbTitle } = Astro.props;
 ---
 
 <BaseLayout {...Astro.props}>
@@ -22,7 +23,7 @@ const { content, headings } = Astro.props;
 		{
 			Astro.url.pathname !== '/' && (
 				<Fragment slot="before-title">
-					<Breadcrumbs />
+					<Breadcrumbs breadcrumbTitle={breadcrumbTitle} />
 				</Fragment>
 			)
 		}

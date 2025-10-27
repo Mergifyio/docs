@@ -859,12 +859,12 @@ header .nav-wrapper {
   counter-reset: h2-section;
 }
 
-.content h2:not(.content-subtitle) {
+.content h2:not(.content-subtitle):not(.no-counter) {
   counter-increment: h2-section;
   position: relative;
 }
 
-.content h2:not(.content-subtitle, .home-title)::before {
+.content h2:not(.content-subtitle, .home-title):not(.no-counter)::before {
   content: counter(h2-section);
   font-weight: 500;
   margin-right: 0.55rem;
