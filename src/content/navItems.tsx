@@ -35,6 +35,7 @@ import { GrTest } from 'react-icons/gr';
 import { LiaShareAltSolid } from 'react-icons/lia';
 import { MdMonitorHeart, MdOutlineLightbulb, MdOutlineRateReview } from 'react-icons/md';
 import {
+  SiBazel,
   SiBuildkite,
   SiCircleci,
   SiCypress,
@@ -49,6 +50,7 @@ import {
   SiJenkins,
   SiJest,
   SiJunit5,
+  SiNx,
   SiPhp,
   SiPytest,
   SiRenovate,
@@ -58,6 +60,7 @@ import {
   SiSnyk,
   SiTeamcity,
   SiTestinglibrary,
+  SiTurborepo,
   SiVitest,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
@@ -141,7 +144,23 @@ const navItems: NavItem[] = [
       { title: 'Parallel Checks', path: '/merge-queue/parallel-checks', icon: TiFlowParallel },
       { title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
-      { title: 'Monorepo', path: '/merge-queue/monorepo', icon: BsBoxes },
+      {
+        title: 'Monorepo',
+        path: '/merge-queue/monorepo',
+        icon: BsBoxes,
+        children: [
+          { title: 'Overview', path: '/merge-queue/monorepo', icon: FaRegLightbulb },
+          {
+            title: 'File Patterns',
+            path: '/merge-queue/monorepo/file-patterns',
+            icon: AiOutlineFile,
+          },
+          { title: 'Nx', path: '/merge-queue/monorepo/nx', icon: SiNx },
+          { title: 'Bazel', path: '/merge-queue/monorepo/bazel', icon: SiBazel },
+          { title: 'Turborepo', path: '/merge-queue/monorepo/turborepo', icon: SiTurborepo },
+          { title: 'Other Build Tools', path: '/merge-queue/monorepo/others', icon: BsGear },
+        ],
+      },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
     ],

@@ -1,0 +1,69 @@
+---
+title: Monorepo with Nx
+description: Configure monorepo scopes using Nx for dependency-aware batching.
+---
+
+If you're using monorepo tools like Nx build system that have built-in dependency graph analysis,
+you can leverage their affected project detection instead of using file patterns.
+This approach is often more accurate because these tools understand your project's 
+dependency relationships.
+
+## Configuring Manual Scopes
+
+To use manual scopes mechanism, configure Mergify to expect scopes from your CI system:
+
+```yaml
+scopes:
+  source:
+    manual:
+
+queue_rules:
+  - name: default
+    batch_size: 5
+```
+
+## Detecting Scopes with Nx
+
+In your GitHub Actions workflow, use the `nx show projects` command to determine affected projects and
+upload them to Mergify:
+
+```yaml
+name: Detect Scopes
+on:
+  pull_request:
+
+jobs:
+  detect-scopes:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Get git refs
+        id: refs
+        uses: Mergifyio/gha-mergify-ci@v11
+        with:
+          action: git-refs
+
+      - name: Get scopes
+        id: scopes
+        env:
+          HEAD: ${{ steps.refs.outputs.head }}
+          BASE: ${{ steps.refs.outputs.base }}
+        run: |
+          scopes=$( npx nx show projects --affected --base=$BASE --head=$HEAD | paste -sd, -)
+          echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
+
+      - name: Scopes upload
+        uses: Mergifyio/gha-mergify-ci@v11
+        with:
+          action: scopes-upload
+          token: ${{ secrets.MERGIFY_TOKEN }}
+          scopes: ${{ steps.scopes.outputs.scopes }}
+```
+
+:::note
+In the context of merge queue pull requests, the `HEAD` and `BASE` git references are specifically
+calculated to detect changed projects in the current batch only, not in the batches this one depends
+on. This ensures that your monorepo tool identifies only the projects affected by the PRs in the
+current batch, allowing for more granular and efficient testing.
+:::
