@@ -5243,17 +5243,6 @@
             ],
             "title": "Priority Rule Name"
           },
-          "position": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Position"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -5276,7 +5265,6 @@
           "branch",
           "partition_name",
           "priority_rule_name",
-          "position",
           "queue_name",
           "queued_at",
           "speculative_check_pull_request"
@@ -5374,10 +5362,6 @@
             ],
             "title": "Priority Rule Name"
           },
-          "position": {
-            "type": "integer",
-            "title": "Position"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -5400,7 +5384,6 @@
           "branch",
           "partition_name",
           "priority_rule_name",
-          "position",
           "queue_name",
           "queued_at",
           "start_reason",
@@ -5481,10 +5464,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "position": {
-            "type": "integer",
-            "title": "Position"
-          },
           "queued_at": {
             "type": "string",
             "format": "date-time",
@@ -5517,7 +5496,6 @@
         "required": [
           "queue_name",
           "branch",
-          "position",
           "queued_at",
           "partition_name",
           "priority_rule_name"
@@ -5605,10 +5583,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "position": {
-            "type": "integer",
-            "title": "Position"
-          },
           "partition_name": {
             "type": "string",
             "title": "Partition Name"
@@ -5653,6 +5627,10 @@
             },
             "type": "array",
             "title": "Checks"
+          },
+          "pull_request_head_sha": {
+            "type": "string",
+            "title": "Pull Request Head Sha"
           }
         },
         "type": "object",
@@ -5661,14 +5639,14 @@
           "merged",
           "queue_name",
           "branch",
-          "position",
           "partition_name",
           "queued_at",
           "seconds_waiting_for_schedule",
           "seconds_waiting_for_freeze",
           "priority_rule_name",
           "conditions_evaluation",
-          "checks"
+          "checks",
+          "pull_request_head_sha"
         ],
         "title": "EventQueueLeaveMetadata"
       },
