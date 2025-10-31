@@ -7,6 +7,7 @@ import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
+import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 
 This guide shows how to generate JUnit reports from your MSTest tests and upload
 them to **CI Insights** using a GitHub Actions workflow.
@@ -70,10 +71,7 @@ dotnet test --logger "console;verbosity=detailed" --logger "junit;LogFilePath=ju
 
 ## Update Your GitHub Actions Workflow
 
-:::note
-Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-docs](/ci-insights#enabling-ci-insights-for-github).
-:::
+<CIInsightsSetupNote />
 
 After generating the JUnit report, add a step to upload the results to CI
 Insights using the mergifyio/gha-mergify-ci action.

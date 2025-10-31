@@ -8,6 +8,7 @@ import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
+import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 
 <IntegrationLogo src={vitestLogo} alt="Vitest logo" />
@@ -50,10 +51,7 @@ Key Options:
 
 ## Update Your GitHub Actions Workflow
 
-:::note
-Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-docs](/ci-insights#enabling-ci-insights-for-github).
-:::
+<CIInsightsSetupNote />
 
 Once you have the JUnit file produced by Vitest, add a step to upload these
 results to **CI Insights** via the `mergifyio/gha-mergify-ci` action.
