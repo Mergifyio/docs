@@ -4,8 +4,6 @@ description: Enable Mergify CI Insights and configure flaky test detection using
 ---
 
 import { Image } from "astro:assets"
-import TokenScreenshot from "../../../images/ci-insights/token.png"
-import GHSecretsScreenshot from "../../../images/ci-insights/gh-secrets.png"
 import JobsScreenshot from "../../../images/ci-insights/jobs.png"
 
 This page explains how to enable CI Insights for a repository using GitHub
@@ -18,19 +16,11 @@ Actions and how to configure repeated test executions for flaky test detection.
    ([docs](/integrations/github)).
 
 2. In order to upload your test results, you'll need to [configure your
-   test](#test-framework-configuration). Before doing so, make sure you set
-   your `MERGIFY_TOKEN` in GitHub Actions secrets.
+   test](#test-framework-configuration). Before doing so, create an application
+   key with `ci` scope as described in the [API Usage documentation](/api-usage)
+   and set it as `MERGIFY_TOKEN` in your GitHub Actions secrets.
 
-   To find your token in the Mergify dashboard, go to `Settings` > `CI
-   Insights`:
-
-   <Image src={TokenScreenshot} alt="CI Insights Token" />
-
-   Once copied, paste it into your GitHub Actions secrets:
-
-   <Image src={GHSecretsScreenshot} alt="GitHub Actions Secrets" />
-
-   This token will be used to upload test reports.
+   This key will be used to upload test reports.
 
 3. Click on `CI Insights` in the Mergify dashboard navigation.
    You should start seeing your GitHub Actions job runs appear:
@@ -49,7 +39,7 @@ Before setting up flaky test detection, ensure you have:
 
 1. Enabled [CI Insights](#enabling-ci-insights-for-github-actions) for your repository
 
-2. Set up your `MERGIFY_TOKEN` in GitHub Actions secrets
+2. Created an application key with `ci` scope and set it as `MERGIFY_TOKEN` in GitHub Actions secrets
 
 3. Configured test integration (e.g., `pytest-mergify` or `mergify cli upload`)
    for your test framework
@@ -158,6 +148,6 @@ jobs:
 ### Key Environment Variables
 
 - `MERGIFY_TEST_FLAKY_DETECTION`: To tell CI Insights that flaky test detection is enabled
-- `MERGIFY_TOKEN`: Required for uploading test results to CI Insights
+- `MERGIFY_TOKEN`: Application key with `ci` scope for uploading test results to CI Insights
 - `RUN_COUNT`: Number of times to execute each test within a single job
 - `MERGIFY_JOB_NAME`: The job name reported to CI Insights

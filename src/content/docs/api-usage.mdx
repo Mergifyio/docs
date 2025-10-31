@@ -39,6 +39,16 @@ Upon successful creation, the dashboard will provide you with an API key.
 
 <Image src={applicationKeysToken} alt="Application key token"/>
 
+### Application Key Scopes
+
+Application keys have different scopes that determine what they can access:
+
+- `admin`: Full access to all API endpoints, including administrative functions.
+- `ci`: Limited to CI-related operations, such as uploading test results and accessing CI Insights data.
+
+When creating an application key, select the appropriate scope based on your
+needs. For CI Insights, use a key with the `ci` scope.
+
 ### Using the API Key
 
 With the provided API key, you're set to make authenticated requests against
