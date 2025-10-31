@@ -1,6 +1,7 @@
 extends: .github
 shared:
   DefaultQueueOptions: &DefaultQueueOptions
+    autoqueue: true
     commit_message_template: |
       {{ title }} (#{{ number }})
 
@@ -111,13 +112,6 @@ queue_rules:
       - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
 
 pull_request_rules:
-  - name: automatic merge
-    conditions:
-      - label != manual merge
-      - base=main
-    actions:
-      queue:
-
   - name: request review
     conditions:
       - -author=dependabot[bot]
