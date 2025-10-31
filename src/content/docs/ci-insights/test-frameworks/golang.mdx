@@ -8,6 +8,7 @@ import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
+import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 
 <IntegrationLogo src={golangLogo} alt="Golang logo" />
@@ -36,10 +37,7 @@ gotestsum --junitfile junit.xml
 
 ## Update Your GitHub Actions Workflow
 
-:::note
-Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-docs](/ci-insights#enabling-ci-insights-for-github).
-:::
+<CIInsightsSetupNote />
 
 After generating the JUnit report, add a step to upload the results to CI
 Insights using the mergifyio/gha-mergify-ci action.

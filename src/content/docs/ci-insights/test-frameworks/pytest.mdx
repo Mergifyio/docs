@@ -5,6 +5,7 @@ description: Report your test results from pytest to CI Insights
 
 import pytestLogo from "../../../images/ci-insights/pytest/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
+import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 
 <IntegrationLogo src={pytestLogo} alt="Pytest logo" />
 
@@ -64,10 +65,7 @@ poetry add --group dev pytest-mergify
 
 ## Modify Your Workflow
 
-:::note
-Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-docs](/ci-insights#enabling-ci-insights-for-github).
-:::
+<CIInsightsSetupNote />
 
 Your workflow should run your tests as usual while exporting the secret
 `MERGIFY_TOKEN` as an environment variable. You’ll need to add the following

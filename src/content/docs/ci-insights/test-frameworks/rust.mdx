@@ -8,6 +8,7 @@ import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 import CommonTroubleshootingTips from './_common-troubleshooting-tips.mdx'
+import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 
 <IntegrationLogo src={rustLogo} alt="Rust logo" />
@@ -70,10 +71,7 @@ cargo nextest run --message-format junit --output-file junit.xml
 
 ## Update Your GitHub Actions Workflow
 
-:::note
-Ensure your CI Insights token (`MERGIFY_TOKEN`) is set up as explained in the [installation
-docs](/ci-insights#enabling-ci-insights-for-github).
-:::
+<CIInsightsSetupNote />
 
 After generating the JUnit report, add a step to upload the results to CI
 Insights using the mergifyio/gha-mergify-ci action.
