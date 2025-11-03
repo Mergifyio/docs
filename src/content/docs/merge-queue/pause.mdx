@@ -24,8 +24,17 @@ When you pause the merge queue:
    will not schedule new checks or merge pull requests. Pull requests can enter
    the queue but won't be acted upon.
 
-4. **Cancel Running Checks**: As soon as the queue is paused, Mergify cancels
-   any running checks and waits for the queue to be resumed.
+4. **Cancel Running Checks**: When you pause the queue, Mergify attempts to
+   cancel any running checks for pull requests that are in the queue and will
+   wait for the queue to be resumed.
+
+   :::note
+   This cancellation does not apply to checks that are running in
+   place (i.e., checks that run directly on the pull request rather than on a
+   temporary merge commit). Those running checks are not cancelable: if they
+   fail while the queue is paused, the associated pull request will be removed
+   from the merge queue as the queue conditions will not match anymore.
+   :::
 
 ## How to Pause the Merge Queues
 
