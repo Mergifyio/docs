@@ -5176,12 +5176,10 @@
                   "PR_AHEAD_DEQUEUED",
                   "BATCH_AHEAD_FAILED",
                   "PR_WITH_HIGHER_PRIORITY_QUEUED",
-                  "PR_QUEUED_TWICE",
                   "SPECULATIVE_CHECK_NUMBER_REDUCED",
                   "CHECKS_TIMEOUT",
                   "CHECKS_FAILED",
                   "QUEUE_RULE_MISSING",
-                  "UNEXPECTED_QUEUE_CHANGE",
                   "BASE_BRANCH_MISSING",
                   "BASE_BRANCH_CHANGED",
                   "PR_UNEXPECTEDLY_FAILED_TO_MERGE",
@@ -7406,12 +7404,6 @@
             "description": "Pull request has been dequeued from a partition",
             "default": 0
           },
-          "PR_QUEUED_TWICE": {
-            "type": "integer",
-            "title": "Pr Queued Twice",
-            "description": "A pull request was queued twice.",
-            "default": 0
-          },
           "PR_UNEXPECTEDLY_FAILED_TO_MERGE": {
             "type": "integer",
             "title": "Pr Unexpectedly Failed To Merge",
@@ -7446,12 +7438,6 @@
             "type": "integer",
             "title": "Success",
             "description": "Successfully merged the pull request.",
-            "default": 0
-          },
-          "UNEXPECTED_QUEUE_CHANGE": {
-            "type": "integer",
-            "title": "Unexpected Queue Change",
-            "description": "An unexpected change happened.",
             "default": 0
           },
           "PR_MANUALLY_MERGED": {
