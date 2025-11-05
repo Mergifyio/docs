@@ -318,6 +318,7 @@ const navItems: NavItem[] = [
   { title: 'Security', path: '/security', icon: FaShieldAlt },
   { title: 'Badge', path: '/badge', icon: BiBadgeCheck },
   { title: 'Billing', path: '/billing', icon: FaMoneyBill1 },
+  { title: 'Changelog', path: '/changelog', icon: FaRegListAlt },
 ];
 
 function addUuidOnGroups(items: NavItem[]): NavItem[] {

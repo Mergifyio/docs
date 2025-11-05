@@ -84,7 +84,7 @@ export const helpCategory: Category = {
     },
     {
       text: 'Changelog',
-      href: 'https://changelog.mergify.com/',
+      href: 'https://docs.mergify.com/changelog/',
     },
     {
       text: 'Terms of Service',
