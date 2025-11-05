@@ -37,6 +37,7 @@
                 "example": {
                   "id": "e155518c-ca1b-443c-9be9-fe90fdab7345",
                   "name": "an application name",
+                  "scope": "admin",
                   "account_scope": {
                     "id": 123456,
                     "login": "Mergifyio"
@@ -3637,13 +3638,22 @@
           },
           "account_scope": {
             "$ref": "#/components/schemas/ApplicationAccountScope"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "ci"
+            ],
+            "title": "Scope"
           }
         },
         "type": "object",
         "required": [
           "id",
           "name",
-          "account_scope"
+          "account_scope",
+          "scope"
         ],
         "title": "ApplicationResponse"
       },
