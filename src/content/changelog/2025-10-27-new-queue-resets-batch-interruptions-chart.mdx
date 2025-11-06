@@ -5,9 +5,14 @@ tags:
   - Merge Queue
 description: "New dedicated chart to track errors and problems in the merge queue, including failed checks, timeouts, queue resets, and batch failures."
 ---
+import { Image } from "astro:assets"
+import static2a3f2b37c5da80549cdbea6290c4b348png from "../images/changelog/static-2a3f2b37-c5da-8054-9cdb-ea6290c4b348.png"
 
-Added a new dedicated chart to track errors and problems in the merge queue, including failed checks, timeouts, queue resets, and batch failures.
+
+We added a new dedicated chart to track errors and problems in the merge queue, including failed checks, timeouts, queue resets, and batch failures.
 
 The existing "Merge Queue Checks Outcomes" chart has been renamed to "PR Exit Reasons" and now focuses exclusively on normal operational outcomes like successful merges, manual dequeues, and PR updates.
 
 This separation makes it easier to quickly identify and prioritize CI/CD problems.
+
+<Image src={static2a3f2b37c5da80549cdbea6290c4b348png} alt="Changelog Image" />
