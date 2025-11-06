@@ -1,0 +1,12 @@
+---
+title: "`allow_inplace_checks` has been deprecated"
+date: 2025-09-30
+tags:
+  - Deprecations
+  - Merge Queue
+description: ""
+---
+
+The option `allow_inplace_checks` from queue rules is deprecated.
+
+The checks are now perform in-place or on a draft PR depending on `batch_size`, `merge_conditions` and `max_parallel_checks`  (cf.  [documentation](https://docs.mergify.com/merge-queue/parallel-checks/#inplace-checks-no-drafts)).

@@ -1,0 +1,40 @@
+---
+title: "New toggle option for the `label` action"
+date: 2022-11-15
+tags:
+  - Rules
+description: ""
+---
+
+The current way of toggling a label using Mergify is usually to write 2 sets of conditions, such as:
+
+```yaml
+pull_request_rules:
+  - name: add ci-fail label when a CI fails
+    conditions:
+      - "#check-failure>0"
+    label:
+      add:
+        - ci-fail
+
+  - name: remove ci-fail label when no CI fail
+    conditions:
+      - -"#check-failure>0"
+    label:
+      remove:
+        - ci-fail
+```
+
+As this can be quite cumbersome to write and maintain, it is now possible to toggle a label based on the conditions written a rule. The above example can be simplified with:
+
+```yaml
+pull_request_rules:
+  - name: toggle ci-fail label on CI failure
+    conditions:
+      - "check-failure>0"
+    label:
+      toggle:
+        - ci-fail
+```
+
+This will add or remove the label `ci-fail` depending whether the rule matches or not.

@@ -1,0 +1,22 @@
+---
+title: "Conditions can access commit details"
+date: 2022-12-15
+tags:
+  - Rules
+description: ""
+---
+
+The conditions can now use the details from the commits composing a pull requests.
+
+For example, you could write a rule like this:
+
+```yaml
+pull_request_rules
+  - name: label when PR is stale
+    conditions:
+      - "commits[-1].date_committer < 7 days ago"
+    actions:
+      label:
+        toggle:
+          - stale
+```

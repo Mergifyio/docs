@@ -1,0 +1,22 @@
+---
+title: "Allow templating in conditions"
+date: 2022-10-10
+tags:
+  - Rules
+description: ""
+---
+
+Mergify conditions can now use [the template syntax](https://docs.mergify.com/configuration/#template) before they are evaluated.
+
+For example, you could write a rule that uses the pull request author login in a matching condition:
+
+```yaml
+pull_request_rules:
+   - name: post a comment if the PR title contains the author login
+     conditions:
+       # True if the PR title contains the author login
+       - title~={{ author }}
+     actions:
+       comment:
+         message: You seem egocentric!
+```

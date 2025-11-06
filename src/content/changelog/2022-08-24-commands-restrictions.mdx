@@ -1,0 +1,28 @@
+---
+title: "Commands restrictions"
+date: 2022-08-24
+tags:
+  - Rules
+  - Workflow Automation
+description: ""
+---
+
+It is now possible to limit usage of commands using the [commands restrictions](https://docs.mergify.com/configuration/#commands-restrictions).
+
+For example, to limit backport commands for pull requests coming from the main branch:
+
+```yaml
+commands_restrictions:
+  backport:
+    conditions:
+      - base=main
+```
+
+Another example, to limit backport commands usage to a specific team (or user):
+
+```yaml
+commands_restrictions:
+  backport:
+    conditions:
+      - sender=@team
+```

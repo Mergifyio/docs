@@ -1,0 +1,12 @@
+---
+title: "Queue branch merge method"
+date: 2022-09-09
+tags:
+  - Merge Queue
+description: ""
+---
+
+The merge queue now supports [a new setting named ](https://docs.mergify.com/actions/queue/#queue-rules)[`queue_branch_merge_method`](https://docs.mergify.com/actions/queue/#queue-rules). It allows to configure the merge behaviour of the merge queue:
+
+- By default, when unset, Mergify merges the original pull requests that are being tested in the queue.
+- When set to `fast-forward`, Mergify will rather merge the branch that is being tested by fast-forwarding the base branch to the tested branch.

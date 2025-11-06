@@ -1,0 +1,11 @@
+---
+title: "Merge Queue Pause"
+date: 2023-06-27
+tags:
+  - Merge Queue
+description: ""
+---
+
+The merge queue is now pauseable. This means it is nos possible to stop processing the merge queue altogether and stop scheduling new checks.
+
+This is exposed [through the API](https://docs.mergify.com/api/#/operations/create_queue_pause_repos__owner___repository__queue_pause_put) at `/repos/{owner}/{repository}/queue/pause`.

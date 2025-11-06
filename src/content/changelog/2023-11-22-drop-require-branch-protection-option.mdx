@@ -1,0 +1,16 @@
+---
+title: "Drop `require_branch_protection` option"
+date: 2023-11-22
+tags:
+  - Merge Queue
+description: ""
+---
+
+This is now replaced by `branch_protection_injection_mode`. See [queue rules documentation.](https://docs.mergify.com/configuration/file-format/#queue-rules)
+
+
+
+For example: 
+
+- `require_branch_protection: false` must be replaced by `branch_protection_injection_mode: merge `
+- `require_branch_protection: true` must be replaced by `branch_protection_injection_mode: queue `

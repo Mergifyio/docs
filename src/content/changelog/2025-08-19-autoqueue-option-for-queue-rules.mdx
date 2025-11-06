@@ -1,0 +1,15 @@
+---
+title: "Autoqueue option for queue rules"
+date: 2025-08-19
+tags:
+  - Merge Queue
+description: ""
+---
+
+We’ve added a new `autoqueue` field to `queue_rules`.
+
+When `autoqueue: true`, pull requests that match the rule’s conditions are **automatically added to the merge queue** during workflow processing. This removes the need to add explicit queue actions in your rules, reduces configuration complexity, and ensures PRs don’t get missed.
+
+By default, autoqueue is set to false to preserve current behavior.
+
+📖 Learn more in the docs: [Auto-queueing pull requests](https://docs.mergify.com/merge-queue/rules/#autoqueueing-pull-requests).

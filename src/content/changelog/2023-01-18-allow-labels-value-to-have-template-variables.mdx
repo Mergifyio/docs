@@ -1,0 +1,22 @@
+---
+title: "Allow labels value to have template variables"
+date: 2023-01-18
+tags:
+  - Rules
+description: ""
+---
+
+You can now leverage [templates](https://docs.mergify.com/configuration/#template) in the [label action](https://docs.mergify.com/actions/label/).
+
+This allows for example to add labels based on the branch name:
+
+```yaml
+pull_request_rules:
+  - name: tag with branch
+	  conditions:
+      - base!=main
+    actions:
+      label:
+        add:
+          - branch:{{base}}
+```

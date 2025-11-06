@@ -1,0 +1,11 @@
+---
+title: "branch-protection-review-decision boolean conditions"
+date: 2022-10-06
+tags:
+  - Rules
+description: ""
+---
+
+Mergify now supports GitHub review decision attributes, named `branch-protection-review-decision`. This field can be either `APPROVED`, `CHANGES_REQUESTED` or `REVIEW_REQUIRED`. It indicates whether code owners have approved or not the pull request.
+
+It is automatically injected by Mergify when its usage is detected in the GitHub branch protection settings.

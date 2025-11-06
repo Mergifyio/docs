@@ -1,0 +1,9 @@
+---
+title: "Add allow_checks_interruption option in priority_rules section"
+date: 2024-09-13
+tags:
+  - Merge Queue
+description: ""
+---
+
+The `priority_rules` section of the configuration file now supports the `allow_checks_interruption` option. This means that a pull request matching one of the priority rule can interrupt existing checks if it has a higher priority than the running checks.
