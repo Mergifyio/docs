@@ -6,11 +6,11 @@ tags:
 description: ""
 ---
 
-The conditions in the configuration file now allows for a glob operator for equality checks, like this: `*-=` .
+The conditions in the configuration file now allows for a glob operator for equality checks: `*=`
 
-Here are some examples:
+Examples:
 
-```plain text
+```yaml
   - branch_name *= "release/*"
   - label *= "team-*"
   - files *= foobar/**/*.py
