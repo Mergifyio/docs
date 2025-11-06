@@ -54,6 +54,13 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
     const baseUrl =
       toObjectIdFromCanonical(canonicalHref) || toObjectIdFromPath(distRoot, filePath);
 
+    // Skip indexing the changelog listing page because it contains the full
+    // changelog (many entries) and produces oversized Algolia records.
+    if (baseUrl === 'changelog') {
+      console.info('[Algolia] Skipping changelog index page to avoid oversized record:', filePath);
+      continue;
+    }
+
     const pageTitle = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
     const pageDescription =
       $('meta[name="description"]').attr('content') ||
