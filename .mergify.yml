@@ -96,6 +96,9 @@ queue_rules:
               - author=mergify-ci-bot
               - head~=^clifus/
               - "title~=^chore: bump"
+          - and:
+              - author = mergify-ci-bot
+              - head = sync-changelog
           - author=dependabot[bot]
     merge_conditions:
       - schedule=Mon-Fri 09:00-17:00[Europe/Paris]
