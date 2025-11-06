@@ -54,13 +54,6 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
     const baseUrl =
       toObjectIdFromCanonical(canonicalHref) || toObjectIdFromPath(distRoot, filePath);
 
-    // Skip indexing the changelog listing page because it contains the full
-    // changelog (many entries) and produces oversized Algolia records.
-    if (baseUrl === 'changelog') {
-      console.info('[Algolia] Skipping changelog index page to avoid oversized record:', filePath);
-      continue;
-    }
-
     const pageTitle = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
     const pageDescription =
       $('meta[name="description"]').attr('content') ||
@@ -79,7 +72,7 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
     if (introHtml) {
       const introText = htmlToText(introHtml, $);
       const introProperties = extractProperties(introHtml, $);
-      records.push({
+      const introRecord = ensureRecordWithinSizeLimit({
         objectID: baseUrl,
         url: baseUrl,
         hierarchy: buildHierarchy(baseUrl, null),
@@ -91,6 +84,9 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
         pageTitle,
         pageDescription,
       });
+      if (introRecord) {
+        records.push(introRecord);
+      }
     }
 
     // Create H1, H2, H3 records (hierarchical, no nesting)
@@ -101,7 +97,7 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
       const headingText = htmlToText(heading.html, $);
       const headingProperties = extractProperties(heading.html, $);
 
-      records.push({
+      const headingRecord = ensureRecordWithinSizeLimit({
         objectID: headingId,
         url: headingId,
         hierarchy: buildHierarchy(baseUrl, heading.headingPath),
@@ -113,10 +109,29 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
         pageTitle,
         pageDescription,
       });
+      if (headingRecord) {
+        records.push(headingRecord);
+      }
     }
   }
 
   return records;
+}
+
+// Algolia has a 100KB limit per record
+const ALGOLIA_SIZE_LIMIT = 100000;
+
+function ensureRecordWithinSizeLimit(record: AlgoliaRecord): AlgoliaRecord | null {
+  const recordSize = Buffer.byteLength(JSON.stringify(record), 'utf8');
+
+  if (recordSize <= ALGOLIA_SIZE_LIMIT) {
+    return record;
+  }
+
+  console.warn(
+    `[Algolia] Record ${record.objectID} exceeds size limit (${recordSize} bytes). Skipping.`
+  );
+  return null;
 }
 
 async function listHtmlFiles(
