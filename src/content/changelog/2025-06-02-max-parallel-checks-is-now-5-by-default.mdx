@@ -1,0 +1,9 @@
+---
+title: "`max_parallel_checks` is now 5 by default"
+date: 2025-06-02
+tags:
+  - Merge Queue
+description: ""
+---
+
+The default value from `max_parallel_checks` which controls how many pull requests can be tested in parallel in the queue is now set to 5 by default. This makes sure that the latency of merging pull request is reduce to a minimum by default without over consuming CI resources.

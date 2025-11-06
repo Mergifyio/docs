@@ -1,0 +1,11 @@
+---
+title: "Star attribute in commits list"
+date: 2023-03-24
+tags:
+  - Rules
+description: ""
+---
+
+The `commits` attribute now supports addressing all the commits of a pull request in a [conditions by using the ](https://docs.mergify.com/conditions/#attributes)[`*`](https://docs.mergify.com/conditions/#attributes)[ operator](https://docs.mergify.com/conditions/#attributes).
+
+You can write a condition such as `conditions[*].committer!=Bob` to verify that at least one committer of a pull request is not `Bob`.

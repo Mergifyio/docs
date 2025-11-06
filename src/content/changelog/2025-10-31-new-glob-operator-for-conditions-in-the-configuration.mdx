@@ -1,0 +1,17 @@
+---
+title: "New `glob` operator for conditions in the configuration"
+date: 2025-10-31
+tags:
+  - Rules
+description: ""
+---
+
+The conditions in the configuration file now allows for a glob operator for equality checks, like this: `*-=` .
+
+Here are some examples:
+
+```plain text
+  - branch_name *= "release/*"
+  - label *= "team-*"
+  - files *= foobar/**/*.py
+```

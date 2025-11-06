@@ -1,0 +1,17 @@
+---
+title: "Allow to extend configuration"
+date: 2022-09-21
+tags:
+  - Rules
+description: ""
+---
+
+The Mergify configuration file now supports a new keyword `extends` which allows to inherits from a configuration file from a different repository.
+
+```yaml
+extends: myrepo
+
+pull_request_rules:
+  - name: custome rule
+    …
+```

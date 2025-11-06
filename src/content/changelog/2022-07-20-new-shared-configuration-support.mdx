@@ -1,0 +1,44 @@
+---
+title: "New shared configuration support"
+date: 2022-07-20
+tags:
+  - Rules
+description: ""
+---
+
+The configuration file now supports [a new key named ](https://docs.mergify.com/configuration/#shared)[`shared`](https://docs.mergify.com/configuration/#shared) which allows to share configuration across several YAML rules.
+
+# Example
+
+```yaml
+shared:
+  my_ci: &common_checks
+    - check-success=ci-one
+    - check-success=ci-two
+
+queue_rules:
+  - name: hotfix
+    conditions: *common_checks
+
+  - name: default
+    conditions:
+    - check-success=slow-ci
+    - and: *common_checks
+
+pull_request_rules:
+  - name: Default merge
+    conditions:
+      - base=main
+      - and: *common_checks
+    actions:
+      queue:
+        name: default
+
+  - name: Hotfix merge
+    conditions:
+      - base=main
+      - label=hotfix
+    actions:
+      queue:
+        name: hotfix
+```

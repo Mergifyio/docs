@@ -1,0 +1,23 @@
+---
+title: "**Test Failure Details in PR Comments**"
+date: 2025-09-04
+tags:
+  - CI Insights
+description: ""
+---
+import { Image } from "astro:assets"
+import static264f2b37c5da800ea69fda55086de5d4png from "../images/changelog/static-264f2b37-c5da-800e-a69f-da55086de5d4.png"
+
+
+We’ve expanded the information included in PR comments from CI Insights.
+
+Previously, comments only reported **job-level results** (success, failure, retries).
+
+Now, they also include **test-level insights**:
+
+- Failed tests are listed directly in the PR comment.
+- Flaky tests are highlighted with their recent history.
+- Linked details let you jump into CI Insights for deeper investigation.
+This makes it easier for developers and reviewers to see exactly *which tests* failed without digging into raw CI logs — saving time and reducing context switching.
+
+<Image src={static264f2b37c5da800ea69fda55086de5d4png} alt="Changelog Image" />

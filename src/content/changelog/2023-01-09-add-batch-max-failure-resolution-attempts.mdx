@@ -1,0 +1,11 @@
+---
+title: "Add batch_max_failure_resolution_attempts"
+date: 2023-01-09
+tags:
+  - Merge Queue
+description: ""
+---
+
+The merge queue received a new option named `batch_max_failure_resolution_attempts`.
+
+This allow to control the number of attempts to resolve a batch failure before unqueueing pull requests. By default, Mergify will attempt to resolve a batch failure by splitting the batch multiple times until it finds the root cause of the failure. You can stop this process earlier by limiting the number of resolution attempts. Setting this to 0 will unqueue all the pull requests from a batch when a batch fails.

@@ -1,0 +1,19 @@
+---
+title: "Rebasing pull requests with a random user is deprecated"
+date: 2023-02-01
+tags:
+  - Deprecations
+description: ""
+---
+
+Some operations, like rebase/squash/update, require Mergify to impersonate a real user due to GitHub API limitations.
+
+In such a case, Mergify impersonates the user set `bot_account` or `update_bot_account` to do it, but if the configuration option is not set, Mergify was using a random organization user.
+
+This behavior is deprecated, Mergify now uses the author of the pull request instead.
+
+If the author never logged into the Dashboard, Mergify cannot impersonate it and will not be able to queue, rebase or squash the pull request.
+
+For the `queue` action, public repositories accepting pull requests from users outside their organization must set a `update_bot_account` or `update_method: merge`.
+
+For the `queue` action, pull requests opened by GitHub App will not be rebased by default anymore, a draft pull request created to check its mergeability instead. `update_bot_account` must be set to get them rebased.
