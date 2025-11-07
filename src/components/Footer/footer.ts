@@ -14,7 +14,7 @@ export const companyCategory: Category = {
   links: [
     {
       text: 'About Us',
-      href: 'https://mergify.com/about-us',
+      href: 'https://mergify.com/about',
     },
     {
       text: 'Careers',
