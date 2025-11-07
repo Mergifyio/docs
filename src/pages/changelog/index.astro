@@ -395,6 +395,21 @@ const description = 'Latest product updates from Mergify.';
     color: #fff;
     border-color: var(--section-merge-protections-accent);
   }
+  /* Deprecations category (yellow) */
+  .pill[data-tag="Deprecations"] {
+    background: #FEFCBF; /* yellow-100 */
+    color: #975A16; /* yellow-700 */
+    border-color: #ECC94B; /* yellow-400 */
+  }
+  .pill[data-tag="Deprecations"]:hover {
+    background: #ECC94B; /* yellow-400 */
+    color: #473307; /* darken for contrast */
+  }
+  .pill[data-tag="Deprecations"].active {
+    background: #B7791F; /* yellow-600 */
+    color: #fff;
+    border-color: #B7791F;
+  }
   /* Disable global automatic numbering for year headings (global rule targets .content h2) */
   .content section.year > h2.no-counter { counter-increment: none !important; }
   .content section.year > h2.no-counter::before { content: none !important; }
@@ -440,6 +455,10 @@ const description = 'Latest product updates from Mergify.';
   .tag[data-tag="Merge Protections"] {
     background: var(--section-merge-protections-accent-bg);
     color: var(--section-merge-protections-accent);
+  }
+  .tag[data-tag="Deprecations"] {
+    background: #FEFCBF; /* yellow-100 */
+    color: #975A16; /* yellow-700 */
   }
   .title { font-size: 1.05rem; margin: 0 0 .4rem; line-height: 1.3; }
   .title a { text-decoration: none; color: var(--theme-text); }
