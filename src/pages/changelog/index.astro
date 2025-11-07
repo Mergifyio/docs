@@ -112,6 +112,29 @@ const description = 'Latest product updates from Mergify.';
         if (show) visibleCount++;
       });
       noResults.hidden = visibleCount !== 0;
+      // Hide empty months (month-group) when filtering by tag
+      const monthGroups = Array.from(document.querySelectorAll<HTMLElement>('.month-group'));
+      monthGroups.forEach(group => {
+        const entriesInGroup = Array.from(group.querySelectorAll<HTMLElement>('.entry'));
+        const anyVisible = entriesInGroup.some(e => e.style.display !== 'none');
+        // Only hide if a specific tag is active; always show months when viewing all
+        if (activeTag) {
+          group.style.display = anyVisible ? '' : 'none';
+        } else {
+          group.style.display = '';
+        }
+      });
+      // Optionally hide entire year sections if all months are hidden
+      const yearSections = Array.from(document.querySelectorAll<HTMLElement>('section.year'));
+      yearSections.forEach(year => {
+        const months = Array.from(year.querySelectorAll<HTMLElement>('.month-group'));
+        const anyMonthVisible = months.some(m => m.style.display !== 'none');
+        if (activeTag) {
+          year.style.display = anyMonthVisible ? '' : 'none';
+        } else {
+          year.style.display = '';
+        }
+      });
     }
 
     if (pillBar) {
