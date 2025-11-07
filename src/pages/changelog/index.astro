@@ -6,6 +6,8 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import { formatDate, groupByYearMonth, sortChangelog } from '../../util/changelog';
 
 const entries = sortChangelog(await getCollection('changelog'));
+// Derive tag info (entries may have no tags)
+const allTags = Array.from(new Set(entries.flatMap((e) => e.data.tags || []))).sort();
 const grouped = groupByYearMonth(entries);
 const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
 
@@ -41,7 +43,7 @@ const description = 'Latest product updates from Mergify.';
 
     <div class="tag-pills tag-pills-row" id="tag-pills" aria-label="Tag filter">
       <button data-tag="" class="pill active" aria-pressed="true">All</button>
-      {Array.from(new Set(entries.flatMap(e => e.data.tags))).sort().map(tag => (
+      {allTags.map(tag => (
         <button data-tag={tag} class="pill" aria-pressed="false">{tag}</button>
       ))}
     </div>
@@ -61,7 +63,7 @@ const description = 'Latest product updates from Mergify.';
             <h3 class="month-heading">{month}</h3>
             <ul class="entry-list" role="list">
               {grouped[year][month].map(entry => (
-                <li class="entry" data-tags={entry.data.tags.join(',')} data-title={entry.data.title.toLowerCase()}>
+                <li class="entry" data-tags={(entry.data.tags || []).join(',')} data-title={entry.data.title.toLowerCase()}>
                   <div class="row">
                     <div class="col date-tags">
                       <time datetime={formatDate(entry.data.date)} class="date">{formatDate(entry.data.date)}</time>
