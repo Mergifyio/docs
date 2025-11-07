@@ -22,7 +22,8 @@ const changelog = defineCollection({
     title: z.string(),
     date: z.date(),
     description: z.string().optional(),
-    tags: z.array(z.string()).default([]),
+    // Accept null/undefined and coerce to [] so frontmatter like `tags: null` is tolerated
+    tags: z.preprocess((val) => (val == null ? [] : val), z.array(z.string())).default([]),
   }),
 });
 
