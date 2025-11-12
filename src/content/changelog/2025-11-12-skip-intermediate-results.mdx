@@ -1,0 +1,11 @@
+---
+title: "Skip Intermediate Results"
+date: 2025-11-12
+tags:
+  - Merge Queue
+description: "Allows merging a PR early if a later batch including it passes all checks and conditions."
+---
+
+A new option named `skip_intermediate_results` has been added to the `merge_queue` section of the Mergify configuration.
+
+This option allow PRs to be merged even if their own speculative is not finished, as long as a later downstream check including them passes and schedule conditions are valid.
