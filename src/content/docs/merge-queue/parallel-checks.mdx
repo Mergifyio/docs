@@ -131,6 +131,29 @@ Parallel Checks adapt automatically as your code and rules evolve:
   `reset_on_external_merge` — see [Lifecycle: Base Branch
   Updates](/merge-queue/lifecycle#base-branch-updates).
 
+### Skip Intermediate Results
+
+By default, each speculative draft that includes a pull request must pass
+before that pull request can be merged. When
+`merge_queue.skip_intermediate_results` is enabled, Mergify can merge a pull
+request as soon as a later downstream draft that also includes that PR passes,
+even if earlier intermediate drafts failed.
+
+When it's useful:
+
+- Your CI is stable (low flakiness) and long-running, and you want to reduce
+  latency by trusting the first comprehensive passing draft.
+
+- You're using parallel checks and/or batches and care more about the final
+  combined outcome than each incremental step.
+
+Enable it in your configuration:
+
+```yaml
+merge_queue:
+  skip_intermediate_results: true
+```
+
 ## Important Considerations
 
 ### In‑place checks (no drafts)
