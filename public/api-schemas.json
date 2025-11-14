@@ -1251,6 +1251,9 @@
                       "ci_issue.reopened",
                       "ci_issue.resolved",
                       "ci_issue.unresolved",
+                      "command.dequeue",
+                      "command.queue",
+                      "command.requeue",
                       "queue.pause.create",
                       "queue.pause.delete",
                       "queue.pause.update",
@@ -4187,6 +4190,212 @@
         ],
         "title": "EventCloseMetadata"
       },
+      "EventCommandDequeue": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "command.dequeue",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventCommandMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventCommandDequeue"
+      },
+      "EventCommandMetadata": {
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/GitHubAccount"
+          },
+          "comment_id": {
+            "type": "integer",
+            "title": "Comment Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "author",
+          "comment_id"
+        ],
+        "title": "EventCommandMetadata"
+      },
+      "EventCommandQueue": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "command.queue",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventCommandMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventCommandQueue"
+      },
+      "EventCommandRequeue": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "command.requeue",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventCommandMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventCommandRequeue"
+      },
       "EventComment": {
         "properties": {
           "id": {
@@ -6863,6 +7072,15 @@
                 },
                 {
                   "$ref": "#/components/schemas/EventScheduledFreezeDelete"
+                },
+                {
+                  "$ref": "#/components/schemas/EventCommandQueue"
+                },
+                {
+                  "$ref": "#/components/schemas/EventCommandRequeue"
+                },
+                {
+                  "$ref": "#/components/schemas/EventCommandDequeue"
                 }
               ]
             },
@@ -6896,6 +7114,34 @@
           "scheduled_freezes"
         ],
         "title": "GetScheduledFreezesResponse"
+      },
+      "GitHubAccount": {
+        "properties": {
+          "login": {
+            "type": "string",
+            "title": "Login"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "User",
+              "Organization",
+              "Bot"
+            ],
+            "title": "Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "login",
+          "id",
+          "type"
+        ],
+        "title": "GitHubAccount"
       },
       "MatchingConditionsDict-Input": {
         "properties": {
