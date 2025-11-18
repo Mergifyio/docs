@@ -71,7 +71,7 @@
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/poppins": "^5.2.7",
     "@scalar/api-reference": "^1.39.3",
-    "@types/react": "^19.2.4",
+    "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^11.0.0",
     "algoliasearch": "^5.44.0",
