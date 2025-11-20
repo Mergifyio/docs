@@ -72,9 +72,6 @@ GitHub rulesets and provides the most consistent, automated workflow.
 
 3. Click the verification button to confirm your setup is correct.
 
-**Be careful**: Mergify injects ruleset rules as conditions in the Merge Queue. However,
-if Mergify has bypass permissions for the rules, the conditions will not be injected.
-
-If you want to add more rules to this ruleset, ensure they are rules that you allow Mergify to bypass.
-Otherwise, set them in a separate ruleset without Mergify in the bypass list.
-
+**Be careful**: Mergify injects ruleset rules as conditions in the Merge Queue.
+If you want Mergify to bypass the injection of the ruleset rules, please
+see the [merge action](/workflow/actions/merge/) documentation.
