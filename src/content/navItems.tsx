@@ -18,6 +18,7 @@ import {
   FaBug,
   FaCircleXmark,
   FaGear,
+  FaLayerGroup,
   FaMoneyBill1,
   FaRegCircleCheck,
   FaRegCirclePause,
@@ -143,6 +144,7 @@ const navItems: NavItem[] = [
       { title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
       { title: 'Parallel Checks', path: '/merge-queue/parallel-checks', icon: TiFlowParallel },
       { title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
+      { title: 'Scopes', path: '/merge-queue/scopes', icon: FaLayerGroup },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
       {
         title: 'Monorepo',
