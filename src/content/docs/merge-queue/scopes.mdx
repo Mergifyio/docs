@@ -70,7 +70,7 @@ Scope-aware batching follows these steps:
    still start.
 
 4. **Fallback safely:** When no scope overlap exists, the queue still batches the oldest pull
-   requests together to honour throughput, but these situations are the exception rather than the
+   requests together to honor throughput, but these situations are the exception rather than the
    rule.
 
 This strategy maximises CI reuse: tests that run for one pull request are likely valid for the other
