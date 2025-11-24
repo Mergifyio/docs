@@ -110,14 +110,18 @@ quickly consume significant compute resources and budget.
 **The Solution:** A merge queue enables several cost-saving strategies:
 
 - **[Batch merging](/merge-queue/batches)**: Combine multiple PRs into a single
-  batch and test them together. Instead of running CI separately for 5 PRs, run
-  it once for all 5 together, drastically reducing CI usage.
+    batch and test them together. Instead of running CI separately for 5 PRs, run
+    it once for all 5 together, drastically reducing CI usage.
+
+- **[Scope-aware batching](/merge-queue/scopes)**: Attach scopes to pull
+    requests so Mergify groups related changes together. Shared test runs can be
+    reused, making batching safer and more efficient—especially in monorepos.
 
 - **[Two-step CI](/merge-queue/two-step)**: Move expensive tests (like E2E
-  tests) to run only in the merge queue instead of on every PR update. Since
-  PRs often get updated multiple times before merging—or may never merge at
-  all—this can dramatically reduce CI costs while actually improving reliability
-  by ensuring those critical tests run against the real merge state.
+    tests) to run only in the merge queue instead of on every PR update. Since
+    PRs often get updated multiple times before merging—or may never merge at
+    all—this can dramatically reduce CI costs while actually improving reliability
+    by ensuring those critical tests run against the real merge state.
 
 With these strategies, you can significantly reduce CI costs compared to running
 all tests on every PR update, while simultaneously gaining better reliability
