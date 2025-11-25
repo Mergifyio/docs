@@ -1,0 +1,113 @@
+---
+title: Monorepo CI
+description: Run the right tests for the right pull requests by combining scopes with your CI system.
+---
+
+Monorepos supercharge collaboration, but they also make continuous integration
+expensive. Every change potentially touches hundreds of packages or services,
+and running the full test matrix for all of them at every pull request update
+quickly becomes unsustainable.
+
+Mergify Monorepo CI brings precision testing to your existing CI pipelines by
+tagging each pull request with **scopes**. Scopes are named slices of your
+repository that describe a service, package, or set of files (see
+[Merge Queue Scopes](/merge-queue/scopes) for the full specification). A scope acts as
+the contract between your codebase and your CI: if a pull request touches files
+that belong to the `frontend` scope, every workflow that cares about that scope
+knows it has work to do.
+
+With scopes in place you can:
+
+- Detect which projects or services are really impacted by a change.
+- Run only the CI jobs that matter for those scopes.
+- Reuse those scopes later in the merge queue to build smarter batches.
+
+Today, GitHub Actions is the first CI platform with native support through our
+[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) action.
+
+## How it works
+
+```dot class="graph"
+strict digraph {
+   fontname="sans-serif";
+   rankdir="LR";
+   nodesep=0.9;
+   ranksep=1.1;
+   splines=polyline;
+
+   node [shape=box, style="rounded,filled", fontname="sans-serif", margin="0.35,0.2", color="#165B33", fillcolor="#347D39", fontcolor="white"];
+   edge [fontname="sans-serif", color="#374151", penwidth=1.2, arrowhead=normal];
+
+   subgraph cluster_repo {
+      label="Repository";
+      style="rounded";
+      color="#1CB893";
+      fontcolor="#063C2C";
+
+      PR [label="Pull request\nchanges"];
+      ScopesConfig [fillcolor="#1CB893", fontcolor="#063C2C", color="#0B7A5C", margin="0.4,0.2", label="Scopes config\n(.mergify.yml)"];
+   }
+
+   Detect [fillcolor="#2563EB", color="#1E40AF", label="gha-mergify-ci\n(scopes)"];
+
+   subgraph cluster_ci {
+      label="GitHub Actions jobs";
+      style="rounded";
+      color="#1CB893";
+      fontcolor="#063C2C";
+
+   Frontend [label="Frontend tests"];
+   API [fillcolor="#6B7280", color="#4B5563", label="API tests\n(skipped)"];
+   Docs [fillcolor="#347D39", color="#165B33", label="Docs checks"];
+   }
+
+   Queue [fillcolor="#111827", color="#0B1120", label="Merge Queue\n(optional reuse)"];
+
+   PR -> Detect;
+   ScopesConfig -> Detect;
+   Detect -> Frontend [label="scope: frontend"];
+   Detect -> Docs [label="scope: docs"];
+   Detect -> Queue [style=dashed, color="#9CA3AF", fontcolor="#9CA3AF"];
+}
+```
+
+1. **Define scopes** in your `.mergify.yml` file by mapping the areas of your repository (via file
+   patterns) to scope names that matter for your CI.
+   
+2. **Collect scopes in CI.** A helper (currently
+   [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)) inspects the
+   pull request diff and dispatches only the jobs whose scopes are touched.
+
+3. **Drive your jobs conditionally.** Use the reported scopes to decide which
+   workflows, test suites, or deployment steps should run for the current pull
+   request.
+
+4. **(Optional) Share scopes with Merge Queue.** The very same scopes help the merge queue build
+   batches that group related pull requests, reuse your CI runs, and unlock advanced strategies like
+   [batch merging](/merge-queue/batches) or [two-step CI](/merge-queue/two-step).
+
+## What you can do with Monorepo CI
+
+- Gate language-specific test suites with fine-grained scope checks.
+- Trigger targeted build pipelines for individual services or packages.
+- Run nightly or specialized workflows only when relevant scopes change.
+
+## Get started
+
+Define your scopes first so every workflow speaks the same language:
+
+1. List the services, packages, or domains that deserve their own scope.
+
+2. Map each scope to file patterns inside the
+   [`scopes`](/merge-queue/scopes#configuration) block of your `.mergify.yml`
+   file.
+
+3. Commit the configuration and open a pull request to verify that the reported
+   scopes match your expectations.
+
+Once those scopes exist, pick the workflow that matches your setup:
+
+- [GitHub Actions setup](/monorepo-ci/github-actions)
+- [Monorepo integrations for merge queue](/merge-queue/monorepo)
+
+Looking for a different CI provider? [Let us know](mailto:support@mergify.com); more platforms are on our roadmap.
