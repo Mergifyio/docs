@@ -28,6 +28,7 @@ merge action to take place:
 
 GitHub provides [branch
 protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+and [rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
 settings that allow to enforce certain restrictions when pushing commits to
 your repository.
 
@@ -39,6 +40,10 @@ For example, if you request your pull request to be approved by at least
 one person, Mergify will inject the `#approved-reviews-by >= 1` condition.
 
 <Image src={branchProtectionConditionsScreenshot} alt="Mergify Branch Protection Condition Injection" />
+
+If you're using rulesets instead of the classic branch protections, you can also bypass
+the injection of those conditions by setting Mergify as a bypass actor with the bypass mode set to `exempt`.
+With all other bypass modes, Mergify will inject the conditions in your rules.
 
 Note that branch protection supports has some limitations. For example, GitHub
 does not provide an API to support [code
