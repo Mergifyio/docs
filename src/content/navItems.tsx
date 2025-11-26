@@ -17,8 +17,8 @@ import { FaHome, FaRadiation, FaRegListAlt, FaShieldAlt } from 'react-icons/fa';
 import {
   FaBug,
   FaCircleXmark,
+  FaDiagramProject,
   FaGear,
-  FaLayerGroup,
   FaMoneyBill1,
   FaRegCircleCheck,
   FaRegCirclePause,
@@ -65,7 +65,13 @@ import {
   SiVitest,
 } from 'react-icons/si';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
-import { TbBulldozer, TbGitBranch, TbMessageX, TbPackages } from 'react-icons/tb';
+import {
+  TbBulldozer,
+  TbGitBranch,
+  TbMessageX,
+  TbPackages,
+  TbTopologyStarRing3,
+} from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
 
 import { v5 } from 'uuid';
@@ -144,7 +150,7 @@ const navItems: NavItem[] = [
       { title: 'Performance', path: '/merge-queue/performance', icon: SlSpeedometer },
       { title: 'Parallel Checks', path: '/merge-queue/parallel-checks', icon: TiFlowParallel },
       { title: 'Batches', path: '/merge-queue/batches', icon: TbPackages },
-      { title: 'Scopes', path: '/merge-queue/scopes', icon: FaLayerGroup },
+      { title: 'Scopes', path: '/merge-queue/scopes', icon: FaDiagramProject },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: FaStairs },
       {
         title: 'Monorepo',
@@ -165,6 +171,19 @@ const navItems: NavItem[] = [
       },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: AiOutlineDeploymentUnit },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: MdMonitorHeart },
+    ],
+  },
+  {
+    title: 'Monorepo CI',
+    path: '/monorepo-ci',
+    icon: TbTopologyStarRing3,
+    children: [
+      { title: 'Overview', path: '/monorepo-ci', icon: TbTopologyStarRing3 },
+      {
+        title: 'GitHub Actions',
+        path: '/monorepo-ci/github-actions',
+        icon: SiGithubactions,
+      },
     ],
   },
   {

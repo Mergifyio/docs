@@ -11,7 +11,7 @@ import { MdOutlineLightbulb, MdMonitorHeart } from 'react-icons/md';
 import { GoGitMerge, GoCodeReview } from 'react-icons/go';
 import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStack, BsLightbulb, BsBoxes } from 'react-icons/bs';
 import { BiRuler, BiBadgeCheck, BiCut, BiSolidCoinStack } from 'react-icons/bi';
-import { TbPackages, TbGitBranch } from 'react-icons/tb';
+import { TbPackages, TbGitBranch, TbTopologyStarRing3 } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
 import { FaUserShield, FaRegLightbulb, FaGear, FaTrafficLight, FaRegCirclePause, FaBug, FaMoneyBill1, FaSnowflake, FaStairs } from 'react-icons/fa6';
 import { FaShieldAlt } from 'react-icons/fa';
@@ -19,7 +19,7 @@ import { AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi } from 'react-icon
 import { LiaShareAltSolid } from 'react-icons/lia';
 import { FiType } from 'react-icons/fi';
 import MergeQueueIcon from '../../components/MergeQueueIcon.astro';
-import { SiSlack, SiGithub, SiX, SiYoutube, SiLinkedin } from 'react-icons/si';
+import { SiSlack, SiGithub, SiX, SiYoutube, SiLinkedin, SiGithubactions } from 'react-icons/si';
 import { IoIosRemoveCircleOutline } from 'react-icons/io';
 import { GrTest } from 'react-icons/gr';
 import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
@@ -37,6 +37,7 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
       <div class="quick-links">
         <a href="/ci-insights" class="ql">CI Insights</a>
         <a href="/merge-queue" class="ql">Merge Queue</a>
+        <a href="/monorepo-ci" class="ql">Monorepo CI</a>
         <a href="/merge-protections" class="ql">Merge Protections</a>
         <a href="/workflow" class="ql">Workflow Automation</a>
       </div>
@@ -62,6 +63,18 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
     </Docset>
     <Docset title="Test Frameworks" path="/ci-insights#test-framework-configuration" icon={GrTest}>
       Configure report upload.
+    </Docset>
+  </DocsetGrid>
+
+  <h2 class="home-title">Monorepo CI</h2>
+  Scope-aware CI workflows that only run the jobs that matter.
+
+  <DocsetGrid>
+    <Docset title="Overview" path="/monorepo-ci" icon={TbTopologyStarRing3}>
+      Define scopes once and reuse them across CI.
+    </Docset>
+    <Docset title="GitHub Actions" path="/monorepo-ci/github-actions" icon={SiGithubactions}>
+      Wire scopes into gha-mergify-ci workflows.
     </Docset>
   </DocsetGrid>
 
