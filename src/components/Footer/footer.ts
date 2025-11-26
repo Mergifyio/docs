@@ -39,6 +39,10 @@ export const productCategory: Category = {
       href: 'https://mergify.com/product/merge-queue',
     },
     {
+      text: 'Monorepo CI',
+      href: 'https://mergify.com/product/monorepo-ci',
+    },
+    {
       text: 'Merge Protections',
       href: 'https://mergify.com/product/merge-protections',
     },
