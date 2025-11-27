@@ -13,7 +13,7 @@ import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStac
 import { BiRuler, BiBadgeCheck, BiCut, BiSolidCoinStack } from 'react-icons/bi';
 import { TbPackages, TbGitBranch, TbTopologyStarRing3 } from 'react-icons/tb';
 import { TiFlowParallel } from 'react-icons/ti';
-import { FaUserShield, FaRegLightbulb, FaGear, FaTrafficLight, FaRegCirclePause, FaBug, FaMoneyBill1, FaSnowflake, FaStairs } from 'react-icons/fa6';
+import { FaUserShield, FaRegLightbulb, FaGear, FaTrafficLight, FaRegCirclePause, FaBug, FaMoneyBill1, FaSnowflake, FaStairs, FaDiagramProject } from 'react-icons/fa6';
 import { FaShieldAlt } from 'react-icons/fa';
 import { AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi } from 'react-icons/ai';
 import { LiaShareAltSolid } from 'react-icons/lia';
@@ -76,6 +76,9 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
     <Docset title="GitHub Actions" path="/monorepo-ci/github-actions" icon={SiGithubactions}>
       Wire scopes into gha-mergify-ci workflows.
     </Docset>
+    <Docset title="Merge Queue integration" path="/merge-queue/monorepo" icon={BsBoxes}>
+      Share scopes with batching strategies.
+    </Docset>
   </DocsetGrid>
 
   <h2 class="home-title">Merge Queue</h2>
@@ -106,11 +109,14 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
     <Docset title="Batches" path="/merge-queue/batches" icon={TbPackages}>
       Increase velocity with batches.
     </Docset>
-    <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon={FaTrafficLight}>
-      Fast + full validation strategy.
+    <Docset title="Scopes" path="/merge-queue/scopes" icon={FaDiagramProject}>
+      Group pull requests by impacted services.
     </Docset>
     <Docset title="Monorepo" path="/merge-queue/monorepo" icon={BsBoxes}>
       Optimization for large repositories.
+    </Docset>
+    <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon={FaTrafficLight}>
+      Fast + full validation strategy.
     </Docset>
     <Docset title="Deployment" path="/merge-queue/deploy" icon={AiOutlineDeploymentUnit}>
       Adopt safely in production.
