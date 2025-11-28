@@ -3,31 +3,17 @@ title: Monorepo
 description: Optimize merge queue batching for monorepos with scopes.
 ---
 
-In monorepo environments, not every pull request affects the entire codebase. Running all tests for
-every change wastes time and CI resources. Mergify's **scopes** feature allows you to intelligently
-batch pull requests based on which parts of your codebase they modify, dramatically improving merge
-queue efficiency.
+In monorepo environments, not every pull request affects the entire codebase. Running the full
+validation matrix for each change quickly becomes wasteful, yet batching unrelated pull requests
+still makes the queue churn through work that doesn't matter. This page explains the pain points
+first and then shows how Mergify's monorepo capabilities keep batching efficient without
+sacrificing safety.
 
-For a deep dive into how scopes influence batching, see [Merge Queue Scopes](/merge-queue/scopes).
-
-## Understanding Scopes
-
-Scopes define discrete areas of your monorepo (like packages, services, or components). When a pull
-request is created, Mergify automatically determines which scopes are affected and uses this
-information to optimize batching.
-
-Scopes can be determined in several ways depending on your project's needs:
-
-- **File patterns**: Match file paths to identify affected scopes
-
-- **Build system integration**: Support for tools like Bazel, Nx, Turborepo, and 
-  others that can provide scope information based on dependency graphs and build targets
-
-This flexibility allows you to use the approach that best fits your monorepo's architecture and
-existing tooling.
-
-Need scope-aware CI without the merge queue? Explore [Monorepo CI](/monorepo-ci) for workflows that
-target GitHub Actions today.
+To solve this, Mergify introduces **scopes**—named regions of your repository that describe which
+services, packages, or domains a change touches. The rest of this guide shows how scopes pair with
+monorepo-aware tooling to batch compatible pull requests, keep unrelated work apart, and drive only
+the CI jobs that matter. For the full schema and advanced strategies, see
+[Merge Queue Scopes](/merge-queue/scopes).
 
 ## The Batching Challenge in Monorepos
 
@@ -43,34 +29,40 @@ With scopes, Mergify can:
 - Keep independent changes in separate batches
 - Reduce unnecessary CI runs for unrelated parts of your codebase
 
-## Configuration Approaches
+## Monorepo support at a glance
 
-Choose the approach that best fits your monorepo setup:
+1. **Define scopes** in `.mergify.yml` using either file patterns or data emitted by your build
+   system. Start with the [Scopes reference](/merge-queue/scopes).
 
-### File Patterns
+2. **Collect scopes in CI** via [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) so
+   every workflow knows which services a pull request touches.
 
-Use simple glob patterns to map file paths to scopes. This approach is straightforward 
-to set up and works well when your monorepo follows clear directory boundaries.
+3. **Reuse scopes in Merge Queue** to batch compatible pull requests, keep unrelated work apart,
+   and gate expensive tests only when those scopes are present.
 
-**Best for:**
-- Projects with well-defined directory structure
-- Monorepos without complex dependency graphs
+Need scope-aware CI without the merge queue? Explore [Monorepo CI](/monorepo-ci) for workflows that
+target GitHub Actions today.
 
-[Learn more about file patterns →](/merge-queue/monorepo/file-patterns)
+### No monorepo tooling yet?
 
-### Monorepo Build Tools
+Start with [Monorepo CI](/monorepo-ci) and its GitHub Actions guide. It ships a ready-made
+[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) workflow that detects scopes through file
+patterns, so you can adopt scope-aware batching without introducing Nx, Bazel, or Turborepo first. As
+your repository grows you can swap in more advanced tooling—your scopes stay the same.
 
-Leverage your existing build tool (Nx, Bazel, Turborepo, etc.) to detect affected projects
-based on your dependency graph. This approach provides more accurate scope detection by 
-understanding your project's dependencies.
+## Understanding Scopes
 
-**Best for:**
-- Projects already using monorepo build tools
-- Complex dependency relationships
-- Teams wanting transitive dependency detection
+Scopes define discrete areas of your monorepo (like packages, services, or components). When a pull
+request is created, Mergify automatically determines which scopes are affected and uses this
+information to optimize batching. The [Scopes reference](/merge-queue/scopes) covers the schema plus
+all tooling-specific guides, including file-pattern detection and integrations with Bazel, Nx, and
+Turborepo. If you already run Nx, Bazel, Turborepo, or another orchestrator, point it at
+`gha-mergify-ci` to upload those scope names—**scopes are the feature Merge Queue consumes**, regardless
+of how you compute them.
 
-Learn more about build tool integrations:
-- [Nx](/merge-queue/monorepo/nx)
-- [Bazel](/merge-queue/monorepo/bazel)
-- [Turborepo](/merge-queue/monorepo/turborepo)
-- [Other](/merge-queue/monorepo/others)
+## Next steps
+
+- [Scopes reference](/merge-queue/scopes): schema, file-pattern setup, and tooling guides (Nx, Bazel,
+  Turborepo, custom uploaders).
+  
+- [Monorepo CI](/monorepo-ci): opinionated GitHub Actions workflows if you need turnkey automation.

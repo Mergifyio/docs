@@ -1,16 +1,16 @@
 ---
-title: Monorepo with Turborepo
-description: Configure monorepo scopes using Turborepo for dependency-aware batching.
+title: Scopes with Bazel
+description: Configure merge queue scopes using Bazel's dependency graph for precise batching.
 ---
 
-If you're using monorepo tools like Turborepo that have built-in
-dependency graph analysis, you can leverage their affected project detection instead of using file
-patterns. This approach is often more accurate because these tools understand your project's
+If you're using monorepo tools like Bazel that have built-in dependency graph analysis,
+you can leverage their affected project detection instead of using file patterns.
+This approach is often more accurate because these tools understand your project's
 dependency relationships.
 
 ## Configuring Manual Scopes
 
-To use manual scopes mechanism, configure Mergify to expect scopes from your CI system:
+To use the manual scopes mechanism, configure Mergify to expect scopes from your CI system:
 
 ```yaml
 scopes:
@@ -22,9 +22,9 @@ queue_rules:
     batch_size: 5
 ```
 
-## Detecting Scopes with Turborepo
+## Detecting Scopes with Bazel
 
-In your GitHub Actions workflow, use the `turbo run build --dry` command to determine affected projects and
+In your GitHub Actions workflow, use `bazel query` to determine affected projects and
 upload them to Mergify:
 
 ```yaml
@@ -50,7 +50,11 @@ jobs:
           HEAD: ${{ steps.refs.outputs.head }}
           BASE: ${{ steps.refs.outputs.base }}
         run: |
-          scopes=$(npx turbo run build --dry=json --filter="[$BASE...$HEAD]" | jq -r '.packages | join(",")')
+          scopes=$( \
+            bazel query --keep_going --noshow_progress --output=package \
+              "buildfiles(set($(git diff --name-only --diff-filter=ACMR \"$BASE\" \"$HEAD\" | tr '\n' ' ')))" \
+            2>/dev/null | sort -u | paste -sd, -
+          )
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
       - name: Scopes upload

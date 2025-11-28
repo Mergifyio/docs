@@ -1,6 +1,6 @@
 ---
-title: Monorepo with File Patterns
-description: Configure monorepo scopes using file patterns to optimize merge queue batching.
+title: Scopes with File Patterns
+description: Configure merge queue scopes using file patterns to batch pull requests intelligently.
 ---
 
 Mergify allows you to define scopes using file patterns to intelligently batch pull requests 
@@ -48,86 +48,18 @@ they share a common scope.
 
 ## Setting Up CI with Scopes
 
-To leverage scopes in your CI workflow, use the
-[gha-mergify-ci](https://github.com/Mergifyio/gha-mergify-ci) GitHub Action. This action detects
-which scopes are affected by a pull request and allows you to run only the relevant tests.
+To wire scopes into GitHub Actions, follow the
+[Monorepo CI GitHub Actions guide](/monorepo-ci/github-actions). It walks through:
 
-## GitHub Actions Integration
+- Adding the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
+  workflow step that reads your file-pattern scopes and exposes them as outputs.
 
-Here's a complete example showing how to set up scope-aware CI:
+- Conditioning downstream jobs (frontend, backend, docs, etc.) on those scope outputs.
 
-```yaml
-name: Continuous Integration
-on:
-  pull_request:
+- Waiting on the right set of jobs so required checks always report, even when work is skipped.
 
-jobs:
-  scopes:
-    runs-on: ubuntu-24.04
-    outputs:
-      python-api: ${{ fromJSON(steps.scopes.outputs.scopes).python-api }}
-      frontend: ${{ fromJSON(steps.scopes.outputs.scopes).frontend }}
-      docs: ${{ fromJSON(steps.scopes.outputs.scopes).docs }}
-      merge-queue: ${{ fromJSON(steps.scopes.outputs.scopes).merge-queue }}
-    steps:
-      - uses: actions/checkout@v5
-      - name: Get PR scopes
-        id: scopes
-        uses: Mergifyio/gha-mergify-ci@v9
-        with:
-          action: scopes
-          token: ${{ secrets.MERGIFY_TOKEN }}
-
-  python-tests:
-    if: ${{ needs.scopes.outputs.python-api == 'true' }}
-    needs: scopes
-    uses: ./.github/workflows/python-tests.yaml
-    secrets: inherit
-
-  frontend-tests:
-    if: ${{ needs.scopes.outputs.frontend == 'true' }}
-    needs: scopes
-    uses: ./.github/workflows/frontend-tests.yaml
-    secrets: inherit
-
-  docs-tests:
-    if: ${{ needs.scopes.outputs.docs == 'true' }}
-    needs: scopes
-    uses: ./.github/workflows/docs-tests.yaml
-    secrets: inherit
-
-  integration-tests:
-    if: ${{ needs.scopes.outputs.merge-queue == 'true' }}
-    needs: scopes
-    uses: ./.github/workflows/integration-tests.yaml
-    secrets: inherit
-
-  ci-gate:
-    if: ${{ !cancelled() }}
-    needs:
-      - python-tests
-      - frontend-tests
-      - docs-tests
-      - integration-tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Verify all jobs succeeded
-        uses: Mergifyio/gha-mergify-ci@v9
-        with:
-          action: wait-jobs
-          jobs: ${{ toJSON(needs) }}
-```
-
-### Key Components
-
-1. **Scopes Job**: Detects which scopes are affected and outputs boolean values
-
-2. **Conditional Jobs**: Each test suite runs only if its scope is affected
-
-3. **Integration Tests**: The special `merge-queue` scope is automatically set to `true` when
-   running in the merge queue context
-
-4. **CI Gate**: Aggregates all job results, handling skipped jobs correctly
+That guide already includes complete workflow samples, so you do not need to duplicate the config
+here—just reuse the same scopes you declared above.
 
 ## The Merge Queue Scope
 
