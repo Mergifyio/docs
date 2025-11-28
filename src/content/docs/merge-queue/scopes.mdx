@@ -86,13 +86,13 @@ Scopes can be attached to pull requests automatically or manually:
 - **File pattern detection:** Define scopes directly in your configuration so Mergify infers them
   from changed paths once your CI uploads the results via
   [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) or an equivalent integration.
-  See [file-pattern scopes](/merge-queue/monorepo/file-patterns) for a
+  See [file-pattern scopes](/merge-queue/scopes/file-patterns) for a
   step-by-step setup.
 
 - **Manual upload:** Use the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
   GitHub Action, the REST API, or the `mergify scopes-send` CLI to push scopes computed by your own
   tooling (Nx, Bazel, Turborepo, etc.). Examples are available in the build tool guides under
-  [Monorepo integrations](/merge-queue/monorepo).
+  [Scopes integrations](/merge-queue/scopes).
 
 ## Configuration schema
 
