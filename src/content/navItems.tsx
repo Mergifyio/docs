@@ -13,7 +13,7 @@ import {
   BsRocket,
   BsStack,
 } from 'react-icons/bs';
-import { FaHome, FaRadiation, FaRegListAlt, FaShieldAlt } from 'react-icons/fa';
+import { FaHome, FaLifeRing, FaRadiation, FaRegListAlt, FaShieldAlt } from 'react-icons/fa';
 import {
   FaBug,
   FaCircleXmark,
@@ -337,6 +337,7 @@ const navItems: NavItem[] = [
   },
   { title: 'Stacks', path: '/stacks', icon: BsStack },
   { title: 'Security', path: '/security', icon: FaShieldAlt },
+  { title: 'Support', path: '/support', icon: FaLifeRing },
   { title: 'Badge', path: '/badge', icon: BiBadgeCheck },
   { title: 'Billing', path: '/billing', icon: FaMoneyBill1 },
   { title: 'Changelog', path: '/changelog', icon: FaRegListAlt },

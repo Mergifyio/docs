@@ -96,7 +96,7 @@ export const helpCategory: Category = {
     },
     {
       text: 'Support',
-      href: 'mailto:support@mergify.com',
+      href: 'https://docs.mergify.com/support/',
     },
     {
       text: 'Privacy Policy',
