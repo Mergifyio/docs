@@ -1,0 +1,250 @@
+---
+import { FiCopy } from 'react-icons/fi';
+import { getMarkdownPath } from '../util/getMarkdownPath';
+
+export interface Props {
+  size?: 'default' | 'compact';
+}
+
+const { size = 'default' } = Astro.props;
+const classes = ['docs-toolbar-button', 'copy-for-llm-button'];
+if (size === 'compact') {
+  classes.push('docs-toolbar-button--compact');
+}
+const markdownPath = getMarkdownPath(Astro.url.pathname);
+---
+
+<button
+	class={classes.join(' ')}
+	type="button"
+	data-copy-for-llm
+	data-markdown-path={markdownPath}
+	data-state="idle"
+	aria-label="Copy page Markdown for LLM"
+>
+	<span class="docs-toolbar-button__icon" aria-hidden="true">
+		<FiCopy size={16} focusable="false" aria-hidden="true" />
+	</span>
+	<span class="docs-toolbar-button__label" aria-live="polite">Copy for LLM</span>
+</button>
+
+<style>
+	:global(.docs-toolbar-button) {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.4rem 0.95rem;
+		border-radius: 999px;
+		border: 1px solid var(--chakra-colors-gray-200);
+		background: var(--chakra-colors-white);
+		color: inherit;
+		font-size: 0.9rem;
+		font-weight: 500;
+		line-height: 1.2;
+		cursor: pointer;
+		transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+		white-space: nowrap;
+	}
+
+	:global(.docs-toolbar-button:hover),
+	:global(.docs-toolbar-button:focus-visible) {
+		border-color: var(--chakra-colors-gray-300);
+		background: var(--chakra-colors-gray-50);
+		outline: none;
+	}
+
+	:global(.docs-toolbar-button:active) {
+		background: var(--chakra-colors-gray-100);
+	}
+
+	:global(.docs-toolbar-button--compact) {
+		padding-inline: 0.8rem;
+		font-size: 0.85rem;
+	}
+
+	:global(.docs-toolbar-button__icon svg) {
+		display: block;
+	}
+
+	:global(.docs-toolbar-button__label) {
+		line-height: 1;
+	}
+
+	@media (max-width: var(--docs-toolbar-mobile-breakpoint)) {
+		:global(.docs-toolbar-button) {
+			width: 100%;
+			justify-content: center;
+		}
+	}
+
+	:global(.theme-dark) .docs-toolbar-button {
+		border-color: rgba(255, 255, 255, 0.2);
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--chakra-colors-whiteAlpha-900);
+	}
+
+	:global(.theme-dark) .docs-toolbar-button:hover,
+	:global(.theme-dark) .docs-toolbar-button:focus-visible {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	:global(.theme-dark) .docs-toolbar-button:active {
+		background: rgba(255, 255, 255, 0.18);
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		if (typeof window === 'undefined') {
+			return;
+		}
+		const globalKey = '__copyForLLMInitialized__';
+		const win = window;
+		if (win[globalKey]) {
+			return;
+		}
+		win[globalKey] = true;
+
+		const LABELS = {
+			default: 'Copy for LLM',
+			preparing: 'Preparing…',
+			copying: 'Copying…',
+			success: 'Copied!',
+			error: 'Copy failed',
+		};
+		const RESET_DELAY = 2000;
+		/** @type {WeakMap<Element, number>} */
+		const resetTimers = new WeakMap();
+
+		const setLabel = (button, state) => {
+			const label = button.querySelector('.docs-toolbar-button__label');
+			if (label) {
+				label.textContent = LABELS[state] ?? LABELS.default;
+			}
+		};
+
+		const clearResetTimer = (button) => {
+			const existing = resetTimers.get(button);
+			if (existing) {
+				window.clearTimeout(existing);
+				resetTimers.delete(button);
+			}
+		};
+
+		// Fallback payload when raw markdown cannot be fetched: pull title, subtitle, and article body text.
+		const buildRenderedPayload = () => {
+			const article = document.querySelector('article#article');
+			const title = document.querySelector('.content-title')?.textContent?.trim();
+			const subtitle = document.querySelector('.content-subtitle')?.textContent?.trim();
+			const mainFallback = document.querySelector('#main-content') ?? document.body;
+			const textSource = article ?? mainFallback;
+			const bodyText = textSource?.innerText?.trim();
+			if (!bodyText) {
+				return '';
+			}
+			return [title, subtitle, bodyText]
+				.filter(Boolean)
+				.join('\n\n')
+				.trim();
+		};
+
+		const fetchPageSource = async (url) => {
+			const response = await fetch(url, {
+				headers: {
+					Accept: 'text/markdown, text/plain;q=0.9, */*;q=0.1',
+				},
+				cache: 'no-store',
+			});
+			if (!response.ok) {
+				throw new Error(`Source fetch failed: ${response.status}`);
+			}
+			return (await response.text()).trim();
+		};
+
+		const copyPayload = async (text) => {
+			if (navigator.clipboard?.writeText) {
+				await navigator.clipboard.writeText(text);
+				return true;
+			}
+			if (navigator.clipboard?.write && typeof window.ClipboardItem !== 'undefined') {
+				const blob = new Blob([text], { type: 'text/plain' });
+				const clipboardItem = new window.ClipboardItem({ 'text/plain': blob });
+				await navigator.clipboard.write([clipboardItem]);
+				return true;
+			}
+			return false;
+		};
+
+		const resetLater = (button) => {
+			clearResetTimer(button);
+			const timeoutId = window.setTimeout(() => {
+				resetTimers.delete(button);
+				if (button.dataset.state === 'idle') {
+					setLabel(button, 'default');
+				}
+			}, RESET_DELAY);
+			resetTimers.set(button, timeoutId);
+		};
+
+		const attachBlurHandler = (button) => {
+			if (button.dataset.copyForLlmBlurAttached === 'true') {
+				return;
+			}
+			button.addEventListener('blur', () => {
+				if (button.dataset.state === 'idle') {
+					clearResetTimer(button);
+					setLabel(button, 'default');
+				}
+			});
+			button.dataset.copyForLlmBlurAttached = 'true';
+		};
+
+		document.addEventListener('click', async (event) => {
+			const target = event.target instanceof Element ? event.target.closest('[data-copy-for-llm]') : null;
+			if (!target) {
+				return;
+			}
+			const button = target;
+			attachBlurHandler(button);
+			if (button.dataset.state === 'busy') {
+				return;
+			}
+			clearResetTimer(button);
+			button.dataset.state = 'busy';
+			setLabel(button, 'preparing');
+			let payload = '';
+			const markdownPath = button.dataset.markdownPath;
+			try {
+				if (!markdownPath) {
+					throw new Error('Missing markdown path');
+				}
+				payload = await fetchPageSource(markdownPath);
+			} catch (fetchError) {
+				console.warn('Falling back to rendered content for Copy for LLM', fetchError);
+				payload = buildRenderedPayload();
+			}
+			if (!payload) {
+				setLabel(button, 'error');
+				button.dataset.state = 'idle';
+				resetLater(button);
+				return;
+			}
+			setLabel(button, 'copying');
+			try {
+				const copied = await copyPayload(payload);
+				if (!copied) {
+					throw new Error('Clipboard API unavailable');
+				}
+				setLabel(button, 'success');
+			} catch (error) {
+				console.error('Copy for LLM failed', error);
+				setLabel(button, 'error');
+			} finally {
+				button.dataset.state = 'idle';
+				resetLater(button);
+			}
+		});
+
+		document.querySelectorAll('[data-copy-for-llm]').forEach((button) => attachBlurHandler(button));
+	})();
+</script>

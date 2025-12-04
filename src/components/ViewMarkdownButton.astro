@@ -1,0 +1,37 @@
+---
+import { FiFileText } from 'react-icons/fi';
+import { getMarkdownPath } from '../util/getMarkdownPath';
+
+export interface Props {
+  size?: 'default' | 'compact';
+}
+
+const { size = 'default' } = Astro.props;
+const classes = ['docs-toolbar-button', 'view-markdown-button'];
+if (size === 'compact') {
+  classes.push('docs-toolbar-button--compact');
+}
+
+const markdownPath = getMarkdownPath(Astro.url.pathname);
+---
+
+<a class={classes.join(' ')} href={markdownPath} target="_blank" rel="noopener noreferrer" aria-label="View current page as Markdown source">
+	<span class="docs-toolbar-button__icon" aria-hidden="true">
+		<FiFileText size={16} focusable="false" aria-hidden="true" />
+	</span>
+	<span class="docs-toolbar-button__label">View as Markdown</span>
+</a>
+
+<style>
+	.view-markdown-button {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.view-markdown-button:hover,
+	.view-markdown-button:focus-visible,
+	.view-markdown-button:active {
+		text-decoration: none;
+		color: inherit;
+	}
+</style>

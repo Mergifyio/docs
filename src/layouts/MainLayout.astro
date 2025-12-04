@@ -3,9 +3,11 @@ import type { CollectionEntry } from 'astro:content';
 import type { MarkdownHeading } from 'astro';
 import generateToc from '~/util/generateToc';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CopyForLLMButton from '../components/CopyForLLMButton.astro';
 import PageContent from '../components/PageContent/PageContent.astro';
 import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
 import TableOfContents from '../components/RightSidebar/TableOfContents';
+import ViewMarkdownButton from '../components/ViewMarkdownButton.astro';
 import BaseLayout from './BaseLayout.astro';
 
 export interface Props {
@@ -23,13 +25,21 @@ const { content, headings, breadcrumbTitle } = Astro.props;
 		{
 			Astro.url.pathname !== '/' && (
 				<Fragment slot="before-title">
-					<Breadcrumbs breadcrumbTitle={breadcrumbTitle} />
+					<div class="page-heading-bar">
+						<div class="page-heading-bar__breadcrumbs">
+							<Breadcrumbs breadcrumbTitle={breadcrumbTitle} />
+						</div>
+						<div class="docs-toolbar-actions docs-toolbar-actions--heading">
+							<CopyForLLMButton size="compact" />
+							<ViewMarkdownButton size="compact" />
+						</div>
+					</div>
 				</Fragment>
 			)
 		}
-		{
-			headings && (
-				<Fragment slot="before-article">
+		<Fragment slot="before-article">
+			{
+				headings && (
 					<nav>
 						<TableOfContents
 							client:media="(max-width: 82em)"
@@ -40,9 +50,9 @@ const { content, headings, breadcrumbTitle } = Astro.props;
 							isMobile={true}
 						/>
 					</nav>
-				</Fragment>
-			)
-		}
+				)
+			}
+		</Fragment>
 		<Fragment slot="after-title"><slot name="header" /></Fragment>
 		<slot />
 	</PageContent>
