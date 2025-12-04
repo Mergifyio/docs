@@ -92,6 +92,35 @@ const suppressTitle = content.suppressTitle;
 	.content > section {
 		margin-bottom: 4rem;
 	}
+	:global(.page-heading-bar) {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 0.75rem;
+		align-items: center;
+		margin-bottom: 0.75rem;
+	}
+	:global(.page-heading-bar__breadcrumbs) {
+		min-width: 0;
+	}
+	:global(.page-heading-bar__breadcrumbs .breadcrumbs) {
+		margin: 0;
+		display: inline-flex;
+		align-items: center;
+	}
+	:global(.page-heading-bar__breadcrumbs .breadcrumbs ol) {
+		flex-wrap: nowrap;
+		gap: 0.25rem;
+	}
+	:global(.page-heading-bar__breadcrumbs .breadcrumbs li) {
+		max-width: none;
+	}
+	:global(.docs-toolbar-actions--heading) {
+		display: inline-flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		flex: 0 0 auto;
+	}
 	.next-previous-nav {
 		display: flex;
 		flex-wrap: wrap;
@@ -116,6 +145,16 @@ const suppressTitle = content.suppressTitle;
 		}
 		.spacer {
 			height: 0;
+		}
+	}
+
+	@media (max-width: var(--docs-toolbar-mobile-breakpoint)) {
+		:global(.page-heading-bar) {
+			grid-template-columns: 1fr;
+		}
+		:global(.docs-toolbar-actions--heading) {
+			width: 100%;
+			justify-content: flex-start;
 		}
 	}
 </style>
