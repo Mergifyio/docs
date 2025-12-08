@@ -2423,7 +2423,7 @@
         },
         "batch_max_wait_time": {
           "default": "30 seconds",
-          "description": "The maximum amount of time to wait before creating a batch when the batch is not full.",
+          "description": "The maximum amount of time to wait for additional pull requests before processing a batch that hasn't reached `batch_size`. The timer starts when the first pull request enters the batch. If `batch_size` is reached before this time expires, the batch processes immediately. This does not enforce a minimum delay between batches.",
           "format": "duration",
           "title": "Batch Max Wait Time",
           "type": "string"
@@ -2641,7 +2641,7 @@
         },
         "batch_max_wait_time": {
           "default": "30 seconds",
-          "description": "The maximum amount of time to wait before creating a batch when the batch is not full.",
+          "description": "The maximum amount of time to wait for additional pull requests before processing a batch that hasn't reached `batch_size`. The timer starts when the first pull request enters the batch. If `batch_size` is reached before this time expires, the batch processes immediately. This does not enforce a minimum delay between batches.",
           "format": "duration",
           "title": "Batch Max Wait Time",
           "type": "string"
