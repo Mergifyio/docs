@@ -1,0 +1,162 @@
+---
+title: 'Manual Installation (Legacy)'
+description: 'Legacy process for provisioning the Mergify GitHub App and engine without the installer.'
+---
+
+> ⚙️ These steps mirror the older manual workflow. Adapt them into infrastructure-as-code if needed.
+
+> 🔼 Replace the `8.9.1` tag with the latest Enterprise release.
+
+## 1. Create the GitHub App
+
+1. In your GHES organization settings, open **Developer settings → GitHub Apps** and click
+  **New GitHub App**.
+
+2. Fill the form with:
+
+   | Field | Value |
+   | --- | --- |
+   | GitHub App name | `Mergify` (or similar) |
+   | Homepage URL | `https://mergify.com` |
+   | Webhook URL | `https://my-mergify.example.com/event` |
+   | Callback URL | `https://my-mergify.example.com/auth/callback` |
+   | Webhook secret | Random shared secret (`ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'`) |
+
+   - Uncheck **Expire user authorization tokens**.
+   - Check **Enable SSL verification**.
+
+3. Permissions:
+
+   - **Repository**:
+
+     - Actions (RO)
+     - Administration (RO)
+     - Checks (RW)
+     - Commit statuses (RO)
+     - Contents (RW)
+     - Deployments (RW)
+     - Issues (RW)
+     - Metadata (RO)
+     - Merge queues (RO)
+     - Pages (RW)
+     - Pull requests (RW)
+     - Workflows (RW)
+
+   - **Organization**:
+
+     - Members (RO)
+
+   - **Account**:
+
+     - Email addresses (RO)
+
+4. Subscribe to events:
+
+  - Branch protection configuration
+  - Branch protection rule
+  - Check run
+  - Check suite
+  - Deployment Status
+  - Issue comment
+  - Member
+  - Membership
+  - Merge group
+  - Organization
+  - Pull request
+  - Pull request review
+  - Pull request review comment
+  - Pull request review thread
+  - Push
+  - Repository
+  - Repository ruleset
+  - Status
+  - Team
+  - Team add
+  - Workflow job
+  - Workflow run
+
+5. Click **Create GitHub App**, then record the **App ID** and **Client ID**.
+  Generate a **Client secret** and a **Private key** (store the PEM for later base64 encoding).
+
+## 2. Install the App on Your Organization
+
+From the GitHub App page, click **Install App**, pick your organization, choose the repositories to
+manage, and complete the installation.
+
+## 3. Build `mergify.env`
+
+Create a file named `mergify.env` with at least:
+
+```ini
+MERGIFYENGINE_GITHUB_URL=https://myonpremise-ghe-installation.example.com
+MERGIFYENGINE_BASE_URL=https://my-mergify.example.com
+MERGIFYENGINE_INTEGRATION_ID=<App ID>
+MERGIFYENGINE_PRIVATE_KEY=<base64 encoded private key>
+MERGIFYENGINE_OAUTH_CLIENT_ID=<Client ID>
+MERGIFYENGINE_OAUTH_CLIENT_SECRET=<Client secret>
+MERGIFYENGINE_WEBHOOK_SECRET=<shared webhook secret>
+MERGIFYENGINE_DATABASE_OAUTH_TOKEN_SECRET_CURRENT=<random hex>
+```
+
+Encode the private key:
+
+```sh
+cat path/to/mergify.private-key.pem | base64 -w0
+```
+
+Generate the token secret:
+
+```sh
+ruby -rsecurerandom -e 'puts SecureRandom.hex(42)'
+```
+
+## 4. Pull the Docker Image
+
+```sh
+cat mergify_registry_key.json | base64 | \
+  docker login -u _json_key_base64 --password-stdin "https://registry.mergify.com"
+
+docker pull registry.mergify.com/enterprise:8.9.1
+```
+
+## 5. Start Mergify
+
+> 🔑 A subscription token is required. Contact Mergify if you do not have one.
+>
+> 💽 Ensure Redis (with persistence/TLS if needed) and Postgres are ready.
+
+```sh
+docker run \
+  -d \
+  -p 5000:5000 \
+  --name mergify-engine \
+  --env-file mergify.env \
+  -e MERGIFYENGINE_SUBSCRIPTION_TOKEN=<mergify-subscription-token> \
+  -e MERGIFYENGINE_REDIS_URL=rediss://:password@my-redis:6363 \
+  -e MERGIFYENGINE_DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres \
+  registry.mergify.com/enterprise:8.9.1
+```
+
+Verify logs:
+
+```sh
+docker logs mergify-engine
+```
+
+Expected output:
+
+```text
+14:37:06 system   | web.1 started (pid=10)
+14:37:06 system   | worker.1 started (pid=11)
+```
+
+The dashboard is available at `https://my-mergify.example.com` and `http://container:5000/` should
+return HTTP 307 for health checks.
+
+## Testing
+
+1. Enable Workflow Automation for a repo.
+2. Commit an empty `.mergify.yml` to the default branch.
+3. Open a pull request; the **Summary** check should appear.
+
+Then begin adding automation rules.

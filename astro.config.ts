@@ -52,6 +52,7 @@ export default defineConfig({
       // To be iso with gatsby's sitemap, not sure it's usefull
       changefreq: 'daily',
       priority: 0.7,
+      exclude: ['/enterprise', '/enterprise/**'],
     }),
     ScalarApiReference(),
     AlgoliaUpdateIndex(),

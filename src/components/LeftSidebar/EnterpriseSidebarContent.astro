@@ -1,0 +1,21 @@
+---
+import enterpriseNavItems from '../../content/enterpriseNavItems';
+import NavGroup from './NavGroup.astro';
+import NavLink from './NavLink.astro';
+
+export interface Props {
+  currentPageMatch: string;
+}
+
+const { currentPageMatch } = Astro.props as Props;
+---
+
+{
+	enterpriseNavItems.map((item) =>
+		item.children ? (
+			<NavGroup navGroup={item} currentPageMatch={currentPageMatch} />
+		) : (
+			<NavLink currentPageMatch={currentPageMatch} navItem={item} />
+		)
+	)
+}

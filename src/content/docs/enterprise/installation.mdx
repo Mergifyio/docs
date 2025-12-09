@@ -1,0 +1,196 @@
+---
+title: 'Installing Mergify Enterprise'
+description: 'Step-by-step process for deploying the on-premise image and wiring it to GitHub.'
+---
+
+import { Image } from "astro:assets"
+import installerScreen from "../../images/enterprise/installer.png"
+import createGitHubAppScreen from "../../images/enterprise/create-github-app.png"
+import installerEnvScreen from "../../images/enterprise/installer-env.png"
+import installAppScreen from "../../images/enterprise/install-app.png"
+import installSuccessScreen from "../../images/enterprise/install-success.png"
+
+> This procedure is a foundation. You can wrap the same steps into Kubernetes manifests, Docker
+> Compose stacks, or other orchestration flows.
+
+## Install Overview
+
+The installation process is separated into two steps:
+
+1. First start the Mergify container without any configuration and the GitHub
+   App Installer started to create your Mergify GitHub App on GitHub. This will
+   generate a configuration file with the GitHub App credentials.
+
+2. Then restart the Mergify container with the downloaded configuration and the
+   GitHub App Installer disabled.
+
+You will run the installer mode first to generate a `mergify.env` file, then restart the container in
+normal mode with that configuration plus your subscription token.
+
+:::note
+Always pick the latest Enterprise image. Examples below use `8.9.1`; replace it with the newest
+tag from the releases page.
+:::
+
+## Get the Docker Image
+
+First, ensure you have the mergify\_registry\_key.json file to get access to
+Mergify docker images.
+
+If you need help, ask your Mergify account representative or the Mergify
+customer support.
+
+Download the Docker image using `docker pull`:
+
+```sh
+cat mergify_registry_key.json | base64 | \
+  docker login -u _json_key_base64 --password-stdin "https://registry.mergify.com"
+
+docker pull registry.mergify.com/enterprise:8.9.1
+```
+
+## Start Installer Mode
+
+```sh
+docker run --rm -d \
+  --name mergify-engine \
+  -p 5000:5000 \
+  -e PORT=5000 \
+  -e MERGIFYENGINE_INSTALLER=1 \
+  registry.mergify.com/enterprise:8.9.1
+```
+
+:::note\[Security Note]
+the installer can be safely exposed to the internet during this
+procedure. The installer is a static page that will post a form on the GitHub
+website. GitHub will then ask for confirmation about the creation of the
+resources. No data is stored on the server or the browser. The actual engine is
+not yet started.
+:::
+
+## Expose the Container
+
+Port 5000 must be reachable over HTTPS with DNS (e.g., `https://mergify.mycompany.com`). Ensure your
+reverse proxy terminates TLS and forwards traffic to the container.
+
+## Verify the Installer
+
+Open the HTTPS endpoint in a browser to confirm the proxy is configured. You should see the installer
+welcome screen.
+
+<Image src={installerScreen} alt="Mergify Enterprise Installer" />
+
+## Configure GitHub Resources
+
+The installer will:
+
+1. Create a GitHub App pointing its webhook to your HTTPS endpoint.
+2. Install that App on your organization.
+
+Enter your organization login and click **Create**:
+
+<Image src={installerScreen} alt="Mergify Enterprise Installer" />
+
+Approve the creation on GitHub, choose an app name:
+
+<Image src={createGitHubAppScreen} alt="Create GitHub App" />
+
+You will be redirected back to the Mergify Installer. Download the generated
+`mergify.env`, then click **Install** to complete the App installation flow.
+
+<Image src={installerEnvScreen} alt="Mergify Installer Environment File Download" />
+
+Click on **Install** on the following screen:
+
+<Image src={installAppScreen} alt="Mergify App Installation" />
+
+The GitHub App creation and installation is finished. 🥳
+
+<Image src={installSuccessScreen} alt="Mergify App Installation Success" />
+
+## Stop the Installer
+
+You can now stop the installer container:
+
+```sh
+docker stop mergify-engine
+```
+
+## Prepare Redis and PostgreSQL
+
+Make sure both data stores are provisioned and reachable before restarting the container in normal
+mode.
+
+### Redis
+
+Make sure your Redis instance is ready and running at this stage.
+
+#### Optional: use Redis with TLS enabled
+
+Redis server provides TLS termination. To connect to such an instance you need to:
+
+- Use `redis://` instead of `rediss://` in the `MERGIFYENGINE_REDIS_URL` environment variable.
+
+#### Optional: use Redis with self-signed TLS certificate
+
+Some Redis server providers set it up with self-signed certificates. In that case, to connect to
+such an instance you need to:
+
+- Use `redis://` instead of `rediss://` in the `MERGIFYENGINE_REDIS_URL` environment variable.
+
+- Set `MERGIFYENGINE_REDIS_SSL_VERIFY_MODE_CERT_NONE=1` in your environment variables. Mergify will
+  connect to Redis using encryption but will not verify the server certificate.
+
+### PostgreSQL
+
+Provision a PostgreSQL instance, create a database/user for Mergify, and ensure the container can
+reach it over the network. Capture the DSN you will pass through
+`MERGIFYENGINE_DATABASE_URL` (for example `postgresql://postgres:password@postgres:5432/postgres`).
+If your provider enforces TLS, configure the connection options accordingly.
+
+## Start Mergify in Normal Mode
+
+:::note
+🔑 You need a subscription token (`MERGIFYENGINE_SUBSCRIPTION_TOKEN`) to start using Mergify at this stage.
+Contact support if you do not have one.
+:::
+
+```sh
+docker run \
+  -d \
+  -p 5000:5000 \
+  --name mergify-engine \
+  --env-file mergify.env \
+  -e MERGIFYENGINE_SUBSCRIPTION_TOKEN=<mergify-subscription-token> \
+  -e MERGIFYENGINE_REDIS_URL=rediss://:password@my-redis:6363 \
+  -e MERGIFYENGINE_DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres \
+  registry.mergify.com/enterprise:8.9.1
+```
+
+Check logs:
+
+```sh
+docker logs mergify-engine
+```
+
+You should see output similar to:
+
+```text
+14:37:06 system   | web.1 started (pid=10)
+14:37:06 system   | worker.1 started (pid=11)
+```
+
+Mergify is live. You can now log in at `https://mergify.mycompany.com` and start using it.
+
+```http
+GET / HTTP/1.1
+host: container:5000
+```
+
+> ❤️‍🩹 The endpoint should respond with HTTP 307.
+
+## Testing the Installation
+
+1. Sign in to the dashboard at https://my-mergify.example.com/ and enable Workflow Automation for a repository.
+2. Commit an empty `.mergify.yml` to the default branch.
+3. Open a pull request; you should see a **Summary** check run.

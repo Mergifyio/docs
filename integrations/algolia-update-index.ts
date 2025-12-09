@@ -12,6 +12,13 @@ interface Heading {
   html: string;
   headingPath: string[];
 }
+
+const HIDDEN_PATH_PREFIXES = ['enterprise'];
+
+const isHiddenPath = (path: string): boolean => {
+  return HIDDEN_PATH_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
+};
+
 export function AlgoliaUpdateIndex(): AstroIntegration {
   return {
     name: 'algolia-update-index',
@@ -53,6 +60,10 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
     const canonicalHref = $('link[rel="canonical"]').attr('href') || '';
     const baseUrl =
       toObjectIdFromCanonical(canonicalHref) || toObjectIdFromPath(distRoot, filePath);
+
+    if (isHiddenPath(baseUrl)) {
+      continue;
+    }
 
     const pageTitle = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
     const pageDescription =
