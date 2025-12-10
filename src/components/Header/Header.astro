@@ -93,12 +93,14 @@ import ThemeToggleButton from './ThemeToggleButton';
 			</HeaderLink>
 			<HeaderLink href="https://status.mergify.com" icon={SiStatuspage}>Status</HeaderLink>
 		</div>
-		<Search />
-		<ThemeToggleButton
-			client:visible
-			labels={{ useLight: 'Use light theme', useDark: 'Use dark theme' }}
-			isInsideHeader={true}
-		/>
+		<div class="nav-actions">
+			<Search />
+			<ThemeToggleButton
+				client:visible
+				labels={{ useLight: 'Use light theme', useDark: 'Use dark theme' }}
+				isInsideHeader={true}
+			/>
+		</div>
 	</nav>
 </header>
 
@@ -130,12 +132,39 @@ import ThemeToggleButton from './ThemeToggleButton';
 		gap: 0.75rem;
 		width: 100%;
 		padding-inline: var(--min-spacing-inline);
+		flex-wrap: wrap;
 	}
 
 	.nav-buttons {
 		display: flex;
-		margin: 0 auto;
 		gap: 0.5em;
+		flex: 1 1 auto;
+		justify-content: center;
+		margin: 0;
+	}
+
+	.nav-actions {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		min-width: 0;
+		flex: 0 0 auto;
+		flex-wrap: nowrap;
+	}
+
+	.nav-actions :global(.search-input) {
+		margin-left: 0;
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 35em) {
+		.nav-actions {
+			flex-basis: 100%;
+			margin-left: 0;
+			padding-top: 0.5rem;
+		}
 	}
 
 	/* If the device is likely to show a scrollbar gutter, reserve space for it */
