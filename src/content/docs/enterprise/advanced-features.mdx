@@ -1,0 +1,155 @@
+---
+title: 'Advanced Features'
+description: 'Optional integrations such as Datadog telemetry and CI Insights object storage.'
+---
+
+## Mergify Instance Datadog Integration
+
+You can monitor your Mergify Enterprise instance using Datadog for metrics and logs.
+
+### Enabling metrics
+
+Mergify can emit metrics to Datadog via StatsD. Set the following environment variables on the
+engine container:
+
+```ini
+DD_TRACE_ENABLED=1
+DD_DOGSTATSD_DISABLE=0
+DD_AGENT_HOST=<my-datadog-agent-host>
+DD_DOGSTATSD_PORT=8125
+GUNICORN_CMD_ARGS="--statsd-host=<my-datadog-agent-host>:8125"
+```
+
+### Enabling logging
+
+Configure the Datadog Agent to accept UDP logs by creating
+`/etc/datadog-agent/mergify-engine.d/conf.yaml`:
+
+```yaml
+init_config:
+
+instances:
+
+logs:
+  - type: udp
+    port: 10518
+    source: python
+    service: mergify-engine
+    sourcecategory: sourcecode
+```
+
+Then instruct Mergify to ship its logs:
+
+```ini
+MERGIFYENGINE_LOG_DATADOG=udp://<my-datadog-agent-host>:10518
+```
+
+## CI Insights Object Storage
+
+CI test traces can be exported to Mergify CI Insights by backing the feature with object storage.
+Set `MERGIFYENGINE_CI_TRACES_BACKEND` and bucket credentials according to your provider.
+
+### Google Cloud Storage
+
+Requirements:
+
+- Two buckets: `<mycompany>-mergify-ci-traces-incoming` and
+  `<mycompany>-mergify-ci-traces-done`
+
+- Service Account with read/write/delete access (`Object Storage User` role scoped to these buckets)
+
+- JSON key for that Service Account
+
+Base64-encode the JSON key:
+
+```sh
+cat credentials.json | base64 -w0
+```
+
+Configure the engine:
+
+```ini
+MERGIFYENGINE_CI_TRACES_BACKEND="gcs"
+MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
+MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
+MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json"
+```
+
+### Amazon S3
+
+Requirements:
+
+- Two buckets named `<mycompany>-mergify-ci-traces-incoming` and
+  `<mycompany>-mergify-ci-traces-done`
+
+- IAM credentials with read/write/delete rights on those buckets
+
+Environment variables:
+
+```ini
+MERGIFYENGINE_CI_TRACES_BACKEND="s3"
+MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
+MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
+MERGIFYENGINE_AWS_ACCOUNT_ID=1234567
+MERGIFYENGINE_AWS_ACCESS_KEY_ID=123567
+MERGIFYENGINE_AWS_SECRET_ACCESS_KEY=<secret>
+# Optional
+MERGIFYENGINE_AWS_REGION_NAME=us-west-2
+# Custom S3 implementation endpoint
+MERGIFYENGINE_AWS_ENDPOINT_URL_S3=s3://my-s3-domain.example.com:1234/
+```
+
+## Slack Integration
+
+Mergify Enterprise 8.6.0+ can post notifications directly to Slack. These steps assume your
+self-hosted dashboard lives at `https://mergify.mycompany.com`—adjust URLs as needed.
+
+### 1. Create a Slack App
+
+Visit [api.slack.com/apps](https://api.slack.com/apps) and click **Create New App**. Once created,
+configure the app:
+
+#### OAuth & Permissions
+
+- Add redirect URL: `https://mergify.mycompany.com/front/integrations/callback/slack`.
+- Add the scopes required for channel messaging and metadata (reuse your existing scope list).
+
+#### Incoming Webhooks
+
+- Enable Incoming Webhooks so Mergify can send messages.
+
+#### Event Subscriptions
+
+- Enable events and set the request URL to `https://mergify.mycompany.com/slack-event`.
+- Subscribe the bot to the `channel_rename` event so channel names stay in sync.
+
+### 2. Set Environment Variables
+
+In your engine container, provide the Slack credentials (under **Basic Information** in the Slack
+app):
+
+```ini
+MERGIFYENGINE_SLACK_CLIENT_ID=<Slack client ID>
+MERGIFYENGINE_SLACK_CLIENT_SECRET=<Slack client secret>
+MERGIFYENGINE_SLACK_SIGNING_SECRET=<Slack signing secret>
+```
+
+### 3. Allow URLs
+
+Permit outbound calls from Mergify to Slack:
+
+- `https://slack.com/oauth/v2/authorize`
+- `https://slack.com/api/oauth.v2.access`
+- `https://hooks.slack.com/*`
+- `https://slack.com/api/conversations.info`
+
+Also ensure Slack can reach these endpoints on your deployment:
+
+- `https://mergify.mycompany.com/front/integrations/callback/slack`
+- `https://mergify.mycompany.com/slack-event`
+- `https://mergify.mycompany.com/slack-interaction`
+
+### 4. Connect via the Dashboard
+
+From the Mergify dashboard (`Integrations → Slack`), initiate the OAuth flow and select the channels
+you want to notify. Each integration can post to multiple channels for different event types.

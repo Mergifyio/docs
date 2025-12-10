@@ -1,2 +1,5 @@
 User-agent: *
+Disallow: /enterprise
+Disallow: /enterprise/
+Disallow: /enterprise/*
 Allow: /

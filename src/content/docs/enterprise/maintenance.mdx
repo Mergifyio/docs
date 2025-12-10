@@ -1,0 +1,75 @@
+---
+title: 'Maintenance'
+description: 'Backup and restore guidance for Mergify Enterprise deployments.'
+---
+
+Deploying Mergify Enterprise on-premise requires backups so you can quickly recover from data loss or
+infrastructure incidents. The key components are:
+
+- Mergify Docker image
+- PostgreSQL database (persistent source of truth)
+
+Backing up your Mergify Enterprise installation involves two main steps: noting
+your current Docker image version and backing up the PostgreSQL database.
+
+:::note
+Redis does not need regular backups because its content can be rebuilt from
+GitHub events.
+:::
+
+This guide will walk you through backing up these components and restoring them
+when necessary.
+
+## Backup strategy
+
+### 1. Track the Docker image version
+
+```sh
+docker images | grep enterprise
+```
+
+Record the tag you are running; you will need it if a restore requires an identical version.
+
+### 2. Backup PostgreSQL
+
+- **Managed service:** use your provider snapshot tooling. Example (AWS RDS):
+
+  ```sh
+  aws rds create-db-snapshot \
+    --db-instance-identifier mergify-database-instance \
+    --db-snapshot-identifier mergify-database-$(date +%Y-%m-%d-%H-%M)
+  ```
+
+- **Self-managed:** retrieve a dump with `pg_dump`:
+
+  ```sh
+  pg_dump --format=c --no-owner --no-acl \
+    -h <host> -U <username> <database_name> > backup.dump
+  ```
+
+## Restore strategy
+
+Restoring Mergify Enterprise involves setting up the Docker container with the
+noted version and restoring the PostgreSQL database.
+
+### 1. Restore PostgreSQL
+
+Ensure the PostgreSQL service is running, then recreate the database and restore
+the dump:
+
+```sh
+createdb -h <host> -U <username> <database_name>
+pg_restore -h <host> -U <username> -d <database_name> backup.dump
+```
+
+### 2. Redeploy the Docker image
+
+Pull the previously recorded version and start the container as usual:
+
+```sh
+docker pull registry.mergify.com/enterprise:<version-tag>
+# ... run docker run with your env vars ...
+```
+
+Keeping regular backups and practicing restores reduces downtime and data loss
+when an incident occurs.
