@@ -1,0 +1,87 @@
+---
+title: 'Mergify Enterprise Requirements'
+description: 'Infrastructure, database, and GitHub prerequisites for running the on-premise edition.'
+---
+
+## GitHub Requirements
+
+To be able to enroll your on-premise Mergify on GitHub, you need a GitHub
+account with enough permissions (Organization owner or [GitHub App
+manager](https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/permission-levels-for-an-organization#github-app-managers))
+to create and install the GitHub App.
+
+## PostgreSQL Requirements
+
+Mergify stores dashboard logins plus encrypted credentials in Postgres. Minimum sizing:
+
+- Version 15 or newer
+- 10 GB of disk
+- 2 GB of memory
+
+High-availability clusters are recommended for production setups, but a single instance that meets
+these specs is sufficient for proofs of concept.
+
+## Redis Requirements
+
+Redis persists queued events, cached repository metadata, and recovery data for
+GitHub outages. Your instance or cluster must provide:
+
+- Redis 6.2+
+- 200 concurrent connections
+- 250 MB of durable storage
+- At least 16 logical databases
+- TLS endpoint
+- Persistence enabled (AOF every second)
+
+You can choose any managed Redis service with TLS and AOF enabled, or run your
+own deployment. For example, the [Bitnami
+image](https://hub.docker.com/r/bitnami/redis) can be started with TLS and
+persistence:
+
+```sh
+docker run --name some-redis-with-tls -d \
+    -v /host/dir/redis/persisted/data:/bitnami/redis/data \
+    -v /host/dir/redis/persisted/certs:/opt/bitnami/redis/certs \
+    -e REDIS_PASSWORD=my_master_password \
+    -e REDIS_TLS_ENABLED=yes \
+    -e REDIS_TLS_CERT_FILE=/opt/bitnami/redis/certs/redis.crt \
+    -e REDIS_TLS_KEY_FILE=/opt/bitnami/redis/certs/redis.key \
+    -e REDIS_TLS_CA_FILE=/opt/bitnami/redis/certs/redisCA.crt \
+    -n redis-server \
+    bitnami/redis
+```
+
+## Mergify Requirements
+
+The Mergify container needs at leas:
+
+- 4 GB of RAM
+- 2 vCPUs
+
+On AWS, a `m5.large` instance fits well.
+
+The service listens on HTTP port 5000 for the dashboard/API and webhook intake,
+and it must sit behind a reverse proxy that:
+
+- Terminates TLS
+- Is exposed publicly through DNS over HTTPS
+- Sets the `X-Forwarded-Proto` header
+
+Some features (copy, backport, rebase) write to `/tmp`, so ensure the host or node offers roughly
+10 GB of scratch space for repositories of similar size.
+
+## GitHub Server Requirements
+
+Mergify Enterprise supports:
+
+- GitHub.com
+- GitHub Enterprise Server 3.2 or newer (3.6+ recommended)
+
+## External Network Access
+
+Two outbound HTTPS calls must be allowed so Mergify can validate and report licensing:
+
+- `GET https://subscription.mergify.com/on-premise/subscription/<random-id>`
+- `POST https://subscription.mergify.com/on-premise/report`
+
+These requests are performed by the workers; restrict egress for other components when possible.

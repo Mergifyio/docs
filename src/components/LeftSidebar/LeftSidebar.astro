@@ -1,6 +1,7 @@
 ---
 import { removeLeadingSlash, removeTrailingSlash } from '../../util';
 import ThemeToggleButton from '../Header/ThemeToggleButton';
+import EnterpriseSidebarContent from './EnterpriseSidebarContent.astro';
 import SidebarContent from './SidebarContent.astro';
 
 export interface Props {
@@ -9,11 +10,16 @@ export interface Props {
 
 const { currentPage } = Astro.props as Props;
 const currentPageMatch = removeLeadingSlash(removeTrailingSlash(currentPage));
+const isEnterprisePage = currentPage === '/enterprise' || currentPage.startsWith('/enterprise/');
 ---
 
 <nav aria-label={'Primary'}>
 	<ul class={`nav-groups`}>
-		<SidebarContent currentPageMatch={currentPageMatch} />
+		{isEnterprisePage ? (
+			<EnterpriseSidebarContent currentPageMatch={currentPageMatch} />
+		) : (
+			<SidebarContent currentPageMatch={currentPageMatch} />
+		)}
 		<li style="text-align: center;">
 			<ThemeToggleButton
 				client:visible

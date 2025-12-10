@@ -1,0 +1,135 @@
+---
+title: 'Troubleshooting'
+description: 'Diagnostics and health checks for Mergify Enterprise deployments.'
+---
+
+import { Image } from "astro:assets"
+import webhooksScreen from "../../images/enterprise/webhooks.png"
+
+If your Mergify Enterprise instance misbehaves, use the following steps to isolate the issue.
+
+## Accessing logs
+
+All services log to STDOUT. View them with:
+
+```sh
+docker logs mergify-engine
+```
+
+## Checking third-party connectivity
+
+### Console
+
+```sh
+docker exec -u root -it mergify-engine /bin/bash
+mergify-admin connectivity-check
+```
+
+Expected output:
+
+```text
+Redis: connected
+Postgres: connected
+GitHub server: connected
+```
+
+### API healthcheck
+
+Add a shared token:
+
+```ini
+MERGIFYENGINE_HEALTHCHECK_SHARED_TOKEN=<a-random-token>
+```
+
+Query the endpoint:
+
+```sh
+curl https://mergify.example.com/healthcheck \
+  -H "Authorization: bearer <a-random-token>"
+```
+
+Response example:
+
+```json
+{
+  "redis": {
+    "status": "ok"
+  },
+  "postgres": {
+    "status": "ok"
+  }
+}
+```
+
+## Checking GitHub Webhooks
+
+Verify they return HTTP 202. If you see 404/504, confirm the webhook URL ends with `/event`.
+Check
+`https://github.mycompany.com/organizations/<org>/settings/apps/<app-name>/advanced`
+to ensure events reach the engine.
+
+<Image src={webhooksScreen} alt="GitHub Webhooks delivery screen" />
+
+## GitHub App permissions checklist
+
+Make sure your GitHub App retained all required permissions and events. Missing scopes routinely
+cause silent failures.
+
+### Repository permissions
+
+| Permission | Access |
+| --- | --- |
+| Actions | Read-only |
+| Administration | Read-only |
+| Checks | Read & Write |
+| Commit statuses | Read-only |
+| Contents | Read & Write |
+| Deployments | Read & Write |
+| Issues | Read & Write |
+| Metadata | Read-only |
+| Merge queues | Read-only |
+| Pages | Read & Write |
+| Pull requests | Read & Write |
+| Workflows | Read & Write |
+
+### Organization permissions
+
+| Permission | Access |
+| --- | --- |
+| Members | Read-only |
+
+### Account permissions
+
+| Permission | Access |
+| --- | --- |
+| Email addresses | Read-only |
+
+### Subscribed events
+
+| Event |
+| --- |
+| Branch protection configuration |
+| Branch protection rule |
+| Check run |
+| Check suite |
+| Deployment Status |
+| Issue comment |
+| Member |
+| Membership |
+| Merge group |
+| Organization |
+| Pull request |
+| Pull request review |
+| Pull request review comment |
+| Pull request review thread |
+| Push |
+| Repository |
+| Repository ruleset |
+| Status |
+| Team |
+| Team add |
+| Workflow job |
+| Workflow run |
+
+You can find the purpose of these permissions in the
+[GitHub App required permissions guide](https://docs.mergify.com/security/#github-app-required-permissions).

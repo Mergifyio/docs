@@ -1,12 +1,28 @@
 ---
 import { AiOutlineDashboard } from 'react-icons/ai';
 import { FaGithub } from 'react-icons/fa';
-import { HiOutlineDocumentArrowUp } from 'react-icons/hi2';
+import { HiOutlineBookOpen, HiOutlineDocumentArrowUp } from 'react-icons/hi2';
 import { SiSlack, SiStatuspage } from 'react-icons/si';
 import Search from '../Search/Search.astro';
 import HeaderLink from './HeaderLink.astro';
 import SidebarToggle from './SidebarToggle';
 import ThemeToggleButton from './ThemeToggleButton';
+
+const pathname = Astro.url.pathname;
+const isEnterpriseSection = pathname.startsWith('/enterprise');
+const primaryLink = isEnterpriseSection
+  ? {
+      label: 'Mergify Docs',
+      href: '/',
+      icon: HiOutlineBookOpen,
+      target: '_blank',
+    }
+  : {
+      label: 'Dashboard',
+      href: 'https://dashboard.mergify.com',
+      icon: AiOutlineDashboard,
+      target: undefined,
+    };
 ---
 
 <header>
@@ -81,8 +97,8 @@ import ThemeToggleButton from './ThemeToggleButton';
 			</ul>
 		</div>
 		<div class="nav-buttons">
-			<HeaderLink href="https://dashboard.mergify.com" icon={AiOutlineDashboard}>
-				Dashboard
+			<HeaderLink href={primaryLink.href} icon={primaryLink.icon} target={primaryLink.target}>
+				{primaryLink.label}
 			</HeaderLink>
 			<HeaderLink href="https://slack.mergify.com" icon={SiSlack}>Slack Community</HeaderLink>
 			<HeaderLink href="https://github.com/Mergifyio/mergify/discussions" icon={FaGithub}>
