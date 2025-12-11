@@ -997,6 +997,7 @@
       "type": "object"
     },
     "FileFilters": {
+      "additionalProperties": false,
       "properties": {
         "include": {
           "description": "Glob patterns of files to include for this scope. Empty means 'include everything' before exclusions. Examples: ('src/**/*.py', 'Makefile')",
@@ -3050,6 +3051,7 @@
       "type": "object"
     },
     "SourceFiles": {
+      "additionalProperties": false,
       "properties": {
         "files": {
           "description": "Mapping of scope name to its file filters. A file belongs to a scope if it matches the scope's `include` patterns and not its `exclude` patterns.",
@@ -3072,6 +3074,7 @@
       "type": "object"
     },
     "SourceManual": {
+      "additionalProperties": false,
       "properties": {
         "manual": {
           "description": "Scopes are manually sent via API or `mergify scopes-send`",
