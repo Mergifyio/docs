@@ -1,15 +1,42 @@
 ---
 import { getCollection } from 'astro:content';
-import { FaSlack } from 'react-icons/fa';
+import { FaIndustry, FaSlack } from 'react-icons/fa';
 import { HiRss } from 'react-icons/hi';
+import enterpriseReleases from '../../data/enterprise-releases.json';
 import MainLayout from '../../layouts/MainLayout.astro';
-import { formatDate, groupByYearMonth, sortChangelog } from '../../util/changelog';
+import type { TimelineEntry } from '../../util/changelog';
+import { formatDate, groupTimelineByYearMonth, sortChangelog } from '../../util/changelog';
 
+const ENTERPRISE_TAG = 'Enterprise';
 const entries = sortChangelog(await getCollection('changelog'));
 // Derive tag info (entries may have no tags)
 const allTags = Array.from(new Set(entries.flatMap((e) => e.data.tags || []))).sort();
-const grouped = groupByYearMonth(entries);
-const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+const tagsWithEnterprise = Array.from(new Set([...allTags, ENTERPRISE_TAG]));
+type EnterpriseRelease = {
+  version: string;
+  releasedAt: string;
+};
+
+const releaseMarkers: TimelineEntry[] = (enterpriseReleases as EnterpriseRelease[]).map(
+  (release) => ({
+    kind: 'release',
+    date: release.releasedAt,
+    version: release.version,
+  })
+);
+
+const changelogTimeline: TimelineEntry[] = entries.map((entry) => ({
+  kind: 'changelog',
+  date: entry.data.date,
+  entry,
+}));
+
+const timelineEntries: TimelineEntry[] = [...changelogTimeline, ...releaseMarkers].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+
+const groupedTimeline = groupTimelineByYearMonth(timelineEntries);
+const years = Object.keys(groupedTimeline).sort((a, b) => b.localeCompare(a));
 
 const title = 'Changelog';
 const description = 'Latest product updates from Mergify.';
@@ -43,12 +70,12 @@ const description = 'Latest product updates from Mergify.';
 
     <div class="tag-pills tag-pills-row" id="tag-pills" aria-label="Tag filter">
       <button data-tag="" class="pill active" aria-pressed="true">All</button>
-      {allTags.map(tag => (
+      {tagsWithEnterprise.map(tag => (
         <button data-tag={tag} class="pill" aria-pressed="false">{tag}</button>
       ))}
     </div>
   {years.map(year => {
-    const months = Object.keys(grouped[year]).sort((a, b) => {
+    const months = Object.keys(groupedTimeline[year]).sort((a, b) => {
       // Sort months in reverse chronological order
       const dateA = new Date(`${a} 1, ${year}`);
       const dateB = new Date(`${b} 1, ${year}`);
@@ -62,29 +89,78 @@ const description = 'Latest product updates from Mergify.';
           <div class="month-group">
             <h3 class="month-heading">{month}</h3>
             <ul class="entry-list" role="list">
-              {grouped[year][month].map(entry => (
-                <li class="entry" data-tags={(entry.data.tags || []).join(',')} data-title={entry.data.title.toLowerCase()}>
-                  <div class="row">
-                    <div class="col date-tags">
-                      <time datetime={formatDate(entry.data.date)} class="date">{formatDate(entry.data.date)}</time>
-                      {entry.data.tags.length ? (
-                        <ul class="tag-list" aria-label="Tags">
-                          {entry.data.tags.map(t => <li><span class="tag" data-tag={t}>{t}</span></li>)}
-                        </ul>
-                      ) : null}
+              {groupedTimeline[year][month].map(item => (
+                item.kind === 'release' ? (
+                  <li
+                    class="entry entry-release"
+                    data-kind="release"
+                    data-tags={ENTERPRISE_TAG}
+                    data-title={`enterprise ${item.version}`}
+                  >
+                    <div class="row">
+                      <div class="col date-tags">
+                        <time datetime={formatDate(item.date)} class="date">
+                          {formatDate(item.date)}
+                        </time>
+                        <span class="tag tag-enterprise" data-tag={ENTERPRISE_TAG}>{ENTERPRISE_TAG}</span>
+                      </div>
+                      <div class="col content-col">
+                        <div class="release-title">
+                          <FaIndustry className="release-icon" aria-hidden="true" />
+                          <span class="sr-only">Enterprise release</span>
+                          <span>{ENTERPRISE_TAG} {item.version}</span>
+                        </div>
+                        <p class="summary release-summary">
+                          Enterprise bundle shipping for self-hosted customers.
+                        </p>
+                      </div>
                     </div>
-                    <div class="col content-col">
-                      <h3 class="title"><a href={`/changelog/${entry.slug}/`}>{entry.data.title}</a></h3>
-                      {entry.data.description && <p class="summary">{entry.data.description}</p>}
+                  </li>
+                ) : (
+                  <li
+                    class="entry"
+                    data-kind="changelog"
+                    data-tags={(item.entry.data.tags || []).join(',')}
+                    data-title={item.entry.data.title.toLowerCase()}
+                  >
+                    <div class="row">
+                      <div class="col date-tags">
+                        <time datetime={formatDate(item.entry.data.date)} class="date">
+                          {formatDate(item.entry.data.date)}
+                        </time>
+                        {item.entry.data.tags.length ? (
+                          <ul class="tag-list" aria-label="Tags">
+                            {item.entry.data.tags.map(t => (
+                              <li>
+                                <span class="tag" data-tag={t}>
+                                  {t}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
+                      <div class="col content-col">
+                        <h3 class="title">
+                          <a href={`/changelog/${item.entry.slug}/`}>{item.entry.data.title}</a>
+                        </h3>
+                        {item.entry.data.description && <p class="summary">{item.entry.data.description}</p>}
+                      </div>
+                      <div class="col more-col">
+                        <a
+                          class="read-more"
+                          href={`/changelog/${item.entry.slug}/`}
+                          aria-label={`Read full entry: ${item.entry.data.title}`}
+                        >
+                          <span class="read-text">Read</span>
+                          <span class="read-icon" aria-hidden="true">
+                            →
+                          </span>
+                        </a>
+                      </div>
                     </div>
-                    <div class="col more-col">
-                      <a class="read-more" href={`/changelog/${entry.slug}/`} aria-label={`Read full entry: ${entry.data.title}`}>
-                        <span class="read-text">Read</span>
-                        <span class="read-icon" aria-hidden="true">→</span>
-                      </a>
-                    </div>
-                  </div>
-                </li>
+                  </li>
+                )
               ))}
             </ul>
           </div>
@@ -96,7 +172,7 @@ const description = 'Latest product updates from Mergify.';
   <script>
     const search = document.getElementById('search') as HTMLInputElement | null;
     const pillBar = document.getElementById('tag-pills');
-    const entries = Array.from(document.querySelectorAll<HTMLElement>('.entry'));
+    const entryRows = Array.from(document.querySelectorAll<HTMLElement>('.entry'));
     const noResults = document.getElementById('no-results');
     let activeTag = '';
 
@@ -104,7 +180,7 @@ const description = 'Latest product updates from Mergify.';
       if (!search || !noResults) return;
       const q = (search.value || '').trim().toLowerCase();
       let visibleCount = 0;
-      entries.forEach(el => {
+      entryRows.forEach(el => {
         const tags = (el.getAttribute('data-tags')||'').split(',').filter(Boolean);
         const title = el.getAttribute('data-title') || '';
         const matchesTag = !activeTag || tags.includes(activeTag);
@@ -412,6 +488,17 @@ const description = 'Latest product updates from Mergify.';
     color: #fff;
     border-color: #B7791F;
   }
+  .pill[data-tag="Enterprise"] {
+    background: #111;
+    color: #fff;
+    border-color: #000;
+  }
+  .pill[data-tag="Enterprise"]:hover,
+  .pill[data-tag="Enterprise"].active {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
   /* Disable global automatic numbering for year headings (global rule targets .content h2) */
   .content section.year > h2.no-counter { counter-increment: none !important; }
   .content section.year > h2.no-counter::before { content: none !important; }
@@ -430,37 +517,57 @@ const description = 'Latest product updates from Mergify.';
   .entry { position: relative; margin: 0; padding: 1.25rem 0 1.25rem 1.25rem; border-bottom: 1px solid var(--theme-border-color); }
   .entry:last-child { border-bottom: 0; }
   .entry::before { content: ''; position: absolute; left: -6px; top: 1.4rem; width: 10px; height: 10px; background: var(--chakra-colors-gray-400); border-radius: 50%; box-shadow: 0 0 0 2px var(--theme-bg); }
+  .entry-release::before { background: var(--section-merge-queue-accent, var(--theme-accent)); box-shadow: 0 0 0 2px var(--theme-bg), 0 0 0 6px rgba(27, 99, 243, 0.15); }
+  .entry-release + .entry { border-top: 1px solid var(--theme-border-color); }
+  .entry-release .release-title { display: inline-flex; align-items: center; gap: .4rem; font-weight: 600; font-size: 1rem; }
+  .entry-release .release-icon { width: 1rem; height: 1rem; color: var(--section-merge-queue-accent, var(--theme-accent)); }
+  .entry-release .release-summary { margin: .35rem 0 0; font-size: .85rem; color: var(--theme-text-light); }
+  .tag-enterprise {
+    background: #111;
+    color: #fff;
+    border: 1px solid #111;
+  }
   .row { display: grid; gap: .9rem; align-items: flex-start; grid-template-columns: 1fr; }
   @media (min-width: 50em) { .row { grid-template-columns: 10rem 1fr auto; } }
   .date-tags { display: flex; flex-direction: column; gap: .5rem; align-items: flex-start; }
   .date { font-size: .65rem; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--theme-text-lighter); background: var(--theme-bg-offset); padding: 3px 8px; border-radius: 6px; width: fit-content; }
   .tag-list { list-style: none; display: flex; flex-direction: column; gap: .4rem; padding: 0; margin: 0; }
   .tag-list li { margin: 0; padding: 0; display: block; line-height: 1; }
-  .tag { background: var(--chakra-colors-gray-100); color: var(--chakra-colors-gray-700); font-size: .55rem; padding: 4px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; display: inline-block; line-height: 1; overflow-wrap: anywhere; }
+  .tag { background: var(--theme-bg-offset); color: var(--theme-text); font-size: .6rem; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; display: inline-block; line-height: 1; overflow-wrap: anywhere; border: 1px solid var(--theme-border-color); }
 
   /* Product-specific label colors */
   .tag[data-tag="Workflow Automation"] {
     background: var(--section-workflow-accent-bg);
     color: var(--section-workflow-accent);
+    border: 1px solid var(--section-workflow-accent);
   }
 
   .tag[data-tag="Merge Queue"] {
     background: var(--section-merge-queue-accent-bg);
     color: var(--section-merge-queue-accent);
+    border: 1px solid var(--section-merge-queue-accent);
   }
 
   .tag[data-tag="CI Insights"] {
     background: var(--section-ci-insights-accent-bg);
     color: var(--section-ci-insights-accent);
+    border: 1px solid var(--section-ci-insights-accent);
   }
 
   .tag[data-tag="Merge Protections"] {
     background: var(--section-merge-protections-accent-bg);
     color: var(--section-merge-protections-accent);
+    border: 1px solid var(--section-merge-protections-accent);
   }
   .tag[data-tag="Deprecations"] {
     background: #FEFCBF; /* yellow-100 */
     color: #975A16; /* yellow-700 */
+    border: 1px solid #ECC94B;
+  }
+  .tag[data-tag="Enterprise"] {
+    background: #111;
+    color: #fff;
+    border-color: #000;
   }
   .title { font-size: 1.05rem; margin: 0 0 .4rem; line-height: 1.3; }
   .title a { text-decoration: none; color: var(--theme-text); }

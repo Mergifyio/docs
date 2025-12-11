@@ -1,5 +1,35 @@
 import type { CollectionEntry } from 'astro:content';
 
+type DateCarrier = {
+  date: Date | string;
+};
+
+function groupByYearMonthGeneric<T extends DateCarrier>(
+  entries: T[]
+): Record<string, Record<string, T[]>> {
+  return entries.reduce(
+    (acc, entry) => {
+      const date = new Date(entry.date);
+      const year = date.getFullYear().toString();
+      const month = date.toLocaleDateString('en-US', { month: 'long' });
+
+      if (!acc[year]) {
+        acc[year] = {};
+      }
+      if (!acc[year][month]) {
+        acc[year][month] = [];
+      }
+      acc[year][month].push(entry);
+      return acc;
+    },
+    {} as Record<string, Record<string, T[]>>
+  );
+}
+
+export type TimelineEntry =
+  | { kind: 'changelog'; date: Date | string; entry: CollectionEntry<'changelog'> }
+  | { kind: 'release'; date: Date | string; version: string };
+
 /**
  * Sort changelog entries by date in descending order (newest first)
  */
@@ -76,6 +106,12 @@ export function groupByYearMonth(
     },
     {} as Record<string, Record<string, CollectionEntry<'changelog'>[]>>
   );
+}
+
+export function groupTimelineByYearMonth(
+  entries: TimelineEntry[]
+): Record<string, Record<string, TimelineEntry[]>> {
+  return groupByYearMonthGeneric(entries);
 }
 
 /**
