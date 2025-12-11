@@ -1,0 +1,18 @@
+---
+title: "Improved Merge Queue Status Reporting"
+date: 2025-12-11
+tags:
+  - Merge Queue
+description: "Release of the Merge Queue status updates"
+---
+import { Image } from "astro:assets"
+import static2c6f2b37c5da80c59b99ee075625534dpng from "../images/changelog/static-2c6f2b37-c5da-80c5-9b99-ee075625534d.png"
+
+
+Mergify now provides **richer, more informative status updates** directly on your pull requests when they enter the Merge Queue.
+
+Instead of a single, static message, PRs now get **step-by-step feedback** about what’s happening: preparing the batch, waiting for CI, retrying, scheduled waits, and more. This gives developers clearer visibility into progress and removes the guesswork around “where is my PR?”.
+
+This now includes an estimated time of merge.
+
+<Image src={static2c6f2b37c5da80c59b99ee075625534dpng} alt="Changelog Image" />
