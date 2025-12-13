@@ -14,16 +14,17 @@ export interface Props {
   content: CollectionEntry<'docs'>['data'];
   headings?: MarkdownHeading[];
   breadcrumbTitle?: string;
+  showMarkdownActions?: boolean;
 }
 
-const { content, headings, breadcrumbTitle } = Astro.props;
+const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro.props;
 ---
 
 <BaseLayout {...Astro.props}>
 	<RightSidebar slot="secondary-sidebar" {...{ content, headings }} />
 	<PageContent {...{ content }}>
 		{
-			Astro.url.pathname !== '/' && (
+			Astro.url.pathname !== '/' && showMarkdownActions && (
 				<Fragment slot="before-title">
 					<div class="page-heading-bar">
 						<div class="page-heading-bar__breadcrumbs">
