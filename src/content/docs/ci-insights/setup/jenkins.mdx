@@ -4,8 +4,8 @@ description: Enable Mergify CI Insights and configure flaky test detection using
 ---
 
 import { Image } from "astro:assets"
-import JenkinsInstallation from "../../../images/ci-insights/jenkins-installation.png"
 import JenkinsConfiguration from "../../../images/ci-insights/jenkins-configuration.png"
+import JenkinsInstallation from "../../../images/ci-insights/jenkins-installation.png"
 import JobsScreenshot from "../../../images/ci-insights/jobs.png"
 
 ## Enabling CI Insights for Jenkins
@@ -88,7 +88,6 @@ that runs tests twice daily with 5 parallel executions:
 pipeline {
   agent any
   environment {
-      MERGIFY_TEST_FLAKY_DETECTION = "true"
       MERGIFY_TOKEN = credentials('MERGIFY_TOKEN')
       RUN_COUNT = '5'
   }
@@ -124,7 +123,6 @@ pipeline {
 pipeline {
   agent any
   environment {
-      MERGIFY_TEST_FLAKY_DETECTION = "true"
       MERGIFY_TOKEN = credentials('MERGIFY_TOKEN')
       RUN_COUNT = '5'
   }
@@ -168,7 +166,6 @@ pipeline {
 
 ### Key Environment Variables
 
-- `MERGIFY_TEST_FLAKY_DETECTION`: To tell CI Insights that flaky test detection is enabled
 - `MERGIFY_TOKEN`: Application key with `ci` scope for uploading test results to CI Insights
 - `RUN_COUNT`: Number of times to execute each test within a single job
 - `MERGIFY_JOB_NAME`: The job name reported to CI Insights
