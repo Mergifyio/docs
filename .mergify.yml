@@ -94,6 +94,10 @@ queue_rules:
               - "title~=^chore: sync"
           - and:
               - author=mergify-ci-bot
+              - head = enterprise-releases-sync
+              - "title~=^chore: sync"
+          - and:
+              - author=mergify-ci-bot
               - head~=^clifus/
               - "title~=^chore: bump"
           - and:
