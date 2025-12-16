@@ -7539,7 +7539,7 @@
           "DRAFT_PULL_REQUEST_CHANGED": {
             "type": "integer",
             "title": "Draft Pull Request Changed",
-            "description": "The draft pull request has been unexpectedly changed",
+            "description": "New commits have been added to the draft pull request that were not made by Mergify",
             "default": 0
           },
           "INCOMPATIBILITY_WITH_BRANCH_PROTECTIONS": {
