@@ -3495,6 +3495,183 @@
           }
         }
       }
+    },
+    "/repos/{owner}/{repository}/merge-queue/status": {
+      "get": {
+        "tags": [
+          "merge_queue"
+        ],
+        "summary": "Get the current status of the merge queue",
+        "description": "Get the current status of the speculative checks, batches, and queued pull requests in the merge queue",
+        "operationId": "get_merge_queue_status_endpoint_repos__owner___repository__merge_queue_status_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The name of the branch",
+              "title": "Branch"
+            },
+            "description": "The name of the branch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeQueueStatus"
+                },
+                "example": {
+                  "batches": [
+                    {
+                      "name": "Batch 1",
+                      "status": {
+                        "code": "running"
+                      },
+                      "started_at": "2025-11-05T14:05:00Z",
+                      "estimated_merge_at": "2025-11-05T14:35:00Z",
+                      "scopes": [
+                        "frontend",
+                        "backend"
+                      ],
+                      "checks_summary": {
+                        "passed": 45,
+                        "total": 67
+                      },
+                      "pull_requests": [
+                        {
+                          "number": 1421,
+                          "title": "feat(auth): add \"Reset Password\" flow to login UI",
+                          "url": "https://github.com/org/repo/pull/1421",
+                          "author": {
+                            "id": 123,
+                            "login": "james"
+                          },
+                          "queued_at": "2025-11-05T13:30:00Z",
+                          "priority_alias": "high",
+                          "labels": [
+                            "feature",
+                            "auth"
+                          ],
+                          "scopes": [
+                            "frontend"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Batch 2",
+                      "status": {
+                        "code": "bisecting"
+                      },
+                      "started_at": "2025-11-05T13:35:00Z",
+                      "estimated_merge_at": "2025-11-05T15:35:00Z",
+                      "scopes": [
+                        "frontend"
+                      ],
+                      "checks_summary": {
+                        "passed": 15,
+                        "total": 28
+                      },
+                      "sub_batches": [
+                        {
+                          "name": "Sub Batch 1",
+                          "status": {
+                            "code": "completed"
+                          },
+                          "started_at": "2025-11-05T13:40:00Z",
+                          "estimated_merge_at": "2025-11-05T13:50:00Z",
+                          "scopes": [
+                            "frontend"
+                          ],
+                          "checks_summary": {
+                            "passed": 15,
+                            "total": 15
+                          },
+                          "pull_requests": []
+                        },
+                        {
+                          "name": "Sub Batch 2",
+                          "status": {
+                            "code": "running"
+                          },
+                          "started_at": "2025-11-05T13:50:00Z",
+                          "estimated_merge_at": "2025-11-05T14:00:00Z",
+                          "scopes": [
+                            "frontend"
+                          ],
+                          "checks_summary": {
+                            "passed": 0,
+                            "total": 13
+                          },
+                          "pull_requests": []
+                        }
+                      ],
+                      "pull_requests": []
+                    }
+                  ],
+                  "waiting_pull_requests": []
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3600,6 +3777,24 @@
         ],
         "title": "BaseRefsResponse"
       },
+      "BatchChecksSummary": {
+        "properties": {
+          "passed": {
+            "type": "integer",
+            "title": "Passed"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "passed",
+          "total"
+        ],
+        "title": "BatchChecksSummary"
+      },
       "BatchSizeGroupResponse": {
         "properties": {
           "base_ref": {
@@ -3693,6 +3888,64 @@
           "groups"
         ],
         "title": "BatchSizeResponse"
+      },
+      "BatchStatus": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "completed",
+              "queued",
+              "running",
+              "bisecting",
+              "failed",
+              "paused",
+              "frozen",
+              "waiting_schedule",
+              "waiting_for_batch"
+            ],
+            "title": "Code"
+          },
+          "batch_filled_slots": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Filled Slots"
+          },
+          "max_batch_slots": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Batch Slots"
+          },
+          "batch_max_start_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Max Start At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "BatchStatus"
       },
       "Branch": {
         "properties": {
@@ -7217,6 +7470,225 @@
         "type": "object",
         "title": "MatchingConditionsDict"
       },
+      "MergeQueueStatus": {
+        "properties": {
+          "batches": {
+            "items": {
+              "$ref": "#/components/schemas/MergeQueueStatusBatchWithSubBatch"
+            },
+            "type": "array",
+            "title": "Batches"
+          },
+          "waiting_pull_requests": {
+            "items": {
+              "$ref": "#/components/schemas/MergeQueueStatusPullRequest"
+            },
+            "type": "array",
+            "title": "Waiting Pull Requests"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batches",
+          "waiting_pull_requests"
+        ],
+        "title": "MergeQueueStatus"
+      },
+      "MergeQueueStatusBatchBase": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchStatus"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "estimated_merge_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Merge At"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Scopes"
+          },
+          "checks_summary": {
+            "$ref": "#/components/schemas/BatchChecksSummary"
+          },
+          "pull_requests": {
+            "items": {
+              "$ref": "#/components/schemas/MergeQueueStatusPullRequest"
+            },
+            "type": "array",
+            "title": "Pull Requests"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "status",
+          "started_at",
+          "estimated_merge_at",
+          "scopes",
+          "checks_summary",
+          "pull_requests"
+        ],
+        "title": "MergeQueueStatusBatchBase"
+      },
+      "MergeQueueStatusBatchWithSubBatch": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchStatus"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "estimated_merge_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Merge At"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Scopes"
+          },
+          "checks_summary": {
+            "$ref": "#/components/schemas/BatchChecksSummary"
+          },
+          "pull_requests": {
+            "items": {
+              "$ref": "#/components/schemas/MergeQueueStatusPullRequest"
+            },
+            "type": "array",
+            "title": "Pull Requests"
+          },
+          "sub_batches": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/MergeQueueStatusBatchBase"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sub Batches"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "status",
+          "started_at",
+          "estimated_merge_at",
+          "scopes",
+          "checks_summary",
+          "pull_requests"
+        ],
+        "title": "MergeQueueStatusBatchWithSubBatch"
+      },
+      "MergeQueueStatusPullRequest": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Number"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "author": {
+            "$ref": "#/components/schemas/PullRequestAuthor"
+          },
+          "queued_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Queued At"
+          },
+          "priority_alias": {
+            "type": "string",
+            "title": "Priority Alias"
+          },
+          "labels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Labels"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Scopes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "number",
+          "title",
+          "url",
+          "author",
+          "queued_at",
+          "priority_alias",
+          "labels",
+          "scopes"
+        ],
+        "title": "MergeQueueStatusPullRequest"
+      },
       "MergedCountResponse": {
         "properties": {
           "groups": {
@@ -7303,6 +7775,24 @@
           "merged"
         ],
         "title": "MergedInInterval"
+      },
+      "PullRequestAuthor": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "login": {
+            "type": "string",
+            "title": "Login"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "login"
+        ],
+        "title": "PullRequestAuthor"
       },
       "PullRequestQueued": {
         "properties": {
@@ -8835,6 +9325,10 @@
     {
       "name": "merge_protections",
       "description": "Operations with merge protections."
+    },
+    {
+      "name": "merge_queue",
+      "description": "Operation with the merge queue."
     },
     {
       "name": "orgs",
