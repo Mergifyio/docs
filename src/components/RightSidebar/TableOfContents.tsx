@@ -87,8 +87,10 @@ const TableOfContents = ({ toc = [], labels, isMobile }: Props) => {
 
     const headingsObserver = new IntersectionObserver(setCurrent, observerOptions);
 
-    // Observe all the headings in the main page content.
-    document.querySelectorAll('article :is(h1,h2,h3)').forEach((h) => headingsObserver.observe(h));
+    // Observe all the headings in the main page content, skipping ones marked to ignore.
+    document
+      .querySelectorAll('article :is(h1,h2,h3):not([data-toc-ignore])')
+      .forEach((h) => headingsObserver.observe(h));
 
     // Stop observing when the component is unmounted.
     return () => headingsObserver.disconnect();
