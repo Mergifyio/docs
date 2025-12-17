@@ -1,0 +1,59 @@
+---
+title: 'Browser Extensions'
+description: 'Install the Chrome or Firefox helpers that surface queue controls directly inside GitHub pull requests.'
+---
+
+import { Image } from "astro:assets";
+import extensionListScreen from "../../images/merge-queue/browser-extensions/list.png";
+import extensionPrScreen from "../../images/merge-queue/browser-extensions/pr.png";
+
+## Why use the browser extensions?
+
+The Chrome and Firefox extensions inject a small Mergify toolbar into every GitHub pull request you
+open. The toolbar exposes the most common merge queue actions (such as queueing a pull request)
+without having to type [commands](/commands). Use it when you want to:
+
+- Enqueue a pull request as soon as you review it.
+- Quickly dequeue without context switching.
+- See at a glance whether the pull request is already in one of your queues.
+
+## Locate the official download links
+
+The dashboard keeps the canonical links to the Chrome Web Store and Firefox Add-ons listing so you
+always grab the signed builds.
+
+1. Sign in to the [Mergify dashboard](https://dashboard.mergify.com).
+2. Open `Settings → Browser Extensions` in the left navigation.
+3. Pick **Add to Chrome** or **Add to Firefox**.
+
+<Image
+  src={extensionListScreen}
+  alt="Browser Extensions settings view in the Mergify dashboard"
+/>
+
+## Install on Chrome or Firefox
+
+### Chrome
+
+1. Click **Add to Chrome** from the dashboard page.
+2. Confirm the permissions in the Chrome Web Store dialog.
+
+### Firefox
+
+1. Click **Add to Firefox** from the dashboard page.
+2. Approve the requested permissions in the Firefox Add-ons prompt.
+
+## Use the queue controls inside GitHub
+
+After installation, reload any pull request on GitHub. A Mergify toolbar appears near the GitHub
+merge box and displays queue-specific controls:
+
+- **Queue** places the pull request into the selected merge queue with one click.
+
+- **Dequeue** (available when the pull request is already in the queue) removes it without typing
+  slash commands.
+
+<Image
+  src={extensionPrScreen}
+  alt="Mergify browser extension toolbar injected into a GitHub pull request"
+/>
