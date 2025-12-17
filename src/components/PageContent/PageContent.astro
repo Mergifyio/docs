@@ -32,7 +32,9 @@ const suppressTitle = content.suppressTitle;
 			<header>
 				<slot name="before-title" />
 				{!suppressTitle && <h1 class="content-title" id="overview" set:html={title} />}
-				{!suppressTitle && <h2 class="content-subtitle" set:html={description} />}
+				{!suppressTitle && (
+					<h2 class="content-subtitle" data-toc-ignore="true" set:html={description} />
+				)}
 				<slot name="after-title" />
 			</header>
 			{!suppressTitle && <hr class="divider" />}
