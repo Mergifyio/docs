@@ -1232,6 +1232,7 @@
                       "action.post_check",
                       "action.queue.change",
                       "action.queue.checks_end",
+                      "action.queue.checks_not_started",
                       "action.queue.checks_start",
                       "action.queue.enter",
                       "action.queue.leave",
@@ -5666,6 +5667,122 @@
         ],
         "title": "EventQueueChecksEndMetadata"
       },
+      "EventQueueChecksNotStarted": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.queue.checks_not_started",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventQueueChecksNotStartedMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventQueueChecksNotStarted"
+      },
+      "EventQueueChecksNotStartedMetadata": {
+        "properties": {
+          "branch": {
+            "type": "string",
+            "title": "Branch"
+          },
+          "partition_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partition Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "queued_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Queued At"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "branch",
+          "partition_name",
+          "priority_rule_name",
+          "queue_name",
+          "queued_at",
+          "reason"
+        ],
+        "title": "EventQueueChecksNotStartedMetadata"
+      },
       "EventQueueChecksStart": {
         "properties": {
           "id": {
@@ -7278,6 +7395,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/EventQueueChecksEnd"
+                },
+                {
+                  "$ref": "#/components/schemas/EventQueueChecksNotStarted"
                 },
                 {
                   "$ref": "#/components/schemas/EventQueueMerged"
