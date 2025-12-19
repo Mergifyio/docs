@@ -8006,13 +8006,13 @@
           "CHECKS_FAILED": {
             "type": "integer",
             "title": "Checks Failed",
-            "description": "The checks for the queued pull request have failed.",
+            "description": "The checks for the queued pull request have failed",
             "default": 0
           },
           "CHECKS_TIMEOUT": {
             "type": "integer",
             "title": "Checks Timeout",
-            "description": "The checks for the queued pull request have timed out.",
+            "description": "The checks for the queued pull request have timed out",
             "default": 0
           },
           "CONFLICT_WITH_BASE_BRANCH": {
@@ -8048,13 +8048,13 @@
           "PR_AHEAD_DEQUEUED": {
             "type": "integer",
             "title": "Pr Ahead Dequeued",
-            "description": "A pull request ahead in the queue has been dequeued.",
+            "description": "A pull request ahead in the queue has been dequeued",
             "default": 0
           },
           "BATCH_AHEAD_FAILED": {
             "type": "integer",
             "title": "Batch Ahead Failed",
-            "description": "A pull request ahead in the queue failed to get merged.",
+            "description": "A pull request ahead in the queue failed to get merged",
             "default": 0
           },
           "PR_CHECKS_STOPPED_BECAUSE_MERGE_QUEUE_PAUSE": {
@@ -8084,7 +8084,7 @@
           "PR_WITH_HIGHER_PRIORITY_QUEUED": {
             "type": "integer",
             "title": "Pr With Higher Priority Queued",
-            "description": "A pull request with a higher priority has been queued.",
+            "description": "A pull request with a higher priority has been queued",
             "default": 0
           },
           "PULL_REQUEST_UPDATED": {
@@ -8096,37 +8096,37 @@
           "QUEUE_RULE_MISSING": {
             "type": "integer",
             "title": "Queue Rule Missing",
-            "description": "The queue rules are missing because of a configuration change.",
+            "description": "The queue rules are missing because of a configuration change",
             "default": 0
           },
           "SPECULATIVE_CHECK_NUMBER_REDUCED": {
             "type": "integer",
             "title": "Speculative Check Number Reduced",
-            "description": "The number of speculative checks, in the queue rules, has been reduced.",
+            "description": "The number of speculative checks, in the queue rules, has been reduced",
             "default": 0
           },
           "SUCCESS": {
             "type": "integer",
             "title": "Success",
-            "description": "Successfully merged the pull request.",
+            "description": "Successfully merged the pull request",
             "default": 0
           },
           "PR_MANUALLY_MERGED": {
             "type": "integer",
             "title": "Pr Manually Merged",
-            "description": "The pull request has been manually merged.",
+            "description": "The pull request has been manually merged",
             "default": 0
           },
           "DRAFT_PULL_REQUEST_CREATION_FAILED": {
             "type": "integer",
             "title": "Draft Pull Request Creation Failed",
-            "description": "The draft pull request cannot be created.",
+            "description": "The draft pull request cannot be created",
             "default": 0
           },
           "CONFIGURATION_CHANGED": {
             "type": "integer",
             "title": "Configuration Changed",
-            "description": "The configuration has changed.",
+            "description": "The configuration has changed",
             "default": 0
           },
           "UNPROCESSABLE_PULL_REQUEST": {
