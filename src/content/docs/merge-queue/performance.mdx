@@ -4,8 +4,6 @@ description: Optimizing your merge queue for maximum efficiency.
 ---
 
 import MergeQueueCalculator from "../../../components/MergeQueueCalculator/MergeQueueCalculator"
-import rcvDiagram from "../../images/merge-queue/rcv-theorem.png"
-import {Image} from 'astro:assets';
 
 As development teams scale and the volume of pull requests grows, achieving an
 optimal balance between merge speed, reliability, and resource usage becomes a
@@ -30,9 +28,92 @@ Similar to the [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) for
 data stores, you can only optimize two of these properties simultaneously. This
 is what we term the **RCV theorem**.
 
-<figure style={{ maxWidth: '66%', margin: 'auto' }}>
-   <Image src={rcvDiagram} alt="RCV theorem"/>
-</figure>
+```neato aria-label="Venn diagram showing the Reliability, Cost, Velocity trade-offs" role="img" style="max-width: 520px; margin: 2rem auto; display: block;"
+graph RCV {
+   graph [bgcolor="transparent", margin=0, overlap=true];
+   node [shape=circle, style="filled,setlinewidth(2)", fontname="Helvetica", fontsize=16, width=2.5, height=2.5, penwidth=2, fixedsize=true, pin=true];
+
+   Reliability [label="Reliability", color="#2563eb", fillcolor="#2563eb33", pos="0,0!", tooltip="Maximize test confidence"];
+   Velocity [label="Velocity", color="#16a34a", fillcolor="#16a34a33", pos="2.2,0!", tooltip="Ship pull requests fast"];
+   Cost [label="Cost", color="#ea580c", fillcolor="#ea580c33", pos="1.1,1.95!", tooltip="Keep CI usage low"];
+}
+```
+
+<div
+   role="note"
+   aria-label="RCV legend"
+   style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '0.5rem',
+      justifyContent: 'center',
+      margin: '1rem auto 0.5rem',
+      fontSize: '0.9rem',
+   }}
+>
+   <span
+      style={{
+         display: 'inline-flex',
+         alignItems: 'center',
+         gap: '0.35rem',
+         padding: '0.35rem 0.75rem',
+         borderRadius: '999px',
+         border: '1px solid #93c5fd',
+      }}
+   >
+      <span
+         style={{
+            width: '0.65rem',
+            height: '0.65rem',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg,#2563eb,#16a34a)',
+         }}
+      ></span>
+      Reliability + Velocity → Parallel Checks
+   </span>
+   <span
+      style={{
+         display: 'inline-flex',
+         alignItems: 'center',
+         gap: '0.35rem',
+         padding: '0.35rem 0.75rem',
+         borderRadius: '999px',
+         border: '1px solid #fca5a5',
+      }}
+   >
+      <span
+         style={{
+            width: '0.65rem',
+            height: '0.65rem',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg,#2563eb,#ea580c)',
+         }}
+      ></span>
+      Reliability + Cost → Sequential Validation
+   </span>
+   <span
+      style={{
+         display: 'inline-flex',
+         alignItems: 'center',
+         gap: '0.35rem',
+         padding: '0.35rem 0.75rem',
+         borderRadius: '999px',
+         border: '1px solid #86efac',
+      }}
+   >
+      <span
+         style={{
+            width: '0.65rem',
+            height: '0.65rem',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg,#16a34a,#ea580c)',
+         }}
+      ></span>
+      Velocity + Cost → Batch Mode
+   </span>
+</div>
+
+<em>Pick any two—every setup sacrifices one dimension.</em>
 
 Based on this trade-off, there are 3 scenarios that you can optimize for:
 
