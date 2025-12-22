@@ -7,7 +7,7 @@ import { Module, render } from 'viz.js/full.render.js';
 
 const viz = new Viz({ Module, render });
 
-const validLanguages = [`dot`, `circo`];
+const validLanguages = [`dot`, `circo`, `neato`];
 
 export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
   const codeNodes = [];
