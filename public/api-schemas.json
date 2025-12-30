@@ -4194,6 +4194,21 @@
             "type": "array",
             "title": "Matching Conditions",
             "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze."
+          },
+          "exclude_conditions": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Exclude Conditions",
+            "description": "List of conditions used to exclude pull requests from the scheduled freeze. Pull requests matching these conditions will not be frozen."
           }
         },
         "type": "object",
@@ -8640,6 +8655,20 @@
             },
             "type": "array",
             "title": "Matching Conditions"
+          },
+          "exclude_conditions": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Exclude Conditions"
           }
         },
         "type": "object",
@@ -8648,7 +8677,8 @@
           "start",
           "end",
           "timezone",
-          "matching_conditions"
+          "matching_conditions",
+          "exclude_conditions"
         ],
         "title": "ScheduledFreezeEventLogAttributes"
       },
@@ -8697,6 +8727,20 @@
             },
             "type": "array",
             "title": "Matching Conditions"
+          },
+          "exclude_conditions": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Output"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Exclude Conditions"
           }
         },
         "type": "object",
@@ -8872,6 +8916,21 @@
             "type": "array",
             "title": "Matching Conditions",
             "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze. Can only be updated if the scheduled freeze has not yet begun."
+          },
+          "exclude_conditions": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Exclude Conditions",
+            "description": "List of conditions used to exclude pull requests from the scheduled freeze. Pull requests matching these conditions will not be frozen. Can only be updated if the scheduled freeze has not yet begun."
           }
         },
         "type": "object",
