@@ -30,7 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.48.1",
     "astro": "^5.16.6",
-    "astro-auto-import": "^0.4.5",
+    "astro-auto-import": "^0.5.1",
     "astro-eslint-parser": "^1.2.2",
     "astro-expressive-code": "^0.41.5",
     "astro-og-canvas": "^0.7.2",
