@@ -1,0 +1,18 @@
+---
+title: "Allow to configure merge queue comment reporting"
+date: 2025-12-24
+tags:
+  - Merge Queue
+description: "The status reported by the merge queue as comments can now be configured"
+---
+
+Adding `status_comments` property to [merge queue configuration](https://docs.mergify.com/configuration/file-format/#merge-queue) to reduce the level of reporting for queue status on github pull request:
+
+-  `all`: Post comments for all queue events (entering queue, CI progress, outcomes).
+-  `outcomes`: Only post comments for final outcomes (merged or dequeued with failure reason).
+Example:
+
+```yaml
+merge_queue:
+  status_comments: outcomes
+```
