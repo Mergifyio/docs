@@ -1,0 +1,25 @@
+---
+title: "
+`Add none option to status_comments for merge queue`"
+date: 2026-01-07
+tags:
+  - Merge Queue
+description: "A new `none` value is now available for the `status_comments` configuration option to completely disable merge queue status comments on pull requests.
+"
+---
+
+The `status_comments` option in the `merge_queue` configuration now supports a `none` value, which disables all merge queue status comments on pull requests.
+
+This provides users with three levels of control over queue notifications:
+
+- `all` (default): Post comments for all queue events, including entering the queue, CI progress updates, and final outcomes
+- `outcomes`: Only post comments for final outcomes (merged or dequeued with failure reason)
+- `none`: Do not post any comments for queue status
+Example configuration:
+
+```yaml
+merge_queue:
+  status_comments: none
+```
+
+This is useful for repositories that want to reduce notification noise and rely solely on the merge queue dashboard or other monitoring tools for queue status updates.
