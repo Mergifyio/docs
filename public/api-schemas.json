@@ -7363,7 +7363,7 @@
           },
           "events": {
             "items": {
-              "anyOf": [
+              "oneOf": [
                 {
                   "$ref": "#/components/schemas/EventAssign"
                 },
@@ -7472,7 +7472,48 @@
                 {
                   "$ref": "#/components/schemas/EventCommandDequeue"
                 }
-              ]
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "action.assign": "#/components/schemas/EventAssign",
+                  "action.backport": "#/components/schemas/EventBackport",
+                  "action.close": "#/components/schemas/EventClose",
+                  "action.comment": "#/components/schemas/EventComment",
+                  "action.copy": "#/components/schemas/EventCopy",
+                  "action.delete_head_branch": "#/components/schemas/EventDeleteHeadBranch",
+                  "action.dismiss_reviews": "#/components/schemas/EventDismissReviews",
+                  "action.edit": "#/components/schemas/EventEdit",
+                  "action.github_actions": "#/components/schemas/EventGithubActions",
+                  "action.label": "#/components/schemas/EventLabel",
+                  "action.merge": "#/components/schemas/EventMerge",
+                  "action.post_check": "#/components/schemas/EventPostCheck",
+                  "action.queue.change": "#/components/schemas/EventQueueChange",
+                  "action.queue.checks_end": "#/components/schemas/EventQueueChecksEnd",
+                  "action.queue.checks_not_started": "#/components/schemas/EventQueueChecksNotStarted",
+                  "action.queue.checks_start": "#/components/schemas/EventQueueChecksStart",
+                  "action.queue.enter": "#/components/schemas/EventQueueEnter",
+                  "action.queue.leave": "#/components/schemas/EventQueueLeave",
+                  "action.queue.merged": "#/components/schemas/EventQueueMerged",
+                  "action.rebase": "#/components/schemas/EventRebase",
+                  "action.refresh": "#/components/schemas/EventRefresh",
+                  "action.request_reviews": "#/components/schemas/EventRequestReviews",
+                  "action.requeue": "#/components/schemas/EventRequeue",
+                  "action.review": "#/components/schemas/EventReview",
+                  "action.squash": "#/components/schemas/EventSquash",
+                  "action.unqueue": "#/components/schemas/EventUnqueue",
+                  "action.update": "#/components/schemas/EventUpdate",
+                  "command.dequeue": "#/components/schemas/EventCommandDequeue",
+                  "command.queue": "#/components/schemas/EventCommandQueue",
+                  "command.requeue": "#/components/schemas/EventCommandRequeue",
+                  "queue.pause.create": "#/components/schemas/EventQueuePauseCreate",
+                  "queue.pause.delete": "#/components/schemas/EventQueuePauseDelete",
+                  "queue.pause.update": "#/components/schemas/EventQueuePauseUpdate",
+                  "scheduled_freeze.create": "#/components/schemas/EventScheduledFreezeCreate",
+                  "scheduled_freeze.delete": "#/components/schemas/EventScheduledFreezeDelete",
+                  "scheduled_freeze.update": "#/components/schemas/EventScheduledFreezeUpdate"
+                }
+              }
             },
             "type": "array",
             "title": "Events",
