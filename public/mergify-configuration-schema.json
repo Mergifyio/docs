@@ -1396,10 +1396,11 @@
         },
         "status_comments": {
           "default": "all",
-          "description": "Controls the level of status comments posted on pull requests in the queue.\n- `all`: Post comments for all queue events (entering queue, CI progress, outcomes).\n- `outcomes`: Only post comments for final outcomes (merged or dequeued with failure reason).\n",
+          "description": "Controls the level of status comments posted on pull requests in the queue.\n- `all`: Post comments for all queue events (entering queue, CI progress, outcomes).\n- `outcomes`: Only post comments for final outcomes (merged or dequeued with failure reason).\n- `none`: Do not post any comments for queue status.\n",
           "enum": [
             "all",
-            "outcomes"
+            "outcomes",
+            "none"
           ],
           "title": "Status Comments",
           "type": "string"
