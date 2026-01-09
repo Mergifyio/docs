@@ -3904,7 +3904,8 @@
               "paused",
               "frozen",
               "waiting_schedule",
-              "waiting_for_batch"
+              "waiting_for_batch",
+              "already_tested"
             ],
             "title": "Code"
           },
