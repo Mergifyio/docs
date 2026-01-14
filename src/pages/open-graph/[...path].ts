@@ -7,7 +7,7 @@ const paths = process.env.SKIP_OG ? [] : allPages;
 /** An object mapping file paths to file metadata. */
 const pages = Object.fromEntries(paths.map(({ id, data }) => [id, { data, id }]));
 
-export const { getStaticPaths, GET } = OGImageRoute({
+export const { getStaticPaths, GET } = await OGImageRoute({
   param: 'path',
 
   pages,
