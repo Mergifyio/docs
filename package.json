@@ -70,7 +70,7 @@
     "@astrojs/rss": "^4.0.15",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/poppins": "^5.2.7",
-    "@scalar/api-reference": "^1.43.4",
+    "@scalar/api-reference": "^1.43.5",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^11.0.0",
