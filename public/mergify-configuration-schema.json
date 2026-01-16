@@ -2465,6 +2465,9 @@
         "draft_bot_account": {
           "anyOf": [
             {
+              "description": "A string template using the Jinja2 syntax.",
+              "format": "template",
+              "title": "Template",
               "type": "string"
             },
             {
@@ -2683,6 +2686,9 @@
         "draft_bot_account": {
           "anyOf": [
             {
+              "description": "A string template using the Jinja2 syntax.",
+              "format": "template",
+              "title": "Template",
               "type": "string"
             },
             {
