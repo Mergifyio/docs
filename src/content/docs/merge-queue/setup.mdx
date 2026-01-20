@@ -1,6 +1,6 @@
 ---
 title: Setting Up a Merge Queue
-description: Implement your first merge queue.
+description: Get your merge queue running in 5 minutes.
 ---
 
 import { Image } from "astro:assets"
@@ -8,90 +8,61 @@ import queueCommandScreenshot from "../../images/merge-queue/setup/queue-command
 import queueStatusScreenshot from "../../images/merge-queue/setup/queue-status.png"
 import Youtube from '../../../components/Youtube.astro'
 
-Mergify’s Merge Queue automates and secures your PR merging process. It ensures
-each PR meets all conditions (status checks, branch rules, reviews, etc.)
-before merging, so your main branch stays stable — without manual tracking or
-coordination.
+Get your first PR merged through a queue in under 5 minutes. No complex setup
+required.
 
-:::note
-For more details about merge queues and their functions, you can refer to our
-[merge queue introduction](./).
-:::
+## Quick Start
 
-## Default Merge Queue
+### 1. Install Mergify
 
-Every repo connected to Mergify gets a queue automatically. By default, it
-respects your GitHub [branch protection
-settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
-and
-[rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets).
+[Install the Mergify GitHub App](https://github.com/apps/mergify/installations/new)
+on your repository. That's it — you now have a working merge queue.
 
-## Adding a Pull Request to the Merge Queue
+### 2. Queue Your First PR
 
-<Youtube video="2mVymDFMaMk" title="Add a PR to the merge queue"/>
+On any open pull request, comment:
 
-To add a pull request to the merge queue, use [the `queue`
-command](/commands/queue). This adds your PR to the merge queue as long as it
-matches the queue conditions.
+```text
+@mergifyio queue
+```
 
 <Image src={queueCommandScreenshot} alt="Mergify queue command" />
 
-Remember, the PR will only be merged once the conditions defined in the
-`merge_conditions` field are met.
+Mergify adds your PR to the queue, updates it against the latest main branch,
+waits for CI to pass, and merges it automatically.
 
-You can also [configure Mergify to automatically queue pull requests that are
-ready](/merge-queue/rules/#autoqueueing-pull-requests).
+<Youtube video="2mVymDFMaMk" title="Add a PR to the merge queue"/>
 
-## Configuring the Merge Queue Rules
+### 3. Watch It Work
 
-To have a more refined control over the PRs entering the merge queue and when
-they get merged, you can configure multiple queue rules in your Mergify
-configuration file. This allows to define custom conditions that should be met
-before a PR is added to the queue (`queue_conditions`) and when it can be
-merged (`merge_conditions`).
-
-See [queue rules](/merge-queue/rules/).
-
-## Monitoring Your Merge Queue
-
-After you've added pull requests to your merge queue, you want to monitor its
-status to understand the progression of your PRs. This can be done directly
-from the [Mergify dashboard](http://dashboard.mergify.com).
+Open the [Mergify dashboard](https://dashboard.mergify.com) to see your PR
+moving through the queue in real-time.
 
 <Image src={queueStatusScreenshot} alt="Mergify Queue Status" />
 
-Here, you can view all the PRs in the queue and their current statuses. PRs
-that are waiting for their `merge_conditions` to be met are marked as pending,
-while those that have met all their `queue_conditions` are displayed in the
-queue and will be merged when they reach the top of the queue.
+**That's it.** Your merge queue is live.
 
-Remember, the PRs in the queue are ordered based on their addition time. The PR
-added first will be merged first after all its conditions are met. You can
-modify the order of the pull request inside a queue using
-[priorities](/merge-queue/priority).
+## What You Get Immediately
 
-## Conclusion
+With zero configuration, your queue already:
 
-Congratulations, you've just set up your first Merge Queue with Mergify! You're
-now armed with a powerful tool to automate and streamline your PR merging
-process, reducing the potential for conflicts and ensuring your main branch is
-always in a consistent, deployable state.
+- **Updates PRs** against the latest main before merging
+- **Runs your CI** on the updated code (not stale branches)
+- **Merges automatically** when checks pass
+- **Respects your GitHub branch protections** and rulesets
 
-However, setting up a basic merge queue is just the beginning. Mergify's
-powerful and flexible configuration system enables you to tailor your merge
-queue to your specific needs.
+This alone prevents the classic problem: PRs that pass CI individually but
+break main when merged together.
 
-For further exploration and inspiration, here are some additional resources and
-use cases that you might find useful:
+## Next Steps
 
-- Using [priorities to order your pull requests](/merge-queue/priority);
+Once your basic queue is running, explore these optimizations:
 
-- Speeding up your merge queue with [parallel
-  checks](/merge-queue/parallel-checks);
-
-- Saving CI time with [batches](/merge-queue/batches);
-
-- Delaying [checks at merge time](/merge-queue/two-step);
-
-Remember, the possibilities with a merge queue are limited only by your
-imagination. Happy merging!
+| Goal | Feature | Guide |
+|------|---------|-------|
+| Skip manual queueing | Auto-queue approved PRs | [Autoqueue](/merge-queue/rules#autoqueueing-pull-requests) |
+| Merge faster | Test multiple PRs in parallel | [Parallel checks](/merge-queue/parallel-checks) |
+| Save CI costs | Combine PRs into single CI runs | [Batches](/merge-queue/batches) |
+| Prioritize urgent PRs | Jump the queue when needed | [Priority](/merge-queue/priority) |
+| Run heavy tests only at merge | Split fast/slow CI checks | [Two-step CI](/merge-queue/two-step) |
+| Monorepo optimization | Only test affected code | [Scopes](/merge-queue/scopes) |
