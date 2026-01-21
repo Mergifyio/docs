@@ -131,28 +131,68 @@ Parallel Checks adapt automatically as your code and rules evolve:
   `reset_on_external_merge` — see [Lifecycle: Base Branch
   Updates](/merge-queue/lifecycle#base-branch-updates).
 
-## Skip Intermediate Results
+## Skip Intermediate Results (Anti-Flake Protection)
 
-By default, each speculative draft that includes a pull request must pass
-before that pull request can be merged. When
-`merge_queue.skip_intermediate_results` is enabled, Mergify can merge a pull
-request as soon as a later downstream draft that also includes that PR passes,
-even if earlier intermediate drafts failed.
+Flaky tests are a reality in most CI pipelines. A test that passes 99% of the
+time will still cause intermittent failures that block your merge queue.
+`skip_intermediate_results` provides automatic protection against these
+transient failures.
 
-When to use it:
+### The Problem
 
-- Your CI is stable (low flakiness) and long-running, and you want to reduce
-  latency by trusting the first comprehensive passing draft.
+You have 3 PRs in the merge queue. PR #1's CI fails due to a flaky test:
 
-- You're using parallel checks and/or batches and care more about the final
-  combined outcome than each incremental step.
+```text
+Draft #1 (PR #1):           ❌ Failed (flaky test)
+Draft #2 (PR #1 + PR #2):   ✅ Passed
+Draft #3 (PR #1 + #2 + #3): ✅ Passed
+```
 
-Enable it in your configuration:
+**Without `skip_intermediate_results`**: PR #1 gets dequeued. The developer
+investigates, finds nothing wrong, reruns CI, waits again. Time wasted.
+
+**With `skip_intermediate_results: true`**: Mergify sees that Draft #2
+(which contains PR #1's code) passed. This proves PR #1's failure was
+flaky, not a real bug. All 3 PRs merge automatically.
+
+### How It Works
+
+When enabled, Mergify doesn't require every intermediate draft to pass.
+Instead, it looks for **any** passing draft that contains the PR's changes:
+
+1. Draft #1 fails (contains PR #1)
+
+2. Draft #2 passes (contains PR #1 + PR #2)
+
+3. Since Draft #2 passed and includes PR #1's code, the failure in Draft #1
+   is treated as transient
+
+4. Both PR #1 and PR #2 merge
+
+This is safe because if PR #1 had a **real** bug, Draft #2 would also fail
+(it contains the same buggy code). Only flaky failures—where the code is
+fine but the test is unreliable—get bypassed.
+
+### Configuration
+
+Enable it in your merge queue configuration:
 
 ```yaml
 merge_queue:
   skip_intermediate_results: true
 ```
+
+### When to Use It
+
+**Enable when:**
+- Your CI has some flakiness (most pipelines do)
+- You have long-running CI where latency matters
+- You want to maximize merge throughput
+- You're using parallel checks
+
+**Consider disabling when:**
+- You need every intermediate state validated for compliance
+- You're debugging CI issues and want to see all failures
 
 ## Important Considerations
 
