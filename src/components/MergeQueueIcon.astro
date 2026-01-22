@@ -9,7 +9,7 @@ export interface Props {
 const { class: className } = Astro.props;
 ---
 
-<span class:list={["merge-queue-icon", className]} set:html={icon} />
+<span aria-hidden="true" class:list={["merge-queue-icon", className]} set:html={icon} />
 
 <style>
 	.merge-queue-icon {
