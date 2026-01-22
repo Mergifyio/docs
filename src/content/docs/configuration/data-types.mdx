@@ -18,7 +18,7 @@ commit](https://docs.github.com/en/pull-requests/committing-changes-to-your-proj
 
 You can use a commit object in templates:
 
-```jinja-html
+```jinja
 {% for commit in commits %}
 Co-Authored-By: {{ commit.author }} <{{ commit.email_author }}>
 {% endfor %}
@@ -269,7 +269,7 @@ attributes](/configuration/conditions#attributes-list) in the final string.
 
 For example the template string:
 
-```jinja-html
+```jinja
 Thank you @{{author}} for your contribution!
 ```
 
@@ -286,7 +286,7 @@ login is `jd`.
 filters](https://jinja.palletsprojects.com/en/3.0.x/templates/#builtin-filters)
 are supported, you can build string from list for example with:
 
-```jinja-html
+```jinja
 Approved by: @{{ approved_reviews_by | join(', @') }}
 ```
 
@@ -294,7 +294,7 @@ Approved by: @{{ approved_reviews_by | join(', @') }}
 manipulation](https://jinja.palletsprojects.com/en/3.0.x/templates/#python-methods>)
 are also supported, you can split string for example with:
 
-```jinja-html
+```jinja
 {{ body.split('----------')[0] | trim }}
 ```
 
@@ -302,13 +302,13 @@ Mergify also provides custom Jinja2 filters:
 
 - `markdownify`: to convert HTML to Markdown:
 
-```jinja-html
+```jinja
 {{ body | markdownify }}
 ```
 
 - `get_section(<section>, <default>)`: to extract one Markdown section
 
-```jinja-html
+```jinja
 {{ body | get_section("## Description") }}
 ```
 
