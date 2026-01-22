@@ -49,10 +49,10 @@ export default defineConfig({
     }),
     vue(),
     sitemap({
-      // To be iso with gatsby's sitemap, not sure it's usefull
+      // To be iso with gatsby's sitemap, not sure it's useful
       changefreq: 'daily',
       priority: 0.7,
-      exclude: ['/enterprise', '/enterprise/**'],
+      filter: (page) => !page.startsWith('/enterprise'),
     }),
     ScalarApiReference(),
     AlgoliaUpdateIndex(),
