@@ -1,5 +1,5 @@
 ---
-import { FiFileText } from 'react-icons/fi';
+import { Icon } from 'astro-icon/components';
 import { getMarkdownPath } from '../util/getMarkdownPath';
 
 export interface Props {
@@ -17,7 +17,7 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 
 <a class={classes.join(' ')} href={markdownPath} target="_blank" rel="noopener noreferrer" aria-label="View current page as Markdown source">
 	<span class="docs-toolbar-button__icon" aria-hidden="true">
-		<FiFileText size={16} focusable="false" aria-hidden="true" />
+		<Icon name="feather:file-text" width={16} height={16} />
 	</span>
 	<span class="docs-toolbar-button__label">View as Markdown</span>
 </a>

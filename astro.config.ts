@@ -6,6 +6,7 @@ import vue from '@astrojs/vue';
 import { defineConfig } from 'astro/config';
 import AutoImport from 'astro-auto-import';
 import { astroExpressiveCode } from 'astro-expressive-code';
+import icon from 'astro-icon';
 import dotenv, { DotenvPopulateInput } from 'dotenv';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
@@ -45,7 +46,7 @@ export default defineConfig({
       shikiConfig: { themes: { light: 'slack-ochin', dark: 'slack-dark' } },
     }),
     react({
-      include: ['react-icons', 'Tables'],
+      include: ['Tables'],
     }),
     vue(),
     sitemap({
@@ -56,14 +57,28 @@ export default defineConfig({
     }),
     ScalarApiReference(),
     AlgoliaUpdateIndex(),
+    icon({
+      include: {
+        bi: ['*'],
+        'fa-solid': ['*'],
+        'fa-brands': ['*'],
+        'fa6-solid': ['*'],
+        'fa6-regular': ['*'],
+        'fa-regular': ['*'],
+        feather: ['*'],
+        'grommet-icons': ['*'],
+        heroicons: ['*'],
+        ion: ['*'],
+        mdi: ['*'],
+        octicon: ['*'],
+        'simple-icons': ['*'],
+        tabler: ['*'],
+      },
+    }),
   ],
   scopedStyleStrategy: 'where',
   compressHTML: false,
-  vite: {
-    ssr: {
-      noExternal: ['react-icons'],
-    },
-  },
+  vite: {},
   markdown: {
     // Override with our own config
     smartypants: false,

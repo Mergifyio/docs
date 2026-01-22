@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 export interface Props {
   colorScheme:
     | 'whiteAlpha'
@@ -21,7 +23,7 @@ export interface Props {
     | 'telegram';
   style?: string;
   href?: string;
-  icon: Function;
+  icon?: string;
   variant?: 'ghost' | 'solid';
   target?: string;
 }
@@ -37,7 +39,7 @@ const {
 
 <div role="presentation" class:list={['button', `button-${colorScheme}`, variant]} {style}>
 	<a href={href} target={target}>
-		{icon && <Astro.props.icon />}
+		{icon && <Icon name={icon} />}
 		<slot />
 	</a>
 </div>

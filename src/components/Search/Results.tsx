@@ -1,6 +1,6 @@
+import { Icon } from '@iconify-icon/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { BsArrowReturnLeft } from 'react-icons/bs';
 import Preview from './PageDetails';
 import { AlgoliaResult } from './types';
 import extractResultValue from './utils';
@@ -74,7 +74,7 @@ function PageResult({
           {breadcrumb}
         </p>
       </div>
-      {active && <BsArrowReturnLeft />}
+      {active && <Icon icon="bi:arrow-return-left" />}
     </a>
   );
 }

@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { FaIndustry, FaSlack } from 'react-icons/fa';
-import { HiRss } from 'react-icons/hi';
+import { Icon } from 'astro-icon/components';
 import enterpriseReleases from '../../data/enterprise-releases.json';
 import MainLayout from '../../layouts/MainLayout.astro';
 import type { TimelineEntry } from '../../util/changelog';
@@ -49,14 +48,14 @@ const description = 'Latest product updates from Mergify.';
         <input id="search" type="search" placeholder="Search changes..." aria-label="Search changelog" />
       </div>
       <a href="/changelog/rss.xml" class="rss-button" aria-label="Subscribe to RSS feed">
-        <HiRss />
+        <Icon name="heroicons:rss" />
         Subscribe via RSS
       </a>
     </div>
 
     <div class="slack-subscribe">
       <div class="slack-content">
-        <FaSlack className="slack-icon" />
+        <Icon name="fa-brands:slack" class="slack-icon" />
         <span class="slack-text">Stay updated on Slack! Subscribe to get changelog updates in your workspace:</span>
       </div>
       <div class="slack-command">
@@ -106,7 +105,7 @@ const description = 'Latest product updates from Mergify.';
                       </div>
                       <div class="col content-col">
                         <div class="release-title">
-                          <FaIndustry className="release-icon" aria-hidden="true" />
+                          <Icon name="fa-solid:industry" class="release-icon" aria-hidden="true" />
                           <span class="sr-only">Enterprise release</span>
                           <span>{ENTERPRISE_TAG} {item.version}</span>
                         </div>
