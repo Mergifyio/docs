@@ -7,22 +7,7 @@ suppressTitle: true
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import CommunityButton from '../../components/CommunityButton.astro';
-import { MdOutlineLightbulb, MdMonitorHeart } from 'react-icons/md';
-import { GoGitMerge, GoCodeReview } from 'react-icons/go';
-import { BsRobot, BsRocket, BsPatchQuestion, BsCommand, BsBook, BsPlugin, BsStack, BsLightbulb, BsBoxes } from 'react-icons/bs';
-import { BiRuler, BiBadgeCheck, BiCut, BiSolidCoinStack } from 'react-icons/bi';
-import { TbPackages, TbGitBranch, TbTopologyStarRing3 } from 'react-icons/tb';
-import { TiFlowParallel } from 'react-icons/ti';
-import { FaUserShield, FaRegLightbulb, FaGear, FaTrafficLight, FaRegCirclePause, FaBug, FaMoneyBill1, FaSnowflake, FaStairs, FaDiagramProject } from 'react-icons/fa6';
-import { FaLifeRing, FaShieldAlt } from 'react-icons/fa';
-import { AiOutlineDeploymentUnit, AiOutlineFile, AiOutlineApi } from 'react-icons/ai';
-import { LiaShareAltSolid } from 'react-icons/lia';
-import { FiType } from 'react-icons/fi';
 import MergeQueueIcon from '../../components/MergeQueueIcon.astro';
-import { SiSlack, SiGithub, SiX, SiYoutube, SiLinkedin, SiGithubactions } from 'react-icons/si';
-import { IoIosRemoveCircleOutline } from 'react-icons/io';
-import { GrTest } from 'react-icons/gr';
-import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
 
 <div id="home">
   {/* ---------------- HERO ---------------- */}
@@ -51,17 +36,17 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
   Insights & automation to make your test suite lean and reliable.
 
   <DocsetGrid>
-    <Docset title="Overview" path="/ci-insights" icon={MdOutlineLightbulb}>What CI Insights gives you.</Docset>
-    <Docset title="Flaky Test Detection" path="/ci-insights/flaky-test-detection" icon={FaBug}>
+    <Docset title="Overview" path="/ci-insights" icon="mdi:lightbulb-outline">What CI Insights gives you.</Docset>
+    <Docset title="Flaky Test Detection" path="/ci-insights/flaky-test-detection" icon="fa6-solid:bug">
       Surface inconsistent tests & jobs.
     </Docset>
-    <Docset title="Auto‑Retry" path="/ci-insights/auto-retry" icon={SlRefresh}>
+    <Docset title="Auto‑Retry" path="/ci-insights/auto-retry" icon="tabler:refresh">
       Automatic transient failure retries.
     </Docset>
-    <Docset title="Quarantine" path="/ci-insights/quarantine" icon={FaRegCirclePause}>
+    <Docset title="Quarantine" path="/ci-insights/quarantine" icon="fa6-regular:circle-pause">
       Isolate noisy tests to unblock merges.
     </Docset>
-    <Docset title="Test Frameworks" path="/ci-insights#test-framework-configuration" icon={GrTest}>
+    <Docset title="Test Frameworks" path="/ci-insights#test-framework-configuration" icon="grommet-icons:test">
       Configure report upload.
     </Docset>
   </DocsetGrid>
@@ -70,13 +55,13 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
   Scope-aware CI workflows that only run the jobs that matter.
 
   <DocsetGrid>
-    <Docset title="Overview" path="/monorepo-ci" icon={TbTopologyStarRing3}>
+    <Docset title="Overview" path="/monorepo-ci" icon="tabler:topology-star-ring-3">
       Define scopes once and reuse them across CI.
     </Docset>
-    <Docset title="GitHub Actions" path="/monorepo-ci/github-actions" icon={SiGithubactions}>
+    <Docset title="GitHub Actions" path="/monorepo-ci/github-actions" icon="simple-icons:githubactions">
       Wire scopes into gha-mergify-ci workflows.
     </Docset>
-    <Docset title="Merge Queue integration" path="/merge-queue/monorepo" icon={BsBoxes}>
+    <Docset title="Merge Queue integration" path="/merge-queue/monorepo" icon="bi:boxes">
       Share scopes with batching strategies.
     </Docset>
   </DocsetGrid>
@@ -85,43 +70,43 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
   Deterministic, parallel, and resource‑aware merging.
 
   <DocsetGrid>
-    <Docset title="Introduction" path="/merge-queue" icon={FaRegLightbulb}>
+    <Docset title="Introduction" path="/merge-queue" icon="fa6-regular:lightbulb">
       Core concepts & guarantees.
     </Docset>
-    <Docset title="Setup" path="/merge-queue/setup" icon={FaGear}>
+    <Docset title="Setup" path="/merge-queue/setup" icon="fa6-solid:gear">
       Enable & configure your first queue.
     </Docset>
-    <Docset title="Queue Rules" path="/merge-queue/rules" icon={BiSolidCoinStack}>
+    <Docset title="Queue Rules" path="/merge-queue/rules" icon="bi:stack">
       Route PRs & define policies.
     </Docset>
-    <Docset title="Lifecycle" path="/merge-queue/lifecycle" icon={SlRefresh}>
+    <Docset title="Lifecycle" path="/merge-queue/lifecycle" icon="tabler:refresh">
       From enqueue to merge.
     </Docset>
-    <Docset title="Priority" path="/merge-queue/priority" icon={FaTrafficLight}>
+    <Docset title="Priority" path="/merge-queue/priority" icon="fa6-solid:traffic-light">
       Order critical work first.
     </Docset>
-    <Docset title="Parallel Checks" path="/merge-queue/parallel-checks" icon={TiFlowParallel}>
+    <Docset title="Parallel Checks" path="/merge-queue/parallel-checks" icon="tabler:arrows-split-2">
       Batch compatible PR tests.
     </Docset>
-    <Docset title="Performance" path="/merge-queue/performance" icon={SlSpeedometer}>
+    <Docset title="Performance" path="/merge-queue/performance" icon="tabler:gauge">
       Throughput & optimization tips.
     </Docset>
-    <Docset title="Batches" path="/merge-queue/batches" icon={TbPackages}>
+    <Docset title="Batches" path="/merge-queue/batches" icon="tabler:packages">
       Increase velocity with batches.
     </Docset>
-    <Docset title="Scopes" path="/merge-queue/scopes" icon={FaDiagramProject}>
+    <Docset title="Scopes" path="/merge-queue/scopes" icon="fa6-solid:diagram-project">
       Group pull requests by impacted services.
     </Docset>
-    <Docset title="Monorepo" path="/merge-queue/monorepo" icon={BsBoxes}>
+    <Docset title="Monorepo" path="/merge-queue/monorepo" icon="bi:boxes">
       Optimization for large repositories.
     </Docset>
-    <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon={FaTrafficLight}>
+    <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon="fa6-solid:traffic-light">
       Fast + full validation strategy.
     </Docset>
-    <Docset title="Deployment" path="/merge-queue/deploy" icon={AiOutlineDeploymentUnit}>
+    <Docset title="Deployment" path="/merge-queue/deploy" icon="mdi:rocket-launch-outline">
       Adopt safely in production.
     </Docset>
-    <Docset title="Monitoring" path="/merge-queue/monitoring" icon={MdMonitorHeart}>
+    <Docset title="Monitoring" path="/merge-queue/monitoring" icon="mdi:monitor-dashboard">
       Key metrics & dashboards.
     </Docset>
   </DocsetGrid>
@@ -130,22 +115,22 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
   Advanced guardrails before code lands.
 
   <DocsetGrid>
-    <Docset title="Overview" path="/merge-protections" icon={FaUserShield}>
+    <Docset title="Overview" path="/merge-protections" icon="fa6-solid:user-shield">
       Protection capabilities.
     </Docset>
-    <Docset title="Setup" path="/merge-protections/setup" icon={FaGear}>
+    <Docset title="Setup" path="/merge-protections/setup" icon="fa6-solid:gear">
       Enable and mark check required.
     </Docset>
-    <Docset title="Built‑in Protections" path="/merge-protections/builtin" icon={FaUserShield}>
+    <Docset title="Built‑in Protections" path="/merge-protections/builtin" icon="fa6-solid:user-shield">
       Depends-On, Merge-After, config safety.
     </Docset>
-    <Docset title="Custom Rules" path="/merge-protections/custom-rules" icon={BiRuler}>
+    <Docset title="Custom Rules" path="/merge-protections/custom-rules" icon="bi:rulers">
       Define granular success logic.
     </Docset>
-    <Docset title="Freezes" path="/merge-protections/freeze" icon={FaSnowflake}>
+    <Docset title="Freezes" path="/merge-protections/freeze" icon="fa6-solid:snowflake">
       Schedule or trigger merge freezes.
     </Docset>
-    <Docset title="Examples" path="/merge-protections/examples" icon={BsLightbulb}>
+    <Docset title="Examples" path="/merge-protections/examples" icon="bi:lightbulb">
       Common rule recipes.
     </Docset>
   </DocsetGrid>
@@ -154,28 +139,28 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
   Expressive rule engine & rich actions to eliminate manual toil.
 
   <DocsetGrid>
-    <Docset title="Overview" path="/workflow" icon={BsRobot}>
+    <Docset title="Overview" path="/workflow" icon="bi:robot">
       What you can automate.
     </Docset>
-    <Docset title="First Rule" path="/workflow/writing-your-first-rule" icon={BiRuler}>
+    <Docset title="First Rule" path="/workflow/writing-your-first-rule" icon="bi:rulers">
       Create your first automation.
     </Docset>
-    <Docset title="Actions" path="/workflow/actions" icon={BsRocket}>
+    <Docset title="Actions" path="/workflow/actions" icon="bi:rocket">
       Full action catalog.
     </Docset>
-    <Docset title="Automatic Merge" path="/workflow/automerge" icon={GoGitMerge}>
+    <Docset title="Automatic Merge" path="/workflow/automerge" icon="octicon:git-merge-16">
       Merge when policy satisfied.
     </Docset>
-    <Docset title="Request Reviews" path="/workflow/request-reviews" icon={GoCodeReview}>
+    <Docset title="Request Reviews" path="/workflow/request-reviews" icon="octicon:code-review-16">
       Smart reviewer assignment.
     </Docset>
-    <Docset title="Dismiss Reviews" path="/workflow/dismiss-reviews" icon={IoIosRemoveCircleOutline}>
+    <Docset title="Dismiss Reviews" path="/workflow/dismiss-reviews" icon="ion:remove-circle-outline">
       Invalidate outdated approvals.
     </Docset>
-    <Docset title="Delete Branches" path="/workflow/delete-head-branches" icon={BiCut}>
+    <Docset title="Delete Branches" path="/workflow/delete-head-branches" icon="bi:scissors">
       Keep repo tidy automatically.
     </Docset>
-    <Docset title="Rebase PRs" path="/workflow/rebase" icon={TbGitBranch}>
+    <Docset title="Rebase PRs" path="/workflow/rebase" icon="tabler:git-branch">
       Keep branches current.
     </Docset>
   </DocsetGrid>
@@ -183,46 +168,46 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
   <h2 class="home-title">Reference & Platform</h2>
 
   <DocsetGrid>
-    <Docset title="Configuration File" path="/configuration/file-format" icon={AiOutlineFile}>
+    <Docset title="Configuration File" path="/configuration/file-format" icon="mdi:file-outline">
       YAML structure & semantics.
     </Docset>
-    <Docset title="Conditions" path="/configuration/conditions" icon={BsPatchQuestion}>
+    <Docset title="Conditions" path="/configuration/conditions" icon="bi:patch-question">
       Filter syntax details.
     </Docset>
-    <Docset title="Data Types" path="/configuration/data-types" icon={FiType}>
+    <Docset title="Data Types" path="/configuration/data-types" icon="feather:type">
       All supported value kinds.
     </Docset>
-    <Docset title="Sharing Configuration" path="/configuration/sharing" icon={LiaShareAltSolid}>
+    <Docset title="Sharing Configuration" path="/configuration/sharing" icon="fa6-solid:share-nodes">
       Reuse config across repos.
     </Docset>
-    <Docset title="Commands" path="/commands" icon={BsCommand}>
+    <Docset title="Commands" path="/commands" icon="bi:command">
       ChatOps style commands.
     </Docset>
-    <Docset title="API Usage" path="/api-usage" icon={AiOutlineApi}>
+    <Docset title="API Usage" path="/api-usage" icon="mdi:api">
       Authenticate & call the API.
     </Docset>
-    <Docset title="API Reference" path="/api" icon={AiOutlineApi}>
+    <Docset title="API Reference" path="/api" icon="mdi:api">
       Endpoint reference.
     </Docset>
-    <Docset title="Integrations" path="/integrations" icon={BsPlugin}>
+    <Docset title="Integrations" path="/integrations" icon="bi:plugin">
       CI & ecosystem hooks.
     </Docset>
-    <Docset title="Migrate to Mergify" path="/migrate" icon={FaStairs}>
+    <Docset title="Migrate to Mergify" path="/migrate" icon="fa6-solid:stairs">
       Move from other tools with step‑by‑step guides.
     </Docset>
-    <Docset title="Stacks" path="/stacks" icon={BsStack}>
+    <Docset title="Stacks" path="/stacks" icon="bi:stack">
       Stacked PR workflow.
     </Docset>
-    <Docset title="Badge" path="/badge" icon={BiBadgeCheck}>
+    <Docset title="Badge" path="/badge" icon="bi:patch-check-fill">
       Public project badge.
     </Docset>
-    <Docset title="Security" path="/security" icon={FaShieldAlt}>
+    <Docset title="Security" path="/security" icon="fa-solid:shield-alt">
       Security & permissions.
     </Docset>
-    <Docset title="Support" path="/support" icon={FaLifeRing}>
+    <Docset title="Support" path="/support" icon="fa-solid:life-ring">
       Contact channels & response goals.
     </Docset>
-    <Docset title="Billing" path="/billing" icon={FaMoneyBill1}>
+    <Docset title="Billing" path="/billing" icon="fa6-solid:money-bill-1">
       Plans & billing model.
     </Docset>
   </DocsetGrid>
@@ -233,11 +218,11 @@ import { SlRefresh, SlSpeedometer } from 'react-icons/sl';
     <h2 class="home-title">Join our Community 💬</h2>
     <p>Share feedback, ask questions, and see what other teams build with Mergify.</p>
     <div class="community-buttons">
-      <CommunityButton href="https://github.com/Mergifyio/mergify/discussions" icon={SiGithub} />
-      <CommunityButton href="https://www.youtube.com/@mergifyio" icon={SiYoutube} />
-      <CommunityButton href="https://slack.mergify.com" icon={SiSlack} />
-      <CommunityButton href="https://x.com/mergifyio" icon={SiX} />
-      <CommunityButton href="https://www.linkedin.com/company/mergify/" icon={SiLinkedin} />
+      <CommunityButton href="https://github.com/Mergifyio/mergify/discussions" icon="simple-icons:github" />
+      <CommunityButton href="https://www.youtube.com/@mergifyio" icon="simple-icons:youtube" />
+      <CommunityButton href="https://slack.mergify.com" icon="simple-icons:slack" />
+      <CommunityButton href="https://x.com/mergifyio" icon="simple-icons:x" />
+      <CommunityButton href="https://www.linkedin.com/company/mergify/" icon="simple-icons:linkedin" />
     </div>
   </section>
 </div>

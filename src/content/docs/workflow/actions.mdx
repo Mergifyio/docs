@@ -5,18 +5,7 @@ description: A complete list of actions you can use with Mergify.
 
 import Docset from '../../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../../components/DocsetGrid/DocsetGrid.astro';
-import { GoGitMerge, GoCodeReview } from 'react-icons/go';
-import { SiGithubactions } from 'react-icons/si';
-import {IoIosRemoveCircleOutline} from 'react-icons/io';
-import { TbGitBranch, TbPackages, TbMessageX } from 'react-icons/tb';
-import { BiCut, BiBadgeCheck, BiSolidCoinStack } from 'react-icons/bi';
-import { FaRegListAlt } from 'react-icons/fa';
-import { FaRegCirclePause, FaRegCircleCheck, FaUserPlus, FaCircleXmark } from 'react-icons/fa6';
-import { SlRefresh } from 'react-icons/sl';
-import { FiType } from 'react-icons/fi';
-import { LiaShareAltSolid } from 'react-icons/lia';
 import MergeQueueIcon from '../../../components/MergeQueueIcon.astro';
-import { MdOutlineRateReview } from 'react-icons/md';
 
 Actions are the engine that powers Mergify. They define what Mergify should do
 when a set of conditions is met. This can range from merging a pull request,
@@ -30,58 +19,58 @@ that takes care of most of the routine tasks associated with pull request
 management.
 
 <DocsetGrid>
-  <Docset title="Assign" path="assign" icon={FaUserPlus}>
+  <Docset title="Assign" path="assign" icon="fa6-solid:user-plus">
     Assign a pull request to a user.
   </Docset>
-  <Docset title="Backport" path="backport" icon={TbGitBranch}>
+  <Docset title="Backport" path="backport" icon="tabler:git-branch">
     Copy a pull request to another branch once it is merged.
   </Docset>
-  <Docset title="Close" path="close" icon={FaCircleXmark}>
+  <Docset title="Close" path="close" icon="fa6-solid:circle-xmark">
     Close a pull request.
   </Docset>
-  <Docset title="Copy" path="copy" icon={LiaShareAltSolid}>
+  <Docset title="Copy" path="copy" icon="fa6-solid:share-nodes">
     Copy a pull request.
   </Docset>
-  <Docset title="Comment" path="comment" icon={FaRegListAlt}>
+  <Docset title="Comment" path="comment" icon="fa-solid:list-alt">
     Comment a pull request.
   </Docset>
-  <Docset title="Delete Head Branch" path="delete_head_branch" icon={BiCut}>
+  <Docset title="Delete Head Branch" path="delete_head_branch" icon="bi:scissors">
     Delete pull request head branch.
   </Docset>
-  <Docset title="Dismiss Reviews" path="dismiss_reviews" icon={TbMessageX}>
+  <Docset title="Dismiss Reviews" path="dismiss_reviews" icon="tabler:message-x">
     Dismiss previous reviews on a pull request.
   </Docset>
-  <Docset title="Edit" path="edit" icon={FiType}>
+  <Docset title="Edit" path="edit" icon="feather:type">
     Edit pull request body, title or draft state.
   </Docset>
-  <Docset title="GitHub Actions" path="github_actions" icon={SiGithubactions}>
+  <Docset title="GitHub Actions" path="github_actions" icon="simple-icons:githubactions">
     Dispatch an existing GitHub workflow in the repository.
   </Docset>
-  <Docset title="Label" path="label" icon={BiBadgeCheck}>
+  <Docset title="Label" path="label" icon="bi:patch-check-fill">
     Add, remove or toggle label on a pull request.
   </Docset>
-  <Docset title="Merge" path="merge" icon={GoGitMerge}>
+  <Docset title="Merge" path="merge" icon="octicon:git-merge-16">
     Automate the merging of your pull requests.
   </Docset>
-  <Docset title="Post Check" path="post_check" icon={FaRegCircleCheck}>
+  <Docset title="Post Check" path="post_check" icon="fa6-regular:circle-check">
     Create a check-run on a pull request.
   </Docset>
   <Docset title="Queue" path="queue" icon={MergeQueueIcon}>
     Add the pull request to the merge queue.
   </Docset>
-  <Docset title="Rebase" path="rebase" icon={TbGitBranch}>
+  <Docset title="Rebase" path="rebase" icon="tabler:git-branch">
     Rebase the pull request on top of its base branch.
   </Docset>
-  <Docset title="Request Reviews" path="request_reviews" icon={GoCodeReview}>
+  <Docset title="Request Reviews" path="request_reviews" icon="octicon:code-review-16">
     Request reviews from specific users or teams.
   </Docset>
-  <Docset title="Review" path="review" icon={MdOutlineRateReview}>
+  <Docset title="Review" path="review" icon="mdi:rate-review">
     Automate reviews for your pull requests with customizable comments and review types.
   </Docset>
-  <Docset title="Update" path="update" icon={TbGitBranch}>
+  <Docset title="Update" path="update" icon="tabler:git-branch">
     Update the pull request branch with its base branch.
   </Docset>
-  <Docset title="Squash" path="squash" icon={BiSolidCoinStack}>
+  <Docset title="Squash" path="squash" icon="bi:stack">
     Squash commits in the pull request.
   </Docset>
 </DocsetGrid>

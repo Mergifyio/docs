@@ -1,10 +1,10 @@
-import { IconType } from 'react-icons';
+import { Icon } from '@iconify-icon/react';
 
 interface Props {
   label: string;
   stat: number | null;
   helperText: string;
-  icon: IconType;
+  icon: string;
   unit?: string;
   indicatorPct?: number; // 0..100
   indicatorColor?: string;
@@ -17,12 +17,12 @@ export default function Stat({
   unit,
   indicatorPct,
   indicatorColor,
-  ...props
+  icon,
 }: Props) {
   return (
     <div className="stat" style={{ display: 'flex', flexDirection: 'column' }}>
       <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        {props.icon && <props.icon />}
+        {icon && <Icon icon={icon} />}
         {label}
       </label>
       <div style={{ display: 'flex', alignItems: 'flex-end', margin: '8px 0', gap: 12 }}>

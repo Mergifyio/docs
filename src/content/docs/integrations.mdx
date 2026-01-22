@@ -3,42 +3,28 @@ title: Mergify Integration
 description: Mergify integration with other systems.
 ---
 
-import {
-  SiJenkins,
-  SiGithubactions,
-  SiSnyk,
-  SiDependabot,
-  SiRenovate,
-  SiTeamcity,
-  SiCircleci,
-  SiBuildkite,
-  SiSlack,
-  SiGitlab,
-SiGithub,
-} from 'react-icons/si';
-import {BsStack} from 'react-icons/bs';
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 
 ## Continuous Integration
 
 <DocsetGrid>
-  <Docset title="GitHub Actions" path="gha" icon={SiGithubactions}>
+  <Docset title="GitHub Actions" path="gha" icon="simple-icons:githubactions">
     Learn how Mergify integrates with GitHub Actions.
   </Docset>
-  <Docset title="CircleCI" path="circleci" icon={SiCircleci}>
+  <Docset title="CircleCI" path="circleci" icon="simple-icons:circleci">
     Learn how Mergify integrates with CircleCI.
   </Docset>
-  <Docset title="Jenkins" path="jenkins" icon={SiJenkins}>
+  <Docset title="Jenkins" path="jenkins" icon="simple-icons:jenkins">
     Learn how Mergify integrates with Jenkins.
   </Docset>
-  <Docset title="BuildKite" path="buildkite" icon={SiBuildkite}>
+  <Docset title="BuildKite" path="buildkite" icon="simple-icons:buildkite">
     How to automate your BuildKite workflow using Mergify.
   </Docset>
-  <Docset title="TeamCity" path="teamcity" icon={SiTeamcity}>
+  <Docset title="TeamCity" path="teamcity" icon="simple-icons:teamcity">
     How to automate your TeamCity workflow using Mergify.
   </Docset>
-  <Docset title="GitLab" path="gitlab" icon={SiGitlab}>
+  <Docset title="GitLab" path="gitlab" icon="simple-icons:gitlab">
     How to automate your GitLab CI workflow using Mergify.
   </Docset>
 </DocsetGrid>
@@ -52,13 +38,13 @@ import Monitoring from './integrations/_monitoring.mdx'
 ## Developers Tools
 
 <DocsetGrid>
-  <Docset title="GitHub" path="github" icon={SiGithub}>
+  <Docset title="GitHub" path="github" icon="simple-icons:github">
     Use GitHub and Mergify together.
   </Docset>
-  <Docset title="Slack" path="slack" icon={SiSlack}>
+  <Docset title="Slack" path="slack" icon="simple-icons:slack">
     Learn how you can use Slack and Mergify together.
   </Docset>
-  <Docset title="Graphite" path="graphite" icon={BsStack}>
+  <Docset title="Graphite" path="graphite" icon="simple-icons:graphite">
     Learn how you can use Graphite and Mergify together.
   </Docset>
 </DocsetGrid>
@@ -66,13 +52,13 @@ import Monitoring from './integrations/_monitoring.mdx'
 ## Dependency Management
 
 <DocsetGrid>
-  <Docset title="Dependabot" path="dependabot" icon={SiDependabot}>
+  <Docset title="Dependabot" path="dependabot" icon="simple-icons:dependabot">
     How to automate your dependencies update using Mergify.
   </Docset>
-  <Docset title="Renovate" path="renovate" icon={SiRenovate}>
+  <Docset title="Renovate" path="renovate" icon="simple-icons:renovate">
     How to automate your dependencies update using Mergify.
   </Docset>
-  <Docset title="Snyk" path="snyk" icon={SiSnyk}>
+  <Docset title="Snyk" path="snyk" icon="simple-icons:snyk">
     Streamline your dependency management.
   </Docset>
 </DocsetGrid>

@@ -1,8 +1,4 @@
 import { useEffect, useState } from 'react';
-import { AiOutlineClockCircle } from 'react-icons/ai';
-import { GoGitPullRequest } from 'react-icons/go';
-import { TbClock, TbCoin, TbGauge, TbPackages, TbShieldCheck } from 'react-icons/tb';
-import { TiFlowParallel } from 'react-icons/ti';
 import LogSliderInput from './LogSliderInput';
 import NumberInput from './NumberInput';
 import SliderInput from './SliderInput';
@@ -136,7 +132,7 @@ function MergeQueueCalculator() {
               <h4 style={{ marginTop: 16, marginBottom: 8 }}>Configuration to apply</h4>
               <div className="stats">
                 <Stat
-                  icon={TbPackages}
+                  icon="tabler:packages"
                   label="Optimal batch size"
                   helperText="per batch"
                   stat={batchSize}
@@ -144,7 +140,7 @@ function MergeQueueCalculator() {
                 />
                 <Stat
                   helperText="run concurrently"
-                  icon={TiFlowParallel}
+                  icon="tabler:arrows-split-2"
                   label="Optimal parallel checks"
                   stat={speculativeChecks}
                   unit="checks"
@@ -154,7 +150,7 @@ function MergeQueueCalculator() {
               <h4 style={{ marginTop: 16, marginBottom: 8 }}>Expected performance</h4>
               <div className="stats">
                 <Stat
-                  icon={TbGauge}
+                  icon="tabler:gauge"
                   label="Average throughput"
                   helperText="target"
                   stat={prPerHour}
@@ -163,7 +159,7 @@ function MergeQueueCalculator() {
                   indicatorColor="#3b82f6"
                 />
                 <Stat
-                  icon={GoGitPullRequest}
+                  icon="octicon:git-pull-request-16"
                   label="Maximum throughput"
                   helperText="merged"
                   stat={throughput}
@@ -172,7 +168,7 @@ function MergeQueueCalculator() {
                   indicatorColor="#3b82f6"
                 />
                 <Stat
-                  icon={TbShieldCheck}
+                  icon="tabler:shield-check"
                   label="Reliability ratio"
                   helperText="probability that a batch is clean"
                   stat={reliabilityRatio}
@@ -190,7 +186,7 @@ function MergeQueueCalculator() {
 
               <div className="stats">
                 <Stat
-                  icon={TbCoin}
+                  icon="tabler:coin"
                   label="CI cost per PR"
                   helperText="CI time consumed"
                   stat={ciCostPerPr}
@@ -203,7 +199,7 @@ function MergeQueueCalculator() {
                   indicatorColor="#f97316"
                 />
                 <Stat
-                  icon={TbClock}
+                  icon="tabler:clock"
                   label="Minimum latency"
                   helperText="best case (single run)"
                   stat={ciTime}
@@ -212,7 +208,7 @@ function MergeQueueCalculator() {
                   indicatorColor="#10b981"
                 />
                 <Stat
-                  icon={AiOutlineClockCircle}
+                  icon="mdi:clock-outline"
                   label="Average latency"
                   helperText="time before merge"
                   stat={latency}

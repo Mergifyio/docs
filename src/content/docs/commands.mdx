@@ -6,11 +6,6 @@ import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import { Image } from "astro:assets"
 import commandExample from "../images/commands/command-example.png"
-import {BsDoorOpen} from 'react-icons/bs';
-import {FaRegCopy, FaCompressArrowsAlt} from 'react-icons/fa';
-import {BiAddToQueue, BiGitBranch, BiRefresh, BiGitMerge} from 'react-icons/bi';
-import {IoRefreshCircleOutline} from 'react-icons/io5';
-import {MdOutlineRemoveCircleOutline} from 'react-icons/md';
 
 Mergify commands are powerful, user-friendly directives that you can invoke
 directly from your repository's comments. Designed to streamline the
@@ -59,31 +54,31 @@ workflow of other contributors.
 ## Command List
 
 <DocsetGrid>
-  <Docset title="Backport" path="backport" icon={BsDoorOpen}>
+  <Docset title="Backport" path="backport" icon="bi:door-open">
     Copy a pull request to another branch after merge.
   </Docset>
-  <Docset title="Copy" path="copy" icon={FaRegCopy}>
+  <Docset title="Copy" path="copy" icon="fa-regular:copy">
     Copy a pull request to another branch.
   </Docset>
-  <Docset title="Queue" path="queue" icon={BiAddToQueue}>
+  <Docset title="Queue" path="queue" icon="bi:plus-square">
     Add a pull request to a merge queue.
   </Docset>
-  <Docset title="Rebase" path="rebase" icon={BiGitBranch}>
+  <Docset title="Rebase" path="rebase" icon="octicon:git-branch-16">
     Rebase a pull request.
   </Docset>
-  <Docset title="Refresh" path="refresh" icon={BiRefresh}>
+  <Docset title="Refresh" path="refresh" icon="bi:arrow-repeat">
     Refresh Mergify status of a pull request.
   </Docset>
-  <Docset title="Requeue" path="requeue" icon={IoRefreshCircleOutline}>
+  <Docset title="Requeue" path="requeue" icon="ion:refresh-circle-outline">
     Allow a pull request to re-enter a merge queue.
   </Docset>
-  <Docset title="Squash" path="squash" icon={FaCompressArrowsAlt}>
+  <Docset title="Squash" path="squash" icon="fa-solid:compress-arrows-alt">
     Squash the commits of a pull request into one.
   </Docset>
-  <Docset title="Update" path="update" icon={BiGitMerge}>
+  <Docset title="Update" path="update" icon="octicon:git-merge-16">
     Update a pull request by merging its base branch.
   </Docset>
-  <Docset title="Dequeue" path="dequeue" icon={MdOutlineRemoveCircleOutline}>
+  <Docset title="Dequeue" path="dequeue" icon="mdi:minus-circle-outline">
     Remove a pull request from a merge queue.
   </Docset>
 </DocsetGrid>

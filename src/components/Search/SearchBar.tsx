@@ -1,7 +1,7 @@
 import { SearchResponse } from '@algolia/client-search';
+import { Icon } from '@iconify-icon/react';
 import { algoliasearch } from 'algoliasearch';
 import React, { useEffect, useRef, useState } from 'react';
-import { BsSearch } from 'react-icons/bs';
 import Modal from '../Modal/Modal';
 import Results from './Results';
 import { AlgoliaResult, AlgoliaSearchResult } from './types';
@@ -96,7 +96,7 @@ export default function SearchBar() {
         <div
           style={{ display: 'flex', alignItems: 'center', gap: 12, paddingLeft: 16, paddingTop: 8 }}
         >
-          <BsSearch fontSize={'large'} />
+          <Icon icon="bi:search" width="24" height="24" />
           <input
             autoFocus
             name="search"

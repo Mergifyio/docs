@@ -6,7 +6,6 @@ description: Set up automated flaky test detection to identify unreliable tests 
 import { Image } from "astro:assets"
 import Docset from '../../../components/DocsetGrid/Docset.astro'
 import DocsetGrid from '../../../components/DocsetGrid/DocsetGrid.astro'
-import { SiGithubactions, SiJenkins } from 'react-icons/si'
 
 Flaky test detection helps you identify tests that produce inconsistent results
 on the same code, allowing you to improve the reliability of your test suite
@@ -109,11 +108,11 @@ See CI‑specific setup guides:
 
 <DocsetGrid>
   <Docset title="GitHub Actions"
-          path="/ci-insights/setup/github-actions#setting-up-flaky-test-detection" icon={SiGithubactions}>
+          path="/ci-insights/setup/github-actions#setting-up-flaky-test-detection" icon="simple-icons:githubactions">
     Configure scheduled looping runs and upload reports.
   </Docset>
   <Docset title="Jenkins"
-          path="/ci-insights/setup/jenkins#setting-up-flaky-test-detection" icon={SiJenkins}>
+          path="/ci-insights/setup/jenkins#setting-up-flaky-test-detection" icon="simple-icons:jenkins">
     Configure scheduled looping runs and upload reports.
   </Docset>
 </DocsetGrid>

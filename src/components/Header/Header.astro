@@ -1,8 +1,4 @@
 ---
-import { AiOutlineDashboard } from 'react-icons/ai';
-import { FaGithub } from 'react-icons/fa';
-import { HiOutlineBookOpen, HiOutlineDocumentArrowUp } from 'react-icons/hi2';
-import { SiSlack, SiStatuspage } from 'react-icons/si';
 import Search from '../Search/Search.astro';
 import HeaderLink from './HeaderLink.astro';
 import SidebarToggle from './SidebarToggle';
@@ -14,13 +10,13 @@ const primaryLink = isEnterpriseSection
   ? {
       label: 'Mergify Docs',
       href: '/',
-      icon: HiOutlineBookOpen,
+      icon: 'heroicons:book-open',
       target: '_blank',
     }
   : {
       label: 'Dashboard',
       href: 'https://dashboard.mergify.com',
-      icon: AiOutlineDashboard,
+      icon: 'mdi:view-dashboard-outline',
       target: undefined,
     };
 ---
@@ -100,14 +96,14 @@ const primaryLink = isEnterpriseSection
 			<HeaderLink href={primaryLink.href} icon={primaryLink.icon} target={primaryLink.target}>
 				{primaryLink.label}
 			</HeaderLink>
-			<HeaderLink href="https://slack.mergify.com" icon={SiSlack}>Slack Community</HeaderLink>
-			<HeaderLink href="https://github.com/Mergifyio/mergify/discussions" icon={FaGithub}>
+			<HeaderLink href="https://slack.mergify.com" icon="simple-icons:slack">Slack Community</HeaderLink>
+			<HeaderLink href="https://github.com/Mergifyio/mergify/discussions" icon="mdi:github">
 				Discussions
 		        </HeaderLink>
-			<HeaderLink href="/changelog/" icon={HiOutlineDocumentArrowUp} target="_self">
+			<HeaderLink href="/changelog/" icon="heroicons:document-arrow-up" target="_self">
 				Changelog
 			</HeaderLink>
-			<HeaderLink href="https://status.mergify.com" icon={SiStatuspage}>Status</HeaderLink>
+			<HeaderLink href="https://status.mergify.com" icon="simple-icons:statuspage">Status</HeaderLink>
 		</div>
 		<div class="nav-actions">
 			<Search />

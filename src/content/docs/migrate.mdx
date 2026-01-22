@@ -5,22 +5,19 @@ description: Guides to migrate from popular tools and bots to Mergify.
 
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
-import { TbBulldozer } from 'react-icons/tb';
-import { BsRobot } from 'react-icons/bs';
-import { SiGithub } from 'react-icons/si';
 
 Thinking about switching? Pick your current tool below to see how to migrate to Mergify with minimal friction.
 
 <DocsetGrid>
-		<Docset title="Bulldozer" path="/migrate/bulldozer" icon={TbBulldozer}>
-		Move from Bulldozer’s automerge to Mergify rules and Merge Queue.
+		<Docset title="Bulldozer" path="/migrate/bulldozer" icon="tabler:bulldozer">
+		Move from Bulldozer's automerge to Mergify rules and Merge Queue.
 	</Docset>
-	<Docset title="Bors‑NG" path="/migrate/bors-ng" icon={BsRobot}>
+	<Docset title="Bors‑NG" path="/migrate/bors-ng" icon="bi:robot">
 		Replace Bors queues and try/staging flows with Mergify Merge Queue.
 	</Docset>
-	<Docset title="GitHub Merge Queue" path="/migrate/github-merge-queue" icon={SiGithub}>
+	<Docset title="GitHub Merge Queue" path="/migrate/github-merge-queue" icon="simple-icons:github">
 		Extend GitHub Merge Queue with automation, batching & observability.
 	</Docset>
 </DocsetGrid>
 
-Don’t see your tool? Tell us which one to add next.
+Don't see your tool? Tell us which one to add next.

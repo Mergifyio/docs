@@ -1,14 +1,19 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 export interface Props {
   href: string;
-  icon: Function;
+  icon: string | ((_props: unknown) => unknown);
 }
 
-const { href } = Astro.props as Props;
+const { href, icon } = Astro.props as Props;
+const isStringIcon = typeof icon === 'string';
+const IconComponent = !isStringIcon ? icon : null;
 ---
 
 <a href={href} class="community-button">
-	{!!Astro.props.icon && <Astro.props.icon />}
+	{!!icon && isStringIcon && <Icon name={icon as string} />}
+	{IconComponent && <IconComponent />}
 </a>
 
 <style lang="scss">
