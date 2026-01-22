@@ -3,10 +3,13 @@ import icon from '../assets/merge-queue-icon.svg?raw';
 
 export interface Props {
   width?: string | number;
+  class?: string;
 }
+
+const { class: className } = Astro.props;
 ---
 
-<div set:html={icon} />
+<div class={className} set:html={icon} />
 
 <style>
 	div {

@@ -1,17 +1,24 @@
 ---
-const { title, path } = Astro.props;
+import { Icon } from 'astro-icon/components';
+
+const { title, path, icon } = Astro.props;
+const isStringIcon = typeof icon === 'string';
+const IconComponent = !isStringIcon ? icon : null;
 ---
 
 <div class="container">
 	<a href={path}>
 		<h4>
-			{
-				!!Astro.props.icon && (
-					<div class="docset-icon">
-						<Astro.props.icon />
-					</div>
-				)
-			}
+			{!!icon && isStringIcon && (
+				<div class="docset-icon">
+					<Icon name={icon} />
+				</div>
+			)}
+			{IconComponent && (
+				<div class="docset-icon">
+					<IconComponent />
+				</div>
+			)}
 			<span>{title}</span>
 		</h4>
 	</a>

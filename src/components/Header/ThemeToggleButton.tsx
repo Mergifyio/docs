@@ -1,6 +1,6 @@
+import { Icon } from '@iconify-icon/react';
 import { useEffect, useState } from 'react';
 import './ThemeToggleButton.css';
-import { FiMoon, FiSun } from 'react-icons/fi';
 
 interface Props {
   labels: {
@@ -12,7 +12,7 @@ interface Props {
 
 const themes = ['light', 'dark'] as const;
 
-const icons = [<FiSun key="light" />, <FiMoon key="dark" />];
+const icons = [<Icon key="light" icon="feather:sun" />, <Icon key="dark" icon="feather:moon" />];
 
 const ThemeToggle = ({ labels, isInsideHeader }: Props) => {
   const [theme, setTheme] = useState<'light' | 'dark'>();

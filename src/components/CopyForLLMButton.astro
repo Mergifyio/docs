@@ -1,5 +1,5 @@
 ---
-import { FiCopy } from 'react-icons/fi';
+import { Icon } from 'astro-icon/components';
 import { getMarkdownPath } from '../util/getMarkdownPath';
 
 export interface Props {
@@ -23,7 +23,7 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 	aria-label="Copy page Markdown for LLM"
 >
 	<span class="docs-toolbar-button__icon" aria-hidden="true">
-		<FiCopy size={16} focusable="false" aria-hidden="true" />
+		<Icon name="feather:copy" width={16} height={16} />
 	</span>
 	<span class="docs-toolbar-button__label" aria-live="polite">Copy for LLM</span>
 </button>

@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import type { NavItem } from '~/content/navItems';
 import NavLink from './NavLink.astro';
 export interface Props {
@@ -7,6 +8,8 @@ export interface Props {
 }
 
 const { navGroup, currentPageMatch } = Astro.props as Props;
+const isStringIcon = typeof navGroup.icon === 'string';
+const IconComponent = !isStringIcon ? navGroup.icon : null;
 ---
 
 <li class:list={{
@@ -21,7 +24,8 @@ const { navGroup, currentPageMatch } = Astro.props as Props;
 		<details>
 			<summary class="nav-group-title">
 				<h2>
-					{navGroup.icon && <navGroup.icon className="left-icon" />}
+					{navGroup.icon && isStringIcon && <Icon name={navGroup.icon as string} class="left-icon" />}
+					{IconComponent && <IconComponent class="left-icon" />}
 					{navGroup.title}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
