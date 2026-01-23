@@ -3598,6 +3598,20 @@
                             "feature",
                             "auth"
                           ],
+                          "github_labels": [
+                            {
+                              "id": 1,
+                              "name": "feature",
+                              "color": "0e8a16",
+                              "default": false
+                            },
+                            {
+                              "id": 2,
+                              "name": "auth",
+                              "color": "1d76db",
+                              "default": false
+                            }
+                          ],
                           "scopes": [
                             "frontend"
                           ]
@@ -7849,7 +7863,8 @@
               "type": "string"
             },
             "type": "array",
-            "title": "Labels"
+            "title": "Labels",
+            "deprecated": true
           },
           "scopes": {
             "items": {
@@ -7857,6 +7872,20 @@
             },
             "type": "array",
             "title": "Scopes"
+          },
+          "github_labels": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PullRequestLabel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Github Labels"
           }
         },
         "type": "object",
@@ -7977,6 +8006,34 @@
           "login"
         ],
         "title": "PullRequestAuthor"
+      },
+      "PullRequestLabel": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color"
+          },
+          "default": {
+            "type": "boolean",
+            "title": "Default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "color",
+          "default"
+        ],
+        "title": "PullRequestLabel"
       },
       "PullRequestQueued": {
         "properties": {
