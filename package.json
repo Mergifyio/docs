@@ -96,7 +96,7 @@
     "classnames": "^2.5.1",
     "dotenv": "^17.2.3",
     "jsonpointer": "^5.0.1",
-    "react": "^19.0.0",
+    "react": "^19.2.4",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-format": "^5.0.1",
     "rehype-raw": "^7.0.0",
