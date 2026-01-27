@@ -26,8 +26,8 @@ configured retry rules
 3. **Wait for Completion**: If any job matches a retry rule, Auto-Retry waits
    for the entire workflow to complete
 
-4. **Workflow Retry**: Once complete, the entire workflow is retried,
-   re-running all failed jobs
+4. **Workflow Retry**: Once complete, the workflow is retried,
+   re-running either all failed jobs or the entire workflow
 
 5. **Success Preservation**: Previously successful jobs are not re-executed
 
@@ -75,4 +75,8 @@ Auto-Retry rules define when a workflow should be retried based on job
 failures. Each rule specifies:
 
 - **Conditions**: When the job failure should trigger a workflow retry
+
 - **Number of retries**: Maximum number of retries and timing constraints
+
+- **Retry mode**: The mode of retry, either retrying all failed jobs (`job`)
+    or the entire workflow (`pipeline`)
