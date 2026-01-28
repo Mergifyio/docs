@@ -5,5 +5,10 @@ tags:
   - CI Insights
 description: "CI Insights Auto Retry gets a new retry mode"
 ---
+import { Image } from "astro:assets"
+import static2f6f2b37c5da80df8dcedef4edd46ba5png from "../images/changelog/static-2f6f2b37-c5da-80df-8dce-def4edd46ba5.png"
+
 
 Added workflow retry mode to Auto-Retry. When a job fails, you can now choose to retry the entire workflow instead of just the failed job. Useful when jobs have dependencies or shared state that requires a clean run.
+
+<Image src={static2f6f2b37c5da80df8dcedef4edd46ba5png} alt="Changelog Image" />
