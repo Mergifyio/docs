@@ -1,4 +1,5 @@
 import * as yaml from 'js-yaml';
+import * as React from 'react';
 
 import configSchema from '../../util/sanitizedConfigSchema';
 import Badge from '../Badge/Badge';
@@ -45,7 +46,7 @@ export function OptionsTableBase(schema: object, options: OptionDefinitionProper
             const { deprecated } = definition;
 
             return (
-              <>
+              <React.Fragment key={optionKey}>
                 <tr style={{ position: 'relative' }}>
                   <td style={{ whiteSpace: 'nowrap' }}>
                     <code>{optionKey}</code>
@@ -85,7 +86,7 @@ export function OptionsTableBase(schema: object, options: OptionDefinitionProper
                     </td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             );
           })}
       </tbody>
