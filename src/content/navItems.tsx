@@ -105,7 +105,7 @@ const navItems: NavItem[] = [
     icon: MergeQueueIcon,
     path: '/merge-queue',
     children: [
-      { title: 'Introduction', path: '/merge-queue', icon: 'fa6-regular:lightbulb' },
+      { title: 'Overview', path: '/merge-queue', icon: 'fa6-regular:lightbulb' },
       { title: 'Setup', path: '/merge-queue/setup', icon: 'fa6-solid:gear' },
       { title: 'Queue Rules', path: '/merge-queue/rules', icon: 'bi:stack' },
       { title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: 'tabler:refresh' },

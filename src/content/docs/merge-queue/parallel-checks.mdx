@@ -11,6 +11,11 @@ ship faster. Mergify creates temporary draft PRs that represent cumulative
 merges (PR#1), (PR#1+PR#2), (PR#1+PR#2+PR#3), runs CI on them in parallel, then
 merges the original PRs once checks pass.
 
+:::tip
+  Learn how speculative checks work conceptually at the
+  [Merge Queue Academy](https://merge-queue.academy/features/speculative-checks).
+:::
+
 ## How Parallel Checks Work
 
 Mergify groups PRs by their position in the queue and the `max_parallel_checks`

@@ -8,6 +8,7 @@ import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import CommunityButton from '../../components/CommunityButton.astro';
 import MergeQueueIcon from '../../components/MergeQueueIcon.astro';
+import AcademyCallout from '../../components/AcademyCallout.astro';
 
 <div id="home">
   {/* ---------------- HERO ---------------- */}
@@ -68,6 +69,10 @@ import MergeQueueIcon from '../../components/MergeQueueIcon.astro';
 
   <h2 class="home-title">Merge Queue</h2>
   Deterministic, parallel, and resource‑aware merging.
+
+  <AcademyCallout title="New to merge queues?">
+    Learn the fundamentals, failure scenarios, and best practices at our free educational resource.
+  </AcademyCallout>
 
   <DocsetGrid>
     <Docset title="Introduction" path="/merge-queue" icon="fa6-regular:lightbulb">

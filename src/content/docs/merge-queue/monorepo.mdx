@@ -9,6 +9,11 @@ still makes the queue churn through work that doesn't matter. This page explains
 first and then shows how Mergify's monorepo capabilities keep batching efficient without
 sacrificing safety.
 
+:::tip
+  Learn about merge queue strategies for monorepos at the
+  [Merge Queue Academy](https://merge-queue.academy/use-cases/monorepos).
+:::
+
 To solve this, Mergify introduces **scopes**—named regions of your repository that describe which
 services, packages, or domains a change touches. The rest of this guide shows how scopes pair with
 monorepo-aware tooling to batch compatible pull requests, keep unrelated work apart, and drive only
