@@ -1,0 +1,72 @@
+---
+export interface Props {
+  title?: string;
+  href?: string;
+}
+
+const { title = 'Merge Queue Academy', href = 'https://merge-queue.academy/' } =
+  Astro.props as Props;
+---
+
+<aside class="academy-callout content" aria-label={title}>
+  <p class="title" aria-hidden="true">
+    <span class="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={16} height={16}>
+        <path
+          fill-rule="evenodd"
+          d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"
+        ></path>
+      </svg>
+    </span>
+    {title}
+  </p>
+  <section>
+    <slot />
+    <p><a href={href} target="_blank" rel="noopener noreferrer">Visit Merge Queue Academy →</a></p>
+  </section>
+</aside>
+
+<style>
+  .academy-callout {
+    border-inline-start: 4px solid var(--section-merge-queue-accent);
+    padding: 1rem;
+    background-color: var(--section-merge-queue-accent-bg);
+    outline: 1px solid transparent;
+    margin: 1rem 0;
+  }
+
+  .title {
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--section-merge-queue-accent);
+  }
+
+  .icon svg {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    fill: currentcolor;
+  }
+
+  .academy-callout :global(a),
+  .academy-callout :global(a > code:not([class*='language'])) {
+    color: var(--section-merge-queue-accent);
+  }
+
+  .academy-callout :global(p),
+  .academy-callout :global(ul) {
+    color: var(--theme-text);
+  }
+
+  .academy-callout section p {
+    margin: 0;
+  }
+
+  .academy-callout section p:last-child {
+    margin-top: 0.5rem;
+  }
+</style>
