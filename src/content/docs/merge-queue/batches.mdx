@@ -13,6 +13,11 @@ and efficiency in your development workflow. Instead of merging pull requests
 one by one, which can be time-consuming, especially for larger projects, batch
 merging allows you to combine and merge multiple pull requests at once.
 
+:::tip
+  Learn the concepts behind batching and its trade-offs at the
+  [Merge Queue Academy](https://merge-queue.academy/features/batching/).
+:::
+
 The batch merging process works by setting a `batch_size` option on your merge
 queue. This option determines the number of pull requests that Mergify will
 check at the same time using your CI. If the CI validation passes, Mergify
