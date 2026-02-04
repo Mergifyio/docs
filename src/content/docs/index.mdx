@@ -1,226 +1,143 @@
 ---
 title: Mergify Documentation
-description: Explore & learn Mergify
+description: Ship code faster with zero broken builds, reliable CI, and optimized monorepo workflows.
 suppressTitle: true
 ---
 
-import Docset from '../../components/DocsetGrid/Docset.astro';
-import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
-import CommunityButton from '../../components/CommunityButton.astro';
-import MergeQueueIcon from '../../components/MergeQueueIcon.astro';
-import AcademyCallout from '../../components/AcademyCallout.astro';
+import Docset from '~/components/DocsetGrid/Docset.astro';
+import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
+import CommunityButton from '~/components/CommunityButton.astro';
+import Button from '~/components/Button.astro';
 
 <div id="home">
   {/* ---------------- HERO ---------------- */}
 
   <div class="home-hero">
     <div class="hero-inner">
-      <h1 class="content-title">Mergify Documentation</h1>
+      <h1 class="content-title">Ship Code Faster, Break Less</h1>
       <p class="tagline content-subtitle">
-        Ship faster with healthier CI, safer merges, and powerful workflow
-        automation.
+        Mergify eliminates broken builds, tames flaky tests, and cuts CI waste—so
+        your team ships with confidence.
       </p>
-      <div class="quick-links">
-        <a href="/ci-insights" class="ql">CI Insights</a>
-        <a href="/merge-queue" class="ql">Merge Queue</a>
-        <a href="/monorepo-ci" class="ql">Monorepo CI</a>
-        <a href="/merge-protections" class="ql">Merge Protections</a>
-        <a href="/workflow" class="ql">Workflow Automation</a>
-      </div>
     </div>
   </div>
 
-  {/* -------------- PRODUCT SECTIONS -------------- */}
+  {/* ---------------- VALUE METRICS ---------------- */}
 
-  <h2 class="home-title">CI Insights</h2>
+  <div class="home-metrics">
+    <div class="home-metric-card">
+      <div class="home-metric-value">3-5x</div>
+      <div class="home-metric-label">faster merge throughput</div>
+    </div>
+    <div class="home-metric-card">
+      <div class="home-metric-value">60-90%</div>
+      <div class="home-metric-label">CI cost reduction</div>
+    </div>
+    <div class="home-metric-card">
+      <div class="home-metric-value">Zero</div>
+      <div class="home-metric-label">broken builds</div>
+    </div>
+  </div>
 
-  Insights & automation to make your test suite lean and reliable.
+  {/* -------------- PROBLEM-SOLUTION CARDS -------------- */}
+
+  <h2 class="home-title">What Problem Are You Solving?</h2>
+
+  <div class="home-problems">
+    <a href="/merge-queue" class="home-problem-card">
+      <div class="home-problem-title">Broken main branch or slow merges?</div>
+      <div class="home-problem-desc">
+        PRs pass CI individually but break when merged. Developers wait hours in a serial queue.
+      </div>
+      <div class="home-problem-cta">Merge Queue →</div>
+    </a>
+    <a href="/ci-insights" class="home-problem-card">
+      <div class="home-problem-title">Flaky tests blocking PRs?</div>
+      <div class="home-problem-desc">
+        Tests fail randomly, forcing reruns and eroding trust in CI. Hard to track down culprits.
+      </div>
+      <div class="home-problem-cta">CI Insights →</div>
+    </a>
+    <a href="/monorepo-ci" class="home-problem-card">
+      <div class="home-problem-title">CI waste in monorepos?</div>
+      <div class="home-problem-desc">
+        Every PR runs the full test matrix even when only one service changed. CI bills spiral.
+      </div>
+      <div class="home-problem-cta">Monorepo CI →</div>
+    </a>
+  </div>
+
+  {/* -------------- PRODUCT OVERVIEW -------------- */}
+
+  <h2 class="home-title">Products</h2>
 
   <DocsetGrid>
-    <Docset title="Overview" path="/ci-insights" icon="mdi:lightbulb-outline">What CI Insights gives you.</Docset>
-    <Docset title="Flaky Test Detection" path="/ci-insights/flaky-test-detection" icon="fa6-solid:bug">
-      Surface inconsistent tests & jobs.
+    <Docset title="Merge Queue" path="/merge-queue" icon="octicon:git-merge-queue-16">
+      Zero broken builds with parallel testing, smart batching, and priority queues.
     </Docset>
-    <Docset title="Auto‑Retry" path="/ci-insights/auto-retry" icon="tabler:refresh">
-      Automatic transient failure retries.
+    <Docset title="CI Insights" path="/ci-insights" icon="mdi:lightbulb-outline">
+      Detect flaky tests, auto-retry failures, and quarantine noisy tests.
     </Docset>
-    <Docset title="Quarantine" path="/ci-insights/quarantine" icon="fa6-regular:circle-pause">
-      Isolate noisy tests to unblock merges.
-    </Docset>
-    <Docset title="Test Frameworks" path="/ci-insights#test-framework-configuration" icon="grommet-icons:test">
-      Configure report upload.
+    <Docset title="Monorepo CI" path="/monorepo-ci" icon="tabler:topology-star-ring-3">
+      Run only the CI jobs that matter for each pull request.
     </Docset>
   </DocsetGrid>
 
-  <h2 class="home-title">Monorepo CI</h2>
-  Scope-aware CI workflows that only run the jobs that matter.
+  {/* -------------- GET STARTED -------------- */}
+
+  <h2 class="home-title">Get Started</h2>
+
+  <div class="home-get-started">
+    <Button colorScheme="teal" href="/merge-queue/setup" target="_self">Set up Merge Queue</Button>
+    <Button colorScheme="gray" href="/ci-insights" target="_self">Enable CI Insights</Button>
+    <Button colorScheme="gray" href="/monorepo-ci/github-actions" target="_self">Configure Monorepo CI</Button>
+  </div>
+
+  <a href="https://mergify.com/discovery" class="home-discovery">
+    <div class="home-discovery-title">Need help getting started?</div>
+    <div class="home-discovery-desc">
+      Book a free discovery call with our team to find the best setup for your workflow.
+    </div>
+  </a>
+
+  {/* -------------- REFERENCE -------------- */}
+
+  <h2 class="home-title">Reference</h2>
+
+  [Configuration](/configuration/file-format) ·
+  [Conditions](/configuration/conditions) ·
+  [Commands](/commands) ·
+  [API](/api) ·
+  [Integrations](/integrations)
 
   <DocsetGrid>
-    <Docset title="Overview" path="/monorepo-ci" icon="tabler:topology-star-ring-3">
-      Define scopes once and reuse them across CI.
+    <Docset title="Merge Queue" path="/merge-queue" icon="octicon:git-merge-queue-16">
+      Parallel testing, batching, and priority queues.
     </Docset>
-    <Docset title="GitHub Actions" path="/monorepo-ci/github-actions" icon="simple-icons:githubactions">
-      Wire scopes into gha-mergify-ci workflows.
+    <Docset title="CI Insights" path="/ci-insights" icon="mdi:lightbulb-outline">
+      Flaky test detection, auto-retry, and quarantine.
     </Docset>
-    <Docset title="Merge Queue integration" path="/merge-queue/monorepo" icon="bi:boxes">
-      Share scopes with batching strategies.
+    <Docset title="Monorepo CI" path="/monorepo-ci" icon="tabler:topology-star-ring-3">
+      Scope-aware CI that runs only what matters.
     </Docset>
-  </DocsetGrid>
-
-  <h2 class="home-title">Merge Queue</h2>
-  Deterministic, parallel, and resource‑aware merging.
-
-  <AcademyCallout title="New to merge queues?">
-    Learn the fundamentals, failure scenarios, and best practices at our free educational resource.
-  </AcademyCallout>
-
-  <DocsetGrid>
-    <Docset title="Introduction" path="/merge-queue" icon="fa6-regular:lightbulb">
-      Core concepts & guarantees.
+    <Docset title="Workflow Automation" path="/workflow" icon="bi:robot">
+      Rule engine and actions to automate PR workflows.
     </Docset>
-    <Docset title="Setup" path="/merge-queue/setup" icon="fa6-solid:gear">
-      Enable & configure your first queue.
-    </Docset>
-    <Docset title="Queue Rules" path="/merge-queue/rules" icon="bi:stack">
-      Route PRs & define policies.
-    </Docset>
-    <Docset title="Lifecycle" path="/merge-queue/lifecycle" icon="tabler:refresh">
-      From enqueue to merge.
-    </Docset>
-    <Docset title="Priority" path="/merge-queue/priority" icon="fa6-solid:traffic-light">
-      Order critical work first.
-    </Docset>
-    <Docset title="Parallel Checks" path="/merge-queue/parallel-checks" icon="tabler:arrows-split-2">
-      Batch compatible PR tests.
-    </Docset>
-    <Docset title="Performance" path="/merge-queue/performance" icon="tabler:gauge">
-      Throughput & optimization tips.
-    </Docset>
-    <Docset title="Batches" path="/merge-queue/batches" icon="tabler:packages">
-      Increase velocity with batches.
-    </Docset>
-    <Docset title="Scopes" path="/merge-queue/scopes" icon="fa6-solid:diagram-project">
-      Group pull requests by impacted services.
-    </Docset>
-    <Docset title="Monorepo" path="/merge-queue/monorepo" icon="bi:boxes">
-      Optimization for large repositories.
-    </Docset>
-    <Docset title="Two‑Step CI" path="/merge-queue/two-step" icon="fa6-solid:traffic-light">
-      Fast + full validation strategy.
-    </Docset>
-    <Docset title="Deployment" path="/merge-queue/deploy" icon="mdi:rocket-launch-outline">
-      Adopt safely in production.
-    </Docset>
-    <Docset title="Monitoring" path="/merge-queue/monitoring" icon="mdi:monitor-dashboard">
-      Key metrics & dashboards.
-    </Docset>
-  </DocsetGrid>
-
-  <h2 class="home-title">Merge Protections</h2>
-  Advanced guardrails before code lands.
-
-  <DocsetGrid>
-    <Docset title="Overview" path="/merge-protections" icon="fa6-solid:user-shield">
-      Protection capabilities.
-    </Docset>
-    <Docset title="Setup" path="/merge-protections/setup" icon="fa6-solid:gear">
-      Enable and mark check required.
-    </Docset>
-    <Docset title="Built‑in Protections" path="/merge-protections/builtin" icon="fa6-solid:user-shield">
-      Depends-On, Merge-After, config safety.
-    </Docset>
-    <Docset title="Custom Rules" path="/merge-protections/custom-rules" icon="bi:rulers">
-      Define granular success logic.
-    </Docset>
-    <Docset title="Freezes" path="/merge-protections/freeze" icon="fa6-solid:snowflake">
-      Schedule or trigger merge freezes.
-    </Docset>
-    <Docset title="Examples" path="/merge-protections/examples" icon="bi:lightbulb">
-      Common rule recipes.
-    </Docset>
-  </DocsetGrid>
-
-  <h2 class="home-title">Workflow Automation</h2>
-  Expressive rule engine & rich actions to eliminate manual toil.
-
-  <DocsetGrid>
-    <Docset title="Overview" path="/workflow" icon="bi:robot">
-      What you can automate.
-    </Docset>
-    <Docset title="First Rule" path="/workflow/writing-your-first-rule" icon="bi:rulers">
-      Create your first automation.
-    </Docset>
-    <Docset title="Actions" path="/workflow/actions" icon="bi:rocket">
-      Full action catalog.
-    </Docset>
-    <Docset title="Automatic Merge" path="/workflow/automerge" icon="octicon:git-merge-16">
-      Merge when policy satisfied.
-    </Docset>
-    <Docset title="Request Reviews" path="/workflow/request-reviews" icon="octicon:code-review-16">
-      Smart reviewer assignment.
-    </Docset>
-    <Docset title="Dismiss Reviews" path="/workflow/dismiss-reviews" icon="ion:remove-circle-outline">
-      Invalidate outdated approvals.
-    </Docset>
-    <Docset title="Delete Branches" path="/workflow/delete-head-branches" icon="bi:scissors">
-      Keep repo tidy automatically.
-    </Docset>
-    <Docset title="Rebase PRs" path="/workflow/rebase" icon="tabler:git-branch">
-      Keep branches current.
-    </Docset>
-  </DocsetGrid>
-
-  <h2 class="home-title">Reference & Platform</h2>
-
-  <DocsetGrid>
-    <Docset title="Configuration File" path="/configuration/file-format" icon="mdi:file-outline">
-      YAML structure & semantics.
-    </Docset>
-    <Docset title="Conditions" path="/configuration/conditions" icon="bi:patch-question">
-      Filter syntax details.
-    </Docset>
-    <Docset title="Data Types" path="/configuration/data-types" icon="feather:type">
-      All supported value kinds.
-    </Docset>
-    <Docset title="Sharing Configuration" path="/configuration/sharing" icon="fa6-solid:share-nodes">
-      Reuse config across repos.
-    </Docset>
-    <Docset title="Commands" path="/commands" icon="bi:command">
-      ChatOps style commands.
-    </Docset>
-    <Docset title="API Usage" path="/api-usage" icon="mdi:api">
-      Authenticate & call the API.
-    </Docset>
-    <Docset title="API Reference" path="/api" icon="mdi:api">
-      Endpoint reference.
-    </Docset>
-    <Docset title="Integrations" path="/integrations" icon="bi:plugin">
-      CI & ecosystem hooks.
-    </Docset>
-    <Docset title="Migrate to Mergify" path="/migrate" icon="fa6-solid:stairs">
-      Move from other tools with step‑by‑step guides.
+    <Docset title="Merge Protections" path="/merge-protections" icon="fa6-solid:user-shield">
+      Advanced guardrails before code lands.
     </Docset>
     <Docset title="Stacks" path="/stacks" icon="bi:stack">
-      Stacked PR workflow.
-    </Docset>
-    <Docset title="Badge" path="/badge" icon="bi:patch-check-fill">
-      Public project badge.
-    </Docset>
-    <Docset title="Security" path="/security" icon="fa-solid:shield-alt">
-      Security & permissions.
+      Stacked PR workflow for incremental changes.
     </Docset>
     <Docset title="Support" path="/support" icon="fa-solid:life-ring">
-      Contact channels & response goals.
-    </Docset>
-    <Docset title="Billing" path="/billing" icon="fa6-solid:money-bill-1">
-      Plans & billing model.
+      Contact channels and response goals.
     </Docset>
   </DocsetGrid>
 
   {/* -------------- COMMUNITY -------------- */}
 
   <section class="community">
-    <h2 class="home-title">Join our Community 💬</h2>
+    <h2 class="home-title">Community</h2>
     <p>Share feedback, ask questions, and see what other teams build with Mergify.</p>
     <div class="community-buttons">
       <CommunityButton href="https://github.com/Mergifyio/mergify/discussions" icon="simple-icons:github" />
