@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "format": "biome format --write .",
     "format:check": "biome format src integrations plugins scripts",
-    "check": "astro check && eslint . && biome check ."
+    "check": "astro check && eslint . && biome check .",
+    "check:links": "linkinator dist/ --recurse --retry-errors --retry-errors-count 3 --timeout 30000 --concurrency 25"
   },
   "devDependencies": {
     "@actions/core": "^3.0.0",
@@ -46,6 +47,7 @@
     "hast-util-to-string": "^3.0.1",
     "hastscript": "^9.0.1",
     "html-escaper": "^3.0.3",
+    "linkinator": "^7.5.3",
     "mdast-util-from-markdown": "^2.0.2",
     "mdast-util-mdx-jsx": "^3.2.0",
     "mdast-util-to-hast": "^13.2.1",
