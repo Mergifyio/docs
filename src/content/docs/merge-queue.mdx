@@ -1,20 +1,119 @@
 ---
-title: Merge Queue Overview
-description: Deterministic, parallel, and resource-aware merging for your team.
+title: Merge Queue
+description: Ship faster with zero broken builds. Parallel testing, smart batching, and CI cost optimization.
 ---
 
-import AcademyCallout from '../../components/AcademyCallout.astro'
+import Button from '~/components/Button.astro';
+import AcademyCallout from '~/components/AcademyCallout.astro';
+import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
+import Docset from '~/components/DocsetGrid/Docset.astro';
+
+export const Yes = ({children}) => (
+  <span style={{color: 'var(--chakra-colors-green-500)', fontWeight: '600'}}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+      style={{verticalAlign: 'middle', marginRight: '4px'}} aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    {children}
+  </span>
+);
+
+export const No = ({children}) => (
+  <span style={{color: 'var(--chakra-colors-red-500)', fontWeight: '600'}}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+      style={{verticalAlign: 'middle', marginRight: '4px'}} aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+    {children}
+  </span>
+);
+
+<div style={{
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '1rem',
+  margin: '1.5rem 0'
+}}>
+  <div style={{
+    flex: '1 1 200px',
+    padding: '1rem 1.25rem',
+    borderRadius: '8px',
+    background: 'var(--section-merge-queue-accent-bg)',
+    borderLeft: '4px solid var(--section-merge-queue-accent)'
+  }}>
+    <div style={{
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      color: 'var(--section-merge-queue-accent)'
+    }}>3-5x</div>
+    <div style={{
+      fontSize: '0.9rem',
+      color: 'var(--theme-text-light)'
+    }}>merge throughput</div>
+  </div>
+  <div style={{
+    flex: '1 1 200px',
+    padding: '1rem 1.25rem',
+    borderRadius: '8px',
+    background: 'var(--section-merge-queue-accent-bg)',
+    borderLeft: '4px solid var(--section-merge-queue-accent)'
+  }}>
+    <div style={{
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      color: 'var(--section-merge-queue-accent)'
+    }}>60-90%</div>
+    <div style={{
+      fontSize: '0.9rem',
+      color: 'var(--theme-text-light)'
+    }}>CI cost reduction</div>
+  </div>
+  <div style={{
+    flex: '1 1 200px',
+    padding: '1rem 1.25rem',
+    borderRadius: '8px',
+    background: 'var(--section-merge-queue-accent-bg)',
+    borderLeft: '4px solid var(--section-merge-queue-accent)'
+  }}>
+    <div style={{
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      color: 'var(--section-merge-queue-accent)'
+    }}>Zero</div>
+    <div style={{
+      fontSize: '0.9rem',
+      color: 'var(--theme-text-light)'
+    }}>broken builds</div>
+  </div>
+</div>
+
+Stop wasting engineering time on merge conflicts and broken main branches.
+Mergify's merge queue tests every PR against the latest code before merging,
+while parallel execution and smart batching keep your team shipping fast.
+
+<Button colorScheme="teal" href="/merge-queue/setup" target="_self">
+  Get Started →
+</Button>
 
 <AcademyCallout>
   New to merge queues? Learn the fundamentals, failure scenarios, and best
   practices.
 </AcademyCallout>
 
-Mergify's merge queue prevents broken main branches by ensuring every PR is
-tested against the latest code before merging. No more "it worked on my branch"
-failures.
+## Do You Need a Merge Queue?
 
-**[Get started in 5 minutes →](/merge-queue/setup)**
+If any of these sound familiar, a merge queue can help:
+
+| Symptom | What's Happening | How Mergify Helps |
+|---------|------------------|-------------------|
+| PRs pass CI but break main | PRs tested against stale base | Tests every PR against latest main |
+| Developers wait hours to merge | Serial merge bottleneck | Parallel speculative testing |
+| CI bill keeps climbing | Full test suite on every PR | Batching + two-step CI |
+| Monorepo PRs block each other | Unrelated changes queued together | Scoped queues for independent paths |
+| Hotfixes stuck behind features | No priority mechanism | Priority rules for urgent PRs |
 
 ## What Mergify Solves
 
@@ -50,18 +149,58 @@ which services a PR affects and only batches compatible changes together.
 
 ## Key Features
 
-| Feature | What it does |
-|---------|--------------|
-| [Parallel checks](/merge-queue/parallel-checks) | Test multiple PRs simultaneously |
-| [Batches](/merge-queue/batches) | Combine PRs into single CI runs |
-| [Priority rules](/merge-queue/priority) | Let urgent PRs jump the queue |
-| [Two-step CI](/merge-queue/two-step) | Run heavy tests only at merge time |
-| [Scopes](/merge-queue/scopes) | Smart batching for monorepos |
-| [Queue rules](/merge-queue/rules) | Route PRs to different queues |
-| [Pause](/merge-queue/pause) | Freeze merges during incidents |
+| Feature | What It Does | Impact |
+|---------|--------------|--------|
+| [Parallel checks](/merge-queue/parallel-checks) | Test multiple PRs simultaneously | 3-5x faster merge throughput |
+| [Batches](/merge-queue/batches) | Combine PRs into single CI runs | 50-80% fewer CI runs |
+| [Two-step CI](/merge-queue/two-step) | Run heavy tests only at merge time | Cut CI costs on draft/WIP PRs |
+| [Priority](/merge-queue/priority) | Let urgent PRs jump the queue | Ship hotfixes in minutes |
+| [Scopes](/merge-queue/scopes) | Separate queues for monorepo paths | No cross-service blocking |
+| [Pause](/merge-queue/pause) | Freeze merges during incidents | Instant incident response |
+
+## Mergify vs GitHub Native Merge Queue
+
+| Capability | GitHub Native | Mergify |
+|------------|---------------|---------|
+| Parallel speculative checks | <Yes>Up to 100</Yes> | <Yes>Up to 128</Yes> |
+| Batch multiple PRs | <No /> | <Yes>Configurable size + CI optimization</Yes> |
+| Priority queues | <No /> | <Yes>Label or rule-based</Yes> |
+| Monorepo scopes | <No /> | <Yes>Path-based queues + Bazel/Nx integration</Yes> |
+| Two-step CI | <No /> | <Yes>Draft CI + merge CI</Yes> |
+| Pause/freeze queue | <No /> | <Yes>API + dashboard</Yes> |
+| Cross-repo queues | <No /> | <Yes>Coordinate dependent repos</Yes> |
+| Queue analytics | <No /> | <Yes>Wait times, throughput, failures</Yes> |
 
 ## Learn More
 
-- [Performance tuning](/merge-queue/performance) — balance reliability, velocity, and cost
-- [Monitoring](/merge-queue/monitoring) — track queue health and metrics
-- [Deployment strategies](/merge-queue/deploy) — roll out safely to your team
+<DocsetGrid>
+  <Docset title="For Engineering Managers" path="/merge-queue/performance" icon="mdi:chart-line">
+    Track queue performance, monitor throughput metrics, and measure CI cost savings.
+  </Docset>
+  <Docset title="For DevOps & Platform" path="/merge-queue/setup" icon="mdi:cog">
+    Configure queue rules, set up CI integration, and tune parallel check settings.
+  </Docset>
+  <Docset title="For Developers" path="/merge-queue/lifecycle" icon="mdi:source-pull">
+    Understand PR lifecycle, queue behavior, and how to use priority labels.
+  </Docset>
+</DocsetGrid>
+
+## Quick Reference
+
+**Setup & Configuration**
+[Setup guide](/merge-queue/setup) ·
+[Queue rules](/merge-queue/rules) ·
+[Freeze conditions](/merge-protections/freeze)
+
+**Performance & Optimization**
+[Performance tuning](/merge-queue/performance) ·
+[Monitoring](/merge-queue/monitoring) ·
+[Deployment strategies](/merge-queue/deploy)
+
+**Advanced Features**
+[Monorepo guide](/merge-queue/monorepo) ·
+[Dependent PRs](/merge-protections/builtin)
+
+**Operations**
+[Pause queue](/merge-queue/pause) ·
+[PR commands](/commands)
