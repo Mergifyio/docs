@@ -871,3 +871,113 @@ header .nav-wrapper {
   color: var(--theme-text-lighter);
   opacity: 0.6;
 }
+
+/* Home page: Value metrics cards */
+.home-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0 0 2rem 0;
+}
+
+.home-metric-card {
+  flex: 1 1 180px;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  background: var(--theme-bg-offset);
+  border-left: 4px solid var(--theme-accent);
+}
+
+.home-metric-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--theme-accent);
+}
+
+.home-metric-label {
+  font-size: 0.9rem;
+  color: var(--theme-text-light);
+}
+
+/* Home page: Problem-solution cards */
+.home-problems {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0 2.5rem 0;
+}
+
+.home-problem-card {
+  display: block;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: var(--theme-bg-offset);
+  border: 1px solid var(--theme-divider);
+  text-decoration: none;
+}
+
+.home-problem-card:hover {
+  border-color: var(--theme-accent);
+}
+
+.home-problem-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text);
+  margin-bottom: 0.5rem;
+}
+
+.home-problem-desc {
+  font-size: 0.9rem;
+  color: var(--theme-text-light);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.home-problem-cta {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--theme-accent);
+}
+
+/* Home page: Get started buttons */
+.home-get-started {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0 2rem 0;
+}
+
+/* Home page: Discovery callout */
+.home-discovery {
+  display: block;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0d9488 0%, #065f46 100%);
+  text-decoration: none;
+}
+
+.home-discovery:hover {
+  opacity: 0.95;
+}
+
+.home-discovery-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.home-discovery-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Home page: Section title */
+.home-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
