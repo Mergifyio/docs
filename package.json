@@ -88,7 +88,7 @@
     "@iconify-json/simple-icons": "^1.2.69",
     "@iconify-json/tabler": "^1.2.26",
     "@scalar/api-reference": "^1.44.14",
-    "@types/react": "^19.2.11",
+    "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^11.0.0",
     "algoliasearch": "^5.48.0",
