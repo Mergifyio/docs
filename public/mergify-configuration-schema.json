@@ -1803,7 +1803,8 @@
                 "PR_MANUALLY_MERGED",
                 "DRAFT_PULL_REQUEST_CREATION_FAILED",
                 "CONFIGURATION_CHANGED",
-                "UNPROCESSABLE_PULL_REQUEST"
+                "UNPROCESSABLE_PULL_REQUEST",
+                "PR_MANUALLY_DEQUEUED"
               ],
               "type": "string"
             },
