@@ -4546,12 +4546,25 @@
           "comment_id": {
             "type": "integer",
             "title": "Comment Id"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
           }
         },
         "type": "object",
         "required": [
           "author",
-          "comment_id"
+          "comment_id",
+          "session_id"
         ],
         "title": "EventCommandMetadata"
       },
@@ -5623,7 +5636,8 @@
                   "PR_MANUALLY_MERGED",
                   "DRAFT_PULL_REQUEST_CREATION_FAILED",
                   "CONFIGURATION_CHANGED",
-                  "UNPROCESSABLE_PULL_REQUEST"
+                  "UNPROCESSABLE_PULL_REQUEST",
+                  "PR_MANUALLY_DEQUEUED"
                 ]
               },
               {
@@ -5681,6 +5695,18 @@
           },
           "speculative_check_pull_request": {
             "$ref": "#/components/schemas/mergify_engine__signals__SpeculativeCheckPullRequest"
+          },
+          "train_car_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train Car Id"
           }
         },
         "type": "object",
@@ -5694,7 +5720,8 @@
           "priority_rule_name",
           "queue_name",
           "queued_at",
-          "speculative_check_pull_request"
+          "speculative_check_pull_request",
+          "train_car_id"
         ],
         "title": "EventQueueChecksEndMetadata"
       },
@@ -5920,6 +5947,18 @@
           },
           "speculative_check_pull_request": {
             "$ref": "#/components/schemas/mergify_engine__signals__SpeculativeCheckPullRequest"
+          },
+          "train_car_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train Car Id"
           }
         },
         "type": "object",
@@ -5930,7 +5969,8 @@
           "queue_name",
           "queued_at",
           "start_reason",
-          "speculative_check_pull_request"
+          "speculative_check_pull_request",
+          "train_car_id"
         ],
         "title": "EventQueueChecksStartMetadata"
       },
@@ -6033,6 +6073,18 @@
               }
             ],
             "title": "Priority Rule Name"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -6041,7 +6093,8 @@
           "branch",
           "queued_at",
           "partition_name",
-          "priority_rule_name"
+          "priority_rule_name",
+          "session_id"
         ],
         "title": "EventQueueEnterMetadata"
       },
@@ -8374,6 +8427,12 @@
             "type": "integer",
             "title": "Unprocessable Pull Request",
             "description": "The pull request could not be processed by Mergify",
+            "default": 0
+          },
+          "PR_MANUALLY_DEQUEUED": {
+            "type": "integer",
+            "title": "Pr Manually Dequeued",
+            "description": "The pull request has been manually dequeued by a dequeue command",
             "default": 0
           }
         },
