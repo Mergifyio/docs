@@ -19,6 +19,8 @@ export interface AlgoliaRecord {
   properties: string[];
   category: string;
   pageDescription: string;
+  pageUrl: string;
+  propertyCount: number;
 }
 
 // Search result type (base record + Algolia-added fields)

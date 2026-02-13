@@ -23,6 +23,7 @@ function useAlgoliaSearch(query: string, open: boolean) {
             query: query,
             attributesToHighlight: [],
             exactOnSingleWordQuery: 'word',
+            distinct: 1,
           },
         ],
       });
