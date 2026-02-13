@@ -48,13 +48,13 @@ export function AlgoliaUpdateIndex(): AstroIntegration {
           indexName,
           indexSettings: {
             searchableAttributes: [
-              'properties',
-              'pageTitle,hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3',
+              'unordered(properties),pageTitle,hierarchy.lvl2,hierarchy.lvl3',
+              'hierarchy.lvl0,hierarchy.lvl1',
               'pageDescription',
               'text',
             ],
             attributeForDistinct: 'pageUrl',
-            customRanking: ['asc(propertyCount)'],
+            customRanking: ['asc(sectionRank)', 'asc(propertyCount)', 'asc(typeRank)'],
             attributesForFaceting: ['type'],
           },
         });
@@ -87,6 +87,8 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
       $('meta[property="og:description"]').attr('content') ||
       '';
     const category = extractCategory(baseUrl, $);
+    const sectionRank = baseUrl.startsWith('changelog') ? 1 : 0;
+    const TYPE_RANKS: Record<string, number> = { page: 0, H1: 1, H2: 2, H3: 3 };
 
     // Try multiple selectors to find the main content area
     let main = $('main article');
@@ -112,6 +114,8 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
         pageDescription,
         pageUrl: baseUrl,
         propertyCount: introProperties.length,
+        sectionRank,
+        typeRank: TYPE_RANKS.page,
       });
       if (introRecord) {
         records.push(introRecord);
@@ -139,6 +143,8 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
         pageDescription,
         pageUrl: baseUrl,
         propertyCount: headingProperties.length,
+        sectionRank,
+        typeRank: TYPE_RANKS[headingType] ?? 1,
       });
       if (headingRecord) {
         records.push(headingRecord);

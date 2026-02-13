@@ -21,6 +21,8 @@ export interface AlgoliaRecord {
   pageDescription: string;
   pageUrl: string;
   propertyCount: number;
+  sectionRank: number;
+  typeRank: number;
 }
 
 // Search result type (base record + Algolia-added fields)
