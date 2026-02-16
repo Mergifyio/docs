@@ -5959,6 +5959,18 @@
               }
             ],
             "title": "Train Car Id"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -5970,7 +5982,8 @@
           "queued_at",
           "start_reason",
           "speculative_check_pull_request",
-          "train_car_id"
+          "train_car_id",
+          "session_id"
         ],
         "title": "EventQueueChecksStartMetadata"
       },
