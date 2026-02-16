@@ -43,6 +43,22 @@ export function AlgoliaUpdateIndex(): AstroIntegration {
         const client = algoliasearch(appId, writeKey) as any;
         await client.replaceAllObjects({ indexName, objects: records, safe: true });
         console.info('[Algolia] Index updated with optimized records.');
+
+        await client.setSettings({
+          indexName,
+          indexSettings: {
+            searchableAttributes: [
+              'properties',
+              'pageTitle,hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3',
+              'pageDescription',
+              'text',
+            ],
+            attributeForDistinct: 'pageUrl',
+            customRanking: ['asc(propertyCount)'],
+            attributesForFaceting: ['type'],
+          },
+        });
+        console.info('[Algolia] Index settings configured.');
       },
     },
   };
@@ -94,6 +110,8 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
         category,
         pageTitle,
         pageDescription,
+        pageUrl: baseUrl,
+        propertyCount: introProperties.length,
       });
       if (introRecord) {
         records.push(introRecord);
@@ -119,6 +137,8 @@ async function collectPagesFromDist(distRoot: string): Promise<AlgoliaRecord[]> 
         category,
         pageTitle,
         pageDescription,
+        pageUrl: baseUrl,
+        propertyCount: headingProperties.length,
       });
       if (headingRecord) {
         records.push(headingRecord);
@@ -198,7 +218,7 @@ function extractProperties(html: string, $: any): string[] {
         /^[a-z_][a-z0-9_.-]*$/i.test(text) || // snake_case, dot.notation, kebab-case
         /^[a-z][a-zA-Z0-9]*$/.test(text) // camelCase
       ) {
-        properties.add(text);
+        properties.add(text.toLowerCase());
       }
     }
   });
