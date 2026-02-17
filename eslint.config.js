@@ -1,3 +1,4 @@
+import { fixupPluginRules } from '@eslint/compat';
 import eslint from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
@@ -91,7 +92,7 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tseslint,
-      react: reactPlugin,
+      react: fixupPluginRules(reactPlugin),
     },
     settings: {
       react: {
@@ -137,6 +138,9 @@ export default [
   {
     files: ['**/*.mdx'],
     ...mdxPlugin.flat,
+    plugins: {
+      mdx: fixupPluginRules(mdxPlugin),
+    },
     rules: {
       'mdx/remark': 'error',
     },
