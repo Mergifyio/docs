@@ -5707,6 +5707,18 @@
               }
             ],
             "title": "Train Car Id"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -5721,7 +5733,8 @@
           "queue_name",
           "queued_at",
           "speculative_check_pull_request",
-          "train_car_id"
+          "train_car_id",
+          "session_id"
         ],
         "title": "EventQueueChecksEndMetadata"
       },
@@ -6240,6 +6253,18 @@
           "pull_request_head_sha": {
             "type": "string",
             "title": "Pull Request Head Sha"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -6255,7 +6280,8 @@
           "priority_rule_name",
           "conditions_evaluation",
           "checks",
-          "pull_request_head_sha"
+          "pull_request_head_sha",
+          "session_id"
         ],
         "title": "EventQueueLeaveMetadata"
       },
