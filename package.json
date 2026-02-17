@@ -91,7 +91,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^11.0.0",
-    "algoliasearch": "^5.48.0",
+    "algoliasearch": "^5.48.1",
     "astro-icon": "^1.1.5",
     "canvas-confetti": "^1.9.4",
     "cheerio": "^1.2.0",
