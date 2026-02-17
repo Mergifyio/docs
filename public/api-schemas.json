@@ -5841,6 +5841,18 @@
           "reason": {
             "type": "string",
             "title": "Reason"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -5850,7 +5862,8 @@
           "priority_rule_name",
           "queue_name",
           "queued_at",
-          "reason"
+          "reason",
+          "session_id"
         ],
         "title": "EventQueueChecksNotStartedMetadata"
       },
