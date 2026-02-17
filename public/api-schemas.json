@@ -6393,6 +6393,18 @@
               }
             ],
             "title": "Priority Rule Name"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -6401,7 +6413,8 @@
           "partition_names",
           "queue_name",
           "queued_at",
-          "priority_rule_name"
+          "priority_rule_name",
+          "session_id"
         ],
         "title": "EventQueueMergedMetadata"
       },
