@@ -58,7 +58,7 @@ export const communityCategory: Category = {
   links: [
     {
       text: 'Documentation',
-      href: 'https://docs.mergify.com',
+      href: '/',
     },
     {
       text: 'Blog',
@@ -84,7 +84,7 @@ export const helpCategory: Category = {
     },
     {
       text: 'Changelog',
-      href: 'https://docs.mergify.com/changelog/',
+      href: '/changelog/',
     },
     {
       text: 'Terms of Service',
@@ -92,7 +92,7 @@ export const helpCategory: Category = {
     },
     {
       text: 'Support',
-      href: 'https://docs.mergify.com/support/',
+      href: '/support/',
     },
     {
       text: 'Privacy Policy',
