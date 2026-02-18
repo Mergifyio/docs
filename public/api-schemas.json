@@ -3919,7 +3919,11 @@
               "frozen",
               "waiting_schedule",
               "waiting_for_batch",
-              "already_tested"
+              "already_tested",
+              "waiting_for_merge",
+              "merged",
+              "evaluating_failure",
+              "requeued"
             ],
             "title": "Code"
           },
