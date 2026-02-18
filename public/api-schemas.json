@@ -7699,7 +7699,8 @@
               "User",
               "Organization",
               "Bot",
-              "Mannequin"
+              "Mannequin",
+              "Enterprise"
             ],
             "title": "Type"
           }
