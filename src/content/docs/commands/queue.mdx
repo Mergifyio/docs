@@ -5,8 +5,8 @@ description: Add a pull request to a merge queue.
 
 The `queue` command in Mergify offers users a direct way to interact with the
 [Mergify merge queue](/merge-queue), right from their pull request
-comments. By utilizing this command, users can add the pull request to a merge
-queue.
+comments. By utilizing this command, users can add a pull request to a merge
+queue or re-add it after it has been dequeued.
 
 To enter a queue, a pull request must match the `queue_conditions` of the
 targeted queue. See [Adding a Pull Request to the Merge
@@ -54,3 +54,21 @@ To add a pull request to a specific queue, simply use:
 
 This command will place the pull request in the `production` queue as soon as
 it passes its `queue_conditions`.
+
+### Re-queuing a Previously Dequeued Pull Request
+
+If a pull request was removed from the merge queue — whether due to a failed
+check, a flaky test, or a manual `dequeue` — you can re-add it using the same
+`queue` command:
+
+```text
+@mergifyio queue
+```
+
+The command resets the pull request status and places it back in the merge
+queue, allowing Mergify to retry validation.
+
+:::note
+  The `requeue` command is deprecated. Use `@mergifyio queue` for both
+  initial queuing and re-queuing.
+:::
