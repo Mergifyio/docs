@@ -1,0 +1,19 @@
+---
+title: "The requeue command is deprecated"
+date: 2026-02-18
+tags:
+  - Merge Queue
+  - Workflow Automation
+  - Deprecations
+description: "**`requeue`** command deprecated"
+---
+
+The `requeue` command has been deprecated. Use `@mergifyio queue` instead to re-queue pull requests that were removed from the merge queue.
+
+### What changed
+
+- **`@mergifyio queue`**** now re-queues pull requests.** After a pull request is dequeued for any reason (check failures, conflicts, timeouts, etc.), posting `@mergifyio queue` will re-queue it.
+- **`@mergifyio requeue`**** still works** but is now an alias for `queue`. No action is required immediately, but we recommend updating your workflows.
+### Migration
+
+Replace any usage of `@mergifyio requeue` with `@mergifyio queue`. If you have automation rules using the `requeue` action, update them to use `queue`.
