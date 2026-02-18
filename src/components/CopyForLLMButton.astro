@@ -212,7 +212,7 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 			clearResetTimer(button);
 			button.dataset.state = 'busy';
 			setLabel(button, 'preparing');
-			let payload = '';
+			let payload;
 			const markdownPath = button.dataset.markdownPath;
 			try {
 				if (!markdownPath) {
