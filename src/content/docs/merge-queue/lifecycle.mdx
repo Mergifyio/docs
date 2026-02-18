@@ -104,7 +104,7 @@ strict digraph {
     ];
 
     // Transitions with detailed labels
-    Dequeued -> Queueing [label="  queue/requeue command\n  or autoqueue  "];
+    Dequeued -> Queueing [label="  queue command\n  or autoqueue  "];
     Queueing -> Queued [label="  matches\n  queue_conditions  "];
     Queued -> Dequeued [label="  unmatches queue_conditions\n  or dequeue command  "];
     Queued -> Validating [label="  reaches top\n  of the queue  "];
@@ -206,14 +206,14 @@ every pull request is ready to be merged when it's time.
 At times, you might find it necessary to requeue a pull request. This could
 happen when a pull request is removed from the queue because it failed to meet
 the `merge_conditions` of the queue it was in. This typically happens when a
-check failed because a flaky test; the PR is removed from the queue whereas it
-might have been mergeable.
+check failed because of a flaky test; the PR is removed from the queue whereas
+it might have been mergeable.
 
 In that case, the PR might be re-added to the merge queue to try again by
-triggering the `@mergifyio requeue` command, which will reset its status to a
-neutral state so Mergify is happy to retry it. Once issued, the command will
-place the pull request back in the merge queue according to the queue's
-`queue_conditions`.
+using the [`@mergifyio queue` command](/commands/queue), which will reset its
+status to a neutral state so Mergify is happy to retry it. Once issued, the
+command will place the pull request back in the merge queue according to the
+queue's `queue_conditions`.
 
 ## Base Branch Updates
 
