@@ -1,38 +1,89 @@
-import { SearchResponse } from '@algolia/client-search';
 import { Icon } from '@iconify-icon/react';
-import { algoliasearch } from 'algoliasearch';
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from '../Modal/Modal';
+import { clearHtmlCache } from './PageDetails';
 import Results from './Results';
-import { AlgoliaResult, AlgoliaSearchResult } from './types';
+import type { PagefindInstance, SearchEntry } from './types';
 import './Search.scss';
 
-function useAlgoliaSearch(query: string, open: boolean) {
-  const [results, setResults] = useState<AlgoliaResult[]>();
+const ACRONYMS = new Set(['api', 'ci', 'ui', 'url', 'html', 'css', 'js']);
+
+function formatSlugToTitle(slug: string): string {
+  return slug
+    .split('-')
+    .map((word) => {
+      const lower = word.toLowerCase();
+      return ACRONYMS.has(lower)
+        ? word.toUpperCase()
+        : word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
+function buildBreadcrumb(url: string, headingPath?: string): string {
+  const path = url.split('#')[0].replace(/^\/|\/$/g, '');
+  const urlParts = path ? path.split('/').filter(Boolean).map(formatSlugToTitle) : [];
+  const headingParts = headingPath ? headingPath.split(' > ') : [];
+  // Drop the last heading part — it's the section title shown as the result title
+  if (headingParts.length > 0) headingParts.pop();
+  return [...urlParts, ...headingParts].join(' › ');
+}
+
+let pagefindInstance: PagefindInstance | null = null;
+
+async function getPagefind(): Promise<PagefindInstance> {
+  if (pagefindInstance) return pagefindInstance;
+  const path = '/pagefind/pagefind.js';
+  const pf: PagefindInstance = await import(/* @vite-ignore */ path);
+  pagefindInstance = pf;
+  return pf;
+}
+
+function usePagefindSearch(query: string, open: boolean) {
+  const [results, setResults] = useState<SearchEntry[]>();
 
   useEffect(() => {
+    if (!open || !query || query.length < 2) {
+      setResults(undefined);
+      return;
+    }
+
+    let cancelled = false;
+
     const search = async () => {
-      const searchClient = algoliasearch(
-        import.meta.env.PUBLIC_ALGOLIA_APP_ID as string,
-        import.meta.env.PUBLIC_ALGOLIA_SEARCH_KEY as string
-      );
-      const response = await searchClient.search<AlgoliaSearchResult>({
-        requests: [
-          {
-            indexName: import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME,
-            query: query,
-            attributesToHighlight: [],
-            exactOnSingleWordQuery: 'word',
-            distinct: 1,
-          },
-        ],
-      });
-      setResults((response.results[0] as SearchResponse<AlgoliaSearchResult>)?.hits);
+      const pagefind = await getPagefind();
+      const response = await pagefind.debouncedSearch(query);
+      if (!response || cancelled) return;
+
+      const loaded = await Promise.all(response.results.slice(0, 30).map((r) => r.data()));
+      if (cancelled) return;
+
+      // Deduplicate: keep only the best match per page
+      const seen = new Set<string>();
+      const entries: SearchEntry[] = [];
+      for (const page of loaded) {
+        const pageUrl = page.url.split('#')[0];
+        if (seen.has(pageUrl)) continue;
+        seen.add(pageUrl);
+        entries.push({
+          id: page.id,
+          url: page.url,
+          title: page.meta.title,
+          excerpt: page.excerpt,
+          pageTitle: page.meta.pageTitle || page.meta.title,
+          pageUrl,
+          breadcrumb: buildBreadcrumb(page.url, page.meta.headingPath),
+        });
+      }
+
+      setResults(entries);
     };
 
-    if (open && query && query.length > 3) {
-      search();
-    }
+    search();
+
+    return () => {
+      cancelled = true;
+    };
   }, [query, open]);
 
   return results;
@@ -44,7 +95,7 @@ export default function SearchBar() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  const searchResults = useAlgoliaSearch(search, open);
+  const searchResults = usePagefindSearch(search, open);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -53,6 +104,7 @@ export default function SearchBar() {
   const handleClose = () => {
     setOpen(false);
     setSearch('');
+    clearHtmlCache();
   };
 
   useEffect(() => {
@@ -61,7 +113,6 @@ export default function SearchBar() {
       setOpen(true);
     };
     const openModalKeydown = (e: KeyboardEvent) => {
-      // Use keydown (not deprecated keypress) and prevent default so '/' isn't typed into the input.
       if (e.key === '/' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
         const active = document.activeElement as HTMLElement | null;
         const isTypingTarget =
@@ -116,7 +167,7 @@ export default function SearchBar() {
           />
         </div>
         <hr style={{ margin: '8px 0' }} />
-        {searchResults && <Results results={searchResults} />}
+        {searchResults && <Results results={searchResults} query={search} />}
       </Modal>
     </div>
   );
