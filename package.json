@@ -13,7 +13,7 @@
     "format": "biome format --write .",
     "format:check": "biome format src integrations plugins scripts",
     "check": "astro check && eslint . && biome check .",
-    "check:links": "linkinator dist/ --recurse --retry-errors --retry-errors-count 3 --timeout 30000 --concurrency 25"
+    "check:links": "linkinator dist/ --recurse --retry-errors --retry-errors-count 3 --timeout 30000 --concurrency 25 --verbosity error"
   },
   "devDependencies": {
     "@actions/core": "^3.0.0",
