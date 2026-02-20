@@ -1,4 +1,5 @@
-import { Icon } from '@iconify-icon/react';
+import { Icon } from '@iconify/react';
+import '~/util/icons';
 import { useEffect, useState } from 'react';
 import './ThemeToggleButton.css';
 
