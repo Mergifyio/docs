@@ -2464,14 +2464,6 @@
           "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds.",
           "title": "Checks Timeout"
         },
-        "max_check_retries": {
-          "default": 0,
-          "description": "The maximum number of retries allowed to be executed on failed PRs or batches before proceeding with the normal failure resolution process.",
-          "include_in_schema": false,
-          "minimum": 0,
-          "title": "Max Check Retries",
-          "type": "integer"
-        },
         "draft_bot_account": {
           "anyOf": [
             {
@@ -2693,14 +2685,6 @@
           "default": null,
           "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds.",
           "title": "Checks Timeout"
-        },
-        "max_check_retries": {
-          "default": 0,
-          "description": "The maximum number of retries allowed to be executed on failed PRs or batches before proceeding with the normal failure resolution process.",
-          "include_in_schema": false,
-          "minimum": 0,
-          "title": "Max Check Retries",
-          "type": "integer"
         },
         "draft_bot_account": {
           "anyOf": [
