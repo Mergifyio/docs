@@ -5642,7 +5642,8 @@
                   "DRAFT_PULL_REQUEST_CREATION_BRANCH_NOT_INDEXED",
                   "CONFIGURATION_CHANGED",
                   "UNPROCESSABLE_PULL_REQUEST",
-                  "PR_MANUALLY_DEQUEUED"
+                  "PR_MANUALLY_DEQUEUED",
+                  "INTERMEDIATE_RESULTS_SKIPPED"
                 ]
               },
               {
@@ -8510,6 +8511,12 @@
             "type": "integer",
             "title": "Pr Manually Dequeued",
             "description": "The pull request has been manually dequeued by a dequeue command",
+            "default": 0
+          },
+          "INTERMEDIATE_RESULTS_SKIPPED": {
+            "type": "integer",
+            "title": "Intermediate Results Skipped",
+            "description": "The pull request intermediate results have been skipped during batch promotion",
             "default": 0
           }
         },
