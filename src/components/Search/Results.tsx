@@ -1,4 +1,4 @@
-import { Icon } from '@iconify-icon/react';
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import Preview from './PageDetails';

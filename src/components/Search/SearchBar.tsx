@@ -1,5 +1,6 @@
 import { SearchResponse } from '@algolia/client-search';
-import { Icon } from '@iconify-icon/react';
+import { Icon } from '@iconify/react';
+import '~/util/icons';
 import { algoliasearch } from 'algoliasearch';
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from '../Modal/Modal';
