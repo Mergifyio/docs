@@ -1805,7 +1805,8 @@
                 "DRAFT_PULL_REQUEST_CREATION_BRANCH_NOT_INDEXED",
                 "CONFIGURATION_CHANGED",
                 "UNPROCESSABLE_PULL_REQUEST",
-                "PR_MANUALLY_DEQUEUED"
+                "PR_MANUALLY_DEQUEUED",
+                "INTERMEDIATE_RESULTS_SKIPPED"
               ],
               "type": "string"
             },
