@@ -50,7 +50,7 @@
     "hastscript": "^9.0.1",
     "html-escaper": "^3.0.3",
     "linkinator": "^7.5.3",
-    "mdast-util-from-markdown": "^2.0.2",
+    "mdast-util-from-markdown": "^2.0.3",
     "mdast-util-mdx-jsx": "^3.2.0",
     "mdast-util-to-hast": "^13.2.1",
     "mdast-util-to-string": "^4.0.0",
