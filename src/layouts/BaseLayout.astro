@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import CodeCopyButton from '../components/CodeCopyButton.astro';
 import Footer from '../components/Footer/Footer.astro';
 import HeadCommon from '../components/HeadCommon.astro';
 import Header from '../components/Header/Header.astro';
@@ -137,5 +138,6 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				<Footer />
 			</slot>
 		</div>
+		<CodeCopyButton />
 	</body>
 </html>

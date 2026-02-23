@@ -1,0 +1,81 @@
+<!--
+  Adds a "Copy" button to all code blocks (pre > code).
+  Include once in the page head or body.
+-->
+<style is:global>
+  pre {
+    position: relative;
+  }
+
+  .code-copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--theme-divider);
+    border-radius: 4px;
+    background: var(--theme-bg-offset);
+    color: var(--theme-text-lighter);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 1;
+    line-height: 1.4;
+  }
+
+  pre:hover .code-copy-btn,
+  .code-copy-btn:focus-visible {
+    opacity: 1;
+  }
+
+  .code-copy-btn:hover {
+    background: var(--theme-bg-hover);
+    color: var(--theme-text);
+  }
+
+  .code-copy-btn[data-copied] {
+    opacity: 1;
+    color: var(--theme-text-accent);
+    border-color: var(--theme-text-accent);
+  }
+</style>
+
+<script>
+  function initCopyButtons() {
+    document.querySelectorAll('pre > code').forEach((codeEl) => {
+      const pre = codeEl.parentElement;
+      if (!pre || pre.querySelector('.code-copy-btn')) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.textContent = 'Copy';
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+
+      btn.addEventListener('click', async () => {
+        const text = codeEl.textContent || '';
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = 'Copied!';
+          btn.setAttribute('data-copied', '');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.removeAttribute('data-copied');
+          }, 2000);
+        } catch {
+          btn.textContent = 'Error';
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+          }, 2000);
+        }
+      });
+
+      pre.appendChild(btn);
+    });
+  }
+
+  initCopyButtons();
+  document.addEventListener('astro:after-swap', initCopyButtons);
+</script>
