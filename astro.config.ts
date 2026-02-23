@@ -29,7 +29,11 @@ export default defineConfig({
   site: process.env.SITE_URL ? process.env.SITE_URL : 'https://docs.mergify.com',
   integrations: [
     AutoImport({
-      imports: [asideAutoImport, youtubeAutoImport],
+      imports: [
+        asideAutoImport,
+        youtubeAutoImport,
+        { '~/components/Steps.astro': [['default', 'Steps']] },
+      ],
     }),
     astroAsides(),
     astroYoutubeEmbeds(),

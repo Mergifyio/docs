@@ -1,0 +1,92 @@
+---
+/**
+ * Steps component for sequential instructions.
+ * Wraps ordered list children with numbered indicators and connecting lines.
+ *
+ * Usage in MDX:
+ *   <Steps>
+ *     1. First step content here
+ *     2. Second step content here
+ *     3. Third step content here
+ *   </Steps>
+ *
+ * The component styles the <ol> that MDX generates from numbered lists.
+ */
+---
+
+<div class="steps-component">
+  <slot />
+</div>
+
+<style is:global>
+  .steps-component > ol {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+    counter-reset: steps-counter;
+  }
+
+  .steps-component > ol > li {
+    counter-increment: steps-counter;
+    position: relative;
+    padding-left: 3rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  /* Connecting line between steps */
+  .steps-component > ol > li::before {
+    content: '';
+    position: absolute;
+    left: 0.9375rem;
+    top: 1.75rem;
+    bottom: 0;
+    width: 1px;
+    background: var(--theme-divider);
+  }
+
+  /* Remove line from last step */
+  .steps-component > ol > li:last-child::before {
+    display: none;
+  }
+
+  .steps-component > ol > li:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Step number circle */
+  .steps-component > ol > li::after {
+    content: counter(steps-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.875rem;
+    height: 1.875rem;
+    border-radius: 50%;
+    background: var(--theme-bg-offset);
+    border: 1px solid var(--theme-divider);
+    color: var(--theme-text);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    text-align: center;
+    /* Flexbox on pseudo-elements doesn't work in all browsers, use line-height fallback */
+    display: grid;
+    place-items: center;
+  }
+
+  /* First child in each step should align with the number */
+  .steps-component > ol > li > :first-child {
+    margin-top: 0;
+    padding-top: 0.2rem;
+  }
+
+  .steps-component > ol > li > :first-child:is(h2, h3, h4, h5, h6) {
+    padding-top: 0;
+    margin-top: -0.1rem;
+  }
+</style>
