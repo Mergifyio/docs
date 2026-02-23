@@ -7,13 +7,13 @@ import { defineConfig } from 'astro/config';
 import AutoImport from 'astro-auto-import';
 import { astroExpressiveCode } from 'astro-expressive-code';
 import icon from 'astro-icon';
-import dotenv, { DotenvPopulateInput } from 'dotenv';
+import dotenv from 'dotenv';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkSmartypants from 'remark-smartypants';
-import { AlgoliaUpdateIndex } from './integrations/algolia-update-index';
 import { asideAutoImport, astroAsides } from './integrations/astro-asides';
 import { astroYoutubeEmbeds, youtubeAutoImport } from './integrations/astro-youtube-embed';
+import { PagefindIndex } from './integrations/pagefind-index';
 import { ScalarApiReference } from './integrations/scalar-api-reference';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
@@ -22,11 +22,6 @@ import { remarkGraphvizPlugin } from './plugins/remark-graphviz';
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
-});
-dotenv.populate(process.env as DotenvPopulateInput, {
-  PUBLIC_ALGOLIA_APP_ID: '81GKA2I1R0',
-  PUBLIC_ALGOLIA_INDEX_NAME: 'docs-pages-dev',
-  PUBLIC_ALGOLIA_SEARCH_KEY: '6fce1b6d8ccf82a6601a169c0167c0e3',
 });
 
 // https://astro.build/config
@@ -56,7 +51,7 @@ export default defineConfig({
       filter: (page) => !page.startsWith('/enterprise'),
     }),
     ScalarApiReference(),
-    AlgoliaUpdateIndex(),
+    PagefindIndex(),
     icon({
       include: {
         bi: ['*'],
