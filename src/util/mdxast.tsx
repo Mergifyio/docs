@@ -78,8 +78,8 @@ function extractHighlightsFromText(text: string | null): string[] {
 }
 
 /**
- * Sometimes, Algolia will add <em> tags aroung escaped characters like: \n ==> \<em>n</em>.
- * We need to prevent this, otherwise JSON.parse will throw an error
+ * Strip <em> tags around escaped characters like: \n ==> \<em>n</em>.
+ * This prevents JSON.parse errors when highlight tags wrap escape sequences.
  */
 function unhighlightEscapedCharacters(str: string): string {
   return str.replace(/\\<em>(.*?)<\/em>/g, '\\$1');
@@ -94,7 +94,7 @@ function quoteHighlightedValues(str: string): string {
 }
 
 /**
- * Calls functions to format JSON input and prevent edge-case issues with algolia's
+ * Calls functions to format JSON input and prevent edge-case issues with
  * highlighting.
  */
 function preventHighlightIssues(str: string) {

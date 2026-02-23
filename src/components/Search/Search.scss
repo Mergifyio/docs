@@ -1,9 +1,9 @@
 #search-bar {
 	font-size: var(--theme-text-md);
 
-	em {
+	mark {
 		color: #003dff;
-		font-style: normal;
+		background: transparent;
 		font-weight: 500;
 	}
 
@@ -48,6 +48,6 @@
 	background: var(--chakra-colors-blue-700) !important;
 }
 
-.theme-dark #search-bar em {
+.theme-dark #search-bar mark {
 	color: #5468ff;
 }
