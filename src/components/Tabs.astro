@@ -1,0 +1,194 @@
+---
+/**
+ * Tabbed content component for MDX documentation pages.
+ *
+ * Usage in MDX:
+ *   import { Tabs, TabItem } from '~/components/Tabs.astro';
+ *
+ *   <Tabs>
+ *     <TabItem label="GitHub Actions">Content here</TabItem>
+ *     <TabItem label="Jenkins">Content here</TabItem>
+ *   </Tabs>
+ *
+ * Tabs sync across the page when they share the same label text,
+ * and the active tab persists via localStorage.
+ */
+---
+
+<tab-group>
+  <div class="tabs-component" role="tablist">
+    <slot />
+  </div>
+</tab-group>
+
+<style is:global>
+  tab-group {
+    display: block;
+    margin: 1.5rem 0;
+  }
+
+  .tabs-component {
+    border: 1px solid var(--theme-divider);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .tabs-component > .tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--theme-divider);
+    background: var(--theme-bg-offset);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs-component > .tab-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabs-component > .tab-bar > button {
+    flex: 0 0 auto;
+    padding: 0.6rem 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--theme-text-lighter);
+    font-family: var(--font-body);
+    font-size: var(--theme-text-sm);
+    font-weight: 450;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .tabs-component > .tab-bar > button:hover {
+    color: var(--theme-text);
+    background: var(--theme-bg-hover);
+  }
+
+  .tabs-component > .tab-bar > button[aria-selected="true"] {
+    color: var(--theme-text);
+    font-weight: 500;
+  }
+
+  .tabs-component > .tab-bar > button[aria-selected="true"]::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 2px;
+    background: var(--color-mergify-blue);
+    border-radius: 2px 2px 0 0;
+  }
+
+  .tabs-component > .tab-bar > button:focus-visible {
+    outline: 2px solid var(--color-mergify-blue);
+    outline-offset: -2px;
+    border-radius: 4px;
+  }
+
+  .tabs-component > .tab-panel {
+    display: none;
+    padding: 1.25rem;
+  }
+
+  .tabs-component > .tab-panel[data-active] {
+    display: block;
+  }
+
+  /* Reset margins for first/last children inside panels */
+  .tabs-component > .tab-panel > :first-child {
+    margin-top: 0;
+  }
+
+  .tabs-component > .tab-panel > :last-child {
+    margin-bottom: 0;
+  }
+</style>
+
+<script>
+  class TabGroup extends HTMLElement {
+    connectedCallback() {
+      this.init();
+      document.addEventListener('astro:after-swap', () => this.init());
+    }
+
+    init() {
+      const panels = this.querySelectorAll<HTMLElement>('[data-tab-panel]');
+      if (panels.length === 0) return;
+
+      const tablist = this.querySelector<HTMLElement>('.tabs-component');
+      if (!tablist) return;
+
+      // Build tab bar if not already built
+      if (tablist.querySelector('.tab-bar')) return;
+
+      const bar = document.createElement('div');
+      bar.className = 'tab-bar';
+      bar.setAttribute('role', 'tablist');
+
+      const labels: string[] = [];
+      panels.forEach((panel, i) => {
+        const label = panel.getAttribute('data-tab-label') || `Tab ${i + 1}`;
+        labels.push(label);
+
+        const id = `tab-${this.id || Math.random().toString(36).slice(2)}-${i}`;
+        const panelId = `${id}-panel`;
+
+        const btn = document.createElement('button');
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', 'false');
+        btn.setAttribute('aria-controls', panelId);
+        btn.id = id;
+        btn.textContent = label;
+
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', id);
+        panel.id = panelId;
+        panel.classList.add('tab-panel');
+
+        btn.addEventListener('click', () => this.selectTab(i, label));
+        bar.appendChild(btn);
+      });
+
+      tablist.prepend(bar);
+
+      // Restore from localStorage or default to first
+      const stored = localStorage.getItem('docs-tab-sync');
+      const storedIndex = stored ? labels.indexOf(stored) : -1;
+      this.selectTab(storedIndex >= 0 ? storedIndex : 0, labels[storedIndex >= 0 ? storedIndex : 0]);
+
+      // Listen for sync events from other tab groups on the page
+      window.addEventListener('tab-sync', (e: Event) => {
+        const idx = labels.indexOf((e as CustomEvent).detail);
+        if (idx >= 0) this.selectTab(idx, (e as CustomEvent).detail, true);
+      });
+    }
+
+    selectTab(index: number, label: string, fromSync = false) {
+      const buttons = this.querySelectorAll<HTMLElement>('[role="tab"]');
+      const panels = this.querySelectorAll<HTMLElement>('[data-tab-panel]');
+
+      buttons.forEach((btn, i) => {
+        btn.setAttribute('aria-selected', String(i === index));
+        btn.setAttribute('tabindex', i === index ? '0' : '-1');
+      });
+
+      panels.forEach((panel, i) => {
+        if (i === index) {
+          panel.setAttribute('data-active', '');
+        } else {
+          panel.removeAttribute('data-active');
+        }
+      });
+
+      if (!fromSync) {
+        localStorage.setItem('docs-tab-sync', label);
+        window.dispatchEvent(new CustomEvent('tab-sync', { detail: label }));
+      }
+    }
+  }
+
+  customElements.define('tab-group', TabGroup);
+</script>
