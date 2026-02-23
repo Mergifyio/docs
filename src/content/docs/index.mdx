@@ -1,6 +1,8 @@
 ---
 title: Mergify Documentation
-description: Ship code faster with zero broken builds, reliable CI, and optimized monorepo workflows.
+description: >-
+  Ship code faster with zero broken builds, reliable CI,
+  and optimized monorepo workflows.
 suppressTitle: true
 ---
 
@@ -10,141 +12,636 @@ import CommunityButton from '~/components/CommunityButton.astro';
 import Button from '~/components/Button.astro';
 
 <div id="home">
-  {/* ---------------- HERO ---------------- */}
+  {/* ════════════════ HERO ════════════════ */}
 
-  <div class="home-hero">
+  <section class="home-hero" aria-label="Introduction">
+    <div class="hero-bg" aria-hidden="true">
+      <svg
+        class="hero-grid"
+        viewBox="0 0 800 400"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <pattern
+            id="hero-dots"
+            x="0" y="0"
+            width="40" height="40"
+            patternUnits="userSpaceOnUse"
+          >
+            <circle
+              cx="2" cy="2" r="1"
+              fill="currentColor"
+              opacity="0.15"
+            />
+          </pattern>
+          <linearGradient
+            id="hero-fade"
+            x1="0" y1="0" x2="0" y2="1"
+          >
+            <stop
+              offset="0%"
+              stop-color="var(--color-mergify-blue)"
+              stop-opacity="0.06"
+            />
+            <stop
+              offset="100%"
+              stop-color="var(--color-mergify-blue)"
+              stop-opacity="0"
+            />
+          </linearGradient>
+        </defs>
+        <rect
+          width="800" height="400"
+          fill="url(#hero-dots)"
+        />
+        <rect
+          width="800" height="400"
+          fill="url(#hero-fade)"
+        />
+      </svg>
+    </div>
     <div class="hero-inner">
-      <h1 class="content-title">Ship Code Faster, Break Less</h1>
-      <p class="tagline content-subtitle">
-        Mergify eliminates broken builds, tames flaky tests, and cuts CI waste—so
-        your team ships with confidence.
+      <div class="hero-badge">Documentation</div>
+      <h1 class="hero-title">
+        Ship Code
+        <span class="hero-title-accent">Faster</span>,
+        <br />Break
+        <span class="hero-title-accent">Less</span>
+      </h1>
+      <p class="hero-tagline">
+        Mergify eliminates broken builds, tames flaky
+        tests, and cuts CI waste — so your team ships
+        with confidence.
       </p>
-    </div>
-  </div>
-
-  {/* ---------------- VALUE METRICS ---------------- */}
-
-  <div class="home-metrics">
-    <div class="home-metric-card">
-      <div class="home-metric-value">3-5x</div>
-      <div class="home-metric-label">faster merge throughput</div>
-    </div>
-    <div class="home-metric-card">
-      <div class="home-metric-value">60-90%</div>
-      <div class="home-metric-label">CI cost reduction</div>
-    </div>
-    <div class="home-metric-card">
-      <div class="home-metric-value">Zero</div>
-      <div class="home-metric-label">broken builds</div>
-    </div>
-  </div>
-
-  {/* -------------- PROBLEM-SOLUTION CARDS -------------- */}
-
-  <h2 class="home-title">What Problem Are You Solving?</h2>
-
-  <div class="home-problems">
-    <a href="/merge-queue" class="home-problem-card">
-      <div class="home-problem-title">Broken main branch or slow merges?</div>
-      <div class="home-problem-desc">
-        PRs pass CI individually but break when merged. Developers wait hours in a serial queue.
+      <div class="hero-actions">
+        <a
+          href="/merge-queue/setup"
+          class="hero-btn hero-btn--primary"
+        >
+          Get Started
+          <svg
+            width="16" height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 8h10M9 4l4 4-4 4" />
+          </svg>
+        </a>
+        <a
+          href="#products"
+          class="hero-btn hero-btn--secondary"
+        >
+          Explore Products
+        </a>
       </div>
-      <div class="home-problem-cta">Merge Queue →</div>
-    </a>
-    <a href="/ci-insights" class="home-problem-card">
-      <div class="home-problem-title">Flaky tests blocking PRs?</div>
-      <div class="home-problem-desc">
-        Tests fail randomly, forcing reruns and eroding trust in CI. Hard to track down culprits.
-      </div>
-      <div class="home-problem-cta">CI Insights →</div>
-    </a>
-    <a href="/monorepo-ci" class="home-problem-card">
-      <div class="home-problem-title">CI waste in monorepos?</div>
-      <div class="home-problem-desc">
-        Every PR runs the full test matrix even when only one service changed. CI bills spiral.
-      </div>
-      <div class="home-problem-cta">Monorepo CI →</div>
-    </a>
-  </div>
-
-  {/* -------------- PRODUCT OVERVIEW -------------- */}
-
-  <h2 class="home-title">Products</h2>
-
-  <DocsetGrid>
-    <Docset title="Merge Queue" path="/merge-queue" icon="octicon:git-merge-queue-16">
-      Zero broken builds with parallel testing, smart batching, and priority queues.
-    </Docset>
-    <Docset title="CI Insights" path="/ci-insights" icon="mdi:lightbulb-outline">
-      Detect flaky tests, auto-retry failures, and quarantine noisy tests.
-    </Docset>
-    <Docset title="Monorepo CI" path="/monorepo-ci" icon="tabler:topology-star-ring-3">
-      Run only the CI jobs that matter for each pull request.
-    </Docset>
-  </DocsetGrid>
-
-  {/* -------------- GET STARTED -------------- */}
-
-  <h2 class="home-title">Get Started</h2>
-
-  <div class="home-get-started">
-    <Button colorScheme="teal" href="/merge-queue/setup" target="_self">Set up Merge Queue</Button>
-    <Button colorScheme="gray" href="/ci-insights" target="_self">Enable CI Insights</Button>
-    <Button colorScheme="gray" href="/monorepo-ci/github-actions" target="_self">Configure Monorepo CI</Button>
-  </div>
-
-  <a href="https://mergify.com/discovery" class="home-discovery">
-    <div class="home-discovery-title">Need help getting started?</div>
-    <div class="home-discovery-desc">
-      Book a free discovery call with our team to find the best setup for your workflow.
     </div>
-  </a>
+  </section>
 
-  {/* -------------- REFERENCE -------------- */}
+  {/* ═══════════ METRICS ═══════════ */}
 
-  <h2 class="home-title">Reference</h2>
+  <section class="home-metrics" aria-label="Key metrics">
+    <div class="home-metric" data-accent="queue">
+      <div class="home-metric__value">3-5x</div>
+      <div class="home-metric__label">
+        Faster merge throughput
+      </div>
+      <div class="home-metric__bar" aria-hidden="true" />
+    </div>
+    <div class="home-metric" data-accent="ci">
+      <div class="home-metric__value">60-90%</div>
+      <div class="home-metric__label">
+        CI cost reduction
+      </div>
+      <div class="home-metric__bar" aria-hidden="true" />
+    </div>
+    <div class="home-metric" data-accent="workflow">
+      <div class="home-metric__value">Zero</div>
+      <div class="home-metric__label">
+        Broken builds
+      </div>
+      <div class="home-metric__bar" aria-hidden="true" />
+    </div>
+  </section>
 
-  [Configuration](/configuration/file-format) ·
-  [Conditions](/configuration/conditions) ·
-  [Commands](/commands) ·
-  [API](/api) ·
-  [Integrations](/integrations)
+  {/* ═══════════ VISUALIZATION ═══════════ */}
 
-  <DocsetGrid>
-    <Docset title="Merge Queue" path="/merge-queue" icon="octicon:git-merge-queue-16">
-      Parallel testing, batching, and priority queues.
-    </Docset>
-    <Docset title="CI Insights" path="/ci-insights" icon="mdi:lightbulb-outline">
-      Flaky test detection, auto-retry, and quarantine.
-    </Docset>
-    <Docset title="Monorepo CI" path="/monorepo-ci" icon="tabler:topology-star-ring-3">
-      Scope-aware CI that runs only what matters.
-    </Docset>
-    <Docset title="Workflow Automation" path="/workflow" icon="bi:robot">
-      Rule engine and actions to automate PR workflows.
-    </Docset>
-    <Docset title="Merge Protections" path="/merge-protections" icon="fa6-solid:user-shield">
-      Advanced guardrails before code lands.
-    </Docset>
-    <Docset title="Stacks" path="/stacks" icon="bi:stack">
-      Stacked PR workflow for incremental changes.
-    </Docset>
-    <Docset title="Support" path="/support" icon="fa-solid:life-ring">
-      Contact channels and response goals.
-    </Docset>
-  </DocsetGrid>
+  <section class="home-viz" aria-label="How it works">
+    <h2 class="home-section-title">
+      How Mergify Works
+    </h2>
+    <p class="home-section-desc">
+      Pull requests enter the queue, get tested in
+      parallel batches, and merge only when green.
+    </p>
+    <div class="merge-viz" aria-hidden="true">
+      <div class="merge-viz__track">
+        <div class="merge-viz__label">Queue</div>
+        <div class="merge-viz__prs">
+          <div
+            class="merge-viz__pr"
+            data-pr="1"
+            style={{
+              '--delay': '0s',
+              '--color': 'var(--section-merge-queue-accent)',
+            }}
+          >
+            <span class="merge-viz__pr-icon">
+              &#9203;
+            </span>
+            <span>PR #142</span>
+          </div>
+          <div
+            class="merge-viz__pr"
+            data-pr="2"
+            style={{
+              '--delay': '0.3s',
+              '--color': 'var(--section-ci-insights-accent)',
+            }}
+          >
+            <span class="merge-viz__pr-icon">
+              &#9203;
+            </span>
+            <span>PR #143</span>
+          </div>
+          <div
+            class="merge-viz__pr"
+            data-pr="3"
+            style={{
+              '--delay': '0.6s',
+              '--color': 'var(--section-workflow-accent)',
+            }}
+          >
+            <span class="merge-viz__pr-icon">
+              &#9203;
+            </span>
+            <span>PR #144</span>
+          </div>
+        </div>
+      </div>
+      <div class="merge-viz__arrow" aria-hidden="true">
+        <svg
+          width="24" height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </div>
+      <div class="merge-viz__track">
+        <div class="merge-viz__label">Testing</div>
+        <div class="merge-viz__prs">
+          <div
+            class="merge-viz__pr merge-viz__pr--testing"
+            data-pr="batch"
+            style={{
+              '--color': 'var(--color-mergify-blue)',
+            }}
+          >
+            <span class="merge-viz__pr-icon merge-viz__pr-icon--spin">
+              &#9881;
+            </span>
+            <span>Batch CI</span>
+          </div>
+        </div>
+      </div>
+      <div class="merge-viz__arrow" aria-hidden="true">
+        <svg
+          width="24" height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </div>
+      <div class="merge-viz__track">
+        <div class="merge-viz__label">Merged</div>
+        <div class="merge-viz__prs">
+          <div
+            class="merge-viz__pr merge-viz__pr--merged"
+            style={{ '--color': '#22c55e' }}
+          >
+            <span class="merge-viz__pr-icon">
+              &#10003;
+            </span>
+            <span>main</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  {/* -------------- COMMUNITY -------------- */}
+  {/* ═══════════ PROBLEMS ═══════════ */}
 
-  <section class="community">
-    <h2 class="home-title">Community</h2>
-    <p>Share feedback, ask questions, and see what other teams build with Mergify.</p>
+  <section class="home-problems-section">
+    <h2 class="home-section-title">
+      What Problem Are You Solving?
+    </h2>
+
+    <div class="home-problems">
+      <a
+        href="/merge-queue"
+        class="home-problem"
+        data-accent="queue"
+      >
+        <div
+          class="home-problem__icon"
+          aria-hidden="true"
+        >
+          <svg
+            width="24" height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M7 18V6h10l-4 6 4 6H7z" />
+          </svg>
+        </div>
+        <div class="home-problem__content">
+          <h3 class="home-problem__title">
+            Broken main branch or slow merges?
+          </h3>
+          <p class="home-problem__desc">
+            PRs pass CI individually but break when
+            merged. Developers wait hours in a serial
+            queue.
+          </p>
+          <span class="home-problem__cta">
+            Merge Queue &rarr;
+          </span>
+        </div>
+      </a>
+      <a
+        href="/ci-insights"
+        class="home-problem"
+        data-accent="ci"
+      >
+        <div
+          class="home-problem__icon"
+          aria-hidden="true"
+        >
+          <svg
+            width="24" height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+        </div>
+        <div class="home-problem__content">
+          <h3 class="home-problem__title">
+            Flaky tests blocking PRs?
+          </h3>
+          <p class="home-problem__desc">
+            Tests fail randomly, forcing reruns and
+            eroding trust in CI. Hard to track down
+            culprits.
+          </p>
+          <span class="home-problem__cta">
+            CI Insights &rarr;
+          </span>
+        </div>
+      </a>
+      <a
+        href="/monorepo-ci"
+        class="home-problem"
+        data-accent="workflow"
+      >
+        <div
+          class="home-problem__icon"
+          aria-hidden="true"
+        >
+          <svg
+            width="24" height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect
+              x="3" y="3"
+              width="18" height="18"
+              rx="2"
+            />
+            <path d="M3 9h18M9 3v18" />
+          </svg>
+        </div>
+        <div class="home-problem__content">
+          <h3 class="home-problem__title">
+            CI waste in monorepos?
+          </h3>
+          <p class="home-problem__desc">
+            Every PR runs the full test matrix even when
+            only one service changed. CI bills spiral.
+          </p>
+          <span class="home-problem__cta">
+            Monorepo CI &rarr;
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  {/* ═══════════ PRODUCTS ═══════════ */}
+
+  <section class="home-products" id="products">
+    <h2 class="home-section-title">Products</h2>
+
+    <div class="home-product-grid">
+      <a
+        href="/merge-queue"
+        class="home-product"
+        data-accent="queue"
+      >
+        <div class="home-product__header">
+          <div class="home-product__icon-wrap">
+            <svg
+              width="20" height="20"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+            >
+              <path d={[
+                'M2.5 3.5a1 1 0 1 1 2 0',
+                '1 1 0 0 1-2 0Z',
+                'M3.5 1a2.5 2.5 0 0 0-.942 4.816l',
+                '.007.005V9.17a2.502 2.502 0 0 0',
+                '-.558 4.64l.556.085A2.5 2.5 0 1 0',
+                '6 11.5v-.338a.75.75 0 0 0-.394-.66',
+                'L3.5 9.5V5.816A2.5 2.5 0 0 0 3.5',
+                '1Zm7 0a2.5 2.5 0 0 0-.942 4.816l',
+                '.007.005V9.17a2.502 2.502 0 0 0',
+                '-.558 4.64l.556.085A2.5 2.5 0 1 0',
+                '13 11.5v-.338a.75.75 0 0 0-.394-.66',
+                'L10.5 9.5V5.816A2.5 2.5 0 0 0 10.5',
+                '1Zm-1 2.5a1 1 0 1 1 2 0',
+                '1 1 0 0 1-2 0Zm-7 9a1 1 0 1 1 2 0',
+                '1 1 0 0 1-2 0Zm8-1a1 1 0 1 1 0 2',
+                '1 1 0 0 1 0-2Z',
+              ].join(' ')} />
+            </svg>
+          </div>
+          <h3 class="home-product__title">
+            Merge Queue
+          </h3>
+        </div>
+        <p class="home-product__desc">
+          Zero broken builds with parallel testing,
+          smart batching, and priority queues.
+        </p>
+        <span class="home-product__link">
+          Learn more &rarr;
+        </span>
+      </a>
+      <a
+        href="/ci-insights"
+        class="home-product"
+        data-accent="ci"
+      >
+        <div class="home-product__header">
+          <div class="home-product__icon-wrap">
+            <svg
+              width="20" height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+          </div>
+          <h3 class="home-product__title">
+            CI Insights
+          </h3>
+        </div>
+        <p class="home-product__desc">
+          Detect flaky tests, auto-retry failures,
+          and quarantine noisy tests.
+        </p>
+        <span class="home-product__link">
+          Learn more &rarr;
+        </span>
+      </a>
+      <a
+        href="/monorepo-ci"
+        class="home-product"
+        data-accent="workflow"
+      >
+        <div class="home-product__header">
+          <div class="home-product__icon-wrap">
+            <svg
+              width="20" height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <circle cx="4" cy="4" r="2" />
+              <circle cx="20" cy="4" r="2" />
+              <circle cx="4" cy="20" r="2" />
+              <circle cx="20" cy="20" r="2" />
+              <path d={[
+                'M5.5 5.5 9.6 9.6',
+                'M14.4 9.6l4.1-4.1',
+                'M9.6 14.4l-4.1 4.1',
+                'M14.4 14.4l4.1 4.1',
+              ].join('')} />
+            </svg>
+          </div>
+          <h3 class="home-product__title">
+            Monorepo CI
+          </h3>
+        </div>
+        <p class="home-product__desc">
+          Run only the CI jobs that matter for each
+          pull request.
+        </p>
+        <span class="home-product__link">
+          Learn more &rarr;
+        </span>
+      </a>
+    </div>
+  </section>
+
+  {/* ═══════════ GET STARTED ═══════════ */}
+
+  <section class="home-cta-section">
+    <div class="home-cta-card">
+      <div class="home-cta-card__content">
+        <h2 class="home-cta-card__title">
+          Ready to get started?
+        </h2>
+        <p class="home-cta-card__desc">
+          Set up Mergify in minutes. No credit card
+          required.
+        </p>
+      </div>
+      <div class="home-cta-card__actions">
+        <a
+          href="/merge-queue/setup"
+          class="hero-btn hero-btn--primary"
+        >
+          Set up Merge Queue
+          <svg
+            width="16" height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 8h10M9 4l4 4-4 4" />
+          </svg>
+        </a>
+        <a
+          href="https://mergify.com/discovery"
+          class="hero-btn hero-btn--outline"
+          target="_blank"
+          rel="noopener"
+        >
+          Book a Discovery Call
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════ REFERENCE ═══════════ */}
+
+  <section class="home-reference">
+    <h2 class="home-section-title">Reference</h2>
+    <div class="home-ref-links">
+      <a
+        href="/configuration/file-format"
+        class="home-ref-link"
+      >
+        Configuration
+      </a>
+      <a
+        href="/configuration/conditions"
+        class="home-ref-link"
+      >
+        Conditions
+      </a>
+      <a href="/commands" class="home-ref-link">
+        Commands
+      </a>
+      <a href="/api" class="home-ref-link">API</a>
+      <a href="/integrations" class="home-ref-link">
+        Integrations
+      </a>
+    </div>
+
+    <DocsetGrid>
+      <Docset
+        title="Merge Queue"
+        path="/merge-queue"
+        icon="octicon:git-merge-queue-16"
+      >
+        Parallel testing, batching, and priority
+        queues.
+      </Docset>
+      <Docset
+        title="CI Insights"
+        path="/ci-insights"
+        icon="mdi:lightbulb-outline"
+      >
+        Flaky test detection, auto-retry, and
+        quarantine.
+      </Docset>
+      <Docset
+        title="Monorepo CI"
+        path="/monorepo-ci"
+        icon="tabler:topology-star-ring-3"
+      >
+        Scope-aware CI that runs only what matters.
+      </Docset>
+      <Docset
+        title="Workflow Automation"
+        path="/workflow"
+        icon="bi:robot"
+      >
+        Rule engine and actions to automate PR
+        workflows.
+      </Docset>
+      <Docset
+        title="Merge Protections"
+        path="/merge-protections"
+        icon="fa6-solid:user-shield"
+      >
+        Advanced guardrails before code lands.
+      </Docset>
+      <Docset
+        title="Stacks"
+        path="/stacks"
+        icon="bi:stack"
+      >
+        Stacked PR workflow for incremental changes.
+      </Docset>
+      <Docset
+        title="Support"
+        path="/support"
+        icon="fa-solid:life-ring"
+      >
+        Contact channels and response goals.
+      </Docset>
+    </DocsetGrid>
+  </section>
+
+  {/* ═══════════ COMMUNITY ═══════════ */}
+
+  <section class="home-community">
+    <h2 class="home-section-title">Community</h2>
+    <p class="home-community__desc">
+      Share feedback, ask questions, and see what other
+      teams build with Mergify.
+    </p>
     <div class="community-buttons">
-      <CommunityButton href="https://github.com/Mergifyio/mergify/discussions" icon="simple-icons:github" />
-      <CommunityButton href="https://www.youtube.com/@mergifyio" icon="simple-icons:youtube" />
-      <CommunityButton href="https://slack.mergify.com" icon="simple-icons:slack" />
-      <CommunityButton href="https://x.com/mergifyio" icon="simple-icons:x" />
-      <CommunityButton href="https://www.linkedin.com/company/mergify/" icon="simple-icons:linkedin" />
+      <CommunityButton
+        href="https://github.com/Mergifyio/mergify/discussions"
+        icon="simple-icons:github"
+      />
+      <CommunityButton
+        href="https://www.youtube.com/@mergifyio"
+        icon="simple-icons:youtube"
+      />
+      <CommunityButton
+        href="https://slack.mergify.com"
+        icon="simple-icons:slack"
+      />
+      <CommunityButton
+        href="https://x.com/mergifyio"
+        icon="simple-icons:x"
+      />
+      <CommunityButton
+        href="https://www.linkedin.com/company/mergify/"
+        icon="simple-icons:linkedin"
+      />
     </div>
   </section>
 </div>
