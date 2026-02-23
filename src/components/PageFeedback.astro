@@ -1,0 +1,144 @@
+---
+/**
+ * "Was this page helpful?" feedback widget.
+ * Sends events to Plausible analytics and stores in localStorage
+ * to prevent duplicate submissions.
+ */
+---
+
+<div class="page-feedback" id="page-feedback">
+  <p class="page-feedback__question">Was this page helpful?</p>
+  <div class="page-feedback__buttons">
+    <button type="button" class="page-feedback__btn" data-feedback="yes" aria-label="Yes, this page was helpful">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/>
+      </svg>
+      <span>Yes</span>
+    </button>
+    <button type="button" class="page-feedback__btn" data-feedback="no" aria-label="No, this page was not helpful">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/>
+      </svg>
+      <span>No</span>
+    </button>
+  </div>
+  <p class="page-feedback__thanks" hidden>Thanks for your feedback!</p>
+</div>
+
+<style>
+  .page-feedback {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    font-size: var(--theme-text-sm);
+    color: var(--theme-text-lighter);
+  }
+
+  .page-feedback__question {
+    margin: 0;
+    font-weight: 450;
+  }
+
+  .page-feedback__buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .page-feedback__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--theme-divider);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--theme-text-lighter);
+    font-family: var(--font-body);
+    font-size: var(--theme-text-xs);
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+
+  .page-feedback__btn:hover {
+    border-color: var(--theme-shade-subtle);
+    color: var(--theme-text);
+    background: var(--theme-bg-offset);
+  }
+
+  .page-feedback__btn:focus-visible {
+    outline: 2px solid var(--color-mergify-blue);
+    outline-offset: 2px;
+  }
+
+  .page-feedback__btn[data-feedback="no"] svg {
+    opacity: 0.5;
+    transform: rotate(180deg);
+  }
+
+  .page-feedback__btn[data-selected] {
+    border-color: var(--color-mergify-blue);
+    color: var(--color-mergify-blue);
+    background: var(--theme-bg-offset);
+  }
+
+  .page-feedback__thanks {
+    margin: 0;
+    color: var(--color-mergify-blue);
+    font-weight: 450;
+  }
+</style>
+
+<script>
+  function initFeedback() {
+    const widget = document.getElementById('page-feedback');
+    if (!widget) return;
+
+    const buttons = widget.querySelector('.page-feedback__buttons') as HTMLElement;
+    const question = widget.querySelector('.page-feedback__question') as HTMLElement;
+    const thanks = widget.querySelector('.page-feedback__thanks') as HTMLElement;
+    if (!buttons || !question || !thanks) return;
+
+    const storageKey = `feedback:${window.location.pathname}`;
+
+    // Check if already submitted
+    if (localStorage.getItem(storageKey)) {
+      question.hidden = true;
+      buttons.hidden = true;
+      thanks.hidden = false;
+      return;
+    }
+
+    widget.querySelectorAll<HTMLButtonElement>('.page-feedback__btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const value = btn.getAttribute('data-feedback');
+        if (!value) return;
+
+        // Track in Plausible
+        const plausible = (window as unknown as Record<string, unknown>).plausible;
+        if (typeof plausible === 'function') {
+          (plausible as (event: string, opts: Record<string, unknown>) => void)(
+            'Page Feedback',
+            { props: { page: window.location.pathname, helpful: value } },
+          );
+        }
+
+        // Store to prevent duplicate
+        localStorage.setItem(storageKey, value);
+
+        // Update UI
+        btn.setAttribute('data-selected', '');
+        setTimeout(() => {
+          question.hidden = true;
+          buttons.hidden = true;
+          thanks.hidden = false;
+        }, 300);
+      });
+    });
+  }
+
+  initFeedback();
+  document.addEventListener('astro:after-swap', initFeedback);
+</script>
