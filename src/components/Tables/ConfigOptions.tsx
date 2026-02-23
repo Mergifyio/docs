@@ -56,12 +56,8 @@ export interface Def {
   def: keyof typeof configSchema.$defs;
 }
 
-/** We need to strip <em> tags when highlighted by algolia */
 function splitRefPath($ref: string) {
-  return $ref
-    .replace(/<\/?em>/g, '')
-    .split('/')
-    .slice(1);
+  return $ref.split('/').slice(1);
 }
 
 function getTypeLink(ref: string): string | undefined {

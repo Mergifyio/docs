@@ -1,35 +1,40 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import Preview from './PageDetails';
-import { AlgoliaResult } from './types';
-import extractResultValue from './utils';
+import Preview, { prefetchSectionHtml } from './PageDetails';
+import type { SearchEntry } from './types';
 
-interface PageResultProps extends AlgoliaResult {
+/**
+ * Wrap occurrences of query terms in a text string with <mark> tags.
+ * Returns an HTML string safe to use with dangerouslySetInnerHTML
+ * (the input text is escaped first).
+ */
+function highlightTerms(text: string, query: string): string {
+  if (!query) return escapeHtml(text);
+  const terms = query
+    .split(/\s+/)
+    .filter((t) => t.length >= 2)
+    .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (terms.length === 0) return escapeHtml(text);
+  const escaped = escapeHtml(text);
+  const pattern = new RegExp(`(${terms.join('|')})`, 'gi');
+  return escaped.replace(pattern, '<mark>$1</mark>');
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+interface PageResultProps {
+  entry: SearchEntry;
+  query: string;
   onHover: () => void;
+  onNavigate?: () => void;
   active: boolean;
 }
 
-function PageResult({
-  url,
-  pageTitle,
-  hierarchy,
-  type,
-  _highlightResult,
-  onHover,
-  active,
-  objectID,
-}: PageResultProps) {
-  const displayUrl = url.startsWith('/') ? `/${url}` : url.startsWith('#') ? url : `/${url}`;
-
-  // Build breadcrumb string - show all hierarchy levels that exist
-  const breadcrumb = [hierarchy.lvl0, hierarchy.lvl1, hierarchy.lvl2, hierarchy.lvl3]
-    .filter(Boolean)
-    .join(' › ');
-
-  // For page type, show page title; for headings, show the heading text from hierarchy
-  const displayTitle =
-    type === 'page' ? pageTitle : hierarchy.lvl3 || hierarchy.lvl2 || hierarchy.lvl1 || pageTitle;
+function PageResult({ entry, query, onHover, onNavigate, active }: PageResultProps) {
+  const breadcrumb = entry.breadcrumb;
 
   return (
     <a
@@ -43,36 +48,33 @@ function PageResult({
         cursor: 'pointer',
       }}
       onMouseOver={onHover}
-      href={displayUrl}
-      id={objectID}
+      onClick={onNavigate}
+      href={entry.url}
+      id={entry.id}
     >
       <div
         style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', gap: 4 }}
       >
         <div
           className="result-title"
-          dangerouslySetInnerHTML={{
-            __html:
-              extractResultValue(_highlightResult?.hierarchy?.lvl3) ||
-              extractResultValue(_highlightResult?.hierarchy?.lvl2) ||
-              extractResultValue(_highlightResult?.hierarchy?.lvl1) ||
-              displayTitle,
-          }}
+          dangerouslySetInnerHTML={{ __html: highlightTerms(entry.title, query) }}
         />
-        <p
-          className="result-description"
-          style={{
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            width: '100%',
-            margin: 0,
-            fontSize: '0.875rem',
-            color: 'var(--theme-text-light)',
-          }}
-        >
-          {breadcrumb}
-        </p>
+        {breadcrumb && (
+          <p
+            className="result-description"
+            style={{
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              width: '100%',
+              margin: 0,
+              fontSize: '0.875rem',
+              color: 'var(--theme-text-light)',
+            }}
+          >
+            {breadcrumb}
+          </p>
+        )}
       </div>
       {active && <Icon icon="bi:arrow-return-left" />}
     </a>
@@ -80,81 +82,86 @@ function PageResult({
 }
 
 interface ResultsProps {
-  results: AlgoliaResult[];
+  results: SearchEntry[];
+  query: string;
+  onNavigate?: (query: string) => void;
 }
 
-export default function Results({ results }: ResultsProps) {
-  const [focusedPage, setFocusedPage] = useState<AlgoliaResult | null>(results[0] ?? null);
+export default function Results({ results, query, onNavigate }: ResultsProps) {
+  const [focusedIndex, setFocusedIndex] = useState(0);
 
-  const changeFocusedPage = (page: AlgoliaResult) => () => {
-    setFocusedPage(page);
+  const scrollToIndex = (index: number) => {
+    const entry = results[index];
+    if (entry) {
+      const element = document.getElementById(entry.id);
+      const container = element?.parentElement;
+
+      if (element && container) {
+        const containerHeight = container.clientHeight;
+        const elementTop = element.offsetTop;
+        const isHiddenTop = elementTop <= container.scrollTop;
+        const isVisibleAtBottom = elementTop + element.clientHeight <= containerHeight;
+
+        if (isHiddenTop || !isVisibleAtBottom) {
+          container.scrollTo({ top: elementTop });
+        }
+      }
+    }
   };
 
   const handleKeysNavigation = (e: KeyboardEvent) => {
-    const getCurrentFocusedIndex = (current: AlgoliaResult | null) =>
-      results.findIndex((el) => el.objectID === current?.objectID);
-
-    const scrollToFocusedPage = (page: AlgoliaResult | null) => {
-      if (page) {
-        const element = document.getElementById(page.objectID);
-        const container = element?.parentElement;
-
-        if (element && container) {
-          const containerHeight = container.clientHeight;
-          const elementTop = element.offsetTop;
-          const isHiddenTop = elementTop <= container.scrollTop;
-          const isVisibleAtBottom = elementTop + element.clientHeight <= containerHeight;
-
-          if (isHiddenTop || !isVisibleAtBottom) {
-            container.scrollTo({
-              top: elementTop,
-            });
-          }
-        }
-      }
-    };
-
     if (e.key === 'ArrowDown') {
-      setFocusedPage((current) => {
-        const currentIndex = getCurrentFocusedIndex(current);
-        const newFocused = results[Math.min(currentIndex + 1, results.length - 1)];
-
-        scrollToFocusedPage(newFocused);
-
-        return newFocused;
+      e.preventDefault();
+      setFocusedIndex((current) => {
+        const next = Math.min(current + 1, results.length - 1);
+        scrollToIndex(next);
+        return next;
       });
     } else if (e.key === 'ArrowUp') {
-      setFocusedPage((current) => {
-        const currentIndex = getCurrentFocusedIndex(current);
-        const newFocused = results[Math.max(currentIndex - 1, 0)];
-
-        scrollToFocusedPage(newFocused);
-
-        return newFocused;
+      e.preventDefault();
+      setFocusedIndex((current) => {
+        const next = Math.max(current - 1, 0);
+        scrollToIndex(next);
+        return next;
       });
     } else if (e.key === 'Enter') {
-      let slug = '/';
-      if (focusedPage?.url) {
-        slug = focusedPage.url.startsWith('/')
-          ? focusedPage.url
-          : focusedPage.url.startsWith('#')
-            ? focusedPage.url
-            : `/${focusedPage.url}`;
+      const focused = results[focusedIndex];
+      if (focused) {
+        onNavigate?.(query);
+        window.location.replace(focused.url);
       }
-
-      if (focusedPage) window.location.replace(slug);
     }
   };
 
   useEffect(() => {
-    setFocusedPage(results[0] ?? null);
+    setFocusedIndex(0);
+    // Prefetch preview HTML for the top results so the preview pane is instant.
+    for (const entry of results.slice(0, 5)) {
+      prefetchSectionHtml(entry);
+    }
   }, [results]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeysNavigation);
-
     return () => window.removeEventListener('keydown', handleKeysNavigation);
-  }, [results, focusedPage]);
+  }, [results, focusedIndex]);
+
+  const focusedEntry = results[focusedIndex] ?? null;
+
+  if (results.length === 0) {
+    return (
+      <div
+        style={{
+          padding: '32px 16px',
+          textAlign: 'center',
+          color: 'var(--theme-text-light)',
+          fontSize: '0.9375rem',
+        }}
+      >
+        No results found. Try different keywords.
+      </div>
+    );
+  }
 
   return (
     <div
@@ -173,17 +180,19 @@ export default function Results({ results }: ResultsProps) {
           position: 'relative',
         }}
       >
-        {results.map((page) => (
+        {results.map((entry, i) => (
           <PageResult
-            active={focusedPage?.objectID === page.objectID}
-            onHover={changeFocusedPage(page)}
-            {...page}
-            key={page.objectID}
+            key={entry.id}
+            entry={entry}
+            query={query}
+            active={focusedIndex === i}
+            onHover={() => setFocusedIndex(i)}
+            onNavigate={() => onNavigate?.(query)}
           />
         ))}
       </div>
       <hr />
-      {focusedPage && <Preview key={focusedPage.objectID} {...focusedPage} />}
+      {focusedEntry && <Preview entry={focusedEntry} />}
     </div>
   );
 }
