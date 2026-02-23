@@ -5,6 +5,7 @@ import HeadCommon from '../components/HeadCommon.astro';
 import Header from '../components/Header/Header.astro';
 import HeadSEO from '../components/HeadSEO.astro';
 import LeftSidebar from '../components/LeftSidebar/LeftSidebar.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
 
 export interface Props {
   content: CollectionEntry<'docs'>['data'];
@@ -137,5 +138,6 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				<Footer />
 			</slot>
 		</div>
+		<ScrollToTop />
 	</body>
 </html>
