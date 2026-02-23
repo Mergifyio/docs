@@ -1,0 +1,81 @@
+---
+/**
+ * Card component for documentation pages.
+ * Displays content in a bordered card with optional title and icon.
+ *
+ * Usage in MDX:
+ *   <Card title="My Card" icon="feather:settings">
+ *     Card content here
+ *   </Card>
+ */
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  title?: string;
+  icon?: string;
+}
+
+const { title, icon } = Astro.props;
+---
+
+<div class="doc-card">
+  {title && (
+    <div class="doc-card__header">
+      {icon && (
+        <span class="doc-card__icon" aria-hidden="true">
+          <Icon name={icon} width={18} height={18} />
+        </span>
+      )}
+      <h4 class="doc-card__title">{title}</h4>
+    </div>
+  )}
+  <div class="doc-card__body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .doc-card {
+    border: 1px solid var(--theme-divider);
+    border-radius: 8px;
+    padding: 1.25rem;
+    background: var(--theme-bg);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .doc-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .doc-card__icon {
+    display: flex;
+    align-items: center;
+    color: var(--color-mergify-blue);
+    flex-shrink: 0;
+  }
+
+  .doc-card__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+    color: var(--theme-text);
+  }
+
+  .doc-card__body {
+    font-size: var(--theme-text-sm);
+    color: var(--theme-text-lighter);
+    line-height: 1.6;
+  }
+
+  .doc-card__body > :first-child {
+    margin-top: 0;
+  }
+
+  .doc-card__body > :last-child {
+    margin-bottom: 0;
+  }
+</style>

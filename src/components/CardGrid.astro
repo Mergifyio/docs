@@ -1,0 +1,24 @@
+---
+/**
+ * Grid wrapper for Card and LinkCard components.
+ *
+ * Usage in MDX:
+ *   <CardGrid>
+ *     <LinkCard title="A" href="/a">...</LinkCard>
+ *     <LinkCard title="B" href="/b">...</LinkCard>
+ *   </CardGrid>
+ */
+---
+
+<div class="card-grid">
+  <slot />
+</div>
+
+<style is:global>
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+</style>

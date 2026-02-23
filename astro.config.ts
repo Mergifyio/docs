@@ -29,7 +29,13 @@ export default defineConfig({
   site: process.env.SITE_URL ? process.env.SITE_URL : 'https://docs.mergify.com',
   integrations: [
     AutoImport({
-      imports: [asideAutoImport, youtubeAutoImport],
+      imports: [
+        asideAutoImport,
+        youtubeAutoImport,
+        { '~/components/Card.astro': [['default', 'Card']] },
+        { '~/components/LinkCard.astro': [['default', 'LinkCard']] },
+        { '~/components/CardGrid.astro': [['default', 'CardGrid']] },
+      ],
     }),
     astroAsides(),
     astroYoutubeEmbeds(),
