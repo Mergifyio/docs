@@ -1,0 +1,201 @@
+---
+/**
+ * ComparisonTable - Feature comparison grid for docs pages.
+ *
+ * Usage in MDX:
+ *   <ComparisonTable
+ *     columns={['Mergify', 'GitHub MQ', 'Bors']}
+ *     highlight={0}
+ *     rows={[
+ *       { feature: 'Parallel testing', values: ['yes', 'no', 'partial'] },
+ *       { feature: 'Smart batching',   values: ['yes', 'no', 'no'] },
+ *     ]}
+ *   />
+ *
+ * `values` entries: 'yes' | 'no' | 'partial' | arbitrary string.
+ */
+
+export interface ComparisonRow {
+  feature: string;
+  values: string[];
+}
+
+export interface Props {
+  /** Column headers (product names) */
+  columns: string[];
+  /** Row data */
+  rows: ComparisonRow[];
+  /** Zero-based index of the column to highlight (typically 0 for Mergify) */
+  highlight?: number;
+}
+
+const { columns, rows, highlight = 0 } = Astro.props;
+
+function renderValue(val: string) {
+  switch (val) {
+    case 'yes':
+      return '<span class="ct-yes" aria-label="Yes">&#10003;</span>';
+    case 'no':
+      return '<span class="ct-no" aria-label="No">&#10005;</span>';
+    case 'partial':
+      return '<span class="ct-partial" aria-label="Partial">&#9679;</span>';
+    default:
+      return val;
+  }
+}
+---
+
+<div class="ct-wrapper">
+	<table class="ct" role="grid">
+		<thead>
+			<tr>
+				<th class="ct__feature-header">Feature</th>
+				{columns.map((col, i) => (
+					<th
+						class:list={[
+							'ct__col-header',
+							{ 'ct__col-header--highlight': i === highlight },
+						]}
+					>
+						{col}
+					</th>
+				))}
+			</tr>
+		</thead>
+		<tbody>
+			{rows.map((row) => (
+				<tr>
+					<td class="ct__feature">{row.feature}</td>
+					{row.values.map((val, i) => (
+						<td
+							class:list={[
+								'ct__cell',
+								{ 'ct__cell--highlight': i === highlight },
+							]}
+							set:html={renderValue(val)}
+						/>
+					))}
+				</tr>
+			))}
+		</tbody>
+	</table>
+</div>
+
+<style>
+	.ct-wrapper {
+		overflow-x: auto;
+		margin: 1.5rem 0;
+		border: 1px solid var(--theme-divider);
+		border-radius: 10px;
+	}
+
+	.ct {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--theme-text-sm);
+		line-height: 1.5;
+		border: none;
+		border-radius: 0;
+	}
+
+	.ct th,
+	.ct td {
+		padding: 0.65rem 1rem;
+		text-align: center;
+		border-bottom: 1px solid var(--theme-divider);
+		border-right: none;
+	}
+
+	.ct thead th {
+		font-weight: 600;
+		font-size: var(--theme-text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: var(--theme-text-lighter);
+		background: var(--theme-bg-offset);
+	}
+
+	.ct tbody tr:last-child td {
+		border-bottom: none;
+	}
+
+	/* Feature name column */
+	.ct__feature-header,
+	.ct__feature {
+		text-align: left;
+		font-weight: 500;
+		color: var(--theme-text);
+		min-width: 12rem;
+	}
+
+	.ct__feature-header {
+		font-weight: 600;
+	}
+
+	/* Highlighted column */
+	.ct__col-header--highlight {
+		color: var(--color-mergify-blue);
+		background: color-mix(
+			in srgb,
+			var(--color-mergify-blue) 8%,
+			var(--theme-bg-offset)
+		);
+	}
+
+	.ct__cell--highlight {
+		background: color-mix(
+			in srgb,
+			var(--color-mergify-blue) 4%,
+			transparent
+		);
+	}
+
+	/* Value indicators */
+	.ct :global(.ct-yes) {
+		color: #22c55e;
+		font-weight: 700;
+		font-size: 1.1em;
+	}
+
+	.ct :global(.ct-no) {
+		color: var(--theme-text-lighter);
+		opacity: 0.5;
+		font-size: 0.9em;
+	}
+
+	.ct :global(.ct-partial) {
+		color: #f59e0b;
+		font-size: 0.65em;
+		vertical-align: middle;
+	}
+
+	/* Zebra stripe */
+	.ct tbody tr:nth-child(even) {
+		background: var(--theme-bg-offset);
+	}
+
+	.ct tbody tr:nth-child(even) .ct__cell--highlight {
+		background: color-mix(
+			in srgb,
+			var(--color-mergify-blue) 6%,
+			var(--theme-bg-offset)
+		);
+	}
+
+	/* Hover */
+	.ct tbody tr:hover {
+		background: var(--theme-bg-hover);
+	}
+
+	@media (max-width: 40em) {
+		.ct th,
+		.ct td {
+			padding: 0.5rem 0.6rem;
+			font-size: var(--theme-text-xs);
+		}
+
+		.ct__feature {
+			min-width: 8rem;
+		}
+	}
+</style>
