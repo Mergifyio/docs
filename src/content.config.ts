@@ -13,6 +13,7 @@ const docs = defineCollection({
     title: z.string(),
     description: z.string(),
     suppressTitle: z.boolean().optional(),
+    pageLayout: z.enum(['default', 'api-ref']).optional(),
   }),
 });
 

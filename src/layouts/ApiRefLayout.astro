@@ -1,0 +1,114 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
+import generateToc from '~/util/generateToc';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CopyForLLMButton from '../components/CopyForLLMButton.astro';
+import PageContent from '../components/PageContent/PageContent.astro';
+import TableOfContents from '../components/RightSidebar/TableOfContents';
+import ViewMarkdownButton from '../components/ViewMarkdownButton.astro';
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+  content: CollectionEntry<'docs'>['data'];
+  headings?: MarkdownHeading[];
+  breadcrumbTitle?: string;
+}
+
+const { content, headings, breadcrumbTitle } = Astro.props;
+---
+
+<BaseLayout {...Astro.props}>
+  <div slot="secondary-sidebar" class="api-ref-sidebar">
+    {
+      headings && (
+        <nav aria-label="Secondary" class="api-ref-toc">
+          <TableOfContents
+            client:media="(min-width: 50em)"
+            toc={generateToc(headings)}
+            labels={{ onThisPage: 'On this page' }}
+            isMobile={false}
+          />
+        </nav>
+      )
+    }
+  </div>
+  <PageContent {...{ content }}>
+    {
+      Astro.url.pathname !== '/' && (
+        <Fragment slot="before-title">
+          <div class="page-heading-bar">
+            <div class="page-heading-bar__breadcrumbs">
+              <Breadcrumbs breadcrumbTitle={breadcrumbTitle} />
+            </div>
+            <div class="docs-toolbar-actions docs-toolbar-actions--heading">
+              <CopyForLLMButton size="compact" />
+              <ViewMarkdownButton size="compact" />
+            </div>
+          </div>
+        </Fragment>
+      )
+    }
+    <Fragment slot="before-article">
+      {
+        headings && (
+          <nav>
+            <TableOfContents
+              client:media="(max-width: 82em)"
+              toc={generateToc(headings)}
+              labels={{
+                onThisPage: 'On this page',
+              }}
+              isMobile={true}
+            />
+          </nav>
+        )
+      }
+    </Fragment>
+    <Fragment slot="after-title"><slot name="header" /></Fragment>
+    <slot />
+  </PageContent>
+</BaseLayout>
+
+<style lang="scss">
+  .api-ref-sidebar {
+    width: 100%;
+    padding: var(--doc-padding-block) 0;
+    overflow: auto;
+    font-size: var(--theme-text-md);
+  }
+
+  .api-ref-toc {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--theme-divider);
+  }
+
+  :global(body:has(.api-ref-sidebar)) {
+    /* Widen the right sidebar on API ref pages */
+    --theme-right-sidebar-width: 22rem;
+  }
+
+  /* API ref pages: reduce content max-width so code blocks
+     align nicely and text doesn't stretch too wide */
+  :global(body:has(.api-ref-sidebar) .content > section) {
+    max-width: 800px;
+  }
+
+  /* API ref code blocks get a distinctive treatment */
+  :global(body:has(.api-ref-sidebar) pre) {
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
+
+  /* Sticky code blocks on API ref pages: when a heading is
+     followed by a code block in the content, the code
+     stays visible as you scroll the explanation. */
+  @media (min-width: 82em) {
+    :global(body:has(.api-ref-sidebar) .content pre) {
+      position: sticky;
+      top: calc(var(--theme-navbar-height) + 1rem);
+      z-index: 1;
+    }
+  }
+</style>
