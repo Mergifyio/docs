@@ -87,16 +87,13 @@ import Button from '~/components/Button.astro';
 
   <h2 class="home-title">Get Started</h2>
 
-  <div class="home-get-started">
-    <Button colorScheme="teal" href="/merge-queue/setup" target="_self">Set up Merge Queue</Button>
-    <Button colorScheme="gray" href="/ci-insights" target="_self">Enable CI Insights</Button>
-    <Button colorScheme="gray" href="/monorepo-ci/github-actions" target="_self">Configure Monorepo CI</Button>
-  </div>
+  <RoleSelector />
 
   <a href="https://mergify.com/discovery" class="home-discovery">
     <div class="home-discovery-title">Need help getting started?</div>
     <div class="home-discovery-desc">
-      Book a free discovery call with our team to find the best setup for your workflow.
+      Book a free discovery call with our team to find
+      the best setup for your workflow.
     </div>
   </a>
 

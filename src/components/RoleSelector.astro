@@ -1,0 +1,265 @@
+---
+/**
+ * RoleSelector — Homepage widget that lets users pick their focus area
+ * and shows a tailored quick-start path. Persists choice in localStorage.
+ *
+ * Usage in MDX:
+ *   <RoleSelector />
+ */
+
+interface Step {
+  label: string;
+  href: string;
+}
+
+interface Role {
+  id: string;
+  title: string;
+  desc: string;
+  accent: string;
+  steps: Step[];
+}
+
+const roles: Role[] = [
+  {
+    id: 'merge-queue',
+    title: 'Ship faster with fewer broken builds',
+    desc: 'Set up a merge queue that tests PRs together before merging.',
+    accent: 'var(--section-merge-queue-accent)',
+    steps: [
+      { label: 'Install the Mergify GitHub App', href: '/merge-queue/setup' },
+      { label: 'Queue your first PR', href: '/merge-queue/lifecycle' },
+      { label: 'Enable parallel checks', href: '/merge-queue/parallel-checks' },
+      { label: 'Configure batches', href: '/merge-queue/batches' },
+    ],
+  },
+  {
+    id: 'ci-insights',
+    title: 'Tame flaky tests and reduce CI costs',
+    desc: 'Get visibility into test reliability and auto-retry failures.',
+    accent: 'var(--section-ci-insights-accent)',
+    steps: [
+      { label: 'Install the Mergify GitHub App', href: '/merge-queue/setup' },
+      { label: 'Set up CI reporting', href: '/ci-insights/ci-setup' },
+      { label: 'Configure your test framework', href: '/ci-insights/test-frameworks-setup' },
+      { label: 'Review flaky test data', href: '/ci-insights/flaky-tests-detection' },
+    ],
+  },
+  {
+    id: 'monorepo',
+    title: 'Run only the CI that matters',
+    desc: 'Scope-aware CI for monorepos — skip unchanged services.',
+    accent: 'var(--section-workflow-accent)',
+    steps: [
+      { label: 'Install the Mergify GitHub App', href: '/merge-queue/setup' },
+      { label: 'Define scopes and file patterns', href: '/monorepo-ci' },
+      { label: 'Set up GitHub Actions', href: '/monorepo-ci/github-actions' },
+      { label: 'Combine with merge queue', href: '/merge-queue/scopes' },
+    ],
+  },
+];
+---
+
+<div class="role-selector" id="role-selector">
+	<div class="role-tabs" role="tablist" aria-label="Choose your focus">
+		{roles.map((role, i) => (
+			<button
+				class="role-tab"
+				role="tab"
+				id={`tab-${role.id}`}
+				aria-controls={`panel-${role.id}`}
+				aria-selected={i === 0 ? 'true' : 'false'}
+				data-role={role.id}
+				style={`--accent: ${role.accent}`}
+			>
+				{role.title}
+			</button>
+		))}
+	</div>
+
+	{roles.map((role, i) => (
+		<div
+			class="role-panel"
+			role="tabpanel"
+			id={`panel-${role.id}`}
+			aria-labelledby={`tab-${role.id}`}
+			data-role={role.id}
+			hidden={i !== 0}
+			style={`--accent: ${role.accent}`}
+		>
+			<p class="role-panel__desc">{role.desc}</p>
+			<ol class="role-steps">
+				{role.steps.map((step, si) => (
+					<li class="role-step">
+						<span class="role-step__num">{si + 1}</span>
+						<a href={step.href} class="role-step__link">
+							{step.label}
+						</a>
+					</li>
+				))}
+			</ol>
+		</div>
+	))}
+</div>
+
+<style>
+	.role-selector {
+		margin: 1.5rem 0 0;
+	}
+
+	/* Tab bar */
+	.role-tabs {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		margin-bottom: 1rem;
+	}
+
+	.role-tab {
+		padding: 0.55rem 1rem;
+		font-size: 0.85rem;
+		font-weight: 500;
+		border: 1px solid var(--theme-divider);
+		border-radius: 8px;
+		background: var(--theme-bg);
+		color: var(--theme-text-lighter);
+		cursor: pointer;
+		transition:
+			border-color 0.15s,
+			background 0.15s,
+			color 0.15s;
+	}
+
+	.role-tab:hover {
+		border-color: var(--theme-shade-subtle);
+		color: var(--theme-text);
+	}
+
+	.role-tab[aria-selected='true'] {
+		border-color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 10%, var(--theme-bg));
+		color: var(--theme-text);
+		font-weight: 600;
+	}
+
+	/* Panel */
+	.role-panel__desc {
+		font-size: 0.95rem;
+		color: var(--theme-text-light);
+		margin-bottom: 1rem;
+		line-height: 1.5;
+	}
+
+	/* Steps */
+	.role-steps {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.role-step {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.65rem 1rem;
+		border: 1px solid var(--theme-divider);
+		border-radius: 8px;
+		background: var(--theme-bg-offset);
+		transition:
+			border-color 0.15s,
+			background 0.15s;
+	}
+
+	.role-step:hover {
+		border-color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 5%, var(--theme-bg-offset));
+	}
+
+	.role-step__num {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		flex-shrink: 0;
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 15%, transparent);
+		border-radius: 50%;
+	}
+
+	.role-step__link {
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.role-step__link:hover {
+		color: var(--accent);
+	}
+</style>
+
+<script is:inline>
+	(function () {
+		const STORAGE_KEY = 'mergify-docs-role';
+		const selector = document.getElementById('role-selector');
+		if (!selector) return;
+
+		const tabs = selector.querySelectorAll('[role="tab"]');
+		const panels = selector.querySelectorAll('[role="tabpanel"]');
+
+		function activate(roleId) {
+			tabs.forEach(function (tab) {
+				tab.setAttribute('aria-selected', tab.dataset.role === roleId ? 'true' : 'false');
+			});
+			panels.forEach(function (panel) {
+				panel.hidden = panel.dataset.role !== roleId;
+			});
+			try {
+				localStorage.setItem(STORAGE_KEY, roleId);
+			} catch {
+				/* noop */
+			}
+		}
+
+		// Restore saved preference
+		try {
+			var saved = localStorage.getItem(STORAGE_KEY);
+			if (saved) activate(saved);
+		} catch {
+			/* noop */
+		}
+
+		// Tab click
+		tabs.forEach(function (tab) {
+			tab.addEventListener('click', function () {
+				activate(tab.dataset.role);
+			});
+		});
+
+		// Keyboard navigation
+		selector.addEventListener('keydown', function (e) {
+			var current = selector.querySelector('[aria-selected="true"]');
+			if (!current) return;
+			var tabArr = Array.from(tabs);
+			var idx = tabArr.indexOf(current);
+
+			if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+				e.preventDefault();
+				var next = tabArr[(idx + 1) % tabArr.length];
+				activate(next.dataset.role);
+				next.focus();
+			} else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+				e.preventDefault();
+				var prev = tabArr[(idx - 1 + tabArr.length) % tabArr.length];
+				activate(prev.dataset.role);
+				prev.focus();
+			}
+		});
+	})();
+</script>
