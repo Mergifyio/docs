@@ -16,17 +16,17 @@ scopes:
   source:
     files:
       python-api:
-        includes:
+        include:
           - api/**/*.py
           - libs/shared/**/*.py
       frontend:
-        includes:
+        include:
           - web/**/*.js
           - web/**/*.jsx
           - web/**/*.ts
           - web/**/*.tsx
       docs:
-        includes:
+        include:
           - docs/**/*.md
           - docs/**/*.mdx
 
@@ -92,17 +92,17 @@ scopes:
   source:
     files:
       python-api:
-        includes:
+        include:
           - services/api/**/*.py
           - libs/python/**/*.py
       user-service:
-        includes:
+        include:
           - services/users/**/*.go
       frontend:
-        includes:
+        include:
           - apps/web/**/*.{js,jsx,ts,tsx}
       shared-config:
-        includes:
+        include:
           - config/**/*
           - docker/**/*
 
