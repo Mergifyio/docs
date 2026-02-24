@@ -66,6 +66,8 @@ export function rehypeOptimizeStatic(): Transformer<Root, Root> {
     for (const el of allPossibleElements) {
       /** We need to skip svg element rendered by graphviz or else it breaks the styling of graphs */
       if (el.type === 'element' && el.tagName === 'svg') continue;
+      /** Skip pre elements so rehype-expressive-code (appended after this plugin) can process them */
+      if (el.type === 'element' && el.tagName === 'pre') continue;
 
       if (el.type === 'mdxJsxFlowElement') {
         el.attributes.push({

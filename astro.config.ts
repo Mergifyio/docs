@@ -35,11 +35,39 @@ export default defineConfig({
     astroYoutubeEmbeds(),
     astroExpressiveCode({
       themes: ['slack-ochin', 'slack-dark'],
+      themeCssSelector: (theme) => {
+        if (theme.name === 'slack-ochin') return ':root:not(.theme-dark)';
+        if (theme.name === 'slack-dark') return ':root.theme-dark';
+        return `[data-theme='${theme.name}']`;
+      },
+      styleOverrides: {
+        borderColor: 'hsla(var(--color-blue), 0.15)',
+        borderRadius: '0.5rem',
+        borderWidth: '1px',
+        codePaddingBlock: '1rem',
+        codePaddingInline: '1.25rem',
+        codeFontFamily: 'var(--font-mono)',
+        codeFontSize: '0.85rem',
+        codeLineHeight: '1.7',
+        uiFontFamily: 'var(--font-body)',
+        uiFontSize: '0.8rem',
+        focusBorder: 'var(--color-mergify-blue)',
+        frames: {
+          frameBoxShadowCssValue: 'none',
+          editorTabBarBorderBottomColor: 'var(--theme-divider)',
+          editorActiveTabIndicatorBottomColor: 'var(--color-mergify-blue)',
+          editorActiveTabIndicatorTopColor: 'transparent',
+          terminalTitlebarBorderBottomColor: 'var(--theme-divider)',
+          tooltipSuccessBackground: 'var(--color-mergify-blue)',
+          tooltipSuccessForeground: '#fff',
+          inlineButtonBorder: 'var(--theme-divider)',
+          inlineButtonForeground: 'var(--theme-text-lighter)',
+          inlineButtonBackgroundIdleOpacity: '0',
+          inlineButtonBackgroundHoverOrFocusOpacity: '0.08',
+        },
+      },
     }),
-    mdx({
-      syntaxHighlight: 'shiki',
-      shikiConfig: { themes: { light: 'slack-ochin', dark: 'slack-dark' } },
-    }),
+    mdx(),
     react({
       include: ['Tables'],
     }),
