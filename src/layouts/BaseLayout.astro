@@ -4,6 +4,7 @@ import Footer from '../components/Footer/Footer.astro';
 import HeadCommon from '../components/HeadCommon.astro';
 import Header from '../components/Header/Header.astro';
 import HeadSEO from '../components/HeadSEO.astro';
+import ImageZoom from '../components/ImageZoom.astro';
 import LeftSidebar from '../components/LeftSidebar/LeftSidebar.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
 
@@ -139,5 +140,6 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 			</slot>
 		</div>
 		<ScrollToTop />
+		<ImageZoom />
 	</body>
 </html>
