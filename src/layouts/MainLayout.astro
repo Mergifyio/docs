@@ -5,6 +5,7 @@ import generateToc from '~/util/generateToc';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import CopyForLLMButton from '../components/CopyForLLMButton.astro';
 import PageContent from '../components/PageContent/PageContent.astro';
+import PageFeedback from '../components/PageFeedback.astro';
 import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
 import TableOfContents from '../components/RightSidebar/TableOfContents';
 import ViewMarkdownButton from '../components/ViewMarkdownButton.astro';
@@ -56,5 +57,12 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 		</Fragment>
 		<Fragment slot="after-title"><slot name="header" /></Fragment>
 		<slot />
+		{
+			Astro.url.pathname !== '/' && (
+				<Fragment slot="after-content">
+					<PageFeedback />
+				</Fragment>
+			)
+		}
 	</PageContent>
 </BaseLayout>
