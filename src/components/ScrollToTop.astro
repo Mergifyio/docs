@@ -1,0 +1,86 @@
+<!--
+  Floating "scroll to top" button that appears after scrolling down.
+-->
+<button
+  id="scroll-to-top"
+  type="button"
+  aria-label="Scroll to top"
+  class="scroll-to-top"
+>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M8 3L3 8.5h3.25V13h3.5V8.5H13L8 3z" fill="currentColor"/>
+  </svg>
+</button>
+
+<style>
+  .scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--theme-divider);
+    background: var(--theme-bg);
+    color: var(--theme-text-lighter);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, background 0.15s ease, color 0.15s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .scroll-to-top[data-visible] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .scroll-to-top:hover {
+    background: var(--theme-bg-hover);
+    color: var(--theme-text);
+    border-color: var(--theme-text-lighter);
+  }
+
+  .scroll-to-top:focus-visible {
+    outline: 2px solid var(--theme-text-accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 50em) {
+    .scroll-to-top {
+      bottom: 1rem;
+      right: 1rem;
+    }
+  }
+</style>
+
+<script>
+  function initScrollToTop() {
+    const btn = document.getElementById('scroll-to-top');
+    if (!btn) return;
+
+    const threshold = 400;
+
+    const update = () => {
+      if (window.scrollY > threshold) {
+        btn.setAttribute('data-visible', '');
+      } else {
+        btn.removeAttribute('data-visible');
+      }
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  initScrollToTop();
+  document.addEventListener('astro:after-swap', initScrollToTop);
+</script>
