@@ -39,6 +39,7 @@ const suppressTitle = content.suppressTitle;
 			</header>
 			{!suppressTitle && <hr class="divider" />}
 			<slot />
+			<slot name="after-content" />
 		</section>
 	</article>
 </div>
