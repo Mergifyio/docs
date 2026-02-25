@@ -7,35 +7,161 @@ import Header from '../components/Header/Header.astro';
 <html dir={'ltr'} lang={'en'} class="initial">
 	<head>
 		<HeadCommon />
-		<title>{`Not found - Mergify Docs`}</title>
+		<title>{`Page not found — Mergify Docs`}</title>
 		<style>
-			html,
-			body,
-			main {
+			html, body {
 				height: 100%;
 			}
-			main {
-				display: grid;
-				place-items: center;
-				padding-inline: var(--min-spacing-inline);
-			}
+
 			:global(#menu-toggle) {
 				display: none;
+			}
+
+			.not-found {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				min-height: calc(100vh - var(--theme-navbar-height) - 10rem);
+				padding: 3rem var(--min-spacing-inline) 4rem;
+				text-align: center;
+			}
+
+			.not-found-inner {
+				max-width: 28rem;
+			}
+
+			/* Large 404 heading */
+			.error-code {
+				font-family: var(--font-mono);
+				font-size: clamp(5rem, 14vw, 8rem);
+				font-weight: 800;
+				letter-spacing: -0.04em;
+				line-height: 1;
+				color: var(--color-mergify-blue);
+				margin: 0 0 1rem;
+				opacity: 0.25;
+			}
+
+			.error-title {
+				font-family: var(--font-brand), var(--font-fallback);
+				font-size: clamp(1.3rem, 3vw, 1.6rem);
+				font-weight: 600;
+				color: var(--theme-text);
+				margin: 0 0 0.75rem;
+				line-height: 1.3;
+			}
+
+			.error-description {
+				font-size: var(--theme-text-base);
+				color: var(--theme-text-lighter);
+				margin: 0 0 2rem;
+				line-height: 1.6;
+			}
+
+			/* Search prompt */
+			.search-prompt {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				width: 100%;
+				max-width: 22rem;
+				margin: 0 auto 1.5rem;
+				padding: 0.7rem 1rem;
+				border: 1px solid var(--theme-divider);
+				border-radius: 8px;
+				background: var(--theme-bg);
+				color: var(--theme-text-lighter);
+				font-size: var(--theme-text-sm);
+				cursor: pointer;
+				transition: border-color 0.15s ease, box-shadow 0.15s ease;
+				text-decoration: none;
+			}
+
+			.search-prompt:hover {
+				border-color: var(--color-mergify-blue);
+				box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-mergify-blue) 12%, transparent);
+			}
+
+			.search-prompt svg {
+				flex-shrink: 0;
+				opacity: 0.5;
+			}
+
+			.search-prompt span {
+				flex: 1;
+				text-align: left;
+			}
+
+			.search-prompt kbd {
+				font-family: var(--font-mono);
+				font-size: 0.7rem;
+				padding: 0.15rem 0.4rem;
+				border: 1px solid var(--theme-shade-subtle);
+				border-radius: 4px;
+				background: var(--theme-bg-offset);
+				color: var(--theme-text-lighter);
+				line-height: 1;
+			}
+
+			/* Home link */
+			.home-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.6rem 1.25rem;
+				border: 1px solid var(--theme-divider);
+				border-radius: 8px;
+				color: var(--theme-text);
+				font-size: var(--theme-text-sm);
+				font-weight: 500;
+				text-decoration: none;
+				transition: border-color 0.15s ease, background 0.15s ease;
+			}
+
+			.home-link:hover {
+				color: var(--color-mergify-blue);
+				border-color: var(--color-mergify-blue);
+				background: var(--theme-bg-offset);
 			}
 		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main class="layout">
-			<article>
-				<h1>404</h1>
-				<p>
-					We couldn't find the page you were looking for. <br />
-					<a href="/">Go back to the home page</a>.
+		<main class="not-found">
+			<div class="not-found-inner">
+				<p class="error-code">404</p>
+				<h1 class="error-title">This page took a wrong branch</h1>
+				<p class="error-description">
+					The page you're looking for doesn't exist or may have been moved.
+					Try searching or head back to the homepage.
 				</p>
-			</article>
+
+				<!-- Search trigger -->
+				<button class="search-prompt" type="button" id="search-trigger" aria-label="Search documentation">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+						<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.442.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+					</svg>
+					<span>Search the docs...</span>
+					<kbd>/</kbd>
+				</button>
+
+				<a href="/" class="home-link">
+					<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+						<path d="M6.293 2.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1-1.414 1.414L8 5.414 4.707 8.707a1 1 0 0 1-1.414-1.414l5-5z" transform="rotate(-90 8 8)"/>
+					</svg>
+					Back to home
+				</a>
+			</div>
 		</main>
 		<Footer />
+
+		<script is:inline>
+			document.getElementById('search-trigger')?.addEventListener('click', () => {
+				// Trigger the site's existing search modal by simulating the / key
+				document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true }));
+			});
+		</script>
 	</body>
 </html>
