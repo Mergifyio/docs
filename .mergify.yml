@@ -54,20 +54,20 @@ merge_protections:
       - label = hotfix
     success_conditions:
       - or:
-          # Author is engineering manager, we allow with one review
-          - and:
-              - author=@eng-mgr
-              - "#approved-reviews-by>=1"
-          - and:
-              - author=@devs
-              # in any other case, we allow if approve by engineering manager
-              # or anyone if it's a regular fix/revert
-              - or:
-                  - approved-reviews-by=@eng-mgr
-                  - and:
-                      - title~=^(revert|fix)
-                      - "#approved-reviews-by>=1"
-
+          - or: &HotfixReviewCond
+              # Author is engineering manager, we allow with one review
+              - and:
+                  - author=@eng-mgr
+                  - "#approved-reviews-by>=1"
+              - and:
+                  - author=@devs
+                  # in any other case, we allow if approve by engineering manager
+                  # or anyone if it's a regular fix/revert
+                  - or:
+                      - approved-reviews-by=@eng-mgr
+                      - and:
+                          - title~=^(revert|fix)
+                          - "#approved-reviews-by>=1"
           - or: *DefaultReviewCond
 
       # yamllint disable-line rule:line-length
@@ -126,9 +126,15 @@ pull_request_rules:
       - -merged
       - -closed
       - and: *CheckRuns
-      - "#approved-reviews-by=0"
       - "#changes-requested-reviews-by=0"
-      - "review-requested!=@devs"
+      - review-requested!=@devs
+      - and:
+          - or:
+              - label!=hotfix
+              - not:
+                  or: *HotfixReviewCond
+          - not:
+              or: *DefaultReviewCond
     actions:
       request_reviews:
         teams:
