@@ -1231,6 +1231,7 @@
                       "action.merge",
                       "action.post_check",
                       "action.queue.change",
+                      "action.queue.checks.change",
                       "action.queue.checks_end",
                       "action.queue.checks_not_started",
                       "action.queue.checks_start",
@@ -2804,27 +2805,6 @@
               "title": "Queue Name"
             },
             "description": "Merge queue name(s) of the pull requests"
-          },
-          {
-            "name": "priority_rule_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Name of the priority rule(s) of the pull requests",
-              "title": "Priority Rule Name"
-            },
-            "description": "Name of the priority rule(s) of the pull requests"
           },
           {
             "name": "start_at",
@@ -4635,69 +4615,6 @@
         ],
         "title": "EventCommandQueue"
       },
-      "EventCommandRequeue": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "received_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Received At"
-          },
-          "trigger": {
-            "type": "string",
-            "title": "Trigger"
-          },
-          "repository": {
-            "type": "string",
-            "title": "Repository"
-          },
-          "pull_request": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Pull Request"
-          },
-          "base_ref": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Base Ref"
-          },
-          "type": {
-            "type": "string",
-            "const": "command.requeue",
-            "title": "Type"
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/EventCommandMetadata"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "received_at",
-          "trigger",
-          "repository",
-          "pull_request",
-          "base_ref",
-          "type",
-          "metadata"
-        ],
-        "title": "EventCommandRequeue"
-      },
       "EventComment": {
         "properties": {
           "id": {
@@ -5526,6 +5443,89 @@
           "size": {
             "type": "integer",
             "title": "Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "queue_name",
+          "partition_name",
+          "priority_rule_name",
+          "size"
+        ],
+        "title": "EventQueueChangeMetadata"
+      },
+      "EventQueueChecksChange": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.queue.checks.change",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventQueueChecksChangeMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventQueueChecksChange"
+      },
+      "EventQueueChecksChangeMetadata": {
+        "properties": {
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
           },
           "running_checks": {
             "type": "integer",
@@ -5536,11 +5536,9 @@
         "required": [
           "queue_name",
           "partition_name",
-          "priority_rule_name",
-          "size",
           "running_checks"
         ],
-        "title": "EventQueueChangeMetadata"
+        "title": "EventQueueChecksChangeMetadata"
       },
       "EventQueueChecksEnd": {
         "properties": {
@@ -6872,69 +6870,6 @@
         ],
         "title": "EventRequestReviewsMetadata"
       },
-      "EventRequeue": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "received_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Received At"
-          },
-          "trigger": {
-            "type": "string",
-            "title": "Trigger"
-          },
-          "repository": {
-            "type": "string",
-            "title": "Repository"
-          },
-          "pull_request": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Pull Request"
-          },
-          "base_ref": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Base Ref"
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/EventNoMetadata"
-          },
-          "type": {
-            "type": "string",
-            "const": "action.requeue",
-            "title": "Type"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "received_at",
-          "trigger",
-          "repository",
-          "pull_request",
-          "base_ref",
-          "metadata",
-          "type"
-        ],
-        "title": "EventRequeue"
-      },
       "EventReview": {
         "properties": {
           "id": {
@@ -7567,9 +7502,6 @@
                   "$ref": "#/components/schemas/EventRequestReviews"
                 },
                 {
-                  "$ref": "#/components/schemas/EventRequeue"
-                },
-                {
                   "$ref": "#/components/schemas/EventReview"
                 },
                 {
@@ -7594,6 +7526,9 @@
                   "$ref": "#/components/schemas/EventQueueChange"
                 },
                 {
+                  "$ref": "#/components/schemas/EventQueueChecksChange"
+                },
+                {
                   "$ref": "#/components/schemas/EventScheduledFreezeCreate"
                 },
                 {
@@ -7604,9 +7539,6 @@
                 },
                 {
                   "$ref": "#/components/schemas/EventCommandQueue"
-                },
-                {
-                  "$ref": "#/components/schemas/EventCommandRequeue"
                 },
                 {
                   "$ref": "#/components/schemas/EventCommandDequeue"
@@ -7628,6 +7560,7 @@
                   "action.merge": "#/components/schemas/EventMerge",
                   "action.post_check": "#/components/schemas/EventPostCheck",
                   "action.queue.change": "#/components/schemas/EventQueueChange",
+                  "action.queue.checks.change": "#/components/schemas/EventQueueChecksChange",
                   "action.queue.checks_end": "#/components/schemas/EventQueueChecksEnd",
                   "action.queue.checks_not_started": "#/components/schemas/EventQueueChecksNotStarted",
                   "action.queue.checks_start": "#/components/schemas/EventQueueChecksStart",
@@ -7637,14 +7570,12 @@
                   "action.rebase": "#/components/schemas/EventRebase",
                   "action.refresh": "#/components/schemas/EventRefresh",
                   "action.request_reviews": "#/components/schemas/EventRequestReviews",
-                  "action.requeue": "#/components/schemas/EventRequeue",
                   "action.review": "#/components/schemas/EventReview",
                   "action.squash": "#/components/schemas/EventSquash",
                   "action.unqueue": "#/components/schemas/EventUnqueue",
                   "action.update": "#/components/schemas/EventUpdate",
                   "command.dequeue": "#/components/schemas/EventCommandDequeue",
                   "command.queue": "#/components/schemas/EventCommandQueue",
-                  "command.requeue": "#/components/schemas/EventCommandRequeue",
                   "queue.pause.create": "#/components/schemas/EventQueuePauseCreate",
                   "queue.pause.delete": "#/components/schemas/EventQueuePauseDelete",
                   "queue.pause.update": "#/components/schemas/EventQueuePauseUpdate",
@@ -8753,17 +8684,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "priority_rule_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Priority Rule Name"
-          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/RunningChecksInInterval"
@@ -8777,7 +8697,6 @@
           "base_ref",
           "partition_name",
           "queue_name",
-          "priority_rule_name",
           "stats"
         ],
         "title": "RunningChecksGroupResponse"
