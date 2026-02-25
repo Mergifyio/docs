@@ -200,7 +200,7 @@ nav ul {
 }
 
 .content {
-  line-height: 1.75;
+  line-height: 1.5;
 }
 
 article > section li > :is(p, pre, .expressive-code, blockquote):not(:first-child) {
@@ -827,27 +827,39 @@ pre {
 
 .content-title {
   font-family: var(--font-brand);
-  font-size: 2.5rem;
-  font-weight: 900;
-  line-height: 1.15;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
   margin-bottom: 0.5em;
 }
 
 .content-subtitle {
   font-family: var(--font-brand);
-  font-size: 1.2rem;
-  font-weight: 500;
-  line-height: 1.2;
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.4;
 }
 
-.main-content.h2,
-.main-content.h3,
-.main-content.h4,
-.main-content.h5,
-.main-content.h6 {
+.main-content h2 {
   font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 21px;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: 0;
+}
+
+.main-content h3 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: 0;
+}
+
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
   letter-spacing: 0;
 }
 
