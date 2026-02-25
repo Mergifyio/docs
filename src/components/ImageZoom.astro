@@ -1,0 +1,137 @@
+<!--
+  Image zoom/lightbox for documentation pages.
+  Makes all article images clickable to view full-size in a modal overlay.
+  Include once in the base layout.
+-->
+<style is:global>
+  /* Make article images look clickable */
+  article img:not(.no-zoom) {
+    cursor: zoom-in;
+    transition: opacity 0.15s ease;
+  }
+
+  article img:not(.no-zoom):hover {
+    opacity: 0.9;
+  }
+
+  /* Overlay */
+  .image-zoom-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    padding: 2rem;
+  }
+
+  .image-zoom-overlay[data-active] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .image-zoom-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+  }
+
+  .image-zoom-overlay[data-active] img {
+    transform: scale(1);
+  }
+
+  .image-zoom-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+
+  .image-zoom-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .image-zoom-close:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+</style>
+
+<div class="image-zoom-overlay" id="image-zoom-overlay" aria-hidden="true">
+  <button class="image-zoom-close" type="button" aria-label="Close image preview">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06z"/>
+    </svg>
+  </button>
+  <img alt="" />
+</div>
+
+<script>
+  function initImageZoom() {
+    const overlay = document.getElementById('image-zoom-overlay');
+    if (!overlay) return;
+
+    const overlayImg = overlay.querySelector('img');
+    const closeBtn = overlay.querySelector('.image-zoom-close');
+    if (!overlayImg || !closeBtn) return;
+
+    function open(src: string, alt: string) {
+      overlayImg!.src = src;
+      overlayImg!.alt = alt;
+      overlay!.setAttribute('data-active', '');
+      overlay!.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay!.removeAttribute('data-active');
+      overlay!.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    // Click handler for article images
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'IMG' && target.closest('article') && !target.classList.contains('no-zoom')) {
+        const img = target as HTMLImageElement;
+        open(img.src, img.alt);
+      }
+    });
+
+    // Close handlers
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target === closeBtn || closeBtn.contains(e.target as Node)) {
+        close();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.hasAttribute('data-active')) {
+        close();
+      }
+    });
+  }
+
+  initImageZoom();
+  document.addEventListener('astro:after-swap', initImageZoom);
+</script>
