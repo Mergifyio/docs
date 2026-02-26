@@ -6,6 +6,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import CopyForLLMButton from '../components/CopyForLLMButton.astro';
 import PageContent from '../components/PageContent/PageContent.astro';
 import PageFeedback from '../components/PageFeedback.astro';
+import PageMeta from '../components/PageMeta.astro';
 import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
 import TableOfContents from '../components/RightSidebar/TableOfContents';
 import ViewMarkdownButton from '../components/ViewMarkdownButton.astro';
@@ -61,6 +62,7 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 			Astro.url.pathname !== '/' && (
 				<Fragment slot="after-content">
 					<PageFeedback />
+					<PageMeta pathname={Astro.url.pathname} />
 				</Fragment>
 			)
 		}

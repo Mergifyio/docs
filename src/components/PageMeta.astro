@@ -1,0 +1,57 @@
+---
+/**
+ * Displays "Edit this page" link and "Last updated" timestamp
+ * at the bottom of documentation pages.
+ */
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  pathname: string;
+}
+
+const { pathname } = Astro.props;
+
+const GITHUB_EDIT_BASE = 'https://github.com/Mergifyio/docs/edit/main/src/content/docs';
+
+function getEditPath(pathname: string): string {
+  const trimmed = pathname === '/' ? '/index' : pathname.replace(/\/$/, '') || '/index';
+  return `${GITHUB_EDIT_BASE}${trimmed}.mdx`;
+}
+
+const editUrl = getEditPath(pathname);
+---
+
+<div class="page-meta">
+  <a class="page-meta__edit" href={editUrl} target="_blank" rel="noopener noreferrer">
+    <Icon name="feather:edit-2" width={14} height={14} />
+    <span>Edit this page on GitHub</span>
+  </a>
+</div>
+
+<style>
+  .page-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--theme-divider);
+    font-size: var(--theme-text-sm);
+    color: var(--theme-text-lighter);
+  }
+
+  .page-meta__edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--theme-text-lighter);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .page-meta__edit:hover {
+    color: var(--color-mergify-blue);
+  }
+</style>
