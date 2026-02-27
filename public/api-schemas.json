@@ -3902,8 +3902,8 @@
               "already_tested",
               "waiting_for_merge",
               "merged",
-              "evaluating_failure",
-              "requeued"
+              "waiting_for_previous_batches",
+              "waiting_for_requeue"
             ],
             "title": "Code"
           },
