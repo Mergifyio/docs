@@ -5713,15 +5713,8 @@
             "title": "Train Car Id"
           },
           "session_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "string",
+            "format": "uuid",
             "title": "Session Id"
           }
         },
@@ -5847,15 +5840,8 @@
             "title": "Reason"
           },
           "session_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "string",
+            "format": "uuid",
             "title": "Session Id"
           }
         },
@@ -5991,15 +5977,8 @@
             "title": "Train Car Id"
           },
           "session_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "string",
+            "format": "uuid",
             "title": "Session Id"
           }
         },
@@ -6118,15 +6097,8 @@
             "title": "Priority Rule Name"
           },
           "session_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "string",
+            "format": "uuid",
             "title": "Session Id"
           }
         },
@@ -6399,15 +6371,8 @@
             "title": "Priority Rule Name"
           },
           "session_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "string",
+            "format": "uuid",
             "title": "Session Id"
           }
         },
