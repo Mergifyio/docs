@@ -72,6 +72,45 @@ Response:
 }
 ```
 
+### Using a GitHub Personal Access Token
+
+As an alternative to application keys, you can authenticate to the Mergify API
+using a **GitHub Personal Access Token (PAT)** as a Bearer token. This is
+useful when integrating with tools that already have a GitHub token available,
+such as CI environments or the [Mergify CLI](/stacks).
+
+#### Prerequisites
+
+You must have logged in to the [Mergify dashboard](https://dashboard.mergify.com)
+at least once using GitHub OAuth before using this method. The PAT is only used
+to verify your GitHub identity — all permissions are based on your Mergify
+account, not the PAT's scopes.
+
+#### Accepted Token Formats
+
+- `ghp_*` — [classic personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
+- `github_pat_*` — [fine-grained personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
+
+#### Example
+
+```bash
+curl -H "Accept: application/json" \
+     -H "Authorization: Bearer <github-personal-access-token>" \
+     https://api.mergify.com/v1/application
+```
+
+:::note
+  The PAT is used solely for identity verification. The token's GitHub scopes
+  do not affect what you can access in the Mergify API — permissions are
+  determined by your Mergify user account and its associated organizations.
+:::
+
+:::caution
+  A small number of endpoints only accept application keys (e.g., CI-specific
+  endpoints). See the [API reference](/api) for details on each endpoint's
+  supported authentication methods.
+:::
+
 ### Revoking an Application Key
 
 If, for any reason, you need to revoke an application key:
