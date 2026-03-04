@@ -77,6 +77,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -145,6 +148,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -221,6 +227,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -280,6 +289,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -348,6 +360,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -409,6 +424,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -582,6 +600,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -889,6 +910,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -979,6 +1003,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -1057,6 +1084,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -1138,6 +1168,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -1392,6 +1425,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -1501,6 +1537,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -1703,6 +1742,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -1905,6 +1947,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -2107,6 +2152,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -2309,6 +2357,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -2511,6 +2562,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -2713,6 +2767,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -2882,6 +2939,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -3072,6 +3132,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -3138,6 +3201,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -3216,6 +3282,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -3308,6 +3377,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -3398,6 +3470,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -3488,6 +3563,9 @@
         "security": [
           {
             "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
@@ -9616,6 +9694,11 @@
     "securitySchemes": {
       "ApplicationAuth": {
         "type": "http",
+        "scheme": "bearer"
+      },
+      "GitHubTokenBearerAuth": {
+        "type": "http",
+        "description": "GitHub Personal Access Token (ghp_* or github_pat_*)",
         "scheme": "bearer"
       }
     }
