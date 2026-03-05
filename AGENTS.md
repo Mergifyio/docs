@@ -7,7 +7,7 @@
 - **Framework**: Astro 5.x with MDX
 - **UI Libraries**: React 19, Vue (for specific components)
 - **Language**: TypeScript (strict mode)
-- **Node Version**: 22 (see `.node-version`)
+- **Node Version**: 24 (see `.node-version`)
 - **Formatter**: Biome (primary), Prettier (for .astro files)
 - **Linter**: ESLint 9 (flat config)
 - **Testing**: Vitest
