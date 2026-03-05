@@ -9698,7 +9698,7 @@
       },
       "GitHubTokenBearerAuth": {
         "type": "http",
-        "description": "GitHub Personal Access Token (ghp_* or github_pat_*)",
+        "description": "GitHub user access token (ghp_*, github_pat_*, or gho_*)",
         "scheme": "bearer"
       }
     }
