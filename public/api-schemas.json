@@ -3277,7 +3277,7 @@
           "scheduled_freeze"
         ],
         "summary": "Update a scheduled freeze",
-        "description": "Update an existing scheduled freeze on the repository specified in the path",
+        "description": "Update an existing scheduled freeze on the repository specified in the path. Only the fields provided in the request body will be updated.",
         "operationId": "update_scheduled_freeze_repos__owner___repository__scheduled_freeze__freeze_id__patch",
         "security": [
           {
@@ -3362,7 +3362,7 @@
             "description": "Unprocessable entity"
           },
           "400": {
-            "description": "The scheduled freeze `start`, `timezone` and `matching_conditions` attributes cannot be updated, because the scheduled freeze has already started"
+            "description": "The scheduled freeze `start` attribute cannot be updated, because the scheduled freeze has already started"
           }
         }
       },
@@ -7986,6 +7986,18 @@
               }
             ],
             "title": "Github Labels"
+          },
+          "estimated_merge_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Merge At"
           }
         },
         "type": "object",
@@ -9071,8 +9083,15 @@
       "UpdateScheduledFreezePayload": {
         "properties": {
           "reason": {
-            "type": "string",
-            "maxLength": 10000,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reason",
             "description": "The reason for the scheduled freeze."
           },
@@ -9087,7 +9106,7 @@
               }
             ],
             "title": "Start",
-            "description": "When the scheduled freeze begins (date and time in ISO 8601 format without TZ). Can only be updated if the scheduled freeze has not yet begun. Begins now if the attribute is null."
+            "description": "When the scheduled freeze begins (date and time in ISO 8601 format without TZ). Can only be updated if the scheduled freeze has not yet begun. Set to null to start now."
           },
           "end": {
             "anyOf": [
@@ -9100,52 +9119,66 @@
               }
             ],
             "title": "End",
-            "description": "When the scheduled freeze ends (date and time in ISO 8601 format without TZ)."
+            "description": "When the scheduled freeze ends (date and time in ISO 8601 format without TZ). Set to null for an indefinite freeze."
           },
           "timezone": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Timezone",
             "description": "Timezone where the freeze is expected to happen."
           },
           "matching_conditions": {
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+            "anyOf": [
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
                 },
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "type": "array",
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Matching Conditions",
-            "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze. Can only be updated if the scheduled freeze has not yet begun."
+            "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze."
           },
           "exclude_conditions": {
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+            "anyOf": [
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/MatchingConditionsDict-Input"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
                 },
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "type": "array",
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Exclude Conditions",
-            "description": "List of conditions used to exclude pull requests from the scheduled freeze. Pull requests matching these conditions will not be frozen. Can only be updated if the scheduled freeze has not yet begun."
+            "description": "List of conditions used to exclude pull requests from the scheduled freeze. Pull requests matching these conditions will not be frozen."
           }
         },
         "type": "object",
-        "required": [
-          "reason",
-          "start",
-          "end",
-          "timezone",
-          "matching_conditions"
-        ],
         "title": "UpdateScheduledFreezePayload"
       },
       "mergify_engine__queue__merge_train__checks__QueueCheck__Serialized": {
