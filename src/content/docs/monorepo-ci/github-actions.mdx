@@ -73,6 +73,13 @@ strict digraph {
 ```
 
 ## Example workflow
+
+:::caution
+  The `scopes` action requires a pull request context. If your workflow also
+  triggers on `push` events, guard the scopes job with
+  `if: ${{ github.event_name == 'pull_request' }}` to avoid failures.
+:::
+
 ```yaml
 name: Monorepo CI
 on:
