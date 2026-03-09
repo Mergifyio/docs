@@ -47,10 +47,11 @@ const isEnterprisePage = currentPage === '/enterprise' || currentPage.startsWith
 	nav {
 		width: 100%;
 		height: 100%;
-		font-size: var(--theme-text-md);
+		font-size: 14px;
 	}
 	.nav-groups {
 		padding-top: 1rem;
+		padding-left: 0.5rem;
 		max-height: 100%;
 		overflow-x: visible;
 		overflow-y: auto;
@@ -59,7 +60,7 @@ const isEnterprisePage = currentPage === '/enterprise' || currentPage.startsWith
 	@media (min-width: 50em) {
 		.nav-groups {
 			position: fixed;
-			top: calc(var(--theme-navbar-height) + 3rem);
+			top: calc(var(--theme-navbar-height) + 1.5rem);
 			bottom: 0;
 			width: calc(var(--theme-left-sidebar-width) - var(--min-spacing-inline) * 1.6);
 		}

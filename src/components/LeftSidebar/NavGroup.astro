@@ -109,21 +109,27 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 	@media (min-width: 50em) {
 		.nav-group {
 			display: none;
-			margin-bottom: 0.5rem;
+			margin-bottom: 0.25rem;
 		}
 	}
 	.nav-group.active {
 		display: block;
 	}
 	.nav-group-title {
-		font-size: 1em;
+		font-size: 14px;
 		font-weight: 600;
-		padding: 0.2rem 1rem;
+		padding: 0.4rem 0.75rem;
+		color: var(--theme-text);
 
 		h2 {
 			display: flex;
 			align-items: center;
-			gap: 12px;
+			gap: 8px;
+		}
+
+		:global(.left-icon) {
+			min-width: 16px;
+			min-height: 16px;
 		}
 	}
 
@@ -132,7 +138,7 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 	}
 
 	details > ul {
-		padding-left: 1rem !important;
+		padding-left: 0.5rem !important;
 	}
 
 	details > summary {
@@ -156,6 +162,13 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		all: inherit;
 		margin: 0;
 		padding: 0;
+	}
+
+	.chevron {
+		margin-left: auto;
+		opacity: 0.4;
+		width: 12px;
+		height: 12px;
 	}
 
 	svg {
