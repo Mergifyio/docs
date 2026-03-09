@@ -3968,20 +3968,21 @@
           "code": {
             "type": "string",
             "enum": [
-              "completed",
-              "queued",
               "running",
               "bisecting",
+              "preparing",
               "failed",
-              "paused",
-              "frozen",
+              "merged",
+              "waiting_for_merge",
+              "waiting_for_previous_batches",
+              "waiting_for_requeue",
               "waiting_schedule",
               "waiting_for_batch",
-              "already_tested",
-              "waiting_for_merge",
-              "merged",
-              "waiting_for_previous_batches",
-              "waiting_for_requeue"
+              "completed",
+              "queued",
+              "paused",
+              "frozen",
+              "already_tested"
             ],
             "title": "Code"
           },
