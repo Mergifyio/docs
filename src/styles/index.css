@@ -493,7 +493,8 @@ body.section-merge-queue a.current-header-link {
 }
 
 #left-sidebar .nav-group-merge-queue .nav-link a[aria-current="page"] {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: transparent;
+  border-left-color: var(--section-merge-queue-accent);
 }
 
 /* CI Insights section: ToC and nav colors */
@@ -518,7 +519,8 @@ body.section-ci-insights a.current-header-link {
 }
 
 #left-sidebar .nav-group-ci-insights .nav-link a[aria-current="page"] {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: transparent;
+  border-left-color: var(--section-ci-insights-accent);
 }
 
 /* Merge Protections section: ToC and nav colors */
@@ -543,7 +545,8 @@ body.section-merge-protections a.current-header-link {
 }
 
 #left-sidebar .nav-group-merge-protections .nav-link a[aria-current="page"] {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: transparent;
+  border-left-color: var(--section-merge-protections-accent);
 }
 
 /* Workflow Automation section: ToC and nav colors */
@@ -568,7 +571,8 @@ body.section-workflow a.current-header-link {
 }
 
 #left-sidebar .nav-group-workflow .nav-link a[aria-current="page"] {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: transparent;
+  border-left-color: var(--section-workflow-accent);
 }
 
 /* Highlight TOC header link matching the current scroll position */

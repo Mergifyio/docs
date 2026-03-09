@@ -5,10 +5,9 @@ import { removeLeadingSlash } from '~/util';
 export interface Props {
   currentPageMatch: string;
   navItem: NavItem;
-  showIcon?: boolean;
 }
 
-const { currentPageMatch, navItem, showIcon = true } = Astro.props as Props;
+const { currentPageMatch, navItem } = Astro.props as Props;
 const isHomepage = navItem.path === '/';
 const isHomepageMatch = isHomepage && currentPageMatch === '';
 const isPageMatch =
@@ -18,22 +17,21 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 ---
 
 <li class="nav-link">
-	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`} title={navItem.title}>
-		{showIcon && navItem.icon && isStringIcon && <Icon name={navItem.icon as string} class="left-icon" />}
-		{showIcon && IconComponent && <IconComponent class="left-icon" />}
-		<span class="nav-link-text" set:html={navItem.title} />
+	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`}>
+		{navItem.icon && isStringIcon && <Icon name={navItem.icon as string} class="left-icon" />}
+		{IconComponent && <IconComponent class="left-icon" />}
+		<Fragment set:html={navItem.title} />
 	</a>
 </li>
 <style>
 	.left-icon {
 		min-width: 16px;
 		min-height: 16px;
-		color: var(--theme-text-lighter);
 	}
 
 	.nav-link a {
 		margin: 0;
-		padding: 0.5rem 0.75rem;
+		padding: 0.35rem 0.75rem;
 		font: inherit;
 		font-size: 14px;
 		color: var(--theme-text-lighter);
@@ -42,8 +40,8 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 		gap: 8px;
 		align-items: center;
 		white-space: nowrap;
-		overflow: hidden;
 		border-radius: 6px;
+		border-left: 2px solid transparent;
 		transition: color 0.15s, background-color 0.15s;
 
 		&:hover,
@@ -54,9 +52,9 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 
 		&[aria-current='page'] {
 			color: var(--theme-text);
-			background-color: rgba(0, 0, 0, 0.05);
-			border-radius: 6px;
-			font-weight: 400;
+			background-color: transparent;
+			font-weight: 500;
+			border-left-color: var(--theme-text);
 			outline: 1px solid transparent;
 
 			&:focus {
@@ -69,10 +67,5 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 				border: 1px solid LinkText;
 			}
 		}
-	}
-
-	.nav-link-text {
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 </style>

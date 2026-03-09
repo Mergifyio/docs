@@ -50,8 +50,8 @@ const isEnterprisePage = currentPage === '/enterprise' || currentPage.startsWith
 		font-size: 14px;
 	}
 	.nav-groups {
-		padding-top: 0.5rem;
-		padding-inline: 0.75rem;
+		padding-top: 1rem;
+		padding-left: 0.5rem;
 		max-height: 100%;
 		overflow-x: visible;
 		overflow-y: auto;
@@ -60,9 +60,9 @@ const isEnterprisePage = currentPage === '/enterprise' || currentPage.startsWith
 	@media (min-width: 50em) {
 		.nav-groups {
 			position: fixed;
-			top: calc(var(--theme-navbar-height) + 0.5rem);
+			top: calc(var(--theme-navbar-height) + 1.5rem);
 			bottom: 0;
-			width: calc(var(--theme-left-sidebar-width) - 0.5rem);
+			width: calc(var(--theme-left-sidebar-width) - var(--min-spacing-inline) * 1.6);
 		}
 	}
 
