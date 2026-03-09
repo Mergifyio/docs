@@ -4270,7 +4270,7 @@
             },
             "type": "array",
             "title": "Matching Conditions",
-            "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze."
+            "description": "List of conditions used to match pull requests that need to be frozen during the scheduled freeze. Defaults to an empty list, which matches all pull requests."
           },
           "exclude_conditions": {
             "items": {
@@ -4292,8 +4292,7 @@
         "required": [
           "reason",
           "start",
-          "timezone",
-          "matching_conditions"
+          "timezone"
         ],
         "title": "CreateScheduledQueueFreezePayload"
       },
