@@ -4,7 +4,7 @@
 :root {
   --theme-navbar-height: 5rem;
   --theme-mobile-toc-height: 4rem;
-  --theme-left-sidebar-width: 22rem;
+  --theme-left-sidebar-width: 18rem;
   --theme-right-sidebar-width: 18rem;
   /*
 		Minimum visual horizontal spacing from the edges of the viewport,
