@@ -493,7 +493,7 @@ body.section-merge-queue a.current-header-link {
 }
 
 #left-sidebar .nav-group-merge-queue .nav-link a[aria-current="page"] {
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.05);
   border-left-color: var(--section-merge-queue-accent);
 }
 
@@ -519,7 +519,7 @@ body.section-ci-insights a.current-header-link {
 }
 
 #left-sidebar .nav-group-ci-insights .nav-link a[aria-current="page"] {
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.05);
   border-left-color: var(--section-ci-insights-accent);
 }
 
@@ -545,7 +545,7 @@ body.section-merge-protections a.current-header-link {
 }
 
 #left-sidebar .nav-group-merge-protections .nav-link a[aria-current="page"] {
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.05);
   border-left-color: var(--section-merge-protections-accent);
 }
 
@@ -571,7 +571,7 @@ body.section-workflow a.current-header-link {
 }
 
 #left-sidebar .nav-group-workflow .nav-link a[aria-current="page"] {
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.05);
   border-left-color: var(--section-workflow-accent);
 }
 
