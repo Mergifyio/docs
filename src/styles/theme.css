@@ -129,7 +129,8 @@
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-light: var(--chakra-colors-blackAlpha-800);
   --theme-text-lighter: var(--chakra-colors-blackAlpha-700);
-  --theme-bg: #f9fafb;
+  --theme-bg: #F6F7F8;
+  --theme-bg-content: #ffffff;
   --theme-bg-gradient-top: var(--theme-bg);
   --theme-bg-gradient-bottom: var(--theme-bg);
   --theme-bg-hover: var(--color-mergify-blue-light);
@@ -264,6 +265,7 @@
   --theme-text-light: var(--chakra-colors-whiteAlpha-800);
   --theme-text-lighter: var(--chakra-colors-whiteAlpha-700);
   --theme-bg: #24292e;
+  --theme-bg-content: var(--theme-bg);
   --theme-bg-hover: var(--color-mergify-blue-dark);
   --theme-bg-offset: #0008;
   --theme-backdrop-overlay: hsla(var(--color-gray-10), 0.8);
