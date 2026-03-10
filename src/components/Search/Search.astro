@@ -9,8 +9,8 @@ import SearchBar from './SearchBar';
 	id="docsearch-search-button"
 >
 	<svg
-		width="1em"
-		height="1em"
+		width="1.25em"
+		height="1.25em"
 		viewBox="0 0 24 24"
 		fill="none"
 		focusable="false"
@@ -33,13 +33,17 @@ import SearchBar from './SearchBar';
 <SearchBar client:only="react" />
 <style>
 	/** Style search header button */
-	.search-input {
+	:global(#docsearch-search-button) {
+		background-color: #fff;
+		border: 1px solid var(--theme-dim-lighter);
+		border-radius: 0.5rem;
 		position: relative;
 		display: flex;
 		place-items: center;
 		gap: 0.25em;
 		white-space: nowrap;
-		border: 1px solid var(--theme-text-lighter);
+		font-size: 14px;
+		color: var(--theme-text-lighter);
 		width: 5rem;
 	}
 
@@ -53,7 +57,7 @@ import SearchBar from './SearchBar';
 	.search-keyboard-hint {
 		display: none;
 		position: absolute;
-		inset-inline-end: 0.75rem;
+		inset-inline-end: 0.4rem;
 		padding: 3px 5px;
 		align-items: center;
 		justify-content: center;
@@ -62,16 +66,15 @@ import SearchBar from './SearchBar';
 		letter-spacing: 0.125rem;
 		line-height: 14px;
 		pointer-events: none;
-		border-color: var(--theme-shade-subtle);
+		border-color: var(--theme-dim-lighter);
 		border-style: solid;
 		border-width: 1px;
 		border-radius: 0.25rem;
 	}
 
 	@media (min-width: 43em) {
-		.search-input {
-			border-radius: 9e9px;
-			padding-inline: 1rem;
+		#docsearch-search-button {
+			padding-inline: 0.58rem;
 			width: min(16.5rem, 100%);
 		}
 
