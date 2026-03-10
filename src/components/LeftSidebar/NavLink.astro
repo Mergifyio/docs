@@ -18,10 +18,10 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 ---
 
 <li class="nav-link">
-	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`}>
+	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`} title={navItem.title}>
 		{showIcon && navItem.icon && isStringIcon && <Icon name={navItem.icon as string} class="left-icon" />}
 		{showIcon && IconComponent && <IconComponent class="left-icon" />}
-		<Fragment set:html={navItem.title} />
+		<span class="nav-link-text" set:html={navItem.title} />
 	</a>
 </li>
 <style>
@@ -33,7 +33,7 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 
 	.nav-link a {
 		margin: 0;
-		padding: 0.35rem 0.75rem;
+		padding: 0.5rem 0.75rem;
 		font: inherit;
 		font-size: 14px;
 		color: var(--theme-text-lighter);
@@ -42,6 +42,7 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 		gap: 8px;
 		align-items: center;
 		white-space: nowrap;
+		overflow: hidden;
 		border-radius: 6px;
 		transition: color 0.15s, background-color 0.15s;
 
@@ -68,5 +69,10 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 				border: 1px solid LinkText;
 			}
 		}
+	}
+
+	.nav-link-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 </style>
