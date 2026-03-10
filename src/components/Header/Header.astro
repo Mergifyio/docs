@@ -124,7 +124,8 @@ const primaryLink = isEnterpriseSection
 		height: var(--theme-navbar-height);
 		z-index: 11;
 		padding: 0.75rem 0;
-		background-color: var(--theme-navbar-bg);
+		background-color: color-mix(in srgb, var(--theme-navbar-bg) 95%, transparent);
+		backdrop-filter: blur(5px);
 		display: flex;
 		align-items: center;
 		justify-content: left;
