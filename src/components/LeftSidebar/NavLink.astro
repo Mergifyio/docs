@@ -5,9 +5,10 @@ import { removeLeadingSlash } from '~/util';
 export interface Props {
   currentPageMatch: string;
   navItem: NavItem;
+  showIcon?: boolean;
 }
 
-const { currentPageMatch, navItem } = Astro.props as Props;
+const { currentPageMatch, navItem, showIcon = true } = Astro.props as Props;
 const isHomepage = navItem.path === '/';
 const isHomepageMatch = isHomepage && currentPageMatch === '';
 const isPageMatch =
@@ -18,8 +19,8 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 
 <li class="nav-link">
 	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`}>
-		{navItem.icon && isStringIcon && <Icon name={navItem.icon as string} class="left-icon" />}
-		{IconComponent && <IconComponent class="left-icon" />}
+		{showIcon && navItem.icon && isStringIcon && <Icon name={navItem.icon as string} class="left-icon" />}
+		{showIcon && IconComponent && <IconComponent class="left-icon" />}
 		<Fragment set:html={navItem.title} />
 	</a>
 </li>
@@ -27,6 +28,7 @@ const IconComponent = !isStringIcon ? navItem.icon : null;
 	.left-icon {
 		min-width: 16px;
 		min-height: 16px;
+		color: var(--theme-text-lighter);
 	}
 
 	.nav-link a {

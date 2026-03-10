@@ -48,7 +48,7 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 						return child.children ? (
 							<Astro.self currentPageMatch={currentPageMatch} navGroup={child} />
 						) : (
-							<NavLink currentPageMatch={currentPageMatch} navItem={child} />
+							<NavLink currentPageMatch={currentPageMatch} navItem={child} showIcon={false} />
 						);
 					})
 				}
@@ -130,6 +130,7 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		:global(.left-icon) {
 			min-width: 16px;
 			min-height: 16px;
+			color: var(--theme-text-lighter);
 		}
 	}
 
@@ -164,6 +165,7 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		all: inherit;
 		margin: 0;
 		padding: 0;
+		width: 100%;
 	}
 
 	.chevron {
