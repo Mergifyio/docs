@@ -422,6 +422,7 @@
         "summary": "Get merge queues",
         "description": "Get the list of pull requests queued in a merge queue of a repository",
         "operationId": "repository_queues_repos__owner___repository__queues_get",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
