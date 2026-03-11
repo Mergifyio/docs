@@ -1,0 +1,31 @@
+---
+title: "Merge Queue Failure Rate Statistics"
+date: 2026-03-11
+tags:
+  - API
+  - Merge Queue
+description: "A new failure_rate endpoint is available in the merge queue statistics API, returning the ratio of failed to total PRs leaving the queue, broken down by time intervals."
+---
+
+The endpoint `GET /repos/{owner}/{repository}/stats/failure_rate` returns the failure rate of pull requests in the merge queue, broken down by time intervals.
+
+Each interval includes:
+
+- **total**: the number of pull requests that left the queue
+- **failures**: the number of pull requests that were not merged
+- **failure_rate**: the ratio of failures to total (between 0.0 and 1.0)
+Results are grouped by **base branch**, **partition**, **queue**, and **priority rule**, making it easy to identify which queues or branches have the highest failure rates.
+
+## Filtering
+
+You can filter results using query parameters:
+
+- `base_ref` — filter by target branch (e.g., `main`)
+- `partition_name` — filter by partition
+- `queue_name` — filter by queue name
+- `priority_rule_name` — filter by priority rule
+## Use cases
+
+- Monitor merge queue health over time
+- Identify queues or branches with unusually high failure rates
+- Track the impact of CI or configuration changes on merge success
