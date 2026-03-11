@@ -3901,7 +3901,7 @@
                         {
                           "name": "Sub Batch 1",
                           "status": {
-                            "code": "completed"
+                            "code": "merged"
                           },
                           "started_at": "2025-11-05T13:40:00Z",
                           "estimated_merge_at": "2025-11-05T13:50:00Z",
@@ -4397,11 +4397,7 @@
               "waiting_for_requeue",
               "waiting_schedule",
               "waiting_for_batch",
-              "completed",
-              "queued",
-              "paused",
-              "frozen",
-              "already_tested"
+              "frozen"
             ],
             "title": "Code"
           },
