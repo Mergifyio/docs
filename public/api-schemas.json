@@ -145,6 +145,7 @@
         "summary": "Pause the merge queue",
         "description": "Pause the merge of the requested repository",
         "operationId": "create_queue_pause_repos__owner___repository__queue_pause_put",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -224,6 +225,7 @@
         "summary": "Unpause merge queue",
         "description": "Unpause the merge queue of the requested repository",
         "operationId": "delete_queue_pause_repos__owner___repository__queue_pause_delete",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -286,6 +288,7 @@
         "summary": "Get queue pause data",
         "description": "Checks if the merge queue is paused and get the queue pause data",
         "operationId": "get_queue_pause_repos__owner___repository__queue_pause_get",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -1265,6 +1268,8 @@
                       "action.label",
                       "action.merge",
                       "action.post_check",
+                      "action.queue.batch_bisection_end",
+                      "action.queue.batch_bisection_start",
                       "action.queue.change",
                       "action.queue.checks.change",
                       "action.queue.checks_end",
@@ -3123,6 +3128,199 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/batch_bisection": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get batch bisection statistics",
+        "description": "Statistics about bisection events in the merge queue",
+        "operationId": "get_stats_batch_bisection_repos__owner___repository__stats_batch_bisection_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Base reference(s) of the pull requests",
+              "title": "Base Ref"
+            },
+            "description": "Base reference(s) of the pull requests"
+          },
+          {
+            "name": "partition_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Partition name(s) of the pull requests",
+              "title": "Partition Name"
+            },
+            "description": "Partition name(s) of the pull requests"
+          },
+          {
+            "name": "queue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Merge queue rule name(s) of the pull requests",
+              "title": "Queue Name"
+            },
+            "description": "Merge queue rule name(s) of the pull requests"
+          },
+          {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date, default 1 day before end_at",
+              "title": "Start At"
+            },
+            "description": "Get the stats until this date, default 1 day before end_at"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date, default now",
+              "title": "End At"
+            },
+            "description": "Get the stats from this date, default now"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BisectionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/stats/failure_rate": {
       "get": {
         "tags": [
@@ -4441,6 +4639,191 @@
           "code"
         ],
         "title": "BatchStatus"
+      },
+      "BisectionEndGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/BisectionEndInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "partition_name",
+          "queue_name",
+          "priority_rule_name",
+          "stats"
+        ],
+        "title": "BisectionEndGroupResponse"
+      },
+      "BisectionEndInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "bisection_completed_count": {
+            "type": "integer",
+            "title": "Bisection Completed Count"
+          },
+          "culprit_found_count": {
+            "type": "integer",
+            "title": "Culprit Found Count"
+          },
+          "max_failure_reached_count": {
+            "type": "integer",
+            "title": "Max Failure Reached Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "bisection_completed_count",
+          "culprit_found_count",
+          "max_failure_reached_count"
+        ],
+        "title": "BisectionEndInInterval"
+      },
+      "BisectionResponse": {
+        "properties": {
+          "started": {
+            "items": {
+              "$ref": "#/components/schemas/BisectionStartGroupResponse"
+            },
+            "type": "array",
+            "title": "Started"
+          },
+          "completed": {
+            "items": {
+              "$ref": "#/components/schemas/BisectionEndGroupResponse"
+            },
+            "type": "array",
+            "title": "Completed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "started",
+          "completed"
+        ],
+        "title": "BisectionResponse"
+      },
+      "BisectionStartGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/BisectionStartInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "partition_name",
+          "queue_name",
+          "priority_rule_name",
+          "stats"
+        ],
+        "title": "BisectionStartGroupResponse"
+      },
+      "BisectionStartInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "bisection_count": {
+            "type": "integer",
+            "title": "Bisection Count"
+          },
+          "avg_depth": {
+            "type": "number",
+            "title": "Avg Depth"
+          },
+          "max_depth": {
+            "type": "integer",
+            "title": "Max Depth"
+          },
+          "avg_batch_size_before_split": {
+            "type": "number",
+            "title": "Avg Batch Size Before Split"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "bisection_count",
+          "avg_depth",
+          "max_depth",
+          "avg_batch_size_before_split"
+        ],
+        "title": "BisectionStartInInterval"
       },
       "Branch": {
         "properties": {
@@ -5848,6 +6231,258 @@
           "summary"
         ],
         "title": "EventPostCheckMetadata"
+      },
+      "EventQueueBatchBisectionEnd": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.queue.batch_bisection_end",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventQueueBatchBisectionEndMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventQueueBatchBisectionEnd"
+      },
+      "EventQueueBatchBisectionEndMetadata": {
+        "properties": {
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "original_batch_pr_numbers": {
+            "items": {
+              "type": "integer",
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Original Batch Pr Numbers"
+          },
+          "culprit_found": {
+            "type": "boolean",
+            "title": "Culprit Found"
+          },
+          "culprit_pr_numbers": {
+            "items": {
+              "type": "integer",
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Culprit Pr Numbers"
+          },
+          "remaining_pr_numbers": {
+            "items": {
+              "type": "integer",
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Remaining Pr Numbers"
+          },
+          "max_failure_resolution_reached": {
+            "type": "boolean",
+            "title": "Max Failure Resolution Reached"
+          }
+        },
+        "type": "object",
+        "required": [
+          "queue_name",
+          "partition_name",
+          "priority_rule_name",
+          "original_batch_pr_numbers",
+          "culprit_found",
+          "culprit_pr_numbers",
+          "remaining_pr_numbers",
+          "max_failure_resolution_reached"
+        ],
+        "title": "EventQueueBatchBisectionEndMetadata"
+      },
+      "EventQueueBatchBisectionStart": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.queue.batch_bisection_start",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventQueueBatchBisectionStartMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventQueueBatchBisectionStart"
+      },
+      "EventQueueBatchBisectionStartMetadata": {
+        "properties": {
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "original_batch_pr_numbers": {
+            "items": {
+              "type": "integer",
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Original Batch Pr Numbers"
+          },
+          "batch_size_before_split": {
+            "type": "integer",
+            "title": "Batch Size Before Split"
+          },
+          "number_of_sub_batches": {
+            "type": "integer",
+            "title": "Number Of Sub Batches"
+          },
+          "bisection_depth": {
+            "type": "integer",
+            "title": "Bisection Depth"
+          },
+          "is_top_level": {
+            "type": "boolean",
+            "title": "Is Top Level"
+          }
+        },
+        "type": "object",
+        "required": [
+          "queue_name",
+          "partition_name",
+          "priority_rule_name",
+          "original_batch_pr_numbers",
+          "batch_size_before_split",
+          "number_of_sub_batches",
+          "bisection_depth",
+          "is_top_level"
+        ],
+        "title": "EventQueueBatchBisectionStartMetadata"
       },
       "EventQueueChange": {
         "properties": {
@@ -7948,6 +8583,12 @@
                   "$ref": "#/components/schemas/EventQueueChecksNotStarted"
                 },
                 {
+                  "$ref": "#/components/schemas/EventQueueBatchBisectionStart"
+                },
+                {
+                  "$ref": "#/components/schemas/EventQueueBatchBisectionEnd"
+                },
+                {
                   "$ref": "#/components/schemas/EventQueueMerged"
                 },
                 {
@@ -8017,6 +8658,8 @@
                   "action.label": "#/components/schemas/EventLabel",
                   "action.merge": "#/components/schemas/EventMerge",
                   "action.post_check": "#/components/schemas/EventPostCheck",
+                  "action.queue.batch_bisection_end": "#/components/schemas/EventQueueBatchBisectionEnd",
+                  "action.queue.batch_bisection_start": "#/components/schemas/EventQueueBatchBisectionStart",
                   "action.queue.change": "#/components/schemas/EventQueueChange",
                   "action.queue.checks.change": "#/components/schemas/EventQueueChecksChange",
                   "action.queue.checks_end": "#/components/schemas/EventQueueChecksEnd",
