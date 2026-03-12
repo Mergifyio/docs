@@ -129,7 +129,7 @@
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-light: var(--chakra-colors-blackAlpha-800);
   --theme-text-lighter: var(--chakra-colors-blackAlpha-700);
-  --theme-bg: #F6F7F8;
+  --theme-bg: #f6f7f8;
   --theme-bg-content: #ffffff;
   --theme-bg-gradient-top: var(--theme-bg);
   --theme-bg-gradient-bottom: var(--theme-bg);
