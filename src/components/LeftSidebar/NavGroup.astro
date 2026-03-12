@@ -113,7 +113,7 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 					// Add opening class to hold grid at 0fr, set open, force reflow, then remove to trigger transition
 					navGroupDetails?.classList.add('opening');
 					navGroupDetails?.setAttribute('open', '');
-					navGroupDetails?.offsetHeight; // force reflow
+					void (navGroupDetails as HTMLElement)?.offsetHeight; // force reflow
 					navGroupDetails?.classList.remove('opening');
 				}
 			});
