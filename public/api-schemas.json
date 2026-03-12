@@ -10935,52 +10935,16 @@
       "description": "Operations with badges."
     },
     {
-      "name": "ci_insights",
-      "description": "Operations with ci insights."
-    },
-    {
       "name": "eventlogs",
       "description": "Operations with event logs."
-    },
-    {
-      "name": "integrations",
-      "description": "Operation with integrations."
-    },
-    {
-      "name": "merge_protections",
-      "description": "Operations with merge protections."
     },
     {
       "name": "merge_queue",
       "description": "Operation with the merge queue."
     },
     {
-      "name": "orgs",
-      "description": "Operation with organizations."
-    },
-    {
-      "name": "products",
-      "description": "Operations with products."
-    },
-    {
-      "name": "pull_requests",
-      "description": "Operations with pull requests."
-    },
-    {
-      "name": "quarantine",
-      "description": "Operations with ci tests quarantine."
-    },
-    {
       "name": "queues",
       "description": "Operations with queues."
-    },
-    {
-      "name": "repositories",
-      "description": "Operation with repositories."
-    },
-    {
-      "name": "repository_rulesets",
-      "description": "Operation with repository rulesets."
     },
     {
       "name": "scheduled_freeze",
