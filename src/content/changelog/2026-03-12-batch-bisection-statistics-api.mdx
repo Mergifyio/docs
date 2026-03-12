@@ -1,0 +1,31 @@
+---
+title: "Batch Bisection Statistics API"
+date: 2026-03-12
+tags:
+  - Merge Queue
+  - API
+description: "New API endpoint to track merge queue bisection events, helping users optimize their batch size configuration."
+---
+
+Bisection is a key signal for batch size optimization:
+
+- **Frequent bisections** suggest the batch size may be too large, causing more CI failures and slower throughput
+- **No bisections** may indicate room to increase batch size for better merge velocity
+- **Deep bisections** (high depth) reveal that failures are hard to isolate, possibly due to flaky tests or complex interactions
+## What's Tracked
+
+### Bisection Start Events
+
+Emitted when a failed batch is split into sub-batches:
+
+- **Batch size before split** — how large the batch was when it failed
+- **Number of sub-batches** — how many pieces it was divided into
+- **Bisection depth** — 0 for the first split, increments for nested splits
+- **Whether it's top-level** — distinguishes root splits from recursive ones
+### Bisection End Events
+
+Emitted when the culprit PR is identified:
+
+- **Culprit PR numbers** — which PR(s) caused the failure
+- **Remaining PR numbers** — PRs that were re-queued after culprit removal
+- **Max failure resolution reached** — whether the bisection hit the configured retry limit
