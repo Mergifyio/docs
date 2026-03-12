@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.7",
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/react": "^5.0.0",
     "@astrojs/rss": "^4.0.17",
     "@astrojs/vue": "^5.1.4",
     "@fontsource/ibm-plex-mono": "^5.2.7",
