@@ -1,0 +1,12 @@
+---
+title: "Merge queue intake statistics endpoint"
+date: 2026-03-13
+tags:
+  - Merge Queue
+  - API
+description: "New API endpoint to track pull requests entering the merge queue over time"
+---
+
+New API endpoint `GET /v1/repos/{owner}/{repository}/stats/queues_entered_count` that returns the count of pull requests entering the merge queue, grouped by time intervals.
+
+This endpoint supports filtering by base branch, partition, queue name, and priority rule. It enables building queue intake graphs and computing merge throughput rates by comparing entered vs merged pull requests.
