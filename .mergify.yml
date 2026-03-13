@@ -23,11 +23,13 @@ priority_rules:
           - author = dependabot[bot]
 
 
-merge_protections:
-  - name: 🤖 Continuous Integration
-    if:
-      - label != hotfix
-    success_conditions:
+pull_request_rules:
+  - name: request review
+    conditions:
+      - -author=dependabot[bot]
+      - -author=mergify-ci-bot
+      - -merged
+      - -closed
       - and: &CheckRuns
           - check-success = lint
           - check-success = build
@@ -39,6 +41,43 @@ merge_protections:
               - check-success=Cloudflare Pages
               # fork can't have the preview build
               - "-head-repo-full-name~=^Mergifyio/"
+      - "#changes-requested-reviews-by=0"
+      - review-requested!=@devs
+      - and:
+          - or:
+              - label!=hotfix
+              - not:
+                  or: &HotfixReviewCond
+                    # Author is engineering manager, we allow with one review
+                    - and:
+                        - author=@eng-mgr
+                        - "#approved-reviews-by>=1"
+                    - and:
+                        - author=@devs
+                        # in any other case, we allow if approve by engineering manager
+                        # or anyone if it's a regular fix/revert
+                        - or:
+                            - approved-reviews-by=@eng-mgr
+                            - and:
+                                - title~=^(revert|fix)
+                                - "#approved-reviews-by>=1"
+
+          - not:
+              or: &DefaultReviewCond
+                - "#approved-reviews-by>=2"
+                - author = dependabot[bot]
+                - author = mergify-ci-bot
+    actions:
+      request_reviews:
+        teams:
+          - devs
+
+merge_protections:
+  - name: 🤖 Continuous Integration
+    if:
+      - label != hotfix
+    success_conditions:
+      - and: *CheckRuns
 
   - name: 👀 Review Requirements
     if:
@@ -101,45 +140,6 @@ queue_rules:
       - and: *CheckRuns
     merge_conditions:
       - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
-
-pull_request_rules:
-  - name: request review
-    conditions:
-      - -author=dependabot[bot]
-      - -author=mergify-ci-bot
-      - -merged
-      - -closed
-      - and: *CheckRuns
-      - "#changes-requested-reviews-by=0"
-      - review-requested!=@devs
-      - and:
-          - or:
-              - label!=hotfix
-              - not:
-                  or: &HotfixReviewCond
-                    # Author is engineering manager, we allow with one review
-                    - and:
-                        - author=@eng-mgr
-                        - "#approved-reviews-by>=1"
-                    - and:
-                        - author=@devs
-                        # in any other case, we allow if approve by engineering manager
-                        # or anyone if it's a regular fix/revert
-                        - or:
-                            - approved-reviews-by=@eng-mgr
-                            - and:
-                                - title~=^(revert|fix)
-                                - "#approved-reviews-by>=1"
-
-          - not:
-              or: &DefaultReviewCond
-                - "#approved-reviews-by>=2"
-                - author = dependabot[bot]
-                - author = mergify-ci-bot
-    actions:
-      request_reviews:
-        teams:
-          - devs
 
 merge_queue:
   max_parallel_checks: 5
