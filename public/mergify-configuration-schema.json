@@ -1784,6 +1784,7 @@
                 "PR_AHEAD_DEQUEUED",
                 "BATCH_AHEAD_FAILED",
                 "PR_WITH_HIGHER_PRIORITY_QUEUED",
+                "SCHEDULED_FREEZE_STATUS_CHANGED",
                 "SPECULATIVE_CHECK_NUMBER_REDUCED",
                 "CHECKS_TIMEOUT",
                 "CHECKS_FAILED",
