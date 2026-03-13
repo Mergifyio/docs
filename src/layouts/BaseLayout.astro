@@ -28,6 +28,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 		<style lang="scss">
 			.layout {
 				display: flex;
+				background: var(--theme-bg-content);
 			}
 			.sidebar {
 				position: fixed;
@@ -48,6 +49,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				position: sticky;
 				left: 100%;
 				height: fit-content;
+				background: var(--theme-bg-content);
 			}
 			#main-content {
 				display: flex;
@@ -55,6 +57,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				height: 100%;
 				min-width: 0;
 				flex: 1;
+				min-height: calc(100vh - var(--theme-navbar-height));
 			}
 
 			/* Allow showing left sidebar as an overlay, but only while viewport stays narrow */
@@ -91,10 +94,20 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				}
 				#left-sidebar {
 					display: flex;
-					padding-inline-end: 1rem;
+					padding-inline-end: 0.5rem;
 					top: var(--theme-navbar-height);
 					width: var(--theme-left-sidebar-width);
-					background: transparent;
+					background: var(--theme-bg);
+
+					&::after {
+						content: '';
+						position: absolute;
+						top: 0;
+						right: -32px;
+						width: 32px;
+						height: 32px;
+						background: radial-gradient(circle at 100% 100%, var(--theme-bg-content) 32px, var(--theme-bg) 32px);
+					}
 				}
 			}
 
@@ -134,7 +147,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				<slot />
 			</div>
 		</main>
-		<div class="main-column main-column-footer" style="margin-inline-end: 0;">
+		<div class="main-column main-column-footer" style="margin-inline-end: 0; background: var(--theme-bg-content);">
 			<slot name="footer">
 				<Footer />
 			</slot>

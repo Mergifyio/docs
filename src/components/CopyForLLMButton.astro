@@ -77,18 +77,18 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 		}
 	}
 
-	:global(.theme-dark) .docs-toolbar-button {
+	:global(.theme-dark .docs-toolbar-button) {
 		border-color: rgba(255, 255, 255, 0.2);
 		background: rgba(255, 255, 255, 0.05);
 		color: var(--chakra-colors-whiteAlpha-900);
 	}
 
-	:global(.theme-dark) .docs-toolbar-button:hover,
-	:global(.theme-dark) .docs-toolbar-button:focus-visible {
+	:global(.theme-dark .docs-toolbar-button:hover),
+	:global(.theme-dark .docs-toolbar-button:focus-visible) {
 		background: rgba(255, 255, 255, 0.12);
 	}
 
-	:global(.theme-dark) .docs-toolbar-button:active {
+	:global(.theme-dark .docs-toolbar-button:active) {
 		background: rgba(255, 255, 255, 0.18);
 	}
 </style>

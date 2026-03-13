@@ -4,7 +4,7 @@
 :root {
   --theme-navbar-height: 5rem;
   --theme-mobile-toc-height: 4rem;
-  --theme-left-sidebar-width: 22rem;
+  --theme-left-sidebar-width: 17rem;
   --theme-right-sidebar-width: 18rem;
   /*
 		Minimum visual horizontal spacing from the edges of the viewport,
@@ -58,7 +58,7 @@
   --font-fallback:
     -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji;
-  --font-body: sans-serif, var(--font-fallback);
+  --font-body: "Inter", sans-serif, var(--font-fallback);
   --font-mono:
     "IBM Plex Mono", Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
     "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
@@ -129,7 +129,8 @@
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-light: var(--chakra-colors-blackAlpha-800);
   --theme-text-lighter: var(--chakra-colors-blackAlpha-700);
-  --theme-bg: #f9fafb;
+  --theme-bg: #f6f7f8;
+  --theme-bg-content: #ffffff;
   --theme-bg-gradient-top: var(--theme-bg);
   --theme-bg-gradient-bottom: var(--theme-bg);
   --theme-bg-hover: var(--color-mergify-blue-light);
@@ -264,6 +265,7 @@
   --theme-text-light: var(--chakra-colors-whiteAlpha-800);
   --theme-text-lighter: var(--chakra-colors-whiteAlpha-700);
   --theme-bg: #24292e;
+  --theme-bg-content: var(--theme-bg);
   --theme-bg-hover: var(--color-mergify-blue-dark);
   --theme-bg-offset: #0008;
   --theme-backdrop-overlay: hsla(var(--color-gray-10), 0.8);
