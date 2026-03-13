@@ -44,30 +44,14 @@ merge_protections:
     if:
       - label != hotfix
     success_conditions:
-      - or: &DefaultReviewCond
-          - "#approved-reviews-by >= 2"
-          - author = dependabot[bot]
-          - author = mergify-ci-bot
+      - or: *DefaultReviewCond
 
   - name: 🧑‍🚒 Hotfix Review Requirements
     if:
       - label = hotfix
     success_conditions:
       - or:
-          - or: &HotfixReviewCond
-              # Author is engineering manager, we allow with one review
-              - and:
-                  - author=@eng-mgr
-                  - "#approved-reviews-by>=1"
-              - and:
-                  - author=@devs
-                  # in any other case, we allow if approve by engineering manager
-                  # or anyone if it's a regular fix/revert
-                  - or:
-                      - approved-reviews-by=@eng-mgr
-                      - and:
-                          - title~=^(revert|fix)
-                          - "#approved-reviews-by>=1"
+          - or: *HotfixReviewCond
           - or: *DefaultReviewCond
 
       # yamllint disable-line rule:line-length
@@ -132,9 +116,26 @@ pull_request_rules:
           - or:
               - label!=hotfix
               - not:
-                  or: *HotfixReviewCond
+                  or: &HotfixReviewCond
+                    # Author is engineering manager, we allow with one review
+                    - and:
+                        - author=@eng-mgr
+                        - "#approved-reviews-by>=1"
+                    - and:
+                        - author=@devs
+                        # in any other case, we allow if approve by engineering manager
+                        # or anyone if it's a regular fix/revert
+                        - or:
+                            - approved-reviews-by=@eng-mgr
+                            - and:
+                                - title~=^(revert|fix)
+                                - "#approved-reviews-by>=1"
+
           - not:
-              or: *DefaultReviewCond
+              or: &DefaultReviewCond
+                - "#approved-reviews-by>=2"
+                - author = dependabot[bot]
+                - author = mergify-ci-bot
     actions:
       request_reviews:
         teams:
