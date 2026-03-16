@@ -7059,7 +7059,8 @@
                   "CONFIGURATION_CHANGED",
                   "UNPROCESSABLE_PULL_REQUEST",
                   "PR_MANUALLY_DEQUEUED",
-                  "INTERMEDIATE_RESULTS_SKIPPED"
+                  "INTERMEDIATE_RESULTS_SKIPPED",
+                  "CHECKS_RETRIED"
                 ]
               },
               {
@@ -9982,6 +9983,12 @@
             "type": "integer",
             "title": "Intermediate Results Skipped",
             "description": "The pull request intermediate results have been skipped during batch promotion",
+            "default": 0
+          },
+          "CHECKS_RETRIED": {
+            "type": "integer",
+            "title": "Checks Retried",
+            "description": "The checks have failed and are being retried",
             "default": 0
           },
           "SCHEDULED_FREEZE_STATUS_CHANGED": {
