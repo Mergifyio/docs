@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { extname, join } from 'node:path';
 import { RemarkPlugin } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
@@ -101,7 +103,33 @@ export default defineConfig({
   ],
   scopedStyleStrategy: 'where',
   compressHTML: false,
-  vite: {},
+  vite: {
+    plugins: [
+      {
+        // Pagefind's JS bundle is not a standard ES module Vite can transform.
+        // Serve it directly from public/ so dynamic `import('/pagefind/pagefind.js')` works in dev.
+        name: 'pagefind-static',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (!req.url?.startsWith('/pagefind/')) return next();
+            const cleanPath = req.url.split('?')[0];
+            const filePath = join(process.cwd(), 'public', cleanPath);
+            if (!existsSync(filePath)) return next();
+            const mimeTypes: Record<string, string> = {
+              '.js': 'application/javascript',
+              '.json': 'application/json',
+              '.wasm': 'application/wasm',
+            };
+            res.setHeader(
+              'Content-Type',
+              mimeTypes[extname(filePath)] ?? 'application/octet-stream'
+            );
+            res.end(readFileSync(filePath));
+          });
+        },
+      },
+    ],
+  },
   markdown: {
     // Override with our own config
     smartypants: false,
