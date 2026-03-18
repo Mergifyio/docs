@@ -1,0 +1,13 @@
+---
+title: "`Automatic CI retries in merge queue`"
+date: 2026-03-18
+tags:
+  - Merge Queue
+description: "You can now configure Mergify to automatically retry failed CI checks before removing a pull request from the queue."
+---
+
+You can now configure Mergify to automatically retry failed CI checks before removing a pull request from the queue. This is useful for handling flaky CI, instead of immediately failing, Mergify will recreate the draft pull request to trigger a fresh CI run.
+
+To enable retries, set `max_checks_retries` in your queue rule. When set to a value greater than 0, Mergify will use draft pull requests (in-place checks are automatically disabled) and retry up to the configured number of times before applying the normal failure resolution. The queue status report shows the current attempt number (e.g., "attempt 2/3").
+
+Defaults to 0 (no retries), preserving existing behavior.
