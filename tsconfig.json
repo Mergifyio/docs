@@ -1,11 +1,5 @@
 {
-  "exclude": [
-    "dist",
-    "public/scalar-api-reference.js",
-    "public/make-scrollable-code-focusable.js",
-    "public/sw.js",
-    "node_modules"
-  ],
+  "exclude": ["dist", "public/make-scrollable-code-focusable.js", "public/sw.js", "node_modules"],
   "include": [".astro/types.d.ts", "src"],
   "compilerOptions": {
     "skipLibCheck": true,

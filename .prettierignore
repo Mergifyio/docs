@@ -3,7 +3,6 @@ node_modules
 .github
 public/api-schemas.json
 public/mergify-configuration-openapi.json
-public/scalar-api-reference.js
 .mergify.yml
 *.md
 *.mdx
