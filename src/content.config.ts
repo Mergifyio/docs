@@ -1,6 +1,6 @@
-import { defineCollection, z } from 'astro:content';
-
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const docs = defineCollection({
   /* Documentation pages */
@@ -17,7 +17,11 @@ const docs = defineCollection({
 });
 
 const changelog = defineCollection({
-  type: 'content',
+  loader: glob({
+    pattern: '**/[^_]*.mdx',
+    base: './src/content/changelog',
+    generateId: ({ entry }) => entry.replace(/\.mdx$/, ''),
+  }),
   schema: z.object({
     title: z.string(),
     date: z.date(),

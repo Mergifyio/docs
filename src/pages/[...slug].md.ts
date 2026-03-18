@@ -24,8 +24,8 @@ export async function getStaticPaths() {
 
   const changelogEntries = await getCollection('changelog');
   const changelogPaths = changelogEntries.map((entry) => ({
-    params: { slug: `changelog/${entry.slug}` },
-    props: { id: entry.slug, collection: 'changelog' } satisfies MarkdownSourceProps,
+    params: { slug: `changelog/${entry.id}` },
+    props: { id: entry.id, collection: 'changelog' } satisfies MarkdownSourceProps,
   }));
 
   return [...docPaths, ...changelogPaths];
