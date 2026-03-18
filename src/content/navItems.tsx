@@ -244,7 +244,7 @@ const navItems: NavItem[] = [
           { title: 'Label', path: '/workflow/actions/label', icon: 'bi:patch-check-fill' },
           { title: 'Merge', path: '/workflow/actions/merge', icon: 'octicon:git-merge-16' },
           {
-            title: 'Post Check',
+            title: 'Post Check (Deprecated)',
             path: '/workflow/actions/post_check',
             icon: 'fa6-regular:circle-check',
           },
