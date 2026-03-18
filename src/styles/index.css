@@ -848,7 +848,7 @@ header .nav-wrapper {
   height: 100%;
 }
 
-.content {
+article.content {
   counter-reset: h2-section;
 }
 
