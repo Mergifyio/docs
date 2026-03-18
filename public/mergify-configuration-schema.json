@@ -133,7 +133,8 @@
               "type": "null"
             }
           ],
-          "default": null
+          "default": null,
+          "deprecated": true
         },
         "queue": {
           "anyOf": [
@@ -2467,6 +2468,13 @@
           "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds.",
           "title": "Checks Timeout"
         },
+        "max_checks_retries": {
+          "default": 0,
+          "description": "Number of times Mergify will retry failed CI checks before removing the pull request from the queue. On each retry, the draft pull request is recreated to trigger a fresh CI run. This is useful for handling flaky CI. When set to a value greater than 0, in-place checks are disabled and a draft pull request is always created. Set to 0 (default) to disable retries.",
+          "minimum": 0,
+          "title": "Max Checks Retries",
+          "type": "integer"
+        },
         "draft_bot_account": {
           "anyOf": [
             {
@@ -2688,6 +2696,13 @@
           "default": null,
           "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds.",
           "title": "Checks Timeout"
+        },
+        "max_checks_retries": {
+          "default": 0,
+          "description": "Number of times Mergify will retry failed CI checks before removing the pull request from the queue. On each retry, the draft pull request is recreated to trigger a fresh CI run. This is useful for handling flaky CI. When set to a value greater than 0, in-place checks are disabled and a draft pull request is always created. Set to 0 (default) to disable retries.",
+          "minimum": 0,
+          "title": "Max Checks Retries",
+          "type": "integer"
         },
         "draft_bot_account": {
           "anyOf": [
