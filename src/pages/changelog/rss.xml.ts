@@ -16,7 +16,7 @@ export async function GET(context: APIContext) {
         description: entry.data.description || '',
         content: entry.data.description || '',
         pubDate: new Date(entry.data.date),
-        link: `/changelog/${entry.slug}/`,
+        link: `/changelog/${entry.id}/`,
         categories: entry.data.tags || [],
         author: 'hello@mergify.com (Mergify)',
       };
