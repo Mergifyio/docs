@@ -141,14 +141,14 @@ const description = 'Latest product updates from Mergify.';
                       </div>
                       <div class="col content-col">
                         <h3 class="title">
-                          <a href={`/changelog/${item.entry.slug}/`}>{item.entry.data.title}</a>
+                          <a href={`/changelog/${item.entry.id}/`}>{item.entry.data.title}</a>
                         </h3>
                         {item.entry.data.description && <p class="summary">{item.entry.data.description}</p>}
                       </div>
                       <div class="col more-col">
                         <a
                           class="read-more"
-                          href={`/changelog/${item.entry.slug}/`}
+                          href={`/changelog/${item.entry.id}/`}
                           aria-label={`Read full entry: ${item.entry.data.title}`}
                         >
                           <span class="read-text">Read</span>

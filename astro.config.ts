@@ -68,9 +68,7 @@ export default defineConfig({
       },
     }),
     mdx(),
-    react({
-      include: ['Tables'],
-    }),
+    react(),
     vue(),
     sitemap({
       // To be iso with gatsby's sitemap, not sure it's useful
@@ -99,7 +97,6 @@ export default defineConfig({
       },
     }),
   ],
-  scopedStyleStrategy: 'where',
   compressHTML: false,
   vite: {},
   markdown: {
