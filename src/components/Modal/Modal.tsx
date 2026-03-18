@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import './Modal.css';
 
 interface Props {
@@ -22,9 +23,10 @@ export default function Modal({ open, onClose, children }: Props) {
     return () => window.removeEventListener('click', close);
   }, []);
 
-  return (
+  return createPortal(
     <div ref={modal} id="myModal" className="modal" style={{ display: open ? 'block' : 'none' }}>
       <div className="modal-content">{children}</div>
-    </div>
+    </div>,
+    document.body
   );
 }
