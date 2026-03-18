@@ -338,7 +338,6 @@ const navItems: NavItem[] = [
   { title: 'Stacks', path: '/stacks', icon: 'bi:stack' },
   { title: 'Security', path: '/security', icon: 'fa-solid:shield-alt' },
   { title: 'Support', path: '/support', icon: 'fa-solid:life-ring' },
-  { title: 'Badge', path: '/badge', icon: 'bi:patch-check-fill' },
   { title: 'Billing', path: '/billing', icon: 'fa6-solid:money-bill-1' },
   { title: 'Changelog', path: '/changelog', icon: 'fa-solid:list-alt' },
 ];
