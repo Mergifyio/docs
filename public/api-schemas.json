@@ -711,6 +711,7 @@
         "summary": "Get PNG badge",
         "description": "Get badge in PNG image format",
         "operationId": "badge_png_badges__owner___repository__png_get",
+        "deprecated": true,
         "parameters": [
           {
             "name": "owner",
@@ -782,6 +783,7 @@
         "summary": "Get SVG badge",
         "description": "Get badge in SVG image format",
         "operationId": "badge_svg_badges__owner___repository__svg_get",
+        "deprecated": true,
         "parameters": [
           {
             "name": "owner",
@@ -853,6 +855,7 @@
         "summary": "Get shields.io badge config",
         "description": "Get shields.io badge JSON configuration",
         "operationId": "badge_badges__owner___repository__get",
+        "deprecated": true,
         "parameters": [
           {
             "name": "owner",
