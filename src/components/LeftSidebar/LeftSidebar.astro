@@ -53,12 +53,18 @@ const isEnterprisePage = currentPage === '/enterprise' || currentPage.startsWith
 
 		const leftSidebar = document.querySelector('.nav-groups');
 		const leftSidebarScroll = localStorage.getItem('sidebar-scroll');
-		if (leftSidebarScroll !== null) {
+		if (leftSidebarScroll !== null && leftSidebar) {
 			leftSidebar.scrollTop = parseInt(leftSidebarScroll, 10);
 		}
-		window.addEventListener('beforeunload', () => {
-			localStorage.setItem('sidebar-scroll', leftSidebar.scrollTop);
-		});
+		if (!window.__sidebarScrollInitialized__) {
+			window.__sidebarScrollInitialized__ = true;
+			function saveScroll() {
+				const sidebar = document.querySelector('.nav-groups');
+				if (sidebar) localStorage.setItem('sidebar-scroll', sidebar.scrollTop);
+			}
+			window.addEventListener('beforeunload', saveScroll);
+			document.addEventListener('astro:before-swap', saveScroll);
+		}
 	}
 </script>
 
