@@ -5,7 +5,6 @@
       "**/*",
       "!.astro/*",
       "!src/@types/*",
-      "!public/scalar-api-reference.js",
       "!public/api-schemas.json",
       "!public/mergify-configuration-schema.json",
       "!dist/*"

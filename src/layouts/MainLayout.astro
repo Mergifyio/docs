@@ -62,7 +62,7 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 			Astro.url.pathname !== '/' && (
 				<Fragment slot="after-content">
 					<PageFeedback />
-					<PageMeta pathname={Astro.url.pathname} />
+					{showMarkdownActions && <PageMeta pathname={Astro.url.pathname} />}
 				</Fragment>
 			)
 		}

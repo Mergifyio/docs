@@ -16,7 +16,6 @@ import remarkSmartypants from 'remark-smartypants';
 import { asideAutoImport, astroAsides } from './integrations/astro-asides';
 import { astroYoutubeEmbeds, youtubeAutoImport } from './integrations/astro-youtube-embed';
 import { PagefindIndex } from './integrations/pagefind-index';
-import { ScalarApiReference } from './integrations/scalar-api-reference';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
 import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
@@ -78,7 +77,6 @@ export default defineConfig({
       priority: 0.7,
       filter: (page) => !page.startsWith('/enterprise'),
     }),
-    ScalarApiReference(),
     PagefindIndex(),
     icon({
       include: {
