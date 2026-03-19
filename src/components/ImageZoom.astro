@@ -87,51 +87,68 @@
 </div>
 
 <script>
-  function initImageZoom() {
-    const overlay = document.getElementById('image-zoom-overlay');
-    if (!overlay) return;
+  // Register document-level handlers exactly once.
+  // All DOM lookups happen dynamically inside handlers to avoid stale refs
+  // after View Transition swaps (which replace <body> content).
+  if (!(window as any).__imageZoomInitialized__) {
+    (window as any).__imageZoomInitialized__ = true;
 
-    const overlayImg = overlay.querySelector('img');
-    const closeBtn = overlay.querySelector('.image-zoom-close');
-    if (!overlayImg || !closeBtn) return;
+    function getOverlay() {
+      return document.getElementById('image-zoom-overlay');
+    }
 
-    function open(src: string, alt: string) {
-      overlayImg!.src = src;
-      overlayImg!.alt = alt;
-      overlay!.setAttribute('data-active', '');
-      overlay!.setAttribute('aria-hidden', 'false');
+    function openZoom(src: string, alt: string) {
+      const overlay = getOverlay();
+      if (!overlay) return;
+      const img = overlay.querySelector('img');
+      if (img) {
+        img.src = src;
+        img.alt = alt;
+      }
+      overlay.setAttribute('data-active', '');
+      overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
 
-    function close() {
-      overlay!.removeAttribute('data-active');
-      overlay!.setAttribute('aria-hidden', 'true');
+    function closeZoom() {
+      const overlay = getOverlay();
+      if (!overlay) return;
+      overlay.removeAttribute('data-active');
+      overlay.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
 
-    // Click handler for article images
+    // Click handler: open on article images, close on overlay/close button
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
+
+      // Open zoom on article image click
       if (target.tagName === 'IMG' && target.closest('article') && !target.classList.contains('no-zoom')) {
         const img = target as HTMLImageElement;
-        open(img.src, img.alt);
+        openZoom(img.src, img.alt);
+        return;
+      }
+
+      // Close zoom on overlay or close button click
+      const overlay = getOverlay();
+      if (overlay?.hasAttribute('data-active')) {
+        const closeBtn = overlay.querySelector('.image-zoom-close');
+        if (target === overlay || target === closeBtn || closeBtn?.contains(target)) {
+          closeZoom();
+        }
       }
     });
 
-    // Close handlers
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay || e.target === closeBtn || closeBtn.contains(e.target as Node)) {
-        close();
-      }
-    });
-
+    // Escape key closes zoom
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay.hasAttribute('data-active')) {
-        close();
+      if (e.key === 'Escape' && getOverlay()?.hasAttribute('data-active')) {
+        closeZoom();
       }
+    });
+
+    // Reset body overflow if zoom was open during SPA navigation
+    document.addEventListener('astro:before-swap', () => {
+      document.body.style.overflow = '';
     });
   }
-
-  initImageZoom();
-  document.addEventListener('astro:after-swap', initImageZoom);
 </script>
