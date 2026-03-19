@@ -22,8 +22,8 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 	'nav-group-workflow': navGroup.path?.startsWith('/workflow')
 }}>
 	<nav-group data-uuid={navGroup.id}>
-		<details>
-			<summary class="nav-group-title" title={navGroup.title}>
+		<div class="nav-details">
+			<button class="nav-group-title" type="button" title={navGroup.title} aria-expanded="false">
 				<h2>
 					{depth === 0 && navGroup.icon && isStringIcon && <Icon name={navGroup.icon as string} class="left-icon" />}
 					{depth === 0 && IconComponent && <IconComponent class="left-icon" />}
@@ -42,8 +42,8 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 						></path>
 					</svg>
 				</h2>
-			</summary>
-			<div class="nav-group-content">
+			</button>
+			<div class="nav-group-content" inert>
 				<ul>
 					{
 						navGroup.children?.map((child) => {
@@ -56,65 +56,87 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 					}
 				</ul>
 			</div>
-		</details>
+		</div>
 	</nav-group>
 </li>
 
 <script>
+	function parseNavState(raw: string | null): Record<string, boolean> {
+		if (raw === null) return {};
+		try {
+			const parsed = JSON.parse(raw);
+			return typeof parsed === 'object' && parsed !== null ? parsed : {};
+		} catch {
+			return {};
+		}
+	}
+
 	class NavGroup extends HTMLElement {
 		constructor() {
 			super();
 
 			const uuid = this.dataset.uuid;
-			const storedNavState = window.localStorage.getItem('navState');
-			let isOpen = false;
 			if (!uuid) {
 				console.warn('No uuid found for nav-group');
 				return;
 			}
-			if (storedNavState !== null && uuid) {
-				const navState = JSON.parse(storedNavState);
-				isOpen = navState[uuid];
+
+			const navState = parseNavState(window.localStorage.getItem('navState'));
+			const isOpen = !!navState[uuid];
+
+			const wrapper = this.querySelector(':scope > .nav-details');
+			const title = this.querySelector(':scope > .nav-details > .nav-group-title');
+			const content = wrapper?.querySelector(':scope > .nav-group-content');
+
+			if (isOpen && wrapper) {
+				wrapper.classList.add('open');
+				title?.setAttribute('aria-expanded', 'true');
+				if (content) content.removeAttribute('inert');
 			}
 
-			// Use :scope > to only match this element's direct children, not nested nav-groups
-			const navGroupDetails = this.querySelector(':scope > details');
-			const navGroupTitle = this.querySelector(':scope > details > .nav-group-title');
+			// Enable transitions only after initial state is applied.
+			// Without this, navigating between pages causes a visible
+			// 0fr→1fr animation as the saved open state is restored.
+			wrapper?.classList.add('ready');
 
-			if (isOpen) {
-				navGroupDetails?.setAttribute('open', '');
-			} else {
-				navGroupDetails?.removeAttribute('open');
-			}
+			// The head-injected #nav-restore style should have been removed
+			// by the LeftSidebar inline script already, but clean it up here
+			// too as a fallback in case that script errored.
+			document.getElementById('nav-restore')?.remove();
 
-			navGroupTitle?.addEventListener('click', (e) => {
-				e.preventDefault();
-				e.stopPropagation();
-				const storedNavState = window.localStorage.getItem('navState');
-				let navState = { uuid: true };
-				if (storedNavState !== null) {
-					navState = JSON.parse(storedNavState);
-					navState[uuid] = !navState[uuid];
-				}
-				window.localStorage.setItem('navState', JSON.stringify({ ...navState }));
+			title?.addEventListener('click', () => {
+				const navState = parseNavState(window.localStorage.getItem('navState'));
+				const shouldOpen = !wrapper?.classList.contains('open') &&
+					!wrapper?.classList.contains('closing');
 
-				if (navGroupDetails?.hasAttribute('open')) {
-					navGroupDetails.classList.add('closing');
-					const content = navGroupDetails.querySelector(':scope > .nav-group-content');
-					const onEnd = (e: Event) => {
-						// Ignore bubbled transitionend events from nested nav-groups
-						if (e.target !== content) return;
-						navGroupDetails.removeAttribute('open');
-						navGroupDetails.classList.remove('closing');
+				navState[uuid] = shouldOpen;
+				window.localStorage.setItem('navState', JSON.stringify(navState));
+
+				if (!shouldOpen) {
+					// Close: animate grid from 1fr → 0fr, then remove .open
+					title?.setAttribute('aria-expanded', 'false');
+					wrapper?.classList.add('closing');
+					if (content) content.setAttribute('inert', '');
+					const cleanup = () => {
+						wrapper?.classList.remove('open', 'closing');
 						content?.removeEventListener('transitionend', onEnd);
 					};
+					const onEnd = (e: Event) => {
+						if (e.target !== content) return;
+						clearTimeout(fallback);
+						cleanup();
+					};
 					content?.addEventListener('transitionend', onEnd);
+					// Fallback if transitionend never fires (e.g. prefers-reduced-motion)
+					const fallback = setTimeout(cleanup, 250);
 				} else {
-					// Add opening class to hold grid at 0fr, set open, force reflow, then remove to trigger transition
-					navGroupDetails?.classList.add('opening');
-					navGroupDetails?.setAttribute('open', '');
-					void (navGroupDetails as HTMLElement)?.offsetHeight; // force reflow
-					navGroupDetails?.classList.remove('opening');
+					// Open: hold at 0fr via .opening, add .open, reflow, then release
+					title?.setAttribute('aria-expanded', 'true');
+					wrapper?.classList.remove('closing');
+					wrapper?.classList.add('opening', 'open');
+					if (content) content.removeAttribute('inert');
+					void (wrapper as HTMLElement)?.offsetHeight; // force reflow
+					wrapper?.classList.remove('opening');
 				}
 			});
 		}
@@ -139,10 +161,21 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		display: block;
 	}
 	.nav-group-title {
+		all: unset;
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
 		font-size: 14px;
 		font-weight: 400;
 		padding: 0.4rem 0.75rem;
 		color: var(--theme-text);
+		cursor: pointer;
+
+		&:focus-visible {
+			outline: 2px solid var(--theme-accent);
+			outline-offset: -2px;
+			border-radius: 4px;
+		}
 
 		h2 {
 			display: flex;
@@ -164,10 +197,19 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 	.nav-group-content {
 		display: grid;
 		grid-template-rows: 0fr;
-		transition: grid-template-rows 0.2s ease;
 	}
 
-	details[open]:not(.closing):not(.opening) > .nav-group-content {
+	@media (prefers-reduced-motion: no-preference) {
+		.nav-details.ready > .nav-group-content {
+			transition: grid-template-rows 0.2s ease;
+		}
+
+		.nav-details.ready .chevron {
+			transition: 0.15s transform ease;
+		}
+	}
+
+	.nav-details.open:not(.closing):not(.opening) > .nav-group-content {
 		grid-template-rows: 1fr;
 	}
 
@@ -178,24 +220,11 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		border-left: 1px solid var(--theme-divider);
 	}
 
-	details > summary {
-		list-style: none;
-	}
-
-	details > summary::marker,
-	details > summary::-webkit-details-marker {
-		display: none;
-	}
-
-	details[open] > summary .chevron {
+	.open > .nav-group-title .chevron {
 		transform: rotate(90deg);
 	}
 
-	summary {
-		cursor: pointer;
-	}
-
-	summary h2 {
+	.nav-group-title h2 {
 		all: inherit;
 		margin: 0;
 		padding: 0;
@@ -215,14 +244,6 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		opacity: 0.4;
 		width: 12px;
 		height: 12px;
-	}
-
-	svg {
 		transform: rotate(0);
-		transition: 0.15s transform ease;
-	}
-
-	svg path {
-		fill: currentColor;
 	}
 </style>
