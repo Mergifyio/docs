@@ -1,25 +1,75 @@
 ---
-title: Post Check
-description: Create a check-run on a pull request.
+title: Post Check (Deprecated)
+description: Create a check-run on a pull request. Deprecated in favor of Merge Protections.
 ---
 
 import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
 import Button from '../../../../components/Button.astro';
 
-:::caution
-  We advise to use [Mergify Merge Protections](/merge-protections)
-  instead of this action.
+:::danger
+  The `post_check` action is **deprecated** and will be removed on September
+  30, 2026. Use [Merge Protections](/merge-protections) instead.
+
+  Mergify will automatically migrate your configuration by removing
+  `post_check` rules and opening a migration pull request that converts them
+  to equivalent merge protections.
 :::
+
+## Migrating to Merge Protections
+
+[Merge Protections](/merge-protections) replace `post_check` by letting you
+define `success_conditions` directly, without creating an intermediate
+check-run.
+
+### Before (post_check)
+
+```yaml
+pull_request_rules:
+  - name: Check CI status
+    conditions:
+      - base=main
+    actions:
+      post_check:
+        success_conditions:
+          - check-success=ci/test
+        neutral_conditions:
+          - check-neutral=ci/lint
+        title: "Mergify check: {{ check_rule_name }}"
+        summary: |
+          {{ check_conditions }}
+```
+
+### After (Merge Protections)
+
+```yaml
+merge_protections:
+  - name: Check CI status
+    if:
+      - base=main
+    success_conditions:
+      - check-success=ci/test
+      - check-neutral=ci/lint
+```
+
+:::note
+  The `title` and `summary` options have no equivalent in merge protections
+  and will be dropped during the automatic migration.
+:::
+
+:::note
+  When both `success_conditions` and `neutral_conditions` are defined, they
+  are combined with an `or` operator in the migrated merge protection.
+:::
+
+---
+
+## Legacy Reference
 
 The `post_check` action allows Mergify to create a check-run on a pull request.
 This can be useful in situations where you want to add a custom check to the
 status of a pull request based on Mergify's evaluation.
 
-:::note
-  Checks posted by Mergify using this action are usable as any other condition.
-:::
-
-## Parameters
+### Parameters
 
 <ActionOptionsTable def="PostCheckActionModel" />
 
