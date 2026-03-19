@@ -29,9 +29,28 @@ const isEnterprisePage = currentPage === '/enterprise' || currentPage.startsWith
 	</ul>
 </nav>
 
-<!-- Preserve sidebar scroll across page loads -->
+<!-- Restore nav state + sidebar scroll before first paint -->
 <script is:inline>
 	{
+		const storedNavState = localStorage.getItem('navState');
+		if (storedNavState) {
+			try {
+				const navState = JSON.parse(storedNavState);
+				for (const el of document.querySelectorAll('nav-group[data-uuid]')) {
+					if (navState[el.dataset.uuid]) {
+						el.querySelector(':scope > .nav-details')?.classList.add('open');
+						const btn = el.querySelector(':scope > .nav-details > .nav-group-title');
+						if (btn) btn.setAttribute('aria-expanded', 'true');
+						const content = el.querySelector(':scope > .nav-details > .nav-group-content');
+						if (content) content.removeAttribute('inert');
+					}
+				}
+			} catch { /* ignore corrupted localStorage */ }
+		}
+		// Head-injected nav-restore style is no longer needed now that
+		// .open classes are set — remove it so it doesn't override clicks.
+		document.getElementById('nav-restore')?.remove();
+
 		const leftSidebar = document.querySelector('.nav-groups');
 		const leftSidebarScroll = localStorage.getItem('sidebar-scroll');
 		if (leftSidebarScroll !== null) {
