@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { ClientRouter, fade } from 'astro:transitions';
 import Footer from '../components/Footer/Footer.astro';
 import HeadCommon from '../components/HeadCommon.astro';
 import Header from '../components/Header/Header.astro';
@@ -25,6 +26,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 		<HeadCommon />
 		<HeadSEO content={content} canonicalURL={canonicalURL} />
 		<title set:html={formatTitle(content)} />
+		<ClientRouter />
 		<style lang="scss">
 			.layout {
 				display: flex;
@@ -133,17 +135,17 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 			'section-merge-protections': currentPage.startsWith('/merge-protections'),
 			'section-workflow': currentPage.startsWith('/workflow')
 	}}>
-		<Header currentPage={currentPage} />
+		<Header currentPage={currentPage} transition:animate="none" />
 		<main class="layout">
-			<aside id="left-sidebar" class="sidebar">
+			<aside id="left-sidebar" class="sidebar" transition:animate="none">
 				<slot name="primary-sidebar">
 					<LeftSidebar currentPage={currentPage} />
 				</slot>
 			</aside>
-			<aside id="right-sidebar" class="sidebar">
+			<aside id="right-sidebar" class="sidebar" transition:animate={fade({ duration: '150ms' })}>
 				<slot name="secondary-sidebar" />
 			</aside>
-			<div id="main-content" class="main-column">
+			<div id="main-content" class="main-column" transition:animate={fade({ duration: '150ms' })}>
 				<slot />
 			</div>
 		</main>
