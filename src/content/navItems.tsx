@@ -296,7 +296,7 @@ const navItems: NavItem[] = [
     title: 'API',
     icon: 'mdi:api',
     children: [
-      { title: 'Usage', path: '/api-usage', icon: 'mdi:api' },
+      { title: 'Usage', path: '/api/usage', icon: 'mdi:api' },
       {
         title: 'Reference',
         path: '/api/',
