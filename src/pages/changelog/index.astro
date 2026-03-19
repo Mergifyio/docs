@@ -168,94 +168,95 @@ const description = 'Latest product updates from Mergify.';
     );
   })}
   <p id="no-results" hidden>No matching entries.</p>
-  <script>
-    const search = document.getElementById('search') as HTMLInputElement | null;
-    const pillBar = document.getElementById('tag-pills');
-    const entryRows = Array.from(document.querySelectorAll<HTMLElement>('.entry'));
-    const noResults = document.getElementById('no-results');
-    let activeTag = '';
+  <script is:inline>
+    function initChangelog() {
+      var search = document.getElementById('search');
+      var pillBar = document.getElementById('tag-pills');
+      var entryRows = Array.from(document.querySelectorAll('.entry'));
+      var noResults = document.getElementById('no-results');
+      if (!search || !noResults || !pillBar) return;
+      var activeTag = '';
 
-    function applyFilter() {
-      if (!search || !noResults) return;
-      const q = (search.value || '').trim().toLowerCase();
-      let visibleCount = 0;
-      entryRows.forEach(el => {
-        const tags = (el.getAttribute('data-tags')||'').split(',').filter(Boolean);
-        const title = el.getAttribute('data-title') || '';
-        const matchesTag = !activeTag || tags.includes(activeTag);
-        const matchesSearch = !q || title.includes(q);
-        const show = matchesTag && matchesSearch;
-        el.style.display = show ? '' : 'none';
-        if (show) visibleCount++;
-      });
-      noResults.hidden = visibleCount !== 0;
-      // Hide empty months (month-group) when filtering by tag
-      const monthGroups = Array.from(document.querySelectorAll<HTMLElement>('.month-group'));
-      monthGroups.forEach(group => {
-        const entriesInGroup = Array.from(group.querySelectorAll<HTMLElement>('.entry'));
-        const anyVisible = entriesInGroup.some(e => e.style.display !== 'none');
-        // Only hide if a specific tag is active; always show months when viewing all
-        if (activeTag) {
-          group.style.display = anyVisible ? '' : 'none';
-        } else {
-          group.style.display = '';
-        }
-      });
-      // Optionally hide entire year sections if all months are hidden
-      const yearSections = Array.from(document.querySelectorAll<HTMLElement>('section.year'));
-      yearSections.forEach(year => {
-        const months = Array.from(year.querySelectorAll<HTMLElement>('.month-group'));
-        const anyMonthVisible = months.some(m => m.style.display !== 'none');
-        if (activeTag) {
-          year.style.display = anyMonthVisible ? '' : 'none';
-        } else {
-          year.style.display = '';
-        }
-      });
-    }
+      function applyFilter() {
+        var q = (search.value || '').trim().toLowerCase();
+        var visibleCount = 0;
+        entryRows.forEach(function(el) {
+          var tags = (el.getAttribute('data-tags')||'').split(',').filter(Boolean);
+          var title = el.getAttribute('data-title') || '';
+          var matchesTag = !activeTag || tags.includes(activeTag);
+          var matchesSearch = !q || title.includes(q);
+          var show = matchesTag && matchesSearch;
+          el.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
+        });
+        noResults.hidden = visibleCount !== 0;
+        var monthGroups = Array.from(document.querySelectorAll('.month-group'));
+        monthGroups.forEach(function(group) {
+          var entriesInGroup = Array.from(group.querySelectorAll('.entry'));
+          var anyVisible = entriesInGroup.some(function(e) { return e.style.display !== 'none'; });
+          if (activeTag) {
+            group.style.display = anyVisible ? '' : 'none';
+          } else {
+            group.style.display = '';
+          }
+        });
+        var yearSections = Array.from(document.querySelectorAll('section.year'));
+        yearSections.forEach(function(year) {
+          var months = Array.from(year.querySelectorAll('.month-group'));
+          var anyMonthVisible = months.some(function(m) { return m.style.display !== 'none'; });
+          if (activeTag) {
+            year.style.display = anyMonthVisible ? '' : 'none';
+          } else {
+            year.style.display = '';
+          }
+        });
+      }
 
-    if (pillBar) {
-      pillBar.addEventListener('click', (e) => {
+      pillBar.addEventListener('click', function(e) {
         if (!e.target) return;
-        const btn = (e.target as HTMLElement).closest('button[data-tag]');
+        var btn = e.target.closest('button[data-tag]');
         if (!btn) return;
-        activeTag = (btn as HTMLButtonElement).dataset.tag || '';
-        pillBar.querySelectorAll('button[data-tag]').forEach(b => {
-          const on = (b === btn);
+        activeTag = btn.dataset.tag || '';
+        pillBar.querySelectorAll('button[data-tag]').forEach(function(b) {
+          var on = (b === btn);
           b.classList.toggle('active', on);
           b.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
         applyFilter();
       });
-    }
 
-    if (search) {
       search.addEventListener('input', applyFilter);
+
+      // Copy Slack command functionality
+      var copyBtn = document.getElementById('copy-slack-command');
+      var commandText = document.getElementById('slack-command-text');
+
+      if (copyBtn && commandText) {
+        copyBtn.addEventListener('click', function() {
+          var text = commandText.textContent || '';
+          if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+          navigator.clipboard.writeText(text).then(function() {
+            var copyTextSpan = copyBtn.querySelector('.copy-text');
+            if (copyTextSpan) {
+              var originalText = copyTextSpan.textContent;
+              copyTextSpan.textContent = 'Copied!';
+              copyBtn.classList.add('copied');
+              setTimeout(function() {
+                copyTextSpan.textContent = originalText;
+                copyBtn.classList.remove('copied');
+              }, 2000);
+            }
+          }).catch(function(err) {
+            console.error('Failed to copy:', err);
+          });
+        });
+      }
     }
 
-    // Copy Slack command functionality
-    const copyBtn = document.getElementById('copy-slack-command');
-    const commandText = document.getElementById('slack-command-text');
-
-    if (copyBtn && commandText) {
-      copyBtn.addEventListener('click', async () => {
-        const text = commandText.textContent || '';
-        try {
-          await navigator.clipboard.writeText(text);
-          const copyTextSpan = copyBtn.querySelector('.copy-text');
-          if (copyTextSpan) {
-            const originalText = copyTextSpan.textContent;
-            copyTextSpan.textContent = 'Copied!';
-            copyBtn.classList.add('copied');
-            setTimeout(() => {
-              copyTextSpan.textContent = originalText;
-              copyBtn.classList.remove('copied');
-            }, 2000);
-          }
-        } catch (err) {
-          console.error('Failed to copy:', err);
-        }
-      });
+    initChangelog();
+    if (!window.__changelogSwapInitialized__) {
+      window.__changelogSwapInitialized__ = true;
+      document.addEventListener('astro:after-swap', initChangelog);
     }
   </script>
   <style>
