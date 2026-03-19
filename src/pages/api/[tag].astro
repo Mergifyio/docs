@@ -1,0 +1,46 @@
+---
+import fs from 'node:fs';
+import Endpoint from '~/components/ApiReference/Endpoint.astro';
+import type { OpenAPISpec } from '~/components/ApiReference/openapi';
+import {
+  getHeadingsForEndpoints,
+  groupByTag,
+  humanizeTag,
+  preprocessSchema,
+  slugifyTag,
+  TAG_DESCRIPTIONS,
+} from '~/components/ApiReference/openapi';
+import MainLayout from '~/layouts/MainLayout.astro';
+import '~/styles/api-reference.css';
+
+export function getStaticPaths() {
+  const rawSchema: OpenAPISpec = JSON.parse(fs.readFileSync('public/api-schemas.json', 'utf-8'));
+  const schema = preprocessSchema(rawSchema);
+  const groups = groupByTag(schema);
+
+  return [...groups.entries()].map(([tag, endpoints]) => ({
+    params: { tag: slugifyTag(tag) },
+    props: { tag, endpoints, schema },
+  }));
+}
+
+const { tag, endpoints, schema } = Astro.props;
+const headings = getHeadingsForEndpoints(endpoints);
+const label = humanizeTag(tag);
+const description = TAG_DESCRIPTIONS[tag] ?? `${label} endpoints for the Mergify API.`;
+
+const content = {
+  title: label,
+  description,
+};
+---
+
+<MainLayout content={content} headings={headings} showMarkdownActions={false}>
+  <div class="api-reference">
+    {
+      endpoints.map((ep) => (
+        <Endpoint endpoint={ep} rootSchema={schema} />
+      ))
+    }
+  </div>
+</MainLayout>

@@ -1,0 +1,308 @@
+---
+import type { GroupedEndpoint, OpenAPISpec, SchemaObject } from './openapi';
+import {
+  generateExample,
+  getAuthLabels,
+  getTypeLabel,
+  renderSchemaHtml,
+  resolveRef,
+} from './openapi';
+
+interface Props {
+  endpoint: GroupedEndpoint;
+  rootSchema: OpenAPISpec;
+}
+
+const { endpoint, rootSchema } = Astro.props;
+const { method, path, operation, slug } = endpoint;
+
+const pathParams = (operation.parameters ?? []).filter((p) => p.in === 'path');
+const queryParams = (operation.parameters ?? []).filter((p) => p.in === 'query');
+
+const requestSchema = operation.requestBody?.content?.['application/json']?.schema;
+
+const responses = Object.entries(operation.responses ?? {});
+const authLabels = getAuthLabels(operation.security);
+
+// Split the path into segments: static parts and {param} parts
+const pathSegments = path.split(/(\{[^}]+\})/).filter(Boolean);
+
+// Build curl example
+const baseUrl = rootSchema.servers[0]?.url ?? 'https://api.mergify.com/v1';
+const examplePath = path.replace(/\{(\w+)\}/g, ':$1');
+const curlLines = [`curl -X ${method} "${baseUrl}${examplePath}"`];
+if (authLabels.length > 0) {
+  curlLines.push('  -H "Authorization: Bearer <token>"');
+}
+if (requestSchema) {
+  const resolved = requestSchema.$ref ? resolveRef(requestSchema, rootSchema) : requestSchema;
+  const example =
+    operation.requestBody?.content?.['application/json']?.example ??
+    generateExample(resolved, rootSchema);
+  curlLines.push('  -H "Content-Type: application/json"');
+  if (example) {
+    curlLines.push(`  -d '${JSON.stringify(example, null, 2).replace(/'/g, "'\\''")}'`);
+  }
+}
+const curlExample = curlLines.join(' \\\n');
+
+// Helper: get constraints text for a parameter
+function getParamConstraints(schema: SchemaObject | undefined): string[] {
+  if (!schema) return [];
+  // Unwrap nullable anyOf
+  if (schema.anyOf) {
+    const nonNull = schema.anyOf.filter((s) => s.type !== 'null');
+    if (nonNull.length === 1) return getParamConstraints(nonNull[0]);
+  }
+  const parts: string[] = [];
+  if (schema.minimum !== undefined) parts.push(`min: ${schema.minimum}`);
+  if (schema.exclusiveMinimum !== undefined)
+    parts.push(`exclusive min: ${schema.exclusiveMinimum}`);
+  if (schema.maximum !== undefined) parts.push(`max: ${schema.maximum}`);
+  if (schema.exclusiveMaximum !== undefined)
+    parts.push(`exclusive max: ${schema.exclusiveMaximum}`);
+  if (schema.minLength !== undefined) parts.push(`min length: ${schema.minLength}`);
+  if (schema.maxLength !== undefined) parts.push(`max length: ${schema.maxLength}`);
+  if (schema.pattern) parts.push(`pattern: ${schema.pattern}`);
+  return parts;
+}
+
+// Helper: generate a response example if the schema has no explicit one
+function getResponseExample(response: (typeof responses)[number][1]): string | null {
+  const explicit = response.content?.['application/json']?.example;
+  if (explicit) return JSON.stringify(explicit, null, 2);
+  const responseSchema = response.content?.['application/json']?.schema;
+  if (!responseSchema) return null;
+  const resolved = responseSchema.$ref ? resolveRef(responseSchema, rootSchema) : responseSchema;
+  const generated = generateExample(resolved, rootSchema);
+  if (generated === null || generated === undefined) return null;
+  return JSON.stringify(generated, null, 2);
+}
+---
+
+<div class="endpoint">
+  <h2 id={slug} class="endpoint-heading">{operation.summary}</h2>
+  <div class="endpoint-head">
+    <div class="endpoint-method-path">
+      <span class={`method-badge method-${method.toLowerCase()}`}
+        >{method}</span
+      >
+      <code class="endpoint-path">{
+          pathSegments.map((seg) =>
+            seg.startsWith('{') ? (
+              <span class="path-param">{seg}</span>
+            ) : (
+              <Fragment>{seg}</Fragment>
+            ),
+          )
+        }</code>
+    </div>
+    {operation.deprecated && <span class="deprecated-badge">Deprecated</span>}
+  </div>
+
+  {
+    operation.description &&
+      operation.description !== operation.summary && (
+        <p class="endpoint-description">{operation.description}</p>
+      )
+  }
+
+  {
+    authLabels.length > 0 && (
+      <div class="endpoint-auth">
+        <span class="endpoint-section-label">
+          Authorization
+          {authLabels.length > 1 && <span class="auth-hint">(any one of)</span>}
+        </span>
+        <div class="auth-badges">
+          {authLabels.map((label) => (
+            <span class="auth-badge">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              {label}
+            </span>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    pathParams.length > 0 && (
+      <div class="endpoint-section">
+        <span class="endpoint-section-label">Path Parameters</span>
+        <div class="params-table">
+          {pathParams.map((param) => {
+            const constraints = getParamConstraints(param.schema);
+            return (
+              <div class="param-row">
+                <div class="param-info">
+                  <code class="param-name">{param.name}</code>
+                  <span class="schema-type-badge">
+                    {getTypeLabel(param.schema, rootSchema)}
+                  </span>
+                  {param.required && (
+                    <span class="schema-required-badge">required</span>
+                  )}
+                </div>
+                {param.description && (
+                  <p class="param-description">{param.description}</p>
+                )}
+                {constraints.length > 0 && (
+                  <p class="param-constraints">{constraints.join(' · ')}</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    queryParams.length > 0 && (
+      <div class="endpoint-section">
+        <span class="endpoint-section-label">Query Parameters</span>
+        <div class="params-table">
+          {queryParams.map((param) => {
+            // For optional query params, strip "| null" from display
+            let typeLabel = getTypeLabel(param.schema, rootSchema);
+            if (!param.required) {
+              typeLabel = typeLabel.replace(/ \| null$/, '');
+            }
+            const constraints = getParamConstraints(param.schema);
+            return (
+              <div class="param-row">
+                <div class="param-info">
+                  <code class="param-name">{param.name}</code>
+                  <span class="schema-type-badge">{typeLabel}</span>
+                  {param.required && (
+                    <span class="schema-required-badge">required</span>
+                  )}
+                </div>
+                {(param.description || param.schema?.description) && (
+                  <p class="param-description">
+                    {param.description || param.schema?.description}
+                  </p>
+                )}
+                {constraints.length > 0 && (
+                  <p class="param-constraints">{constraints.join(' · ')}</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    requestSchema && (
+      <div class="endpoint-section">
+        <span class="endpoint-section-label">Request Body</span>
+        <div
+          class="schema-container"
+          set:html={renderSchemaHtml(requestSchema, rootSchema)}
+        />
+      </div>
+    )
+  }
+
+  {
+    responses.length > 0 && (
+      <div class="endpoint-section">
+        <span class="endpoint-section-label">Responses</span>
+        <div class="responses-list">
+          {responses.map(([code, response]) => {
+            const responseSchema =
+              response.content?.['application/json']?.schema;
+            const exampleJson = getResponseExample(response);
+            return (
+              <details
+                class="response-item"
+                open={code.startsWith('2')}
+              >
+                <summary class="response-header">
+                  <svg
+                    class="schema-chevron"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                  >
+                    <path
+                      d="M4.5 2L8.5 6L4.5 10"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span
+                    class={`response-code response-${code.charAt(0)}xx`}
+                  >
+                    {code}
+                  </span>
+                  <span class="response-description">
+                    {response.description}
+                  </span>
+                </summary>
+                {(responseSchema || exampleJson) && (
+                  <div class="response-body">
+                    {responseSchema && (
+                      <div
+                        class="schema-container"
+                        set:html={renderSchemaHtml(
+                          responseSchema,
+                          rootSchema,
+                        )}
+                      />
+                    )}
+                    {exampleJson && (
+                      <details class="response-example">
+                        <summary>Example Response</summary>
+                        <pre>
+                          <code set:text={exampleJson} />
+                        </pre>
+                      </details>
+                    )}
+                  </div>
+                )}
+              </details>
+            );
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  <details class="endpoint-curl">
+    <summary>
+      <svg
+        class="schema-chevron"
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+      >
+        <path
+          d="M4.5 2L8.5 6L4.5 10"
+          stroke="currentColor"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linecap="round"></path>
+      </svg>
+       Example Request
+    </summary>
+    <div class="curl-block">
+      <pre><code set:text={curlExample} /></pre>
+    </div>
+  </details>
+</div>

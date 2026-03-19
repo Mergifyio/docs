@@ -297,7 +297,21 @@ const navItems: NavItem[] = [
     icon: 'mdi:api',
     children: [
       { title: 'Usage', path: '/api-usage', icon: 'mdi:api' },
-      { title: 'Reference', path: '/api/', icon: 'fa-solid:list-alt' },
+      {
+        title: 'Reference',
+        path: '/api/',
+        icon: 'fa-solid:list-alt',
+        children: [
+          { title: 'Applications', path: '/api/applications' },
+          { title: 'Queues', path: '/api/queues' },
+          { title: 'Merge Queue', path: '/api/merge-queue' },
+          { title: 'Statistics', path: '/api/statistics' },
+          { title: 'Simulator', path: '/api/simulator' },
+          { title: 'Event Logs', path: '/api/eventlogs' },
+          { title: 'Badges', path: '/api/badges' },
+          { title: 'Scheduled Freeze', path: '/api/scheduled-freeze' },
+        ],
+      },
     ],
   },
   {
