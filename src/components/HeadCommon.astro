@@ -50,6 +50,34 @@ import '../styles/index.css';
 	}
 </script>
 
+<!-- Restore sidebar nav-group open/closed state from localStorage to avoid FOUC.
+     Generates CSS rules in <head> so groups render at the correct height from the
+     very first paint, before the body is parsed. Cleaned up by LeftSidebar. -->
+<script is:inline>
+	{
+		const raw = localStorage.getItem('navState');
+		if (raw) {
+			try {
+				const state = JSON.parse(raw);
+				const safe = /^[\w-]+$/;
+				const css = Object.entries(state)
+					.filter(([id, open]) => open && safe.test(id))
+					.map(([id]) =>
+						`nav-group[data-uuid="${id}"]>.nav-details>.nav-group-content{grid-template-rows:1fr}` +
+						`nav-group[data-uuid="${id}"]>.nav-details>.nav-group-title .chevron{transform:rotate(90deg)}`
+					)
+					.join('');
+				if (css) {
+					const s = document.createElement('style');
+					s.id = 'nav-restore';
+					s.textContent = css;
+					document.head.appendChild(s);
+				}
+			} catch { /* ignore corrupted localStorage */ }
+		}
+	}
+</script>
+
 <!-- Double-click to highlight code blocks (inline only). -->
 <script is:inline>
 	document.addEventListener('dblclick', (el) => {
