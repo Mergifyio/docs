@@ -5,9 +5,10 @@
 /conditions /configuration/conditions 301
 /conditions/ /configuration/conditions 301
 /conditions/_ /configuration/conditions/:splat 301
-/api-intro /api-usage 301
-/api-intro/ /api-usage 301
-/api-intro/_ /api-usage/:splat 301
+/api-intro /api/usage 301
+/api-intro/ /api/usage 301
+/api-usage /api/usage 301
+/api-usage/ /api/usage 301
 /examples /integrations 301
 /examples/ /integrations 301
 /examples/_ /integrations/:splat 301
