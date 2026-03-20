@@ -306,9 +306,9 @@ th {
   border-bottom-style: solid;
 }
 
-tr {
-  border-width: 1px;
-  border-style: solid;
+tbody tr:last-child td,
+tbody tr:last-child th {
+  border-bottom: none;
 }
 
 blockquote code {
