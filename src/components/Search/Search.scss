@@ -1,14 +1,14 @@
 #search-bar {
 	font-size: var(--theme-text-md);
+}
 
+/* Modal content is portaled to document.body (outside #search-bar),
+   so these styles must NOT be nested under #search-bar. */
+.modal-content {
 	mark {
 		color: #003dff;
 		background: transparent;
 		font-weight: 500;
-	}
-
-	.modal-content {
-		background: var(--theme-bg);
 	}
 
 	a {
@@ -44,10 +44,10 @@
 	}
 }
 
-.theme-dark .page-result.active {
+.theme-dark .modal-content .page-result.active {
 	background: var(--chakra-colors-blue-700) !important;
 }
 
-.theme-dark #search-bar mark {
+.theme-dark .modal-content mark {
 	color: #5468ff;
 }
