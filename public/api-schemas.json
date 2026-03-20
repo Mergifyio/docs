@@ -957,6 +957,7 @@
             "required": true,
             "schema": {
               "type": "integer",
+              "maximum": 9223372036854775807,
               "minimum": 0,
               "description": "The pull request number",
               "title": "Number"
@@ -1217,6 +1218,7 @@
               "anyOf": [
                 {
                   "type": "integer",
+                  "maximum": 9223372036854775807,
                   "minimum": 1,
                   "exclusiveMaximum": 2147483647
                 },
@@ -5471,6 +5473,7 @@
           },
           "pull_request_number": {
             "type": "integer",
+            "maximum": 9.223372036854776e+18,
             "minimum": 0.0,
             "title": "Pull Request Number",
             "description": "The number of the pull request used by the speculative check"
@@ -7111,6 +7114,7 @@
           "original_batch_pr_numbers": {
             "items": {
               "type": "integer",
+              "maximum": 9.223372036854776e+18,
               "minimum": 0.0
             },
             "type": "array",
@@ -7123,6 +7127,7 @@
           "culprit_pr_numbers": {
             "items": {
               "type": "integer",
+              "maximum": 9.223372036854776e+18,
               "minimum": 0.0
             },
             "type": "array",
@@ -7131,6 +7136,7 @@
           "remaining_pr_numbers": {
             "items": {
               "type": "integer",
+              "maximum": 9.223372036854776e+18,
               "minimum": 0.0
             },
             "type": "array",
@@ -7241,6 +7247,7 @@
           "original_batch_pr_numbers": {
             "items": {
               "type": "integer",
+              "maximum": 9.223372036854776e+18,
               "minimum": 0.0
             },
             "type": "array",
@@ -9914,6 +9921,7 @@
         "properties": {
           "number": {
             "type": "integer",
+            "maximum": 9.223372036854776e+18,
             "minimum": 0.0,
             "title": "Number"
           },
@@ -10223,6 +10231,7 @@
         "properties": {
           "number": {
             "type": "integer",
+            "maximum": 9.223372036854776e+18,
             "minimum": 0.0,
             "title": "Number",
             "description": "The number of the pull request"
@@ -11328,6 +11337,7 @@
         "properties": {
           "pull_request": {
             "type": "integer",
+            "maximum": 9.223372036854776e+18,
             "minimum": 0.0,
             "title": "Pull Request"
           },
@@ -11528,6 +11538,7 @@
           "pull_request_numbers": {
             "items": {
               "type": "integer",
+              "maximum": 9.223372036854776e+18,
               "minimum": 0.0
             },
             "type": "array",
@@ -11556,6 +11567,7 @@
           },
           "number": {
             "type": "integer",
+            "maximum": 9.223372036854776e+18,
             "minimum": 0.0,
             "title": "Number",
             "description": "The number of the pull request used by the speculative check"
