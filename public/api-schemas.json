@@ -3940,6 +3940,211 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/queues_pr_exit_reasons": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get PR exit reasons by interval",
+        "description": "Count of pull request queue-session exits by reason, grouped by time intervals. Each queue session (enter \u2192 leave) is counted once. A PR re-queued after failure appears in each session separately.",
+        "operationId": "get_pr_exit_reasons_repos__owner___repository__stats_queues_pr_exit_reasons_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Base reference(s) of the pull requests",
+              "title": "Base Ref"
+            },
+            "description": "Base reference(s) of the pull requests"
+          },
+          {
+            "name": "partition_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Partition name(s) of the pull requests",
+              "title": "Partition Name"
+            },
+            "description": "Partition name(s) of the pull requests"
+          },
+          {
+            "name": "queue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the merge queue(s) for the pull requests",
+              "title": "Queue Name"
+            },
+            "description": "Name of the merge queue(s) for the pull requests"
+          },
+          {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date, default 1 day before end_at",
+              "title": "Start At"
+            },
+            "description": "Get the stats until this date, default 1 day before end_at"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date, default now",
+              "title": "End At"
+            },
+            "description": "Get the stats from this date, default now"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrExitReasonResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/scheduled_freeze": {
       "get": {
         "tags": [
@@ -9879,6 +10084,95 @@
         ],
         "title": "MergedInInterval"
       },
+      "PrExitReasonGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/PrExitReasonInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "partition_name",
+          "queue_name",
+          "priority_rule_name",
+          "stats"
+        ],
+        "title": "PrExitReasonGroupResponse"
+      },
+      "PrExitReasonInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "exit_reason": {
+            "type": "string",
+            "title": "Exit Reason"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "exit_reason",
+          "count"
+        ],
+        "title": "PrExitReasonInInterval"
+      },
+      "PrExitReasonResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/PrExitReasonGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "PrExitReasonResponse"
+      },
       "PullRequestAuthor": {
         "properties": {
           "id": {
@@ -11409,13 +11703,28 @@
           "queue_time": {
             "type": "number",
             "title": "Queue Time"
+          },
+          "idle_capacity": {
+            "type": "number",
+            "title": "Idle Capacity"
+          },
+          "idle_schedule": {
+            "type": "number",
+            "title": "Idle Schedule"
+          },
+          "idle_freeze": {
+            "type": "number",
+            "title": "Idle Freeze"
           }
         },
         "type": "object",
         "required": [
           "start",
           "end",
-          "queue_time"
+          "queue_time",
+          "idle_capacity",
+          "idle_schedule",
+          "idle_freeze"
         ],
         "title": "QueueTimeInInterval"
       },
