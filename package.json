@@ -157,6 +157,9 @@
   "overrides": {
     "eslint-plugin-react": {
       "eslint": "$eslint"
+    },
+    "cheerio": {
+      "encoding-sniffer": "^1.0.2"
     }
   }
 }
