@@ -1675,6 +1675,7 @@
         },
         "number": {
           "description": "The pull request number.",
+          "maximum": 9223372036854775807,
           "minimum": 0,
           "title": "Number",
           "type": "integer"
