@@ -1,0 +1,231 @@
+---
+title: Parallel Scopes
+description: Run independent pull requests through the merge queue simultaneously to merge faster in monorepos.
+---
+
+By default, Mergify's merge queue operates in **serial mode**: every pull request is tested on top
+of the previous one, forming a single ordered pipeline. This guarantees correctness but means
+unrelated changes wait for each other.
+
+**Parallel mode** removes that constraint. When two pull requests touch different areas of the
+codebase — different **scopes** — Mergify tests and merges them independently, at the same time. Pull
+requests that do share a scope are still queued together so they are tested as a group, preventing
+semantic conflicts.
+
+:::tip
+  Parallel mode is designed for monorepos and large repositories where pull requests frequently
+  change independent parts of the codebase. If most of your pull requests touch the same files,
+  serial mode with [batching](/merge-queue/batches) may be a better fit.
+:::
+
+## Serial vs. Parallel at a Glance
+
+In **serial mode**, every batch depends on the one before it. Even if PR #3 (docs) has nothing in
+common with PR #1 (api) or PR #2 (frontend), it still waits:
+
+```dot class="graph"
+strict digraph {
+  fontname="sans-serif";
+  rankdir="LR";
+  label="Serial Mode — Single Queue";
+  nodesep=0.6;
+  ranksep=0.8;
+
+  node [shape=box, style="rounded,filled", fillcolor="#347D39", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+  edge [color="#374151", arrowhead=normal, penwidth=1.2, fontname="sans-serif"];
+
+  PR1 [label="Batch 1\nPR #1 (api)"];
+  PR2 [label="Batch 2\nPR #2 (frontend)"];
+  PR3 [label="Batch 3\nPR #3 (docs)"];
+
+  PR1 -> PR2 -> PR3;
+}
+```
+
+In **parallel mode**, Mergify groups pull requests by scope. Batches that share no scope run at the
+same time:
+
+```dot class="graph"
+strict digraph {
+  fontname="sans-serif";
+  rankdir="TB";
+  label="Parallel Mode\nIndependent Scope Queues";
+  nodesep=0.8;
+  ranksep=0.6;
+
+  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+  edge [style=invis];
+
+  subgraph cluster_running {
+    style="rounded,filled";
+    fillcolor="#1CB893";
+    color="#1CB893";
+    fontcolor="#000000";
+    label="Tested simultaneously";
+
+    PR1 [label="Batch 1\nPR #1 (api)", fillcolor="#347D39"];
+    PR2 [label="Batch 2\nPR #2 (frontend)", fillcolor="#347D39"];
+    PR3 [label="Batch 3\nPR #3 (docs)", fillcolor="#347D39"];
+  }
+
+  { rank=same; PR1; PR2; PR3; }
+}
+```
+
+When scopes **do** overlap, Mergify preserves ordering within that scope to guarantee the changes are
+tested together:
+
+```dot class="graph"
+strict digraph {
+  fontname="sans-serif";
+  rankdir="LR";
+  label="Parallel Mode — Overlapping Scopes Create Dependencies";
+  nodesep=0.6;
+  ranksep=1.0;
+
+  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+  edge [color="#374151", arrowhead=normal, penwidth=1.2, fontname="sans-serif"];
+
+  PR1 [label="Batch 1\nPR #1 (api)", fillcolor="#347D39"];
+  PR4 [label="Batch 2\nPR #4 (api, frontend)", fillcolor="#347D39"];
+  PR3 [label="Batch 3\nPR #3 (docs)", fillcolor="#347D39"];
+
+  PR1 -> PR4 [label="same scope: api"];
+
+  { rank=same; PR1; PR3; }
+}
+```
+
+Here PR #4 touches the `api` scope, just like PR #1 — so it must wait for PR #1 to merge first.
+Meanwhile PR #3 (docs) proceeds independently.
+
+## Setting Up Parallel Mode
+
+Parallel mode requires two things: switching the queue mode and configuring
+[scopes](/merge-queue/scopes) so Mergify knows which areas of the codebase each pull request
+touches.
+
+### 1. Define scopes
+
+Scopes can come from file patterns declared directly in `.mergify.yml`, or from an external build
+system (Nx, Bazel, Turborepo, …) via the
+[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) GitHub Action.
+
+```yaml
+scopes:
+  source:
+    files:
+      api:
+        include:
+          - services/api/**/*
+      frontend:
+        include:
+          - apps/web/**/*
+      docs:
+        include:
+          - docs/**/*
+```
+
+See [Scopes](/merge-queue/scopes) for all configuration options and build-tool integrations.
+
+### 2. Enable parallel mode
+
+Add `mode: parallel` under `merge_queue`:
+
+```yaml
+merge_queue:
+  mode: parallel
+  max_parallel_checks: 5
+
+scopes:
+  source:
+    files:
+      api:
+        include:
+          - services/api/**/*
+      frontend:
+        include:
+          - apps/web/**/*
+      docs:
+        include:
+          - docs/**/*
+
+queue_rules:
+  - name: default
+    batch_size: 3
+    queue_conditions:
+      - check-success = ci
+```
+
+The `max_parallel_checks` setting controls how many batches Mergify tests at the same time across
+all scope queues. Tune it to match your CI capacity.
+
+## How It Works
+
+Once parallel mode is active, the merge queue follows these steps whenever it processes pull
+requests:
+
+1. **Scope assignment.** Each pull request is tagged with the scopes it affects, either
+   automatically from file patterns or via an external upload.
+
+2. **Batch formation.** Mergify groups pull requests that share **exactly the same set of scopes**
+   into batches (respecting `batch_size`). Pull requests with different scopes form separate
+   batches.
+
+3. **Dependency tracking.** Batches that share at least one scope are linked as parent → child in a
+   dependency graph. A child batch cannot merge until all its parents have merged.
+
+4. **Parallel execution.** Batches with no shared scopes — and therefore no dependency — are tested
+   by CI at the same time, up to `max_parallel_checks`.
+
+5. **Merge.** As soon as a batch's CI passes and all its parent batches are merged, Mergify merges
+   the pull requests in that batch.
+
+### What happens when a batch fails?
+
+The failure handling works the same way as in serial mode: Mergify splits the failed batch and
+retests the parts to isolate the problematic pull request. See
+[Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout) for details.
+
+Because batches in parallel mode are scoped, a failure in one scope queue does **not** block
+unrelated scope queues. Only batches that depend on the failed one (via shared scopes) are affected.
+
+## The Monorepo Trade-Off
+
+Parallel mode is built for the reality of monorepos: most pull requests are independent, but some
+do interact.
+
+| Scenario | What happens | Benefit |
+|----------|-------------|---------|
+| PRs touch **different** scopes | Tested and merged in parallel | Faster merge times — no waiting for unrelated work |
+| PRs touch **the same** scope | Ordered within that scope queue and tested together | Conflicts caught before merge |
+| A PR touches **multiple** scopes | Linked to all relevant scope queues | Correctness preserved across scopes |
+
+The net effect: **pull requests merge faster when their scopes don't collide**, while pull requests
+that do collide are still tested in the right order to avoid semantic conflicts reaching your main
+branch.
+
+## Compatibility and Limitations
+
+Parallel mode changes how the queue operates. Some features that rely on strict single-queue
+ordering are not available:
+
+- **Scopes are required.** You must configure `scopes.source` (either `files` or `manual`).
+  Without scopes, Mergify cannot determine which pull requests are independent.
+
+- **`fast-forward` merge is not supported.** Because batches merge independently, Mergify needs to
+  rebase them. Use `merge` or `rebase` as your `merge_method`.
+
+- **`skip_intermediate_results` is not available.** This feature depends on the strict cumulative
+  ordering of serial mode.
+
+## Next Steps
+
+- [Scopes](/merge-queue/scopes): learn how to define and manage scopes for your repository.
+
+- [Batches](/merge-queue/batches): understand batch formation, sizing, and failure handling.
+
+- [Performance](/merge-queue/performance): tune your queue for the right balance of speed, cost,
+  and reliability.
+
+- [Monorepo](/merge-queue/monorepo): broader guidance on using Mergify in monorepo setups.
