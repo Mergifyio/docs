@@ -4650,8 +4650,16 @@
                   "$ref": "#/components/schemas/MergeQueueStatus"
                 },
                 "example": {
+                  "scope_queues": {
+                    "__default__": [
+                      "550e8400-e29b-41d4-a716-446655440001",
+                      "550e8400-e29b-41d4-a716-446655440002"
+                    ]
+                  },
                   "batches": [
                     {
+                      "id": "550e8400-e29b-41d4-a716-446655440001",
+                      "parent_ids": [],
                       "name": "Batch 1",
                       "status": {
                         "code": "running"
@@ -4703,6 +4711,10 @@
                       ]
                     },
                     {
+                      "id": "550e8400-e29b-41d4-a716-446655440002",
+                      "parent_ids": [
+                        "550e8400-e29b-41d4-a716-446655440001"
+                      ],
                       "name": "Batch 2",
                       "status": {
                         "code": "bisecting"
@@ -4718,6 +4730,8 @@
                       },
                       "sub_batches": [
                         {
+                          "id": "550e8400-e29b-41d4-a716-446655440003",
+                          "parent_ids": [],
                           "name": "Sub Batch 1",
                           "status": {
                             "code": "merged"
@@ -4734,6 +4748,8 @@
                           "pull_requests": []
                         },
                         {
+                          "id": "550e8400-e29b-41d4-a716-446655440004",
+                          "parent_ids": [],
                           "name": "Sub Batch 2",
                           "status": {
                             "code": "running"
@@ -9768,6 +9784,17 @@
             },
             "type": "array",
             "title": "Waiting Pull Requests"
+          },
+          "scope_queues": {
+            "additionalProperties": {
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Scope Queues"
           }
         },
         "type": "object",
@@ -9779,9 +9806,22 @@
       },
       "MergeQueueStatusBatchBase": {
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
           "name": {
             "type": "string",
             "title": "Name"
+          },
+          "parent_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Parent Ids"
           },
           "status": {
             "$ref": "#/components/schemas/BatchStatus"
@@ -9830,7 +9870,9 @@
         },
         "type": "object",
         "required": [
+          "id",
           "name",
+          "parent_ids",
           "status",
           "started_at",
           "estimated_merge_at",
@@ -9842,9 +9884,22 @@
       },
       "MergeQueueStatusBatchWithSubBatch": {
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
           "name": {
             "type": "string",
             "title": "Name"
+          },
+          "parent_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Parent Ids"
           },
           "status": {
             "$ref": "#/components/schemas/BatchStatus"
@@ -9907,7 +9962,9 @@
         },
         "type": "object",
         "required": [
+          "id",
           "name",
+          "parent_ids",
           "status",
           "started_at",
           "estimated_merge_at",
