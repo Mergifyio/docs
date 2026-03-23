@@ -18,7 +18,7 @@ With queue rules, you can:
 - Define multiple queues for different categories of PRs (e.g. dependencies vs.
   features).
 
-- Control merge methods (merge, squash, rebase) per queue.
+- Control merge methods (merge, squash, rebase, fast-forward) per queue.
 
 - Adjust batching behavior (batch size, max wait time).
 
@@ -57,6 +57,23 @@ your [merge queue](/merge-queue).
 Here are all the available fields you can configure for a queue rule:
 
 <OptionsTable def="QueueRuleModel" />
+
+## Merge Method
+
+The `merge_method` option controls how pull requests are merged into the base
+branch. Accepted values are `merge`, `rebase`, `squash`, and `fast-forward`.
+
+Each method produces a different git history shape. See the
+[Merge Strategies](/merge-queue/merge-strategies) guide for a detailed
+comparison, including configuration examples and trade-offs.
+
+:::note
+  The `fast-forward` method preserves original commit SHAs on the base branch
+  but requires `batch_size: 1` on the queue rule and
+  `max_parallel_checks: 1` as a global `merge_queue` setting. See
+  [Merge Strategies: Fast-Forward](/merge-queue/merge-strategies#fast-forward)
+  for requirements.
+:::
 
 ## Queue vs. Merge Conditions
 

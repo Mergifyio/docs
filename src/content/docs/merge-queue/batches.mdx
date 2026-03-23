@@ -145,6 +145,15 @@ By setting `queue_branch_merge_method` to `fast-forward`, Mergify will merge
 the temporary branches instead of the original PRs. The default setting is
 `none`, which means the temporary branches are not merged.
 
+:::note
+  `queue_branch_merge_method` controls how the **temporary batch branch** is
+  merged into the base branch. This is different from `merge_method`, which
+  controls how **individual PRs** are merged. To learn about using
+  `merge_method: fast-forward` for individual PR merges (preserving commit
+  SHAs without batching), see [Merge Strategies:
+  Fast-Forward](/merge-queue/merge-strategies#fast-forward).
+:::
+
 Here is an example configuration:
 
 ```yaml
@@ -156,14 +165,12 @@ queue_rules:
 ```
 
 :::note
-
-  Please note that this setting only works if `merge_method` is set to `merge`.
-  This is necessary so GitHub can mark the original PR as "merged" once the
-  temporary branch is merged. This configuration makes sure that the original
-  SHA1 from the PRs are included in the temporary branch and thus are detected
-  as merged. Importantly, the final merged result is the exact SHA1 of what has
-  been tested by CI, ensuring consistency and traceability.
-
+  `queue_branch_merge_method: fast-forward` only works if `merge_method` is set
+  to `merge`. This is necessary so GitHub can mark the original PR as "merged"
+  once the temporary branch is merged. This configuration makes sure that the
+  original SHA1 from the PRs are included in the temporary branch and thus are
+  detected as merged. Importantly, the final merged result is the exact SHA1 of
+  what has been tested by CI, ensuring consistency and traceability.
 :::
 
 :::caution
