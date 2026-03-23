@@ -108,6 +108,11 @@ const navItems: NavItem[] = [
       { title: 'Overview', path: '/merge-queue', icon: 'fa6-regular:lightbulb' },
       { title: 'Setup', path: '/merge-queue/setup', icon: 'fa6-solid:gear' },
       { title: 'Queue Rules', path: '/merge-queue/rules', icon: 'bi:stack' },
+      {
+        title: 'Merge Strategies',
+        path: '/merge-queue/merge-strategies',
+        icon: 'octicon:git-merge-16',
+      },
       { title: 'Lifecycle', path: '/merge-queue/lifecycle', icon: 'tabler:refresh' },
       { title: 'Priority', path: '/merge-queue/priority', icon: 'fa6-solid:traffic-light' },
       { title: 'Pause', path: '/merge-queue/pause', icon: 'fa6-regular:circle-pause' },
