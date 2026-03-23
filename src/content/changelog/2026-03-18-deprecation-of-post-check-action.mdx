@@ -1,0 +1,14 @@
+---
+title: "Deprecation of `post_check` action"
+date: 2026-03-18
+tags:
+  - Deprecations
+  - Merge Protections
+description: "Automatic migration of post_check actions to merge_protections entries"
+---
+
+The `post_check` action in `pull_request_rules` is being replaced by `merge_protections`. A new transformer handles the migration automatically:
+
+## What you need to do
+
+The transformer runs automatically and will open a pull request with the required changes. However, we recommend reviewing your configuration and migrating to `merge_protections` explicitly, as the `post_check` action will be removed in a future release.
