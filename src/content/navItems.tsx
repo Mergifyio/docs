@@ -140,6 +140,11 @@ const navItems: NavItem[] = [
         ],
       },
       { title: 'Monorepo', path: '/merge-queue/monorepo', icon: 'bi:boxes' },
+      {
+        title: 'Parallel Scopes',
+        path: '/merge-queue/parallel-scopes',
+        icon: 'tabler:arrows-fork',
+      },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: 'fa6-solid:stairs' },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: 'mdi:rocket-launch-outline' },
       {
