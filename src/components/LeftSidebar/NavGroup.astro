@@ -177,12 +177,6 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 			border-radius: 4px;
 		}
 
-		h2 {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-		}
-
 		:global(.left-icon) {
 			min-width: 16px;
 			min-height: 16px;
@@ -226,6 +220,9 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 
 	.nav-group-title h2 {
 		all: inherit;
+		display: flex;
+		align-items: center;
+		gap: 8px;
 		margin: 0;
 		padding: 0;
 		width: 100%;
