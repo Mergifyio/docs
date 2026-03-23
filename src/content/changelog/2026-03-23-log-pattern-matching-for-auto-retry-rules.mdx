@@ -1,0 +1,9 @@
+---
+title: "Log pattern matching for Auto-Retry rules"
+date: 2026-03-23
+tags:
+  - CI Insights
+description: "Auto-Retry rules can now match against job log content to decide whether a failed job should be retried"
+---
+
+A new `log_pattern` condition is now available for Auto-Retry rules. When a CI job fails, Mergify can stream the job's logs and match them against regex patterns you define. This lets you target retries to specific, known transient failures — such as network timeouts or flaky infrastructure errors — instead of blindly retrying every failure.
