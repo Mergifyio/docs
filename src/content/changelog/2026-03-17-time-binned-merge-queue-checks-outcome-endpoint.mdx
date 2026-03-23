@@ -1,0 +1,14 @@
+---
+title: "Time-binned merge queue checks outcome endpoint"
+date: 2026-03-17
+tags:
+  - Merge Queue
+  - API
+description: "New API endpoint to track dequeue reasons over time as a time-series graph"
+---
+
+New API endpoint `GET /v1/repos/{owner}/{repository}/stats/queues_checks_outcome_count` that returns dequeue reason counts grouped by time intervals.
+
+The existing `merge_queue_checks_outcome` endpoint only returns aggregate totals (useful for pie charts). This new endpoint enables time-series graphs showing how dequeue reasons (e.g. CHECKS_FAILED, MERGE_QUEUE_RESET, SUCCESS) evolve over time. The old endpoint is now deprecated.
+
+Supports filtering by base branch, partition, queue name, and priority rule.

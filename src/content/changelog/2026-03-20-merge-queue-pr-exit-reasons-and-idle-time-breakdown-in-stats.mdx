@@ -1,0 +1,22 @@
+---
+title: "Merge Queue: PR exit reasons and idle time breakdown in stats"
+date: 2026-03-20
+tags:
+  - Merge Queue
+description: "New stats endpoints for the merge queue dashboard: PR exit reasons count (unique PRs by final exit reason) and idle time breakdown (capacity, schedule, freeze). Powers the new Sankey flow diagram and stacked time chart."
+---
+
+Two new stats capabilities for the merge queue dashboard:
+
+**PR Exit Reasons**
+
+New visualization showing how pull requests flow through your merge queue — see at a glance how many PRs were merged successfully, cancelled, or failed, broken down over time. This powers the new Sankey flow diagram on the dashboard.
+
+**Idle Time Breakdown**
+
+Queue time stats now break down idle time into actionable categories:
+
+- **Capacity** — time spent waiting because the queue was at max parallel checks
+- **Schedule** — time spent waiting due to merge schedule restrictions
+- **Freeze** — time spent waiting because the queue was frozen
+This helps you understand where your merge queue time is actually spent and what to optimize.
