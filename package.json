@@ -30,7 +30,7 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "^25.5.0",
     "@types/viz.js": "^2.1.5",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
     "@typescript-eslint/parser": "^8.57.2",
     "astro": "^6.0.8",
     "astro-auto-import": "^0.5.1",
