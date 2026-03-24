@@ -4,7 +4,7 @@ import type { AstroIntegration } from 'astro';
 import { load } from 'cheerio';
 import * as pagefind from 'pagefind';
 
-const HIDDEN_PATH_PREFIXES = ['enterprise'];
+const HIDDEN_PATH_PREFIXES = ['enterprise', 'support/premium'];
 
 const isHiddenPath = (path: string): boolean => {
   return HIDDEN_PATH_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));

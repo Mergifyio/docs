@@ -75,7 +75,7 @@ export default defineConfig({
       // To be iso with gatsby's sitemap, not sure it's useful
       changefreq: 'daily',
       priority: 0.7,
-      filter: (page) => !page.startsWith('/enterprise'),
+      filter: (page) => !page.includes('/enterprise') && !page.includes('/support/premium'),
     }),
     PagefindIndex(),
     icon({
