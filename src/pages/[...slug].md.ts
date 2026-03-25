@@ -15,7 +15,7 @@ type MarkdownSourceProps = {
  * This enables llms.txt consumers to fetch LLM-friendly source content.
  */
 export async function getStaticPaths() {
-  const docPaths = allPages.map((page) => ({
+  const docPaths = allPages.map((page: { id: string; data: Record<string, unknown> }) => ({
     // For catch-all `[...slug]` we must provide the full id as a string (not array),
     // mirroring the pattern used in `[...slug].astro` so that `index` maps to /index.md
     params: { slug: page.id },
@@ -23,7 +23,7 @@ export async function getStaticPaths() {
   }));
 
   const changelogEntries = await getCollection('changelog');
-  const changelogPaths = changelogEntries.map((entry) => ({
+  const changelogPaths = changelogEntries.map((entry: { id: string }) => ({
     params: { slug: `changelog/${entry.id}` },
     props: { id: entry.id, collection: 'changelog' } satisfies MarkdownSourceProps,
   }));
