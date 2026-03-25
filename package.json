@@ -93,6 +93,7 @@
     "@iconify/react": "^6.0.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@viz-js/viz": "^3.25.0",
     "astro-icon": "^1.1.5",
     "canvas-confetti": "^1.9.4",
     "cheerio": "^1.2.0",
@@ -112,8 +113,7 @@
     "remark-lint-no-file-name-irregular-characters": "^3.0.1",
     "remark-lint-ordered-list-marker-value": "^4.0.1",
     "remark-smartypants": "^3.0.2",
-    "uuid": "^13.0.0",
-    "viz.js": "^2.1.2"
+    "uuid": "^13.0.0"
   },
   "remarkConfig": {
     "settings": {
