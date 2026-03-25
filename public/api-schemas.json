@@ -7642,6 +7642,28 @@
             "format": "date-time",
             "title": "Queued At"
           },
+          "retry_attempt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry Attempt"
+          },
+          "max_retries": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Retries"
+          },
           "speculative_check_pull_request": {
             "$ref": "#/components/schemas/mergify_engine__signals__SpeculativeCheckPullRequest"
           },
@@ -7674,6 +7696,8 @@
           "priority_rule_name",
           "queue_name",
           "queued_at",
+          "retry_attempt",
+          "max_retries",
           "speculative_check_pull_request",
           "train_car_id",
           "session_id"
