@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { ClientRouter, fade } from 'astro:transitions';
+import { Agentation } from 'agentation';
 import Footer from '../components/Footer/Footer.astro';
 import HeadCommon from '../components/HeadCommon.astro';
 import Header from '../components/Header/Header.astro';
@@ -156,5 +157,6 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 		</div>
 		<ScrollToTop />
 		<ImageZoom />
+		{import.meta.env.DEV && <Agentation client:only="react" />}
 	</body>
 </html>
