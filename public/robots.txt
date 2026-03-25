@@ -2,4 +2,7 @@ User-agent: *
 Disallow: /enterprise
 Disallow: /enterprise/
 Disallow: /enterprise/*
+Disallow: /support/premium
+Disallow: /support/premium/
+Disallow: /support/premium/*
 Allow: /

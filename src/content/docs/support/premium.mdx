@@ -1,0 +1,91 @@
+---
+title: 24/7 Premium Support
+description: Escalation guide for Mergify's 24/7 Premium Support service.
+---
+
+Mergify's 24/7 Premium Support gives your team a direct escalation path to our
+on-call engineers — around the clock, every day of the year. This service is
+exclusively for critical incidents that block your ability to merge.
+
+For general support questions, configuration help, or feature requests, see the
+[standard support page](/support).
+
+## How to Escalate
+
+Email our dedicated escalation address:
+
+<a href="mailto:support-escalation@mergify.com">support-escalation@mergify.com</a>
+
+Use the following template to help our on-call engineer start investigating
+immediately:
+
+```text
+Subject: [ESCALATION] <your-org> — <brief description>
+
+Repository: <org/repo>
+Pull Request: <link to the affected PR>
+Observed behavior: <what is happening>
+Expected behavior: <what should happen>
+Started at: <approximate time + timezone>
+Recent config changes: <any changes made before the issue>
+```
+
+:::tip
+  Include as much context as possible. Logs, screenshots, and links to CI runs
+  help us triage faster and reduce back-and-forth.
+:::
+
+## What Happens Next
+
+1. **Acknowledgment** — within 1 hour, an engineer confirms receipt and begins
+   triage.
+
+2. **Investigation** — we analyze the incident using the details you provided
+   alongside our own telemetry.
+
+3. **Resolution** — a fix or workaround is deployed. We confirm the outcome with
+   you before closing the incident.
+
+Resolution time varies depending on incident complexity.
+
+## What's Covered
+
+This service covers critical incidents where Mergify's core features are
+unavailable or actively blocking your workflow:
+
+- **Merge Queue** is unavailable or non-responsive.
+- **Workflow Automation** is failing to trigger or execute.
+- **Merge Protections** are blocking merges unexpectedly.
+
+## What's Not Covered
+
+- Issues caused by third-party systems (GitHub outages, your CI/CD
+  infrastructure).
+
+- Configuration questions or product guidance.
+
+- Feature requests or non-urgent assistance.
+
+- Problems unrelated to Mergify's core services.
+
+:::note
+  For these topics, reach out through the [standard support channels](/support).
+:::
+
+## Your Part
+
+To help us resolve your incident as fast as possible:
+
+- **Use the template above** — include repository, PR, and observed behavior.
+
+- **Stay reachable** — ensure a technical contact is available for follow-up
+  during triage.
+
+- **Reserve escalation for blocking events** — this channel is for genuine
+  service-blocking incidents that you cannot resolve using the product's
+  available features.
+
+---
+
+Not yet subscribed to Premium Support? Contact
+<a href="mailto:sales@mergify.com">sales@mergify.com</a> to learn more.
