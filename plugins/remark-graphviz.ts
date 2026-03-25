@@ -1,11 +1,10 @@
+import { instance } from '@viz-js/viz';
 import { load } from 'cheerio';
 import type * as mdast from 'mdast';
 import type * as unified from 'unified';
 import { CONTINUE, visit } from 'unist-util-visit';
-import Viz from 'viz.js';
-import { Module, render } from 'viz.js/full.render.js';
 
-const viz = new Viz({ Module, render });
+const viz = await instance();
 
 const validLanguages = [`dot`, `circo`, `neato`];
 
@@ -28,7 +27,7 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
         if (node.value?.includes('<svg')) return node;
         try {
           // Perform actual render
-          const svgString = await viz.renderString(value, { engine: lang });
+          const svgString = viz.renderString(value, { format: 'svg', engine: lang });
           // Add default inline styling
           const $ = load(svgString);
           $(`svg`).attr(`style`, `max-width: 100%; height: auto;`);
