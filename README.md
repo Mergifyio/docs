@@ -170,6 +170,47 @@ npm run build && npm run preview
 > The build compiles every page, so you may see errors here that don't
 > appear in dev mode (where pages are built one at a time).
 
+## Agentation (Visual Feedback for AI Agents)
+
+[Agentation](https://www.agentation.com) lets developers leave visual
+annotations directly on the rendered site so AI coding agents can see
+and act on them. It consists of a React overlay component and an MCP
+server.
+
+### Setup
+
+Agentation is already configured in this project:
+
+1. **React component** — included in `src/layouts/BaseLayout.astro` (dev mode only via `import.meta.env.DEV`)
+2. **MCP server** — configured in `.claude/mcp.json`
+3. **npm package** — installed as a dev dependency (`agentation`)
+
+### Usage
+
+1. Start the dev server (`npm start`) and open the site in your
+   browser
+
+2. Use the Agentation overlay to create annotations on page elements
+   (click on elements, leave comments describing what needs to change)
+
+3. AI agents connected via the MCP server pick up pending annotations
+   and act on them automatically
+
+### Adding Agentation to a new agent
+
+Add the following to your agent's MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "agentation": {
+      "command": "npx",
+      "args": ["-y", "agentation-mcp", "server"]
+    }
+  }
+}
+```
+
 ## Tech Stack
 
 - **Framework:** [Astro 5](https://astro.build/) with MDX
