@@ -62,7 +62,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-preset-lint-markdown-style-guide": "^6.0.1",
     "sass-embedded": "^1.98.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "unified": "^11.0.5",
     "unist-util-remove": "^4.0.0",
     "unist-util-visit": "^5.1.0",
@@ -160,6 +160,7 @@
     },
     "cheerio": {
       "encoding-sniffer": "^1.0.2"
-    }
+    },
+    "typescript": "$typescript"
   }
 }

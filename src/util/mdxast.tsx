@@ -20,13 +20,13 @@ type JSONObject = Record<string, unknown>;
 export function stripHtmlFromkeys(jsonObject: JSONObject | null): JSONObject {
   console.log('stripHtmlFromkeys', jsonObject);
 
-  let stripped = {};
+  let stripped: Record<string, unknown> = {};
   if (typeof jsonObject === 'string') {
     return jsonObject;
   }
 
   if (Array.isArray(jsonObject)) {
-    stripped = jsonObject.map(stripHtmlFromkeys);
+    stripped = jsonObject.map(stripHtmlFromkeys) as unknown as Record<string, unknown>;
   } else {
     Object.entries(jsonObject ?? {}).forEach(([key, value]) => {
       const strippedKey = key.replace(/<\/?em>/g, '');
@@ -47,19 +47,17 @@ export function stripHtmlFromkeys(jsonObject: JSONObject | null): JSONObject {
 function removeOptionsWithoutHighlight(
   options: { [optionKey: string]: OptionDefinition } | OptionDefinition[]
 ) {
-  let cleanOptions = {};
-
   if (Array.isArray(options)) {
-    cleanOptions = options.filter((option) => JSON.stringify(option).includes('<em>'));
-  } else {
-    Object.entries(options).forEach(([key, definition]) => {
-      if (JSON.stringify(definition).includes('<em>')) {
-        cleanOptions[key] = definition;
-      }
-    });
+    return options.filter((option) => JSON.stringify(option).includes('<em>'));
   }
 
-  return cleanOptions;
+  const result: Record<string, OptionDefinition> = {};
+  Object.entries(options).forEach(([key, definition]) => {
+    if (JSON.stringify(definition).includes('<em>')) {
+      result[key] = definition;
+    }
+  });
+  return result;
 }
 
 function extractHighlightsFromText(text: string | null): string[] {
@@ -133,7 +131,7 @@ export function renderMdxTable(table: TableType) {
 
     case 'PullRequestAttributesTable': {
       const attributes =
-        onlyHighlightedOptions as typeof configSchema.$defs.PullRequestAttributes.properties;
+        onlyHighlightedOptions as unknown as typeof configSchema.$defs.PullRequestAttributes.properties;
       return <PullRequestAttributesTable staticAttributes={attributes} />;
     }
 
@@ -186,10 +184,10 @@ export const renderMdxRawTable = (
   highlights: string[]
 ): { element: React.ReactElement | string; isHighlight: boolean } => {
   const children =
-    node.children?.map((child: MdxNodeJsxElement) => renderMdxRawTable(child, highlights)) ?? [];
+    node.children?.map((child) => renderMdxRawTable(child as MdxNodeJsxElement, highlights)) ?? [];
 
   if (node.type === 'mdxJsxFlowElement') {
-    const attributes = {};
+    const attributes: Record<string, unknown> = {};
 
     node.attributes
       .filter((attr) => attr.type === 'mdxJsxAttribute')
