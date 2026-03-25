@@ -57,4 +57,22 @@ fi
 
 astro build 2>&1 | tee -a build.log
 
+# Add Last-Modified headers for JSON schema files to fix check-jsonschema caching
+# See: https://github.com/Mergifyio/mergify/issues/5161
+for schema in mergify-configuration-schema.json api-schemas.json; do
+  if [ -f "dist/$schema" ]; then
+    # Try file-specific date first; fall back to HEAD date (for shallow clones).
+    # Use %ct (unix timestamp) + date -u to produce RFC 1123 (HTTP-date) in GMT.
+    # Non-fatal (|| true) to avoid breaking the deploy if git metadata is missing.
+    ts=$(git log -1 --format="%ct" -- "public/$schema" 2>/dev/null || true)
+    if [ -z "$ts" ]; then
+      ts=$(git log -1 --format="%ct" 2>/dev/null || true)
+    fi
+    if [ -n "$ts" ]; then
+      last_modified=$(date -u -d "@$ts" +"%a, %d %b %Y %H:%M:%S GMT")
+      printf "\n/%s\n  Last-Modified: %s\n" "$schema" "$last_modified" >> dist/_headers
+    fi
+  fi
+done
+
 conclusion="success" emoji="🦾"
