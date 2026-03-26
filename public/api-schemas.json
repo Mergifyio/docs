@@ -1434,6 +1434,7 @@
         "summary": "Time to merge statistics for every queues and partitions",
         "description": "Get the average time to merge statistics, in seconds, for all the queues and partitions in the repository",
         "operationId": "get_time_to_merge_stats_for_all_queues_and_partitions_endpoint_repos__owner___repository__stats_time_to_merge_get",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -3737,6 +3738,211 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/checks_retries": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get the queue checks retries statistics",
+        "description": "Statistics about checks retries in the merge queue by intervals of time",
+        "operationId": "get_queue_checks_retries_repos__owner___repository__stats_checks_retries_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Base reference(s) of the pull requests",
+              "title": "Base Ref"
+            },
+            "description": "Base reference(s) of the pull requests"
+          },
+          {
+            "name": "partition_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Partition name(s) of the pull requests",
+              "title": "Partition Name"
+            },
+            "description": "Partition name(s) of the pull requests"
+          },
+          {
+            "name": "queue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the merge queue(s) for the pull requests",
+              "title": "Queue Name"
+            },
+            "description": "Name of the merge queue(s) for the pull requests"
+          },
+          {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date, default 1 day before end_at",
+              "title": "Start At"
+            },
+            "description": "Get the stats until this date, default 1 day before end_at"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date, default now",
+              "title": "End At"
+            },
+            "description": "Get the stats from this date, default now"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChecksRetriesResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/stats/failure_rate": {
       "get": {
         "tags": [
@@ -5743,6 +5949,120 @@
           "groups"
         ],
         "title": "ChecksOutcomeResponse"
+      },
+      "ChecksRetriesGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/ChecksRetriesInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "partition_name",
+          "queue_name",
+          "priority_rule_name",
+          "stats"
+        ],
+        "title": "ChecksRetriesGroupResponse"
+      },
+      "ChecksRetriesInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "total_retries": {
+            "type": "integer",
+            "title": "Total Retries"
+          },
+          "sessions_with_retries": {
+            "type": "integer",
+            "title": "Sessions With Retries"
+          },
+          "recovered": {
+            "type": "integer",
+            "title": "Recovered"
+          },
+          "not_recovered": {
+            "type": "integer",
+            "title": "Not Recovered"
+          },
+          "recovery_rate": {
+            "type": "number",
+            "title": "Recovery Rate"
+          },
+          "avg_retry_depth": {
+            "type": "number",
+            "title": "Avg Retry Depth"
+          },
+          "max_retry_depth": {
+            "type": "integer",
+            "title": "Max Retry Depth"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "total_retries",
+          "sessions_with_retries",
+          "recovered",
+          "not_recovered",
+          "recovery_rate",
+          "avg_retry_depth",
+          "max_retry_depth"
+        ],
+        "title": "ChecksRetriesInInterval"
+      },
+      "ChecksRetriesResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/ChecksRetriesGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "ChecksRetriesResponse"
       },
       "CreateScheduledQueueFreezePayload": {
         "properties": {
