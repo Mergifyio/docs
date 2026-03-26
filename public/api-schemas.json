@@ -2750,7 +2750,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/mergify_engine__web__api__statistics__average_queue_time__QueueAverageTimeResponse"
+                  "$ref": "#/components/schemas/AverageQueueTime_QueueAverageTimeResponse"
                 }
               }
             }
@@ -2955,7 +2955,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/mergify_engine__web__api__statistics__total_queue_time__QueueAverageTimeResponse"
+                  "$ref": "#/components/schemas/TotalQueueTime_QueueAverageTimeResponse"
                 }
               }
             }
@@ -7985,7 +7985,7 @@
             "title": "Max Retries"
           },
           "speculative_check_pull_request": {
-            "$ref": "#/components/schemas/mergify_engine__signals__SpeculativeCheckPullRequest"
+            "$ref": "#/components/schemas/Signals_SpeculativeCheckPullRequest"
           },
           "train_car_id": {
             "anyOf": [
@@ -8251,7 +8251,7 @@
             "title": "Start Reason"
           },
           "speculative_check_pull_request": {
-            "$ref": "#/components/schemas/mergify_engine__signals__SpeculativeCheckPullRequest"
+            "$ref": "#/components/schemas/Signals_SpeculativeCheckPullRequest"
           },
           "train_car_id": {
             "anyOf": [
@@ -8514,7 +8514,7 @@
           "conditions_evaluation": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/mergify_engine__rules__conditions__QueueConditionEvaluationResult__Serialized"
+                "$ref": "#/components/schemas/QueueConditionEvaluationResult_Serialized"
               },
               {
                 "type": "null"
@@ -8523,7 +8523,7 @@
           },
           "checks": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__queue__merge_train__checks__QueueCheck__Serialized"
+              "$ref": "#/components/schemas/QueueCheck_Serialized"
             },
             "type": "array",
             "title": "Checks"
@@ -10670,7 +10670,7 @@
           "speculative_check_pull_request": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/mergify_engine__web__api__queues__index__SpeculativeCheckPullRequest"
+                "$ref": "#/components/schemas/Queues_SpeculativeCheckPullRequest"
               },
               {
                 "type": "null"
@@ -11675,7 +11675,7 @@
         "type": "object",
         "title": "UpdateScheduledFreezePayload"
       },
-      "mergify_engine__queue__merge_train__checks__QueueCheck__Serialized": {
+      "QueueCheck_Serialized": {
         "properties": {
           "name": {
             "type": "string",
@@ -11734,7 +11734,7 @@
         ],
         "title": "Serialized"
       },
-      "mergify_engine__rules__conditions__QueueConditionEvaluationResult__Evaluation__Serialized": {
+      "QueueConditionEvaluationResult_Evaluation_Serialized": {
         "properties": {
           "pull_request": {
             "type": "integer",
@@ -11787,7 +11787,7 @@
         ],
         "title": "Serialized"
       },
-      "mergify_engine__rules__conditions__QueueConditionEvaluationResult__Serialized": {
+      "QueueConditionEvaluationResult_Serialized": {
         "properties": {
           "match": {
             "type": "boolean",
@@ -11848,14 +11848,14 @@
           },
           "subconditions": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__rules__conditions__QueueConditionEvaluationResult__Serialized"
+              "$ref": "#/components/schemas/QueueConditionEvaluationResult_Serialized"
             },
             "type": "array",
             "title": "Subconditions"
           },
           "evaluations": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__rules__conditions__QueueConditionEvaluationResult__Evaluation__Serialized"
+              "$ref": "#/components/schemas/QueueConditionEvaluationResult_Evaluation_Serialized"
             },
             "type": "array",
             "title": "Evaluations"
@@ -11875,7 +11875,7 @@
         ],
         "title": "Serialized"
       },
-      "mergify_engine__signals__SpeculativeCheckPullRequest": {
+      "Signals_SpeculativeCheckPullRequest": {
         "properties": {
           "number": {
             "type": "integer",
@@ -11931,7 +11931,7 @@
           },
           "unsuccessful_checks": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__queue__merge_train__checks__QueueCheck__Serialized"
+              "$ref": "#/components/schemas/QueueCheck_Serialized"
             },
             "type": "array",
             "title": "Unsuccessful Checks"
@@ -11959,7 +11959,7 @@
         ],
         "title": "SpeculativeCheckPullRequest"
       },
-      "mergify_engine__web__api__queues__index__SpeculativeCheckPullRequest": {
+      "Queues_SpeculativeCheckPullRequest": {
         "properties": {
           "in_place": {
             "type": "boolean",
@@ -12042,11 +12042,11 @@
         ],
         "title": "SpeculativeCheckPullRequest"
       },
-      "mergify_engine__web__api__statistics__average_queue_time__QueueAverageTimeResponse": {
+      "AverageQueueTime_QueueAverageTimeResponse": {
         "properties": {
           "groups": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__web__api__statistics__average_queue_time__QueueTimeGroupResponse"
+              "$ref": "#/components/schemas/AverageQueueTime_QueueTimeGroupResponse"
             },
             "type": "array",
             "title": "Groups"
@@ -12058,7 +12058,7 @@
         ],
         "title": "QueueAverageTimeResponse"
       },
-      "mergify_engine__web__api__statistics__average_queue_time__QueueTimeGroupResponse": {
+      "AverageQueueTime_QueueTimeGroupResponse": {
         "properties": {
           "base_ref": {
             "type": "string",
@@ -12085,7 +12085,7 @@
           },
           "stats": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__web__api__statistics__average_queue_time__QueueTimeInInterval"
+              "$ref": "#/components/schemas/AverageQueueTime_QueueTimeInInterval"
             },
             "type": "array",
             "title": "Stats"
@@ -12101,7 +12101,7 @@
         ],
         "title": "QueueTimeGroupResponse"
       },
-      "mergify_engine__web__api__statistics__average_queue_time__QueueTimeInInterval": {
+      "AverageQueueTime_QueueTimeInInterval": {
         "properties": {
           "start": {
             "type": "string",
@@ -12141,11 +12141,11 @@
         ],
         "title": "QueueTimeInInterval"
       },
-      "mergify_engine__web__api__statistics__total_queue_time__QueueAverageTimeResponse": {
+      "TotalQueueTime_QueueAverageTimeResponse": {
         "properties": {
           "groups": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__web__api__statistics__total_queue_time__QueueTimeGroupResponse"
+              "$ref": "#/components/schemas/TotalQueueTime_QueueTimeGroupResponse"
             },
             "type": "array",
             "title": "Groups"
@@ -12157,7 +12157,7 @@
         ],
         "title": "QueueAverageTimeResponse"
       },
-      "mergify_engine__web__api__statistics__total_queue_time__QueueTimeGroupResponse": {
+      "TotalQueueTime_QueueTimeGroupResponse": {
         "properties": {
           "base_ref": {
             "type": "string",
@@ -12184,7 +12184,7 @@
           },
           "stats": {
             "items": {
-              "$ref": "#/components/schemas/mergify_engine__web__api__statistics__total_queue_time__QueueTimeInInterval"
+              "$ref": "#/components/schemas/TotalQueueTime_QueueTimeInInterval"
             },
             "type": "array",
             "title": "Stats"
@@ -12200,7 +12200,7 @@
         ],
         "title": "QueueTimeGroupResponse"
       },
-      "mergify_engine__web__api__statistics__total_queue_time__QueueTimeInInterval": {
+      "TotalQueueTime_QueueTimeInInterval": {
         "properties": {
           "start": {
             "type": "string",
