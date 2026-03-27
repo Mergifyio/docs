@@ -7905,6 +7905,7 @@
                   "CONFIGURATION_CHANGED",
                   "UNPROCESSABLE_PULL_REQUEST",
                   "PR_MANUALLY_DEQUEUED",
+                  "STACK_PREDECESSOR_DEQUEUED",
                   "INTERMEDIATE_RESULTS_SKIPPED",
                   "CHECKS_RETRIED"
                 ]
@@ -10979,6 +10980,12 @@
             "type": "integer",
             "title": "Pr Manually Dequeued",
             "description": "The pull request has been manually dequeued by a dequeue command",
+            "default": 0
+          },
+          "STACK_PREDECESSOR_DEQUEUED": {
+            "type": "integer",
+            "title": "Stack Predecessor Dequeued",
+            "description": "The pull request has been dequeued because its stack predecessor was dequeued",
             "default": 0
           },
           "INTERMEDIATE_RESULTS_SKIPPED": {
