@@ -80,3 +80,37 @@ failures. Each rule specifies:
 
 - **Retry mode**: The mode of retry, either retrying all failed jobs (`job`)
     or the entire workflow (`pipeline`)
+
+### Conditions
+
+Conditions let you control which job failures should trigger a retry. Each
+condition matches against a specific attribute of the failed job. You can
+combine multiple conditions in a single rule — all conditions must match for
+the rule to apply.
+
+The following condition attributes are available:
+
+- **Job name**: Match against the name of the failed job. This allows you to
+  target retries to specific jobs known to be flaky.
+
+- **Pipeline name**: Match against the name of the workflow (pipeline) that
+  contains the failed job.
+
+- **Repository**: Restrict the rule to specific repositories.
+
+- **Branch**: Restrict the rule to specific branches. You can also enter custom
+  branch names that are not yet in the list.
+
+- **Conclusion**: Match against the type of failure. Available values are
+  `failure` (the job failed) and `timed_out` (the job exceeded its time limit).
+
+- **Flaky**: Match against whether Mergify has detected the job as flaky.
+  Set to `true` to only retry jobs that have been identified as flaky, or
+  `false` to only retry jobs that are not considered flaky.
+
+- **Log pattern**: Match against the content of the job logs and GitHub
+  Actions check-run annotations using regular expressions. Each pattern is
+  evaluated against individual log lines. You can specify multiple
+  patterns — a retry is triggered if any of the patterns match. For
+  example, `timeout|connection refused` would match any log line
+  containing either "timeout" or "connection refused".
