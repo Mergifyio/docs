@@ -7905,7 +7905,6 @@
                   "CONFIGURATION_CHANGED",
                   "UNPROCESSABLE_PULL_REQUEST",
                   "PR_MANUALLY_DEQUEUED",
-                  "STACK_PREDECESSOR_DEQUEUED",
                   "INTERMEDIATE_RESULTS_SKIPPED",
                   "CHECKS_RETRIED"
                 ]
@@ -10992,12 +10991,6 @@
             "type": "integer",
             "title": "Checks Retried",
             "description": "The checks have failed and are being retried",
-            "default": 0
-          },
-          "STACK_PREDECESSOR_DEQUEUED": {
-            "type": "integer",
-            "title": "Stack Predecessor Dequeued",
-            "description": "The pull request was dequeued because a stack predecessor was dequeued",
             "default": 0
           },
           "SCHEDULED_FREEZE_STATUS_CHANGED": {
