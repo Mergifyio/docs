@@ -141,9 +141,10 @@ trigger only a single deployment once a batch of pull request is fully tested
 and passes the CI.
 
 To achieve this, set `merge_method: fast-forward` on your queue rule. When
-batching is enabled, Mergify creates the draft PR as usual, runs CI on it,
-and then fast-forwards the base branch to the draft PR's head commit instead
-of merging the original PRs individually.
+using draft PRs (i.e., `batch_size > 1`, `max_parallel_checks > 1`, or
+two-step CI), Mergify creates the draft PR as usual, runs CI on it, and then
+fast-forwards the base branch to the draft PR's head commit instead of
+merging the original PRs individually.
 
 ```yaml
 queue_rules:
