@@ -1,0 +1,9 @@
+---
+title: "Match CI log patterns against check run annotations"
+date: 2026-03-30
+tags:
+  - CI Insights
+description: "Auto-retry log patterns now also match against GitHub check run annotations, not just log output."
+---
+
+Auto-retry rules using `log_pattern` conditions now automatically check GitHub check run annotations in addition to log output. This makes auto-retry detection more reliable for CI systems that surface errors through annotations.
