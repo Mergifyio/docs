@@ -67,7 +67,8 @@
               "type": "null"
             }
           ],
-          "default": null
+          "default": null,
+          "deprecated": true
         },
         "dismiss_reviews": {
           "anyOf": [

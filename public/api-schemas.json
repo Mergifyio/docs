@@ -7481,6 +7481,11 @@
           "max_failure_resolution_reached": {
             "type": "boolean",
             "title": "Max Failure Resolution Reached"
+          },
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -7492,7 +7497,8 @@
           "culprit_found",
           "culprit_pr_numbers",
           "remaining_pr_numbers",
-          "max_failure_resolution_reached"
+          "max_failure_resolution_reached",
+          "session_id"
         ],
         "title": "EventQueueBatchBisectionEndMetadata"
       },
@@ -7604,6 +7610,11 @@
           "is_top_level": {
             "type": "boolean",
             "title": "Is Top Level"
+          },
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
           }
         },
         "type": "object",
@@ -7615,7 +7626,8 @@
           "batch_size_before_split",
           "number_of_sub_batches",
           "bisection_depth",
-          "is_top_level"
+          "is_top_level",
+          "session_id"
         ],
         "title": "EventQueueBatchBisectionStartMetadata"
       },
