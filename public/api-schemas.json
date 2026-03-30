@@ -7483,8 +7483,15 @@
             "title": "Max Failure Resolution Reached"
           },
           "session_id": {
-            "type": "string",
-            "format": "uuid",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Session Id"
           }
         },
@@ -7612,8 +7619,15 @@
             "title": "Is Top Level"
           },
           "session_id": {
-            "type": "string",
-            "format": "uuid",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Session Id"
           }
         },
