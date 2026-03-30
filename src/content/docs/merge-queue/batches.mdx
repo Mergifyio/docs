@@ -167,35 +167,6 @@ draft-PR modes.
   <Image src={requiredPRbypassScreenshot} alt="Mergify bypass required pull requests" />
 :::
 
-### Migrating from `queue_branch_merge_method`
-
-:::caution
-  `queue_branch_merge_method` is **deprecated**. Use
-  `merge_method: fast-forward` instead, which now works with batching and
-  parallel checks.
-:::
-
-If you are currently using `queue_branch_merge_method: fast-forward`, replace
-it with `merge_method: fast-forward`:
-
-```yaml
-# Before (deprecated)
-queue_rules:
-  - name: default
-    batch_size: 10
-    queue_branch_merge_method: fast-forward
-    merge_method: merge
-
-# After
-queue_rules:
-  - name: default
-    batch_size: 10
-    merge_method: fast-forward
-```
-
-The new configuration produces the same result: the draft PR is tested by CI,
-and the base branch is fast-forwarded to the exact SHA that was tested.
-
 ## Handling Batch Failure or Timeout
 
 When a batch fails, or when the checks time out with the option

@@ -17,7 +17,7 @@ shape, with trade-offs between linearity, SHA preservation, and throughput.
 | `merge` | Non-linear | Original commits + merge commit | Yes | Full |
 | `squash` | Linear | 1 new commit per PR | No | Full |
 | `rebase` | Linear | Recreated copies of each commit | No | Full |
-| `fast-forward` | Linear | Original commits moved to base | Yes | Full |
+| `fast-forward` | Linear | Original commits moved to base | Yes | Serial only |
 
 ## Merge (Default)
 
@@ -317,4 +317,4 @@ from the original PR branch.
 | One commit per PR | | ✔ | | |
 | Individual PR commits visible | ✔ | | ✔ | ✔ |
 | See PR boundaries in `git log` | ✔ | | | |
-| [Batches](/merge-queue/batches) and [parallel checks](/merge-queue/parallel-checks) | ✔ | ✔ | ✔ | ✔ |
+| [Batches](/merge-queue/batches) and [parallel checks](/merge-queue/parallel-checks) | ✔ | ✔ | ✔ | |
