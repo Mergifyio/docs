@@ -68,11 +68,11 @@ Each method produces a different git history shape. See the
 comparison, including configuration examples and trade-offs.
 
 :::note
-  The `fast-forward` method preserves original commit SHAs on the base branch
-  but requires `batch_size: 1` on the queue rule and
-  `max_parallel_checks: 1` as a global `merge_queue` setting. See
+  The `fast-forward` method advances the base branch ref directly to the
+  tested commit(s) instead of creating a merge via GitHub. It works with both
+  single PRs and batches. See
   [Merge Strategies: Fast-Forward](/merge-queue/merge-strategies#fast-forward)
-  for requirements.
+  for details on inplace and draft-PR modes.
 :::
 
 ## Queue vs. Merge Conditions
