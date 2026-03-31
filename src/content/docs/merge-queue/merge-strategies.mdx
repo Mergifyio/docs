@@ -159,18 +159,24 @@ strict digraph {
 ## Fast-Forward
 
 ```yaml
-merge_queue:
-  max_parallel_checks: 1
-
 queue_rules:
   - name: default
     merge_method: fast-forward
-    batch_size: 1
 ```
 
-Moves the base branch ref directly to the PR's head commit using the Git API.
-No merge commit is created and no commits are recreated — the original SHAs
-from the PR branch end up on the base branch.
+Fast-forward merging advances the base branch ref directly to the tested
+commit(s) using the Git API instead of creating a merge via GitHub. The exact
+behavior depends on whether the queue operates in
+[inplace or draft-PR mode](/merge-queue/parallel-checks#important-considerations).
+
+### Inplace Mode
+
+The PR is rebased on top of the base branch, CI runs on the PR itself, and
+the base branch ref is fast-forwarded to the PR's head commit.
+
+In this mode, `update_method` must be set to `rebase` (the default). If a
+rebase update occurs, the commit SHAs on the PR will change — what fast-forward
+preserves are the SHAs of the PR branch at merge time.
 
 ```dot class="graph"
 strict digraph {
@@ -195,32 +201,39 @@ strict digraph {
 }
 ```
 
-- **History:** linear — commits sit directly on the base branch
+- **History:** strictly linear — commits sit directly on the base branch
 
-- **Merge commits:** no
+- **Merge commits:** none
 
 - **SHAs preserved:** yes — the exact same commit SHAs from the PR appear on
   the base branch
 
+### Draft-PR Mode
+
+Mergify creates a draft PR that combines the queued pull requests, runs CI on
+that draft, and then fast-forwards the base branch to the draft PR's head
+commit.
+
+Because the draft branch combines multiple PRs, the history **may contain merge
+commits** from folding each PR into the draft branch.
+
+- **History:** linear at the base-branch level, but individual merge commits
+  from combining PRs may appear
+
+- **Merge commits:** possible — from combining PRs in the draft branch
+
+- **SHAs preserved:** the final merged result is the exact SHA tested by CI
+
+### Constraints
+
+- **`commit_message_template` must not be set** — fast-forward preserves
+  the original commits, so custom commit messages are not applicable
+
+- **[Parallel mode](/merge-queue/parallel-scopes) is not supported** — fast-forward
+  is not compatible with scope-based parallel queues
+
 - **Use case:** teams and OSS projects that care about commit identity and want
-  `git log --oneline` to be perfectly clean
-
-### Requirements and Constraints
-
-Fast-forward merging has specific requirements:
-
-- **`batch_size` must be `1`** — batching is not supported because fast-forward
-  can only advance the ref to a single PR's head
-
-- **Global `merge_queue.max_parallel_checks` must be set to `1`** — speculative
-  checks (draft PRs) are not supported
-
-- **Two-step CI is not supported** — for the same reason as above
-
-- **`update_method` defaults to `rebase`** — PRs must be rebased on top of the
-  base branch before merging so the fast-forward is possible. Note that if a
-  rebase update occurs, the commit SHAs on the PR will change — what
-  fast-forward preserves are the SHAs of the PR branch at merge time
+  the exact CI-tested code on their base branch
 
 :::caution
   Fast-forward requires Mergify to push directly to the base branch without
@@ -230,10 +243,9 @@ Fast-forward merging has specific requirements:
   <Image src={requiredPRbypassScreenshot} alt="Mergify bypass required pull requests" />
 :::
 
-### Complete Example
+### Examples
 
-A typical fast-forward configuration for a repository that wants a strictly
-linear history with preserved commit SHAs:
+Inplace mode — strictly linear history with preserved commit SHAs:
 
 ```yaml
 merge_queue:
@@ -243,6 +255,17 @@ queue_rules:
   - name: default
     merge_method: fast-forward
     batch_size: 1
+    merge_conditions:
+      - check-success = ci
+```
+
+Draft-PR mode — batching with fast-forward merge:
+
+```yaml
+queue_rules:
+  - name: default
+    merge_method: fast-forward
+    batch_size: 5
     merge_conditions:
       - check-success = ci
 ```
