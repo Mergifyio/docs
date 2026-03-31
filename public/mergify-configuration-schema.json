@@ -2550,7 +2550,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on draft PR (`max_parallel_checks > 1`, or `batch_size > 1`, or two-step CI).",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration.",
           "title": "Merge Method"
         },
         "autosquash": {
@@ -2779,7 +2779,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration. `fast-forward` is not supported on draft PR (`max_parallel_checks > 1`, or `batch_size > 1`, or two-step CI).",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration.",
           "title": "Merge Method"
         },
         "autosquash": {
@@ -3078,17 +3078,12 @@
           "title": "Source"
         },
         "merge_queue_scope": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
           "default": "merge-queue",
-          "description": "Optional scope name automatically applied to merge queue PRs. Set to `None` to disable.",
-          "title": "Merge Queue Scope"
+          "description": "Scope name automatically applied to merge queue PRs.",
+          "minLength": 2,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Merge Queue Scope",
+          "type": "string"
         }
       },
       "title": "Scopes",
@@ -3105,7 +3100,7 @@
             }
           },
           "propertyNames": {
-            "minLength": 1
+            "minLength": 2
           },
           "title": "Files",
           "type": "object"
