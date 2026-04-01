@@ -1291,6 +1291,7 @@
                       "action.squash",
                       "action.unqueue",
                       "action.update",
+                      "ci_insights.job_retried",
                       "ci_issue.created",
                       "ci_issue.linked",
                       "ci_issue.merged",
@@ -6390,6 +6391,125 @@
         ],
         "title": "EventBackport"
       },
+      "EventCiInsightsJobRetried": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "ci_insights.job_retried",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventCiInsightsJobRetriedMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventCiInsightsJobRetried"
+      },
+      "EventCiInsightsJobRetriedMetadata": {
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Rule Id"
+          },
+          "rule_name": {
+            "type": "string",
+            "title": "Rule Name"
+          },
+          "max_retry": {
+            "type": "integer",
+            "title": "Max Retry"
+          },
+          "retry_mode": {
+            "type": "string",
+            "enum": [
+              "job",
+              "pipeline"
+            ],
+            "title": "Retry Mode"
+          },
+          "retry_attempt": {
+            "type": "integer",
+            "title": "Retry Attempt"
+          },
+          "condition_matches": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/SimpleConditionMatchSerialized"
+                },
+                {
+                  "$ref": "#/components/schemas/LogPatternAnnotationConditionMatchSerialized"
+                },
+                {
+                  "$ref": "#/components/schemas/LogPatternJobLogConditionMatchSerialized"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Condition Matches"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rule_id",
+          "rule_name",
+          "max_retry",
+          "retry_mode",
+          "retry_attempt",
+          "condition_matches"
+        ],
+        "title": "EventCiInsightsJobRetriedMetadata"
+      },
       "EventClose": {
         "properties": {
           "id": {
@@ -9811,6 +9931,9 @@
                   "$ref": "#/components/schemas/EventScheduledFreezeDelete"
                 },
                 {
+                  "$ref": "#/components/schemas/EventCiInsightsJobRetried"
+                },
+                {
                   "$ref": "#/components/schemas/EventCommandQueue"
                 },
                 {
@@ -9849,6 +9972,7 @@
                   "action.squash": "#/components/schemas/EventSquash",
                   "action.unqueue": "#/components/schemas/EventUnqueue",
                   "action.update": "#/components/schemas/EventUpdate",
+                  "ci_insights.job_retried": "#/components/schemas/EventCiInsightsJobRetried",
                   "command.dequeue": "#/components/schemas/EventCommandDequeue",
                   "command.queue": "#/components/schemas/EventCommandQueue",
                   "queue.pause.create": "#/components/schemas/EventQueuePauseCreate",
@@ -10014,6 +10138,76 @@
           "type"
         ],
         "title": "GitHubAccount"
+      },
+      "LogPatternAnnotationConditionMatchSerialized": {
+        "properties": {
+          "attribute": {
+            "type": "string",
+            "title": "Attribute"
+          },
+          "matched_value": {
+            "type": "string",
+            "title": "Matched Value"
+          },
+          "source": {
+            "type": "string",
+            "const": "annotation",
+            "title": "Source"
+          },
+          "annotation_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Annotation Title"
+          },
+          "annotation_path": {
+            "type": "string",
+            "title": "Annotation Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attribute",
+          "matched_value",
+          "source",
+          "annotation_title",
+          "annotation_path"
+        ],
+        "title": "LogPatternAnnotationConditionMatchSerialized"
+      },
+      "LogPatternJobLogConditionMatchSerialized": {
+        "properties": {
+          "attribute": {
+            "type": "string",
+            "title": "Attribute"
+          },
+          "matched_value": {
+            "type": "string",
+            "title": "Matched Value"
+          },
+          "source": {
+            "type": "string",
+            "const": "job_log",
+            "title": "Source"
+          },
+          "matched_line_number": {
+            "type": "integer",
+            "title": "Matched Line Number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attribute",
+          "matched_value",
+          "source",
+          "matched_line_number"
+        ],
+        "title": "LogPatternJobLogConditionMatchSerialized"
       },
       "MatchingConditionsDict-Input": {
         "properties": {
@@ -11483,6 +11677,24 @@
           "matching_conditions"
         ],
         "title": "ScheduledFreezeObjectResponse"
+      },
+      "SimpleConditionMatchSerialized": {
+        "properties": {
+          "attribute": {
+            "type": "string",
+            "title": "Attribute"
+          },
+          "matched_value": {
+            "type": "string",
+            "title": "Matched Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attribute",
+          "matched_value"
+        ],
+        "title": "SimpleConditionMatchSerialized"
       },
       "SimulatorPayload": {
         "properties": {
