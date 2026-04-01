@@ -2505,6 +2505,7 @@
             }
           ],
           "default": null,
+          "deprecated": true,
           "description": "If set to `fast-forward`, Mergify will merge the draft pull request instead of merging the original pull request that has been checked. This only works when `merge_method` is set to `merge`.",
           "title": "Queue Branch Merge Method"
         },
@@ -2734,6 +2735,7 @@
             }
           ],
           "default": null,
+          "deprecated": true,
           "description": "If set to `fast-forward`, Mergify will merge the draft pull request instead of merging the original pull request that has been checked. This only works when `merge_method` is set to `merge`.",
           "title": "Queue Branch Merge Method"
         },
