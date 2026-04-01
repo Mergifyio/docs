@@ -15,10 +15,7 @@ import Button from '~/components/Button.astro';
   <div class="home-hero">
     <div class="hero-inner">
       <h1 class="content-title">Ship Code Faster, Break Less</h1>
-      <p class="tagline content-subtitle">
-        Mergify eliminates broken builds, tames flaky tests, and cuts CI waste—so
-        your team ships with confidence.
-      </p>
+      <div class="tagline content-subtitle">Mergify eliminates broken builds, tames flaky tests, and cuts CI waste—so your team ships with confidence.</div>
     </div>
   </div>
 
@@ -88,9 +85,9 @@ import Button from '~/components/Button.astro';
   <h2 class="home-title">Get Started</h2>
 
   <div class="home-get-started">
-    <Button colorScheme="teal" href="/merge-queue/setup" target="_self">Set up Merge Queue</Button>
-    <Button colorScheme="gray" href="/ci-insights" target="_self">Enable CI Insights</Button>
-    <Button colorScheme="gray" href="/monorepo-ci/github-actions" target="_self">Configure Monorepo CI</Button>
+    <Button variant="primary" href="/merge-queue/setup" target="_self">Set up Merge Queue</Button>
+    <Button variant="primary" href="/ci-insights" target="_self">Enable CI Insights</Button>
+    <Button variant="primary" href="/monorepo-ci/github-actions" target="_self">Configure Monorepo CI</Button>
   </div>
 
   <a href="https://mergify.com/discovery" class="home-discovery">
