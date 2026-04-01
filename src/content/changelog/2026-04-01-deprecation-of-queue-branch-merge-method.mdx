@@ -1,0 +1,10 @@
+---
+title: "Deprecation of queue_branch_merge_method"
+date: 2026-04-01
+tags:
+  - Deprecations
+  - Merge Queue
+description: "queue_branch_merge_method is deprecated in favor of merge_method: fast-forward, which now works in both inplace and draft-PR modes."
+---
+
+The queue_branch_merge_method setting is deprecated. Use merge_method: fast-forward instead, which now works in both inplace and draft-PR modes. Existing configurations will be migrated automatically.
