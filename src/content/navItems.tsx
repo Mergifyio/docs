@@ -213,11 +213,6 @@ const navItems: NavItem[] = [
             icon: 'octicon:code-review-16',
           },
           {
-            title: 'Delete Head Branches',
-            path: '/workflow/delete-head-branches',
-            icon: 'bi:scissors',
-          },
-          {
             title: 'Dismiss Reviews',
             path: '/workflow/dismiss-reviews',
             icon: 'tabler:message-x',
@@ -236,7 +231,7 @@ const navItems: NavItem[] = [
           { title: 'Copy', path: '/workflow/actions/copy', icon: 'fa6-solid:share-nodes' },
           { title: 'Comment', path: '/workflow/actions/comment', icon: 'fa-solid:list-alt' },
           {
-            title: 'Delete Head Branch',
+            title: 'Delete Head Branch (Deprecated)',
             path: '/workflow/actions/delete_head_branch',
             icon: 'bi:scissors',
           },
