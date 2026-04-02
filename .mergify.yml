@@ -86,14 +86,13 @@ queue_rules:
 
   - name: automated updates
     <<: *DefaultQueueOptions
-    merge_method: merge
+    merge_method: fast-forward
     queue_conditions:
       - or:
           - author = mergify-ci-bot
           - author=dependabot[bot]
     batch_size: 10
     batch_max_wait_time: 5min
-    queue_branch_merge_method: fast-forward
     commit_message_template:
 
 pull_request_rules:
