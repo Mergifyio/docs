@@ -178,6 +178,13 @@ In this mode, `update_method` must be set to `rebase` (the default). If a
 rebase update occurs, the commit SHAs on the PR will change — what fast-forward
 preserves are the SHAs of the PR branch at merge time.
 
+:::caution
+  When using `update_bot_account` with fast-forward inplace mode, fork pull
+  requests will no longer be supported after **July 1, 2026**. See the
+  [update method deprecation note](#combining-merge-and-update-methods) for
+  details and migration options.
+:::
+
 ```dot class="graph"
 strict digraph {
     fontname="sans-serif";
@@ -275,6 +282,12 @@ queue_rules:
 The `update_method` option controls how Mergify updates PR branches when they
 fall behind the base branch. Combining `merge_method` with `update_method`
 gives you additional control over your history shape.
+
+:::note
+  `update_method: rebase` combined with `update_bot_account` will no longer
+  support fork pull requests after **July 1, 2026**. If your repository
+  receives fork PRs, use `update_method: merge` instead.
+:::
 
 ### Semi-Linear History (Rebase + Merge Commit)
 
