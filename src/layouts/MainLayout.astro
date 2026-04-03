@@ -26,16 +26,18 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 	<RightSidebar slot="secondary-sidebar" {...{ content, headings }} />
 	<PageContent {...{ content }}>
 		{
-			Astro.url.pathname !== '/' && showMarkdownActions && (
+			Astro.url.pathname !== '/' && (
 				<Fragment slot="before-title">
 					<div class="page-heading-bar">
 						<div class="page-heading-bar__breadcrumbs">
 							<Breadcrumbs breadcrumbTitle={breadcrumbTitle} />
 						</div>
-						<div class="docs-toolbar-actions docs-toolbar-actions--heading">
-							<CopyForLLMButton size="compact" />
-							<ViewMarkdownButton size="compact" />
-						</div>
+						{showMarkdownActions && (
+							<div class="docs-toolbar-actions docs-toolbar-actions--heading">
+								<CopyForLLMButton size="compact" />
+								<ViewMarkdownButton size="compact" />
+							</div>
+						)}
 					</div>
 				</Fragment>
 			)
