@@ -17,6 +17,13 @@ up-to-date with the latest changes from the base branch.
   before being merged.
 :::
 
+:::caution
+  The `rebase` action with `bot_account` will no longer support fork pull
+  requests after **July 1, 2026**. If you use this configuration on
+  repositories that receive PRs from forks, switch to the
+  [`update` action](/workflow/actions/update) instead.
+:::
+
 ## Parameters
 
 <ActionOptionsTable def='RebaseActionModel'/>
