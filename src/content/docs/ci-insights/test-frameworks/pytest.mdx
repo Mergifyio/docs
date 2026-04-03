@@ -121,7 +121,7 @@ If you’re using multiple environments (e.g. `py38`, `py39`, etc.), the plugin
 will work for all of them as long as the token is set correctly.
 
 If you’re running multiple Tox environments (e.g., py38, py39, etc.), we
-recommend setting the `MERGIFY_JOB_NAME` environment variable to identify each
+recommend setting the `MERGIFY_TEST_JOB_NAME` environment variable to identify each
 environment’s report in CI Insights:
 
 In your GitHub Actions workflow:
@@ -130,11 +130,11 @@ In your GitHub Actions workflow:
 - name: Run Tox Tests
   env:
     MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
-    MERGIFY_JOB_NAME: tox-${{ matrix.python-version }}
+    MERGIFY_TEST_JOB_NAME: tox-${{ matrix.python-version }}
   run: tox
 ```
 
 :::tip
-Use `MERGIFY_JOB_NAME` to make reports clearer in CI Insights, especially when
+Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in CI Insights, especially when
 running multiple Tox environments or using a matrix.
 :::
