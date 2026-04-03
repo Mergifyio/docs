@@ -142,10 +142,10 @@ jobs:
   running when no changes are made on the code
 
 - **Job name**: Ensure the job name is the same as the one running tests on your pull request,
-  allowing CI-Insights to identify them. It can be overriden with `MERGIFY_JOB_NAME` if needed.
+  allowing CI-Insights to identify them. It can be overridden with `MERGIFY_TEST_JOB_NAME` if needed.
 
 ### Key Environment Variables
 
 - `MERGIFY_TOKEN`: Application key with `ci` scope for uploading test results to CI Insights
 - `RUN_COUNT`: Number of times to execute each test within a single job
-- `MERGIFY_JOB_NAME`: The job name reported to CI Insights
+- `MERGIFY_TEST_JOB_NAME`: The job name reported to CI Insights
