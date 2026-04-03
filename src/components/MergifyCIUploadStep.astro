@@ -13,7 +13,8 @@ const { reportPath } = Astro.props;
   uses: mergifyio/gha-mergify-ci@v8
   with:
     token: \${{ secrets.MERGIFY_TOKEN }}
-    report_path: ${reportPath}`}
+    report_path: ${reportPath}
+    test_step_outcome: \${{ steps.tests.outcome }}`}
 	lang="yaml"
 	theme="slack-ochin"
 />
@@ -26,5 +27,12 @@ const { reportPath } = Astro.props;
 	<li>
 		<Code code={`report_path: ${reportPath}`} inline lang="yaml" theme="slack-ochin" />: Points to
 		where your JUnit file is located. Make sure it matches the path you set in your CI job.
+	</li>
+	<li>
+		<Code code={`test_step_outcome: \${{ steps.tests.outcome }}`} inline lang="yaml" theme="slack-ochin" />:
+		Passes the test runner step's outcome so Mergify can detect silent failures where the runner
+		crashed but the JUnit report appears clean. Add an <Code code="id" inline lang="yaml" theme="slack-ochin" /> (such
+		as <Code code="tests" inline lang="yaml" theme="slack-ochin" />) to your test runner step and
+		update the <Code code="steps.<id>.outcome" inline lang="yaml" theme="slack-ochin" /> reference to match.
 	</li>
 </ul>

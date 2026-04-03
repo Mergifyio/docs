@@ -33,7 +33,8 @@ const { reportPath } = Astro.props;
   with:
     job_name: example_matrix (\${{ matrix.version }})
     token: \${{ secrets.MERGIFY_TOKEN }}
-    report_path: ${reportPath}`}
+    report_path: ${reportPath}
+    test_step_outcome: \${{ steps.tests.outcome }}`}
 	lang="yaml"
 	theme="slack-ochin"
 />

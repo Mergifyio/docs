@@ -1,4 +1,10 @@
 In order to benefit from CI Insights Quarantine, you need to add `continue-on-error: true`
-in your GitHb Actions step that execute your tests and generates the JUnit file.
+in your GitHub Actions step that executes your tests and generates the JUnit file.
 The step running the `gha-mergify-ci` action will determine the success or failure conclusion,
 considering quarantined tests.
+
+You should also pass `test_step_outcome: ${{ steps.tests.outcome }}` to the step that runs
+`mergifyio/gha-mergify-ci` (where `tests` is the `id` of your test runner step) to detect
+silent failures where the test runner crashed but the JUnit report appears clean. Without
+this input, a crash that produces a partial or empty report could be mistakenly treated as a
+success.
