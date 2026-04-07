@@ -1,0 +1,9 @@
+---
+title: "Native RSpec Integration for Test Insights"
+date: 2026-04-07
+tags:
+  - Test Insights
+description: "RSpec projects can now use the rspec-mergify gem for automatic test result upload, flaky test detection, and flaky test prevention"
+---
+
+Test Insights now natively supports RSpec through the rspec-mergify gem. Just add the gem to your Gemfile and set MERGIFY_TOKEN in your CI — test results are uploaded automatically. The gem handles flaky test detection and prevention out of the box, with no JUnit XML generation or separate upload steps required
