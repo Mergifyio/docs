@@ -4996,6 +4996,90 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/merge-queue/pull/{pr_number}": {
+      "get": {
+        "tags": [
+          "merge_queue"
+        ],
+        "summary": "Get a pull request in the merge queue",
+        "description": "Get details about a specific pull request in the merge queue",
+        "operationId": "get_merge_queue_pull_request_repos__owner___repository__merge_queue_pull__pr_number__get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pr_number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "maximum": 9223372036854775807,
+              "minimum": 0,
+              "description": "The pull request number",
+              "title": "Pr Number"
+            },
+            "description": "The pull request number"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeQueuePullRequest"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The pull request is not found in any merge queue."
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/merge-queue/pause": {
       "put": {
         "tags": [
@@ -6143,6 +6227,22 @@
         ],
         "title": "CreateScheduledQueueFreezePayload"
       },
+      "DayJSON": {
+        "properties": {
+          "times": {
+            "items": {
+              "$ref": "#/components/schemas/TimeRangeJSON"
+            },
+            "type": "array",
+            "title": "Times"
+          }
+        },
+        "type": "object",
+        "required": [
+          "times"
+        ],
+        "title": "DayJSON"
+      },
       "DeleteScheduledFreezePayload": {
         "properties": {
           "delete_reason": {
@@ -6240,6 +6340,59 @@
           "entered"
         ],
         "title": "EnteredInInterval"
+      },
+      "Evaluation": {
+        "properties": {
+          "pull_request": {
+            "type": "integer",
+            "maximum": 9.223372036854776e+18,
+            "minimum": 0.0,
+            "title": "Pull Request"
+          },
+          "match": {
+            "type": "boolean",
+            "title": "Match"
+          },
+          "evaluation_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluation Error"
+          },
+          "related_checks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Related Checks"
+          },
+          "next_evaluation_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Evaluation At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pull_request",
+          "match",
+          "evaluation_error",
+          "related_checks",
+          "next_evaluation_at"
+        ],
+        "title": "Evaluation"
       },
       "EventAssign": {
         "properties": {
@@ -10283,6 +10436,98 @@
         "type": "object",
         "title": "MatchingConditionsDict"
       },
+      "MergeQueueMergeabilityCheck": {
+        "properties": {
+          "check_type": {
+            "type": "string",
+            "enum": [
+              "in_place",
+              "draft_pr"
+            ],
+            "title": "Check Type",
+            "description": "The type of queue check (in_place or draft_pr)"
+          },
+          "queue_pull_request_number": {
+            "type": "integer",
+            "maximum": 9.223372036854776e+18,
+            "minimum": 0.0,
+            "title": "Queue Pull Request Number",
+            "description": "The number of the pull request used by the speculative check"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At",
+            "description": "The timestamp when the checks started for this pull request"
+          },
+          "ci_ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ci Ended At",
+            "description": "The timestamp when the CI ended for this pull request"
+          },
+          "ci_state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "success",
+              "failed"
+            ],
+            "title": "Ci State",
+            "description": "The combined state of the CI checks"
+          },
+          "state": {
+            "type": "string",
+            "title": "State",
+            "description": "The overall queue check conclusion"
+          },
+          "checks": {
+            "items": {
+              "$ref": "#/components/schemas/QueueCheck"
+            },
+            "type": "array",
+            "title": "Checks",
+            "description": "The list of pull request checks"
+          },
+          "conditions_evaluation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QueueConditionEvaluationJsonSerialized"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The queue rule conditions evaluation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "check_type",
+          "queue_pull_request_number",
+          "started_at",
+          "ci_ended_at",
+          "ci_state",
+          "state",
+          "checks",
+          "conditions_evaluation"
+        ],
+        "title": "MergeQueueMergeabilityCheck"
+      },
       "MergeQueuePausePayload": {
         "properties": {
           "reason": {
@@ -10319,6 +10564,92 @@
           "paused_at"
         ],
         "title": "MergeQueuePauseResponse"
+      },
+      "MergeQueuePullRequest": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "maximum": 9.223372036854776e+18,
+            "minimum": 0.0,
+            "title": "Number",
+            "description": "The number of the pull request"
+          },
+          "queued_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Queued At",
+            "description": "The timestamp when the pull request entered the queue"
+          },
+          "estimated_time_of_merge": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Time Of Merge",
+            "description": "The estimated timestamp when this pull request will be merged"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position",
+            "description": "The position of the pull request in the queue (0-indexed)"
+          },
+          "priority_rule_name": {
+            "type": "string",
+            "title": "Priority Rule Name",
+            "description": "The name of the priority rule applied to this pull request"
+          },
+          "queue_rule_name": {
+            "type": "string",
+            "title": "Queue Rule Name",
+            "description": "The name of the queue rule"
+          },
+          "checks_timeout_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checks Timeout At",
+            "description": "The timestamp when the checks will timeout for this pull request"
+          },
+          "queue_rule": {
+            "$ref": "#/components/schemas/QueueRule",
+            "description": "The queue rule associated to this pull request"
+          },
+          "mergeability_check": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MergeQueueMergeabilityCheck"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The current state of the mergeability check"
+          }
+        },
+        "type": "object",
+        "required": [
+          "number",
+          "queued_at",
+          "estimated_time_of_merge",
+          "position",
+          "priority_rule_name",
+          "queue_rule_name",
+          "checks_timeout_at",
+          "queue_rule",
+          "mergeability_check"
+        ],
+        "title": "MergeQueuePullRequest"
       },
       "MergeQueueStatus": {
         "properties": {
@@ -11216,6 +11547,63 @@
         "type": "object",
         "title": "QueueChecksOutcome"
       },
+      "QueueConditionEvaluationJsonSerialized": {
+        "properties": {
+          "match": {
+            "type": "boolean",
+            "title": "Match"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "schedule": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScheduleJSON"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "subconditions": {
+            "items": {
+              "$ref": "#/components/schemas/QueueConditionEvaluationJsonSerialized"
+            },
+            "type": "array",
+            "title": "Subconditions"
+          },
+          "evaluations": {
+            "items": {
+              "$ref": "#/components/schemas/Evaluation"
+            },
+            "type": "array",
+            "title": "Evaluations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "match",
+          "label",
+          "description",
+          "schedule",
+          "subconditions",
+          "evaluations"
+        ],
+        "title": "QueueConditionEvaluationJsonSerialized"
+      },
       "QueuePause": {
         "properties": {
           "reason": {
@@ -11539,6 +11927,27 @@
         ],
         "title": "RuntimeInInterval"
       },
+      "ScheduleJSON": {
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "days": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DayJSON"
+            },
+            "type": "object",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "timezone",
+          "days"
+        ],
+        "title": "ScheduleJSON"
+      },
       "ScheduledFreezeEventLogAttributes": {
         "properties": {
           "reason": {
@@ -11730,6 +12139,40 @@
           "summary"
         ],
         "title": "SimulatorResponse"
+      },
+      "TimeJSON": {
+        "properties": {
+          "hour": {
+            "type": "integer",
+            "title": "Hour"
+          },
+          "minute": {
+            "type": "integer",
+            "title": "Minute"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hour",
+          "minute"
+        ],
+        "title": "TimeJSON"
+      },
+      "TimeRangeJSON": {
+        "properties": {
+          "start_at": {
+            "$ref": "#/components/schemas/TimeJSON"
+          },
+          "end_at": {
+            "$ref": "#/components/schemas/TimeJSON"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_at",
+          "end_at"
+        ],
+        "title": "TimeRangeJSON"
       },
       "TimeToMergePerPartition": {
         "properties": {
