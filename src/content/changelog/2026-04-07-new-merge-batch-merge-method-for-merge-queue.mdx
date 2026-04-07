@@ -1,0 +1,10 @@
+---
+title: "New merge-batch merge method for merge queue"
+date: 2026-04-07
+tags:
+  - Merge Queue
+description: "A new merge-batch merge method merges the draft pull request prepared by the merge queue directly into the base branch"
+---
+
+The merge queue now supports a new `merge_method: merge-batch` option for queue rules. When enabled with `batch_size > 1`, instead of merging each pull request individually, the merge queue merges its draft pull request directly using the GitHub merge API. The
+resulting merge commit clearly indicates it was performed by the merge queue, listing all included pull requests. This provides a cleaner merge history for teams using batch merging.
