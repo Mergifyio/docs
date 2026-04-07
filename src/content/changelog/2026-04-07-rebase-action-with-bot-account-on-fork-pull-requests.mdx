@@ -1,0 +1,9 @@
+---
+title: "rebase action with bot_account on fork pull requests"
+date: 2026-04-07
+tags:
+  - Deprecations
+description: "The `rebase` action with `bot_account` impersonation on fork pull requests is deprecated and will be removed on July 1, 2026."
+---
+
+When using the `rebase` action on pull requests coming from forks, Mergify can impersonate a user via the `bot_account` option to perform the rebase. This capability will be removed on July 1, 2026. After this date, the `rebase` action will no longer be able to rebase fork pull requests with this configuration. Please switch to the `update` action/command to ensure compatibility going forward. Affected pull requests will now receive a deprecation notice as a comment.
