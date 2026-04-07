@@ -1,6 +1,6 @@
 ---
 title: 'Advanced Features'
-description: 'Optional integrations such as Datadog telemetry and CI Insights object storage.'
+description: 'Optional integrations such as Datadog telemetry and CI Insights and Test Insights object storage.'
 ---
 
 ## Mergify Instance Datadog Integration
@@ -44,10 +44,11 @@ Then instruct Mergify to ship its logs:
 MERGIFYENGINE_LOG_DATADOG=udp://<my-datadog-agent-host>:10518
 ```
 
-## CI Insights Object Storage
+## CI Insights and Test Insights Object Storage
 
-CI test traces can be exported to Mergify CI Insights by backing the feature with object storage.
-Set `MERGIFYENGINE_CI_TRACES_BACKEND` and bucket credentials according to your provider.
+CI test traces can be exported to Mergify CI Insights and Test Insights by backing these features
+with object storage. Set `MERGIFYENGINE_CI_TRACES_BACKEND` and bucket credentials according to your
+provider.
 
 ### Google Cloud Storage
 

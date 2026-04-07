@@ -148,12 +148,64 @@ reach it over the network. Capture the DSN you will pass through
 `MERGIFYENGINE_DATABASE_URL` (for example `postgresql://postgres:password@postgres:5432/postgres`).
 If your provider enforces TLS, configure the connection options accordingly.
 
+## Optional: Configure CI Insights and Test Insights Object Storage
+
+[CI Insights](/ci-insights/setup/github-actions/) and Test Insights let Mergify collect and analyze
+CI test traces. To enable these features, you need to provision object storage buckets and pass the
+corresponding credentials when starting the engine.
+
+:::tip
+  This step is optional. Skip it if you do not plan to use CI Insights or Test Insights.
+:::
+
+### Google Cloud Storage
+
+Create two buckets and a Service Account with the `Storage Object User` role scoped to them.
+
+Base64-encode the JSON key:
+
+```sh
+base64 < credentials.json | tr -d '\n'
+```
+
+Add these environment variables when starting the engine:
+
+```ini
+MERGIFYENGINE_CI_TRACES_BACKEND="gcs"
+MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
+MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
+MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json"
+```
+
+### Amazon S3
+
+Create two buckets and IAM credentials with read/write/delete rights on them.
+
+```ini
+MERGIFYENGINE_CI_TRACES_BACKEND="s3"
+MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
+MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
+MERGIFYENGINE_AWS_ACCOUNT_ID=1234567
+MERGIFYENGINE_AWS_ACCESS_KEY_ID=123567
+MERGIFYENGINE_AWS_SECRET_ACCESS_KEY=<secret>
+# Optional
+MERGIFYENGINE_AWS_REGION_NAME=us-west-2
+# Custom S3 implementation endpoint
+MERGIFYENGINE_AWS_ENDPOINT_URL_S3=s3://my-s3-domain.example.com:1234/
+```
+
+See [Advanced Features](/enterprise/advanced-features/#ci-insights-and-test-insights-object-storage)
+for more details on storage provider requirements.
+
 ## Start Mergify in Normal Mode
 
 :::note
-🔑 You need a subscription token (`MERGIFYENGINE_SUBSCRIPTION_TOKEN`) to start using Mergify at this stage.
-Contact support if you do not have one.
+  🔑 You need a subscription token (`MERGIFYENGINE_SUBSCRIPTION_TOKEN`) to start using Mergify at this stage.
+  Contact support if you do not have one.
 :::
+
+The example below includes the CI Insights and Test Insights environment variables. Omit them if you
+skipped the previous step.
 
 ```sh
 docker run \
@@ -164,6 +216,10 @@ docker run \
   -e MERGIFYENGINE_SUBSCRIPTION_TOKEN=<mergify-subscription-token> \
   -e MERGIFYENGINE_REDIS_URL=rediss://:password@my-redis:6363 \
   -e MERGIFYENGINE_DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres \
+  -e MERGIFYENGINE_CI_TRACES_BACKEND="gcs" \
+  -e MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming" \
+  -e MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done" \
+  -e MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json" \
   registry.mergify.com/enterprise:8.9.1
 ```
 
