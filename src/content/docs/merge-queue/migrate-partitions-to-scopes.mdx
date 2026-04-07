@@ -106,8 +106,6 @@ scopes:
 queue_rules:
   - name: default
     batch_size: 5
-    queue_conditions:
-      - check-success = ci-gate
 
 pull_request_rules:
   - name: Queue PRs for merge
@@ -136,97 +134,33 @@ Partition rules use **regex** conditions (`files~=^pattern/`), while scopes use
 | `files~=^apps/web/.*\.(js\|ts)$` | `apps/web/**/*.{js,ts}` |
 | `files~=^(config\|docker)/` | Two includes: `config/**/*` and `docker/**/*` |
 
-### 2. Add the GitHub Actions workflow
+### 2. Update your GitHub Actions workflow
 
-Create or update your CI workflow to detect scopes and conditionally run jobs.
-This replaces the old approach where every partition ran the full CI:
+Add a job that detects and submits scopes on every pull request using
+[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci):
 
 ```yaml
-name: CI
+name: Scopes
 on:
   pull_request:
-  merge_group:
 
 jobs:
   detect-scopes:
     runs-on: ubuntu-24.04
-    outputs:
-      backend: ${{ fromJSON(steps.scopes.outputs.scopes).backend }}
-      frontend: ${{ fromJSON(steps.scopes.outputs.scopes).frontend }}
-      docs: ${{ fromJSON(steps.scopes.outputs.scopes).docs }}
-      merge-queue: ${{ fromJSON(steps.scopes.outputs.scopes)['merge-queue'] }}
     steps:
       - uses: actions/checkout@v5
 
-      - name: Detect scopes
-        id: scopes
+      - name: Detect and submit scopes
         uses: Mergifyio/gha-mergify-ci@v11
         with:
           action: scopes
-
-  backend-tests:
-    needs: detect-scopes
-    if: ${{ needs.detect-scopes.outputs.backend == 'true' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - name: Run backend tests
-        run: cd services/api && make test
-
-  frontend-tests:
-    needs: detect-scopes
-    if: ${{ needs.detect-scopes.outputs.frontend == 'true' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - name: Run frontend tests
-        run: cd apps/web && npm test
-
-  docs-build:
-    needs: detect-scopes
-    if: ${{ needs.detect-scopes.outputs.docs == 'true' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - name: Build docs
-        run: cd docs && npm run build
-
-  integration-tests:
-    needs: detect-scopes
-    if: ${{ needs.detect-scopes.outputs.merge-queue == 'true' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - name: Run expensive integration tests
-        run: make integration-test
-
-  ci-gate:
-    if: ${{ !cancelled() }}
-    needs:
-      - backend-tests
-      - frontend-tests
-      - docs-build
-      - integration-tests
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Report status
-        uses: Mergifyio/gha-mergify-ci@v11
-        with:
-          action: wait-jobs
-          jobs: ${{ toJSON(needs) }}
+          token: ${{ secrets.MERGIFY_TOKEN }}
 ```
 
 :::tip
-  The `ci-gate` job aggregates all results into a single check. Add `ci-gate`
-  as a required status check in your branch protection rules. This replaces
-  per-partition checks with a single, reliable gate.
-:::
-
-:::caution
-  The `merge-queue` scope is a special scope automatically set to `true` only
-  when running on merge queue temporary branches. Use it to gate expensive tests
-  (integration, e2e) that should only run right before merging — not on every
-  push.
+  Did you know? Scopes also work outside of the merge queue to optimize your
+  CI pipelines. See the [GitHub Actions integration guide](/monorepo-ci/github-actions)
+  for a complete setup walkthrough.
 :::
 
 ### 3. Remove partition_rules from your config
@@ -235,10 +169,10 @@ Delete the entire `partition_rules` section from `.mergify.yml`. If you
 referenced `partition-name` or `current-partition-name` in your
 `pull_request_rules` conditions, remove those conditions — they no longer apply.
 
-### 4. (Optional) Enable parallel mode
+### 4. Enable parallel mode
 
 With partitions, independent lanes ran in parallel by design. With scopes, you
-can get the same benefit — and more — by enabling parallel mode:
+get the same behavior by enabling parallel mode:
 
 ```yaml
 merge_queue:
@@ -261,8 +195,6 @@ scopes:
 queue_rules:
   - name: default
     batch_size: 3
-    queue_conditions:
-      - check-success = ci-gate
 ```
 
 In parallel mode, PRs touching different scopes are tested and merged
@@ -378,7 +310,7 @@ jobs:
       - run: echo "All tests passed"
 ```
 
-### After: scopes with conditional CI
+### After: scopes with parallel mode
 
 **.mergify.yml:**
 ```yaml
@@ -392,11 +324,13 @@ scopes:
         include:
           - apps/web/**/*
 
+merge_queue:
+  mode: parallel
+  max_parallel_checks: 5
+
 queue_rules:
   - name: default
     batch_size: 5
-    queue_conditions:
-      - check-success = ci-gate
 
 pull_request_rules:
   - name: Queue PRs for merge
@@ -407,59 +341,6 @@ pull_request_rules:
       queue:
 ```
 
-**.github/workflows/ci.yml:**
-```yaml
-name: CI
-on:
-  pull_request:
-  merge_group:
-
-jobs:
-  detect-scopes:
-    runs-on: ubuntu-24.04
-    outputs:
-      backend: ${{ fromJSON(steps.scopes.outputs.scopes).backend }}
-      frontend: ${{ fromJSON(steps.scopes.outputs.scopes).frontend }}
-    steps:
-      - uses: actions/checkout@v5
-      - name: Detect scopes
-        id: scopes
-        uses: Mergifyio/gha-mergify-ci@v11
-        with:
-          action: scopes
-
-  backend-tests:
-    needs: detect-scopes
-    if: ${{ needs.detect-scopes.outputs.backend == 'true' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - run: cd services/api && make test
-
-  frontend-tests:
-    needs: detect-scopes
-    if: ${{ needs.detect-scopes.outputs.frontend == 'true' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - run: cd apps/web && npm test
-
-  ci-gate:
-    if: ${{ !cancelled() }}
-    needs:
-      - backend-tests
-      - frontend-tests
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Report status
-        uses: Mergifyio/gha-mergify-ci@v11
-        with:
-          action: wait-jobs
-          jobs: ${{ toJSON(needs) }}
-```
-
 The key improvements:
-- **A backend-only PR skips frontend tests entirely** — saving CI time and cost
-- **The `ci-gate` job provides a single reliable check** instead of per-partition status
 - **Scopes enable smarter batching** — PRs touching the same scope are grouped together
-- **Adding parallel mode later is a one-line change** (`mode: parallel` under `merge_queue`)
+- **Non-overlapping scopes merge simultaneously** — just like partition lanes, but with smarter dependency tracking when scopes overlap
