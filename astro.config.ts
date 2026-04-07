@@ -75,7 +75,10 @@ export default defineConfig({
       // To be iso with gatsby's sitemap, not sure it's useful
       changefreq: 'daily',
       priority: 0.7,
-      filter: (page) => !page.includes('/enterprise') && !page.includes('/support/premium'),
+      filter: (page) =>
+        !page.includes('/enterprise') &&
+        !page.includes('/support/premium') &&
+        !page.includes('/merge-queue/migrate-partitions-to-scopes'),
     }),
     PagefindIndex(),
     icon({

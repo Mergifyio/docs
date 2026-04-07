@@ -5,4 +5,5 @@ Disallow: /enterprise/*
 Disallow: /support/premium
 Disallow: /support/premium/
 Disallow: /support/premium/*
+Disallow: /merge-queue/migrate-partitions-to-scopes
 Allow: /
