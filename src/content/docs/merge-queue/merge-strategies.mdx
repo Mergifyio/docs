@@ -18,6 +18,7 @@ shape, with trade-offs between linearity, SHA preservation, and throughput.
 | `squash` | Linear | 1 new commit per PR | No | Full |
 | `rebase` | Linear | Recreated copies of each commit | No | Full |
 | `fast-forward` | Linear | Original commits moved to base | Yes | Serial only |
+| `merge-batch` | Non-linear | Draft branch commits + 1 merge commit per batch | No | Full |
 
 ## Merge (Default)
 
@@ -277,6 +278,75 @@ queue_rules:
       - check-success = ci
 ```
 
+## Merge Batch
+
+```yaml
+queue_rules:
+  - name: default
+    merge_method: merge-batch
+    batch_size: 5
+    merge_conditions:
+      - check-success = ci
+```
+
+When `merge_method` is set to `merge-batch`, Mergify merges the draft pull
+request it creates for batching directly into the base branch using a merge
+commit — instead of merging the original pull requests individually.
+
+This is similar to `fast-forward` in that the draft PR itself is merged, but
+uses the GitHub Pull Request merge API rather than advancing the git ref
+directly. The resulting merge commit message identifies which pull requests
+were included in the batch (e.g., "Merge queue: merged #42, #43, #44").
+
+```dot class="graph"
+strict digraph {
+    fontname="sans-serif";
+    rankdir="LR";
+    splines=line;
+    node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, fixedsize=true];
+    edge [color="#374151", fontname="sans-serif"];
+
+    A [label="A", fillcolor="#6B7280"];
+    B [label="B", fillcolor="#6B7280"];
+    D1 [label="D1", fillcolor="#347D39"];
+    D2 [label="D2", fillcolor="#347D39"];
+    M [label="M", fillcolor="#2563EB"];
+
+    main [label="main", shape=plaintext, fontname="sans-serif", fontcolor="#2563EB", fontsize=10];
+
+    A -> B;
+    B -> D1 [label="draft PR\n(batch)", fontsize=9, fontcolor="#347D39"];
+    D1 -> D2;
+    B -> M;
+    D2 -> M [label="merge commit", fontsize=9, fontcolor="#2563EB"];
+    main -> M [style=dashed, color="#2563EB", arrowhead=none];
+
+    { rank=same; M; main; }
+}
+```
+
+- **History:** non-linear — a single merge commit per batch appears on the base
+  branch
+
+- **Merge commits:** yes — one merge commit per batch, not per PR
+
+- **SHAs preserved:** no — the batch merge commit is new, and the original PR
+  commit SHAs are not preserved because the draft PR contains recreated commits
+
+- **Requires `batch_size > 1`** — this method is designed for batch merging and
+  cannot be used with single PRs
+
+- **Not compatible with [partition rules](/merge-queue/parallel-scopes)**
+
+- **Use case:** teams that use batch merging and want a single merge commit per
+  batch on the base branch, triggering only one deployment per batch
+
+:::note
+  Unlike `fast-forward`, `merge-batch` uses the standard GitHub Pull Request
+  merge API, so it works with branch protection settings that require pull
+  request merges. No bypass configuration is needed.
+:::
+
 ## Combining Merge and Update Methods
 
 The `update_method` option controls how Mergify updates PR branches when they
@@ -320,11 +390,13 @@ from the original PR branch.
 
 ## Choosing the Right Strategy
 
-| I want... | `merge` | `squash` | `rebase` | `fast-forward` |
-|---|:---:|:---:|:---:|:---:|
-| Linear history | | ✔ | ✔ | ✔ |
-| Preserved commit SHAs | ✔ | | | ✔ |
-| One commit per PR | | ✔ | | |
-| Individual PR commits visible | ✔ | | ✔ | ✔ |
-| See PR boundaries in `git log` | ✔ | | | |
-| [Batches](/merge-queue/batches) and [parallel checks](/merge-queue/parallel-checks) | ✔ | ✔ | ✔ | |
+| I want... | `merge` | `squash` | `rebase` | `fast-forward` | `merge-batch` |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Linear history | | ✔ | ✔ | ✔ | |
+| Preserved commit SHAs | ✔ | | | ✔ | |
+| One commit per PR | | ✔ | | | |
+| One commit per batch | | | | | ✔ |
+| Individual PR commits visible | ✔ | | ✔ | ✔ | |
+| See PR boundaries in `git log` | ✔ | | | | |
+| [Batches](/merge-queue/batches) and [parallel checks](/merge-queue/parallel-checks) | ✔ | ✔ | ✔ | | ✔ |
+| Single deployment per batch | | | | ✔ | ✔ |

@@ -61,7 +61,8 @@ Here are all the available fields you can configure for a queue rule:
 ## Merge Method
 
 The `merge_method` option controls how pull requests are merged into the base
-branch. Accepted values are `merge`, `rebase`, `squash`, and `fast-forward`.
+branch. Accepted values are `merge`, `rebase`, `squash`, `fast-forward`, and
+`merge-batch`.
 
 Each method produces a different git history shape. See the
 [Merge Strategies](/merge-queue/merge-strategies) guide for a detailed
@@ -73,6 +74,14 @@ comparison, including configuration examples and trade-offs.
   single PRs and batches. See
   [Merge Strategies: Fast-Forward](/merge-queue/merge-strategies#fast-forward)
   for details on inplace and draft-PR modes.
+:::
+
+:::note
+  The `merge-batch` method merges the draft pull request prepared by the
+  merge queue directly into the base branch using a merge commit. It requires
+  `batch_size > 1`. See
+  [Merge Strategies: Merge Batch](/merge-queue/merge-strategies#merge-batch)
+  for details.
 :::
 
 ## Queue vs. Merge Conditions
