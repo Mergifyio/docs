@@ -2542,7 +2542,8 @@
                 "merge",
                 "rebase",
                 "squash",
-                "fast-forward"
+                "fast-forward",
+                "merge-batch"
               ],
               "type": "string"
             },
@@ -2551,7 +2552,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration.",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration.\n\nAdditionally, `merge-batch` merges the draft pull request prepared by the merge queue using a merge commit. This requires `batch_size > 1`.",
           "title": "Merge Method"
         },
         "autosquash": {
@@ -2772,7 +2773,8 @@
                 "merge",
                 "rebase",
                 "squash",
-                "fast-forward"
+                "fast-forward",
+                "merge-batch"
               ],
               "type": "string"
             },
@@ -2781,7 +2783,7 @@
             }
           ],
           "default": null,
-          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration.",
+          "description": "Merge method to use. If no value is set, Mergify uses the first authorized method available in the repository configuration.\n\nAdditionally, `merge-batch` merges the draft pull request prepared by the merge queue using a merge commit. This requires `batch_size > 1`.",
           "title": "Merge Method"
         },
         "autosquash": {
