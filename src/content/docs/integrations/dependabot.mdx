@@ -118,6 +118,32 @@ updates:
     rebase-strategy: "disabled"
 ```
 
+## Configuring `MERGIFY_TOKEN` for Dependabot
+
+If you use Mergify features that require a `MERGIFY_TOKEN` in your GitHub
+Actions workflows — such as [CI Insights](/ci-insights/setup/github-actions) or
+[Scopes](/merge-queue/scopes) — you need to add the token to your **Dependabot
+secrets** in addition to your regular GitHub Actions secrets.
+
+Dependabot workflows run in a restricted environment and **cannot access regular
+GitHub Actions secrets**. Without this extra step, any workflow triggered by a
+Dependabot pull request will fail to authenticate with the Mergify API.
+
+To configure it:
+
+1. Go to your repository **Settings → Secrets and variables → Dependabot**.
+
+2. Click **New repository secret**.
+
+3. Set the name to `MERGIFY_TOKEN` and paste the same application key you use in
+   your GitHub Actions secrets.
+
+:::note
+  This applies to any workflow that references `${{secrets.MERGIFY_TOKEN}}`
+  and runs on Dependabot pull requests — including scopes detection, CI Insights
+  test uploads, and any other Mergify CI integration.
+:::
+
 With Mergify and Dependabot working together, you can ensure your project's
 dependencies are always up-to-date with minimal effort, ensuring a smooth and
 efficient update process.
