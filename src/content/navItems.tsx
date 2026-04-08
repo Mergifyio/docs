@@ -355,6 +355,7 @@ const navItems: NavItem[] = [
     ],
   },
   { title: 'Stacks', path: '/stacks', icon: 'bi:stack' },
+  { title: 'CLI', path: '/cli', icon: 'bi:terminal' },
   { title: 'Security', path: '/security', icon: 'fa-solid:shield-alt' },
   { title: 'Support', path: '/support', icon: 'fa-solid:life-ring' },
   { title: 'Billing', path: '/billing', icon: 'fa6-solid:money-bill-1' },

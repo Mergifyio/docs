@@ -49,3 +49,77 @@ Create a rule with a success condition that grants override, e.g.:
 
 Then apply the `hotfix` label (manually or via automation) to bypass the freeze
 for a specific PR.
+
+## Managing Freezes with the CLI
+
+You can also manage freezes from the command line using the [Mergify
+CLI](/cli).
+
+### Listing Freezes
+
+List all scheduled freezes for a repository:
+
+```bash
+mergify freeze list
+```
+
+Use `--json` to get machine-readable output:
+
+```bash
+mergify freeze list --json
+```
+
+### Creating a Freeze
+
+Create a time-bounded freeze:
+
+```bash
+mergify freeze create \
+  --reason "Release stabilization" \
+  --timezone UTC \
+  --start 2024-01-15T18:00:00 \
+  --end 2024-01-15T22:00:00
+```
+
+Create an emergency freeze with no end time:
+
+```bash
+mergify freeze create \
+  --reason "Incident response" \
+  --timezone UTC
+```
+
+You can restrict which pull requests are affected using conditions and
+exclusions:
+
+```bash
+mergify freeze create \
+  --reason "Freeze main branch" \
+  --timezone UTC \
+  -c "base=main" \
+  -e "label=hotfix"
+```
+
+### Updating a Freeze
+
+Modify an existing freeze by its ID:
+
+```bash
+mergify freeze update <freeze_id> \
+  --end 2024-01-16T06:00:00
+```
+
+### Deleting a Freeze
+
+Remove a freeze by its ID:
+
+```bash
+mergify freeze delete <freeze_id>
+```
+
+:::note
+  If the freeze is currently active, you must provide a reason:
+  ```bash
+  mergify freeze delete <freeze_id> --reason "Incident resolved"
+  ```
+:::

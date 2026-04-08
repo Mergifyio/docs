@@ -1,0 +1,68 @@
+---
+title: Command Line Interface (CLI)
+description: Install and configure the Mergify CLI to manage your merge queue, freezes, and stacked PRs from the terminal.
+---
+
+The Mergify CLI lets you interact with Mergify features directly from your
+terminal.
+
+## Installation
+
+Install the CLI using [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv tool install mergify-cli
+```
+
+Or using [pipx](https://pipx.pypa.io/):
+
+```bash
+pipx install mergify-cli
+```
+
+On macOS, you can install these tools via Homebrew:
+
+```bash
+brew install uv
+uv tool install mergify-cli
+```
+
+## Authentication
+
+The CLI needs an authentication token to interact with your repositories.
+Depending on the command, this can be a GitHub token or a Mergify API token.
+
+If you have the [GitHub CLI](https://cli.github.com/) (`gh`) installed and
+authenticated, the Mergify CLI automatically uses its token for commands that
+require GitHub access. No extra configuration needed.
+
+Otherwise, create a [personal access
+token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+and either set it as an environment variable:
+
+```bash
+export GITHUB_TOKEN=your_token_here
+```
+
+Or pass it directly to any command:
+
+```bash
+mergify --token your_token_here <command>
+```
+
+## Global Options
+
+| Option | Description |
+|---|---|
+| `--token`, `-t` | GitHub or Mergify authentication token |
+| `--repository`, `-r` | Repository full name (`owner/repo`) |
+| `--api-url`, `-u` | Mergify API URL (default: `https://api.mergify.com`) |
+
+## Available Commands
+
+| Command | Description | Documentation |
+|---|---|---|
+| `mergify stack` | Create and manage stacked pull requests | [Stacks](/stacks) |
+| `mergify freeze` | Schedule and manage merge freezes | [Scheduling Freezes](/merge-protections/freeze) |
+| `mergify queue` | Monitor merge queue status | [Monitoring](/merge-queue/monitoring) |
+| `mergify ci` | Upload and analyze CI results | [CI Insights](/ci-insights) |
