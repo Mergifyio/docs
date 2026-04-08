@@ -1,0 +1,244 @@
+---
+import { instance } from '@viz-js/viz';
+import { load } from 'cheerio';
+
+/**
+ * Shared color palette for all git graph diagrams.
+ */
+const COLORS: Record<string, string> = {
+  gray: '#6B7280',
+  green: '#347D39',
+  blue: '#2563EB',
+  amber: '#D97706',
+  red: '#DC2626',
+  ghost: '#9CA3AF',
+};
+
+// ── Types ──────────────────────────────────────────────
+
+interface PR {
+  label: string;
+  commits: number | [number, number];
+  color?: 'blue' | 'red';
+  annotation?: string;
+}
+
+interface GraphNode {
+  id: string;
+  label: string;
+  color?: 'gray' | 'green' | 'blue' | 'amber' | 'red';
+  ghost?: boolean;
+}
+
+interface GraphEdge {
+  from: string;
+  to: string;
+  dashed?: boolean;
+  label?: string;
+}
+
+interface BranchLabel {
+  label: string;
+  node: string;
+}
+
+type Props =
+  | {
+      /** Linear mode: commit labels left to right. */
+      commits: string[];
+      commitColor?: 'gray' | 'green';
+      branch?: string;
+      prs?: PR[];
+      nodes?: never;
+    }
+  | {
+      /** Graph mode: explicit nodes, edges, and branch labels. */
+      nodes: GraphNode[];
+      edges?: GraphEdge[];
+      branch?: BranchLabel;
+      commits?: never;
+    };
+
+// ── Rendering ──────────────────────────────────────────
+
+const props = Astro.props;
+let svgHtml: string;
+
+if ('commits' in props && props.commits) {
+  svgHtml = renderLinear(props);
+} else if ('nodes' in props && props.nodes) {
+  svgHtml = await renderGraph(props);
+} else {
+  svgHtml = '';
+}
+
+// ── Linear mode (stacks): pure SVG ────────────────────
+
+function renderLinear(p: {
+  commits: string[];
+  commitColor?: string;
+  branch?: string;
+  prs?: PR[];
+}): string {
+  const { commits, commitColor = 'gray', branch = 'main', prs = [] } = p;
+
+  const R = 18;
+  const SPACING = 80;
+  const PAD_LEFT = 50;
+  const COMMIT_Y = 32;
+  const PR_Y = 100;
+  const PR_H = 26;
+  const PR_R = 6;
+  const FONT = 11;
+  const CHAR_W = 7;
+  const PR_PAD_X = 16;
+  const ANNO_GAP = 16;
+
+  const fill = COLORS[commitColor] || COLORS.gray;
+  const cx = (i: number) => PAD_LEFT + i * SPACING;
+
+  const prData = prs.map((pr) => {
+    const [from, to] = Array.isArray(pr.commits) ? pr.commits : [pr.commits, pr.commits];
+    const center = (cx(from) + cx(to)) / 2;
+    const w = Math.max(pr.label.length * CHAR_W + PR_PAD_X, 54);
+    return { ...pr, from, to, center, w, fill: COLORS[pr.color || 'blue'] };
+  });
+
+  const hasAnno = prData.some((pr) => pr.annotation);
+  const annoY = PR_Y + PR_H / 2 + ANNO_GAP;
+  const maxX = Math.max(
+    cx(commits.length - 1) + R + 30,
+    ...prData.map((pr) => pr.center + pr.w / 2 + 20)
+  );
+  const maxY = hasAnno ? annoY + 12 : PR_Y + PR_H / 2 + 12;
+
+  const lines: string[] = [];
+  const push = (s: string) => lines.push(s);
+
+  push(
+    `<svg viewBox="0 0 ${maxX} ${maxY}" xmlns="http://www.w3.org/2000/svg" class="git-graph" role="img">`
+  );
+
+  // branch line
+  push(
+    `<line x1="${cx(0) - 28}" y1="${COMMIT_Y}" x2="${cx(commits.length - 1)}" y2="${COMMIT_Y}" stroke="${fill}" stroke-width="2" stroke-dasharray="6 4"/>`
+  );
+
+  // branch label
+  push(
+    `<text x="${cx(0) - 34}" y="${COMMIT_Y + 4}" text-anchor="end" fill="${COLORS.gray}" font-size="${FONT}" font-weight="500">${branch}</text>`
+  );
+
+  // commits
+  for (let i = 0; i < commits.length; i++) {
+    if (i < commits.length - 1) {
+      push(
+        `<line x1="${cx(i) + R}" y1="${COMMIT_Y}" x2="${cx(i + 1) - R}" y2="${COMMIT_Y}" stroke="${fill}" stroke-width="2"/>`
+      );
+    }
+    push(`<circle cx="${cx(i)}" cy="${COMMIT_Y}" r="${R}" fill="${fill}"/>`);
+    push(
+      `<text x="${cx(i)}" y="${COMMIT_Y + 4}" text-anchor="middle" fill="white" font-size="${FONT}" font-weight="600">${commits[i]}</text>`
+    );
+  }
+
+  // PRs
+  for (const pr of prData) {
+    for (let i = pr.from; i <= pr.to; i++) {
+      push(
+        `<line x1="${cx(i)}" y1="${COMMIT_Y + R}" x2="${pr.center}" y2="${PR_Y - PR_H / 2}" stroke="${pr.fill}" stroke-width="1.5" stroke-dasharray="4 3"/>`
+      );
+    }
+    push(
+      `<rect x="${pr.center - pr.w / 2}" y="${PR_Y - PR_H / 2}" width="${pr.w}" height="${PR_H}" rx="${PR_R}" fill="${pr.fill}"/>`
+    );
+    push(
+      `<text x="${pr.center}" y="${PR_Y + 4}" text-anchor="middle" fill="white" font-size="${FONT}" font-weight="500">${pr.label}</text>`
+    );
+    if (pr.annotation) {
+      push(
+        `<text x="${pr.center}" y="${annoY}" text-anchor="middle" fill="${pr.fill}" font-size="9" font-style="italic">${pr.annotation}</text>`
+      );
+    }
+  }
+
+  push('</svg>');
+  return lines.join('\n');
+}
+
+// ── Graph mode (merge strategies): Graphviz ───────────
+
+async function renderGraph(p: {
+  nodes: GraphNode[];
+  edges?: GraphEdge[];
+  branch?: BranchLabel;
+}): Promise<string> {
+  const { nodes, edges = [], branch } = p;
+  const viz = await instance();
+
+  const dot: string[] = [];
+  dot.push('strict digraph {');
+  dot.push('  fontname="sans-serif";');
+  dot.push('  rankdir="LR";');
+  dot.push('  splines=line;');
+  dot.push(
+    '  node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, height=0.5, fixedsize=true];'
+  );
+  dot.push('  edge [color="#374151", fontname="sans-serif"];');
+
+  // nodes
+  for (const n of nodes) {
+    const c = COLORS[n.color || 'gray'];
+    const style = n.ghost ? 'style="filled,dashed"' : '';
+    dot.push(`  ${n.id} [label="${n.label}", fillcolor="${c}" ${style}];`);
+  }
+
+  // branch label
+  if (branch) {
+    const targetNode = nodes.find((n) => n.id === branch.node);
+    const branchColor = targetNode ? COLORS[targetNode.color || 'gray'] : COLORS.gray;
+    dot.push(
+      `  _branch [label="${branch.label}", shape=plaintext, fontcolor="${branchColor}", fontsize=10];`
+    );
+    dot.push(`  _branch -> ${branch.node} [style=dashed, color="${branchColor}", arrowhead=none];`);
+    dot.push(`  { rank=same; ${branch.node}; _branch; }`);
+  }
+
+  // edges
+  for (const e of edges) {
+    const attrs: string[] = [];
+    if (e.dashed) {
+      attrs.push(`style=dashed, color="${COLORS.ghost}"`);
+    }
+    if (e.label) {
+      const edgeColor = e.dashed ? COLORS.ghost : '#374151';
+      attrs.push(`label="${e.label}", fontsize=9, fontcolor="${edgeColor}"`);
+    }
+    const attrStr = attrs.length ? ` [${attrs.join(', ')}]` : '';
+    dot.push(`  ${e.from} -> ${e.to}${attrStr};`);
+  }
+
+  dot.push('}');
+
+  const svgString = viz.renderString(dot.join('\n'), { format: 'svg', engine: 'dot' });
+  const $ = load(svgString);
+  $('svg').removeAttr('width').removeAttr('height');
+  $('svg').attr('class', 'git-graph');
+  // Strip Graphviz background
+  $('svg > g > polygon').first().attr('fill', 'none').attr('stroke', 'none');
+  return $.html('svg');
+}
+---
+
+<Fragment set:html={svgHtml} />
+
+<style>
+  :global(.git-graph) {
+    display: block;
+    margin: 1.5em auto;
+    max-width: 560px;
+    width: 100%;
+    height: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+</style>

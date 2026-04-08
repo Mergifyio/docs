@@ -5,6 +5,7 @@ description: Choose how pull requests are merged into your base branch and contr
 
 import { Image } from "astro:assets"
 import requiredPRbypassScreenshot from "../../images/merge-queue/batches/mergify-required-pull-request-bypass.png"
+import GitGraph from '~/components/GitGraph.astro'
 
 The `merge_method` option in your queue rules controls how Mergify merges pull
 requests into your base branch. Each method produces a different git history
@@ -31,32 +32,23 @@ queue_rules:
 Creates a merge commit joining the PR branch into the base branch. This is the
 default GitHub merge behavior.
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    splines=line;
-    node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, fixedsize=true];
-    edge [color="#374151", fontname="sans-serif"];
-
-    A [label="A", fillcolor="#6B7280"];
-    B [label="B", fillcolor="#6B7280"];
-    C [label="C", fillcolor="#347D39"];
-    D [label="D", fillcolor="#347D39"];
-    M [label="M", fillcolor="#2563EB"];
-
-    main [label="main", shape=plaintext, fontname="sans-serif", fontcolor="#2563EB", fontsize=10];
-
-    A -> B;
-    B -> C;
-    C -> D;
-    B -> M;
-    D -> M;
-    main -> M [style=dashed, color="#2563EB", arrowhead=none];
-
-    { rank=same; M; main; }
-}
-```
+<GitGraph
+  nodes={[
+    { id: "A", label: "A", color: "gray" },
+    { id: "B", label: "B", color: "gray" },
+    { id: "C", label: "C", color: "green" },
+    { id: "D", label: "D", color: "green" },
+    { id: "M", label: "M", color: "blue" },
+  ]}
+  edges={[
+    { from: "A", to: "B" },
+    { from: "B", to: "C" },
+    { from: "C", to: "D" },
+    { from: "B", to: "M" },
+    { from: "D", to: "M" },
+  ]}
+  branch={{ label: "main", node: "M" }}
+/>
 
 - **History:** non-linear — the PR branch and base branch are visible as
   separate lines in `git log --graph`
@@ -78,31 +70,23 @@ queue_rules:
 
 Squashes all PR commits into a single commit on the base branch.
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    splines=line;
-    node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, fixedsize=true];
-    edge [color="#374151", fontname="sans-serif"];
-
-    A [label="A", fillcolor="#6B7280"];
-    B [label="B", fillcolor="#6B7280"];
-    S [label="S", fillcolor="#D97706"];
-    C [label="C", fillcolor="#347D39", style="filled,dashed"];
-    D [label="D", fillcolor="#347D39", style="filled,dashed"];
-
-    main [label="main", shape=plaintext, fontname="sans-serif", fontcolor="#D97706", fontsize=10];
-
-    A -> B -> S;
-    B -> C [style=dashed, color="#9CA3AF"];
-    C -> D [style=dashed, color="#9CA3AF"];
-    D -> S [style=dashed, color="#9CA3AF", label="squashed\ninto one commit", fontsize=9, fontcolor="#9CA3AF"];
-    main -> S [style=dashed, color="#D97706", arrowhead=none];
-
-    { rank=same; S; main; }
-}
-```
+<GitGraph
+  nodes={[
+    { id: "A", label: "A", color: "gray" },
+    { id: "B", label: "B", color: "gray" },
+    { id: "S", label: "S", color: "amber" },
+    { id: "C", label: "C", color: "green", ghost: true },
+    { id: "D", label: "D", color: "green", ghost: true },
+  ]}
+  edges={[
+    { from: "A", to: "B" },
+    { from: "B", to: "S" },
+    { from: "B", to: "C", dashed: true },
+    { from: "C", to: "D", dashed: true },
+    { from: "D", to: "S", dashed: true, label: "squashed\ninto one commit" },
+  ]}
+  branch={{ label: "main", node: "S" }}
+/>
 
 - **History:** linear — one commit per PR on the base branch
 - **Merge commits:** no
@@ -120,32 +104,24 @@ queue_rules:
 Replays each PR commit on top of the base branch, creating new commits with new
 SHAs.
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    splines=line;
-    node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, fixedsize=true];
-    edge [color="#374151", fontname="sans-serif"];
-
-    A [label="A", fillcolor="#6B7280"];
-    B [label="B", fillcolor="#6B7280"];
-    C [label="C", fillcolor="#347D39", style="filled,dashed"];
-    D [label="D", fillcolor="#347D39", style="filled,dashed"];
-    Cp [label="C'", fillcolor="#D97706"];
-    Dp [label="D'", fillcolor="#D97706"];
-
-    main [label="main", shape=plaintext, fontname="sans-serif", fontcolor="#D97706", fontsize=10];
-
-    A -> B -> Cp [label="replayed with\nnew SHAs", fontsize=9, fontcolor="#D97706"];
-    Cp -> Dp;
-    A -> C [style=dashed, color="#9CA3AF"];
-    C -> D [style=dashed, color="#9CA3AF"];
-    main -> Dp [style=dashed, color="#D97706", arrowhead=none];
-
-    { rank=same; Dp; main; }
-}
-```
+<GitGraph
+  nodes={[
+    { id: "A", label: "A", color: "gray" },
+    { id: "B", label: "B", color: "gray" },
+    { id: "C", label: "C", color: "green", ghost: true },
+    { id: "D", label: "D", color: "green", ghost: true },
+    { id: "Cp", label: "C'", color: "amber" },
+    { id: "Dp", label: "D'", color: "amber" },
+  ]}
+  edges={[
+    { from: "A", to: "B" },
+    { from: "B", to: "Cp", label: "replayed with\nnew SHAs" },
+    { from: "Cp", to: "Dp" },
+    { from: "A", to: "C", dashed: true },
+    { from: "C", to: "D", dashed: true },
+  ]}
+  branch={{ label: "main", node: "Dp" }}
+/>
 
 - **History:** linear — no merge commits, individual commits are preserved
 
@@ -186,28 +162,20 @@ preserves are the SHAs of the PR branch at merge time.
   details and migration options.
 :::
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    splines=line;
-    node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, fixedsize=true];
-    edge [color="#374151", fontname="sans-serif"];
-
-    A [label="A", fillcolor="#6B7280"];
-    B [label="B", fillcolor="#6B7280"];
-    C [label="C", fillcolor="#347D39"];
-    D [label="D", fillcolor="#347D39"];
-
-    main [label="main", shape=plaintext, fontname="sans-serif", fontcolor="#347D39", fontsize=10];
-
-    A -> B -> C [label="same SHAs\non base branch", fontsize=9, fontcolor="#347D39"];
-    C -> D;
-    main -> D [style=dashed, color="#347D39", arrowhead=none];
-
-    { rank=same; D; main; }
-}
-```
+<GitGraph
+  nodes={[
+    { id: "A", label: "A", color: "gray" },
+    { id: "B", label: "B", color: "gray" },
+    { id: "C", label: "C", color: "green" },
+    { id: "D", label: "D", color: "green" },
+  ]}
+  edges={[
+    { from: "A", to: "B" },
+    { from: "B", to: "C", label: "same SHAs\non base branch" },
+    { from: "C", to: "D" },
+  ]}
+  branch={{ label: "main", node: "D" }}
+/>
 
 - **History:** strictly linear — commits sit directly on the base branch
 
@@ -298,32 +266,23 @@ uses the GitHub Pull Request merge API rather than advancing the git ref
 directly. The resulting merge commit message identifies which pull requests
 were included in the batch (e.g., "Merge queue: merged #42, #43, #44").
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    splines=line;
-    node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, fixedsize=true];
-    edge [color="#374151", fontname="sans-serif"];
-
-    A [label="A", fillcolor="#6B7280"];
-    B [label="B", fillcolor="#6B7280"];
-    D1 [label="D1", fillcolor="#347D39"];
-    D2 [label="D2", fillcolor="#347D39"];
-    M [label="M", fillcolor="#2563EB"];
-
-    main [label="main", shape=plaintext, fontname="sans-serif", fontcolor="#2563EB", fontsize=10];
-
-    A -> B;
-    B -> D1 [label="batch PR", fontsize=9, fontcolor="#347D39"];
-    D1 -> D2;
-    B -> M;
-    D2 -> M [label="merge commit", fontsize=9, fontcolor="#2563EB"];
-    main -> M [style=dashed, color="#2563EB", arrowhead=none];
-
-    { rank=same; M; main; }
-}
-```
+<GitGraph
+  nodes={[
+    { id: "A", label: "A", color: "gray" },
+    { id: "B", label: "B", color: "gray" },
+    { id: "D1", label: "D1", color: "green" },
+    { id: "D2", label: "D2", color: "green" },
+    { id: "M", label: "M", color: "blue" },
+  ]}
+  edges={[
+    { from: "A", to: "B" },
+    { from: "B", to: "D1", label: "batch PR" },
+    { from: "D1", to: "D2" },
+    { from: "B", to: "M" },
+    { from: "D2", to: "M", label: "merge commit" },
+  ]}
+  branch={{ label: "main", node: "M" }}
+/>
 
 - **History:** non-linear — a single merge commit per batch appears on the base
   branch
