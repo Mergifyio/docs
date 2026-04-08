@@ -84,7 +84,7 @@ function renderLinear(p: {
 
   const R = 18;
   const SPACING = 80;
-  const PAD_LEFT = 50;
+  const PAD_LEFT = 70;
   const COMMIT_Y = 32;
   const PR_Y = 100;
   const PR_H = 26;
@@ -115,8 +115,9 @@ function renderLinear(p: {
   const lines: string[] = [];
   const push = (s: string) => lines.push(s);
 
+  const cssMaxW = Math.min(560, Math.max(360, maxX + 20));
   push(
-    `<svg viewBox="0 0 ${maxX} ${maxY}" xmlns="http://www.w3.org/2000/svg" class="git-graph" role="img">`
+    `<svg viewBox="0 0 ${maxX} ${maxY}" xmlns="http://www.w3.org/2000/svg" class="git-graph" style="max-width:${cssMaxW}px" role="img">`
   );
 
   // branch line

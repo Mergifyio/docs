@@ -1,0 +1,101 @@
+---
+title: Setup
+description: Install Mergify CLI and configure your repository for stacked PRs.
+---
+
+import { Image } from 'astro:assets';
+import deleteHeadBranches from '../../images/github-delete-head-branches.png';
+
+## Prerequisites
+
+1. **Install the Mergify CLI**, see the [CLI installation guide](/cli) for
+   instructions.
+
+2. **GitHub authentication**: Stacks needs access to create PRs. Either:
+   - Set the `GITHUB_TOKEN` environment variable, or
+   - Install the [GitHub CLI](https://cli.github.com/) and run `gh auth login`
+
+3. **Enable "[Automatically delete head branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)"**
+   in your GitHub repository settings (Settings > General > Pull Requests).
+   When a stacked PR merges, this cleans up its remote branch automatically
+   so the next PR in the chain can rebase onto `main` cleanly.
+
+<Image src={deleteHeadBranches} alt="GitHub setting: Automatically delete head branches" style={{ maxWidth: '66%' }} />
+
+## Initialize Your Repository
+
+Run the setup command in your Git repository:
+
+```bash
+mergify stack setup
+```
+
+This installs:
+
+- A `commit-msg` Git hook that automatically generates a
+  [Change-Id](/stacks/concepts#change-id) for every new commit. The Change-Id
+  is how Stacks tracks the relationship between your local commits and their
+  GitHub pull requests.
+
+- A `pre-push` hook that warns you if you accidentally use `git push` instead
+  of `mergify stack push`.
+
+- A [Claude Code](https://claude.ai/code) skill that teaches the AI
+  coding agent how to work with Mergify Stacks, so it automatically uses
+  `mergify stack push` instead of `git push`.
+
+## Verify It Works
+
+Create a test commit to confirm the hook is active:
+
+```bash
+echo "test" >> test.txt
+git add test.txt
+git commit -m "test: verify stack setup"
+```
+
+Check the commit message:
+
+```bash
+git log -1
+```
+
+You should see a `Change-Id` trailer at the bottom of the message:
+
+```text
+test: verify stack setup
+
+Change-Id: Ia1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2
+```
+
+:::tip
+  If you already have commits without Change-Ids, run
+  `git rebase -i <base-branch>` and choose **reword** for each commit. The hook
+  will add the Change-Id automatically when you save the message.
+:::
+
+Clean up the test commit if you don't need it:
+
+```bash
+git reset HEAD~1
+```
+
+## Configuration
+
+These optional Git config settings let you customize Stacks behavior:
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `mergify-cli.stack-branch-prefix` | `stack/{username}` | Prefix for remote branch names |
+| `mergify-cli.stack-create-as-draft` | `false` | Create PRs as drafts by default |
+| `mergify-cli.stack-keep-pr-title-body` | `false` | Don't overwrite PR title/body on updates |
+
+Example:
+
+```bash
+git config mergify-cli.stack-create-as-draft true
+```
+
+## Next Steps
+
+Head to [Creating Stacks](/stacks/creating) to push your first stack.

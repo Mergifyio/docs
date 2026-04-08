@@ -1,0 +1,130 @@
+---
+title: Concepts
+description: How Mergify Stacks maps Git commits to GitHub pull requests.
+---
+
+import { Image } from 'astro:assets';
+import StackComment from '../../images/stack-comment.png';
+import GitGraph from '~/components/GitGraph.astro';
+import StackMapping from '~/components/StackMapping.astro';
+
+## The Mental Model
+
+You work on one local branch with multiple commits. Mergify Stacks maps each
+commit to its own GitHub pull request. The PRs are chained together: each one's
+base branch is the previous PR's head branch.
+
+<GitGraph
+  commits={["A", "B", "C"]}
+  commitColor="green"
+  prs={[
+    { label: "PR #1", commits: 0, annotation: "base: main" },
+    { label: "PR #2", commits: 1, annotation: "base: PR #1" },
+    { label: "PR #3", commits: 2, annotation: "base: PR #2" },
+  ]}
+/>
+
+Reviewers see one small, focused diff per PR instead of the accumulated changes
+of the entire branch.
+
+When you run `mergify stack push`, each commit goes through three stages:
+
+<StackMapping entries={[
+  { commit: "A: add model", branch: "stack/.../Ia1b2c3", pr: "PR #1" },
+  { commit: "B: add endpoint", branch: "stack/.../Id4e5f6", pr: "PR #2" },
+  { commit: "C: add tests", branch: "stack/.../Ig7h8i9", pr: "PR #3" },
+]} />
+
+Your local commits become remote branches, and each remote branch becomes a
+pull request. The Change-Id in each commit message is what ties all three
+together.
+
+## Change-Id
+
+The Change-Id connects your local commits to their corresponding pull requests.
+It's a unique identifier embedded as a
+[Git trailer](https://git-scm.com/docs/git-interpret-trailers) in each commit
+message:
+
+```text
+feat: add user authentication
+
+Implement JWT-based auth with refresh tokens.
+
+Change-Id: Ia1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2
+```
+
+The Change-Id is:
+
+- Generated automatically by a `commit-msg` Git hook installed during
+  [setup](/stacks/setup)
+
+- Persistent across rebases, amends, and history rewrites
+
+- The mapping key that Stacks uses to know which commit corresponds to which
+  PR, even after you rewrite your branch
+
+You never need to manage Change-Ids manually. They're created once and preserved
+through all git operations.
+
+## Branch Mapping
+
+When you run `mergify stack push`, each commit gets its own remote branch. The
+naming convention is:
+
+```text
+stack/{username}/{branch-name}/{Change-Id}
+```
+
+For example, if user `alice` pushes a branch called `feat/auth` with 3 commits:
+
+| Commit | Remote Branch |
+|--------|--------------|
+| A: add data model | `stack/alice/feat/auth/Ia1b2c3...` |
+| B: add API endpoint | `stack/alice/feat/auth/Id4e5f6...` |
+| C: add tests | `stack/alice/feat/auth/Ig7h8i9...` |
+
+You can customize the branch prefix via Git config:
+
+```bash
+git config mergify-cli.stack-branch-prefix "my-prefix"
+```
+
+## PR Chaining
+
+Each PR targets the previous PR's branch as its base, creating a dependency
+chain:
+
+| Commit | PR Base | PR Head |
+|--------|---------|---------|
+| A (first) | `main` | `stack/alice/feat/auth/Ia1b2c3...` |
+| B (second) | `stack/alice/feat/auth/Ia1b2c3...` | `stack/alice/feat/auth/Id4e5f6...` |
+| C (third) | `stack/alice/feat/auth/Id4e5f6...` | `stack/alice/feat/auth/Ig7h8i9...` |
+
+Stacks also adds a `Depends-On: #NNN` reference in each PR description and
+posts a stack comment on every PR listing the full chain:
+
+<Image src={StackComment} alt="Stack comment showing all PRs in the chain" style={{ maxWidth: '66%' }} />
+
+The stack comment shows where each PR sits in the chain, with links to jump
+between them. This gives both authors and reviewers a clear map of the entire
+change.
+
+## Smart Updates
+
+When you push again after making changes, Stacks doesn't recreate everything. It
+compares each commit's Change-Id and SHA against what's already on GitHub:
+
+- Changed commits get their PR updated (force-push to the remote branch)
+
+- Unchanged commits are skipped entirely
+
+- Removed commits (after squashing or dropping) get their orphan remote
+  branches deleted automatically
+
+`mergify stack push` is always safe to run. It only does the minimum work needed
+to sync your local branch with GitHub.
+
+## Next Steps
+
+See [Setup](/stacks/setup) to install the CLI and configure your repository.
