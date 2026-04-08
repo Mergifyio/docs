@@ -591,20 +591,27 @@ a.current-header-link {
 /* Home page specific styles moved from inline MDX */
 .home-hero {
   padding: 2.5rem 0 1rem;
-  text-align: center;
+  text-align: left;
 }
 .hero-inner {
   max-width: 60rem;
   margin: 0 auto;
 }
 .hero-inner h1 {
-  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-  margin: 0 0 0.75rem;
-  letter-spacing: -0.02em;
+  font-size: clamp(var(--text-4xl), 4.5vw, 2.5rem);
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.home-hero .content-title {
+  margin-bottom: 0;
+}
+#home .home-hero .tagline {
+  margin-top: 0.65rem;
 }
 .tagline {
-  font-size: 1.15rem;
-  margin: 0 auto 1.25rem;
+  font-size: var(--text-lg);
+  margin: 0 0 2rem;
   max-width: 46rem;
   font-weight: 400;
 }
@@ -807,41 +814,46 @@ pre {
 }
 
 .content-title {
-  font-family: var(--font-brand);
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: var(--text-4xl);
+  font-weight: 500;
   line-height: 1.2;
-  margin-bottom: 0.5em;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.25em;
 }
 
 .content-subtitle {
-  font-family: var(--font-brand);
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.5;
+  text-wrap: balance;
 }
 
-.main-content h2 {
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 1.5rem;
-  letter-spacing: 0;
+#main-content .content-subtitle {
+  font-size: var(--text-lg);
+  color: var(--theme-text-lighter);
 }
 
-.main-content h3 {
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 1.25rem;
-  letter-spacing: 0;
+#main-content h2 {
+  font-weight: 500;
+  font-size: var(--text-2xl);
+  letter-spacing: -0.025em;
 }
 
-.main-content h4,
-.main-content h5,
-.main-content h6 {
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0;
+#main-content h3 {
+  font-weight: 500;
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+}
+
+#main-content h4 {
+  font-weight: 500;
+  font-size: var(--text-lg);
+}
+
+#main-content h5,
+#main-content h6 {
+  font-weight: 500;
+  font-size: var(--text-base);
 }
 
 header .nav-wrapper {
@@ -882,13 +894,13 @@ article.content {
 }
 
 .home-metric-value {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: var(--text-2xl);
+  font-weight: 500;
   color: var(--theme-accent);
 }
 
 .home-metric-label {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: var(--theme-text-light);
 }
 
@@ -914,21 +926,21 @@ article.content {
 }
 
 .home-problem-title {
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: var(--theme-text);
   margin-bottom: 0.5rem;
 }
 
 .home-problem-desc {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: var(--theme-text-light);
   margin-bottom: 1rem;
   line-height: 1.5;
 }
 
 .home-problem-cta {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--theme-accent);
 }
@@ -936,9 +948,12 @@ article.content {
 /* Home page: Get started buttons */
 .home-get-started {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.75rem;
-  margin: 1rem 0 2rem 0;
+  margin-bottom: 2rem;
+}
+.home-get-started .button {
+  flex: 1;
+  justify-content: center;
 }
 
 /* Home page: Discovery callout */
@@ -956,21 +971,22 @@ article.content {
 }
 
 .home-discovery-title {
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: white;
   margin-bottom: 0.25rem;
 }
 
 .home-discovery-desc {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.9);
 }
 
 /* Home page: Section title */
 .home-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  letter-spacing: -0.025em;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
