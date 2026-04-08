@@ -70,42 +70,13 @@ and precise changes to commits.
 
 ## Setting Up Mergify Stacks
 
-### Installation
+First, [install the Mergify CLI](/cli) if you haven't already.
 
-Begin by installing the Mergify CLI using
-[pip](https://packaging.python.org/en/latest/tutorials/installing-packages/):
-
-Linux:
-
-```bash
-python3 -m pip install --user mergify-cli
-```
-
-MacOS:
-
-```bash
-brew install pipx
-pipx install mergify-cli
-```
-
-### Configuration
-
-To use Mergify CLI for creating stacked pull requests in your repository,
-follow these steps:
-
-1. Execute the following command to set up the commit-msg hook:
+Then, set up the commit-msg hook in your repository:
 
 ```bash
 mergify stack --setup
 ```
-
-2. For GitHub API access, Mergify CLI requires a GitHub OAuth token. If you
-   have the [gh client](https://cli.github.com/) authenticated, Mergify CLI
-   will seamlessly fetch the token. If not, create a [personal access
-   token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-   with necessary permissions and set it as an environment variable
-   (`GITHUB_TOKEN`). You can also provide it directly using the `--token`
-   parameter.
 
 ## Creating Stacked Pull Requests
 
