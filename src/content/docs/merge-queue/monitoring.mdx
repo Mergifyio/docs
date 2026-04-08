@@ -46,6 +46,53 @@ View these metrics on the merge queue page of your
 
 <Image src={dashboardStatsScreenshot} alt="Statistics page on mergify's dashboard"/>
 
+## Monitoring the Queue with the CLI
+
+You can check your merge queue status from the command line using the [Mergify
+CLI](/cli).
+
+```bash
+mergify queue status
+```
+
+This displays:
+
+- **Pause status** — whether the queue is paused, with reason and elapsed time
+
+- **Batches** — batches organized by scope with status indicators and their
+  pull requests
+
+- **Waiting PRs** — queued pull requests with priority, queue time, and
+  estimated merge time
+
+To filter results to a specific branch:
+
+```bash
+mergify queue status --branch main
+```
+
+Use `--json` for machine-readable output:
+
+```bash
+mergify queue status --json
+```
+
+### Inspecting a Pull Request
+
+To see the detailed state of a specific pull request in the queue:
+
+```bash
+mergify queue show <pr_number>
+```
+
+This displays the PR's position, priority, queue rule, CI checks summary, and
+blocking conditions. Use `--verbose` (`-v`) for the full checks table and
+conditions tree:
+
+```bash
+mergify queue show 123 --verbose
+```
+
 ## Integrations
 
 import Monitoring from '../integrations/_monitoring.mdx'
