@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components';
 
 export interface Props {
-  colorScheme:
+  colorScheme?:
     | 'whiteAlpha'
     | 'blackAlpha'
     | 'gray'
@@ -24,7 +24,7 @@ export interface Props {
   style?: string;
   href?: string;
   icon?: string;
-  variant?: 'ghost' | 'solid';
+  variant?: 'ghost' | 'solid' | 'primary' | 'secondary';
   target?: string;
 }
 const {
@@ -35,9 +35,17 @@ const {
   variant = 'solid',
   target = '_blank',
 } = Astro.props as Props;
+
+const isPrimary = variant === 'primary';
+const isSecondary = variant === 'secondary';
+const classes = [
+  'button',
+  isPrimary ? 'button-primary' : isSecondary ? 'button-secondary' : `button-${colorScheme}`,
+  isPrimary || isSecondary ? '' : variant,
+].filter(Boolean);
 ---
 
-<div role="presentation" class:list={['button', `button-${colorScheme}`, variant]} {style}>
+<div role="presentation" class:list={classes} {style}>
 	<a href={href} target={target}>
 		{icon && <Icon name={icon} />}
 		<slot />
@@ -54,11 +62,63 @@ const {
 		cursor: pointer;
 		width: fit-content;
 	}
-	.button a {
+	.button a,
+	.button a:hover,
+	.button a:focus-visible {
 		display: flex;
 		align-items: center;
 		color: inherit;
 		text-decoration: none;
+	}
+
+	/* Primary button — matches mergify.com */
+	.button.button-primary {
+		background-color: #000;
+		color: #fff;
+		border-radius: 12px;
+		padding: 10px 16px;
+		font-size: 0.875rem;
+		font-weight: 600;
+		line-height: 20px;
+		transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+		&:hover {
+			background-color: #3e434c;
+		}
+	}
+
+	/* Secondary button — matches mergify.com */
+	.button.button-secondary {
+		background-color: rgba(255, 255, 255, 0.6);
+		color: #000;
+		border-radius: 12px;
+		padding: 10px 16px;
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 20px;
+		transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.8);
+		}
+	}
+
+	.theme-dark .button.button-primary {
+		background-color: #fff;
+		color: #000;
+
+		&:hover {
+			background-color: #d1d5db;
+		}
+	}
+
+	.theme-dark .button.button-secondary {
+		background-color: rgba(255, 255, 255, 0.1);
+		color: #fff;
+
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.2);
+		}
 	}
 
 	@mixin generate-button-styles($colorSchemes) {
