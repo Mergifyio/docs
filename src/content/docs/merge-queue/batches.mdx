@@ -21,7 +21,7 @@ merging allows you to combine and merge multiple pull requests at once.
 The batch merging process works by setting a `batch_size` option on your merge
 queue. This option determines the number of pull requests that Mergify will
 check at the same time using your CI. If the CI validation passes, Mergify
-merges all the pull requests in the batch and closes the draft pull request it
+merges all the pull requests in the batch and closes the batch pull request it
 created to test.
 
 If a failure occurs, Mergify identifies the problematic pull request(s)
@@ -42,9 +42,9 @@ configuration. This option tells Mergify how many pull requests it should try
 to combine and validate at once. The `batch_size` can be adjusted according to
 the needs of your project, with a higher number indicating a larger batch size.
 
-For example, if you set `batch_size` to 3, Mergify will create a draft pull
+For example, if you set `batch_size` to 3, Mergify will create a batch pull
 request that includes the changes from the next three pull requests in the
-queue. This draft pull request is then validated by your CI system. If all
+queue. This batch pull request is then validated by your CI system. If all
 checks pass, then the three pull requests included in the batch are deemed
 ready to be merged.
 
@@ -125,9 +125,9 @@ With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
 
-## Merging the Draft PRs
+## Merging the Batch PRs
 
-By default, Mergify creates temporary branches and draft PRs for testing
+By default, Mergify creates temporary branches and batch PRs for testing
 batches. However, the original PRs are the ones merged, not these temporary
 branches. This ensures the integrity and traceability of the original pull
 requests.
@@ -140,13 +140,13 @@ Also, if you are deploying after a merge, this can also make sure that you
 trigger only a single deployment once a batch of pull request is fully tested
 and passes the CI.
 
-There are two ways to merge the draft PR directly:
+There are two ways to merge the batch PR directly:
 
 ### Fast-Forward
 
 Set `merge_method: fast-forward` on your queue rule. When
-batching is enabled, Mergify creates the draft PR as usual, runs CI on it,
-and then fast-forwards the base branch to the draft PR's head commit instead
+batching is enabled, Mergify creates the batch PR as usual, runs CI on it,
+and then fast-forwards the base branch to the batch PR's head commit instead
 of merging the original PRs individually.
 
 ```yaml
@@ -158,7 +158,7 @@ queue_rules:
 
 See [Merge Strategies: Fast-Forward](/merge-queue/merge-strategies#fast-forward)
 for a detailed explanation of how fast-forward works in both inplace and
-draft-PR modes.
+batch-PR modes.
 
 :::caution
   If GitHub branch protections are enabled, fast-forward requires some
@@ -174,8 +174,8 @@ draft-PR modes.
 ### Merge Batch
 
 Set `merge_method: merge-batch` on your queue rule. This merge method requires
-`batch_size` to be greater than 1. Mergify creates the draft PR as usual, runs
-CI on it, and then merges the draft PR into the base branch using the GitHub
+`batch_size` to be greater than 1. Mergify creates the batch PR as usual, runs
+CI on it, and then merges the batch PR into the base branch using the GitHub
 Pull Request merge API with a merge commit. The merge commit message lists all
 the pull requests included in the batch.
 

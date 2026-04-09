@@ -18,7 +18,7 @@ shape, with trade-offs between linearity, SHA preservation, and throughput.
 | `squash` | Linear | 1 new commit per PR | No | Full |
 | `rebase` | Linear | Recreated copies of each commit | No | Full |
 | `fast-forward` | Linear | Original commits moved to base | Yes | Serial only |
-| `merge-batch` | Non-linear | Draft branch commits + 1 merge commit per batch | No | Full |
+| `merge-batch` | Non-linear | Batch branch commits + 1 merge commit per batch | No | Full |
 
 ## Merge (Default)
 
@@ -168,7 +168,7 @@ queue_rules:
 Fast-forward merging advances the base branch ref directly to the tested
 commit(s) using the Git API instead of creating a merge via GitHub. The exact
 behavior depends on whether the queue operates in
-[inplace or draft-PR mode](/merge-queue/parallel-checks#important-considerations).
+[inplace or batch-PR mode](/merge-queue/parallel-checks#important-considerations).
 
 ### Inplace Mode
 
@@ -216,19 +216,19 @@ strict digraph {
 - **SHAs preserved:** yes — the exact same commit SHAs from the PR appear on
   the base branch
 
-### Draft-PR Mode
+### Batch-PR Mode
 
-Mergify creates a draft PR that combines the queued pull requests, runs CI on
-that draft, and then fast-forwards the base branch to the draft PR's head
+Mergify creates a batch PR that combines the queued pull requests, runs CI on
+that batch, and then fast-forwards the base branch to the batch PR's head
 commit.
 
-Because the draft branch combines multiple PRs, the history **may contain merge
-commits** from folding each PR into the draft branch.
+Because the batch branch combines multiple PRs, the history **may contain merge
+commits** from folding each PR into the batch branch.
 
 - **History:** linear at the base-branch level, but individual merge commits
   from combining PRs may appear
 
-- **Merge commits:** possible — from combining PRs in the draft branch
+- **Merge commits:** possible — from combining PRs in the batch branch
 
 - **SHAs preserved:** the final merged result is the exact SHA tested by CI
 
@@ -267,7 +267,7 @@ queue_rules:
       - check-success = ci
 ```
 
-Draft-PR mode — batching with fast-forward merge:
+Batch-PR mode — batching with fast-forward merge:
 
 ```yaml
 queue_rules:
@@ -289,11 +289,11 @@ queue_rules:
       - check-success = ci
 ```
 
-When `merge_method` is set to `merge-batch`, Mergify merges the draft pull
+When `merge_method` is set to `merge-batch`, Mergify merges the batch pull
 request it creates for batching directly into the base branch using a merge
 commit — instead of merging the original pull requests individually.
 
-This is similar to `fast-forward` in that the draft PR itself is merged, but
+This is similar to `fast-forward` in that the batch PR itself is merged, but
 uses the GitHub Pull Request merge API rather than advancing the git ref
 directly. The resulting merge commit message identifies which pull requests
 were included in the batch (e.g., "Merge queue: merged #42, #43, #44").
@@ -315,7 +315,7 @@ strict digraph {
     main [label="main", shape=plaintext, fontname="sans-serif", fontcolor="#2563EB", fontsize=10];
 
     A -> B;
-    B -> D1 [label="draft PR\n(batch)", fontsize=9, fontcolor="#347D39"];
+    B -> D1 [label="batch PR", fontsize=9, fontcolor="#347D39"];
     D1 -> D2;
     B -> M;
     D2 -> M [label="merge commit", fontsize=9, fontcolor="#2563EB"];
@@ -331,7 +331,7 @@ strict digraph {
 - **Merge commits:** yes — one merge commit per batch, not per PR
 
 - **SHAs preserved:** no — the batch merge commit is new, and the original PR
-  commit SHAs are not preserved because the draft PR contains recreated commits
+  commit SHAs are not preserved because the batch PR contains recreated commits
 
 - **Requires `batch_size > 1`** — this method is designed for batch merging and
   cannot be used with single PRs
