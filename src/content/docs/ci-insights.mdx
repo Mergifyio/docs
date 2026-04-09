@@ -5,7 +5,6 @@ description: Optimize your CI run time, catch flaky tests, and give developers a
 
 import { Image } from "astro:assets"
 import JobsScreenshot from "../images/ci-insights/jobs.png"
-import TestsScreenshot from "../images/ci-insights/tests.png"
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 
@@ -22,23 +21,11 @@ GitHub and covers basic configuration steps.
 
 ### Components
 
-CI Insights provides monitoring and analysis for two key components of your CI pipeline:
-
-#### Jobs
-
-Jobs are the individual tasks that run as part of your CI pipeline (e.g.,
-build, test, deploy steps). CI Insights tracks job-level metrics and health
-status.
+CI Insights provides monitoring and analysis for your CI pipeline jobs — the
+individual tasks that run as part of your pipeline (e.g., build, test, deploy
+steps). CI Insights tracks job-level metrics and health status.
 
 <Image src={JobsScreenshot} alt="CI Insights Jobs" />
-
-#### Tests
-
-Tests are the individual test cases that run within your test suites. CI
-Insights captures detailed test-level data to help identify problematic test
-cases.
-
-<Image src={TestsScreenshot} alt="CI Insights Tests" />
 
 ### Flaky Detection
 
