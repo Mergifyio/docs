@@ -2099,6 +2099,14 @@
           "title": "Dependabot update type",
           "type": "array"
         },
+        "scope": {
+          "description": "The list of scopes associated with the pull request for merge queue batching.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Scope",
+          "type": "array"
+        },
         "commits": {
           "description": "The list of commits of the pull request. The index 0 is the first commit, while -1 is the last commit.",
           "items": {
@@ -2259,6 +2267,7 @@
         "dependabot-dependency-name",
         "dependabot-dependency-type",
         "dependabot-update-type",
+        "scope",
         "commits",
         "current-datetime",
         "updated-at",
