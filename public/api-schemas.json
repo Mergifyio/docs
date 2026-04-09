@@ -10702,6 +10702,16 @@
             },
             "type": "object",
             "title": "Scope Queues"
+          },
+          "pause": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MergeQueuePauseResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
