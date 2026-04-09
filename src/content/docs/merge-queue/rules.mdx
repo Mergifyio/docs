@@ -73,11 +73,11 @@ comparison, including configuration examples and trade-offs.
   tested commit(s) instead of creating a merge via GitHub. It works with both
   single PRs and batches. See
   [Merge Strategies: Fast-Forward](/merge-queue/merge-strategies#fast-forward)
-  for details on inplace and draft-PR modes.
+  for details on inplace and batch-PR modes.
 :::
 
 :::note
-  The `merge-batch` method merges the draft pull request prepared by the
+  The `merge-batch` method merges the batch pull request prepared by the
   merge queue directly into the base branch using a merge commit. It requires
   `batch_size > 1`. See
   [Merge Strategies: Merge Batch](/merge-queue/merge-strategies#merge-batch)
