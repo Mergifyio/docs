@@ -7,7 +7,7 @@ import { Image } from "astro:assets"
 import specChecksListScreenshot from "../../images/merge-queue/parallel-checks/spec-checks-list.png"
 
 Parallel Checks let Mergify test multiple queued pull requests together so you
-ship faster. Mergify creates temporary draft PRs that represent cumulative
+ship faster. Mergify creates temporary batch PRs that represent cumulative
 merges (PR#1), (PR#1+PR#2), (PR#1+PR#2+PR#3), runs CI on them in parallel, then
 merges the original PRs once checks pass.
 
@@ -19,13 +19,13 @@ merges the original PRs once checks pass.
 ## How Parallel Checks Work
 
 Mergify groups PRs by their position in the queue and the `max_parallel_checks`
-value. It creates draft PRs that speculatively combine changes and runs your CI
+value. It creates batch PRs that speculatively combine changes and runs your CI
 on each in parallel. For example, with PR #1–#5 and `max_parallel_checks: 3`,
 Mergify creates:
 
-- Draft #1: PR #1
-- Draft #2: PR #1 + PR #2
-- Draft #3: PR #1 + PR #2 + PR #3
+- Batch #1: PR #1
+- Batch #2: PR #1 + PR #2
+- Batch #3: PR #1 + PR #2 + PR #3
 
 ```dot class="graph"
 strict digraph "Parallel Checks" {
@@ -49,7 +49,7 @@ strict digraph "Parallel Checks" {
 
     subgraph cluster_specmerge {
       label="Currently tested (in parallel)";
-      // Add a bit of padding around labels inside draft nodes
+      // Add a bit of padding around labels inside batch nodes
       node [];
       style="rounded";
       color="#000";
@@ -77,12 +77,12 @@ strict digraph "Parallel Checks" {
     fontcolor="black";
     fontsize=11;
 
-    traincar1 [label="Draft #1\nPR #1", fontcolor=black, fillcolor="grey"]
-    traincar2 [label="Draft #2\nPR #1 + #2", fontcolor=black, fillcolor="grey"]
-    traincar3 [label="Draft #3\nPR #1 + #2 + #3", fontcolor=black, fillcolor="grey"]
+    traincar1 [label="Batch #1\nPR #1", fontcolor=black, fillcolor="grey"]
+    traincar2 [label="Batch #2\nPR #1 + #2", fontcolor=black, fillcolor="grey"]
+    traincar3 [label="Batch #3\nPR #1 + #2 + #3", fontcolor=black, fillcolor="grey"]
   }
 
-  // Map queue to drafts
+  // Map queue to batches
   pr1 -> traincar1 [color="#374151"];
   pr2 -> traincar2 [color="#374151"];
   pr3 -> traincar3 [color="#374151"];
@@ -99,7 +99,7 @@ strict digraph "Parallel Checks" {
 ```
 
 This validates the combined outcome ahead of time against your `queue_rules`.
-If a draft fails, Mergify removes the culprit PR from the queue and continues
+If a batch fails, Mergify removes the culprit PR from the queue and continues
 with the rest.
 
 <Image src={specChecksListScreenshot} alt="Mergify parallel checks" />
@@ -108,9 +108,9 @@ The result: fewer head-of-line stalls, faster merges, and earlier detection of
 incompatibilities.
 
 :::note
-  Mergify merges the original PRs, not the temporary drafts. If you prefer
-  merging the draft PRs instead, see [Merging the Draft
-  PRs](/merge-queue/batches#merging-the-draft-prs).
+  Mergify merges the original PRs, not the temporary batch PRs. If you prefer
+  merging the batch PRs instead, see [Merging the Batch
+  PRs](/merge-queue/batches#merging-the-batch-prs).
 :::
 
 ## Configuring Parallel Checks
@@ -148,33 +148,33 @@ transient failures.
 You have 3 PRs in the merge queue. PR #1's CI fails due to a flaky test:
 
 ```text
-Draft #1 (PR #1):           ❌ Failed (flaky test)
-Draft #2 (PR #1 + PR #2):   ✅ Passed
-Draft #3 (PR #1 + #2 + #3): ✅ Passed
+Batch #1 (PR #1):           ❌ Failed (flaky test)
+Batch #2 (PR #1 + PR #2):   ✅ Passed
+Batch #3 (PR #1 + #2 + #3): ✅ Passed
 ```
 
 **Without `skip_intermediate_results`**: PR #1 gets dequeued. The developer
 investigates, finds nothing wrong, reruns CI, waits again. Time wasted.
 
-**With `skip_intermediate_results: true`**: Mergify sees that Draft #2
+**With `skip_intermediate_results: true`**: Mergify sees that Batch #2
 (which contains PR #1's code) passed. This proves PR #1's failure was
 flaky, not a real bug. All 3 PRs merge automatically.
 
 ### How It Works
 
-When enabled, Mergify doesn't require every intermediate draft to pass.
-Instead, it looks for **any** passing draft that contains the PR's changes:
+When enabled, Mergify doesn't require every intermediate batch to pass.
+Instead, it looks for **any** passing batch that contains the PR's changes:
 
-1. Draft #1 fails (contains PR #1)
+1. Batch #1 fails (contains PR #1)
 
-2. Draft #2 passes (contains PR #1 + PR #2)
+2. Batch #2 passes (contains PR #1 + PR #2)
 
-3. Since Draft #2 passed and includes PR #1's code, the failure in Draft #1
+3. Since Batch #2 passed and includes PR #1's code, the failure in Batch #1
    is treated as transient
 
 4. Both PR #1 and PR #2 merge
 
-This is safe because if PR #1 had a **real** bug, Draft #2 would also fail
+This is safe because if PR #1 had a **real** bug, Batch #2 would also fail
 (it contains the same buggy code). Only flaky failures—where the code is
 fine but the test is unreliable—get bypassed.
 
@@ -201,10 +201,10 @@ merge_queue:
 
 ## Important Considerations
 
-### In‑place checks (no drafts)
+### In‑place checks (no batch PRs)
 
 Mergify runs checks directly on the original pull request (instead of using
-temporary draft PRs) only when of the following are true:
+temporary batch PRs) only when all of the following are true:
 
 - `queue_rules[*].batch_size = 1`
 
