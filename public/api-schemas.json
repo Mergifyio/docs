@@ -208,7 +208,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The pause does not exist"
+            "description": "Not found"
           },
           "409": {
             "description": "Conflict"
@@ -271,7 +271,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The merge queue is not currently paused on this repository"
+            "description": "Not found"
           },
           "409": {
             "description": "Conflict"
@@ -341,7 +341,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The merge queue is not currently paused on this repository"
+            "description": "Not found"
           },
           "409": {
             "description": "Conflict"
@@ -406,7 +406,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The merge queue is not currently paused on this repository"
+            "description": "Not found"
           },
           "409": {
             "description": "Conflict"
@@ -5212,7 +5212,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The merge queue is not currently paused on this repository"
+            "description": "Not found"
           },
           "409": {
             "description": "Conflict"
@@ -5281,7 +5281,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The merge queue is not currently paused on this repository"
+            "description": "Not found"
           },
           "409": {
             "description": "Conflict"
@@ -5786,8 +5786,15 @@
             "description": "The number of the pull request used by the speculative check"
           },
           "started_at": {
-            "type": "string",
-            "format": "date-time",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Started At",
             "description": "The timestamp when the checks have started for this pull request"
           },
@@ -10545,23 +10552,41 @@
       },
       "MergeQueuePauseResponse": {
         "properties": {
+          "paused": {
+            "type": "boolean",
+            "title": "Paused",
+            "description": "Whether the merge queue is currently paused"
+          },
           "reason": {
-            "type": "string",
-            "maxLength": 255,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reason",
             "description": "The reason of the merge queue pause"
           },
           "paused_at": {
-            "type": "string",
-            "format": "date-time",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Paused At",
             "description": "The date and time when the merge queue was paused"
           }
         },
         "type": "object",
         "required": [
-          "reason",
-          "paused_at"
+          "paused"
         ],
         "title": "MergeQueuePauseResponse"
       },
