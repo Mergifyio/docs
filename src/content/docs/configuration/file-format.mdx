@@ -269,3 +269,31 @@ file, consider the following troubleshooting steps:
 By following these troubleshooting steps, you can effectively identify and
 resolve any issues with your Mergify configuration file, ensuring a smooth and
 efficient automation process for your repository.
+
+## Validating with the CLI
+
+The [Mergify CLI](/cli) can check your configuration file locally before you
+push, catching errors without waiting for a round-trip to GitHub.
+
+### Validate
+
+Check your configuration against the Mergify schema:
+
+```bash
+mergify config validate
+```
+
+This catches syntax errors, invalid keys, and type mismatches. It reads
+`.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml` from the
+current directory.
+
+### Simulate
+
+Test your rules against an existing pull request without applying any actions:
+
+```bash
+mergify config simulate https://github.com/owner/repo/pull/142
+```
+
+Shows which rules would match and what actions Mergify would take. Useful for
+testing rule changes before merging your configuration update.
