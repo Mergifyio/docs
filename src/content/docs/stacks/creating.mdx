@@ -1,0 +1,103 @@
+---
+title: Creating Stacks
+description: Walk through creating your first stack of pull requests.
+---
+
+import { Image } from 'astro:assets';
+import StackComment from '../../images/stack-comment.png';
+import setupNewPush from '../../images/stacks-setup-new-push.png';
+import stackList from '../../images/stacks-list-output.png';
+
+This guide walks you through creating a stack from scratch, from starting a
+branch to having multiple chained PRs on GitHub.
+
+## Start a New Branch
+
+Use the `stack new` command to create a branch that tracks your main branch:
+
+```bash
+mergify stack new feat/my-feature
+```
+
+This is equivalent to `git checkout -b feat/my-feature --track origin/main`. You
+can also create branches however you normally do. Stacks doesn't require its own
+branch creation command.
+
+## Make Commits
+
+Work normally. Each commit should represent one logical unit of work, something
+that makes sense to review on its own.
+
+For example, building a new API feature:
+
+```bash
+# First commit: data model
+git add src/models/user.py
+git commit -m "feat: add user data model
+
+Define the User schema with fields for auth."
+
+# Second commit: API endpoint
+git add src/api/users.py
+git commit -m "feat: add user registration endpoint
+
+POST /api/users creates a new user account."
+
+# Third commit: tests
+git add tests/test_users.py
+git commit -m "test: add user registration tests
+
+Cover happy path, duplicate email, and validation errors."
+```
+
+Each commit automatically gets a `Change-Id` trailer. You don't need to do
+anything special.
+
+## Push the Stack
+
+Run:
+
+```bash
+mergify stack push
+```
+
+What happens behind the scenes:
+
+1. **Rebases** your branch on the latest `main`
+2. **Creates a remote branch** for each commit
+3. **Opens a PR** for each commit, chained in dependency order
+4. **Posts a stack comment** on every PR showing the full stack
+
+The full flow, from setup to push:
+
+<Image src={setupNewPush} alt="Terminal showing mergify stack setup, new, and push" />
+
+The result on GitHub: three small, focused PRs instead of one large one. Each PR
+contains exactly one commit's worth of changes.
+
+Each PR includes a stack comment that shows where it sits in the chain:
+
+<Image src={StackComment} alt="Stack comment showing PR position in the chain" style={{ maxWidth: '66%' }} />
+
+## Check Your Stack
+
+To see the state of your stack at any time:
+
+```bash
+mergify stack list
+```
+
+This shows each PR, its CI and review status, and a link to GitHub:
+
+<Image src={stackList} alt="Terminal output of mergify stack list" />
+
+:::tip
+  Use `mergify stack open` to quickly open a PR in your browser. It shows an
+  interactive picker if your stack has multiple PRs.
+:::
+
+## Next Steps
+
+To update a commit after code review, see [Updating Stacks](/stacks/updating).
+For a reviewer's perspective on navigating stacked PRs, see
+[Reviewing Stacks](/stacks/reviewing).

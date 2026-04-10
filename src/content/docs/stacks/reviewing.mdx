@@ -1,0 +1,72 @@
+---
+title: Reviewing Stacks
+description: A reviewer's guide to navigating and reviewing stacked pull requests.
+---
+
+import { Image } from 'astro:assets';
+import StackComment from '../../images/stack-comment.png';
+
+Stacked PRs look and feel like regular pull requests, just smaller. You don't
+need to install anything or learn new tools to review them.
+
+## What You'll See
+
+Each stacked PR contains a single commit's worth of changes. At the top of
+every PR, a stack comment shows the full chain and highlights the current PR:
+
+<Image src={StackComment} alt="Stack comment showing the current PR in the chain" style={{ maxWidth: '66%' }} />
+
+The comment includes links to every PR in the stack, so you can jump between
+them.
+
+## How to Review
+
+### Start from the Bottom
+
+Review the stack in order, starting with the first PR (the one targeting
+`main`). Each subsequent PR builds on the previous one, so reviewing in order
+gives you the narrative of the change.
+
+### Each PR Shows Only Its Own Changes
+
+Unlike a single large PR, each stacked PR's diff contains only the changes from
+its corresponding commit, not the accumulated changes of the entire branch:
+
+- PR #1 shows the data model changes
+- PR #2 shows only the API endpoint, not the model + endpoint
+- PR #3 shows only the tests, not everything combined
+
+You review small, focused diffs instead of trying to parse hundreds of lines at
+once.
+
+### Navigate Between PRs
+
+Use the links in the stack comment to move between PRs. The current PR is
+marked in the list so you always know where you are in the chain.
+
+## Leaving Feedback
+
+Review comments work exactly like any other PR:
+
+- Leave inline comments on specific lines
+- Request changes or approve
+- Use GitHub's review features normally
+
+When the author addresses your feedback, they'll rebase and push. The PR updates
+in place, and your review comments stay attached to the relevant lines.
+
+## Merging Stacked PRs
+
+Stacked PRs merge bottom-up. The first PR in the stack (targeting `main`)
+merges first. Once it lands, the next PR's base automatically updates to `main`,
+and you can review and merge that one. Each PR in turn, working up the chain.
+
+:::tip
+  Stacks work well with [Merge Queue](/merge-queue). Each stacked PR can enter
+  the queue independently as its dependencies land, keeping your merge pipeline
+  flowing.
+:::
+
+You don't need to merge the entire stack at once. If the first two PRs are
+approved but the third needs more work, merge the first two and let the author
+continue iterating on the rest.

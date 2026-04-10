@@ -1,139 +1,94 @@
 ---
-title: "Stacks: Stacked Pull Requests"
-description: How to create and manage stacked PRs.
+title: Stacks
+description: Break large changes into small, reviewable pull requests. One branch, many PRs.
 ---
 
-import { Image } from "astro:assets"
-import GHPRSchema from "../images/stacked-gh-pr.png"
-import MergifyStackSchema from "../images/stacked-mergify-pr.png"
-import StackComment from "../images/stack-comment.png"
+import Button from '~/components/Button.astro';
+import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
+import Docset from '~/components/DocsetGrid/Docset.astro';
+import GitGraph from '~/components/GitGraph.astro';
 
-Mergify Stacks allow you to split your local Git branches in multiple pull
-requests to make it easier to split you work in small atomic parts.
+AI can write 1,000 lines of code in minutes, but nobody wants to review a
+1,000-line pull request. Reviewers skim instead of reading, bugs slip through,
+and merges stall for days.
 
-## Limitations of GitHub's Pull Request Model
+<Button variant="primary" href="/stacks/setup" target="_self">
+  Get Started →
+</Button>
 
-The conventional GitHub pull request model operates on a branch-based system
-where each branch corresponds to one pull request.
+## The Problem: One Branch = One PR
 
-<Image src={ GHPRSchema } alt="GitHub PR" style={{ maxWidth: '66%', }} />
+GitHub's pull request model ties every branch to a single PR. As you add
+commits, the PR grows, and so does the review burden.
 
-As more commits are added to a branch and pushed, the associated pull request
-expands. This continual growth can complicate the review process, making it
-challenging for reviewers as the code base increases. Moreover, this model
-often discourages the division of work into atomic, manageable commits.
+<GitGraph
+  commits={["A", "B", "C", "D", "E"]}
+  prs={[{ label: "PR #1", commits: [0, 4], color: "red" }]}
+/>
 
-The concept of Stacks addresses this issue by breaking down work into
-incremental, reviewable steps. This structure not only simplifies the review
-process but also enhances the digestibility of changes for teammates.
+Developers face a bad choice: ship one giant PR that no one can review
+thoroughly, or manually manage a chain of dependent branches and rebase each one
+whenever the base changes. Git has the tools to split work into atomic commits.
+GitHub just doesn't expose them as separate, reviewable units.
 
-Furthermore, should a rollback be necessary, it's far simpler and less
-disruptive to revert a single, small pull request rather than an entire branch
-of accumulated changes.
+## The Solution: One Branch, Many PRs
 
-## Advantages of Using Mergify Stacks
+Mergify Stacks maps each commit on your branch to its own pull request,
+automatically chained in dependency order.
 
-Mergify Stacks retains the familiar branch model used in Git while innovating
-on how pull requests are handled. Instead of opening one pull request for an
-entire branch, Mergify Stacks opens a separate pull request for each commit.
+<GitGraph
+  commits={["A", "B", "C", "D", "E"]}
+  commitColor="green"
+  prs={[
+    { label: "PR #1", commits: 0 },
+    { label: "PR #2", commits: 1 },
+    { label: "PR #3", commits: 2 },
+    { label: "PR #4", commits: 3 },
+    { label: "PR #5", commits: 4 },
+  ]}
+/>
 
-<Image
-  src={ MergifyStackSchema } alt="Mergify Stacks" style={{ maxWidth: '66%' }} />
+You work on a single local branch using standard Git: commits, rebase, amend.
+When you push, Stacks creates a separate PR for each commit, linked together so
+reviewers see the logical progression of your work.
 
-This approach allows developers to maintain all their changes within a single
-branch while effectively segmenting their work into smaller, more manageable
-parts. Each part is easier to review and quicker to integrate, streamlining the
-development process and enhancing overall efficiency.
+- Small, focused PRs that reviewers actually read
+- One local branch (no juggling N branches for N PRs)
+- Automatic PR chaining with dependency tracking
+- Smart updates that only touch PRs that changed
+- Standard Git, no new commands to learn
+- Complements [Merge Queue](/merge-queue) for safe, fast landing
 
-When a commit needs to be changed, [`git rebase
---interactive`](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History) can
-be used to
-change the content of the branch. Mergify Stacks automatically synchronize your
-branch to the pull requests.
-
-This means that there is no need to learn any new tool to manage your Mergify
-Stacks: they are just regular Git branches.
-
-:::note
-  For Mergify Stacks to function effectively, branches must be in the `heads`
-  namespace.
-:::
-
-This process ensures that developers don't have to tediously update each
-individual pull request manually. Everything is managed under the hood by
-Mergify Stacks, from the commit level to the PR level.
-
-The automated nature of this approach minimizes the chances of human error—like
-missing a pull request update or misapplying a change. Developers maintain the
-freedom and flexibility of the Git interactive rebase, allowing for granular
-and precise changes to commits.
-
-## Setting Up Mergify Stacks
-
-First, [install the Mergify CLI](/cli) if you haven't already.
-
-Then, set up the commit-msg hook in your repository:
+## Get Started in 30 Seconds
 
 ```bash
-mergify stack --setup
+uv tool install mergify-cli
+mergify stack setup
+mergify stack push
 ```
 
-## Creating Stacked Pull Requests
+Three commands to go from a branch with commits to a stack of reviewable PRs on
+GitHub. See the [setup guide](/stacks/setup) for details.
 
-1. Spawn a branch and introduce your changes.
+## Learn More
 
-2. Commit the changes. If Mergify CLI is correctly configured, your commit
-   message will automatically contain the `Change-Id`.
-
-3. In case you committed before initializing Mergify CLI, use `git rebase
-   <base-branch> -i` to reword commits and automatically embed the `Change-Id`.
-
-4. To construct the stack, run:
-
-```bash
-mergify stack
-```
-
-<Image src={ StackComment } alt="Mergify Stack comment" style={{ maxWidth: '66%' }} />
-
-Mergify CLI will manage the creation of individual pull requests for every
-commit in your feature branch. This structured approach ensures smooth and
-error-free management of changes and reviews.
-
-## Updating Stacked Pull Requests
-
-Inevitably, there will be times when you'll need to modify or refine your pull
-requests—perhaps due to feedback from a code review or just a late realization.
-Mergify CLI streamlines this process, ensuring your stacked pull requests are
-always in sync with your latest changes.
-
-1. **Stay in Your Feature Branch:** The beauty of stacked PRs lies in their
-   granular structure. Always make sure you are working within the specific
-   feature branch where the relevant commits reside.
-
-2. **Modifying Commits:** To update or modify commits inside your branch:
-   - Use the interactive rebase feature of Git:
-     ```bash
-     git rebase --interactive <base-branch>
-     ```
-
-   - Within the interactive rebase session, you can:
-     - **pick** to retain a commit.
-     - **reword** to change a commit message.
-     - **edit** to modify the content of a commit.
-     - **squash** to combine the commit with the previous one.
-     - **drop** to remove a commit entirely.
-
-   Make your desired changes and save. This action will reapply your commits on
-   top of the base branch, incorporating the changes you've made.
-
-3. **Pushing Updated Stacked PRs:** Once you've made all the necessary
-   modifications to your branch and are satisfied with the changes, call the
-   Mergify CLI with the `stack` command:
-   ```bash
-   mergify stack
-   ```
-   This command will push your modified commits and update the corresponding
-   pull requests on GitHub. Mergify CLI intelligently keeps track of the
-   relationships between your commits and the pull requests, ensuring
-   everything remains synchronized.
+<DocsetGrid>
+  <Docset title="Concepts" path="/stacks/concepts" icon="fa6-solid:diagram-project">
+    How stacks work under the hood: Change-Ids, branch mapping, and PR chaining.
+  </Docset>
+  <Docset title="Setup" path="/stacks/setup" icon="fa6-solid:wrench">
+    Install the CLI and configure your repository in under 2 minutes.
+  </Docset>
+  <Docset title="Creating Stacks" path="/stacks/creating" icon="fa6-solid:layer-group">
+    Walk through creating your first stack from branch to PRs.
+  </Docset>
+  <Docset title="Updating Stacks" path="/stacks/updating" icon="fa6-solid:pen-to-square">
+    Amend, reorder, squash, or add commits and keep PRs in sync.
+  </Docset>
+  <Docset title="Reviewing Stacks" path="/stacks/reviewing" icon="fa6-solid:magnifying-glass">
+    A reviewer's guide to navigating and reviewing stacked PRs.
+  </Docset>
+  <Docset title="Team Adoption" path="/stacks/team" icon="fa6-solid:people-group">
+    Why and how to roll out stacked PRs across your engineering team.
+  </Docset>
+</DocsetGrid>
