@@ -4785,6 +4785,77 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/merge-queue/branches": {
+      "get": {
+        "tags": [
+          "merge_queue"
+        ],
+        "summary": "Get branches with active merge queues",
+        "description": "Get the list of branches that currently have active merge queues",
+        "operationId": "get_merge_queue_branches_repos__owner___repository__merge_queue_branches_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeQueueBranches"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/merge-queue/status": {
       "get": {
         "tags": [
@@ -10442,6 +10513,23 @@
         },
         "type": "object",
         "title": "MatchingConditionsDict"
+      },
+      "MergeQueueBranches": {
+        "properties": {
+          "branches": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Branches",
+            "description": "List of branches with active merge queues"
+          }
+        },
+        "type": "object",
+        "required": [
+          "branches"
+        ],
+        "title": "MergeQueueBranches"
       },
       "MergeQueueMergeabilityCheck": {
         "properties": {
