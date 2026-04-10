@@ -1,0 +1,73 @@
+---
+title: Prevention
+description: Catch flaky and broken tests on pull requests before they reach your codebase.
+---
+
+Prevention monitors tests introduced or modified in pull requests. By
+rerunning tests on PRs, it detects flaky behavior before code merges, keeping
+your codebase reliable.
+
+## How it works
+
+When a pull request runs tests, Mergify reruns them to check for consistency.
+Tests that produce different results on the same commit are flagged as flaky.
+This happens transparently as part of your existing CI pipeline, with no changes
+to your test code needed.
+
+Tests caught as flaky on a PR are prevented from silently degrading your
+test suite. You can review their health status before deciding to merge.
+
+## What you can track
+
+Prevention provides key metrics to help you understand test reliability
+on pull requests:
+
+### Caught flaky tests
+
+The number of flaky tests detected during PR reruns. This is the core value
+of Prevention: every caught test is a reliability problem that didn't make it
+into your codebase.
+
+### New tests
+
+Tests being introduced on PRs, along with their health status. Each new test
+is classified as healthy, flaky, or broken based on its rerun results. This
+helps you spot unreliable tests before they're merged.
+
+### CI budget spent
+
+The total CI time spent on reruns. This metric helps teams understand the
+cost of flaky test prevention and make informed trade-offs between
+thoroughness and CI budget.
+
+## Practical workflows
+
+### Reviewing tests before merging
+
+When a PR introduces or modifies tests, check the Prevention page to see
+their health status. Tests with a flaky or broken status should be
+investigated before merging.
+
+### Filtering by pull request state
+
+Use the pull request state filter to focus on specific PRs:
+
+- **Open**: Tests on PRs still in review
+- **Merged**: Tests on PRs that have already been merged
+- **Closed**: Tests on PRs that were closed without merging
+
+### Understanding confidence on new tests
+
+New tests have limited run data, so their confidence level may be low. A low
+confidence means the health status could change as more data is collected.
+Consider waiting for more runs before drawing conclusions about a test's
+reliability.
+
+## Setup
+
+Prevention requires test framework plugins that instrument test runs to track
+flakiness on pull requests.
+
+See the [test framework configuration](/ci-insights#test-framework-configuration)
+for setup instructions specific to your framework (pytest-mergify,
+rspec-mergify, etc.).
