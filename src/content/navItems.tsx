@@ -101,6 +101,17 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    title: 'Test Insights',
+    path: '/test-insights',
+    icon: 'fa6-solid:flask-vial',
+    children: [
+      { title: 'Overview', path: '/test-insights', icon: 'fa6-regular:lightbulb' },
+      { title: 'Prevention', path: '/test-insights/prevention', icon: 'fa6-solid:shield-halved' },
+      { title: 'Detection', path: '/test-insights/detection', icon: 'fa6-solid:magnifying-glass' },
+      { title: 'Mitigation', path: '/test-insights/mitigation', icon: 'fa-solid:radiation' },
+    ],
+  },
+  {
     title: 'Merge Queue',
     icon: MergeQueueIcon,
     path: '/merge-queue',
