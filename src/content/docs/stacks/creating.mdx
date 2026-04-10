@@ -23,6 +23,12 @@ This is equivalent to `git checkout -b feat/my-feature --track origin/main`. You
 can also create branches however you normally do. Stacks doesn't require its own
 branch creation command.
 
+To branch from something other than `main` (a release branch, for example):
+
+```bash
+mergify stack new feat/my-feature --base origin/release-v2
+```
+
 ## Make Commits
 
 Work normally. Each commit should represent one logical unit of work, something
