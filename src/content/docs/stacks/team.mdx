@@ -1,0 +1,84 @@
+---
+title: Team Adoption
+description: Why and how to roll out stacked PRs across your engineering team.
+---
+
+## Why Stacked PRs Matter for Teams
+
+Code review slows down as PRs get bigger. Reviewers spend less time per line as
+the diff grows: a 400-line PR gets a thorough review, a 2,000-line PR gets a
+skim and an approval.
+
+As teams adopt AI coding tools, the amount of code generated per developer is
+increasing faster than anyone can review it. Stacked PRs let developers ship
+large changes as a series of small, reviewable units instead of one monolith.
+
+The difference shows up in practice:
+
+- Faster review cycles: small PRs get reviewed in hours, not days
+
+- Higher review quality: reviewers catch more issues in focused diffs
+
+- Faster unblocking: developers can start the next piece while the first is
+  in review
+
+- Easier rollbacks: revert one small PR instead of unwinding a monolith
+
+## Gradual Rollout
+
+Stacks doesn't require a team-wide rollout. There's no repo-wide configuration,
+no CI changes, and no admin setup.
+
+A single developer can start using stacks today:
+
+1. [Install the CLI](/cli) locally
+2. Run [`mergify stack setup`](/stacks/setup) in their clone
+3. Start pushing stacks
+
+Their teammates review the resulting PRs normally. They just see smaller,
+well-organized PRs with stack comments explaining the chain. No one else needs
+to install anything.
+
+As more developers see the benefits in review, adoption spreads naturally.
+
+## When to Use Stacks
+
+Not every change needs a stack. Use stacks when the alternative is a large,
+hard-to-review PR:
+
+**Good candidates:**
+- Features touching multiple layers (model, API, UI)
+- Large refactors that can be broken into logical steps
+- AI-generated changes that need careful human review
+- Any change that would exceed ~300 lines in a single PR
+
+**Skip stacks for:**
+- One-line bug fixes
+- Documentation-only changes
+- Simple configuration updates
+- Changes that are already small and focused
+
+## Pairing with Merge Queue
+
+[Merge Queue](/merge-queue) complements Stacks well: Stacks break large changes
+into reviewable pieces, and Merge Queue lands those pieces safely and
+efficiently. Each stacked PR can enter the queue independently as its
+dependencies land. The bottom PR merges first, then the next one enters the
+queue, and so on, without manual coordination.
+
+## Comparing with Alternatives
+
+Several tools offer stacked PRs. Here's how Mergify Stacks compares:
+
+| | Mergify Stacks | Graphite | ghstack | spr |
+|---|---|---|---|---|
+| **Workflow** | Standard Git | Custom CLI | Standard Git | Standard Git |
+| **Branch model** | One local branch | Managed branches | Managed branches | Managed branches |
+| **GitHub integration** | PR chaining + deps | PR chaining + dashboard | PR chaining | PR chaining |
+| **Merge queue** | [Built-in](/merge-queue) | Separate | None | None |
+| **Pricing** | Included with Mergify | Separate subscription | Open source | Open source |
+| **Setup** | CLI + one command | CLI + account setup | CLI install | CLI install |
+
+Mergify Stacks uses standard Git. You don't learn new commands for committing
+or managing branches. You use `git commit`, `git rebase`, and
+`git commit --amend` like you always have. Stacks handles the GitHub side.

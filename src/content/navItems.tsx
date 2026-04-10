@@ -191,6 +191,20 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    title: 'Stacks',
+    path: '/stacks',
+    icon: 'bi:stack',
+    children: [
+      { title: 'Overview', path: '/stacks', icon: 'fa6-regular:lightbulb' },
+      { title: 'Concepts', path: '/stacks/concepts', icon: 'fa6-solid:diagram-project' },
+      { title: 'Setup', path: '/stacks/setup', icon: 'fa6-solid:wrench' },
+      { title: 'Creating Stacks', path: '/stacks/creating', icon: 'fa6-solid:layer-group' },
+      { title: 'Updating Stacks', path: '/stacks/updating', icon: 'fa6-solid:pen-to-square' },
+      { title: 'Reviewing Stacks', path: '/stacks/reviewing', icon: 'fa6-solid:magnifying-glass' },
+      { title: 'Team Adoption', path: '/stacks/team', icon: 'fa6-solid:people-group' },
+    ],
+  },
+  {
     title: 'Workflow Automation',
     icon: 'bi:gear',
     path: '/workflow',
@@ -354,7 +368,6 @@ const navItems: NavItem[] = [
       },
     ],
   },
-  { title: 'Stacks', path: '/stacks', icon: 'bi:stack' },
   { title: 'CLI', path: '/cli', icon: 'bi:terminal' },
   { title: 'Security', path: '/security', icon: 'fa-solid:shield-alt' },
   { title: 'Support', path: '/support', icon: 'fa-solid:life-ring' },

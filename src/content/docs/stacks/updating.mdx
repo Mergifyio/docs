@@ -1,0 +1,173 @@
+---
+title: Updating Stacks
+description: Amend, reorder, add, or remove commits in your stack.
+---
+
+import GitGraph from '~/components/GitGraph.astro';
+
+After pushing a stack, you'll need to make changes: responding to review
+feedback, adding commits, rearranging order, or squashing. This page covers
+every common scenario.
+
+In all cases, the workflow is the same: **make your changes locally, then run
+`mergify stack push`** to sync with GitHub.
+
+## Amend the Latest Commit
+
+Make your changes, then amend:
+
+```bash
+git add src/api/users.py
+git commit --amend
+```
+
+The Change-Id is preserved automatically. Then push:
+
+```bash
+mergify stack push
+```
+
+Only the PR corresponding to the amended commit is updated.
+
+## Edit a Commit Mid-Stack
+
+To modify a commit that isn't at the top of your branch, use interactive rebase.
+Stacks provides a shortcut:
+
+```bash
+mergify stack edit
+```
+
+This opens `git rebase -i` from the fork point of your stack. You'll see your
+commits listed:
+
+```text
+pick a1b2c3d feat: add user data model
+pick d4e5f6a feat: add user registration endpoint
+pick g7h8i9b test: add user registration tests
+```
+
+Change `pick` to `edit` for the commit you want to modify:
+
+```text
+edit a1b2c3d feat: add user data model
+pick d4e5f6a feat: add user registration endpoint
+pick g7h8i9b test: add user registration tests
+```
+
+Save and close. Git pauses at that commit so you can make changes:
+
+```bash
+# Make your changes
+git add src/models/user.py
+git commit --amend
+git rebase --continue
+```
+
+Then push:
+
+```bash
+mergify stack push
+```
+
+## Reorder Commits
+
+Open interactive rebase and change the line order:
+
+```bash
+mergify stack edit
+```
+
+```text
+pick d4e5f6a feat: add user registration endpoint
+pick a1b2c3d feat: add user data model
+pick g7h8i9b test: add user registration tests
+```
+
+Save and close. The PRs re-chain automatically when you push.
+
+:::caution
+  Reordering can cause conflicts if later commits depend on earlier ones. Git
+  will pause and ask you to resolve conflicts during the rebase.
+:::
+
+## Add a Commit
+
+Just commit normally anywhere in your branch:
+
+```bash
+git add src/api/auth.py
+git commit -m "feat: add authentication middleware"
+```
+
+On the next `mergify stack push`, a new PR is created and inserted at the
+correct position in the chain.
+
+## Remove a Commit
+
+Open interactive rebase and change `pick` to `drop` (or delete the line):
+
+```bash
+mergify stack edit
+```
+
+```text
+pick a1b2c3d feat: add user data model
+drop d4e5f6a feat: add user registration endpoint
+pick g7h8i9b test: add user registration tests
+```
+
+On push, the orphan remote branch is deleted and the remaining PRs re-chain.
+
+## Squash Commits
+
+To combine two commits into one, use `squash` or `fixup` in interactive rebase:
+
+```bash
+mergify stack edit
+```
+
+```text
+pick a1b2c3d feat: add user data model
+squash d4e5f6a feat: add user registration endpoint
+pick g7h8i9b test: add user registration tests
+```
+
+The surviving commit keeps its Change-Id, so the corresponding PR is updated. The
+absorbed commit's remote branch is cleaned up automatically.
+
+## After a PR Merges
+
+When the bottom PR in your stack merges into `main`, the next PR's base
+automatically updates to `main`. To keep your local branch in sync, just push
+again:
+
+```bash
+mergify stack push
+```
+
+Before the merge, your stack looks like this:
+
+<GitGraph
+  commits={["A", "B", "C"]}
+  commitColor="green"
+  prs={[
+    { label: "PR #1", commits: 0, annotation: "base: main" },
+    { label: "PR #2", commits: 1, annotation: "base: PR #1" },
+    { label: "PR #3", commits: 2, annotation: "base: PR #2" },
+  ]}
+/>
+
+After PR #1 merges, commit A lands on `main`. The remaining PRs re-chain:
+
+<GitGraph
+  commits={["B", "C"]}
+  commitColor="green"
+  prs={[
+    { label: "PR #2", commits: 0, annotation: "base: main" },
+    { label: "PR #3", commits: 1, annotation: "base: PR #2" },
+  ]}
+/>
+
+Stacks rebases on `main` automatically, detects that the merged commit is already
+in `main`, and skips it. The remaining PRs update as needed.
