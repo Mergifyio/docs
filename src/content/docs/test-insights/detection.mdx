@@ -1,0 +1,74 @@
+---
+title: Detection
+description: Identify and prioritize unhealthy tests across your repositories.
+---
+
+Even with prevention in place, tests can degrade over time. Detection surfaces
+all unhealthy tests (flaky and broken) across your repositories, so you can
+see the full picture and prioritize what to fix.
+
+## How tests are classified
+
+Mergify classifies tests based on their results across multiple CI runs,
+with recent results weighted more heavily:
+
+- **Flaky**: The test produces inconsistent results on the same commit. It
+  passes on some runs and fails on others, without any code changes.
+
+- **Broken**: The test fails consistently. Recent runs are weighted more
+  heavily, so a test that started failing recently will be classified as
+  broken even if it passed in earlier runs.
+
+Only unhealthy tests (flaky or broken) appear in Detection. Healthy tests
+are not listed.
+
+## Understanding confidence
+
+Confidence indicates how much data is available to assess a test's health.
+
+- **High confidence**: Enough runs have been collected to make a reliable
+  assessment. The health status is unlikely to change significantly.
+
+- **Low confidence**: Limited data is available. The health status could
+  still shift as more runs are collected. Treat low-confidence results as
+  preliminary.
+
+Confidence increases as more CI runs are collected for a given test.
+
+## Prioritizing with impact
+
+The impact metric reflects how many failed executions a test causes. A
+high-impact flaky test wastes more CI time and disrupts more workflows than
+a low-impact one.
+
+Use impact to decide which tests to fix first: high-impact tests give you
+the most return on investment when fixed.
+
+## Practical workflows
+
+### Finding your worst tests
+
+Sort by impact to surface the tests causing the most CI disruption. These
+are the best candidates for immediate attention.
+
+### Narrowing scope
+
+Use filters to focus on specific areas:
+
+- **Test name**: Search for a specific test or pattern
+- **Job name**: Focus on tests within a particular CI job
+- **Pipeline name**: Narrow to a specific CI pipeline
+
+### Checking quarantine status
+
+Tests that have already been quarantined are indicated in the health status.
+This helps you avoid spending time investigating tests that are already being
+managed through [Mitigation](/test-insights/mitigation).
+
+## Setup
+
+Detection requires test metrics collection through repeated CI runs. See the
+CI setup guides for your platform:
+
+- [GitHub Actions setup](/ci-insights/setup/github-actions)
+- [Jenkins setup](/ci-insights/setup/jenkins)
