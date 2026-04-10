@@ -1,0 +1,55 @@
+---
+title: Test Insights
+description: Monitor, detect, and manage unreliable tests across your repositories.
+---
+
+Test Insights helps you manage test reliability across the full lifecycle.
+It catches flaky tests on pull requests before they merge, surfaces unhealthy
+tests across your repositories, and lets you quarantine problematic tests so
+they don't block your CI pipeline.
+
+## How it works
+
+Test Insights is organized into three phases that follow the natural lifecycle
+of a test reliability problem:
+
+1. **[Prevention](/test-insights/prevention)**: Catch flaky and broken tests
+   on pull requests before they reach your codebase. Mergify reruns tests on
+   PRs to detect inconsistent behavior early.
+
+2. **[Detection](/test-insights/detection)**: Identify and prioritize
+   unhealthy tests across your repositories. See which tests are flaky or
+   broken, and focus on the ones with the most impact.
+
+3. **[Mitigation](/test-insights/mitigation)**: Quarantine problematic tests
+   to unblock CI without removing them. Tests keep running, but their failures
+   no longer block merges.
+
+## Key concepts
+
+- **Flaky test**: A test that produces different results on the same commit.
+  For example, passing on one run and failing on the next with identical code.
+
+- **Broken test**: A test that fails consistently, with recent runs weighted
+  more heavily.
+
+- **Health status**: A test's reliability classification: healthy, flaky, or
+  broken. Based on results from multiple CI runs.
+
+- **Confidence**: How much data is available to assess a test's health. Low
+  confidence means the status could still change significantly as more runs
+  are collected.
+
+- **Quarantine**: Isolating a test so its failures are ignored for merge
+  decisions. The test still runs and results are still collected, preserving
+  full visibility.
+
+## Setup
+
+Test Insights is powered by the same CI integration as
+[CI Insights](/ci-insights). To get started, configure your CI system and test
+framework:
+
+- [GitHub Actions setup](/ci-insights/setup/github-actions)
+- [Jenkins setup](/ci-insights/setup/jenkins)
+- [Test framework configuration](/ci-insights#test-framework-configuration)
