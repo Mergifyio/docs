@@ -1486,10 +1486,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Retrieve the time to merge at this timestamp (in seconds)",
+              "description": "Retrieve the time to merge at this timestamp (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z)",
               "title": "At"
             },
-            "description": "Retrieve the time to merge at this timestamp (in seconds)"
+            "description": "Retrieve the time to merge at this timestamp (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z)"
           },
           {
             "name": "branch",
