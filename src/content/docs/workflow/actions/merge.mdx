@@ -26,38 +26,15 @@ merge action to take place:
 
 ## Branch Protection Conditions
 
-GitHub provides [branch
-protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
-and [rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
-settings that allow to enforce certain restrictions when pushing commits to
-your repository.
-
-Mergify automatically injects those conditions in your rules, though,
-they could be bypassed.
-(see
-[branch_protection_injection_mode](/configuration/file-format/#queue-rules).
-For example, if you request your pull request to be approved by at least
-one person, Mergify will inject the `#approved-reviews-by >= 1` condition.
+Mergify automatically reads your GitHub branch protections and rulesets and
+injects them as merge conditions. For example, if you require at least one
+approved review, Mergify injects the `#approved-reviews-by >= 1` condition.
 
 <Image src={branchProtectionConditionsScreenshot} alt="Mergify Branch Protection Condition Injection" />
 
-If you're using rulesets instead of the classic branch protections, you can also bypass
-the injection of those conditions by setting Mergify as a bypass actor with the bypass mode set to `exempt`.
-With all other bypass modes, Mergify will inject the conditions in your rules.
-
-Note that branch protection supports has some limitations. For example, GitHub
-does not provide an API to support [code
-owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)
-which makes it unreliable in certain circumstances.
-
-The following protection settings are only partially supported by Mergify:
-
-- Require status checks to pass before merging;
-- Require branches to be up to date before merging;
-- Require review from Code Owners;
-- Require linear history;
-- Require conversation resolution before merging;
-- Require approvals.
+For details on how injection works, which ruleset rules are compatible,
+known incompatibilities, and how to configure bypass actors, see
+[GitHub Rulesets Compatibility](/merge-queue/github-rulesets).
 
 ## Pull Request Dependencies
 

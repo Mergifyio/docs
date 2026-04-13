@@ -234,14 +234,10 @@ queue_rules:
 
 ### Branch Protection Settings
 
-Parallel checks operate by creating temporary pull requests, which merge
-multiple PRs with the base branch. This process requires the branch protection
-setting `Require branches to be up to date before merging` to be disabled.
-
-This does not mean that Mergify will test outdated PRs, but it will merge the
-original pull requests once its parallel checks is finished. The original PR
-won't be up-to-date according to GitHub, which means using this setting would
-block the merge.
+Parallel checks require the branch protection setting *Require branches to be
+up to date before merging* to be disabled. For details on why and how to
+resolve this, see [GitHub Rulesets Compatibility: Require Branches to Be Up to
+Date](/merge-queue/github-rulesets#require-branches-to-be-up-to-date).
 
 ### Tuning parallel checks
 
