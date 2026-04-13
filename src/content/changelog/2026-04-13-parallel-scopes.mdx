@@ -1,0 +1,13 @@
+---
+title: "Parallel Scopes"
+date: 2026-04-13
+tags:
+  - Merge Queue
+description: "Merge unrelated pull requests in parallel by grouping them into scopes based on the files they touch."
+---
+
+Parallel Scopes lets the merge queue test and merge pull requests simultaneously when they affect different parts of your codebase. Define scopes through file patterns or your existing monorepo build system (Nx, Bazel, Turborepo), and Mergify will run an independent queue for each scope — while still serializing pull requests that share a scope to catch real conflicts.
+This dramatically reduces merge latency in monorepos where most changes are independent.
+Enable it by setting mode: parallel on your merge queue and declaring your scopes in the configuration. 
+
+See the [Parallel Scopes documentation](https://docs.mergify.com/merge-queue/parallel-checks/) for details.
