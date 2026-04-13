@@ -1,0 +1,50 @@
+---
+title: Jobs
+description: Track your CI job health, duration, and cost to identify flaky, broken, or expensive jobs before they slow down your team.
+---
+
+import { Image } from "astro:assets"
+import JobsScreenshot from "../../images/ci-insights/jobs.png"
+
+The Jobs page helps you understand how your CI jobs behave over time.
+Spot flaky jobs, catch regressions in duration or failure rate, and keep
+track of where your CI budget goes.
+
+<Image src={JobsScreenshot} alt="CI Insights Jobs" />
+
+:::note
+  Before using the Jobs page, you need to have CI Insights enabled on
+  your repository. See the [CI Insights setup guides](/ci-insights) to
+  get started.
+:::
+
+## Job Metrics
+
+The metrics view is the default landing page for CI Insights. It
+aggregates job performance across a time period so you can identify
+trends and outliers at a glance.
+
+Each job is assigned a **health status** (Healthy, Flaky, or Broken)
+based on its recent run history. This helps you quickly focus on jobs
+that need attention rather than sifting through individual runs.
+
+:::tip
+  Use the grouping options (by branch, runner group, or labels) to
+  compare the same job across different environments and isolate
+  where problems occur.
+:::
+
+## Job Executions
+
+The executions view shows individual job runs with their status,
+duration, and cost. Use it to drill into specific failures, investigate
+flaky behavior, or trace a regression back to a particular commit.
+
+Clicking any execution opens a detail panel with the full job timeline
+and related test results.
+
+:::tip
+  If a job started failing recently, filter by date range and sort by
+  duration to see whether the failure correlates with a performance
+  change.
+:::

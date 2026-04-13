@@ -17,14 +17,15 @@ const navItems: NavItem[] = [
     icon: 'mdi:lightbulb-outline',
     children: [
       { title: 'Overview', path: '/ci-insights', icon: 'mdi:lightbulb-outline' },
+      { title: 'Runners', path: '/ci-insights/runners', icon: 'fa6-solid:server' },
+      { title: 'Jobs', path: '/ci-insights/jobs', icon: 'fa6-solid:list-check' },
+      { title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: 'fa6-solid:rotate-right' },
       {
         title: 'Flaky Test Detection',
         path: '/ci-insights/flaky-test-detection',
         icon: 'fa6-solid:bug',
       },
-      { title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: 'fa6-solid:rotate-right' },
       { title: 'Quarantine', path: '/ci-insights/quarantine', icon: 'fa-solid:radiation' },
-      { title: 'Runners', path: '/ci-insights/runners', icon: 'fa6-solid:server' },
       {
         title: 'CI Setup',
         icon: 'fa6-solid:gear',
