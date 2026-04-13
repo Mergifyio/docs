@@ -4,80 +4,103 @@ description: Report your test results from Vitest to CI Insights
 ---
 
 import vitestLogo from "../../../images/ci-insights/vitest/logo.svg"
-import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
-import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
-import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
-import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 
 <IntegrationLogo src={vitestLogo} alt="Vitest logo" />
 
-This guide shows how to configure [Vitest](https://vitest.dev/) to produce
-JUnit reports and upload them to CI Insights within a GitHub Actions workflow.
+This guide explains how to integrate [Vitest](https://vitest.dev/) with CI
+Insights using the `@mergifyio/vitest` reporter. Once installed, test results
+are automatically uploaded to CI Insights without any extra workflow changes.
 
-## Generate a JUnit Report with Vitest
+## Installation
 
-By default, Vitest doesn't generate JUnit-format test results. You need to
-enable it in your `vite.config.ts` or `vitest.config.ts`.
+You need to install the
+[`@mergifyio/vitest`](https://www.npmjs.com/package/@mergifyio/vitest) package
+to automatically upload your test results to **CI Insights**.
 
-This is [documenteded on vitest
-website](https://vitest.dev/guide/reporters#junit-reporter).
+### npm
 
-For example:
+```bash
+npm install --save-dev @mergifyio/vitest
+```
 
-```javascript
-export default defineConfig(({ mode }) => {
-  return {
-    test: {
-      reporters: ['default', 'junit'],
-      outputFile: './junit.xml',
-      includeConsoleOutput: true,
-    },
-  };
+### yarn
+
+```bash
+yarn add --dev @mergifyio/vitest
+```
+
+### pnpm
+
+```bash
+pnpm add --save-dev @mergifyio/vitest
+```
+
+## Configuration
+
+Add the Mergify reporter to your `vitest.config.ts` (or `vite.config.ts`):
+
+```typescript
+import { defineConfig } from 'vitest/config';
+import MergifyReporter from '@mergifyio/vitest';
+
+export default defineConfig({
+  test: {
+    reporters: ['default', new MergifyReporter()],
+  },
 });
 ```
 
-Key Options:
+The `'default'` reporter keeps the standard console output alongside the
+Mergify reporter.
 
-- `reporters: ['default', 'junit']`: Tells Vitest to generate JUnit reports
-  alongside the standard console output.
-
-- `outputFile: './junit.xml'`: Sets the path where Vitest writes the test
-  results (you can rename or relocate as you prefer).
-
-- `includeConsoleOutput: true`: Ensures console logs are captured in the final
-  report.
-
-## Update Your GitHub Actions Workflow
+## Modify Your Workflow
 
 <CIInsightsSetupNote />
 
-Once you have the JUnit file produced by Vitest, add a step to upload these
-results to **CI Insights** via the `mergifyio/gha-mergify-ci` action.
+Your workflow should run your tests as usual while exporting the secret
+`MERGIFY_TOKEN` as an environment variable. You'll need to add the following
+code to the GitHub Actions step running your tests:
 
-In the workflow file where vitest is launched, after running `npm run test` (or
-similar), include a step like:
+```yaml
+env:
+  MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+```
 
-<MergifyCIUploadStep reportPath="src/junit.xml" />
+For example:
 
-<MergifyCIUploadStepMatrix reportPath="src/junit.xml" />
+```yaml
+- name: Run Tests 🧪
+  env:
+    MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+  run: npm test
+```
 
-<GhaMergifyCiQuarantineSetup />
+The reporter automatically collects your test results and sends them to CI
+Insights.
 
-## Verify and Review in CI Insights
+Check the CI Insights dashboard afterward to view execution metrics, detect
+flaky tests, and gather actionable feedback.
 
-After pushing these changes:
+## Environment Variables
 
-1. Your GitHub Actions workflow will run tests with Vitest.
-2. Vitest generates junit.xml.
-3. The Mergify CI action uploads that file to CI Insights.
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `MERGIFY_TOKEN` | API authentication token | **Required** |
+| `MERGIFY_API_URL` | API endpoint location | `https://api.mergify.com` |
+| `VITEST_MERGIFY_ENABLE` | Force-enable outside CI | `false` |
+| `VITEST_MERGIFY_DEBUG` | Print spans to console | `false` |
+| `MERGIFY_TRACEPARENT` | W3C distributed trace context | Optional |
+| `MERGIFY_TEST_JOB_NAME` | Test job name identifier | Optional |
 
-You can then see your test results, including failures and flaky tests,
-directly in the CI Insights dashboard.
+:::tip
+  The reporter auto-activates in CI environments (detected via the `CI`
+  environment variable). To enable it outside CI, set
+  `VITEST_MERGIFY_ENABLE=true`.
+:::
 
-## Troubleshooting Tips
-
-<ul>
-  <CommonTroubleshootingTips />
-</ul>
+:::tip
+  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in CI Insights,
+  especially when running multiple test suites or using a matrix strategy.
+:::
