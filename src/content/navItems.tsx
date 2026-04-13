@@ -166,6 +166,11 @@ const navItems: NavItem[] = [
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: 'fa6-solid:stairs' },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: 'mdi:rocket-launch-outline' },
       {
+        title: 'GitHub Rulesets Compatibility',
+        path: '/merge-queue/github-rulesets',
+        icon: 'simple-icons:github',
+      },
+      {
         title: 'Browser Extensions',
         path: '/merge-queue/browser-extensions',
         icon: 'fa6-solid:puzzle-piece',

@@ -281,15 +281,13 @@ for an optimal setup:
 
 ### Branch Protection Settings
 
-Since pull requests are tested within temporary ones, the branch protection
-setting `Require branches to be up to date before merging` needs to be
-disabled. If your team requires a linear history, you can set the queue option
-`merge_method: rebase`.
+Batches require the branch protection setting *Require branches to be up to
+date before merging* to be disabled. If your team requires a linear history,
+you can set the queue option `merge_method: rebase`.
 
-This does not mean that Mergify will test outdated PRs, but it will merge the
-original pull requests once its parallel checks are finished. The original PR
-won't be up-to-date according to GitHub, which means using this setting would
-block the merge.
+For details on why and how to resolve this, see [GitHub Rulesets
+Compatibility: Require Branches to Be Up to
+Date](/merge-queue/github-rulesets#require-branches-to-be-up-to-date).
 
 ### Queued PR Changes
 
