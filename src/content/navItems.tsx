@@ -24,6 +24,7 @@ const navItems: NavItem[] = [
       },
       { title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: 'fa6-solid:rotate-right' },
       { title: 'Quarantine', path: '/ci-insights/quarantine', icon: 'fa-solid:radiation' },
+      { title: 'Runners', path: '/ci-insights/runners', icon: 'fa6-solid:server' },
       {
         title: 'CI Setup',
         icon: 'fa6-solid:gear',
