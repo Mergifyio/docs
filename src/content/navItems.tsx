@@ -26,7 +26,6 @@ const navItems: NavItem[] = [
         icon: 'fa6-solid:bug',
       },
       { title: 'Quarantine', path: '/ci-insights/quarantine', icon: 'fa-solid:radiation' },
-      { title: 'Runners', path: '/ci-insights/runners', icon: 'fa6-solid:server' },
       {
         title: 'CI Setup',
         icon: 'fa6-solid:gear',
