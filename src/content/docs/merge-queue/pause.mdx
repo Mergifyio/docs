@@ -46,6 +46,20 @@ the queue.
 
 <Image alt="Pause button is in the top right corner in Mergify's dashboard" src={screenshotButtonPause} />
 
+### Using the CLI
+
+Pause the queue from the terminal with an optional reason:
+
+```bash
+mergify queue pause --reason "deploying hotfix"
+```
+
+Resume when ready:
+
+```bash
+mergify queue unpause
+```
+
 ### Using the API
 
 You can also pause the merge queue programmatically using the [Mergify
