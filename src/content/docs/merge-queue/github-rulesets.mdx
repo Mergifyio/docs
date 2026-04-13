@@ -1,0 +1,162 @@
+---
+title: GitHub Rulesets Compatibility
+description: How Mergify interacts with GitHub branch protections and rulesets, including known incompatibilities and how to resolve them.
+---
+
+Mergify automatically detects [GitHub branch
+protections](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+and
+[rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+configured on your repository and injects them as merge conditions. This
+page explains how that injection works, which ruleset rule types are
+supported, which ones are incompatible with the merge queue, and how to
+resolve conflicts.
+
+## How Condition Injection Works
+
+When Mergify processes a pull request, it reads the branch protection and
+ruleset rules that apply to the target branch and converts them into
+[merge conditions](/configuration/conditions). For example, if you require at
+least one approved review, Mergify injects the condition
+`#approved-reviews-by >= 1`.
+
+This injection happens automatically for both the
+[`merge`](/workflow/actions/merge) action and the merge queue.
+
+### Controlling Injection
+
+You can control this behavior with the
+[`branch_protection_injection_mode`](/configuration/file-format/#queue-rules)
+option on your queue rules:
+
+- **`queue`** (default) -- rules are injected as required conditions for
+  both queuing and merging pull requests.
+
+- **`merge`** -- rules are injected as merge conditions, checked after the
+  queue has tested the pull request.
+
+- **`none`** -- no injection at all. This mode requires a
+  [`merge_bot_account`](/configuration/file-format/#queue-rules) with admin
+  rights. Use this only if you manage all conditions explicitly in your
+  Mergify configuration.
+
+### Bypass Actors and Injection
+
+If you are using GitHub rulesets (not classic branch protections), you can
+add Mergify as a **bypass actor** on the ruleset. The bypass mode determines
+whether injection still happens:
+
+- **`always` bypass mode** -- Mergify can bypass the rules, but it still
+  injects them as conditions in your queue.
+
+- **`exempt` bypass mode** -- Mergify skips injection entirely for that
+  ruleset. Use this when you want Mergify to ignore specific ruleset rules.
+
+## Ruleset Rule Compatibility
+
+Mergify handles each GitHub ruleset rule type as follows.
+
+| Ruleset rule type | Mergify behavior | Notes |
+|---|---|---|
+| `required_status_checks` | Injected as conditions | See [below](#require-branches-to-be-up-to-date) |
+| `pull_request` | Injected as conditions | Limited code owner support |
+| `required_deployments` | Used by [Merge Protections](/merge-protections) | -- |
+| `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
+| `creation` | Checked for draft PR creation | -- |
+| `update` | Checked for branch updates | -- |
+
+:::caution
+  Branch protection support has some limitations. For example, GitHub does
+  not provide an API to support [code
+  owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners),
+  which makes it unreliable in certain circumstances.
+:::
+
+## Known Incompatibilities
+
+### GitHub Native Merge Queue Rule
+
+If the `merge_queue` ruleset rule (GitHub's built-in merge queue) is enabled
+on the target branch and Mergify is **not** a bypass actor, GitHub blocks
+Mergify from merging pull requests -- all merges must go through GitHub's own
+queue.
+
+**Resolution:**
+
+- **Preferred:** disable the `merge_queue` ruleset rule on branches where you
+  use Mergify's merge queue.
+
+- **Alternative:** add Mergify as a bypass actor on that ruleset with the
+  `always` bypass mode. This lets Mergify merge directly while GitHub's queue
+  is still active for other actors.
+
+### Require Branches to Be Up to Date
+
+The `strict_required_status_checks_policy` setting (labeled *Require branches
+to be up to date before merging* in the GitHub UI) is incompatible with
+[parallel checks](/merge-queue/parallel-checks) and
+[batches](/merge-queue/batches).
+
+Mergify creates temporary batch pull requests to test combined changes. The
+original pull requests are merged after those checks pass, but GitHub
+considers them "not up to date" because they were not the branches that were
+tested. This setting blocks the merge.
+
+:::note
+  Disabling this setting does **not** mean Mergify tests outdated code.
+  Mergify always updates pull requests against the latest base branch before
+  testing.
+:::
+
+**Resolution:**
+
+- **Preferred:** disable the *Require branches to be up to date before
+  merging* setting.
+
+- **Alternative:** add Mergify as a bypass actor on the ruleset with `always`
+  bypass mode.
+
+### Review Requirements and Fast-Forward
+
+The `required_approving_review_count` and `require_code_owner_review` ruleset
+rules are incompatible with the [`fast-forward` merge
+method](/merge-queue/merge-strategies#fast-forward) when using batch-PR mode.
+
+In batch-PR mode, Mergify creates a temporary batch pull request that
+combines multiple PRs. This batch PR does not carry the review approvals
+from the original PRs, so GitHub blocks the fast-forward push if review
+requirements are enforced.
+
+**Resolution:**
+
+- Add Mergify as a bypass actor on the ruleset that enforces review
+  requirements, with `always` bypass mode.
+
+## Configuring Mergify as a Bypass Actor
+
+To add Mergify as a bypass actor on a GitHub ruleset:
+
+1. Go to your repository **Settings > Rules > Rulesets**.
+
+2. Select the ruleset you want to modify (or create a new one).
+
+3. Under **Bypass list**, click **Add bypass**.
+
+4. Search for the **Mergify** app and select it.
+
+5. Choose the bypass mode:
+
+   - **Always** -- Mergify can bypass the rules but still injects them as
+     merge conditions (recommended for most cases).
+
+   - **Exempt** -- Mergify bypasses the rules **and** skips injecting them
+     as conditions. Use this when you want Mergify to fully ignore specific
+     rules.
+
+6. Save the ruleset.
+
+:::tip
+  If you only want to exempt Mergify from specific rules (e.g.,
+  `merge_queue`) but still enforce others (e.g., `required_status_checks`),
+  create separate rulesets for each group and set different bypass modes.
+:::

@@ -118,6 +118,11 @@ const navItems: NavItem[] = [
     children: [
       { title: 'Overview', path: '/merge-queue', icon: 'fa6-regular:lightbulb' },
       { title: 'Setup', path: '/merge-queue/setup', icon: 'fa6-solid:gear' },
+      {
+        title: 'GitHub Rulesets',
+        path: '/merge-queue/github-rulesets',
+        icon: 'simple-icons:github',
+      },
       { title: 'Queue Rules', path: '/merge-queue/rules', icon: 'bi:stack' },
       {
         title: 'Merge Strategies',

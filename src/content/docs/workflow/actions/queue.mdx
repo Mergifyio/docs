@@ -33,3 +33,10 @@ pull_request_rules:
 In this example, any pull request that has the label `queue-me` will be
 automatically queued. The pull request still needs to match the
 `queue_conditions` defined in the queue to enter the queue.
+
+:::note
+  Mergify automatically injects your GitHub branch protection and ruleset
+  rules as queue conditions. If some ruleset rules are incompatible with your
+  queue setup, see [GitHub Rulesets
+  Compatibility](/merge-queue/github-rulesets) for resolution steps.
+:::
