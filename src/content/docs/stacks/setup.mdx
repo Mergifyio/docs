@@ -40,9 +40,36 @@ This installs:
 - A `pre-push` hook that warns you if you accidentally use `git push` instead
   of `mergify stack push`.
 
-- A [Claude Code](https://claude.ai/code) skill that teaches the AI
-  coding agent how to work with Mergify Stacks, so it automatically uses
-  `mergify stack push` instead of `git push`.
+## AI Agent Skills
+
+Mergify CLI provides AI skills that teach coding agents how to work with
+Stacks — so they automatically use `mergify stack push` instead of `git push`,
+amend commits instead of creating fixup commits, and follow stack conventions.
+
+### Install via npx (all agents)
+
+This works with [Claude Code](https://claude.ai/code),
+[Cursor](https://cursor.sh), and
+[many other AI agents](https://skills.sh):
+
+```bash
+npx skills add Mergifyio/mergify-cli
+```
+
+### Install as a Claude Code plugin
+
+From the official marketplace:
+
+```text
+/plugin install mergify@claude-plugins-official
+```
+
+Or from the repository:
+
+```text
+/plugin marketplace add Mergifyio/mergify-cli
+/plugin install mergify
+```
 
 ## Verify It Works
 
