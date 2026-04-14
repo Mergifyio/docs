@@ -1146,7 +1146,8 @@
                   "$ref": "#/components/schemas/RepositoryConfigurationSimulatorResponse"
                 },
                 "example": {
-                  "message": "The configuration is valid"
+                  "message": "The configuration is valid",
+                  "deprecations": []
                 }
               }
             }
@@ -6334,6 +6335,43 @@
           "delete_reason"
         ],
         "title": "DeleteScheduledFreezePayload"
+      },
+      "DeprecationInfo": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable deprecation reason"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date",
+            "title": "Deadline",
+            "description": "Date after which the deprecated configuration will be rejected"
+          },
+          "path_to_field": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path To Field",
+            "description": "Path to the deprecated field inside the configuration, or null when the deprecation is not tied to a specific field"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "deadline",
+          "path_to_field"
+        ],
+        "title": "DeprecationInfo"
       },
       "EnteredCountResponse": {
         "properties": {
@@ -11935,11 +11973,20 @@
             "type": "string",
             "title": "Message",
             "description": "The message of the Mergify check run simulation"
+          },
+          "deprecations": {
+            "items": {
+              "$ref": "#/components/schemas/DeprecationInfo"
+            },
+            "type": "array",
+            "title": "Deprecations",
+            "description": "Deprecation notices detected in the configuration"
           }
         },
         "type": "object",
         "required": [
-          "message"
+          "message",
+          "deprecations"
         ],
         "title": "RepositoryConfigurationSimulatorResponse"
       },
@@ -12254,12 +12301,21 @@
             "type": "string",
             "title": "Summary",
             "description": "The summary of the Mergify check run simulation"
+          },
+          "deprecations": {
+            "items": {
+              "$ref": "#/components/schemas/DeprecationInfo"
+            },
+            "type": "array",
+            "title": "Deprecations",
+            "description": "Deprecation notices detected in the configuration"
           }
         },
         "type": "object",
         "required": [
           "title",
-          "summary"
+          "summary",
+          "deprecations"
         ],
         "title": "SimulatorResponse"
       },
