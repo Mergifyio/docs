@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { APIRoute } from 'astro';
 import { allPages } from '~/content';
+import { mdxToMarkdown } from '~/util/mdxToMarkdown';
 
 type MarkdownSourceProps = {
   id: string;
@@ -36,6 +37,7 @@ export const GET: APIRoute = async ({ props }) => {
   const fsPath = path.join(process.cwd(), 'src', 'content', collection, id + '.mdx');
   try {
     let source = await readFile(fsPath, 'utf-8');
+    source = mdxToMarkdown(source);
     if (!source.endsWith('\n')) source += '\n';
     return new Response(source, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
   } catch {
