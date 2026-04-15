@@ -227,31 +227,8 @@ const navItems: NavItem[] = [
     icon: 'bi:gear',
     path: '/workflow',
     children: [
-      { title: 'Introducing Workflow Automation', path: '/workflow/', icon: 'bi:robot' },
-      {
-        title: 'Writing Your First Rule',
-        path: '/workflow/writing-your-first-rule',
-        icon: 'bi:rulers',
-      },
+      { title: 'Workflow Automation', path: '/workflow/', icon: 'bi:robot' },
       { title: 'Rule Syntax', path: '/workflow/rule-syntax', icon: 'bi:patch-question' },
-      {
-        title: 'Use Cases',
-        icon: 'bi:lightbulb',
-        children: [
-          { title: 'Automatic Merge', path: '/workflow/automerge', icon: 'octicon:git-merge-16' },
-          {
-            title: 'Request Reviews',
-            path: '/workflow/request-reviews',
-            icon: 'octicon:code-review-16',
-          },
-          {
-            title: 'Dismiss Reviews',
-            path: '/workflow/dismiss-reviews',
-            icon: 'tabler:message-x',
-          },
-          { title: 'Rebasing PRs', path: '/workflow/rebase', icon: 'tabler:git-branch' },
-        ],
-      },
       {
         title: 'Actions',
         icon: 'bi:rocket',
