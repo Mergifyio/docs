@@ -1,30 +1,31 @@
 ---
 title: Migrate from Bulldozer to Mergify
-description: Map Bulldozer configuration and behaviors to Mergify rules and merge queue.
+description: Move from Bulldozer automerge to Mergify's Merge Queue for safer, faster merges.
 ---
 
 [Bulldozer](https://github.com/palantir/bulldozer) focuses on automerging pull
-requests based on labels, reviews, and status checks. Mergify covers that and
-more, with a powerful rule engine and a production‑grade merge queue.
+requests based on labels, reviews, and status checks. Mergify's [Merge
+Queue](/merge-queue) covers that and more, with automatic PR updates,
+prioritization, batching, and parallel checks.
 
-This page shows a practical, minimal‑diff path to move from Bulldozer to
-Mergify.
+This page shows a practical path to move from Bulldozer to Mergify's Merge
+Queue.
 
 :::tip[Need help?]
 
-We’ve migrated many teams from Bulldozer. [Reach
-out](mailto:support@mergify.com) and we’ll review your Bulldozer configuration
+We've migrated many teams from Bulldozer. [Reach
+out](mailto:support@mergify.com) and we'll review your Bulldozer configuration
 and propose an equivalent Mergify setup.
 
 :::
 
 ## Typical Migration Plan
 
-1. Keep your labels and branch protections as‑is
-2. Translate Bulldozer settings to one or two Mergify rules
-3. Start with a dry‑run or low‑impact setup and expand gradually
+1. Keep your labels and branch protections as-is
+2. Set up a Mergify merge queue with conditions matching your Bulldozer config
+3. Start with a low-impact setup and expand gradually
 
-## Common Bulldozer config → Mergify
+## Common Bulldozer config → Mergify Merge Queue
 
 Example Bulldozer snippet:
 
@@ -38,59 +39,49 @@ merge:
     - "ci/circleci: ete-tests"
 ```
 
-Equivalent Mergify:
+Equivalent Mergify merge queue:
 
 ```yaml title=.mergify.yml
-pull_request_rules:
-  - name: Automerge when ready
-    conditions:
+queue_rules:
+  - name: default
+    merge_method: squash
+    autoqueue: true
+    queue_conditions:
+      - base = main
       - label = merge when ready
       - head ~= ^feature/
       - "check-success = ci/circleci: ete-tests"
-    actions:
-      merge:
-        method: squash
 ```
 
 Notes:
 - Checks map to `check-success = <name>` (or `check-skipped`, `check-neutral`)
 - Required labels map to `label = <name>` conditions
 - Approvals map to review count or specific reviewers
+- The merge queue keeps PRs updated automatically — no manual rebases needed
 
-## Enabling the Merge Queue (optional but recommended)
+## Going Further with Merge Queue
 
-If you rely on Bulldozer plus manual rebases to keep PRs up‑to‑date, [Mergify’s
-Merge Queue](/merge-queue) removes that toil — with even more optimizations.
+Once you have basic automerge working, you can take advantage of features
+Bulldozer doesn't offer:
 
-Add a queue rule and switch to queueing instead of immediate merge:
+- [Priorities](/merge-queue/priority) — urgent PRs jump ahead in the queue
 
-```yaml title=.mergify.yml
-queue_rules:
-  - name: default
-    autoqueue: true
-    queue_conditions:
-      - base = main
-      - check-success = ci
-```
+- [Batches](/merge-queue/batches) — merge multiple PRs at once to reduce CI
+  load
 
-- The queue keeps PRs updated and merges them only after passing on the latest
-  version of the base branch
-
-- You can set [priorities](/merge-queue/priority),
-  [batches](/merge-queue/batches), and [parallel
-  checks](/merge-queue/parallel-checks) later
+- [Parallel checks](/merge-queue/parallel-checks) — test multiple queue
+  entries simultaneously
 
 ## Feature parity quick table
 
-- Merge methods: squash/merge/rebase → supported
+- Merge methods: squash/merge/rebase → supported via `merge_method`
 
-- Delete branch after merge → [`delete_head_branch`
-  action](/workflow/actions/delete_head_branch)
+- Delete branch after merge → use GitHub's "Automatically delete head branches"
+  repository setting
 
-- Rebase/update before merge →
-  [`rebase`](/workflow/actions/rebase)/[`update`](/workflow/actions/update)
-  actions or merge queue `update_method`
+- Rebase/update before merge → automatic in merge queue
 
-- Require labels → conditions `label = `
+- Require labels → `label =` in `queue_conditions`
 
-- Restrict by authors/paths → conditions `author =`, `files ~=`, etc.
+- Restrict by authors/paths → `author =`, `files ~=`, etc. in
+  `queue_conditions`
