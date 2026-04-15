@@ -4,7 +4,6 @@ description: Rebase the pull request on top of its base branch.
 ---
 
 import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable'
-import Button from '../../../../components/Button.astro';
 
 The `rebase` action makes Mergify rebase the pull request on top of its base
 branch. This is useful when you want to ensure that your pull request is always
@@ -27,9 +26,3 @@ up-to-date with the latest changes from the base branch.
 ## Parameters
 
 <ActionOptionsTable def='RebaseActionModel'/>
-
-## Examples
-
-<Button colorScheme='teal' href="/workflow/rebase#automatically-rebasing-prs">
-  Read Rebase Use Cases
-</Button>
