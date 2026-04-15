@@ -102,7 +102,7 @@
     "dotenv": "^17.4.2",
     "jsonpointer": "^5.0.1",
     "react": "^19.0.0",
-    "react-dom": "^19.2.4",
+    "react-dom": "^19.2.5",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-format": "^5.0.1",
     "rehype-raw": "^7.0.0",
