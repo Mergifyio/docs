@@ -220,6 +220,15 @@ const navItems: NavItem[] = [
       { title: 'Updating Stacks', path: '/stacks/updating', icon: 'fa6-solid:pen-to-square' },
       { title: 'Reviewing Stacks', path: '/stacks/reviewing', icon: 'fa6-solid:magnifying-glass' },
       { title: 'Team Adoption', path: '/stacks/team', icon: 'fa6-solid:people-group' },
+      {
+        title: 'Compare Tools',
+        path: '/stacks/compare',
+        icon: 'fa6-solid:scale-balanced',
+        children: [
+          { title: 'Overview', path: '/stacks/compare', icon: 'fa6-regular:lightbulb' },
+          { title: 'vs gh-stack', path: '/stacks/compare/gh-stack', icon: 'simple-icons:github' },
+        ],
+      },
     ],
   },
   {
