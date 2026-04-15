@@ -84,13 +84,13 @@ function renderLinear(p: {
 
   const R = 18;
   const SPACING = 80;
-  const PAD_LEFT = 70;
   const COMMIT_Y = 32;
   const PR_Y = 100;
   const PR_H = 26;
   const PR_R = 6;
   const FONT = 11;
   const CHAR_W = 7;
+  const PAD_LEFT = Math.max(70, branch.length * CHAR_W + 40);
   const PR_PAD_X = 16;
   const ANNO_GAP = 16;
 
