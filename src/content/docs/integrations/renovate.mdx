@@ -17,17 +17,24 @@ submits automated pull requests.
 There are two primary ways to automate the merging of Renovate PRs with
 Mergify:
 
-### 1. Using the Merge Queue
+### 1. Using Auto-Merge
 
-You can set up a queue rule to automatically enqueue Renovate PRs into the
-merge queue using [`autoqueue`](/merge-queue/rules#autoqueueing-pull-requests).
+You can automatically merge Renovate PRs using
+[`auto_merge`](/merge-protections/auto-merge) in `merge_protections_settings`.
+When all merge protection `success_conditions` pass, the PR is automatically
+merged (or queued if the [merge queue](/merge-queue) is enabled).
 
 ```yaml
-queue_rules:
-  - name: default
-    autoqueue: true
-    queue_conditions:
+merge_protections_settings:
+  auto_merge: true
+
+merge_protections:
+  - name: renovate
+    if:
       - author = renovate[bot]
+    success_conditions:
+      # Replace "ci" with the name of your CI check
+      - check-success = ci
 ```
 
 ### 2. PR Approval
@@ -55,10 +62,19 @@ together, reducing CI load and ensuring compatibility.
 For example, you could set up a merge queue to batch those PRs 10 by 10:
 
 ```yaml
+merge_protections_settings:
+  auto_merge: true
+
+merge_protections:
+  - name: renovate
+    if:
+      - author = renovate[bot]
+    success_conditions:
+      # Replace "ci" with the name of your CI check
+      - check-success = ci
+
 queue_rules:
-  # If you have other queues defined, add this at the end so it is processed last
   - name: dep-update
-    autoqueue: true
     batch_size: 10
     # Wait for up to 30 minutes for the batch to fill up
     batch_max_wait_time: 30 min

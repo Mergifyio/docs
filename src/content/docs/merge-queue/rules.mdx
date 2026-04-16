@@ -25,8 +25,6 @@ With queue rules, you can:
 - Apply custom conditions for queuing and merging (labels, branch targets, CI
   checks, file paths, etc.).
 
-- Use autoqueue to automatically add matching PRs to the right queue.
-
 ## Configuring Queue Rules
 
 Multiple queue rules are defined under the `queue_rules` key in your
@@ -101,13 +99,30 @@ documentation](/merge-queue/lifecycle#lifecycle-of-a-pull-request-in-the-merge-q
 
 ## Auto‑Queueing Pull Requests
 
+:::caution
+  `autoqueue` is deprecated and will be removed on 2026-07-16.
+  Use [`auto_merge`](/merge-protections/auto-merge) in
+  `merge_protections_settings` instead.
+
+  To migrate, remove `autoqueue` from your queue rules and add
+  `auto_merge: true` to `merge_protections_settings`.
+  [Merge protections](/merge-protections/setup) must be enabled first.
+
+  Note that `auto_merge` is global — it applies to all queue rules.
+  If only some of your rules had `autoqueue: true`, review your
+  conditions to make sure this is the desired behavior.
+
+  `auto_merge` and `autoqueue` cannot coexist; Mergify raises a
+  configuration error if both are present.
+:::
+
 You can automatically enqueue pull requests that satisfy a queue rule's
 `queue_conditions` by setting the `autoqueue` flag to `true` (default is
 `false`). When `autoqueue: true` the pull request is added to the merge queue
 as soon as it matches `queue_conditions`. No pull request rule with a `queue`
 action or manual [`queue` command](/commands/queue) is required.
 
-This ensures PRs are enqueued consistently & immediately, reduing latency
+This ensures PRs are enqueued consistently & immediately, reducing latency
 between validation success and scheduling.
 
 Example:

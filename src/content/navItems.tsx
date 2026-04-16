@@ -198,6 +198,7 @@ const navItems: NavItem[] = [
     children: [
       { title: 'Overview', path: '/merge-protections', icon: 'fa6-regular:lightbulb' },
       { title: 'Setup', path: '/merge-protections/setup', icon: 'fa6-solid:gear' },
+      { title: 'Auto-Merge', path: '/merge-protections/auto-merge', icon: 'fa6-solid:bolt' },
       {
         title: 'Built‑in Protections',
         path: '/merge-protections/builtin',

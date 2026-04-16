@@ -59,18 +59,26 @@ allowing for a thorough review.
    file](/configuration/file-format) file in the repository root.
 
      ```yaml
-     queue_rules:
-       - name: default
-         autoqueue: true
-         merge_method: merge
-         queue_conditions:
+     merge_protections_settings:
+       auto_merge: true
+
+     merge_protections:
+       - name: snyk
+         if:
            - author = snyk-bot
            - base = main
+         success_conditions:
+           # Replace "ci" with the name of your CI check
+      - check-success = ci
+
+     queue_rules:
+       - name: default
+         merge_method: merge
      ```
 
-     This configuration uses [`autoqueue`](/merge-queue/rules#autoqueueing-pull-requests)
-     to automatically enqueue and merge Snyk PRs when they meet the defined
-     conditions.
+     This configuration uses [`auto_merge`](/merge-protections/auto-merge)
+     to automatically merge or queue Snyk PRs when they meet the defined
+     merge protection conditions.
 
 ## Batching Dependency Updates
 
@@ -83,10 +91,19 @@ ensuring compatibility.
 For example, you could set up a merge queue to batch those PRs 10 by 10:
 
 ```yaml
+merge_protections_settings:
+  auto_merge: true
+
+merge_protections:
+  - name: snyk
+    if:
+      - author = snyk-bot
+    success_conditions:
+      # Replace "ci" with the name of your CI check
+      - check-success = ci
+
 queue_rules:
-  # If you have other queue rules defined, add this at the end so it is processed last
   - name: dep-update
-    autoqueue: true
     batch_size: 10
     # Wait for up to 30 minutes for the batch to fill up
     batch_max_wait_time: 30 min
