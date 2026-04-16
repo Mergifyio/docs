@@ -602,6 +602,7 @@
         "summary": "Get the base refs in the repository",
         "description": "Retrieve a list of base refs branches affected by queue activity",
         "operationId": "get_queue_base_refs_repos__owner___repository__queues_branches_get",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
