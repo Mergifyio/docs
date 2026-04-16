@@ -94,7 +94,7 @@
     "@iconify/react": "^6.0.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@viz-js/viz": "^3.25.0",
+    "@viz-js/viz": "^3.26.0",
     "astro-icon": "^1.1.5",
     "canvas-confetti": "^1.9.4",
     "cheerio": "^1.2.0",
