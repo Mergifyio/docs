@@ -1,0 +1,210 @@
+---
+title: Mergify Stacks vs gh-stack
+description: An honest comparison of Mergify Stacks and GitHub's gh-stack CLI for stacked pull requests.
+---
+
+import GitGraph from '~/components/GitGraph.astro';
+import StackMapping from '~/components/StackMapping.astro';
+
+GitHub released [gh-stack](https://github.github.com/gh-stack/), a stacking
+extension for the `gh` CLI. Both tools solve the same problem (big PRs are hard
+to review, so split them into a chain of small ones), but they take different
+approaches to get there.
+
+## Two Models for Stacking
+
+The biggest difference is how each tool thinks about branches.
+
+| | Mergify Stacks | gh-stack |
+|---|---|---|
+| **Local model** | One branch, many commits | One branch per PR |
+| **Identity** | Change-Id trailer in commit message | Branch name |
+| **Who manages branches** | Mergify auto-creates remote branches | Developer creates and names them |
+| **Mental model** | "Chain of commits" | "Chain of dependent branches" |
+
+Both produce the same result on GitHub: chained PRs where each targets the
+previous one's branch. The difference is what you deal with locally.
+
+### Mergify Stacks: one branch, many commits
+
+You work on a single branch. Each commit maps to a PR automatically:
+
+<GitGraph
+  commits={["A", "B", "C"]}
+  commitColor="green"
+  branch="feat/auth"
+  prs={[
+    { label: "PR #1", commits: 0, annotation: "base: main" },
+    { label: "PR #2", commits: 1, annotation: "base: PR #1" },
+    { label: "PR #3", commits: 2, annotation: "base: PR #2" },
+  ]}
+/>
+
+Under the hood, `mergify stack push` creates a remote branch per commit and
+chains the PRs:
+
+<StackMapping entries={[
+  { commit: "A: add model", branch: "stack/.../Ia1b2c3", pr: "PR #1" },
+  { commit: "B: add endpoint", branch: "stack/.../Id4e5f6", pr: "PR #2" },
+  { commit: "C: add tests", branch: "stack/.../Ig7h8i9", pr: "PR #3" },
+]} />
+
+You never see or manage these remote branches. They're an implementation detail.
+
+### gh-stack: one branch per PR
+
+You create and name a separate branch for each change. Each branch becomes a PR
+that targets the branch below it:
+
+<GitGraph
+  nodes={[
+    { id: "m1", label: "M", color: "gray" },
+    { id: "m2", label: "", color: "gray" },
+    { id: "a1", label: "A", color: "green" },
+    { id: "a2", label: "A'", color: "green" },
+    { id: "a3", label: "", color: "green" },
+    { id: "b1", label: "B", color: "blue" },
+    { id: "b2", label: "", color: "blue" },
+    { id: "c1", label: "C", color: "amber" },
+    { id: "c2", label: "C'", color: "amber" },
+  ]}
+  edges={[
+    { from: "m1", to: "m2", label: "main" },
+    { from: "m2", to: "a1" },
+    { from: "a1", to: "a2" },
+    { from: "a2", to: "a3", label: "feat/model" },
+    { from: "a3", to: "b1" },
+    { from: "b1", to: "b2", label: "feat/endpoint" },
+    { from: "b2", to: "c1" },
+    { from: "c1", to: "c2", label: "feat/tests" },
+  ]}
+/>
+
+Three branches, three PRs: `feat/model` targets `main`, `feat/endpoint`
+targets `feat/model`, `feat/tests` targets `feat/endpoint`. You navigate
+between them with `gh stack up` and `gh stack down`.
+
+## Feature Comparison
+
+| Feature | Mergify Stacks | gh-stack |
+|---|---|---|
+| Create a stack | `mergify stack new` + commits | `gh stack init` + `gh stack add` per branch |
+| Push changes | `mergify stack push` | `gh stack push` |
+| Create PRs | Included in `mergify stack push` | Separate `gh stack submit` command |
+| View the stack | `mergify stack list` | `gh stack view` |
+| Edit mid-stack | `mergify stack edit` (interactive rebase) | Checkout the branch, edit, rebase |
+| Reorder changes | `mergify stack reorder` or `mergify stack move` | Manual rebase + `gh stack rebase` |
+| Squash changes | `mergify stack edit` (squash/fixup) | Manual |
+| Cascading rebase | Automatic on push | `gh stack rebase --upstack` / `--downstack` |
+| Sync after merge | `mergify stack sync` | `gh stack sync` |
+| Open PR in browser | `mergify stack open` (interactive picker) | Links from `gh stack view` |
+| Collaboration | `mergify stack checkout` | Difficult (force-push based) |
+| Draft PRs | `mergify stack push --draft` | `gh stack submit --draft` |
+| Merge Queue | [Native Mergify integration](/merge-queue) | GitHub's built-in merge queue |
+| Merge a stack | Bottom-up via Merge Queue | `gh stack merge` (not yet implemented) |
+| Stack visualization | Stack comment on each PR | Native GitHub UI stack map |
+| Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen or auto-numbered |
+| Navigate between PRs | N/A (single branch) | `gh stack up` / `down` / `top` / `bottom` |
+| Unstack | Not needed (standard Git branches) | `gh stack unstack` |
+| Atomic push | `--force-with-lease --atomic` (all-or-nothing) | `--force-with-lease --atomic` (all-or-nothing) |
+| Conflict memory | Git's native rerere | Built-in automatic rerere |
+| Pre-operation safety | Git reflog | Automatic branch snapshots before rebases |
+| Exit codes | Standard | Structured (8 specific codes) |
+
+## Where Mergify Is Stronger
+
+**Simpler workflow.** One branch, standard Git. You don't create branches or
+navigate between them. You commit and rebase like you already do. The branching
+complexity lives on the remote side where you don't have to think about it.
+
+**One command does more.** `mergify stack push` rebases on the target branch,
+pushes all changes, and creates or updates PRs in a single command. With
+gh-stack, pushing and creating PRs are separate steps (`push` then `submit`).
+
+**Merge Queue depth.** Mergify's Merge Queue has [batching](/merge-queue/batches),
+[priority lanes](/merge-queue/priority),
+[speculative checks](/merge-queue/parallel-checks), and
+[queue freeze](/merge-queue/pause). gh-stack relies on GitHub's built-in merge
+queue, which is more limited.
+
+**Collaboration support.** `mergify stack checkout` lets a teammate pick up
+your stack locally and push changes. `mergify stack sync` pulls remote changes
+back down, so commits made by bots or review suggestions are incorporated
+automatically. With gh-stack's force-push model, coordinating on the same stack
+is harder.
+
+**Merge works today.** Stacked PRs land through the Merge Queue as each
+dependency merges. gh-stack's `merge` command is listed in the docs but not
+yet implemented.
+
+## Where gh-stack Is Stronger
+
+**Native GitHub UI.** gh-stack gets a stack map rendered directly in the PR
+interface. Mergify posts a stack comment on each PR, which works well but is
+a comment rather than a native UI element.
+
+## Other Considerations
+
+**Platform lock-in.** gh-stack is GitHub-only by design. Mergify's stacking
+workflow also targets GitHub today, but the architecture isn't tied to a single
+platform.
+
+**Distribution.** gh-stack ships as a `gh` CLI extension and will likely get
+deeper GitHub integration over time. Mergify CLI is a standalone install
+(`uv tool install mergify-cli`).
+
+**Pricing.** Both are free. Mergify Stacks is a standalone CLI that doesn't
+require a Mergify subscription.
+
+## Switching from gh-stack
+
+If you've been using gh-stack and want to try Mergify Stacks, the migration is
+straightforward. The main shift is moving from "one branch per PR" to "one
+commit per PR on a single branch."
+
+### Install and setup
+
+```bash
+uv tool install mergify-cli
+mergify stack setup
+```
+
+This installs the CLI and adds a `commit-msg` hook that generates
+[Change-Ids](/stacks/concepts#change-id) for your commits. See the
+[setup guide](/stacks/setup) for details.
+
+### Concept mapping
+
+| gh-stack | Mergify Stacks |
+|---|---|
+| `gh stack init` | `mergify stack new` |
+| `gh stack add` (create a branch) | `git commit` (create a commit) |
+| `gh stack push` + `gh stack submit` | `mergify stack push` |
+| `gh stack up` / `down` | Not needed (single branch) |
+| `gh stack rebase` | Automatic on `mergify stack push` |
+| `gh stack sync` | `mergify stack sync` |
+| `gh stack view` | `mergify stack list` |
+
+### Workflow before and after
+
+**With gh-stack:**
+
+```bash
+gh stack init
+# work on first change
+gh stack add
+# work on second change
+gh stack push
+gh stack submit
+```
+
+**With Mergify Stacks:**
+
+```bash
+mergify stack new
+git commit -m "first change"
+git commit -m "second change"
+mergify stack push
+```
+
+The result on GitHub is the same: two chained PRs, each showing one change.
