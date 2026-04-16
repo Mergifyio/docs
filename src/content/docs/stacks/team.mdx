@@ -81,17 +81,7 @@ queue, and so on, without manual coordination.
 
 ## Comparing with Alternatives
 
-Several tools offer stacked PRs. Here's how Mergify Stacks compares:
-
-| | Mergify Stacks | Graphite | ghstack | spr |
-|---|---|---|---|---|
-| **Workflow** | Standard Git | Custom CLI | Standard Git | Standard Git |
-| **Branch model** | One local branch | Managed branches | Managed branches | Managed branches |
-| **GitHub integration** | PR chaining + deps | PR chaining + dashboard | PR chaining | PR chaining |
-| **Merge queue** | [Built-in](/merge-queue) | Separate | None | None |
-| **Pricing** | Included with Mergify | Separate subscription | Open source | Open source |
-| **Setup** | CLI + one command | CLI + account setup | CLI install | CLI install |
-
-Mergify Stacks uses standard Git. You don't learn new commands for committing
-or managing branches. You use `git commit`, `git rebase`, and
-`git commit --amend` like you always have. Stacks handles the GitHub side.
+Several tools offer stacked PRs, each with different trade-offs around workflow
+complexity, branch management, platform integration, and collaboration support.
+See the [detailed comparisons](/stacks/compare) for an honest look at how
+Mergify Stacks measures up against alternatives, starting with gh-stack.

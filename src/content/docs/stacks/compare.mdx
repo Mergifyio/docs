@@ -1,0 +1,18 @@
+---
+title: Compare Stacking Tools
+description: Honest comparisons between Mergify Stacks and other stacked PR tools.
+---
+
+import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
+import Docset from '~/components/DocsetGrid/Docset.astro';
+
+Choosing a stacking tool matters. Each one makes different trade-offs around
+workflow complexity, Git model, platform integration, and collaboration support.
+These pages give you an honest look at how Mergify Stacks compares so you can
+pick what fits your team.
+
+<DocsetGrid>
+  <Docset title="gh-stack (GitHub)" path="/stacks/compare/gh-stack" icon="simple-icons:github">
+    GitHub's native stacking CLI. Multi-branch model with GitHub UI integration.
+  </Docset>
+</DocsetGrid>
