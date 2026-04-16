@@ -63,13 +63,16 @@ Make sure those dependencies are installed when running your tests.
 poetry add --group dev pytest-mergify
 ```
 
-## Modify Your Workflow
+## Update Your CI Workflow
 
 <CIInsightsSetupNote />
 
 Your workflow should run your tests as usual while exporting the secret
-`MERGIFY_TOKEN` as an environment variable. You’ll need to add the following
-code to the GitHub Actions step running your tests:
+`MERGIFY_TOKEN` as an environment variable.
+
+### GitHub Actions
+
+Add the following to the GitHub Actions step running your tests:
 
 ```yaml
 env:
@@ -85,10 +88,22 @@ For example:
   run: pytest
 ```
 
+### Buildkite
+
+Set `MERGIFY_TOKEN` as an environment variable in your pipeline step:
+
+```yaml
+steps:
+  - label: "Run Tests 🧪"
+    command: pytest
+    env:
+      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
+```
+
 The plugin collects your test results and sends them to CI Insights.
 
 Check the CI Insights dashboard afterward to view execution metrics, detect
-flaky tests, and gather actionable feedback.
+flaky tests, and review test trends.
 
 ## Using with Tox
 
@@ -96,13 +111,23 @@ If you’re using [Tox](https://tox.wiki/) to manage test environments, you can
 still use `pytest-mergify` by passing the `MERGIFY_TOKEN` and the rest of the
 CI environment variable into the test environment.
 
-In your GitHub Actions workflow:
+In your CI workflow:
 
 ```yaml
+# GitHub Actions
 - name: Run Tox Tests
   env:
     MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
   run: tox
+```
+
+```yaml
+# Buildkite
+steps:
+  - label: "Run Tox Tests"
+    command: tox
+    env:
+      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
 ```
 
 In your `tox.ini`, make sure the plugin is included in your testenv dependencies:
@@ -124,14 +149,29 @@ If you’re running multiple Tox environments (e.g., py38, py39, etc.), we
 recommend setting the `MERGIFY_TEST_JOB_NAME` environment variable to identify each
 environment’s report in CI Insights:
 
-In your GitHub Actions workflow:
+In your CI workflow:
 
 ```yaml
+# GitHub Actions
 - name: Run Tox Tests
   env:
     MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
     MERGIFY_TEST_JOB_NAME: tox-${{ matrix.python-version }}
   run: tox
+```
+
+```yaml
+# Buildkite
+steps:
+  - label: "Run Tox Tests ({{matrix}})"
+    command: tox
+    matrix:
+      - "3.10"
+      - "3.11"
+      - "3.12"
+    env:
+      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
+      MERGIFY_TEST_JOB_NAME: "tox-{{matrix}}"
 ```
 
 :::tip

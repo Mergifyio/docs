@@ -8,9 +8,12 @@ import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
+import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
+import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
+import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 
 This guide shows how to generate JUnit reports from your TestNG tests and upload
-them to **CI Insights** using a GitHub Actions workflow.
+them to **CI Insights** using your CI workflow.
 
 ## Generate a JUnit Report with TestNG
 
@@ -77,7 +80,9 @@ You can also run TestNG directly with JUnit listener:
 java -cp "your-classpath" org.testng.TestNG -listener org.testng.reporters.JUnitReportReporter testng.xml
 ```
 
-## Update Your GitHub Actions Workflow
+## Update Your CI Workflow
+
+### GitHub Actions
 
 <CIInsightsSetupNote />
 
@@ -106,6 +111,20 @@ For Gradle projects:
 <MergifyCIUploadStepMatrix reportPath="build/test-results/test/*.xml" />
 
 <GhaMergifyCiQuarantineSetup />
+
+### Buildkite
+
+For Maven projects:
+
+<BuildkiteCIUploadStep reportPath="target/surefire-reports/*.xml" />
+<BuildkiteCIUploadStepMatrix reportPath="target/surefire-reports/*.xml" />
+
+For Gradle projects:
+
+<BuildkiteCIUploadStep reportPath="build/test-results/test/*.xml" />
+<BuildkiteCIUploadStepMatrix reportPath="build/test-results/test/*.xml" />
+
+<BuildkiteCIQuarantineSetup />
 
 ## Verify and Review in CI Insights
 
