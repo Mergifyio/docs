@@ -58,18 +58,28 @@ npx skills add Mergifyio/mergify-cli
 
 ### Install as a Claude Code plugin
 
-From the official marketplace:
-
-```text
-/plugin install mergify@claude-plugins-official
-```
-
-Or from the repository:
+Add the marketplace, then install the Stacks plugin:
 
 ```text
 /plugin marketplace add Mergifyio/mergify-cli
-/plugin install mergify
+/plugin install mergify-stack@mergify
+/reload-plugins
 ```
+
+Or run `/plugin` on its own and use the **Marketplaces** tab to add
+`Mergifyio/mergify-cli`, then pick `mergify-stack` from **Discover**.
+
+:::tip
+  The same marketplace ships plugins for other Mergify features —
+  merge queue, CI insights, config validation, and scheduled freezes.
+  Open `/plugin` and browse **Discover** to pick the ones you want.
+:::
+
+:::tip
+  Third-party marketplaces don't auto-update by default. Open `/plugin`,
+  go to **Marketplaces**, select **mergify**, and choose **Enable
+  auto-update** to receive new skills and fixes as we ship them.
+:::
 
 ## Verify It Works
 
