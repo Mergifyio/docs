@@ -1,0 +1,64 @@
+---
+title: Stacks for AI Agents
+description: One-page bootstrap for AI coding agents — install the Mergify CLI and the Stacks skill.
+---
+
+You are an AI coding agent. Follow these three steps to enable stacked pull
+request support. After step 2, your skill system will contain the full Stacks
+workflow — consult it for any stack-related task.
+
+## 1. Install the Mergify CLI
+
+Install `mergify-cli` with `uv` (preferred) or `pipx`:
+
+```bash
+uv tool install mergify-cli
+```
+
+```bash
+pipx install mergify-cli
+```
+
+Verify:
+
+```bash
+mergify --version
+```
+
+## 2. Install the Stacks skill
+
+Pick the command that matches your runtime.
+
+**Claude Code:**
+
+```text
+/plugin marketplace add Mergifyio/mergify-cli
+/plugin install mergify-stack@mergify
+/reload-plugins
+```
+
+**Any agent supporting [skills.sh](https://skills.sh) (Cursor, Cline, and others):**
+
+```bash
+npx skills add Mergifyio/mergify-cli
+```
+
+The skill contains the full Stacks workflow — commands, rules, and common
+scenarios. Load it before performing any stack work.
+
+## 3. Initialize the repository
+
+Run in the repository root:
+
+```bash
+mergify stack setup
+```
+
+This installs a `commit-msg` Git hook that generates a `Change-Id` for every
+new commit, and a `pre-push` hook that warns if `git push` is used instead of
+`mergify stack push`.
+
+## You are ready
+
+The skill installed in step 2 contains the workflow. Follow it for any
+stack-related task.
