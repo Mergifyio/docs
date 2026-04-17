@@ -41,9 +41,19 @@ merge_protections_settings:
     reporting_method: check-runs  # or deployments
     # Post a comment with details about required rules
     post_comment: true
+    # Automatically merge or queue PRs when all protections pass
+    auto_merge: true
 ```
 
 Choose the method that best fits your integration and compliance needs.
+
+### Auto-Merge
+
+The `auto_merge` option automatically merges or queues pull requests when all
+merge protection `success_conditions` pass. It is disabled by default.
+
+See [Auto-Merge](/merge-protections/auto-merge) for the full behavior
+reference and configuration examples.
 
 ## Make the Check Required
 
