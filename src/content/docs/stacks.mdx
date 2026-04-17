@@ -12,9 +12,14 @@ AI can write 1,000 lines of code in minutes, but nobody wants to review a
 1,000-line pull request. Reviewers skim instead of reading, bugs slip through,
 and merges stall for days.
 
-<Button variant="primary" href="/stacks/setup" target="_self">
-  Get Started →
-</Button>
+<div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+  <Button variant="primary" href="/stacks/setup" target="_self">
+    Get Started →
+  </Button>
+  <Button variant="secondary" href="/stacks/agents" target="_self">
+    Give your agent this link →
+  </Button>
+</div>
 
 ## The Problem: One Branch = One PR
 
@@ -57,9 +62,20 @@ reviewers see the logical progression of your work.
 - Automatic PR chaining with dependency tracking
 - Smart updates that only touch PRs that changed
 - Standard Git, no new commands to learn
+- Ships with skills for Claude Code, Cursor, and any agent supporting [skills.sh](https://skills.sh)
 - Complements [Merge Queue](/merge-queue) for safe, fast landing
 
 ## Get Started in 30 Seconds
+
+**For your AI agent** — share this URL:
+
+```text
+https://docs.mergify.com/stacks/agents
+```
+
+Your agent installs the CLI and skill itself, then you prompt it as usual.
+
+**For yourself:**
 
 ```bash
 uv tool install mergify-cli
@@ -67,12 +83,15 @@ mergify stack setup
 mergify stack push
 ```
 
-Three commands to go from a branch with commits to a stack of reviewable PRs on
-GitHub. See the [setup guide](/stacks/setup) for details.
+See the [setup guide](/stacks/setup) for the full walkthrough.
 
 ## Learn More
 
 <DocsetGrid>
+  <Docset title="For AI Agents" path="/stacks/agents" icon="fa6-solid:robot">
+    A single URL to hand your AI coding agent so it installs the CLI and the
+    Stacks skill itself.
+  </Docset>
   <Docset title="Concepts" path="/stacks/concepts" icon="fa6-solid:diagram-project">
     How stacks work under the hood: Change-Ids, branch mapping, and PR chaining.
   </Docset>
