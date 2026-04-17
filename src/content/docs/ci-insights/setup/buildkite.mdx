@@ -4,6 +4,7 @@ description: Enable Mergify CI Insights and configure flaky test detection using
 ---
 
 import { Image } from "astro:assets"
+import BuildkiteWebhookNotification from "../../../images/ci-insights/buildkite-webhook-notification.png"
 import JobsScreenshot from "../../../images/ci-insights/jobs.png"
 
 This page explains how to enable CI Insights for a repository using Buildkite
@@ -15,15 +16,49 @@ and how to configure repeated test executions for flaky test detection.
    page](https://dashboard.mergify.com/integrations/github)
    ([docs](/integrations/github)).
 
-2. To upload your test results, you'll need to [configure your
-   test](#test-framework-configuration). Before doing so, create an application
-   key with `ci` scope as described in the [API Usage documentation](/api/usage)
-   and set it as `MERGIFY_CI_TOKEN` in your Buildkite pipeline environment
-   variables.
+2. Create an application key with `ci` scope as described in the [API Usage
+   documentation](/api/usage). This key will be used both for the webhook
+   authentication and for uploading test reports.
 
-   This key will be used to upload test reports.
+3. Configure a webhook in Buildkite to send build and job events to Mergify.
+   Go to your Buildkite **Organization Settings** → **Integrations** →
+   **Notification Services** and add a new **Webhook** notification with the
+   following settings:
 
-3. Click on `CI Insights` in the Mergify dashboard navigation.
+   - **Webhook URL**: set it to:
+
+     ```text
+     https://api.mergify.com/v1/ci/<org>/repositories/<repo>/buildkite/webhooks
+     ```
+
+     Replace `<org>` with your Mergify organization name and `<repo>` with
+     your repository name.
+
+   - **Token**: paste your Mergify application key and select
+     **Send the token as X-Buildkite-Token**.
+
+   - **Events**: enable the following events:
+
+     | Event | Description |
+     |-------|-------------|
+     | `ping` | Webhook notification settings have changed |
+     | `build.scheduled` | A build has been scheduled |
+     | `build.running` | A build has started running |
+     | `build.failing` | A build has started failing |
+     | `build.finished` | A build has finished |
+     | `build.skipped` | A build has been skipped |
+     | `job.scheduled` | A job has been scheduled |
+     | `job.started` | A command step job has started running on an agent |
+     | `job.finished` | A job has finished |
+     | `job.activated` | A block step job has been unblocked |
+
+   <Image src={BuildkiteWebhookNotification} alt="Buildkite Webhook Notification configuration" />
+
+4. Set the application key as `MERGIFY_TOKEN` in your Buildkite pipeline
+   environment variables. This will be used by the Buildkite plugin to upload
+   test reports.
+
+5. Click on `CI Insights` in the Mergify dashboard navigation.
    You should start seeing your Buildkite job runs appear:
 
    <Image src={JobsScreenshot} alt="CI Insights Jobs" />
@@ -41,7 +76,7 @@ steps:
       - mergifyio/mergify-ci#v1:
           action: junit-process
           report_path: "reports/*.xml"
-          token: "${MERGIFY_CI_TOKEN}"
+          token: "${MERGIFY_TOKEN}"
 ```
 
 The plugin runs in the `post-command` hook, so your test command executes first,
@@ -63,7 +98,7 @@ Before setting up flaky test detection, ensure you have:
 
 1. Enabled [CI Insights](#enabling-ci-insights-for-buildkite) for your repository
 
-2. Created an application key with `ci` scope and set it as `MERGIFY_CI_TOKEN`
+2. Created an application key with `ci` scope and set it as `MERGIFY_TOKEN`
    in your Buildkite pipeline environment variables
 
 3. Configured test integration for your test framework
@@ -92,7 +127,7 @@ steps:
       - mergifyio/mergify-ci#v1:
           action: junit-process
           report_path: "reports/*.xml"
-          token: "${MERGIFY_CI_TOKEN}"
+          token: "${MERGIFY_TOKEN}"
 ```
 
 Configure a schedule in your Buildkite pipeline settings to run this
