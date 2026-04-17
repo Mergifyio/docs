@@ -1,0 +1,34 @@
+---
+import { Code } from 'astro:components';
+
+export interface Props {
+  reportPath: string;
+}
+const { reportPath } = Astro.props;
+---
+
+<Code
+	code={`steps:
+  - label: "Run tests"
+    command: <your test command>
+    plugins:
+      - mergifyio/mergify-ci#v1:
+          action: junit-process
+          report_path: ${reportPath}
+          token: "\${MERGIFY_CI_TOKEN}"`}
+	lang="yaml"
+	theme="slack-ochin"
+/>
+<p>Key Points:</p>
+<ul>
+	<li>
+		The plugin runs in the <code>post-command</code> hook, so it uploads results <strong>after</strong> your tests finish — even if they fail.
+	</li>
+	<li>
+		<Code code={`report_path: ${reportPath}`} inline lang="yaml" theme="slack-ochin" />: Points to
+		where your JUnit file is located. Make sure it matches the path you set in your test configuration.
+	</li>
+	<li>
+		Silent failure detection is automatic — the plugin reads the step's exit code to detect cases where the test runner crashed but the JUnit report appears clean.
+	</li>
+</ul>

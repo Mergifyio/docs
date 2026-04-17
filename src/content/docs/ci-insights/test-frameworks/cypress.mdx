@@ -10,11 +10,14 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 import CommonTroubleshootingTips from './_common-troubleshooting-tips.mdx'
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
+import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
+import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
+import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 
 <IntegrationLogo src={cypressLogo} alt="Cypress logo" />
 
 This guide shows how to configure [Cypress](https://www.cypress.io/) to produce
-JUnit reports and upload them to CI Insights within a GitHub Actions workflow.
+JUnit reports and upload them to CI Insights using your CI workflow.
 
 ## Generate a JUnit Report with Cypress
 
@@ -41,7 +44,9 @@ both have JUnit generated while keeping the standard output.
    }
    ```
 
-## Update Your GitHub Actions Workflow
+## Update Your CI Workflow
+
+### GitHub Actions
 
 <CIInsightsSetupNote />
 
@@ -55,6 +60,13 @@ test:cypress` (or similar), include a step like:
 <MergifyCIUploadStepMatrix reportPath="cypress/results/junit*.xml" />
 
 <GhaMergifyCiQuarantineSetup />
+
+### Buildkite
+
+<BuildkiteCIUploadStep reportPath="cypress/results/junit*.xml" />
+<BuildkiteCIUploadStepMatrix reportPath="cypress/results/junit*.xml" />
+
+<BuildkiteCIQuarantineSetup />
 
 ## Verify and Review in CI Insights
 
