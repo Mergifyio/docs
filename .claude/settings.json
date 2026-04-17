@@ -14,6 +14,18 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "agent",
+            "if": "Bash(git commit*)",
+            "timeout": 600,
+            "statusMessage": "Proofreading staged MDX docs...",
+            "prompt": "You are a pre-commit proofreading gate for the Mergify docs repository. A `git commit` is about to run — you decide whether to let it proceed.\n\nHook input: $ARGUMENTS\n\nSteps:\n\n1. Run `git diff --cached --numstat -- src/content/docs/` to inspect staged MDX doc changes.\n\n2. Compute the total line churn across all staged `*.mdx` files under `src/content/docs/` by summing the `added` and `deleted` columns from the `git diff --cached --numstat` output. If that total is fewer than 10, OR the only staged changes are to frontmatter / code blocks (no prose diff), skip proofreading. In that case, output exactly this JSON and stop:\n   {\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"allow\"}}\n\n3. Otherwise, capture the staged diff with `git diff --cached -- src/content/docs/` and the list of changed MDX file paths.\n\n4. In a single message, dispatch 4 sub-agents in parallel using the Agent tool (subagent_type: general-purpose), one per skill — proofread-style, proofread-technical, proofread-structure, proofread-consistency. Each sub-agent prompt must say: \"Read the {skill} skill using the Skill tool, then follow its instructions. Review only the changed/added lines in this diff: {diff}. Changed files: {file paths}. Fix issues directly in the files. Report what you changed. Note FOLLOW-UP items for unchanged content without editing them.\"\n\n5. After all 4 sub-agents complete, run `git status --porcelain -- src/content/docs/` to check whether any file was modified on disk by the sub-agents.\n\n6. If ANY file was modified, output JSON in exactly this shape and stop. Keep every field and key identical, but replace the `<brief one-paragraph summary of what the 4 subagents changed>` placeholder inside `permissionDecisionReason` with a real short summary of the sub-agents' edits:\n   {\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"deny\", \"permissionDecisionReason\": \"Proofreading made edits to staged docs. Review the changes, stage them, and commit again. Summary of fixes: <brief one-paragraph summary of what the 4 subagents changed>\"}, \"systemMessage\": \"Proofreaders modified files — review and re-stage before re-committing.\"}\n\n7. If NO file was modified, output exactly this JSON:\n   {\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"allow\"}, \"systemMessage\": \"Docs proofreading passed — no issues found.\"}\n\nRules: do not edit files yourself — only sub-agents do. Do not run lint/format/build. Do not amend the commit or stage files. Stay strictly within proofreading."
+          }
+        ]
       }
     ],
     "PostToolUse": [
