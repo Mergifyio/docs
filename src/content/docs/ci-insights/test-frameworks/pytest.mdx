@@ -97,7 +97,7 @@ steps:
   - label: "Run Tests 🧪"
     command: pytest
     env:
-      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
+      MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
 
 The plugin collects your test results and sends them to CI Insights.
@@ -127,7 +127,7 @@ steps:
   - label: "Run Tox Tests"
     command: tox
     env:
-      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
+      MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
 
 In your `tox.ini`, make sure the plugin is included in your testenv dependencies:
@@ -170,7 +170,7 @@ steps:
       - "3.11"
       - "3.12"
     env:
-      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
+      MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
       MERGIFY_TEST_JOB_NAME: "tox-{{matrix}}"
 ```
 
