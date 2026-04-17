@@ -43,13 +43,16 @@ Alternatively, install it directly:
 gem install rspec-mergify
 ```
 
-## Modify Your Workflow
+## Update Your CI Workflow
 
 <CIInsightsSetupNote />
 
 Your workflow should run your tests as usual while exporting the secret
-`MERGIFY_TOKEN` as an environment variable. You'll need to add the following
-code to the GitHub Actions step running your tests:
+`MERGIFY_TOKEN` as an environment variable.
+
+### GitHub Actions
+
+Add the following to the GitHub Actions step running your tests:
 
 ```yaml
 env:
@@ -65,10 +68,22 @@ For example:
   run: bundle exec rspec
 ```
 
+### Buildkite
+
+Set `MERGIFY_TOKEN` as an environment variable in your pipeline step:
+
+```yaml
+steps:
+  - label: "Run RSpec Tests 🧪"
+    command: bundle exec rspec
+    env:
+      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
+```
+
 The gem automatically collects your test results and sends them to CI Insights.
 
 Check the CI Insights dashboard afterward to view execution metrics, detect
-flaky tests, and gather actionable feedback.
+flaky tests, and review test trends.
 
 ## Environment Variables
 
