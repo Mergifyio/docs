@@ -14,6 +14,7 @@ priority_rules:
     conditions:
       - label = hotfix
 
+    allow_checks_interruption: true
   - name: automated updates
     priority: low
     conditions:
