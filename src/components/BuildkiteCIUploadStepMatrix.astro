@@ -26,7 +26,7 @@ const { reportPath } = Astro.props;
           action: junit-process
           job_name: "Tests ({{matrix}})"
           report_path: ${reportPath}
-          token: "\${MERGIFY_CI_TOKEN}"`}
+          token: "\${MERGIFY_TOKEN}"`}
 	lang="yaml"
 	theme="slack-ochin"
 />
