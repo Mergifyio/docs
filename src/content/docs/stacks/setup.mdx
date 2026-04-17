@@ -6,23 +6,72 @@ description: Install Mergify CLI and configure your repository for stacked PRs.
 import { Image } from 'astro:assets';
 import deleteHeadBranches from '../../images/github-delete-head-branches.png';
 
-## Prerequisites
+## 1. Install the Mergify CLI
 
-1. **Install the Mergify CLI**, see the [CLI installation guide](/cli) for
-   instructions.
+See the [CLI installation guide](/cli) for full instructions.
 
-2. **GitHub authentication**: Stacks needs access to create PRs. Either:
-   - Set the `GITHUB_TOKEN` environment variable, or
-   - Install the [GitHub CLI](https://cli.github.com/) and run `gh auth login`
+Quick install:
 
-3. **Enable "[Automatically delete head branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)"**
-   in your GitHub repository settings (Settings > General > Pull Requests).
-   When a stacked PR merges, this cleans up its remote branch automatically
-   so the next PR in the chain can rebase onto `main` cleanly.
+```bash
+uv tool install mergify-cli
+```
+
+## 2. Install skills for your AI agent
+
+Mergify ships skills that teach AI coding agents how to work with Stacks — so
+they run `mergify stack push` instead of `git push`, amend commits instead of
+creating fixups, and follow stack conventions automatically.
+
+**Claude Code:**
+
+```text
+/plugin marketplace add Mergifyio/mergify-cli
+/plugin install mergify-stack@mergify
+/reload-plugins
+```
+
+Or run `/plugin` on its own and use the **Marketplaces** tab to add
+`Mergifyio/mergify-cli`, then pick `mergify-stack` from **Discover**.
+
+**Any agent supporting [skills.sh](https://skills.sh)** — Cursor, Cline, and
+others:
+
+```bash
+npx skills add Mergifyio/mergify-cli
+```
+
+:::tip
+  Prefer to hand a single URL to your agent? Point it at
+  [docs.mergify.com/stacks/agents](/stacks/agents) — the page walks the agent
+  through installing the CLI and skill itself.
+:::
+
+:::tip
+  The same marketplace ships plugins for other Mergify features — merge queue,
+  CI insights, config validation, and scheduled freezes. Open `/plugin` and
+  browse **Discover** to pick the ones you want.
+:::
+
+:::tip
+  Third-party marketplaces don't auto-update by default. Open `/plugin`, go to
+  **Marketplaces**, select **mergify**, and choose **Enable auto-update** to
+  receive new skills and fixes as we ship them.
+:::
+
+## 3. Configure GitHub
+
+Stacks needs access to create PRs. Set the `GITHUB_TOKEN` environment
+variable, or install the [GitHub CLI](https://cli.github.com/) and run
+`gh auth login`.
+
+Enable "[Automatically delete head branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)"
+in your GitHub repository settings (Settings > General > Pull Requests). When
+a stacked PR merges, this cleans up its remote branch automatically so the
+next PR in the chain can rebase onto `main` cleanly.
 
 <Image src={deleteHeadBranches} alt="GitHub setting: Automatically delete head branches" style={{ maxWidth: '66%' }} />
 
-## Initialize Your Repository
+## 4. Initialize your repository
 
 Run the setup command in your Git repository:
 
@@ -39,47 +88,6 @@ This installs:
 
 - A `pre-push` hook that warns you if you accidentally use `git push` instead
   of `mergify stack push`.
-
-## AI Agent Skills
-
-Mergify CLI provides AI skills that teach coding agents how to work with
-Stacks — so they automatically use `mergify stack push` instead of `git push`,
-amend commits instead of creating fixup commits, and follow stack conventions.
-
-### Install via npx (all agents)
-
-This works with [Claude Code](https://claude.ai/code),
-[Cursor](https://cursor.sh), and
-[many other AI agents](https://skills.sh):
-
-```bash
-npx skills add Mergifyio/mergify-cli
-```
-
-### Install as a Claude Code plugin
-
-Add the marketplace, then install the Stacks plugin:
-
-```text
-/plugin marketplace add Mergifyio/mergify-cli
-/plugin install mergify-stack@mergify
-/reload-plugins
-```
-
-Or run `/plugin` on its own and use the **Marketplaces** tab to add
-`Mergifyio/mergify-cli`, then pick `mergify-stack` from **Discover**.
-
-:::tip
-  The same marketplace ships plugins for other Mergify features —
-  merge queue, CI insights, config validation, and scheduled freezes.
-  Open `/plugin` and browse **Discover** to pick the ones you want.
-:::
-
-:::tip
-  Third-party marketplaces don't auto-update by default. Open `/plugin`,
-  go to **Marketplaces**, select **mergify**, and choose **Enable
-  auto-update** to receive new skills and fixes as we ship them.
-:::
 
 ## Verify It Works
 
