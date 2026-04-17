@@ -4465,6 +4465,89 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/pulls/{number}/scopes": {
+      "post": {
+        "tags": [
+          "pull_requests"
+        ],
+        "summary": "Set the scopes for a pull request",
+        "description": "Set the scopes for a pull request",
+        "operationId": "set_ci_scopes_repos__owner___repository__pulls__number__scopes_post",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Number"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScopesBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/scheduled_freeze": {
       "get": {
         "tags": [
@@ -12367,6 +12450,23 @@
         ],
         "title": "ScheduledFreezeObjectResponse"
       },
+      "ScopesBody": {
+        "properties": {
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true,
+            "title": "Scopes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scopes"
+        ],
+        "title": "ScopesBody"
+      },
       "SimpleConditionMatchSerialized": {
         "properties": {
           "attribute": {
@@ -13227,6 +13327,10 @@
     {
       "name": "merge_queue",
       "description": "Operation with the merge queue."
+    },
+    {
+      "name": "pull_requests",
+      "description": "Operations with pull requests."
     },
     {
       "name": "queues",
