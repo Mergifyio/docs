@@ -1328,6 +1328,12 @@
           "description": "Whether to post merge protection status comments on pull requests",
           "title": "Post Comment",
           "type": "boolean"
+        },
+        "auto_merge": {
+          "default": false,
+          "description": "Automatically merge or queue PRs when all merge protection conditions pass",
+          "title": "Auto Merge",
+          "type": "boolean"
         }
       },
       "title": "MergeProtections",
