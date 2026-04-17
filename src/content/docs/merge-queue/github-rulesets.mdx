@@ -69,6 +69,7 @@ Mergify handles each GitHub ruleset rule type as follows.
 | `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
 | `creation` | Checked when creating batch PRs | May block batch PR creation if Mergify is not a bypass actor |
 | `update` | Checked when updating batch PRs | May block batch PR updates if Mergify is not a bypass actor |
+| `branch_name_pattern` | Checked on queue branch creation/rename | See [below](#branch-name-pattern) |
 | `required_review_thread_resolution` | Injected as conditions | -- |
 | All other rule types | Ignored | See [below](#ignored-rule-types) |
 
@@ -96,6 +97,38 @@ queue.
 - **Alternative:** add Mergify as a bypass actor on that ruleset with the
   `always` bypass mode. This lets Mergify merge directly while GitHub's queue
   is still active for other actors.
+
+### Branch Name Pattern
+
+If a `branch_name_pattern` ruleset rule matches Mergify's queue branches and
+Mergify is **not** a bypass actor with `always` or `exempt` bypass mode,
+GitHub blocks Mergify from creating or renaming queue branches. As a result,
+Mergify cannot queue or merge pull requests targeting that branch. The
+`pull_requests_only` bypass mode does not help here, because queue branch
+creation and rename are direct ref updates, not pull request actions.
+
+Mergify uses two branch prefixes for queue branches:
+
+- `mergify/merge-queue/` -- the final queue branch (customizable via
+  `queue_branch_prefix` in
+  [`queue_rules`](/configuration/file-format/#queue-rules)).
+
+- `tmp-mergify/merge-queue/` -- the temporary branch Mergify creates during
+  setup before renaming it to the final name.
+
+A ruleset that only covers the final prefix still allows the temporary
+branch to be created but blocks the subsequent rename, producing the same
+error.
+
+**Resolution:**
+
+- **Preferred:** add Mergify as a bypass actor on the ruleset with `always`
+  or `exempt` bypass mode.
+
+- **Alternative:** narrow the ruleset pattern so it excludes both
+  `mergify/merge-queue/*` and `tmp-mergify/merge-queue/*`. If you customized
+  [`queue_branch_prefix`](/configuration/file-format/#queue-rules), substitute
+  your prefix and its `tmp-` counterpart.
 
 ### Require Branches to Be Up to Date
 
