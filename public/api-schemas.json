@@ -1337,10 +1337,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the events received from this date",
+              "description": "Start of the time range. Defaults to `received_to - 1 day`.",
               "title": "Received From"
             },
-            "description": "Get the events received from this date"
+            "description": "Start of the time range. Defaults to `received_to - 1 day`."
           },
           {
             "name": "received_to",
@@ -1356,10 +1356,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the events received until this date",
+              "description": "End of the time range. Defaults to `now`.",
               "title": "Received To"
             },
-            "description": "Get the events received until this date"
+            "description": "End of the time range. Defaults to `now`."
           },
           {
             "name": "cursor",
