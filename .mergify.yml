@@ -1,7 +1,6 @@
 extends: .github
 shared:
   DefaultQueueOptions: &DefaultQueueOptions
-    autoqueue: true
     commit_message_template: |
       {{ title }} (#{{ number }})
 
@@ -122,3 +121,4 @@ merge_queue:
 
 merge_protections_settings:
   reporting_method: deployments
+  auto_merge: true
