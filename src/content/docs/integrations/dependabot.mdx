@@ -16,24 +16,6 @@ intervention.
 
 ## Automating Dependabot Pull Request Merges
 
-There are two primary ways to automate the merging of Dependabot PRs with
-Mergify:
-
-### 1. Using the Merge Queue
-
-You can set up a queue rule to automatically enqueue Dependabot PRs into the
-merge queue using [`autoqueue`](/merge-queue/rules#autoqueueing-pull-requests).
-
-```yaml
-queue_rules:
-  - name: default
-    autoqueue: true
-    queue_conditions:
-      - author = dependabot[bot]
-```
-
-### 2. PR Approval
-
 If you have GitHub's branch protection set up to require approvals, you can use
 Mergify to automatically approve Dependabot PRs.
 
@@ -51,18 +33,18 @@ pull_request_rules:
 
 Dependabot provides specific labels for the type of dependency update, such as
 `dependabot-dependency-name`, `dependabot-dependency-type`, and
-`dependabot-update-type`. You can use these in your queue rule conditions to
-filter which Dependabot PRs to auto-merge. For instance, you might only want to
-auto-merge minor version bumps:
+`dependabot-update-type`. You can use these in your [merge
+protection](/merge-protections/custom-rules) conditions to filter which
+Dependabot PRs are allowed to merge. For instance, you might want to block
+major version bumps:
 
 ```yaml
-queue_rules:
-  - name: default
-    autoqueue: true
-    merge_method: merge
-    queue_conditions:
+merge_protections:
+  - name: auto-approve-minor-dependabot-updates
+    if:
       - author = dependabot[bot]
-      - dependabot-update-type = version-update:semver-minor
+    success_conditions:
+      - dependabot-update-type != version-update:semver-major
 ```
 
 ## Batching Dependency Updates
@@ -76,9 +58,7 @@ For example, you could set up a merge queue to batch those PRs 10 by 10:
 
 ```yaml
 queue_rules:
-  # If you have other queue rules defined, add this at the end so it is processed last
   - name: dep-update
-    autoqueue: true
     batch_size: 10
     # Wait for up to 30 minutes for the batch to fill up
     batch_max_wait_time: 30 min
