@@ -10,11 +10,14 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 import CommonTroubleshootingTips from './_common-troubleshooting-tips.mdx'
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
+import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
+import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
+import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 
 <IntegrationLogo src={rustLogo} alt="Rust logo" />
 
 This guide shows how to generate JUnit reports from your Rust tests and upload
-them to **CI Insights** using a GitHub Actions workflow.
+them to **CI Insights** using your CI workflow.
 
 ## Generate a JUnit Report with Rust Tests
 
@@ -69,7 +72,9 @@ cargo install cargo-nextest
 cargo nextest run --message-format junit --output-file junit.xml
 ```
 
-## Update Your GitHub Actions Workflow
+## Update Your CI Workflow
+
+### GitHub Actions
 
 <CIInsightsSetupNote />
 
@@ -104,6 +109,13 @@ Alternative approach using cargo2junit:
 <MergifyCIUploadStepMatrix reportPath="junit.xml" />
 
 <GhaMergifyCiQuarantineSetup />
+
+### Buildkite
+
+<BuildkiteCIUploadStep reportPath="junit.xml" />
+<BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
+
+<BuildkiteCIQuarantineSetup />
 
 ## Verify and Review in CI Insights
 

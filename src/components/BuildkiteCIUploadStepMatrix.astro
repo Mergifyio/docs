@@ -1,0 +1,38 @@
+---
+import { Code } from 'astro:components';
+
+import Aside from '~/components/Aside.astro';
+
+export interface Props {
+  reportPath: string;
+}
+const { reportPath } = Astro.props;
+---
+
+<p>
+	If you use a build matrix in your pipeline, set the <code>job_name</code> property so <strong>CI Insights</strong> can properly distinguish reports for each matrix variation.
+</p>
+<p>For example:</p>
+<Code
+	code={`steps:
+  - label: "Tests ({{matrix}})"
+    matrix:
+      - "3.10"
+      - "3.11"
+      - "3.12"
+    command: <your test command>
+    plugins:
+      - mergifyio/mergify-ci#v1:
+          action: junit-process
+          job_name: "Tests ({{matrix}})"
+          report_path: ${reportPath}
+          token: "\${MERGIFY_CI_TOKEN}"`}
+	lang="yaml"
+	theme="slack-ochin"
+/>
+<Aside type="tip">
+	<p>
+		Setting <code>job_name</code> helps <strong>CI Insights</strong> group and display reports correctly
+		for each matrix variation.
+	</p>
+</Aside>

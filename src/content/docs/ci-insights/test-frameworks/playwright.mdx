@@ -10,11 +10,14 @@ import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
+import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
+import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
+import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 
 <IntegrationLogo src={playwrightLogo} alt="Playwright logo" />
 
 This guide shows how to generate JUnit reports from your Playwright tests and upload
-them to **CI Insights** using a GitHub Actions workflow.
+them to **CI Insights** using your CI workflow.
 
 ## Generate a JUnit Report with Playwright
 
@@ -53,7 +56,9 @@ To specify the output file location:
 npx playwright test --reporter=list --reporter=junit:junit.xml
 ```
 
-## Update Your GitHub Actions Workflow
+## Update Your CI Workflow
+
+### GitHub Actions
 
 <CIInsightsSetupNote />
 
@@ -72,6 +77,13 @@ For example, in your workflow file:
 <MergifyCIUploadStepMatrix reportPath="junit.xml" />
 
 <GhaMergifyCiQuarantineSetup />
+
+### Buildkite
+
+<BuildkiteCIUploadStep reportPath="junit.xml" />
+<BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
+
+<BuildkiteCIQuarantineSetup />
 
 ## Verify and Review in CI Insights
 

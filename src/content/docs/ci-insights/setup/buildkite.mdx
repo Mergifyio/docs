@@ -1,0 +1,120 @@
+---
+title: CI Insights Setup – Buildkite
+description: Enable Mergify CI Insights and configure flaky test detection using Buildkite.
+---
+
+import { Image } from "astro:assets"
+import JobsScreenshot from "../../../images/ci-insights/jobs.png"
+
+This page explains how to enable CI Insights for a repository using Buildkite
+and how to configure repeated test executions for flaky test detection.
+
+## Enabling CI Insights for Buildkite
+
+1. Enable CI Insights on your repositories by visiting the [GitHub Integration
+   page](https://dashboard.mergify.com/integrations/github)
+   ([docs](/integrations/github)).
+
+2. To upload your test results, you'll need to [configure your
+   test](#test-framework-configuration). Before doing so, create an application
+   key with `ci` scope as described in the [API Usage documentation](/api/usage)
+   and set it as `MERGIFY_CI_TOKEN` in your Buildkite pipeline environment
+   variables.
+
+   This key will be used to upload test reports.
+
+3. Click on `CI Insights` in the Mergify dashboard navigation.
+   You should start seeing your Buildkite job runs appear:
+
+   <Image src={JobsScreenshot} alt="CI Insights Jobs" />
+
+## Uploading Test Results
+
+Use the [`mergifyio/mergify-ci`](https://github.com/Mergifyio/mergify-ci-buildkite-plugin)
+Buildkite plugin to upload JUnit XML test reports:
+
+```yaml
+steps:
+  - label: "Run tests"
+    command: pytest --junitxml=reports/junit.xml
+    plugins:
+      - mergifyio/mergify-ci#v1:
+          action: junit-process
+          report_path: "reports/*.xml"
+          token: "${MERGIFY_CI_TOKEN}"
+```
+
+The plugin runs in the `post-command` hook, so your test command executes first,
+then the plugin uploads the results. Even if your tests fail, the results are
+still uploaded.
+
+For frameworks with native Mergify integration (e.g., `pytest-mergify`), you
+only need to set the `MERGIFY_TOKEN` environment variable. No plugin is required.
+
+## Setting Up Flaky Test Detection
+
+To detect flaky tests, you need to run the same tests multiple
+times on the same code. This section explains how to set up your Buildkite
+pipeline for repeated test execution.
+
+### Prerequisites
+
+Before setting up flaky test detection, ensure you have:
+
+1. Enabled [CI Insights](#enabling-ci-insights-for-buildkite) for your repository
+
+2. Created an application key with `ci` scope and set it as `MERGIFY_CI_TOKEN`
+   in your Buildkite pipeline environment variables
+
+3. Configured test integration for your test framework
+
+### Buildkite Setup
+
+Use a [scheduled build](https://buildkite.com/docs/pipelines/scheduled-builds)
+that runs your test suite multiple times on the default branch. Here's an
+example pipeline that runs tests with 5 repeated executions:
+
+```yaml
+steps:
+  - label: "Flaky test detection"
+    command: |
+      set +e
+      failed=0
+      for i in $(seq $${RUN_COUNT:-5}); do
+        echo "--- Run $$i of $${RUN_COUNT:-5}"
+        pytest --junitxml=reports/junit-$$i.xml tests/
+        if [ $$? -ne 0 ]; then
+          failed=1
+        fi
+      done
+      exit $$failed
+    plugins:
+      - mergifyio/mergify-ci#v1:
+          action: junit-process
+          report_path: "reports/*.xml"
+          token: "${MERGIFY_CI_TOKEN}"
+```
+
+Configure a schedule in your Buildkite pipeline settings to run this
+every 12 hours on weekdays.
+
+### Configuration Tips
+
+- **Frequency**: Running twice daily (every 12 hours) provides a good balance
+  between detection accuracy and resource usage
+
+- **Default Branch Only**: Focus on the default branch where flaky tests have
+  the most impact
+
+- **Weekday Schedule**: Run Monday to Friday to avoid running when no changes
+  are made on the code
+
+- **Job name**: Ensure the step label matches the one running tests on your
+  pull request, allowing CI Insights to identify them. It can be overridden
+  with the `job_name` plugin property if needed.
+
+## Test Framework Configuration
+
+See the [test framework guides](/ci-insights#test-framework-configuration) for
+framework-specific instructions on generating JUnit XML reports and uploading
+them to CI Insights with both GitHub Actions and Buildkite.

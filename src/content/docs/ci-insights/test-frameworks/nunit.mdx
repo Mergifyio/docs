@@ -8,9 +8,12 @@ import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
+import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
+import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
+import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 
 This guide shows how to generate JUnit reports from your NUnit tests and upload
-them to **CI Insights** using a GitHub Actions workflow.
+them to **CI Insights** using your CI workflow.
 
 ## Generate a JUnit Report with NUnit
 
@@ -88,7 +91,9 @@ Then run:
 dotnet test --settings test.runsettings
 ```
 
-## Update Your GitHub Actions Workflow
+## Update Your CI Workflow
+
+### GitHub Actions
 
 <CIInsightsSetupNote />
 
@@ -107,6 +112,13 @@ For example, in your workflow file:
 <MergifyCIUploadStepMatrix reportPath="junit.xml" />
 
 <GhaMergifyCiQuarantineSetup />
+
+### Buildkite
+
+<BuildkiteCIUploadStep reportPath="junit.xml" />
+<BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
+
+<BuildkiteCIQuarantineSetup />
 
 ## Verify and Review in CI Insights
 
