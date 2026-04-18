@@ -24,8 +24,8 @@ queue_rules:
 
 ## Detecting Scopes with Turborepo
 
-Use the `turbo run build --dry=json` command to determine affected projects and
-upload them to Mergify.
+Use the `turbo run build --dry=json` command to determine affected projects
+and upload them to Mergify.
 
 ### GitHub Actions
 
@@ -90,6 +90,23 @@ steps:
       - mergifyio/mergify-ci#v1:
           action: scopes-upload
           token: "${MERGIFY_TOKEN}"
+```
+
+### Any CI (Mergify CLI)
+
+Install the [Mergify CLI](/cli) in your pipeline and export `MERGIFY_TOKEN`.
+Use `mergify ci git-refs` to get the merge-queue-aware base and head SHAs and
+`mergify ci scopes-send` to upload the detected scopes:
+
+```bash
+REFS=$(mergify ci git-refs)
+BASE=$(echo "$REFS" | awk '/^Base:/ {print $2}')
+HEAD=$(echo "$REFS" | awk '/^Head:/ {print $2}')
+
+npx turbo run build --dry=json --filter="[$BASE...$HEAD]" \
+  | jq '{scopes: .packages}' > scopes.json
+
+mergify ci scopes-send --file scopes.json
 ```
 
 :::note

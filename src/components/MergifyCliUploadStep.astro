@@ -1,0 +1,45 @@
+---
+import { Code } from 'astro:components';
+
+export interface Props {
+  reportPath: string;
+  testCommand?: string;
+}
+
+const { reportPath, testCommand = '<your test command>' } = Astro.props;
+---
+
+<p>
+	Install the <a href="/cli">Mergify CLI</a> in your pipeline and export
+	<Code code={`MERGIFY_TOKEN`} inline lang="bash" theme="slack-ochin" />. Run
+	<Code code={`mergify ci junit-process`} inline lang="bash" theme="slack-ochin" /> after your tests:
+</p>
+
+<Code
+	code={`set -o pipefail
+${testCommand}
+exit_code=$?
+mergify ci junit-process \\
+  --test-exit-code "$exit_code" \\
+  ${reportPath}
+exit $exit_code`}
+	lang="bash"
+	theme="slack-ochin"
+/>
+
+<p>Key Points:</p>
+<ul>
+	<li>
+		<Code code={`MERGIFY_TOKEN`} inline lang="bash" theme="slack-ochin" />: Export this
+		environment variable with your Mergify application key so <code>junit-process</code> can authenticate to the API.
+	</li>
+	<li>
+		<Code code={`--test-exit-code "$exit_code"`} inline lang="bash" theme="slack-ochin" />: Passes the test runner's exit
+		code so Mergify can detect silent failures where the runner crashed but the JUnit report appears clean.
+	</li>
+	<li>
+		On CI systems other than GitHub Actions, also pass
+		<Code code={`--tests-target-branch <branch>`} inline lang="bash" theme="slack-ochin" /> so the command knows which
+		branch to compare against for quarantine decisions.
+	</li>
+</ul>

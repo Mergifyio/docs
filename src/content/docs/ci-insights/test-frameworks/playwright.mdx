@@ -13,6 +13,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
 import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
+import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 
 <IntegrationLogo src={playwrightLogo} alt="Playwright logo" />
 
@@ -84,6 +85,13 @@ For example, in your workflow file:
 <BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
 
 <BuildkiteCIQuarantineSetup />
+
+### Any CI (Mergify CLI)
+
+<MergifyCliUploadStep
+  reportPath="junit.xml"
+  testCommand="npx playwright test --reporter=list --reporter=junit:junit.xml"
+/>
 
 ## Verify and Review in CI Insights
 
