@@ -61,16 +61,14 @@ allowing for a thorough review.
      ```yaml
      queue_rules:
        - name: default
-         autoqueue: true
          merge_method: merge
          queue_conditions:
            - author = snyk-bot
            - base = main
      ```
 
-     This configuration uses [`autoqueue`](/merge-queue/rules#autoqueueing-pull-requests)
-     to automatically enqueue and merge Snyk PRs when they meet the defined
-     conditions.
+     This configuration sets up a [merge queue](/merge-queue) for
+     Snyk PRs targeting `main`.
 
 ## Batching Dependency Updates
 
@@ -84,9 +82,7 @@ For example, you could set up a merge queue to batch those PRs 10 by 10:
 
 ```yaml
 queue_rules:
-  # If you have other queue rules defined, add this at the end so it is processed last
   - name: dep-update
-    autoqueue: true
     batch_size: 10
     # Wait for up to 30 minutes for the batch to fill up
     batch_max_wait_time: 30 min
