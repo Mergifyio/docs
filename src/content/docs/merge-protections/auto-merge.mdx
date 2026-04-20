@@ -1,0 +1,49 @@
+---
+title: Auto-Merge
+description: Automatically merge or queue pull requests when all merge protection conditions pass.
+---
+
+When `auto_merge` is enabled in your `merge_protections_settings`, Mergify
+automatically acts on pull requests as soon as all applicable [merge
+protection](/merge-protections/custom-rules) `success_conditions` are satisfied.
+
+The exact behavior depends on whether the [merge queue](/merge-queue) is
+enabled for the repository:
+
+| `auto_merge` | Merge queue enabled? | Behavior |
+|---|---|---|
+| `true` | Yes | PR is automatically added to the merge queue |
+| `true` | No | PR is automatically merged |
+| `false` (default) | — | No automatic action |
+
+## Configuration
+
+Add `auto_merge: true` to the `merge_protections_settings` section of your
+Mergify configuration file:
+
+```yaml
+merge_protections_settings:
+  auto_merge: true
+
+merge_protections:
+  - name: require-review-and-ci
+    if:
+      - base = main
+    success_conditions:
+      - "#approved-reviews-by >= 1"
+      - check-success = ci
+```
+
+With this configuration, any pull request targeting `main` that has at least
+one approved review and a passing `ci` check is automatically merged (or
+queued if the merge queue is enabled).
+
+## Constraints
+
+- **Global setting** — `auto_merge` applies to all pull requests in the
+  repository. You cannot enable it selectively for specific queue rules.
+
+- **Requires merge protections** — `auto_merge` only takes effect when at
+  least one [merge protection rule](/merge-protections/custom-rules) is
+  configured. Without protection rules there are no `success_conditions` to
+  evaluate.

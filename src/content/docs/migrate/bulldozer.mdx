@@ -39,24 +39,36 @@ merge:
     - "ci/circleci: ete-tests"
 ```
 
-Equivalent Mergify merge queue:
+Equivalent Mergify configuration:
 
 ```yaml title=.mergify.yml
+merge_protections_settings:
+  auto_merge: true
+
+merge_protections:
+  - name: bulldozer-equivalent
+    if:
+      - base = main
+      - head ~= ^feature/
+    success_conditions:
+      - label = merge when ready
+      - "check-success = ci/circleci: ete-tests"
+
 queue_rules:
   - name: default
     merge_method: squash
-    autoqueue: true
-    queue_conditions:
-      - base = main
-      - label = merge when ready
-      - head ~= ^feature/
-      - "check-success = ci/circleci: ete-tests"
 ```
 
 Notes:
+- [`auto_merge`](/merge-protections/auto-merge) automatically queues PRs when
+  all [merge protection](/merge-protections) `success_conditions` pass
+
 - Checks map to `check-success = <name>` (or `check-skipped`, `check-neutral`)
+
 - Required labels map to `label = <name>` conditions
+
 - Approvals map to review count or specific reviewers
+
 - The merge queue keeps PRs updated automatically — no manual rebases needed
 
 ## Going Further with Merge Queue
@@ -81,7 +93,7 @@ Bulldozer doesn't offer:
 
 - Rebase/update before merge → automatic in merge queue
 
-- Require labels → `label =` in `queue_conditions`
+- Require labels → `label =` in `success_conditions`
 
 - Restrict by authors/paths → `author =`, `files ~=`, etc. in
-  `queue_conditions`
+  `success_conditions` or `if`
