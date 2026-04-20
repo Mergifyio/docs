@@ -354,17 +354,16 @@ const navItems: NavItem[] = [
     children: [
       { title: 'GitHub', path: '/integrations/github', icon: 'simple-icons:github' },
       { title: 'GitHub Actions', path: '/integrations/gha', icon: 'simple-icons:githubactions' },
-      { title: 'CircleCI', path: '/integrations/circleci', icon: 'simple-icons:circleci' },
-      { title: 'Jenkins', path: '/integrations/jenkins', icon: 'simple-icons:jenkins' },
-      { title: 'TeamCity', path: '/integrations/teamcity', icon: 'simple-icons:teamcity' },
       { title: 'Buildkite', path: '/integrations/buildkite', icon: 'simple-icons:buildkite' },
-      { title: 'GitLab', path: '/integrations/gitlab', icon: 'simple-icons:gitlab' },
+      { title: 'Jenkins', path: '/integrations/jenkins', icon: 'simple-icons:jenkins' },
+      {
+        title: 'Other CI (status checks)',
+        path: '/integrations/ci-status-checks',
+        icon: 'mdi:check-circle-outline',
+      },
       { title: 'Datadog', path: '/integrations/datadog', icon: 'simple-icons:datadog' },
       { title: 'Slack', path: '/integrations/slack', icon: 'simple-icons:slack' },
-      { title: 'Graphite', path: '/integrations/graphite', icon: 'simple-icons:graphite' },
       { title: 'Dependabot', path: '/integrations/dependabot', icon: 'simple-icons:dependabot' },
-      { title: 'Renovate', path: '/integrations/renovate', icon: 'simple-icons:renovate' },
-      { title: 'Snyk', path: '/integrations/snyk', icon: 'simple-icons:snyk' },
     ],
   },
   {
