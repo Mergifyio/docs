@@ -11,6 +11,26 @@ The `label` action allows Mergify to automatically add or remove labels from a
 pull request based on the conditions specified in your rules, making your
 workflow more organized and efficient.
 
+:::caution
+  **Avoid rule pairs that flip the same label.** If one rule adds a label and
+  another removes it, and both rules' conditions keep matching after each
+  flip, the label toggles back and forth indefinitely. Every change
+  re-triggers rule evaluation. Scope your conditions so they become mutually
+  exclusive once the label is applied. For example, guard post-merge cleanup
+  rules with the `merged` condition and drop that label from any opposing
+  rule's conditions.
+:::
+
+:::caution
+  **Avoid using labels to trigger CI workflows.** GitHub Actions workflows
+  subscribed to `labeled` or `unlabeled` pull request events run on every
+  label change. Coupling CI to label state makes runs sensitive to any actor
+  that touches labels (people or automation) and can amplify the cost of a
+  misbehaving rule into redundant workflow runs on a single pull request.
+  Trigger CI from code events such as `push` or `pull_request` and reserve
+  labels for state and visibility.
+:::
+
 ## Parameters
 
 <ActionOptionsTable def="LabelActionModel" />
