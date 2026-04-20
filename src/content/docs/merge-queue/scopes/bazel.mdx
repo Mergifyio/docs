@@ -99,6 +99,25 @@ steps:
           token: "${MERGIFY_TOKEN}"
 ```
 
+### Any CI (Mergify CLI)
+
+Install the [Mergify CLI](/cli) in your pipeline and export `MERGIFY_TOKEN`.
+Use `mergify ci git-refs` to get the merge-queue-aware base and head SHAs and
+`mergify ci scopes-send` to upload the detected scopes:
+
+```bash
+REFS=$(mergify ci git-refs)
+BASE=$(echo "$REFS" | awk '/^Base:/ {print $2}')
+HEAD=$(echo "$REFS" | awk '/^Head:/ {print $2}')
+
+bazel query --keep_going --noshow_progress --output=package \
+  "buildfiles(set($(git diff --name-only --diff-filter=ACMR \"$BASE\" \"$HEAD\" | tr '\n' ' ')))" \
+  2>/dev/null | sort -u \
+  | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json
+
+mergify ci scopes-send --file scopes.json
+```
+
 :::note
 In the context of merge queue pull requests, the `HEAD` and `BASE` git references are specifically
 calculated to detect changed projects in the current batch only, not in the batches this one depends
