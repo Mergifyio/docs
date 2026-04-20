@@ -82,6 +82,9 @@ queue_rules:
 
   - name: default
     <<: *DefaultQueueOptions
+    queue_conditions:
+      - author != mergify-ci-bot
+      - author != dependabot[bot]
     merge_conditions:
       - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
 
@@ -91,7 +94,7 @@ queue_rules:
     queue_conditions:
       - or:
           - author = mergify-ci-bot
-          - author=dependabot[bot]
+          - author = dependabot[bot]
     batch_size: 10
     batch_max_wait_time: 5min
     commit_message_template:
