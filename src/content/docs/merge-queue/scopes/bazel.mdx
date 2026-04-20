@@ -24,8 +24,9 @@ queue_rules:
 
 ## Detecting Scopes with Bazel
 
-In your GitHub Actions workflow, use `bazel query` to determine affected projects and
-upload them to Mergify:
+Use `bazel query` to determine affected projects and upload them to Mergify.
+
+### GitHub Actions
 
 ```yaml
 name: Detect Scopes
@@ -63,6 +64,39 @@ jobs:
           action: scopes-upload
           token: ${{ secrets.MERGIFY_TOKEN }}
           scopes: ${{ steps.scopes.outputs.scopes }}
+```
+
+### Buildkite
+
+Using the
+[`mergifyio/mergify-ci`](https://github.com/Mergifyio/mergify-ci-buildkite-plugin)
+Buildkite plugin, a first step resolves the merge-queue-aware base and head
+SHAs and exposes them as meta-data, while a second step computes the affected
+projects with `bazel query` and uploads them to Mergify:
+
+```yaml
+steps:
+  - label: ":mag: Get git refs"
+    key: git-refs
+    plugins:
+      - mergifyio/mergify-ci#v1:
+          action: scopes-git-refs
+
+  - label: ":mag: Detect and upload scopes"
+    depends_on: git-refs
+    command: |
+      BASE=$(buildkite-agent meta-data get "mergify-ci.base")
+      HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
+      SCOPES=$( \
+        bazel query --keep_going --noshow_progress --output=package \
+          "buildfiles(set($(git diff --name-only --diff-filter=ACMR \"$BASE\" \"$HEAD\" | tr '\n' ' ')))" \
+        2>/dev/null | sort -u | paste -sd, - \
+      )
+      buildkite-agent meta-data set "mergify-ci.scopes" "$SCOPES"
+    plugins:
+      - mergifyio/mergify-ci#v1:
+          action: scopes-upload
+          token: "${MERGIFY_TOKEN}"
 ```
 
 :::note
