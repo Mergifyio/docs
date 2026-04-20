@@ -28,8 +28,9 @@ automatically. Here's an overview of the process:
 - **Manual addition:** A pull request can be manually added to the merge queue
    using the [`@mergifyio queue` command](/commands/queue).
 
-- **Automated addition:** A pull request can also be [automatically added to
-   the merge queue](/merge-queue/rules/#autoqueueing-pull-requests).
+- **Automated addition:** A pull request can be automatically added to the
+   merge queue using [`auto_merge`](/merge-protections/auto-merge) in
+   `merge_protections_settings`.
 
 Before a pull request can be added to the merge queue, it must meet certain
 conditions, specified under `queue_conditions` in your
@@ -104,7 +105,7 @@ strict digraph {
     ];
 
     // Transitions with detailed labels
-    Dequeued -> Queueing [label="  queue command\n  or autoqueue  "];
+    Dequeued -> Queueing [label="  queue command\n  or auto_merge  "];
     Queueing -> Queued [label="  matches\n  queue_conditions  "];
     Queued -> Dequeued [label="  unmatches queue_conditions\n  or dequeue command  "];
     Queued -> Validating [label="  reaches top\n  of the queue  "];
