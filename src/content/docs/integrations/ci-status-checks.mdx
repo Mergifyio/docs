@@ -1,0 +1,34 @@
+---
+title: Integrating Any CI with Mergify
+description: Run CI Insights and Merge Queue Scopes on CircleCI, GitLab CI, TeamCity, or any CI that reports status checks to GitHub.
+---
+
+Mergify works with any CI system that reports status checks to GitHub through
+the [GitHub Checks
+API](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks).
+Tools known to work this way include CircleCI, GitLab CI, TeamCity, and many
+others. The Mergify CLI brings CI Insights and Merge Queue Scopes to these
+tools without needing a dedicated plugin or action. Any status check reported
+to GitHub can also be referenced from your Mergify
+[conditions](/configuration/conditions) via `check-success`.
+
+Mergify has dedicated integration pages for [GitHub
+Actions](/integrations/gha), [Buildkite](/integrations/buildkite), and
+[Jenkins](/integrations/jenkins), which ship native plugins, actions, or
+webhook integrations.
+
+## Prerequisites
+
+1. Your CI system is configured to report build statuses to GitHub.
+
+2. The [Mergify GitHub App](/integrations/github) is installed in your
+   repository.
+
+## Mergify features via the CLI
+
+- **[CI Insights](/ci-insights)**: upload test results from any CI job using
+  the Mergify CLI (`mergify ci junit-process`) to detect flaky tests and get
+  Slack notifications for CI failures.
+
+- **[Merge Queue Scopes](/merge-queue/scopes/others)**: run only the jobs
+  affected by a batch when processing the merge queue, via the Mergify CLI.

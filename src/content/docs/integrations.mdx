@@ -9,23 +9,17 @@ import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 ## Continuous Integration
 
 <DocsetGrid>
-  <Docset title="GitHub Actions" path="gha" icon="simple-icons:githubactions">
-    Learn how Mergify integrates with GitHub Actions.
+  <Docset title="GitHub Actions" path="/integrations/gha" icon="simple-icons:githubactions">
+    CI Insights, Monorepo CI, and Merge Queue Scopes on GitHub Actions. Trigger workflows from Mergify rules.
   </Docset>
-  <Docset title="CircleCI" path="circleci" icon="simple-icons:circleci">
-    Learn how Mergify integrates with CircleCI.
+  <Docset title="Buildkite" path="/integrations/buildkite" icon="simple-icons:buildkite">
+    CI Insights, Monorepo CI, and Merge Queue Scopes on Buildkite.
   </Docset>
-  <Docset title="Jenkins" path="jenkins" icon="simple-icons:jenkins">
-    Learn how Mergify integrates with Jenkins.
+  <Docset title="Jenkins" path="/integrations/jenkins" icon="simple-icons:jenkins">
+    CI Insights via the Mergify Jenkins plugin, plus Merge Queue Scopes through the CLI.
   </Docset>
-  <Docset title="BuildKite" path="buildkite" icon="simple-icons:buildkite">
-    How to automate your BuildKite workflow using Mergify.
-  </Docset>
-  <Docset title="TeamCity" path="teamcity" icon="simple-icons:teamcity">
-    How to automate your TeamCity workflow using Mergify.
-  </Docset>
-  <Docset title="GitLab" path="gitlab" icon="simple-icons:gitlab">
-    How to automate your GitLab CI workflow using Mergify.
+  <Docset title="Other CI (status checks)" path="/integrations/ci-status-checks" icon="mdi:check-circle-outline">
+    CI Insights and Merge Queue Scopes via the Mergify CLI, for CircleCI, GitLab CI, TeamCity, and others.
   </Docset>
 </DocsetGrid>
 
@@ -38,27 +32,18 @@ import Monitoring from './integrations/_monitoring.mdx'
 ## Developers Tools
 
 <DocsetGrid>
-  <Docset title="GitHub" path="github" icon="simple-icons:github">
+  <Docset title="GitHub" path="/integrations/github" icon="simple-icons:github">
     Use GitHub and Mergify together.
   </Docset>
-  <Docset title="Slack" path="slack" icon="simple-icons:slack">
+  <Docset title="Slack" path="/integrations/slack" icon="simple-icons:slack">
     Learn how you can use Slack and Mergify together.
-  </Docset>
-  <Docset title="Graphite" path="graphite" icon="simple-icons:graphite">
-    Learn how you can use Graphite and Mergify together.
   </Docset>
 </DocsetGrid>
 
 ## Dependency Management
 
 <DocsetGrid>
-  <Docset title="Dependabot" path="dependabot" icon="simple-icons:dependabot">
+  <Docset title="Dependabot" path="/integrations/dependabot" icon="simple-icons:dependabot">
     How to automate your dependencies update using Mergify.
-  </Docset>
-  <Docset title="Renovate" path="renovate" icon="simple-icons:renovate">
-    How to automate your dependencies update using Mergify.
-  </Docset>
-  <Docset title="Snyk" path="snyk" icon="simple-icons:snyk">
-    Streamline your dependency management.
   </Docset>
 </DocsetGrid>

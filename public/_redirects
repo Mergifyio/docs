@@ -59,4 +59,16 @@
 /merge-queue/speculative-checks/ /merge-queue/parallel-checks 301
 /getting-started/ /integrations/github 301
 /merge-queue/freeze/ /merge-protections/freeze/ 301
+/integrations/snyk /integrations/dependabot 301
+/integrations/snyk/ /integrations/dependabot 301
+/integrations/renovate /integrations/dependabot 301
+/integrations/renovate/ /integrations/dependabot 301
+/integrations/graphite /stacks 301
+/integrations/graphite/ /stacks 301
+/integrations/circleci /integrations/ci-status-checks 301
+/integrations/circleci/ /integrations/ci-status-checks 301
+/integrations/teamcity /integrations/ci-status-checks 301
+/integrations/teamcity/ /integrations/ci-status-checks 301
+/integrations/gitlab /integrations/ci-status-checks 301
+/integrations/gitlab/ /integrations/ci-status-checks 301
 
