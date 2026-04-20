@@ -1,26 +1,20 @@
 ---
 title: Integrating Buildkite with Mergify
-description: How to automate your Buildkite workflow using Mergify
+description: Run CI Insights, Monorepo CI, and Merge Queue Scopes on Buildkite.
 ---
 
 import buildkiteLogo from "../../images/integrations/buildkite/logo.svg"
-import { Image } from "astro:assets"
-import statusScreenshot from "../../images/integrations/buildkite/github-status.png"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
-<IntegrationLogo src={buildkiteLogo} alt="BuildKite logo"/>
+<IntegrationLogo src={buildkiteLogo} alt="Buildkite logo"/>
 
-[Buildkite](https://buildkite.com/) is a CI/CD tool providing scalable
-orchestration system, dynamic pipelines, customizable runners, and a great
-local development experience. Mergify can interact with Buildkite by evaluating
-[the status
-checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks)
-reported by Buildkite to GitHub. This enables powerful automation workflows
-that react to the results of your Buildkite jobs.
+[Buildkite](https://buildkite.com/) is a CI/CD tool with pipeline orchestration
+and self-hosted runners. Mergify has native integrations for Buildkite covering
+CI Insights, Monorepo CI, and Merge Queue Scopes. Any Buildkite status check
+reported to GitHub can also be referenced from your Mergify
+[conditions](/configuration/conditions) via `check-success`.
 
 ## Prerequisites
-
-Before you can use Mergify with Buildkite, ensure the following:
 
 1. Buildkite is properly set up and is building your projects. See the
    [Buildkite
@@ -32,34 +26,16 @@ Before you can use Mergify with Buildkite, ensure the following:
 
 3. The [Mergify GitHub App](/integrations/github) is installed in your repository.
 
-## Using Buildkite Status Checks in Mergify Configuration
+## Mergify features for Buildkite
 
-Once Buildkite reports status checks to GitHub, they can be used as conditions
-in your Mergify rules.
+- **[CI Insights](/ci-insights/setup/buildkite)**: collect Buildkite job
+  metrics, detect flaky tests, and get Slack notifications for CI failures.
 
-<Image src={statusScreenshot} alt="BuildKite check status on GitHub"/>
+- **[Monorepo CI](/monorepo-ci/buildkite)**: skip unaffected pipelines on
+  pull requests to cut CI spend in monorepos.
 
-Here's a simple example:
-
-```yaml
-pull_request_rules:
-  - name: Automatically merge when Buildkite build succeeds
-    conditions:
-      - check-success = buildkite/github-test  # Change this to match your Buildkite check name
-      - "#approved-reviews-by >= 1"
-    actions:
-      merge:
-        method: merge
-```
-
-In this example, Mergify will automatically merge pull requests that have at
-least one approved review and a successful Buildkite build.
-
-## Further Configuration
-
-The possibilities of integrating Buildkite with Mergify are extensive.
-For instance, you could use Mergify to:
-
-import CIFurther from './_ci-further.mdx'
-
-<CIFurther />
+- **[Merge Queue Scopes](/merge-queue/scopes/others)**: run only the jobs
+  affected by a batch when processing the merge queue. Examples for
+  [Bazel](/merge-queue/scopes/bazel),
+  [Nx](/merge-queue/scopes/nx), and
+  [Turborepo](/merge-queue/scopes/turborepo) are available.
