@@ -58,6 +58,63 @@ lines.
 10. **No "nobody" dramatic openers.** "Nobody tells
     you this" feels fake.
 
+11. **No throat-clearing intros.** The first sentence
+    of a page, section, or callout must state what
+    the reader will learn or do. Narrative framing
+    delays the payoff.
+    - Why: Readers scan. A setup paragraph before the
+      actual topic wastes the most valuable line on
+      the page.
+
+    - Flag: Openers like "As your codebase grows...",
+      "In modern software development...",
+      "When teams scale...", "In today's...",
+      historical or contextual framing before the
+      topic, or any opening sentence that doesn't
+      say what the page is about.
+
+    - Prefer: One scannable sentence stating the
+      concrete topic. "This page explains how to
+      configure priority rules." or just dive into
+      the mechanics.
+
+12. **Assume the audience knows CI, Git, and PRs.**
+    Mergify docs are read by staff engineers. Do not
+    re-explain fundamentals.
+    - Why: Defining what a pull request, CI pipeline,
+      merge conflict, or monorepo is wastes the
+      reader's time and reads as patronizing.
+
+    - Flag: Paragraphs that define PRs, CI, testing,
+      merge conflicts, monorepos, branches, reviews,
+      or other baseline concepts; sentences that
+      start with "A pull request is..." or "CI
+      stands for..." in the middle of a feature
+      page.
+
+    - Prefer: Skip the background. If context is
+      genuinely required, link to a prerequisite
+      page or glossary entry instead of restating
+      it inline.
+
+13. **One example per concept.** Do not stack minor
+    variations of the same example.
+    - Why: Three YAML snippets that differ only in
+      label name or threshold value add scroll, not
+      information. Staff engineers generalize from
+      one example.
+
+    - Flag: Sequential code blocks or config
+      snippets showing the same pattern with
+      trivial differences (different values,
+      different names, different counts); an
+      "other examples" section that repeats the
+      same structure.
+
+    - Prefer: Pick the most representative example.
+      For edge cases, link to a reference page or
+      a "variations" section at the bottom.
+
 ### Banned Words and Phrases
 
 Replace with plain alternatives.
