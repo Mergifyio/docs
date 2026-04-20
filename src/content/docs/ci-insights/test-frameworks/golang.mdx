@@ -13,6 +13,7 @@ import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadSte
 import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
 import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
+import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 
 <IntegrationLogo src={golangLogo} alt="Golang logo" />
 
@@ -66,6 +67,10 @@ For example, in your workflow file:
 <BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
 
 <BuildkiteCIQuarantineSetup />
+
+### Any CI (Mergify CLI)
+
+<MergifyCliUploadStep reportPath="junit.xml" testCommand="go test -v ./... 2>&1 | go-junit-report > junit.xml" />
 
 ## Verify and Review in CI Insights
 

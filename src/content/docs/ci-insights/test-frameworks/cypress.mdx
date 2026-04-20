@@ -13,6 +13,7 @@ import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
 import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
+import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 
 <IntegrationLogo src={cypressLogo} alt="Cypress logo" />
 
@@ -67,6 +68,10 @@ test:cypress` (or similar), include a step like:
 <BuildkiteCIUploadStepMatrix reportPath="cypress/results/junit*.xml" />
 
 <BuildkiteCIQuarantineSetup />
+
+### Any CI (Mergify CLI)
+
+<MergifyCliUploadStep reportPath="cypress/results/junit*.xml" testCommand="npm run test:cypress" />
 
 ## Verify and Review in CI Insights
 
