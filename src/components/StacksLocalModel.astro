@@ -1,0 +1,30 @@
+---
+import GitGraph from './GitGraph.astro';
+import StackMapping from './StackMapping.astro';
+---
+
+<p>You work on a single branch. Each commit maps to a PR automatically:</p>
+
+<GitGraph
+  commits={["A", "B", "C"]}
+  commitColor="green"
+  branch="feat/auth"
+  prs={[
+    { label: "PR #1", commits: 0, annotation: "base: main" },
+    { label: "PR #2", commits: 1, annotation: "base: PR #1" },
+    { label: "PR #3", commits: 2, annotation: "base: PR #2" },
+  ]}
+/>
+
+<p>
+  Under the hood, <code>mergify stack push</code> creates a remote branch per
+  commit and chains the PRs:
+</p>
+
+<StackMapping entries={[
+  { commit: "A: add model", branch: "stack/.../add-model--a1b2c3d4", pr: "PR #1" },
+  { commit: "B: add endpoint", branch: "stack/.../add-endpoint--d4e5f6a7", pr: "PR #2" },
+  { commit: "C: add tests", branch: "stack/.../add-tests--g7h8i9j0", pr: "PR #3" },
+]} />
+
+<p>You never see or manage these remote branches. They're an implementation detail.</p>
