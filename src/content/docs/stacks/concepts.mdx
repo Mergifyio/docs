@@ -73,16 +73,24 @@ When you run `mergify stack push`, each commit gets its own remote branch. The
 naming convention is:
 
 ```text
-stack/{username}/{branch-name}/{Change-Id}
+stack/{username}/{branch-name}/{commit-slug}--{change-id}
 ```
+
+`{commit-slug}` is derived from the commit title: the conventional commit
+prefix is stripped, stop words are removed, and common words are abbreviated.
+`{change-id}` is the first 8 hex characters of the commit's Change-Id, which
+keeps names unique when commit titles repeat.
 
 For example, if user `alice` pushes a branch called `feat/auth` with 3 commits:
 
-| Commit | Remote Branch |
+| Commit title | Remote Branch |
 |--------|--------------|
-| A: add data model | `stack/alice/feat/auth/Ia1b2c3...` |
-| B: add API endpoint | `stack/alice/feat/auth/Id4e5f6...` |
-| C: add tests | `stack/alice/feat/auth/Ig7h8i9...` |
+| `feat: add user data model` | `stack/alice/feat/auth/add-user-data-model--a1b2c3d4` |
+| `feat: add registration endpoint` | `stack/alice/feat/auth/add-registration-endpoint--d4e5f6a7` |
+| `test: add registration tests` | `stack/alice/feat/auth/add-registration-tests--g7h8i9j0` |
+
+Readable branch names make `git branch -a`, `gh pr list`, and GitHub's
+branch dropdown easier to scan.
 
 You can customize the branch prefix via Git config:
 
@@ -97,9 +105,9 @@ chain:
 
 | Commit | PR Base | PR Head |
 |--------|---------|---------|
-| A (first) | `main` | `stack/alice/feat/auth/Ia1b2c3...` |
-| B (second) | `stack/alice/feat/auth/Ia1b2c3...` | `stack/alice/feat/auth/Id4e5f6...` |
-| C (third) | `stack/alice/feat/auth/Id4e5f6...` | `stack/alice/feat/auth/Ig7h8i9...` |
+| A (first) | `main` | `.../add-user-data-model--a1b2c3d4` |
+| B (second) | `.../add-user-data-model--a1b2c3d4` | `.../add-registration-endpoint--d4e5f6a7` |
+| C (third) | `.../add-registration-endpoint--d4e5f6a7` | `.../add-registration-tests--g7h8i9j0` |
 
 Stacks also adds a `Depends-On: #NNN` reference in each PR description and
 posts a stack comment on every PR listing the full chain:
