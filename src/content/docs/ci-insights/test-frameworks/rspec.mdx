@@ -77,7 +77,7 @@ steps:
   - label: "Run RSpec Tests 🧪"
     command: bundle exec rspec
     env:
-      MERGIFY_TOKEN: "${MERGIFY_CI_TOKEN}"
+      MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
 
 The gem automatically collects your test results and sends them to CI Insights.
