@@ -4465,6 +4465,115 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/queues": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get the queue names in the repository",
+        "description": "Retrieve a list of queue names affected by queue activity",
+        "operationId": "get_stats_queues_repos__owner___repository__stats_queues_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date, default 1 day before end_at",
+              "title": "Start At"
+            },
+            "description": "Get the stats until this date, default 1 day before end_at"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date, default now",
+              "title": "End At"
+            },
+            "description": "Get the stats from this date, default now"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueueNamesResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/pulls/{number}/scopes": {
       "post": {
         "tags": [
@@ -11957,6 +12066,22 @@
           "evaluations"
         ],
         "title": "QueueConditionEvaluationJsonSerialized"
+      },
+      "QueueNamesResponse": {
+        "properties": {
+          "queue_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Queue Names"
+          }
+        },
+        "type": "object",
+        "required": [
+          "queue_names"
+        ],
+        "title": "QueueNamesResponse"
       },
       "QueuePause": {
         "properties": {
