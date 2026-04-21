@@ -5,14 +5,7 @@ description: Optimizing your merge queue for maximum efficiency.
 
 import MergeQueueCalculator from "../../../components/MergeQueueCalculator/MergeQueueCalculator"
 
-As development teams scale and the volume of pull requests grows, achieving an
-optimal balance between merge speed, reliability, and resource usage becomes a
-paramount concern. Performance bottlenecks in the merge process can
-significantly hamper a team's productivity. Leveraging the capabilities of
-Mergify's merge queue configurations can help alleviate these challenges. This
-guide dives deep into how you can tune your merge queue to strike the right
-balance, ensuring a fast, cost-efficient, and reliable merging process tailored
-to your team's needs.
+Tune parallel checks, batch size, and CI scope to balance throughput, reliability, and CI cost.
 
 :::tip
   Scaling to 20+ PRs per day? The [Merge Queue Academy's high-velocity teams
@@ -22,221 +15,70 @@ to your team's needs.
 
 ### The Trade-offs: Reliability, Cost, and Velocity (RCV Theorem)
 
-Before making any decision in configuring your merge queue, you need to
-understand the trade-off that needs to be done. In the world of merging, three
-critical properties influence the effectiveness of a merge queue:
+A merge queue can only optimize two of three properties at a time: reliability
+(merges don't break main), cost (CI jobs executed), and velocity (throughput
+and latency). We call this the **RCV theorem**, analogous to the
+[CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) for data stores.
 
-1. **Reliability:** Ensure merges are accurate and won't cause issues.
-2. **Cost:** The number of CI jobs executed.
-3. **Velocity:** Throughput and latency of your merges.
+The three viable combinations:
 
-Similar to the [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) for
-data stores, you can only optimize two of these properties simultaneously. This
-is what we term the **RCV theorem**.
+- **Reliability + Velocity**: enable **[parallel speculative
+  checks](/merge-queue/parallel-checks)** to test predicted merge states
+  concurrently. Wasted CI runs occur when a PR ahead in the queue fails.
 
-```neato aria-label="Venn diagram showing the Reliability, Cost, Velocity trade-offs" role="img" style="max-width: 520px; margin: 2rem auto; display: block;"
-graph RCV {
-   graph [bgcolor="transparent", margin=0, overlap=true];
-   node [shape=circle, style="filled,setlinewidth(2)", fontname="Helvetica", fontsize=16, width=2.5, height=2.5, penwidth=2, fixedsize=true, pin=true];
+- **Reliability + Cost**: validate pull requests sequentially. No wasted CI,
+  but throughput is capped at one PR per CI run.
 
-   Reliability [label="Reliability", color="#2563eb", fillcolor="#2563eb33", pos="0,0!", tooltip="Maximize test confidence"];
-   Velocity [label="Velocity", color="#16a34a", fillcolor="#16a34a33", pos="2.2,0!", tooltip="Ship pull requests fast"];
-   Cost [label="Cost", color="#ea580c", fillcolor="#ea580c33", pos="1.1,1.95!", tooltip="Keep CI usage low"];
-}
-```
+- **Velocity + Cost**: use [batch mode](/merge-queue/batches) to test groups
+  of PRs as a single unit. Fewer CI runs, but hidden failures inside a passing
+  batch can land on main.
 
-<div
-   role="note"
-   aria-label="RCV legend"
-   style={{
-      display: 'flex',
-      flexWrap: 'wrap',
-      gap: '0.5rem',
-      justifyContent: 'center',
-      margin: '1rem auto 0.5rem',
-      fontSize: '0.9rem',
-   }}
->
-   <span
-      style={{
-         display: 'inline-flex',
-         alignItems: 'center',
-         gap: '0.35rem',
-         padding: '0.35rem 0.75rem',
-         borderRadius: '999px',
-         border: '1px solid #93c5fd',
-      }}
-   >
-      <span
-         style={{
-            width: '0.65rem',
-            height: '0.65rem',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg,#2563eb,#16a34a)',
-         }}
-      ></span>
-      Reliability + Velocity → Parallel Checks
-   </span>
-   <span
-      style={{
-         display: 'inline-flex',
-         alignItems: 'center',
-         gap: '0.35rem',
-         padding: '0.35rem 0.75rem',
-         borderRadius: '999px',
-         border: '1px solid #fca5a5',
-      }}
-   >
-      <span
-         style={{
-            width: '0.65rem',
-            height: '0.65rem',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg,#2563eb,#ea580c)',
-         }}
-      ></span>
-      Reliability + Cost → Sequential Validation
-   </span>
-   <span
-      style={{
-         display: 'inline-flex',
-         alignItems: 'center',
-         gap: '0.35rem',
-         padding: '0.35rem 0.75rem',
-         borderRadius: '999px',
-         border: '1px solid #86efac',
-      }}
-   >
-      <span
-         style={{
-            width: '0.65rem',
-            height: '0.65rem',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg,#16a34a,#ea580c)',
-         }}
-      ></span>
-      Velocity + Cost → Batch Mode
-   </span>
-</div>
-
-<em>Pick any two—every setup sacrifices one dimension.</em>
-
-Based on this trade-off, there are 3 scenarios that you can optimize for:
-
-- **Reliability and Velocity:** This is the standard behavior.
-  This aims to reduce latency and maximize throughput without considering CI
-  costs by enabling **[parallel speculative
-  checks](/merge-queue/parallel-checks)**. This feature lets Mergify test pull
-  requests in parallel, predicting potential merges and executing CI runs
-  simultaneously. Parallel checks can slightly increase CI cost: there might be
-  certain scenarios that are tested and whose results won't be used if a pull
-  request ahead in the queue fails.
-
-- **Reliability and Cost:** In that case, each pull request is validated
-  sequentially, ensuring reliability at a minimal CI cost. As every pull
-  request is tested one after the other, there is no room for wasted CI time.
-  However, this scenario is slow as only one PR is tested at a time.
-
-- **Velocity and Cost:** By using [batch mode](/merge-queue/batches), you can
-  merge groups of pull requests simultaneously. This reduces CI runs but merges
-  pull request that are not tested individually. There is therefore a
-  theoretical risk that a hidden failure is merged, while the whole batch
-  passes the CI.
-
-You can also combine parallel speculative checks and batching to achieve a
-balanced approach between reliability, cheapness, and velocity. This
-configuration offers a mix of both strategies, allowing you to test multiple
-batches of requests concurrently.
+Parallel checks and batching can be combined for a middle ground across all
+three dimensions.
 
 ### Determining the Right Configuration for Parallel Checks and Batching
 
-Optimizing the performance of your merge queue involves fine-tuning the number
-of parallel checks and the size of batches. The right configuration balances
-throughput, latency, and CI resource consumption. Here's a guide to help you
-determine the optimal settings:
+Weigh these factors when picking `batch_size` and `max_parallel_checks`:
 
-1. **Expected Merge Throughput**: Analyze your historical data to gauge the
-   average number of merges per hour or per day. This will help set a benchmark
-   for parallel checks and batch size, ensuring that pull requests are
-   processed at the desired rate.
+1. **Merge throughput and queue latency**: target settings that match your
+   historical merges-per-hour and keep PR wait time acceptable.
 
-2. **Queue Latency**: Consider the typical wait time in the queue for a PR. Aim
-   for settings that reduce this latency, but be mindful of the trade-offs.
-   Reducing latency might lead to increased CI consumption or decreased
-   reliability.
+2. **Peak load**: size for peak developer hours, not averages, so the queue
+   doesn't back up during busy windows.
 
-3. **Peak Load Periods**: Observe patterns to identify times when there's a
-   surge in PR merges, such as during active developer hours. Adjust your
-   settings to handle these peak periods efficiently, ensuring that the merge
-   queue remains effective during high activity periods.
+3. **CI capacity and job duration**: fast CI and abundant runners tolerate
+   higher parallelism; slow CI or constrained runners need a conservative
+   setting, since reruns on failure are expensive.
 
-4. **CI Resource Availability**: Evaluate the resources allocated to your CI
-   environment. If resources are abundant, you can lean towards higher parallel
-   checks. Conversely, if resources are limited, consider a conservative
-   approach to ensure that CI doesn't become a bottleneck.
+4. **Change stability**: repositories with frequent flaky or failing PRs
+   should lower batch size and parallelism to limit wasted work.
 
-5. **CI Job Duration**: The execution time of CI jobs can significantly
-   influence your choice. Faster CI jobs might permit a higher number of
-   parallel checks, as potential reruns won't lead to major delays. On the
-   other hand, longer CI jobs necessitate a more conservative setting.
-
-6. **Stability of Changes**: Reflect on the typical quality of pull requests in
-   your repository. For repositories with a high rate of stable PRs, you might
-   increase parallel checks or batch sizes. However, for those with frequent
-   unstable PRs, a conservative approach might be more suitable.
-
-7. **Team Size & Activity Patterns**: The size of your team and their activity
-   patterns can also dictate your settings. Larger or globally distributed
-   teams might have pull requests coming in throughout the day. Understanding
-   these patterns can help in configuring the merge queue for optimal
-   performance.
-
-8. **Feedback Loop for Developers**: Ensure that the chosen configuration
-   promotes a quick feedback loop. While parallel checks and batching can
-   enhance queue performance, they shouldn't delay critical feedback to
-   developers about the state of their PR.
-
-By carefully considering and balancing these factors, you can configure your
-merge queue to be both efficient and reliable. Remember, the right balance may
-vary over time as your team grows and your development processes evolve.
-Periodic reviews and adjustments can help maintain an optimal merge queue
-performance.
+5. **Team distribution**: globally distributed teams produce a steady PR flow;
+   concentrated teams spike and need headroom for bursts.
 
 ### Performance Configuration Calculator
 
-Optimizing your merge queue is a balancing act between throughput and CI
-resource allocation. Our calculator is here to guide you in configuring the
-optimal settings tailored to your team's workflow. Here's how to use it:
+Provide the inputs below and the calculator will suggest a configuration:
 
-1. **CI time in minutes**: Input the average time it takes for your Continuous
-   Integration to validate a change.
+1. **CI time in minutes**: average duration of a CI run.
 
-2. **Estimated CI success ratio in %**: Provide an estimate of how often your
-   CI process returns a successful result. For instance, if your CI passes 95
-   out of 100 times on average, you'd input 95%.
+2. **Estimated CI success ratio in %**: how often CI passes (e.g. 95 if 95
+   out of 100 runs succeed).
 
-3. **Desired PRs to merge per hour**: Set your target for how many pull
-   requests you'd like to merge within an hour at minimum.
+3. **Desired PRs to merge per hour**: target throughput.
 
-4. **Desired CI usage in %**: Define how intensively you'd like to utilize your
-   CI resources. A setting of 100% indicates a standard usage, matching a
-   regular merge queue. Values below 100% will aim to conserve CI resources by
-   leveraging batching, while values above 100% will prioritize higher
-   throughput and reduced latency, even if it means using more CI time than
-   usual.
-
-Once you've input your parameters, the calculator will suggest the optimal
-configuration for your merge queue, ensuring an efficient and seamless merging
-process.
+4. **Desired CI usage in %**: 100% matches a standard queue. Below 100%
+   favors batching to conserve CI; above 100% favors parallel checks for
+   lower latency at higher CI cost.
 
 <MergeQueueCalculator client:only="react"/>
 
 :::note
-  - This calculator optimizes CI usage and throughput but not latency. 
-    If you want to further optimize latency, you need to increase 
+  - This calculator optimizes CI usage and throughput but not latency.
+    If you want to further optimize latency, you need to increase
     the number of parallel checks.
 
-  - The average latency computing assumes that the number of PR merged per hour 
+  - The average latency computing assumes that the number of PR merged per hour
     enters the queue at the beginning of the hour.
 
   - CI time is an important factor in those computing. If you want to optimize
@@ -246,49 +88,29 @@ process.
 
 ## Optimizing Merge Queue Time with Efficient CI Runs
 
-To ensure your merge queue processes efficiently, it's essential that your
-Continuous Integration (CI) system runs as quickly as possible. One way to
-achieve this is by meticulously selecting the tests you run, ensuring that only
-necessary tests are executed. Remember, every minute saved in CI time can have
-a cascading positive effect on your overall merge efficiency.
+Every minute shaved off CI compounds across every queued PR. Run only the
+tests required for the change under test.
 
-A strategic approach to further optimize CI runtime is the [**Two-Step
-CI**](/merge-queue/two-step) method. This approach differentiates between:
+The [**Two-step CI**](/merge-queue/two-step) method splits validation into:
 
-1. **Preliminary Tests**: These are the tests run immediately when a PR is
-created or updated. They're designed to be quick yet effective, ensuring only
-quality PRs enter the merge queue.
+1. **Preliminary tests**: fast checks run when a PR is created or updated,
+   gating entry into the queue.
 
-2. **Comprehensive Tests**: These tests are more exhaustive and are run just
-before merging, ensuring the final quality of the code.
+2. **Pre-merge tests**: exhaustive checks run just before merge.
 
-By splitting your tests in this manner, you ensure that the merge queue is not
-held up by lengthy CI processes for every minor PR update. Instead, the more
-extensive tests are reserved for when PRs are about to be merged, providing a
-balance between speed and code quality.
+This keeps queue-time CI short without sacrificing final-merge confidence.
 
 ## Combining Batch Merging and Parallel Checks
 
-[Batch merging](/merge-queue/batches) and [parallel
-checks](/merge-queue/parallel-checks) are two powerful features that work in
-synergy to improve the efficiency of your merge queue.
-
-Batch merging allows Mergify to test multiple pull requests together as a
-single unit, reducing the amount of time waiting for individual pull request
-tests to complete. On the other hand, [parallel
-checks](/merge-queue/parallel-checks) allow for multiple batches to be tested
-in parallel, further speeding up the merge process.
-
-When both these features are enabled, Mergify creates multiple batches of pull
-requests (according to the `batch_size` option) and then runs tests on several
-of these batches at the same time (as defined by the `parallel_checks`
-option). If any pull request within a batch fails, [Mergify identifies the
-culprit through a binary search, removes it from the queue, and continues
-processing the rest of the queue](#handling-batch-failure).
+[Batch merging](/merge-queue/batches) tests multiple PRs as a single unit.
+[Parallel checks](/merge-queue/parallel-checks) run several batches
+concurrently. Together, they maximize CI utilization: if any PR in a batch
+fails, [Mergify binary-searches for the culprit, removes it, and continues
+processing](/merge-queue/batches#handling-batch-failure-or-timeout).
 
 ```yaml
 merge_queue:
-  max_parallel_check: 2
+  max_parallel_checks: 2
 
 queue_rules:
   - name: default
@@ -296,19 +118,10 @@ queue_rules:
     ...
 ```
 
-In the above example, Mergify will create up to 2 batches, each containing up
-to 3 pull requests, and test them in parallel.
-
-Combining these two features allows you to optimize the throughput of your
-merge queue. You can increase the batch size to merge more pull requests
-concurrently, while also increasing the number of parallel checks to test
-more batches in parallel. This minimizes idle time and makes full use of your
-CI resources.
-
-Suppose your queue has 7 pull requests waiting, and your CI pipeline takes
-about 10 minutes to complete. If you set `batch_size` to 3 and
-`max_parallel_checks` to 2, Mergify would create 2 batches, each containing 3
-pull requests. These batches are then tested in parallel.
+With `batch_size: 3` and `max_parallel_checks: 2`, Mergify runs up to 2
+batches of up to 3 PRs each in parallel. Given 7 queued PRs and a 10-minute
+CI pipeline, the first 6 merge in 10 minutes instead of the hour required for
+sequential validation.
 
 ```dot class="graph"
 strict digraph {
@@ -352,15 +165,3 @@ strict digraph {
     PR6 -> CI;
 }
 ```
-
-With this configuration, even if your CI time is 10 minutes, you can merge the
-first 6 pull requests in only 10 minutes, as opposed to the 1 hour it would
-typically take to test each pull request individually.
-
-### Concluding Thoughts
-
-Mergify provides a range of configurations to tailor your CI budget and merge
-queue strategy. Whether you're aiming for speed, cost-efficiency, or
-reliability, our platform caters to diverse requirements. With Mergify, the
-merging process becomes easier, faster, and safer, boosting your team's
-performance.
