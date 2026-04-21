@@ -4,15 +4,7 @@ description: Run essential tests on every PR and comprehensive tests before merg
 ---
 import Youtube from '../../../components/Youtube.astro'
 
-As your codebase grows, so does your test suite. What once took minutes can
-balloon into hour-long CI runs that slow down development and drain resources.
-But here's the insight: not all tests need to run at every stage of the PR
-lifecycle.
-
-Two-step CI is a strategy that separates your test suite into two phases—fast
-preliminary checks that run on every commit, and comprehensive validation that
-runs only before merging. Combined with Mergify's merge queue, this approach
-can dramatically reduce CI time and costs while maintaining code quality.
+Split your CI into fast preliminary checks on every PR and full tests that run only before merging.
 
 :::tip
   Understand the concepts behind two-step CI at the
@@ -21,31 +13,14 @@ can dramatically reduce CI time and costs while maintaining code quality.
 
 <Youtube video="2mVymDFMaMk" title="Using two-step CI"/>
 
-## Implementing Two-Step CI
+## The Two Phases
 
-A two-step CI approach separates tests into two phases based on when they need
-to run and what they validate:
+**Step 1: Preliminary tests** run on every PR push: linters, formatters,
+unit tests, basic compile checks. Fast feedback, cheap to run.
 
-### Step 1: Preliminary Tests (Fast Feedback)
-Run immediately when a PR is opened or updated. These are:
-- **Fast**: Complete in minutes, not hours
-- **Essential**: Code quality checks that catch obvious issues
-
-Examples: Linters, formatters, unit tests, basic compile checks
-
-These give developers rapid feedback and prevent broken code from entering the
-merge queue.
-
-### Step 2: Pre-Merge Tests (Comprehensive Validation)
-
-Run only when a PR enters the merge queue, just before merging. These are:
-
-- **Thorough**: Full test coverage including edge cases
-- **Expensive**: Integration tests, end-to-end tests, performance benchmarks
-- **Slower**: May take 30+ minutes to complete
-
-These jobs ensure code quality before merging to your main branch, without
-slowing down every PR update.
+**Step 2: Pre-merge tests** run only when a PR enters the merge queue:
+integration tests, end-to-end tests, performance benchmarks. Thorough but
+expensive.
 
 ## How It Works
 
@@ -180,246 +155,21 @@ strict digraph {
 }
 ```
 
-## Batch Processing: Even More Efficient
+## Batch Processing
 
-When you enable [batching](/merge-queue/batches) in Mergify's merge queue, you
-can achieve even greater efficiency. Instead of running pre-merge tests
-separately for each PR, Mergify:
+Enable [batching](/merge-queue/batches) to run pre-merge tests **once** for a
+group of PRs instead of per PR. For 5 PRs with a 30-minute pre-merge suite,
+that's 30 minutes instead of 2.5 hours.
 
-1. Groups multiple PRs together in a batch
-2. Runs the expensive pre-merge tests **once** for the entire batch
-3. Merges all PRs if the batch passes
+## Configuration
 
-**Example**: If you have 5 PRs ready to merge and your pre-merge tests take 30
-minutes:
-- **Without batching**: 5 × 30 minutes = 2.5 hours of CI time
-- **With batching**: 1 × 30 minutes = 30 minutes of CI time
+### CI System
 
-That's **80% reduction** in CI resource usage!
+Run pre-merge tests only on merge queue branches. Mergify creates branches
+prefixed with `mergify/merge-queue/` (customizable via `queue_branch_prefix`
+in [`queue_rules`](/configuration/file-format/#queue-rules)).
 
-```dot class="graph"
-strict digraph {
-    fontname="Inter, system-ui, sans-serif";
-    rankdir="TB";
-    bgcolor="#FAFBFC";
-
-    // Global styling
-    node [
-        style="filled,rounded",
-        shape=rect,
-        fontcolor="black",
-        fontname="Inter, system-ui, sans-serif",
-        fontsize=10,
-        margin=0.12,
-        penwidth=2,
-        width=1.8,
-        height=0.6
-    ];
-
-    edge [
-        color="#7C3AED",
-        arrowhead=normal,
-        fontname="Inter, system-ui, sans-serif",
-        fontsize=9,
-        penwidth=2
-    ];
-
-    // Subgraph for PR #1 flow
-    subgraph cluster_pr1 {
-        style="rounded,filled";
-        fillcolor="#FAF5FF";
-        color="#A855F7";
-        penwidth=1;
-        label="PR #1 Workflow";
-        fontname="Inter, system-ui, sans-serif";
-        fontsize=10;
-        fontcolor="#7C3AED";
-
-        open1 [
-            label="🔄 PR #1 opened",
-            fillcolor="#EDE9FE",
-            color="#8B5CF6",
-            fontcolor="#5B21B6"
-        ];
-
-        preliminary1 [
-            label="🧪 Tests",
-            fillcolor="#FFF4ED",
-            color="#FF8A3D",
-            fontcolor="#C2410C"
-        ];
-
-        preliminary_ok1 [
-            label="✅ Passed",
-            fillcolor="#D1FAE5",
-            color="#10B981",
-            fontcolor="#065F46"
-        ];
-
-        queue_req1 [
-            label="📝 Queue",
-            fillcolor="#F3E8FF",
-            color="#A855F7",
-            fontcolor="#6B21A8"
-        ];
-    }
-
-    // Subgraph for PR #2 flow
-    subgraph cluster_pr2 {
-        style="rounded,filled";
-        fillcolor="#FAF5FF";
-        color="#A855F7";
-        penwidth=1;
-        label="PR #2 Workflow";
-        fontname="Inter, system-ui, sans-serif";
-        fontsize=10;
-        fontcolor="#7C3AED";
-
-        open2 [
-            label="🔄 PR #2 opened",
-            fillcolor="#EDE9FE",
-            color="#8B5CF6",
-            fontcolor="#5B21B6"
-        ];
-
-        preliminary2 [
-            label="🧪 Tests",
-            fillcolor="#FFF4ED",
-            color="#FF8A3D",
-            fontcolor="#C2410C"
-        ];
-
-        preliminary_ok2 [
-            label="✅ Passed",
-            fillcolor="#D1FAE5",
-            color="#10B981",
-            fontcolor="#065F46"
-        ];
-
-        queue_req2 [
-            label="📝 Queue",
-            fillcolor="#F3E8FF",
-            color="#A855F7",
-            fontcolor="#6B21A8"
-        ];
-    }
-
-    // Shared batch processing
-    subgraph cluster_batch {
-        style="rounded,filled";
-        fillcolor="#FFF7ED";
-        color="#FF8A3D";
-        penwidth=2;
-        label="";
-        fontname="Inter, system-ui, sans-serif";
-        fontsize=10;
-        fontcolor="#C2410C";
-
-        batch_title [
-            label="📦 Batch Processing\n(Resource Efficient)",
-            fillcolor="#FFEDD5",
-            color="#FF8A3D",
-            fontcolor="#9A3412",
-            shape=note,
-            width=2.2,
-            height=0.6
-        ];
-
-        queued [
-            label="⏳ Both PRs\nqueued together",
-            shape=ellipse,
-            fillcolor="#FFEDD5",
-            color="#FF8A3D",
-            fontcolor="#9A3412",
-            width=2,
-            height=0.8
-        ];
-
-        premerge [
-            label="🔬 Single test run\n(Both PRs tested)",
-            fillcolor="#FFF4ED",
-            color="#FF8A3D",
-            fontcolor="#C2410C",
-            width=2.2
-        ];
-
-        premerge_ok [
-            label="✅ Batch passed",
-            fillcolor="#D1FAE5",
-            color="#10B981",
-            fontcolor="#065F46"
-        ];
-
-        // Internal layout
-        batch_title -> queued [style=invis];
-    }
-
-    // Final merge results
-    merged1 [
-        label="🎉 PR #1 merged",
-        fillcolor="#DDD6FE",
-        color="#7C3AED",
-        fontcolor="#5B21B6"
-    ];
-
-    merged2 [
-        label="🎉 PR #2 merged",
-        fillcolor="#DDD6FE",
-        color="#7C3AED",
-        fontcolor="#5B21B6"
-    ];
-
-    // PR #1 flow
-    open1 -> preliminary1;
-    preliminary1 -> preliminary_ok1 [color="#10B981", penwidth=3];
-    preliminary_ok1 -> queue_req1;
-    queue_req1 -> queued;
-
-    // PR #2 flow
-    open2 -> preliminary2;
-    preliminary2 -> preliminary_ok2 [color="#10B981", penwidth=3];
-    preliminary_ok2 -> queue_req2;
-    queue_req2 -> queued;
-
-    // Batch processing
-    queued -> premerge;
-    premerge -> premerge_ok [color="#10B981", penwidth=3];
-
-    // Both PRs merge from single test success
-    premerge_ok -> merged1 [color="#7C3AED", penwidth=3];
-    premerge_ok -> merged2 [color="#7C3AED", penwidth=3];
-
-    // Alignment
-    {rank=same; merged1, merged2}
-}
-```
-
-## Implementation Guide
-
-Implementing two-step CI requires coordinating your CI system with Mergify's
-merge queue. Here's how:
-
-### Overview
-
-1. **Configure CI to distinguish test phases**: Set up your CI to run
-   preliminary tests on all branches, but pre-merge tests only on merge queue
-   branches
-
-2. **Configure Mergify conditions**: Define which tests must pass to enter the
-   queue vs. which must pass to merge
-
-### Step 1: Configure Your CI System
-
-The key is to run pre-merge tests **only on merge queue branches**. By default,
-Mergify creates branches prefixed with `mergify/merge-queue/` for queued PRs
-(customizable via `queue_branch_prefix` in
-[`queue_rules`](/configuration/file-format/#queue-rules)).
-
-**Pattern**:
-- ✅ Preliminary tests: Run on **all** branches
-- ✅ Pre-merge tests: Run **only** on branches matching `mergify/merge-queue/*`
-
-#### Example: GitHub Actions
+#### GitHub Actions
 
 ```yaml
 name: CI
@@ -454,26 +204,13 @@ jobs:
       run: make benchmark
 ```
 
-How it works:
+#### Other CI Systems
 
-- `preliminary-tests` runs on **every PR** (fast feedback)
+- **CircleCI**: Branch filter regex `/^mergify\/merge-queue\/.*/`
+- **Jenkins**: Conditional execution on `BRANCH_NAME`
+- **GitLab CI**: `only: /^mergify\/merge-queue\/.*/`
 
-- `pre-merge-tests` runs **only when** the branch name starts with
-  `mergify/merge-queue/` (comprehensive validation before merge)
-
-#### Example: Other CI Systems
-
-The same principle applies to any CI system. Just configure the pre-merge job
-to run only on merge queue branches:
-
-- **CircleCI**: Use branch filters with regex `/^mergify\/merge-queue\/.*/`
-- **Jenkins**: Add conditional execution based on `BRANCH_NAME`
-- **GitLab CI**: Use `only: /^mergify\/merge-queue\/.*/`
-
-### Step 2: Configure Mergify
-
-Set up your `queue_rules` to define when PRs can enter the queue and when they
-can merge:
+### Mergify
 
 ```yaml
 queue_rules:
@@ -487,9 +224,5 @@ queue_rules:
       - check-success=pre-merge-tests
 ```
 
-What this means:
-- `queue_conditions`: Preliminary tests must pass before a PR can enter the
-   merge queue
-
-- `merge_conditions`: Pre-merge tests must pass before the PR actually merges
-  to main
+`queue_conditions` gates entry into the queue; `merge_conditions` gates the
+final merge to main.
