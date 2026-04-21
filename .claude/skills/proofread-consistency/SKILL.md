@@ -116,6 +116,15 @@ For each changed section:
    verbs ("Configure...", "Add..."), all items should
    follow the same pattern.
 
+5. **Link text for the same URL:** Within a single
+   page, the same URL should have the same link text.
+   If `[Monorepo strategy](/merge-queue/monorepo)` and
+   `[Monorepo guide](/merge-queue/monorepo)` both
+   appear, pick the form already used elsewhere in the
+   file (or in sibling pages) and use it throughout.
+   Check every internal link added in the diff against
+   other occurrences of the same URL in the file.
+
 ## How to Verify
 
 1. **Read the full changed file** to understand the
