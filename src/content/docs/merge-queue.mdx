@@ -103,6 +103,18 @@ while parallel execution and smart batching keep your team shipping fast.
   practices.
 </AcademyCallout>
 
+## Glossary
+
+Vocabulary used across these pages:
+
+| Term | Meaning |
+|------|---------|
+| **Queue** | The ordered line of pull requests waiting to merge. |
+| **Scopes** | Metadata describing which parts of the codebase a PR touches; used to batch PRs in monorepos. |
+| **Batches** | Queued PRs tested together in one CI run to reduce total CI cost and time. |
+| **Two-step CI** | Run fast tests on every PR, and run expensive tests only before merge. |
+| **Parallel checks** | Run CI speculatively on multiple queued PRs at once, instead of one at a time. |
+
 ## Do You Need a Merge Queue?
 
 If any of these sound familiar, a merge queue can help:
@@ -114,6 +126,18 @@ If any of these sound familiar, a merge queue can help:
 | CI bill keeps climbing | Full test suite on every PR | Batching + two-step CI |
 | Monorepo PRs block each other | Unrelated changes queued together | Scoped queues for independent paths |
 | Hotfixes stuck behind features | No priority mechanism | Priority rules for urgent PRs |
+
+## Which Problem Are You Solving?
+
+Jump straight to the feature that matches your pain point:
+
+| Problem | Feature |
+|---------|---------|
+| PRs waiting too long in queue | [Parallel checks](/merge-queue/parallel-checks) |
+| CI cost getting out of hand | [Batches](/merge-queue/batches) or [Two-step CI](/merge-queue/two-step) |
+| Hotfixes blocked behind feature PRs | [Priority rules](/merge-queue/priority) |
+| Monorepo with independent packages | [Scopes](/merge-queue/scopes) and [Monorepo guide](/merge-queue/monorepo) |
+| Want to auto-queue approved PRs | [Auto-Merge](/merge-protections/auto-merge) and [Queue rules](/merge-queue/rules) |
 
 ## What Mergify Solves
 
