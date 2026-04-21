@@ -4,7 +4,10 @@ description: An honest comparison of Mergify Stacks and GitHub's gh-stack CLI fo
 ---
 
 import GitGraph from '~/components/GitGraph.astro';
-import StackMapping from '~/components/StackMapping.astro';
+import StacksLocalModel from '~/components/StacksLocalModel.astro';
+import ComparisonLogo from '~/components/ComparisonLogo.astro';
+
+<ComparisonLogo icon="simple-icons:github" alt="GitHub logo" />
 
 GitHub released [gh-stack](https://github.github.com/gh-stack/), a stacking
 extension for the `gh` CLI. Both tools solve the same problem (big PRs are hard
@@ -27,29 +30,7 @@ previous one's branch. The difference is what you deal with locally.
 
 ### Mergify Stacks: one branch, many commits
 
-You work on a single branch. Each commit maps to a PR automatically:
-
-<GitGraph
-  commits={["A", "B", "C"]}
-  commitColor="green"
-  branch="feat/auth"
-  prs={[
-    { label: "PR #1", commits: 0, annotation: "base: main" },
-    { label: "PR #2", commits: 1, annotation: "base: PR #1" },
-    { label: "PR #3", commits: 2, annotation: "base: PR #2" },
-  ]}
-/>
-
-Under the hood, `mergify stack push` creates a remote branch per commit and
-chains the PRs:
-
-<StackMapping entries={[
-  { commit: "A: add model", branch: "stack/.../Ia1b2c3", pr: "PR #1" },
-  { commit: "B: add endpoint", branch: "stack/.../Id4e5f6", pr: "PR #2" },
-  { commit: "C: add tests", branch: "stack/.../Ig7h8i9", pr: "PR #3" },
-]} />
-
-You never see or manage these remote branches. They're an implementation detail.
+<StacksLocalModel />
 
 ### gh-stack: one branch per PR
 

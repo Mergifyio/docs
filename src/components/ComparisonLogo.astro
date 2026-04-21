@@ -1,0 +1,27 @@
+---
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  icon: string;
+  alt: string;
+}
+
+const { icon, alt } = Astro.props as Props;
+---
+
+<Icon
+  name={icon}
+  class="comparison-logo"
+  role="img"
+  aria-label={alt}
+  width={96}
+  height={96}
+/>
+
+<style lang="scss">
+  .comparison-logo {
+    float: right;
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+  }
+</style>
