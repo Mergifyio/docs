@@ -1,0 +1,247 @@
+---
+title: Mergify Stacks vs Graphite
+description: An honest comparison of Mergify Stacks and Graphite's stacking workflow.
+---
+
+import GitGraph from '~/components/GitGraph.astro';
+import StacksLocalModel from '~/components/StacksLocalModel.astro';
+import ComparisonLogo from '~/components/ComparisonLogo.astro';
+
+<ComparisonLogo icon="simple-icons:graphite" alt="Graphite logo" />
+
+[Graphite](https://graphite.dev/) is a developer workflow platform built
+around stacked pull requests. It ships a CLI (`gt`), a custom PR review UI,
+AI reviews, and a merge queue. This page focuses on how the two tools handle
+stacking: how you create, update, and land a chain of PRs. A short
+[Beyond stacks](#beyond-stacks) section near the end covers how the broader
+platforms differ.
+
+Both tools solve the same core problem (big PRs are hard to review, so split
+them into a chain of small ones), but they take different approaches to get
+there.
+
+## Two Models for Stacking
+
+The biggest difference is how each tool thinks about branches.
+
+| | Mergify Stacks | Graphite |
+|---|---|---|
+| **Local model** | One branch, many commits | One branch per PR |
+| **Identity** | Change-Id trailer in commit message | Branch name |
+| **Who manages branches** | Mergify auto-creates remote branches | Developer creates and names them |
+| **Mental model** | "Chain of commits" | "Chain of dependent branches" |
+
+Both produce the same result on GitHub: chained PRs where each targets the
+previous one's branch. The difference is what you deal with locally.
+
+### Mergify Stacks: one branch, many commits
+
+<StacksLocalModel />
+
+### Graphite: one branch per PR
+
+You create and name a separate branch for each change with `gt create`. Each
+branch becomes a PR that targets the branch below it:
+
+<GitGraph
+  nodes={[
+    { id: "m1", label: "M", color: "gray" },
+    { id: "m2", label: "", color: "gray" },
+    { id: "a1", label: "A", color: "green" },
+    { id: "a2", label: "A'", color: "green" },
+    { id: "a3", label: "", color: "green" },
+    { id: "b1", label: "B", color: "blue" },
+    { id: "b2", label: "", color: "blue" },
+    { id: "c1", label: "C", color: "amber" },
+    { id: "c2", label: "C'", color: "amber" },
+  ]}
+  edges={[
+    { from: "m1", to: "m2", label: "main" },
+    { from: "m2", to: "a1" },
+    { from: "a1", to: "a2" },
+    { from: "a2", to: "a3", label: "add-model" },
+    { from: "a3", to: "b1" },
+    { from: "b1", to: "b2", label: "add-endpoint" },
+    { from: "b2", to: "c1" },
+    { from: "c1", to: "c2", label: "add-tests" },
+  ]}
+/>
+
+Three branches, three PRs: `add-model` targets `main`, `add-endpoint`
+targets `add-model`, `add-tests` targets `add-endpoint`. You navigate
+between them with `gt up`, `gt down`, `gt top`, and `gt bottom`.
+
+## Feature Comparison
+
+| Feature | Mergify Stacks | Graphite |
+|---|---|---|
+| Create a stack | `mergify stack new` + commits | `gt create [name]` per branch |
+| Push changes | `mergify stack push` (rebase + push + PRs) | `gt submit` (force-push + PRs) |
+| View the stack | `mergify stack list` | `gt log` |
+| Edit mid-stack | `mergify stack edit` (interactive rebase) | `gt modify` (auto-restacks) |
+| Absorb fixups | Not supported | `gt absorb` (auto-routes staged hunks) |
+| Split a commit | Not supported | `gt split` (by commit, hunk, or file) |
+| Reorder changes | `mergify stack edit` (rebase -i) | `gt reorder` (interactive) |
+| Squash / fold | `mergify stack edit` (squash/fixup) | `gt squash` / `gt fold` |
+| Undo | Git reflog | `gt undo` (reverts recent `gt` operations) |
+| Sync after merge | `mergify stack sync` | `gt sync` |
+| Navigate between PRs | N/A (single branch) | `gt up` / `down` / `top` / `bottom` |
+| Open PR in browser | `mergify stack open` (interactive picker) | `gt pr` |
+| Collaboration | `mergify stack checkout` | Shared stacks + frozen branches |
+| Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen |
+| Alternate base branch | `mergify stack new --base <branch>` | Multi-trunk support |
+| IDE integration | CLI only | VS Code extension |
+| MCP for AI agents | Bundled with CLI | `gt mcp` |
+| Merge Queue | [Native Mergify integration](/merge-queue) | Graphite merge queue |
+| Merge a stack | Bottom-up via Merge Queue | `gt merge` (stack-aware) |
+
+## Where Mergify Is Stronger
+
+**Simpler Git model.** One branch, standard Git. You don't create branches or
+navigate between them. You commit and rebase like you already do. The
+branching complexity lives on the remote side where you don't have to think
+about it. Graphite's one-branch-per-PR model is more expressive but asks you
+to learn a new set of commands (`gt up`, `gt down`, `gt modify`, `gt restack`)
+and keep a tree of local branches in your head.
+
+**One command does more.** `mergify stack push` rebases on the target branch,
+pushes all changes, and creates or updates PRs in a single step. Graphite
+splits the flow across several operations (`gt create`, `gt modify`,
+`gt submit`) depending on where you are in the stack.
+
+**Merge Queue depth.** Mergify's Merge Queue has
+[batching](/merge-queue/batches), [priority lanes](/merge-queue/priority),
+[speculative checks](/merge-queue/parallel-checks), and
+[queue freeze](/merge-queue/pause). Graphite has a merge queue too; Mergify's
+is more configurable and has been in production longer.
+
+**No one else needs Mergify.** Only the stack author installs the CLI.
+Reviewers, teammates, and anyone else interacting with the PRs use GitHub's
+native UI: no Mergify sign-up, no install, no account required. Graphite's
+full review, navigation, and approval flow lives inside the Graphite app, so
+to get the complete experience everyone on the team needs a Graphite
+account.
+
+## Where Graphite Is Stronger
+
+**`gt absorb` saves real time.** After a review round, you often need to
+amend several commits with different fixes. Graphite's `gt absorb` looks at
+your staged hunks and routes each one into the commit that last touched those
+lines. Mergify doesn't have an equivalent; you amend each commit by hand.
+
+**`gt split` breaks big commits apart.** When a commit grows too large
+during development, `gt split` carves it into smaller commits by file or hunk.
+Useful when what started as one change turns out to need separating for
+review.
+
+**`gt undo` is a safety net.** Graphite tracks its own operations and can
+revert them with a single command. Mergify relies on Git's reflog, which is
+harder to navigate when something goes sideways.
+
+**Frozen branches for collaboration.** Graphite can freeze branches that
+other contributors are working on to prevent accidental force-pushes.
+`mergify stack checkout` supports handoff too, but Graphite's explicit locking
+prevents more foot-guns on shared stacks.
+
+**IDE integration.** Graphite has a VS Code extension that lets you manage
+the stack visually. Mergify is CLI-only today.
+
+## Beyond Stacks
+
+Stacking is one feature of Graphite, not all of it. The rest of the product
+includes:
+
+- **AI reviews and Graphite Chat**: automated review comments and an AI
+  assistant that answers questions and edits code on PRs.
+
+- **Custom PR review UI**: inbox, code tours, diff versions, keyboard
+  shortcuts.
+
+- **Developer velocity analytics**: PR throughput, review time, per-person
+  metrics.
+
+- **Native integrations**: Linear, Slack (including review and merge from
+  Slack).
+
+Mergify has invested in a different direction:
+
+- **Rules engine**: 40+ conditions, 20+ actions, cascading logic for
+  [Workflow Automation](/workflow).
+
+- **Merge Queue maturity**: batching, priority lanes, speculative checks,
+  queue freeze.
+
+- **CI and test intelligence**: [CI Insights](/ci-insights) for cost and
+  timing analytics, flaky test detection, quarantine, and test reporting.
+
+- **Open CLI, review in GitHub**: Stacks works with GitHub's native review
+  UI; there's no separate app to learn.
+
+If AI review and a custom PR experience are what you want, Graphite is built
+around that. If you want a deep Merge Queue, Workflow Automation, and CI/test
+intelligence, Mergify is built around that. For stacking alone, the choice
+comes down to the Git model and the feature gaps above.
+
+## Other Considerations
+
+**Pricing.** The Mergify CLI and Stacks are free and work without a Mergify
+subscription. Graphite has a free tier for the CLI and charges for platform
+features (AI reviews, merge queue, analytics) on team and enterprise plans.
+
+**Platform support.** Both tools target GitHub today.
+
+**Review surface.** Graphite encourages review inside its own app. Mergify
+Stacks keeps review in GitHub's native UI, which matters if your team doesn't
+want to move PR review off GitHub.
+
+## Switching from Graphite
+
+If you've been using Graphite and want to try Mergify Stacks, the main shift
+is moving from "one branch per PR" to "one commit per PR on a single branch."
+
+### Install and setup
+
+```bash
+uv tool install mergify-cli
+mergify stack setup
+```
+
+This installs the CLI and adds a `commit-msg` hook that generates
+[Change-Ids](/stacks/concepts#change-id) for your commits. See the
+[setup guide](/stacks/setup) for details.
+
+### Concept mapping
+
+| Graphite | Mergify Stacks |
+|---|---|
+| `gt create` (create a branch) | `git commit` (create a commit) |
+| `gt modify` | `git commit --amend` or `mergify stack edit` |
+| `gt submit` | `mergify stack push` |
+| `gt up` / `down` / `top` / `bottom` | Not needed (single branch) |
+| `gt restack` | Automatic on `mergify stack push` |
+| `gt sync` | `mergify stack sync` |
+| `gt log` | `mergify stack list` |
+| `gt absorb` | `git commit --fixup` + `mergify stack edit` |
+
+### Workflow before and after
+
+**With Graphite:**
+
+```bash
+gt create add-model
+# work on first change
+gt create add-endpoint
+# work on second change
+gt submit
+```
+
+**With Mergify Stacks:**
+
+```bash
+mergify stack new
+git commit -m "add model"
+git commit -m "add endpoint"
+mergify stack push
+```
+
+The result on GitHub is the same: two chained PRs, each showing one change.
