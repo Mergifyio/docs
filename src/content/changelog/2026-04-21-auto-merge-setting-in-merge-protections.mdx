@@ -1,0 +1,14 @@
+---
+title: "Auto-merge setting in Merge Protections"
+date: 2026-04-21
+tags:
+  - Merge Protections
+  - Deprecations
+description: "New auto_merge setting that automatically merges or queues PRs when all merge protection conditions pass, replacing the deprecated autoqueue in queue rules."
+---
+
+You can now add `auto_merge: true` to `merge_protection_settings` to automatically merge PRs when all your merge protection `success_conditions` are met. If the merge queue is enabled, PRs are queued automatically; without it, they are merged directly.
+
+This replaces `autoqueue` in `queue_rules`, which is now deprecated and will stop working on July 16, 2026. If you currently use `autoqueue`, Mergify will automatically open a pull request to migrate your configuration.
+
+Note that `auto_merge` applies globally to all queue rules, unlike `autoqueue` which was set per rule.

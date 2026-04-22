@@ -1,0 +1,9 @@
+---
+title: "Merge queue rebase with update_bot_account on fork pull requests"
+date: 2026-04-21
+tags:
+  - Deprecations
+description: "Using the merge queue with `update_method=rebase` and `update_bot_account` on fork pull requests is deprecated and will be removed on July 1, 2026."
+---
+
+When a fork pull request is queued with `update_method=rebase` and `update_bot_account`, Mergify uses git-based rebase with user impersonation to update the branch. This capability will be removed on July 1, 2026. To avoid disruption, switch to `update_method=merge` in your queue rule. Affected pull requests will now receive a deprecation notice as a comment.

@@ -1,0 +1,9 @@
+---
+title: "Automated migration for check interruption default change"
+date: 2026-04-21
+tags:
+  - Merge Queue
+description: "An automated configuration migration adds explicit `allow_checks_interruption: true` to priority rules with priority higher than medium, preparing for the upcoming default change."
+---
+
+Priority rules with priority higher than medium that don't explicitly set `allow_checks_interruption` will receive an automated configuration pull request adding the explicit value. This preserves current behavior ahead of the default changing from `true` to `false`. The migration deadline is July 1, 2026.
