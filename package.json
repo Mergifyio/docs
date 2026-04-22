@@ -16,7 +16,7 @@
     "check:links": "linkinator dist/ --recurse --retry-errors --retry-errors-count 3 --timeout 30000 --concurrency 25 --verbosity error --skip 'github.com/.*/edit/' --skip 'https://docs.mergify.com'"
   },
   "devDependencies": {
-    "@actions/core": "^3.0.0",
+    "@actions/core": "^3.0.1",
     "@astrojs/mdx": "^5.0.3",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/ts-plugin": "^1.10.7",
