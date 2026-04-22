@@ -62,9 +62,9 @@ merges first. Once it lands, the next PR's base automatically updates to `main`,
 and you can review and merge that one. Each PR in turn, working up the chain.
 
 :::tip
-  Stacks work well with [Merge Queue](/merge-queue). Each stacked PR can enter
-  the queue independently as its dependencies land, keeping your merge pipeline
-  flowing.
+  Comment `@mergifyio queue` on the top PR and the Merge Queue enqueues the
+  whole stack at once, bottom-up. See
+  [Stacked PRs in the Merge Queue](/merge-queue/stacks) for the full mechanics.
 :::
 
 You don't need to merge the entire stack at once. If the first two PRs are
