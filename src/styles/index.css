@@ -455,12 +455,16 @@ a.header-link:focus {
 
 body {
   /* Set a section-specific accent for product pages */
-  --section-merge-queue-accent: #1db793;
-  --section-merge-queue-accent-bg: rgba(29, 183, 147, 0.15);
-  --section-ci-insights-accent: #4f5ce1;
-  --section-ci-insights-accent-bg: rgba(79, 92, 225, 0.15);
-  --section-merge-protections-accent: #52ade6;
-  --section-merge-protections-accent-bg: rgba(82, 173, 230, 0.15);
+  --section-merge-queue-accent: #1cb893;
+  --section-merge-queue-accent-bg: rgba(28, 184, 147, 0.15);
+  --section-ci-insights-accent: #4d59e0;
+  --section-ci-insights-accent-bg: rgba(77, 89, 224, 0.15);
+  --section-test-insights-accent: #f27b2a;
+  --section-test-insights-accent-bg: rgba(242, 123, 42, 0.15);
+  --section-merge-protections-accent: #43a7e5;
+  --section-merge-protections-accent-bg: rgba(67, 167, 229, 0.15);
+  --section-stacks-accent: #e53935;
+  --section-stacks-accent-bg: rgba(229, 57, 53, 0.15);
   --section-workflow-accent: #e62474;
   --section-workflow-accent-bg: rgba(230, 36, 116, 0.15);
 }
@@ -543,6 +547,56 @@ body.section-merge-protections a.current-header-link {
 }
 
 #left-sidebar .nav-group-merge-protections .nav-link a[aria-current="page"] {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Test Insights section: ToC and nav colors */
+body.section-test-insights .header-link {
+  border-inline-start-color: var(--section-test-insights-accent-bg);
+}
+
+body.section-test-insights .header-link:hover,
+body.section-test-insights .header-link:focus,
+body.section-test-insights .header-link:focus-within {
+  border-inline-start-color: var(--section-test-insights-accent);
+}
+
+body.section-test-insights a.current-header-link {
+  border-inline-start-color: var(--section-test-insights-accent);
+  background-color: var(--section-test-insights-accent-bg);
+}
+
+#left-sidebar .nav-group-test-insights .nav-link a:hover,
+#left-sidebar .nav-group-test-insights .nav-link a:focus {
+  background-color: transparent;
+}
+
+#left-sidebar .nav-group-test-insights .nav-link a[aria-current="page"] {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Stacks section: ToC and nav colors */
+body.section-stacks .header-link {
+  border-inline-start-color: var(--section-stacks-accent-bg);
+}
+
+body.section-stacks .header-link:hover,
+body.section-stacks .header-link:focus,
+body.section-stacks .header-link:focus-within {
+  border-inline-start-color: var(--section-stacks-accent);
+}
+
+body.section-stacks a.current-header-link {
+  border-inline-start-color: var(--section-stacks-accent);
+  background-color: var(--section-stacks-accent-bg);
+}
+
+#left-sidebar .nav-group-stacks .nav-link a:hover,
+#left-sidebar .nav-group-stacks .nav-link a:focus {
+  background-color: transparent;
+}
+
+#left-sidebar .nav-group-stacks .nav-link a[aria-current="page"] {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
