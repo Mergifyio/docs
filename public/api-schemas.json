@@ -74,6 +74,7 @@
         "summary": "Get merge queues configuration",
         "description": "Get the list of all merge queues configuration sorted by processing order",
         "operationId": "repository_queues_configuration_repos__owner___repository__queues_configuration_get",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -11391,6 +11392,22 @@
               }
             ],
             "title": "Estimated Merge At"
+          },
+          "conflict_with_pull_requests": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer",
+                  "maximum": 9.223372036854776e+18,
+                  "minimum": 0.0
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conflict With Pull Requests"
           }
         },
         "type": "object",
