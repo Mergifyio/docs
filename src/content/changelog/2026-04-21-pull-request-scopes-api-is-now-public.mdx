@@ -1,0 +1,9 @@
+---
+title: "Pull Request Scopes API is now public"
+date: 2026-04-21
+tags:
+  - API
+description: "The endpoint to set scopes on pull requests is now available in the public API."
+---
+
+You can now use the public API to set scopes on pull requests via `POST /v1/repos/{owner}/{repository}/pulls/{number}/scopes`. This endpoint was previously internal-only and is now documented in the public OpenAPI specification, making it accessible to CI application key holders for programmatic scope management.

@@ -1,0 +1,9 @@
+---
+title: "Check interruption disabled by default for priority rules"
+date: 2026-04-21
+tags:
+  - Merge Queue
+description: "The default for `allow_checks_interruption` in priority rules changes from true to false, so higher-priority pull requests no longer interrupt running checks unless explicitly configured."
+---
+
+Previously, when a higher-priority pull request entered the merge queue, it would automatically interrupt ongoing checks of lower-priority pull requests. This is now disabled by default. To keep the previous behavior, set `allow_checks_interruption: true` explicitly on your priority rules. Affected configurations will receive an automated migration pull request.
