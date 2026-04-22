@@ -31,7 +31,7 @@
     "@types/node": "^25.6.0",
     "@types/viz.js": "^2.1.5",
     "@typescript-eslint/eslint-plugin": "^8.58.2",
-    "@typescript-eslint/parser": "^8.58.2",
+    "@typescript-eslint/parser": "^8.59.0",
     "agentation": "^3.0.2",
     "astro": "^6.1.8",
     "astro-auto-import": "^0.5.1",
