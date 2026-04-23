@@ -141,6 +141,7 @@ const navItems: NavItem[] = [
         icon: 'tabler:arrows-split-2',
       },
       { title: 'Batches', path: '/merge-queue/batches', icon: 'tabler:packages' },
+      { title: 'Stacked PRs', path: '/merge-queue/stacks', icon: 'bi:stack' },
       {
         title: 'Scopes',
         path: '/merge-queue/scopes',

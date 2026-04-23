@@ -73,11 +73,11 @@ hard-to-review PR:
 
 ## Pairing with Merge Queue
 
-[Merge Queue](/merge-queue) complements Stacks well: Stacks break large changes
-into reviewable pieces, and Merge Queue lands those pieces safely and
-efficiently. Each stacked PR can enter the queue independently as its
-dependencies land. The bottom PR merges first, then the next one enters the
-queue, and so on, without manual coordination.
+[Merge Queue](/merge-queue) understands stacks natively. A single
+`@mergifyio queue` on the top PR enqueues the whole stack in order; the queue
+keeps stacked PRs together when batching and cascades dequeues if any
+predecessor fails. See [Stacked PRs in the Merge Queue](/merge-queue/stacks)
+for the full mechanics.
 
 ## Comparing with Alternatives
 
