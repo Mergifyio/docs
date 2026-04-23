@@ -118,6 +118,11 @@ The stack comment shows where each PR sits in the chain, with links to jump
 between them. This gives both authors and reviewers a clear map of the entire
 change.
 
+The `Depends-On: #NNN` marker isn't only for humans. The
+[Merge Queue](/merge-queue/stacks) also uses it to recognize a stack and queue
+it as a unit. Without both the branch chain and the `Depends-On:` marker, the
+queue treats each PR independently.
+
 ## Smart Updates
 
 When you push again after making changes, Stacks doesn't recreate everything. It
