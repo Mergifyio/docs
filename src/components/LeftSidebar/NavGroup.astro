@@ -18,7 +18,9 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 	'active': true,
 	'nav-group-merge-queue': navGroup.path?.startsWith('/merge-queue'),
 	'nav-group-ci-insights': navGroup.path?.startsWith('/ci-insights'),
+	'nav-group-test-insights': navGroup.path?.startsWith('/test-insights'),
 	'nav-group-merge-protections': navGroup.path?.startsWith('/merge-protections'),
+	'nav-group-stacks': navGroup.path?.startsWith('/stacks'),
 	'nav-group-workflow': navGroup.path?.startsWith('/workflow')
 }}>
 	<nav-group data-uuid={navGroup.id}>
