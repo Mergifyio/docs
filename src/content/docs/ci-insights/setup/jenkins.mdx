@@ -142,7 +142,9 @@ pipeline {
             # npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
           done
           set -e
-          mergify ci junit-process test-results-*.xml
+          # Quote the glob so Mergify expands it rather than the shell —
+          # recommended when many reports match.
+          mergify ci junit-process 'test-results-*.xml'
         '''
       }
     }
