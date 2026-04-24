@@ -345,6 +345,7 @@ const navItems: NavItem[] = [
           { title: 'Event Logs', path: '/api/eventlogs' },
           { title: 'Badges', path: '/api/badges' },
           { title: 'Scheduled Freeze', path: '/api/scheduled-freeze' },
+          { title: 'CI Insights', path: '/api/ci-insights' },
         ],
       },
     ],

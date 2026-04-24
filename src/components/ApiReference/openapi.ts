@@ -167,6 +167,7 @@ export const TAG_LABELS: Record<string, string> = {
   scheduled_freeze: 'Scheduled Freeze',
   merge_queue: 'Merge Queue',
   pull_requests: 'Pull Requests',
+  ci_insights: 'CI Insights',
 };
 
 // Tag descriptions for sub-page intros
@@ -180,6 +181,7 @@ export const TAG_DESCRIPTIONS: Record<string, string> = {
   scheduled_freeze: 'Schedule merge queue freezes for maintenance or release windows.',
   merge_queue: 'Control merge queue state — pause, unpause, and inspect status.',
   pull_requests: 'Push scopes and other per-pull-request data to Mergify.',
+  ci_insights: 'Access data from CI Insights.',
 };
 
 export function humanizeTag(tag: string): string {
