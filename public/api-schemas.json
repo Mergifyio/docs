@@ -4658,6 +4658,211 @@
         }
       }
     },
+    "/ci/{owner}/repositories/{repository}/quarantines": {
+      "get": {
+        "tags": [
+          "ci_insights"
+        ],
+        "summary": "List quarantined tests",
+        "description": "List the tests currently quarantined in the repository, ordered by quarantine creation time ascending. A quarantine applies to a specific branch or to all branches when `branch` is `null`.",
+        "operationId": "get_quarantined_tests_with_params_token_auth_ci__owner__repositories__repository__quarantines_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Branch"
+            }
+          },
+          {
+            "name": "test_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Test Id"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "manual",
+                    "auto"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuarantinedTestsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/ci/{owner}/repositories/{repository}/quarantines/{quarantine_id}": {
+      "get": {
+        "tags": [
+          "ci_insights"
+        ],
+        "summary": "Get a quarantined test",
+        "description": "Retrieve a single quarantined test by its quarantine ID.",
+        "operationId": "get_quarantine_by_id_ci__owner__repositories__repository__quarantines__quarantine_id__get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "quarantine_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Quarantine Id"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuarantinedTest"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/scheduled_freeze": {
       "get": {
         "tags": [
@@ -11743,6 +11948,85 @@
         ],
         "title": "PullRequestQueued"
       },
+      "QuarantinedTest": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "Unique identifier of the quarantine record."
+          },
+          "test_name": {
+            "type": "string",
+            "title": "Test Name",
+            "description": "Fully qualified name of the quarantined test."
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "description": "Free-form reason recorded when the test was quarantined."
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch",
+            "description": "Branch name or pattern this quarantine applies to. `null` means the test is quarantined on every branch."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At",
+            "description": "UTC timestamp when the test was added to quarantine."
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "auto"
+            ],
+            "title": "Source",
+            "description": "How the test got quarantined: `manual` (user action) or `auto` (auto-quarantined).",
+            "default": "manual"
+          },
+          "is_recovered": {
+            "type": "boolean",
+            "title": "Is Recovered",
+            "description": "True when recent runs of this test are healthy, suggesting the quarantine could be removed."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "test_name",
+          "reason",
+          "branch",
+          "created_at",
+          "is_recovered"
+        ],
+        "title": "QuarantinedTest"
+      },
+      "QuarantinedTestsResponse": {
+        "properties": {
+          "quarantined_tests": {
+            "items": {
+              "$ref": "#/components/schemas/QuarantinedTest"
+            },
+            "type": "array",
+            "title": "Quarantined Tests"
+          }
+        },
+        "type": "object",
+        "required": [
+          "quarantined_tests"
+        ],
+        "title": "QuarantinedTestsResponse"
+      },
       "Queue": {
         "properties": {
           "branch": {
@@ -13461,6 +13745,10 @@
     {
       "name": "badges",
       "description": "Operations with badges."
+    },
+    {
+      "name": "ci_insights",
+      "description": "Operations with ci insights."
     },
     {
       "name": "eventlogs",
