@@ -156,17 +156,26 @@ also inherit this role in Mergify.
 <table>
   <thead>
     <tr>
-      <th>Feature</th>
+      <th rowSpan="2">Feature</th>
+      <th colSpan="5">Repository role</th>
+      <th>Organization role</th>
+    </tr>
+    <tr>
       <th>Read</th>
       <th>Triage</th>
       <th>Write</th>
       <th>Maintain</th>
       <th>Admin</th>
+      <th>Owner</th>
     </tr>
   </thead>
   <tbody>
-      <tr>
+    <tr>
+      <th colSpan="7" scope="rowgroup">Merge Queue</th>
+    </tr>
+    <tr>
       <td>View the merge queue</td>
+      <td>✓</td>
       <td>✓</td>
       <td>✓</td>
       <td>✓</td>
@@ -180,9 +189,121 @@ also inherit this role in Mergify.
       <td>✓</td>
       <td>✓</td>
       <td>✓</td>
+      <td>✓</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <th colSpan="7" scope="rowgroup">Merge Protection</th>
+    </tr>
+    <tr>
+      <td>View merge protection status</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Edit merge protection rules in <code>.mergify.yml</code></td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Schedule a queue freeze</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <th colSpan="7" scope="rowgroup">CI Insights</th>
+    </tr>
+    <tr>
+      <td>View CI Insights data</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Activate CI Insights or configure its repositories</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Manage CI Insights Auto-Retry rules</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Configure CI Insights self-hosted runners</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✓</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <th colSpan="7" scope="rowgroup">Test Insights</th>
+    </tr>
+    <tr>
+      <td>View Test Insights data</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Quarantine or unquarantine tests</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+    <tr>
+      <td>Configure Test Insights Auto-Quarantine</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <th colSpan="7" scope="rowgroup">Account</th>
     </tr>
     <tr>
       <td>Manage API keys</td>
+      <td>✗</td>
       <td>✗</td>
       <td>✗</td>
       <td>✗</td>
@@ -191,6 +312,7 @@ also inherit this role in Mergify.
     </tr>
     <tr>
       <td>Manage Mergify subscription</td>
+      <td>✗</td>
       <td>✗</td>
       <td>✗</td>
       <td>✗</td>
@@ -216,7 +338,7 @@ Restrictions](/commands/restrictions/) for changing the default.
 
 ## Managing IP Addresses Allowed for the GitHub App
 
-[GitHub allows to configure the list of IP adresses](https://docs.github.com/en/apps/maintaining-github-apps/managing-allowed-ip-addresses-for-a-github-app)
+[GitHub allows to configure the list of IP addresses](https://docs.github.com/en/apps/maintaining-github-apps/managing-allowed-ip-addresses-for-a-github-app)
 that a GitHub App is allowed to use to access GitHub.
 
 Mergify services use the following IP addresses:
@@ -227,7 +349,7 @@ Mergify services use the following IP addresses:
 - 136.119.26.243/32
 
 :::note
-Even though these IP addresses will appear in the GitHub allow list as "Managed by Mergify GitHub App",
-they must be manually added to the list by an organization administrator.
-GitHub does not allow OAuth authentication to our dashboard if IPs have not been manually added to the list.
+  Even though these IP addresses will appear in the GitHub allow list as "Managed by Mergify GitHub App",
+  they must be manually added to the list by an organization administrator.
+  GitHub does not allow OAuth authentication to our dashboard if IPs have not been manually added to the list.
 :::
