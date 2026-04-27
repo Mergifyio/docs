@@ -32,32 +32,32 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 						<div class="page-heading-bar__breadcrumbs">
 							<Breadcrumbs breadcrumbTitle={breadcrumbTitle} />
 						</div>
-						{showMarkdownActions && (
+						{(headings || showMarkdownActions) && (
 							<div class="docs-toolbar-actions docs-toolbar-actions--heading">
-								<CopyForLLMButton size="compact" />
-								<ViewMarkdownButton size="compact" />
+								{headings && (
+									<nav class="page-heading-bar__toc" aria-label="Secondary">
+										<TableOfContents
+											client:media="(max-width: 81.99em)"
+											toc={generateToc(headings)}
+											labels={{
+												onThisPage: 'On this page',
+											}}
+											isMobile={true}
+										/>
+									</nav>
+								)}
+								{showMarkdownActions && (
+									<>
+										<CopyForLLMButton size="compact" />
+										<ViewMarkdownButton size="compact" />
+									</>
+								)}
 							</div>
 						)}
 					</div>
 				</Fragment>
 			)
 		}
-		<Fragment slot="before-article">
-			{
-				headings && (
-					<nav>
-						<TableOfContents
-							client:media="(max-width: 82em)"
-							toc={generateToc(headings)}
-							labels={{
-								onThisPage: 'On this page',
-							}}
-							isMobile={true}
-						/>
-					</nav>
-				)
-			}
-		</Fragment>
 		<Fragment slot="after-title"><slot name="header" /></Fragment>
 		<slot />
 		{
