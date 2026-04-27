@@ -28,7 +28,7 @@ You will run the installer mode first to generate a `mergify.env` file, then res
 normal mode with that configuration plus your subscription token.
 
 :::note
-Always pick the latest Enterprise image. Examples below use `8.9.1`; replace it with the newest
+Always pick the latest Enterprise image. Examples below use `8.15.0`; replace it with the newest
 tag from the releases page.
 :::
 
@@ -46,7 +46,7 @@ Download the Docker image using `docker pull`:
 cat mergify_registry_key.json | base64 | \
   docker login -u _json_key_base64 --password-stdin "https://registry.mergify.com"
 
-docker pull registry.mergify.com/enterprise:8.9.1
+docker pull registry.mergify.com/enterprise:8.15.0
 ```
 
 ## Start Installer Mode
@@ -57,7 +57,7 @@ docker run --rm -d \
   -p 5000:5000 \
   -e PORT=5000 \
   -e MERGIFYENGINE_INSTALLER=1 \
-  registry.mergify.com/enterprise:8.9.1
+  registry.mergify.com/enterprise:8.15.0
 ```
 
 :::note\[Security Note]
@@ -220,7 +220,7 @@ docker run \
   -e MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming" \
   -e MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done" \
   -e MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json" \
-  registry.mergify.com/enterprise:8.9.1
+  registry.mergify.com/enterprise:8.15.0
 ```
 
 Check logs:
