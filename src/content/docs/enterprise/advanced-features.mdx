@@ -109,18 +109,27 @@ Requirements:
 
 - An IAM identity with read/write/delete rights on those buckets
 
-Common settings:
+Common settings. Mergify reads the standard AWS environment variables, so no `MERGIFYENGINE_`
+prefix is required:
 
 ```ini
 MERGIFYENGINE_CI_TRACES_BACKEND="s3"
 MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
 MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
-MERGIFYENGINE_AWS_ACCOUNT_ID=1234567
+AWS_ACCOUNT_ID=123456789012
 # Optional
-MERGIFYENGINE_AWS_REGION_NAME=us-west-2
+AWS_REGION=us-west-2
 # Custom S3 implementation endpoint
-MERGIFYENGINE_AWS_ENDPOINT_URL_S3=s3://my-s3-domain.example.com:1234/
+AWS_ENDPOINT_URL_S3=https://my-s3-domain.example.com:1234/
 ```
+
+:::note
+  The `MERGIFYENGINE_AWS_*` variants (`MERGIFYENGINE_AWS_ACCOUNT_ID`,
+  `MERGIFYENGINE_AWS_ACCESS_KEY_ID`, `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY`,
+  `MERGIFYENGINE_AWS_REGION_NAME`, `MERGIFYENGINE_AWS_ENDPOINT_URL_S3`) are still accepted for
+  backwards compatibility but are deprecated. Prefer the unprefixed `AWS_*` names. They are the
+  same variables the AWS CLI and SDKs use.
+:::
 
 #### Option A: IAM user access key
 
@@ -128,14 +137,14 @@ Create an IAM user, attach a policy granting access to the two buckets, generate
 and provide it to the engine:
 
 ```ini
-MERGIFYENGINE_AWS_ACCESS_KEY_ID=<access-key-id>
-MERGIFYENGINE_AWS_SECRET_ACCESS_KEY=<secret-access-key>
+AWS_ACCESS_KEY_ID=<access-key-id>
+AWS_SECRET_ACCESS_KEY=<secret-access-key>
 ```
 
 #### Option B: IAM role discovery
 
-Leave both `MERGIFYENGINE_AWS_ACCESS_KEY_ID` and `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY` unset.
-Mergify falls back to the standard
+Leave both `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` unset. Mergify falls back to the
+standard
 [boto3 credential chain](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html),
 which can resolve credentials from any of:
 
