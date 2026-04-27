@@ -1,59 +1,79 @@
 ---
 title: Security
-description: Learn more about the applications permissions and Mergify's security obsession.
+description: Mergify's security posture — compliance, data handling, access control, and the GitHub App permissions we request.
 ---
 
 import Button from '../../components/Button.astro';
 
-At Mergify, security is of utmost importance to us. We understand the crucial
-role we play in the software development process and are fully committed to
-earning and maintaining the trust of our users. Our Security page is dedicated
-to providing transparency regarding our security measures and practices. We
-continually strive to improve the safety and reliability of our platform,
-ensuring that your repositories and code are well-protected.
+Mergify runs in front of GitHub to evaluate merge conditions and orchestrate
+your pipeline. This page documents our compliance posture, how we handle your
+data, the access controls in place, and the GitHub App permissions we request.
 
-## Trust Report
+## Compliance
 
-Our Trust Report is designed to provide transparency and instill confidence in
-our customers. By sharing our compliance reports and offering insights into our
-security practices, we aim to demonstrate our unwavering dedication to
-safeguarding your valuable information.
+Mergify is **SOC 2 Type II** attested. Reports, audit details, and our
+sub-processor list are available in the Trust Center.
 
 <Button href="https://trust.mergify.com" colorScheme='blue'>
-  Trust Report
+  Trust Center
 </Button>
 
-We invite you to explore this documentation and learn more about how we
-prioritize your trust. Click the button above to access our Trust Report page,
-where you will find in-depth information on our security measures and our
-ongoing commitment to protecting your data.
+A Data Processing Addendum (DPA) is available on request. Contact <a
+  href="mailto:security@mergify.com">security@mergify.com</a>.
 
-## Bug Bounty Program
+## Data Handling
 
-Mergify hosts a public Bug Bounty program with HackerOne. If you're an
-independent security expert or researcher and believe you've discovered a
-security-related issue on our platform, we appreciate you disclosing the issue
-to us responsibly, and thank you for your time and expertise.
+:::tip
+  Mergify processes repository contents in memory and does not persist them.
+:::
+
+- **Encryption in transit:** TLS 1.2 or higher.
+
+- **Encryption at rest:** persisted service data, such as configuration and
+  metadata, is encrypted with AES-256.
+
+- **Service status:** real-time availability and incident history at
+  [status.mergify.com](https://status.mergify.com).
+
+## Access Control
+
+Mergify does not maintain a separate identity or permission system. All
+authentication and authorization are delegated to GitHub:
+
+- **Single sign-on:** users sign in through GitHub, so any SSO policy you
+  enforce on your GitHub organization (including SAML SSO) applies to
+  Mergify.
+
+- **Roles and permissions:** Mergify users inherit their roles directly from
+  [GitHub
+  roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization).
+  A user with the `Read` role on a repository in GitHub also has the `Read`
+  role in Mergify.
+
+See the [Features Permissions](#features-permissions) table below for the
+mapping between GitHub roles and Mergify capabilities.
+
+## Vulnerability Disclosure
+
+Mergify hosts a public Bug Bounty program with HackerOne. If you believe
+you've found a security issue on our platform, please disclose it responsibly.
 
 <Button href="https://hackerone.com/mergify" colorScheme='blue'>
   Submit a vulnerability
 </Button>
 
-## Contacting Us About Security Concerns
+For other security questions or concerns, contact our security team at <a
+  href="mailto:security@mergify.com">security@mergify.com</a>.
 
-At Mergify, we prioritize the security of our platform and the safety of our
-users. If you have any security-related questions, concerns, please reach out
-directly to our dedicated security team at <a
-href="mailto:security@mergify.com">security@mergify.com</a>.
+## Reference
 
-We appreciate your collaboration in ensuring the security of Mergify and its
-community. Rest assured, all communications related to security matters will be
-treated with the highest priority and confidentiality.
+Mergify requests a fixed set of GitHub App permissions required for the
+product to operate. Some permissions are only exercised by specific features.
 
-## GitHub App Required Permissions
+### GitHub App Required Permissions
 
-Below is the list of the required permission on GitHub for
-Mergify to function properly.
+Below is the list of the required permissions on GitHub for Mergify to
+function properly.
 
 <table>
   <thead>
@@ -137,21 +157,11 @@ Mergify to function properly.
   </tbody>
 </table>
 
-## User Permissions
-
-To perform any actions on Mergify, such as adding a pull request in a merge
-queue or triggering a command, a person must have sufficient access to the
-relevant account or resource. This access is controlled by permissions. A
-permission is the ability to perform a specific action. A role is a set of
-permissions you can assign to individuals or teams.
-
-Mergify users inherit their roles directly from [GitHub
-roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization).
-
-That means that a user that has the `Read` role for a repository in GitHub will
-also inherit this role in Mergify.
-
 ### Features Permissions
+
+To perform any action on Mergify (such as adding a pull request to a merge
+queue or triggering a command), a user must have sufficient access to the
+relevant account or resource. Permissions are inherited from GitHub roles.
 
 <table>
   <thead>
@@ -201,10 +211,9 @@ also inherit this role in Mergify.
 </table>
 
 :::note
-  Non-admin users might be able to manage permissions on demand. <a
-  href="mailto:support@mergify.com">Contact our support</a>
-  to request a non-admin to get access to Mergify subscription and
-  billing details.
+  Non-admin users can be granted access to manage Mergify subscription and
+  billing details on demand. <a href="mailto:support@mergify.com">Contact
+  support</a> to request it.
 :::
 
 ### Command Permissions
@@ -214,9 +223,10 @@ default](/commands/restrictions/#default-restrictions) and have their own
 mechanism that can be modified. See [Commands
 Restrictions](/commands/restrictions/) for changing the default.
 
-## Managing IP Addresses Allowed for the GitHub App
+### Managing IP Addresses Allowed for the GitHub App
 
-[GitHub allows to configure the list of IP adresses](https://docs.github.com/en/apps/maintaining-github-apps/managing-allowed-ip-addresses-for-a-github-app)
+[GitHub allows you to configure the list of IP
+addresses](https://docs.github.com/en/apps/maintaining-github-apps/managing-allowed-ip-addresses-for-a-github-app)
 that a GitHub App is allowed to use to access GitHub.
 
 Mergify services use the following IP addresses:
@@ -227,7 +237,8 @@ Mergify services use the following IP addresses:
 - 136.119.26.243/32
 
 :::note
-Even though these IP addresses will appear in the GitHub allow list as "Managed by Mergify GitHub App",
-they must be manually added to the list by an organization administrator.
-GitHub does not allow OAuth authentication to our dashboard if IPs have not been manually added to the list.
+  Even though these IP addresses appear in the GitHub allow list as "Managed
+  by Mergify GitHub App", they must be manually added to the list by an
+  organization administrator. GitHub does not allow OAuth authentication to
+  our dashboard if these IPs have not been manually added.
 :::
