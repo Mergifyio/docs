@@ -5,7 +5,7 @@ description: 'Legacy process for provisioning the Mergify GitHub App and engine 
 
 > ⚙️ These steps mirror the older manual workflow. Adapt them into infrastructure-as-code if needed.
 
-> 🔼 Replace the `8.9.1` tag with the latest Enterprise release.
+> 🔼 Replace the `8.15.0` tag with the latest Enterprise release.
 
 ## 1. Create the GitHub App
 
@@ -116,7 +116,7 @@ ruby -rsecurerandom -e 'puts SecureRandom.hex(42)'
 cat mergify_registry_key.json | base64 | \
   docker login -u _json_key_base64 --password-stdin "https://registry.mergify.com"
 
-docker pull registry.mergify.com/enterprise:8.9.1
+docker pull registry.mergify.com/enterprise:8.15.0
 ```
 
 ## 5. Start Mergify
@@ -134,7 +134,7 @@ docker run \
   -e MERGIFYENGINE_SUBSCRIPTION_TOKEN=<mergify-subscription-token> \
   -e MERGIFYENGINE_REDIS_URL=rediss://:password@my-redis:6363 \
   -e MERGIFYENGINE_DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres \
-  registry.mergify.com/enterprise:8.9.1
+  registry.mergify.com/enterprise:8.15.0
 ```
 
 Verify logs:
