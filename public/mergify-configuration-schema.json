@@ -2746,12 +2746,7 @@
           "type": "boolean"
         },
         "autoqueue": {
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "`autoqueue` in `queue_rules` is deprecated. Use `auto_merge` in `merge_protections_settings` instead.",
-            "deprecated_summary_saas_mode": "`autoqueue` in `queue_rules` is deprecated and will be removed on 2026-07-16. Use `auto_merge` in `merge_protections_settings` instead."
-          },
           "default": false,
-          "deprecated": true,
           "description": "When set to true, automatically add a pull request to the queue when it matches the queue conditions. When false, the pull request must be manually queued.",
           "title": "Autoqueue",
           "type": "boolean"
@@ -2982,12 +2977,7 @@
           "type": "boolean"
         },
         "autoqueue": {
-          "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "`autoqueue` in `queue_rules` is deprecated. Use `auto_merge` in `merge_protections_settings` instead.",
-            "deprecated_summary_saas_mode": "`autoqueue` in `queue_rules` is deprecated and will be removed on 2026-07-16. Use `auto_merge` in `merge_protections_settings` instead."
-          },
           "default": false,
-          "deprecated": true,
           "description": "When set to true, automatically add a pull request to the queue when it matches the queue conditions. When false, the pull request must be manually queued.",
           "title": "Autoqueue",
           "type": "boolean"
