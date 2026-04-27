@@ -779,15 +779,7 @@ a.current-header-link {
 	due to lack of iOS Safari browser support.
 */
 html {
-  /* Mobile TOC is displayed above page content */
-  scroll-padding-top: calc(1.5rem + var(--theme-navbar-height) + var(--theme-mobile-toc-height));
-}
-
-@media (min-width: 72em) {
-  html {
-    /* Regular TOC is displayed as a sidebar */
-    scroll-padding-top: calc(1.5rem + var(--theme-navbar-height));
-  }
+  scroll-padding-top: calc(1.5rem + var(--theme-navbar-height));
 }
 
 @media (prefers-reduced-motion: reduce) {
