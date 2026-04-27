@@ -158,6 +158,12 @@ corresponding credentials when starting the engine.
   This step is optional. Skip it if you do not plan to use CI Insights or Test Insights.
 :::
 
+Both providers support two authentication modes: a static credential set you manage yourself, or
+automatic discovery through your cloud workload identity (recommended when running on GKE, EKS,
+GCE, or EC2 to avoid manual key rotation). The examples below use static credentials; see
+[Advanced Features](/enterprise/advanced-features/#ci-insights-and-test-insights-object-storage)
+for the workload-identity setup and the full list of provider requirements.
+
 ### Google Cloud Storage
 
 Create two buckets and a Service Account with the `Storage Object User` role scoped to them.
@@ -177,6 +183,9 @@ MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
 MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json"
 ```
 
+To use Application Default Credentials instead (GKE Workload Identity, GCE metadata server, or a
+local key path), set `MERGIFYENGINE_GCS_CREDENTIALS="auto"` and skip the JSON key.
+
 ### Amazon S3
 
 Create two buckets and IAM credentials with read/write/delete rights on them.
@@ -194,8 +203,9 @@ MERGIFYENGINE_AWS_REGION_NAME=us-west-2
 MERGIFYENGINE_AWS_ENDPOINT_URL_S3=s3://my-s3-domain.example.com:1234/
 ```
 
-See [Advanced Features](/enterprise/advanced-features/#ci-insights-and-test-insights-object-storage)
-for more details on storage provider requirements.
+To use IAM role discovery instead (IRSA, EKS Pod Identity, ECS task role, or EC2 instance
+profile), omit `MERGIFYENGINE_AWS_ACCESS_KEY_ID` and `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY` and
+attach an IAM role granting bucket access to the workload running the engine.
 
 ## Start Mergify in Normal Mode
 
