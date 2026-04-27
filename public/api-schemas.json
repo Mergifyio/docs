@@ -4598,8 +4598,12 @@
             "required": true,
             "schema": {
               "type": "integer",
+              "maximum": 9223372036854775807,
+              "minimum": 0,
+              "description": "The pull request number",
               "title": "Number"
-            }
+            },
+            "description": "The pull request number"
           },
           {
             "name": "owner",
