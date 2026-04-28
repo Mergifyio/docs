@@ -48,7 +48,9 @@ MERGIFYENGINE_LOG_DATADOG=udp://<my-datadog-agent-host>:10518
 
 CI test traces can be exported to Mergify CI Insights and Test Insights by backing these features
 with object storage. Set `MERGIFYENGINE_CI_TRACES_BACKEND` and bucket credentials according to your
-provider.
+provider. Both providers support two authentication modes: a static credential set you manage
+yourself, or automatic discovery through your cloud workload identity (recommended when running
+on GKE, EKS, GCE, or EC2 to avoid manual key rotation).
 
 ### Google Cloud Storage
 
@@ -57,24 +59,46 @@ Requirements:
 - Two buckets: `<mycompany>-mergify-ci-traces-incoming` and
   `<mycompany>-mergify-ci-traces-done`
 
-- Service Account with read/write/delete access (`Object Storage User` role scoped to these buckets)
+- An identity (Service Account) with the `Storage Object User` role scoped to these buckets
 
-- JSON key for that Service Account
-
-Base64-encode the JSON key:
-
-```sh
-cat credentials.json | base64 -w0
-```
-
-Configure the engine:
+Common settings:
 
 ```ini
 MERGIFYENGINE_CI_TRACES_BACKEND="gcs"
 MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
 MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
+```
+
+#### Option A: Service Account JSON key
+
+Generate a JSON key for the Service Account and base64-encode it:
+
+```sh
+base64 < credentials.json | tr -d '\n'
+```
+
+Add the encoded key to the engine:
+
+```ini
 MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json"
 ```
+
+#### Option B: Application Default Credentials
+
+Set `MERGIFYENGINE_GCS_CREDENTIALS="auto"` to let Mergify resolve credentials from the Google
+[Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials)
+chain at runtime:
+
+```ini
+MERGIFYENGINE_GCS_CREDENTIALS="auto"
+```
+
+The chain looks at, in order, the path in `GOOGLE_APPLICATION_CREDENTIALS`, then the attached
+service account exposed by the GCE/GKE metadata server (which on GKE is configured through
+[Workload Identity](https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity)).
+Bind the Kubernetes Service Account that runs the engine to the Google Service Account with
+bucket access. Google issues and rotates the credentials automatically, so no further
+configuration is needed.
 
 ### Amazon S3
 
@@ -83,22 +107,50 @@ Requirements:
 - Two buckets named `<mycompany>-mergify-ci-traces-incoming` and
   `<mycompany>-mergify-ci-traces-done`
 
-- IAM credentials with read/write/delete rights on those buckets
+- An IAM identity with read/write/delete rights on those buckets
 
-Environment variables:
+Common settings:
 
 ```ini
 MERGIFYENGINE_CI_TRACES_BACKEND="s3"
 MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
 MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
 MERGIFYENGINE_AWS_ACCOUNT_ID=1234567
-MERGIFYENGINE_AWS_ACCESS_KEY_ID=123567
-MERGIFYENGINE_AWS_SECRET_ACCESS_KEY=<secret>
 # Optional
 MERGIFYENGINE_AWS_REGION_NAME=us-west-2
 # Custom S3 implementation endpoint
 MERGIFYENGINE_AWS_ENDPOINT_URL_S3=s3://my-s3-domain.example.com:1234/
 ```
+
+#### Option A: IAM user access key
+
+Create an IAM user, attach a policy granting access to the two buckets, generate an access key,
+and provide it to the engine:
+
+```ini
+MERGIFYENGINE_AWS_ACCESS_KEY_ID=<access-key-id>
+MERGIFYENGINE_AWS_SECRET_ACCESS_KEY=<secret-access-key>
+```
+
+#### Option B: IAM role discovery
+
+Leave both `MERGIFYENGINE_AWS_ACCESS_KEY_ID` and `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY` unset.
+Mergify falls back to the standard
+[boto3 credential chain](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html),
+which can resolve credentials from any of:
+
+- IAM Roles for Service Accounts ([IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html))
+  or [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html)
+  on Amazon EKS
+
+- The task role on Amazon ECS or AWS Fargate
+
+- The instance profile on Amazon EC2
+
+- A profile or shared credentials file mounted into the container
+
+Attach an IAM role granting access to the two buckets to the workload running the engine. AWS
+issues and rotates short-lived credentials automatically, so no key rotation is required.
 
 ## Slack Integration
 
