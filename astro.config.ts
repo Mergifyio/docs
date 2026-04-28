@@ -19,6 +19,7 @@ import { PagefindIndex } from './integrations/pagefind-index';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
 import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
+import { remarkEnterpriseVersionPlugin } from './plugins/remark-enterprise-version';
 import { remarkGraphvizPlugin } from './plugins/remark-graphviz';
 
 dotenv.config({
@@ -132,6 +133,7 @@ export default defineConfig({
     // Override with our own config
     smartypants: false,
     remarkPlugins: [
+      remarkEnterpriseVersionPlugin(),
       remarkGraphvizPlugin(),
       [
         remarkSmartypants as RemarkPlugin,
