@@ -158,54 +158,12 @@ corresponding credentials when starting the engine.
   This step is optional. Skip it if you do not plan to use CI Insights or Test Insights.
 :::
 
-Both providers support two authentication modes: a static credential set you manage yourself, or
-automatic discovery through your cloud workload identity (recommended when running on GKE, EKS,
-GCE, or EC2 to avoid manual key rotation). The examples below use static credentials; see
-[Advanced Features](/enterprise/advanced-features/#ci-insights-and-test-insights-object-storage)
-for the workload-identity setup and the full list of provider requirements.
-
-### Google Cloud Storage
-
-Create two buckets and a Service Account with the `Storage Object User` role scoped to them.
-
-Base64-encode the JSON key:
-
-```sh
-base64 < credentials.json | tr -d '\n'
-```
-
-Add these environment variables when starting the engine:
-
-```ini
-MERGIFYENGINE_CI_TRACES_BACKEND="gcs"
-MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
-MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
-MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json"
-```
-
-To use Application Default Credentials instead (GKE Workload Identity, GCE metadata server, or a
-local key path), set `MERGIFYENGINE_GCS_CREDENTIALS="auto"` and skip the JSON key.
-
-### Amazon S3
-
-Create two buckets and IAM credentials with read/write/delete rights on them.
-
-```ini
-MERGIFYENGINE_CI_TRACES_BACKEND="s3"
-MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
-MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
-MERGIFYENGINE_AWS_ACCOUNT_ID=1234567
-MERGIFYENGINE_AWS_ACCESS_KEY_ID=123567
-MERGIFYENGINE_AWS_SECRET_ACCESS_KEY=<secret>
-# Optional
-MERGIFYENGINE_AWS_REGION_NAME=us-west-2
-# Custom S3 implementation endpoint
-MERGIFYENGINE_AWS_ENDPOINT_URL_S3=s3://my-s3-domain.example.com:1234/
-```
-
-To use IAM role discovery instead (IRSA, EKS Pod Identity, ECS task role, or EC2 instance
-profile), omit `MERGIFYENGINE_AWS_ACCESS_KEY_ID` and `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY` and
-attach an IAM role granting bucket access to the workload running the engine.
+Mergify supports both Google Cloud Storage and Amazon S3, with either static credentials or
+automatic discovery through your cloud workload identity (GKE Workload Identity, IRSA, EKS Pod
+Identity, instance profile). See
+[Advanced Features → CI Insights and Test Insights Object Storage](/enterprise/advanced-features/#ci-insights-and-test-insights-object-storage)
+for bucket requirements, the full list of environment variables, and side-by-side examples for
+each authentication mode.
 
 ## Start Mergify in Normal Mode
 
