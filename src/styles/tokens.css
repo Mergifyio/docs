@@ -1,0 +1,40 @@
+/*
+  Primitive tokens — fixed values. Do NOT remap in dark mode.
+  Components must NEVER reference these directly. Use semantic tokens
+  in theme.css instead.
+*/
+
+:root {
+  /* Neutrals — clean ramp, no duplicates (intentionally diverges from
+     mergify.com which has gray-50 == gray-200 collisions). */
+  --color-white: #ffffff;
+  --color-dark: #000000;
+  --color-gray-50: #f6f7f8; /* Docs body-bg tone — preserves the historical
+                                "Mergify gray" character that the translucent
+                                navbar relies on for visual presence. */
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Product palette — verbatim from mergify.com/DESIGN.md.
+     Brand colors. Do NOT flip in dark mode. */
+  --color-teal-400: #82ddbe; /* Merge Queue accent */
+  --color-teal-700: #1cb893; /* Merge Queue label */
+  --color-purple-400: #858ef4; /* CI Insights accent */
+  --color-purple-700: #4d59e0; /* CI Insights label */
+  --color-orange-400: #f9b070; /* Test Insights accent */
+  --color-orange-700: #f27b2a; /* Test Insights label */
+  --color-blue-400: #85c9f4; /* Merge Protections accent */
+  --color-blue-700: #43a7e5; /* Merge Protections label */
+  --color-blue-800: #237caf; /* Link hover (docs-only) */
+  --color-coral-400: #ef9a9a; /* Stacks accent */
+  --color-coral-700: #e53935; /* Stacks label */
+  --color-rose-400: #f485b3; /* Workflow Automation accent */
+  --color-rose-700: #e61e71; /* Workflow Automation label */
+}
