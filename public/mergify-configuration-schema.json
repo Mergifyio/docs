@@ -260,6 +260,27 @@
       "title": "AssignActionModel",
       "type": "object"
     },
+    "AutoMergeConditionsModel": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/AndCondition"
+          },
+          {
+            "$ref": "#/$defs/OrCondition"
+          },
+          {
+            "$ref": "#/$defs/NegationCondition"
+          },
+          {
+            "$ref": "#/$defs/RuleConditionModel"
+          }
+        ]
+      },
+      "maxItems": 500,
+      "title": "List of conditions",
+      "type": "array"
+    },
     "BackportActionModel": {
       "additionalProperties": false,
       "properties": {
@@ -1384,6 +1405,19 @@
           "description": "Automatically merge or queue PRs when all merge protection conditions pass",
           "title": "Auto Merge",
           "type": "boolean"
+        },
+        "auto_merge_conditions": {
+          "anyOf": [
+            {
+              "const": true,
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/AutoMergeConditionsModel"
+            }
+          ],
+          "default": null,
+          "description": "Conditions that gate auto-merge. Accepts `true` as shorthand for unconditional auto-merge, or a list of conditions to restrict the audience. Omit the field to disable auto-merge."
         }
       },
       "title": "MergeProtections",
