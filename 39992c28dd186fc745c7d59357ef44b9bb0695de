@@ -1,0 +1,1 @@
+declare sharp as a direct dep — Astro's image service uses it at runtime. With npm's flat hoisting it was implicitly resolvable; pnpm's strict layout requires it to be a declared dep of this project.
