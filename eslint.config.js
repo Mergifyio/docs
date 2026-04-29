@@ -16,6 +16,7 @@ export default [
       '.astro/**',
       'node_modules/**',
       '.github/**',
+      '.claude/**',
       'public/scalar-api-reference.js',
       'src/content/changelog/',
     ],
