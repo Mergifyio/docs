@@ -124,37 +124,59 @@
   --color-mergify-blue-dark: #113c55;
 }
 
+/* -----------------------------------------------------------------------
+   Semantic tokens. Three :root, ::backdrop blocks share this selector:
+   1. Sizing/font block above (line 4): stable, not remapped per mode.
+   2. Semantic color tokens (this block): consume --color-* primitives.
+   3. Chakra legacy block below (line 199): deleted in Phase 3.
+   Dark-mode overrides for #2 follow in :root.theme-dark.
+   ----------------------------------------------------------------------- */
 :root,
 ::backdrop {
   color-scheme: light;
-  --theme-accent: var(--color-mergify-blue);
-  --theme-accent-secondary: var(--color-mergify-blue);
-  --theme-dim: hsla(var(--color-gray-70), 1);
-  --theme-dim-light: hsla(var(--color-gray-80), 1);
-  --theme-dim-lighter: hsla(var(--color-gray-90), 1);
-  --theme-accent-opacity: 0.1;
-  --theme-divider: hsla(var(--color-blue), 0.1);
-  --theme-shade-subtle: hsla(var(--color-blue), 0.3);
-  --theme-text: hsla(var(--color-gray-10), 1);
-  --theme-text-light: var(--chakra-colors-blackAlpha-800);
-  --theme-text-lighter: var(--chakra-colors-blackAlpha-700);
-  --theme-bg: #f6f7f8;
-  --theme-bg-content: #ffffff;
+
+  /* Text */
+  --theme-text: var(--color-gray-900);
+  --theme-text-secondary: var(--color-gray-700);
+  --theme-text-muted: var(--color-gray-500);
+  /* Legacy aliases — kept until Phase 4 sweeps consumers, then deleted. */
+  --theme-text-light: var(--color-gray-700);
+  --theme-text-lighter: var(--color-gray-500);
+
+  /* Surfaces */
+  --theme-bg: var(--color-gray-50);
+  --theme-bg-content: var(--color-white);
+  --theme-bg-offset: var(--color-gray-100);
+  --theme-bg-hover: var(--color-gray-100);
+  --theme-bg-accent: hsla(0, 0%, 0%, 0.04);
   --theme-bg-gradient-top: var(--theme-bg);
   --theme-bg-gradient-bottom: var(--theme-bg);
-  --theme-bg-hover: var(--color-mergify-blue-light);
-  --theme-bg-offset: hsla(var(--color-blue), 0.1);
-  --theme-bg-accent: hsla(var(--color-blue), var(--theme-accent-opacity));
-  --theme-backdrop-overlay: hsla(var(--color-gray-50), 0.8);
-  --theme-code-inline-bg: var(--chakra-colors-gray-50);
-  --theme-code-inline-text: #b83280;
-  --theme-code-bg: var(--chakra-colors-gray-50);
+  --theme-backdrop-overlay: hsla(0, 0%, 50%, 0.5);
+
+  /* Borders */
+  --theme-border: var(--color-gray-300);
+  --theme-divider: var(--color-gray-200);
+  --theme-border-color: var(--theme-border);
+  --theme-shade-subtle: var(--color-gray-200);
+
+  /* Links + accents */
+  --theme-link: var(--color-blue-700);
+  --theme-link-hover: var(--color-blue-800);
+  --theme-accent: var(--color-gray-900);
+  --theme-accent-secondary: var(--color-gray-700);
+  --theme-accent-opacity: 0.1;
+
+  /* Selection */
+  --theme-selection-color: var(--color-blue-700);
+  --theme-selection-bg: hsla(204, 73%, 58%, 0.2);
+
+  /* Code blocks */
+  --theme-code-inline-bg: var(--color-gray-100);
+  --theme-code-inline-text: var(--theme-text);
+  --theme-code-bg: var(--color-gray-100);
+  --theme-code-text: var(--color-gray-900);
   --theme-code-tabs: hsla(257, 38%, 32%, 1);
-  --theme-code-text: hsla(var(--color-gray-95), 1);
-  --theme-navbar-bg: var(--theme-bg);
-  --theme-selection-color: hsla(var(--color-blue), 1);
-  --theme-selection-bg: hsla(var(--color-blue), var(--theme-accent-opacity));
-  --theme-code-selection-bg: hsla(var(--color-blue), 0.4);
+  --theme-code-selection-bg: hsla(204, 73%, 58%, 0.4);
   --theme-code-mark-bg: hsl(226, 50%, 33%);
   --theme-code-mark-border: hsl(224, 50%, 54%);
   --theme-code-ins-bg: hsl(122, 22%, 23%);
@@ -164,20 +186,26 @@
   --theme-code-del-border: hsl(338, 46%, 53%);
   --theme-code-del-text: hsl(338, 36%, 70%);
 
+  /* Navbar */
+  --theme-navbar-bg: var(--theme-bg);
+
+  /* Glow */
+  --theme-glow-highlight: transparent;
+  --theme-glow-diffuse: hsla(204, 73%, 58%, 0.5);
+  --theme-glow-blur: 10px;
+
+  /* Background gradient (existing, unchanged) */
   --theme-bg-gradient: linear-gradient(
     180deg,
     var(--theme-bg-gradient-top),
     var(--theme-bg-gradient-top) calc(var(--theme-navbar-height) + var(--theme-mobile-toc-height)),
     var(--theme-bg-gradient-bottom)
   );
+}
 
-  --theme-glow-highlight: transparent;
-  --theme-glow-diffuse: hsla(var(--color-base-blue), 65%, 0.5);
-  --theme-glow-blur: 10px;
-
-  --theme-border-color: #e2e8f0;
-
-  /* 
+:root,
+::backdrop {
+  /*
 		Chakra colors
 	*/
   --chakra-colors-transparent: transparent;
@@ -260,34 +288,50 @@
 :root.theme-dark,
 .theme-dark ::backdrop {
   color-scheme: dark;
-  /* We lighten-up the orange in dark mode, to help with link contrast. */
-  --color-orange: var(--color-base-orange), 60%;
-  --theme-accent: var(--color-mergify-blue);
-  --theme-accent-secondary: var(--color-mergify-blue-light);
-  --theme-text-accent: hsla(var(--color-orange), 1);
-  --theme-dim: hsla(var(--color-gray-90), 0.3);
-  --theme-dim-light: hsla(var(--color-gray-90), 0.2);
-  --theme-dim-lighter: hsla(var(--color-gray-90), 0.1);
-  --theme-divider: hsla(var(--color-gray-95), 0.1);
-  --theme-shade-subtle: hsla(var(--color-gray-95), 0.4);
-  --theme-text: hsla(var(--color-gray-90), 1);
-  --theme-text-light: var(--chakra-colors-whiteAlpha-800);
-  --theme-text-lighter: var(--chakra-colors-whiteAlpha-700);
+
+  /* Text */
+  --theme-text: var(--color-gray-50);
+  --theme-text-secondary: var(--color-gray-300);
+  --theme-text-muted: var(--color-gray-400);
+  /* Legacy aliases — kept until Phase 4 sweeps consumers, then deleted. */
+  --theme-text-light: var(--color-gray-300);
+  --theme-text-lighter: var(--color-gray-400);
+
+  /* Surfaces */
+  /* Preserved hex: docs-specific dark surface, intentionally NOT mapped to
+     a primitive — changing it shifts every dark-mode page. The transitional
+     plan accepts this as the only hex literal outside tokens.css until a
+     dedicated --color-gray-850 (or similar) is introduced. */
   --theme-bg: #24292e;
   --theme-bg-content: var(--theme-bg);
-  --theme-bg-hover: var(--color-mergify-blue-dark);
-  --theme-bg-offset: #0008;
-  --theme-backdrop-overlay: hsla(var(--color-gray-10), 0.8);
-  /* Ensure gradients resolve to the dark background in dark mode */
+  --theme-bg-offset: var(--color-gray-800);
+  --theme-bg-hover: var(--color-gray-800);
+  --theme-bg-accent: hsla(0, 0%, 100%, 0.06);
   --theme-bg-gradient-top: var(--theme-bg);
   --theme-bg-gradient-bottom: var(--theme-bg);
-  --theme-code-inline-bg: var(--chakra-colors-gray-700);
-  --theme-code-inline-text: #f687b3;
-  --theme-code-bg: var(--chakra-colors-gray-700);
+  --theme-backdrop-overlay: hsla(0, 0%, 0%, 0.8);
+
+  /* Borders */
+  --theme-border: var(--color-gray-700);
+  --theme-divider: var(--color-gray-800);
+  --theme-border-color: var(--theme-border);
+  --theme-shade-subtle: var(--color-gray-700);
+
+  /* Links + accents */
+  --theme-link: var(--color-blue-400);
+  --theme-link-hover: var(--color-blue-700);
+  --theme-accent: var(--color-gray-50);
+  --theme-accent-secondary: var(--color-gray-300);
+
+  /* Selection */
+  --theme-selection-color: var(--color-white);
+
+  /* Code */
+  --theme-code-inline-bg: var(--color-gray-800);
+  --theme-code-inline-text: var(--theme-text);
+  --theme-code-bg: var(--color-gray-800);
+  --theme-code-text: hsla(0, 0%, 100%, 0.8);
   --theme-code-tabs: hsla(261, 40%, 21%, 1);
-  --theme-code-text: hsla(var(--color-base-white), 80%, 1);
-  --theme-navbar-bg: var(--theme-bg);
-  --theme-selection-color: hsla(var(--color-base-white), 100%, 1);
   --theme-code-mark-bg: hsl(224, 60%, 25%);
   --theme-code-mark-border: hsl(225, 42%, 46%);
   --theme-code-ins-bg: hsl(122, 29%, 17%);
@@ -297,10 +341,12 @@
   --theme-code-del-border: hsl(340, 34%, 43%);
   --theme-code-del-text: hsl(340, 24%, 65%);
 
-  --theme-glow-highlight: hsla(var(--color-base-blue), 50%, 1);
-  --theme-glow-diffuse: hsla(var(--color-base-blue), 35%, 0.4);
+  /* Navbar */
+  --theme-navbar-bg: var(--theme-bg);
 
-  --theme-border-color: rgb(255 255 255 / 16%);
+  /* Glow */
+  --theme-glow-highlight: hsla(204, 73%, 50%, 1);
+  --theme-glow-diffuse: hsla(204, 73%, 35%, 0.4);
 }
 
 ::selection {
