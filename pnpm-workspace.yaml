@@ -1,0 +1,9 @@
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  sharp: true
+
+overrides:
+  eslint-plugin-react>eslint: $eslint
+  cheerio>encoding-sniffer: ^1.0.2
+  typescript: $typescript
