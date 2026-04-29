@@ -1220,19 +1220,23 @@
             "schema": {
               "anyOf": [
                 {
-                  "type": "integer",
-                  "maximum": 9223372036854775807,
-                  "minimum": 1,
-                  "exclusiveMaximum": 2147483647
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "integer",
+                    "maximum": 9223372036854775807,
+                    "minimum": 1,
+                    "exclusiveMaximum": 2147483647
+                  }
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Get the events for the specified pull request",
+              "description": "Filter events by pull-request number. Repeatable to match several PRs at once (e.g. `?pull_request=1&pull_request=2`).",
               "title": "Pull Request"
             },
-            "description": "Get the events for the specified pull request"
+            "description": "Filter events by pull-request number. Repeatable to match several PRs at once (e.g. `?pull_request=1&pull_request=2`)."
           },
           {
             "name": "base_ref",
