@@ -1,0 +1,1 @@
+also declare js-yaml as a direct dep — Vite/Rollup also uses strict resolution, so the missing transitive dep broke the astro build step (post-tsc).
