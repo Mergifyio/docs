@@ -109,13 +109,74 @@ pull_request_rules:
         method: squash
 ```
 
-### Using Commit Message Template
+### Customizing the Commit Message
 
-When a pull request is merged using the squash or merge method, you can
-override the default commit message. To that end, you need to set
-`commit_message_template`. This setting is a
-[template](/configuration/data-types#template), which means you can use
-attributes of the pull request to build the content of the commit message.
+When merging with the `merge` or `squash` method, the
+`commit_message_format` setting controls the title, body, and trailers
+of the resulting commit:
+
+```yaml
+commit_message_format:
+  title: inherit            # inherit | pr-title              (default: inherit)
+  body:  inherit            # inherit | pr-body | empty       (default: inherit)
+  trailers: []              # subset of [co-authored-by, approved-by, merged-by]
+```
+
+`commit_message_format` is accepted under `queue_rules`,
+`actions.merge`, and `defaults`. Omit it to let your repository's GitHub
+settings render the entire commit.
+
+#### Title
+
+- `inherit` (default): Mergify does not send a title; your repository
+  settings render it.
+
+- `pr-title`: use the pull request title with the PR number appended:
+  `{title} (#{number})`.
+
+#### Body
+
+- `inherit` (default): Mergify does not send a body; your repository
+  settings render it.
+
+- `pr-body`: use the pull request description.
+
+- `empty`: produce an empty body. Useful when you only want trailers.
+
+#### Trailers
+
+`trailers` is an ordered list. Mergify appends one trailer block to the
+commit body, separated by a blank line:
+
+| Value | Source | Format |
+| ----- | ------ | ------ |
+| `co-authored-by` | PR commit authors, deduplicated by email | `Co-authored-by: <name> <email>` |
+| `approved-by` | Approving reviewers | `Approved-by: <login> <id+login@users.noreply.github.com>` |
+| `merged-by` | Mergify identity | `Merged-by: Mergify <bot-id+mergify[bot]@users.noreply.github.com>` |
+
+All three follow the canonical kernel-style `Name <email>` shape and
+are parseable by `git interpret-trailers`. `Co-authored-by` continues
+to render as a co-author badge in the GitHub UI.
+
+#### Validation
+
+- `commit_message_format` and `commit_message_template` cannot be set
+  on the same rule.
+
+- `body: inherit` cannot be combined with non-empty `trailers`,
+  because Mergify must not override the body to append trailers.
+
+:::caution
+  When `body` is set to `pr-body` or `empty`, Mergify always sends a
+  body to GitHub's merge API. This overrides your repository's
+  `squash_merge_commit_message` and `merge_commit_message` settings
+  for the affected merges.
+:::
+
+#### Sample Configurations
+
+GitHub-style commit, with the pull request title in the subject and the
+pull request description as the body:
 
 ```yaml
 pull_request_rules:
@@ -126,16 +187,13 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-        commit_message_template: |
-        {{ title }} (#{{ number }})
-
-        {{ body }}
+        commit_message_format:
+          title: pr-title
+          body: pr-body
 ```
 
-This configuration makes sure the commit message for the squash commit is taken
-from the title, includes the pull request number and uses the body as the
-message. Merging the pull request results in a single squashed commit with the
-message:
+Merging a pull request titled "Fix some bug" with the description "This
+fixes some bug I found while testing the app." produces:
 
 ```text
 Fix some bug (#123)
@@ -143,35 +201,85 @@ Fix some bug (#123)
 This fixes some bug I found while testing the app.
 ```
 
-For example, you could include reviewers of a pull request in the commit
-message of a pull request:
+The remaining variants show only the `commit_message_format` block;
+nest it under `actions.merge`, `queue_rules[]`, or `defaults`.
+
+Title only, no body content:
 
 ```yaml
-pull_request_rules:
-  - name: automatic merge when CI checks pass and at least 2 approved reviews
-    conditions:
-      - check-success = test
-      - "#approved-reviews-by >= 2"
-    actions:
-      merge:
-        method: squash
-        commit_message_template: |
-{{ title }} (#{{ number }})
-
-{{ body }}
-
-{% for user in approved_reviews_by %}
-Approved-By: {{user}}
-{% endfor %}
+commit_message_format:
+  title: pr-title
+  body: empty
 ```
 
-which would result to the following commit message:
+Pull request description plus an `Approved-by:` trailer block:
+
+```yaml
+commit_message_format:
+  title: pr-title
+  body: pr-body
+  trailers:
+    - approved-by
+```
+
+resulting in:
 
 ```text
 Fix some bug (#123)
 
 This fixes some bug I found while testing the app.
 
-Approved-By: jd
-Approved-By: sileht
+Approved-by: jdoe <12345+jdoe@users.noreply.github.com>
+Approved-by: jsmith <67890+jsmith@users.noreply.github.com>
+```
+
+Trailer-only commit, useful when you want every merge to carry a
+`Merged-by:` line and nothing else:
+
+```yaml
+commit_message_format:
+  title: pr-title
+  body: empty
+  trailers:
+    - merged-by
+```
+
+### Migrating from `commit_message_template`
+
+The legacy `commit_message_template` setting is a
+[template](/configuration/data-types#template) that renders the entire
+commit message. `commit_message_format` covers the common patterns
+declaratively, with predictable output and no template engine.
+
+Most existing templates map directly:
+
+| `commit_message_template` | `commit_message_format` equivalent |
+| ------------------------- | ---------------------------------- |
+| `{{ title }} (#{{ number }})\n\n{{ body }}` | `title: pr-title`, `body: pr-body` |
+| `{{ title }} (#{{ number }})` | `title: pr-title`, `body: empty` |
+| `{{ title }}\n\n{{ body }}` | `title: inherit`, `body: pr-body` |
+| `Merge pull request #N from owner/branch` (the GitHub default) | omit `commit_message_format` entirely |
+
+For example, this template that appends an `Approved-by:` line per
+reviewer:
+
+```yaml
+commit_message_template: |
+  {{ title }} (#{{ number }})
+
+  {{ body }}
+
+  {% for user in approved_reviews_by %}
+  Approved-by: {{ user }}
+  {% endfor %}
+```
+
+becomes:
+
+```yaml
+commit_message_format:
+  title: pr-title
+  body: pr-body
+  trailers:
+    - approved-by
 ```
