@@ -1,0 +1,1 @@
+declare transitive deps that were silently hoisted by npm: rehype-stringify, remark-parse, remark-rehype, @iconify/types — pnpm's strict node_modules layout exposed them as missing in CI. Also allowlist @parcel/watcher's postinstall.
