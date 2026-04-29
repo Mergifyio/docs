@@ -725,6 +725,44 @@
       "title": "CommitAuthor",
       "type": "object"
     },
+    "CommitMessageFormatModel": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "default": "inherit",
+          "enum": [
+            "inherit",
+            "pr-title"
+          ],
+          "title": "Title",
+          "type": "string"
+        },
+        "body": {
+          "default": "inherit",
+          "enum": [
+            "inherit",
+            "pr-body",
+            "empty"
+          ],
+          "title": "Body",
+          "type": "string"
+        },
+        "trailers": {
+          "items": {
+            "enum": [
+              "co-authored-by",
+              "approved-by",
+              "merged-by"
+            ],
+            "type": "string"
+          },
+          "title": "Trailers",
+          "type": "array"
+        }
+      },
+      "title": "CommitMessageFormatModel",
+      "type": "object"
+    },
     "CopyActionModel": {
       "additionalProperties": false,
       "properties": {
@@ -1238,6 +1276,18 @@
           "default": null,
           "description": "Template to use as the commit message when using the merge or squash merge method.",
           "title": "Commit Message Template"
+        },
+        "commit_message_format": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CommitMessageFormatModel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Declarative commit message format configuration. Use this instead of the Jinja2 `commit_message_template` for the common merge-commit shapes. Mutually exclusive with `commit_message_template` on the same rule."
         }
       },
       "title": "MergeActionModel",
@@ -2784,6 +2834,18 @@
           "description": "Template to use as the commit message when using the merge or squash merge method.",
           "title": "Commit Message Template"
         },
+        "commit_message_format": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CommitMessageFormatModel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Declarative commit message format configuration. Use this instead of the Jinja2 `commit_message_template` for the common merge-commit shapes. Mutually exclusive with `commit_message_template` on the same rule."
+        },
         "merge_bot_account": {
           "anyOf": [
             {
@@ -3014,6 +3076,18 @@
           "default": null,
           "description": "Template to use as the commit message when using the merge or squash merge method.",
           "title": "Commit Message Template"
+        },
+        "commit_message_format": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CommitMessageFormatModel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Declarative commit message format configuration. Use this instead of the Jinja2 `commit_message_template` for the common merge-commit shapes. Mutually exclusive with `commit_message_template` on the same rule."
         },
         "merge_bot_account": {
           "anyOf": [
