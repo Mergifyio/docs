@@ -43,7 +43,7 @@ export default defineConfig({
         return `[data-theme='${theme.name}']`;
       },
       styleOverrides: {
-        borderColor: 'hsla(var(--color-blue), 0.15)',
+        borderColor: 'var(--theme-border)',
         borderRadius: '0.5rem',
         borderWidth: '1px',
         codePaddingBlock: '1rem',
@@ -53,14 +53,14 @@ export default defineConfig({
         codeLineHeight: '1.7',
         uiFontFamily: 'var(--font-body)',
         uiFontSize: '0.8rem',
-        focusBorder: 'var(--color-mergify-blue)',
+        focusBorder: 'var(--theme-link)',
         frames: {
           frameBoxShadowCssValue: 'none',
           editorTabBarBorderBottomColor: 'var(--theme-divider)',
-          editorActiveTabIndicatorBottomColor: 'var(--color-mergify-blue)',
+          editorActiveTabIndicatorBottomColor: 'var(--theme-link)',
           editorActiveTabIndicatorTopColor: 'transparent',
           terminalTitlebarBorderBottomColor: 'var(--theme-divider)',
-          tooltipSuccessBackground: 'var(--color-mergify-blue)',
+          tooltipSuccessBackground: 'var(--theme-link)',
           tooltipSuccessForeground: '#fff',
           inlineButtonBorder: 'var(--theme-divider)',
           inlineButtonForeground: 'var(--theme-text-lighter)',
