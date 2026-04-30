@@ -3,27 +3,26 @@ title: Auto-Merge
 description: Automatically merge or queue pull requests when all merge protection conditions pass.
 ---
 
-When `auto_merge` is enabled in your `merge_protections_settings`, Mergify
-automatically acts on pull requests as soon as all applicable [merge
-protection](/merge-protections/custom-rules) `success_conditions` are satisfied.
+Mergify can act on a pull request as soon as all applicable [merge
+protection](/merge-protections/custom-rules) `success_conditions` are
+satisfied. The exact action (merge directly or add to the [merge
+queue](/merge-queue)) depends on whether the merge queue is enabled for the
+repository.
 
-The exact behavior depends on whether the [merge queue](/merge-queue) is
-enabled for the repository:
-
-| `auto_merge` | Merge queue enabled? | Behavior |
-|---|---|---|
-| `true` | Yes | PR is automatically added to the merge queue |
-| `true` | No | PR is automatically merged |
-| `false` (default) | — | No automatic action |
+Auto-merge is configured with the `auto_merge_conditions` field under
+`merge_protections_settings`. It accepts `true` for unconditional auto-merge,
+or a list of conditions to restrict the audience.
 
 ## Configuration
 
-Add `auto_merge: true` to the `merge_protections_settings` section of your
-Mergify configuration file:
+### Unconditional auto-merge
+
+Set `auto_merge_conditions: true` to auto-merge every pull request that
+satisfies the merge protections:
 
 ```yaml
 merge_protections_settings:
-  auto_merge: true
+  auto_merge_conditions: true
 
 merge_protections:
   - name: require-review-and-ci
@@ -34,16 +33,135 @@ merge_protections:
       - check-success = ci
 ```
 
-With this configuration, any pull request targeting `main` that has at least
-one approved review and a passing `ci` check is automatically merged (or
-queued if the merge queue is enabled).
+Any pull request targeting `main` with at least one approved review and a
+passing `ci` check is automatically merged (or queued if the merge queue is
+enabled).
+
+### Conditional auto-merge
+
+Pass a list of conditions to restrict auto-merge to pull requests that match.
+Only matching pull requests are auto-merged. Other pull requests still need
+to be merged manually or queued via the [`/queue` command](/commands/queue).
+
+```yaml
+merge_protections_settings:
+  auto_merge_conditions:
+    - author = dependabot[bot]
+```
+
+The list accepts the same condition syntax as `success_conditions`, including
+nested `and`, `or`, and `not` operators.
+
+### Behavior matrix
+
+| `auto_merge_conditions` | Merge queue enabled? | Behavior |
+|---|---|---|
+| `true` | Yes | Every PR is auto-queued. The merge queue then handles routing and merging |
+| `true` | No | PR is auto-merged once the merge protections pass |
+| List of conditions | Yes | PR is auto-queued when conditions match. The merge queue then handles routing and merging |
+| List of conditions | No | PR is auto-merged once both the conditions and the merge protections pass |
+| omitted | — | No automatic action. Merge manually or use the [`/queue` command](/commands/queue) |
+
+### Accepted and rejected values
+
+`auto_merge_conditions` accepts:
+
+- `true`: unconditional auto-merge.
+- A list of conditions: conditional auto-merge.
+
+The schema rejects `false`, `null`, and `{}` (an empty mapping). To disable
+auto-merge, omit the field entirely.
+
+## Examples
+
+### Bot-only auto-merge
+
+Auto-merge dependency updates from Dependabot, leaving every other pull
+request to be merged manually:
+
+```yaml
+merge_protections_settings:
+  auto_merge_conditions:
+    - author = dependabot[bot]
+```
+
+### Label-gated auto-merge
+
+Auto-merge any pull request that carries the `ready-to-merge` label:
+
+```yaml
+merge_protections_settings:
+  auto_merge_conditions:
+    - label = ready-to-merge
+```
+
+## Migrating from `autoqueue`
+
+`queue_rules[].autoqueue` is deprecated and will stop working on
+**2026-07-16**. The replacement is `auto_merge_conditions` in
+`merge_protections_settings`.
+
+Mergify opens an automatic migration pull request that rewrites the
+configuration. The translation depends on the shape of the original
+configuration:
+
+- **All queues had `autoqueue: true`**: the migration produces
+  `auto_merge_conditions: true`. Each queue's existing `queue_conditions`
+  still gate routing, so they don't need to be duplicated.
+
+- **One autoqueued queue alongside manual queues**: the migration inlines
+  that queue's `queue_conditions` into `auto_merge_conditions`.
+
+- **Multiple autoqueued queues alongside manual queues**: the migration
+  produces an `or` over each autoqueued queue's conditions.
+
+- **Autoqueued queue with empty `queue_conditions`**: collapses to
+  `auto_merge_conditions: true`, since an empty list matches every pull
+  request.
+
+When a configuration mixes autoqueued and manual queues, the migration pull
+request includes a YAML comment listing the queues that remain manual-only.
+Those queues stay reachable via the [`/queue` command](/commands/queue).
+
+### Example
+
+Before:
+
+```yaml
+queue_rules:
+  - name: dependencies
+    autoqueue: true
+    queue_conditions:
+      - author = dependabot[bot]
+    merge_conditions:
+      - check-success = ci
+
+  - name: default
+    queue_conditions:
+      - check-success = ci
+```
+
+After:
+
+```yaml
+queue_rules:
+  - name: dependencies
+    queue_conditions:
+      - author = dependabot[bot]
+    merge_conditions:
+      - check-success = ci
+
+  - name: default
+    queue_conditions:
+      - check-success = ci
+
+merge_protections_settings:
+  auto_merge_conditions:
+    - author = dependabot[bot]
+```
 
 ## Constraints
 
-- **Global setting** — `auto_merge` applies to all pull requests in the
-  repository. You cannot enable it selectively for specific queue rules.
-
-- **Requires merge protections** — `auto_merge` only takes effect when at
-  least one [merge protection rule](/merge-protections/custom-rules) is
-  configured. Without protection rules there are no `success_conditions` to
-  evaluate.
+`auto_merge_conditions` only takes effect when at least one [merge protection
+rule](/merge-protections/custom-rules) is configured. Without protection
+rules there are no `success_conditions` to evaluate.
