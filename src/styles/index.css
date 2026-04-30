@@ -62,7 +62,7 @@ body {
 }
 
 a {
-  color: var(--color-mergify-blue-darker);
+  color: var(--theme-link);
   text-decoration: none;
 }
 
@@ -605,7 +605,7 @@ a.current-header-link {
   transform: translateY(1px);
 }
 .quick-links .ql:focus-visible {
-  outline: 2px solid var(--color-mergify-blue-darker);
+  outline: 2px solid var(--theme-link);
   outline-offset: 2px;
 }
 @media (hover: hover) {
@@ -738,7 +738,7 @@ pre {
   transform: translateY(0);
 }
 .home-hero .quick-links .ql:focus-visible {
-  outline: 2px solid var(--color-mergify-blue-darker);
+  outline: 2px solid var(--theme-link);
   outline-offset: 2px;
 }
 

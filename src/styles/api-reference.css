@@ -104,8 +104,8 @@
 }
 
 .endpoint:target {
-  border-color: var(--color-mergify-blue);
-  box-shadow: 0 0 0 1px var(--color-mergify-blue);
+  border-color: var(--theme-link);
+  box-shadow: 0 0 0 1px var(--theme-link);
 }
 
 .endpoint-heading {
@@ -147,7 +147,7 @@
 }
 
 .endpoint-path .path-param {
-  color: var(--color-mergify-blue-darker);
+  color: var(--theme-link);
   font-style: italic;
 }
 
@@ -358,7 +358,7 @@
 }
 
 .schema-expandable > .schema-property-header:hover {
-  color: var(--color-mergify-blue-darker);
+  color: var(--theme-link);
 }
 
 .schema-property-name {
@@ -508,7 +508,7 @@ details[open] > .schema-property-header > .schema-chevron {
 .schema-type-ref {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--color-mergify-blue-darker);
+  color: var(--theme-link);
 }
 
 .schema-variant-more {
@@ -728,8 +728,8 @@ details[open] > .schema-property-header > .schema-chevron {
 }
 
 .api-section-card:hover {
-  border-color: var(--color-mergify-blue);
-  box-shadow: 0 2px 8px hsla(var(--color-base-blue), 50%, 0.1);
+  border-color: var(--theme-link);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--theme-link) 10%, transparent);
   color: inherit;
 }
 
