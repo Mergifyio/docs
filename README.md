@@ -49,18 +49,21 @@ node --version
    cd mergify-docs
    ```
 
-2. **Install dependencies:**
+2. **Install [pnpm](https://pnpm.io/) and dependencies:**
 
    ```sh
-   npm install
+   corepack enable
+   pnpm install
    ```
 
-   This downloads all the packages the project needs. It may take a minute the first time.
+   `corepack enable` makes pnpm available without a separate install (it ships
+   with Node.js). The `packageManager` field in `package.json` pins the exact
+   pnpm version.
 
 3. **Start the development server:**
 
    ```sh
-   npm start
+   pnpm start
    ```
 
    Open [http://localhost:4321](http://localhost:4321) in your browser to see the site.
@@ -71,13 +74,13 @@ node --version
 
 | Command              | What it does                                          |
 | -------------------- | ----------------------------------------------------- |
-| `npm start`          | Start the local development server                    |
-| `npm run build`      | Build the full site for production (with type checks) |
-| `npm run preview`    | Preview the production build locally                  |
-| `npm run check`      | Run all linting and type checks                       |
-| `npm run format`     | Auto-format code with Biome                           |
-| `npm run format:check` | Check formatting without changing files             |
-| `npm test`           | Run unit tests with Vitest                            |
+| `pnpm start`         | Start the local development server                    |
+| `pnpm build`         | Build the full site for production (with type checks) |
+| `pnpm preview`       | Preview the production build locally                  |
+| `pnpm check`         | Run all linting and type checks                       |
+| `pnpm format`        | Auto-format code with Biome                           |
+| `pnpm format:check`  | Check formatting without changing files               |
+| `pnpm test`          | Run unit tests with Vitest                            |
 
 ## Project Structure
 
@@ -148,7 +151,7 @@ Place images in `src/content/docs/images/` and use relative imports in your MDX 
 Always run the checks before pushing your changes:
 
 ```sh
-npm run check
+pnpm check
 ```
 
 This runs TypeScript type checking, ESLint, and Biome formatting checks all at once. Fix any errors before committing.
@@ -156,7 +159,7 @@ This runs TypeScript type checking, ESLint, and Biome formatting checks all at o
 You can also do a full production build to catch issues that only appear when building all pages:
 
 ```sh
-npm run build
+pnpm build
 ```
 
 ## Production Build Preview
@@ -164,7 +167,7 @@ npm run build
 To see exactly what the site will look like in production:
 
 ```sh
-npm run build && npm run preview
+pnpm build && pnpm preview
 ```
 
 > The build compiles every page, so you may see errors here that don't
@@ -183,11 +186,11 @@ Agentation is already configured in this project:
 
 1. **React component** — included in `src/layouts/BaseLayout.astro` (dev mode only via `import.meta.env.DEV`)
 2. **MCP server** — configured in `.claude/mcp.json`
-3. **npm package** — installed as a dev dependency (`agentation`)
+3. **Package** — installed as a dev dependency (`agentation`)
 
 ### Usage
 
-1. Start the dev server (`npm start`) and open the site in your
+1. Start the dev server (`pnpm start`) and open the site in your
    browser
 
 2. Use the Agentation overlay to create annotations on page elements

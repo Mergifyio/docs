@@ -17,17 +17,17 @@
 
 ```bash
 # Development
-npm start              # Start dev server (pages build on-demand)
-npm run build          # Full production build with type checking
-npm run preview        # Preview production build locally
+pnpm start             # Start dev server (pages build on-demand)
+pnpm build             # Full production build with type checking
+pnpm preview           # Preview production build locally
 
 # Code Quality
-npm run check          # Run all checks: astro check + eslint + biome
-npm run format         # Auto-format with Biome
-npm run format:check   # Check formatting without modifying
+pnpm check             # Run all checks: astro check + eslint + biome
+pnpm format            # Auto-format with Biome
+pnpm format:check      # Check formatting without modifying
 
 # Testing
-npm run test           # Run Vitest unit tests
+pnpm test              # Run Vitest unit tests
 ./scripts/detect-broken-links.sh  # Check for broken links
 ```
 
@@ -116,13 +116,13 @@ Do NOT use regular `git push` - always use `mergify stack push`.
 
 ## Critical Rules
 
-1. **Always run `npm run check` before committing** - Catches TypeScript, lint, and format errors
+1. **Always run `pnpm check` before committing** - Catches TypeScript, lint, and format errors
 
 2. **MDX files must have valid frontmatter** - Title and description required
 
 3. **Images go in `src/content/docs/images/`** - Use relative imports
 
-4. **Test locally with `npm run build`** - Ensures SSG works correctly
+4. **Test locally with `pnpm build`** - Ensures SSG works correctly
 
 5. **Use `mergify stack push` to push** - Not regular git push
 

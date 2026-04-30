@@ -238,5 +238,5 @@ See the [configuration reference](/configuration/file-format) for more options.
 ## Integration with Other Skills
 
 - Review content with project code style guidelines
-- Run `npm run build` to verify MDX compiles correctly
+- Run `pnpm build` to verify MDX compiles correctly
 - Check broken links with `./scripts/detect-broken-links.sh`

@@ -30,16 +30,19 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v6.0.2
 
+      - name: Setup pnpm 📦
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node 🔧
         uses: actions/setup-node@v6
         with:
-          cache: npm
+          cache: pnpm
           node-version-file: .node-version
 
       - name: Lint
         run: |
-          npm ci
-          npm run check
+          pnpm install --frozen-lockfile
+          pnpm check
 
   test:
     timeout-minutes: 20
@@ -48,16 +51,19 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v6.0.2
 
+      - name: Setup pnpm 📦
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node 🔧
         uses: actions/setup-node@v6
         with:
-          cache: npm
+          cache: pnpm
           node-version-file: .node-version
 
       - name: Test
         run: |
-          npm ci
-          npm run test
+          pnpm install --frozen-lockfile
+          pnpm test
 
   build:
     timeout-minutes: 20
@@ -66,16 +72,19 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v6.0.2
 
+      - name: Setup pnpm 📦
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node 🔧
         uses: actions/setup-node@v6
         with:
-          cache: npm
+          cache: pnpm
           node-version-file: .node-version
 
       - name: Build
         run: |
-          npm ci
-          npm run build
+          pnpm install --frozen-lockfile
+          pnpm build
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v7
@@ -91,10 +100,13 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v6.0.2
 
+      - name: Setup pnpm 📦
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node 🔧
         uses: actions/setup-node@v6
         with:
-          cache: npm
+          cache: pnpm
           node-version-file: .node-version
 
       - name: Download build artifact
@@ -105,5 +117,5 @@ jobs:
 
       - name: Check links
         run: |
-          npm ci
-          npm run check:links
+          pnpm install --frozen-lockfile
+          pnpm check:links
