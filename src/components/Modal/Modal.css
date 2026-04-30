@@ -27,7 +27,7 @@
 }
 
 .close {
-  color: var(--theme-text-lighter);
+  color: var(--theme-text-muted);
   float: right;
   font-size: 28px;
   font-weight: bold;

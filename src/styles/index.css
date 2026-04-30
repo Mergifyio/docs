@@ -162,7 +162,7 @@ nav ul {
   margin-inline-end: calc(-1 * var(--icon-size-x));
   width: var(--icon-size-x);
   height: var(--icon-size-y);
-  color: var(--theme-text-light);
+  color: var(--theme-text-secondary);
   text-decoration: none;
   justify-content: center;
   vertical-align: baseline;
@@ -209,7 +209,7 @@ article > section li > :is(p, pre, .expressive-code, blockquote):not(:first-chil
 
 article > section ::marker {
   font-weight: bold;
-  color: var(--theme-text-light);
+  color: var(--theme-text-secondary);
 }
 
 article > section iframe {
@@ -412,7 +412,7 @@ a.header-link {
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
   line-height: 1.3;
-  color: var(--theme-text-lighter);
+  color: var(--theme-text-muted);
   text-decoration: none;
   unicode-bidi: plaintext;
 }
@@ -808,7 +808,7 @@ article.content {
   content: counter(h2-section);
   font-weight: 500;
   margin-right: 0.55rem;
-  color: var(--theme-text-lighter);
+  color: var(--theme-text-muted);
   opacity: 0.6;
 }
 
@@ -836,7 +836,7 @@ article.content {
 
 .home-metric-label {
   font-size: var(--text-sm);
-  color: var(--theme-text-light);
+  color: var(--theme-text-secondary);
 }
 
 /* Home page: Problem-solution cards */
@@ -869,7 +869,7 @@ article.content {
 
 .home-problem-desc {
   font-size: var(--text-sm);
-  color: var(--theme-text-light);
+  color: var(--theme-text-secondary);
   margin-bottom: 1rem;
   line-height: 1.5;
 }

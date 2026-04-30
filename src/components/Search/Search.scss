@@ -27,14 +27,14 @@
 	}
 
 	.result-description {
-		color: var(--theme-text-lighter);
+		color: var(--theme-text-muted);
 		font-weight: 300;
 		text-decoration: none !important;
 	}
 
 	.table-of-content {
 		a {
-			color: var(--theme-text-lighter);
+			color: var(--theme-text-muted);
 			transition: color 0.115s;
 
 			&:hover {

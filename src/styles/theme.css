@@ -72,64 +72,11 @@
   --text-2xl: 1.5rem;
   --text-3xl: 1.875rem;
   --text-4xl: 2rem;
-
-  /*
-		Variables with --color-base prefix define
-		the hue, and saturation values to be used for
-		hsla colors.
-
-		Example:
-		--color-base-{color}: {hue}, {saturation};
-	*/
-
-  --color-base-white: 0, 0%;
-  --color-base-black: 240, 100%;
-  --color-base-gray: 250, 14%;
-  --color-base-blue: 202, 65%;
-  --color-base-blue-dark: 202, 72%;
-  --color-base-teal: 180, 80%;
-  --color-base-green: 158, 79%;
-  --color-base-orange: 22, 100%;
-  --color-base-red: 351, 100%;
-  --color-base-yellow: 41, 100%;
-
-  /*
-		Color palettes are made using --color-base 
-		variables, along with a lightness value to
-		define different variants.
-	*/
-
-  --color-gray-5: var(--color-base-gray), 5%;
-  --color-gray-10: var(--color-base-gray), 10%;
-  --color-gray-20: var(--color-base-gray), 20%;
-  --color-gray-30: var(--color-base-gray), 30%;
-  --color-gray-40: var(--color-base-gray), 40%;
-  --color-gray-50: var(--color-base-gray), 50%;
-  --color-gray-60: var(--color-base-gray), 60%;
-  --color-gray-70: var(--color-base-gray), 70%;
-  --color-gray-80: var(--color-base-gray), 80%;
-  --color-gray-90: var(--color-base-gray), 90%;
-  --color-gray-95: var(--color-base-gray), 95%;
-
-  --color-blue: var(--color-base-blue), 59%;
-  --color-blue-dark: var(--color-base-blue-dark), 23%;
-  --color-green: var(--color-base-green), 42%;
-  --color-orange: var(--color-base-orange), 50%;
-  --color-red: var(--color-base-red), 54%;
-  --color-yellow: var(--color-base-yellow), 59%;
-
-  --color-mergify-blue: #53a9db;
-  --color-mergify-blue-light: #ddeef8;
-  --color-mergify-blue-darker: #237caf;
-  --color-mergify-blue-dark: #113c55;
 }
 
 /* -----------------------------------------------------------------------
-   Semantic tokens. Three :root, ::backdrop blocks share this selector:
-   1. Sizing/font block above (line 4): stable, not remapped per mode.
-   2. Semantic color tokens (this block): consume --color-* primitives.
-   3. Chakra legacy block below (line 199): deleted in Phase 3.
-   Dark-mode overrides for #2 follow in :root.theme-dark.
+   Semantic tokens. Consume primitives from tokens.css.
+   Dark-mode overrides follow in :root.theme-dark below.
    ----------------------------------------------------------------------- */
 :root,
 ::backdrop {
@@ -139,9 +86,6 @@
   --theme-text: var(--color-gray-900);
   --theme-text-secondary: var(--color-gray-700);
   --theme-text-muted: var(--color-gray-500);
-  /* Legacy aliases — kept until Phase 4 sweeps consumers, then deleted. */
-  --theme-text-light: var(--color-gray-700);
-  --theme-text-lighter: var(--color-gray-500);
 
   /* Surfaces */
   --theme-bg: var(--color-gray-50);
@@ -213,9 +157,6 @@
   --theme-text: var(--color-gray-50);
   --theme-text-secondary: var(--color-gray-300);
   --theme-text-muted: var(--color-gray-400);
-  /* Legacy aliases — kept until Phase 4 sweeps consumers, then deleted. */
-  --theme-text-light: var(--color-gray-300);
-  --theme-text-lighter: var(--color-gray-400);
 
   /* Surfaces */
   /* Preserved hex: docs-specific dark surface, intentionally NOT mapped to

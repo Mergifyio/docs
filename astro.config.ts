@@ -63,7 +63,7 @@ export default defineConfig({
           tooltipSuccessBackground: 'var(--theme-link)',
           tooltipSuccessForeground: '#fff',
           inlineButtonBorder: 'var(--theme-divider)',
-          inlineButtonForeground: 'var(--theme-text-lighter)',
+          inlineButtonForeground: 'var(--theme-text-muted)',
           inlineButtonBackgroundIdleOpacity: '0',
           inlineButtonBackgroundHoverOrFocusOpacity: '0.08',
         },

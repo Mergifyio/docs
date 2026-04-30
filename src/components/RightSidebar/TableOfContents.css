@@ -19,8 +19,8 @@
   transform: rotate(0);
   transition: transform 0.15s ease;
   vertical-align: middle;
-  fill: var(--theme-text-light);
-  stroke: var(--theme-text-light);
+  fill: var(--theme-text-secondary);
+  stroke: var(--theme-text-secondary);
 }
 
 .toc-mobile-container[data-open] .toc-toggle svg {
