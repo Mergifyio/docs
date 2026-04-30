@@ -1,6 +1,6 @@
 ---
 description: Run the full build and check suite to verify project health
-allowed-tools: Bash(npm:*), Bash(./scripts/*)
+allowed-tools: Bash(pnpm:*), Bash(./scripts/*)
 ---
 
 # Build and Check Suite
@@ -14,17 +14,17 @@ Run all quality checks to verify the project builds correctly and passes all val
 First, verify code formatting without modifying files:
 
 ```bash
-npm run format:check
+pnpm format:check
 ```
 
-**If this fails:** Run `npm run format` to auto-fix, then review changes.
+**If this fails:** Run `pnpm format` to auto-fix, then review changes.
 
 ### Step 2: Full Quality Check
 
 Run the comprehensive check that includes TypeScript, ESLint, and Biome:
 
 ```bash
-npm run check
+pnpm check
 ```
 
 This runs:
@@ -39,7 +39,7 @@ This runs:
 Run the Vitest test suite:
 
 ```bash
-npm run test
+pnpm test
 ```
 
 **If this fails:** Check the test output for failing assertions.
@@ -49,7 +49,7 @@ npm run test
 Attempt a full production build to catch build-time issues:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 This is the most comprehensive check as it:
@@ -97,10 +97,10 @@ All checks passed / X issues need attention before merge.
 
 | Command | What It Checks |
 |---------|----------------|
-| `npm run format:check` | Code formatting |
-| `npm run check` | Astro + ESLint + Biome |
-| `npm run test` | Unit tests |
-| `npm run build` | Full production build |
+| `pnpm format:check` | Code formatting |
+| `pnpm check` | Astro + ESLint + Biome |
+| `pnpm test` | Unit tests |
+| `pnpm build` | Full production build |
 | `./scripts/detect-broken-links.sh` | Internal/external links |
 
 ## When to Run
