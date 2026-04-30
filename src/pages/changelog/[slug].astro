@@ -75,19 +75,19 @@ const { title, description, date, tags } = entry.data;
   .date {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--chakra-colors-gray-700);
+    color: var(--theme-text-secondary);
     letter-spacing: 0.01em;
-    background: var(--chakra-colors-gray-100);
+    background: var(--theme-bg-offset);
     padding: 0.5rem 1rem;
     border-radius: 6px;
-    border: 1px solid var(--chakra-colors-gray-200);
+    border: 1px solid var(--theme-border);
     display: inline-block;
   }
 
   .theme-dark .date {
-    background: var(--chakra-colors-gray-800);
-    color: var(--chakra-colors-gray-100);
-    border-color: var(--chakra-colors-gray-700);
+    background: var(--theme-bg-offset);
+    color: var(--theme-text-secondary);
+    border-color: var(--theme-border);
   }
 
   .tag-list {
@@ -114,21 +114,21 @@ const { title, description, date, tags } = entry.data;
   }
 
   .tag {
-    background: var(--chakra-colors-gray-100);
-    color: var(--chakra-colors-gray-700);
+    background: var(--theme-bg-offset);
+    color: var(--theme-text-secondary);
     font-size: 0.75rem;
     font-weight: 600;
     padding: 0.4rem 0.75rem;
     border-radius: 6px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border: 1px solid var(--chakra-colors-gray-200);
+    border: 1px solid var(--theme-border);
   }
 
   .theme-dark .tag {
-    background: var(--chakra-colors-gray-700);
-    color: var(--chakra-colors-gray-200);
-    border-color: var(--chakra-colors-gray-600);
+    background: var(--theme-bg-offset);
+    color: var(--theme-text-secondary);
+    border-color: var(--theme-border);
   }
 
   .entry-title {
@@ -242,27 +242,27 @@ const { title, description, date, tags } = entry.data;
   .entry-content :global(blockquote) {
     margin: 1.5rem 0;
     padding: 1rem 1.25rem;
-    border-left: 4px solid var(--chakra-colors-gray-300);
-    background: var(--chakra-colors-gray-50);
+    border-left: 4px solid var(--theme-border);
+    background: var(--theme-bg-offset);
     color: var(--theme-text-light);
     font-style: italic;
   }
 
   .theme-dark .entry-content :global(blockquote) {
-    border-left-color: var(--chakra-colors-gray-600);
-    background: var(--chakra-colors-gray-800);
+    border-left-color: var(--theme-border);
+    background: var(--theme-bg-offset);
   }
 
   .entry-content :global(a) {
     color: var(--theme-text);
     text-decoration: underline;
-    text-decoration-color: var(--chakra-colors-gray-300);
+    text-decoration-color: var(--theme-border);
     text-underline-offset: 2px;
     transition: text-decoration-color 0.2s;
   }
 
   .entry-content :global(a:hover) {
-    text-decoration-color: var(--chakra-colors-gray-600);
+    text-decoration-color: var(--theme-text-muted);
   }
 
   .entry-content :global(hr) {
@@ -292,19 +292,19 @@ const { title, description, date, tags } = entry.data;
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--chakra-colors-gray-700);
-    background: var(--chakra-colors-gray-100);
+    color: var(--theme-text-secondary);
+    background: var(--theme-bg-offset);
     padding: 0.5rem 1rem;
     border-radius: 6px;
-    border: 1px solid var(--chakra-colors-gray-200);
+    border: 1px solid var(--theme-border);
     transition: all 0.2s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .back-button:hover {
-    background: var(--chakra-colors-gray-700);
-    color: #fff;
-    border-color: var(--chakra-colors-gray-700);
+    background: var(--theme-accent);
+    color: var(--theme-bg-content);
+    border-color: var(--theme-accent);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
   }
@@ -321,14 +321,14 @@ const { title, description, date, tags } = entry.data;
   }
 
   .theme-dark .back-button {
-    background: var(--chakra-colors-gray-700);
-    color: var(--chakra-colors-gray-200);
-    border-color: var(--chakra-colors-gray-600);
+    background: var(--theme-bg-offset);
+    color: var(--theme-text-secondary);
+    border-color: var(--theme-border);
   }
 
   .theme-dark .back-button:hover {
-    background: var(--chakra-colors-gray-600);
-    color: #fff;
-    border-color: var(--chakra-colors-gray-500);
+    background: var(--theme-accent);
+    color: var(--theme-bg-content);
+    border-color: var(--theme-accent);
   }
 </style>

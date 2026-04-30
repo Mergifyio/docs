@@ -18,7 +18,7 @@
 
 	.page-result {
 		&.active {
-			background: var(--chakra-colors-blue-100);
+			background: var(--theme-bg-offset);
 		}
 	}
 
@@ -45,7 +45,7 @@
 }
 
 .theme-dark .modal-content .page-result.active {
-	background: var(--chakra-colors-blue-700) !important;
+	background: var(--theme-bg-hover) !important;
 }
 
 .theme-dark .modal-content mark {
