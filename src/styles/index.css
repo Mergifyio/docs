@@ -11,7 +11,7 @@
 
 /* Firefox */
 * {
-  scrollbar-color: var(--theme-dim-light) transparent;
+  scrollbar-color: var(--theme-border) transparent;
 }
 
 /* Webkit */
@@ -27,7 +27,7 @@ body::-webkit-scrollbar-track {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--theme-dim-light);
+  background-color: var(--theme-border);
   border: 4px solid transparent;
   background-clip: content-box;
   border-radius: 10px;
@@ -223,7 +223,7 @@ article > section iframe {
 
 a > code {
   position: relative;
-  color: var(--theme-text-accent);
+  color: var(--theme-link);
   text-underline-offset: var(--padding-block);
 }
 
