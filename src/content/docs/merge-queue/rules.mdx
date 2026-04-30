@@ -100,56 +100,24 @@ documentation](/merge-queue/lifecycle#lifecycle-of-a-pull-request-in-the-merge-q
 ## Auto‑Queueing Pull Requests
 
 :::caution
-  `autoqueue` is deprecated and will be removed on 2026-07-16.
-  Use [`auto_merge`](/merge-protections/auto-merge) in
+  `autoqueue` is deprecated and will stop working on 2026-07-16. Use
+  [`auto_merge_conditions`](/merge-protections/auto-merge) in
   `merge_protections_settings` instead.
 
-  To migrate, remove `autoqueue` from your queue rules and add
-  `auto_merge: true` to `merge_protections_settings`.
-  [Merge protections](/merge-protections/setup) must be enabled first.
+  Mergify opens an automatic migration pull request that rewrites the
+  configuration: uniform `autoqueue: true` becomes
+  `auto_merge_conditions: true`, while mixed configurations inline the
+  autoqueued queues' `queue_conditions` into `auto_merge_conditions`. See
+  [Migrating from `autoqueue`](/merge-protections/auto-merge#migrating-from-autoqueue)
+  for the full translation rules.
 
-  Note that `auto_merge` is global — it applies to all queue rules.
-  If only some of your rules had `autoqueue: true`, review your
-  conditions to make sure this is the desired behavior.
-
-  `auto_merge` and `autoqueue` cannot coexist; Mergify raises a
-  configuration error if both are present.
+  [Merge Protections](/merge-protections/setup) must be enabled for
+  `auto_merge_conditions` to take effect. `auto_merge_conditions` and
+  `autoqueue` cannot coexist; Mergify raises a configuration error if both
+  are present.
 :::
 
-You can automatically enqueue pull requests that satisfy a queue rule's
-`queue_conditions` by setting the `autoqueue` flag to `true` (default is
-`false`). When `autoqueue: true` the pull request is added to the merge queue
-as soon as it matches `queue_conditions`. No pull request rule with a `queue`
-action or manual [`queue` command](/commands/queue) is required.
-
-This ensures PRs are enqueued consistently & immediately, reducing latency
-between validation success and scheduling.
-
-Example:
-
-```yaml
-queue_rules:
-  - name: urgent
-    autoqueue: true
-    queue_conditions:
-      - label = urgent
-    merge_conditions:
-      - check-success = myci
-
-  - name: default
-    autoqueue: false
-    queue_conditions:
-      - check-success = myci
-    batch_size: 5
-```
-
-With this configuration, any PR carrying `label = urgent` is enqueued instantly
-(even before CI finishes, if you omit that check from `queue_conditions`),
-while standard PRs enter only manually after CI succeeds.
-
-Set `autoqueue: false` (or omit it) if you want enqueueing to be explicit, for
-example:
-- Allow contributors to opt‑in manually via the [`queue`
-  command](/commands/queue)
-
-- Gate queueing behind an internal custom workflow step
+Control auto-queueing with
+[`auto_merge_conditions`](/merge-protections/auto-merge) in
+`merge_protections_settings`. It accepts `true` for unconditional auto-merge,
+or a list of conditions to restrict the audience.
