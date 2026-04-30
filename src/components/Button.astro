@@ -1,26 +1,10 @@
 ---
 import { Icon } from 'astro-icon/components';
 
+// colorScheme: only 'blue' is used by callers (security.mdx, HeaderLink.astro).
+// All Chakra ramp schemes dropped (YAGNI). primary/secondary handled by variant.
 export interface Props {
-  colorScheme?:
-    | 'whiteAlpha'
-    | 'blackAlpha'
-    | 'gray'
-    | 'red'
-    | 'orange'
-    | 'yellow'
-    | 'green'
-    | 'teal'
-    | 'blue'
-    | 'cyan'
-    | 'purple'
-    | 'pink'
-    | 'linkedin'
-    | 'facebook'
-    | 'messenger'
-    | 'whatsapp'
-    | 'twitter'
-    | 'telegram';
+  colorScheme?: 'blue';
   style?: string;
   href?: string;
   icon?: string;
@@ -121,68 +105,44 @@ const classes = [
 		}
 	}
 
-	@mixin generate-button-styles($colorSchemes) {
-		@each $colorScheme in $colorSchemes {
-			.button-#{$colorScheme}.solid {
-				background-color: var(--chakra-colors-#{$colorScheme}-500);
-				transition: background-color 0.2s;
-				color: white;
+	/* blue — Merge Protections palette token. Used by security.mdx and HeaderLink. */
+	.button-blue.solid {
+		background-color: var(--color-blue-700);
+		transition: background-color 0.2s;
+		color: var(--color-white);
 
-				&:hover {
-					background-color: var(--chakra-colors-#{$colorScheme}-600);
-				}
-			}
-
-			.theme-dark .button-#{$colorScheme}.solid {
-				color: var(--chakra-colors-gray-800);
-
-				&:hover {
-					background-color: var(--chakra-colors-#{$colorScheme}-300);
-				}
-			}
-
-			.button-#{$colorScheme}.ghost {
-				background-color: transparent;
-				transition: background-color 0.2s;
-				color: black;
-
-				&:hover {
-					background-color: var(--chakra-colors-#{$colorScheme}-50);
-				}
-			}
-
-			.theme-dark .button-#{$colorScheme}.ghost {
-				color: var(--chakra-colors-whiteAlpha-900);
-
-				svg {
-					color: var(--chakra-colors-whiteAlpha-900);
-				}
-
-				&:hover {
-					background-color: var(--chakra-colors-#{$colorScheme}-600);
-				}
-			}
+		&:hover {
+			background-color: var(--color-blue-400);
 		}
 	}
 
-	@include generate-button-styles(
-		[ 'whiteAlpha',
-		'blackAlpha',
-		'gray',
-		'red',
-		'orange',
-		'yellow',
-		'green',
-		'teal',
-		'blue',
-		'cyan',
-		'purple',
-		'pink',
-		'linkedin',
-		'facebook',
-		'messenger',
-		'whatsapp',
-		'twitter',
-		'telegram']
-	);
+	.theme-dark .button-blue.solid {
+		color: var(--color-white);
+
+		&:hover {
+			background-color: var(--color-blue-400);
+		}
+	}
+
+	.button-blue.ghost {
+		background-color: transparent;
+		transition: background-color 0.2s;
+		color: var(--theme-text);
+
+		&:hover {
+			background-color: var(--theme-bg-offset);
+		}
+	}
+
+	.theme-dark .button-blue.ghost {
+		color: var(--theme-text);
+
+		svg {
+			color: var(--theme-text);
+		}
+
+		&:hover {
+			background-color: var(--theme-bg-offset);
+		}
+	}
 </style>
