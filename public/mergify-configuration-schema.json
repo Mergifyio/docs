@@ -2831,7 +2831,8 @@
         },
         "autoqueue": {
           "default": false,
-          "description": "When set to true, automatically add a pull request to the queue when it matches the queue conditions. When false, the pull request must be manually queued.",
+          "deprecated": true,
+          "description": "When set to true, automatically add a pull request to the queue when it matches the queue conditions. When false, the pull request must be manually queued. Deprecated: use merge_protection_settings.auto_merge_conditions instead.",
           "title": "Autoqueue",
           "type": "boolean"
         },
@@ -3074,7 +3075,8 @@
         },
         "autoqueue": {
           "default": false,
-          "description": "When set to true, automatically add a pull request to the queue when it matches the queue conditions. When false, the pull request must be manually queued.",
+          "deprecated": true,
+          "description": "When set to true, automatically add a pull request to the queue when it matches the queue conditions. When false, the pull request must be manually queued. Deprecated: use merge_protection_settings.auto_merge_conditions instead.",
           "title": "Autoqueue",
           "type": "boolean"
         },
