@@ -859,47 +859,53 @@ pre {
   outline-offset: 2px;
 }
 
+/* Heading rules for MDX-rendered content. Properties match the
+   typography utilities in typography.css — keep in sync. */
+#main-content h1,
 .content-title {
-  font-size: var(--text-4xl);
+  font-size: 2rem;
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: -0.025em;
+  text-wrap: balance;
   margin-bottom: 0.25em;
 }
 
+#main-content h2.content-subtitle,
 .content-subtitle {
-  font-size: var(--text-lg);
+  font-size: 1.125rem;
   font-weight: 400;
   line-height: 1.5;
   text-wrap: balance;
+  color: var(--theme-text-muted);
 }
 
-#main-content .content-subtitle {
-  font-size: var(--text-lg);
-  color: var(--theme-text-lighter);
-}
-
-#main-content h2 {
+#main-content h2:not(.content-subtitle):not(.home-title) {
+  font-size: 1.5rem;
   font-weight: 500;
-  font-size: var(--text-2xl);
+  line-height: 1.3;
   letter-spacing: -0.025em;
+  text-wrap: balance;
 }
 
 #main-content h3 {
+  font-size: 1.25rem;
   font-weight: 500;
-  font-size: var(--text-xl);
+  line-height: 1.3;
   letter-spacing: -0.01em;
 }
 
 #main-content h4 {
+  font-size: 1.125rem;
   font-weight: 500;
-  font-size: var(--text-lg);
+  line-height: 1.4;
 }
 
 #main-content h5,
 #main-content h6 {
+  font-size: 1rem;
   font-weight: 500;
-  font-size: var(--text-base);
+  line-height: 1.4;
 }
 
 header .nav-wrapper {
