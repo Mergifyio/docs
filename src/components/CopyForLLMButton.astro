@@ -35,8 +35,8 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 		gap: 0.5rem;
 		padding: 0.4rem 0.95rem;
 		border-radius: 999px;
-		border: 1px solid var(--chakra-colors-gray-200);
-		background: var(--chakra-colors-white);
+		border: 1px solid var(--theme-border);
+		background: var(--theme-bg-content);
 		color: inherit;
 		font-size: 0.9rem;
 		font-weight: 500;
@@ -48,13 +48,13 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 
 	:global(.docs-toolbar-button:hover),
 	:global(.docs-toolbar-button:focus-visible) {
-		border-color: var(--chakra-colors-gray-300);
-		background: var(--chakra-colors-gray-50);
+		border-color: var(--theme-border);
+		background: var(--theme-bg);
 		outline: none;
 	}
 
 	:global(.docs-toolbar-button:active) {
-		background: var(--chakra-colors-gray-100);
+		background: var(--theme-bg-offset);
 	}
 
 	:global(.docs-toolbar-button--compact) {
@@ -80,7 +80,7 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 	:global(.theme-dark .docs-toolbar-button) {
 		border-color: rgba(255, 255, 255, 0.2);
 		background: rgba(255, 255, 255, 0.05);
-		color: var(--chakra-colors-whiteAlpha-900);
+		color: var(--theme-text);
 	}
 
 	:global(.theme-dark .docs-toolbar-button:hover),

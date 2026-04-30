@@ -69,7 +69,7 @@ function PageResult({ entry, query, onHover, onNavigate, active }: PageResultPro
               width: '100%',
               margin: 0,
               fontSize: '0.875rem',
-              color: 'var(--theme-text-light)',
+              color: 'var(--theme-text-secondary)',
             }}
           >
             {breadcrumb}
@@ -154,7 +154,7 @@ export default function Results({ results, query, onNavigate }: ResultsProps) {
         style={{
           padding: '32px 16px',
           textAlign: 'center',
-          color: 'var(--theme-text-light)',
+          color: 'var(--theme-text-secondary)',
           fontSize: '0.9375rem',
         }}
       >

@@ -85,7 +85,7 @@ function MergeQueueCalculator() {
   return (
     <div
       id="calculator"
-      style={{ padding: 16, border: '1px solid var(--theme-text-lighter)', borderRadius: 4 }}
+      style={{ padding: 16, border: '1px solid var(--theme-border)', borderRadius: 4 }}
     >
       <div>
         <div>

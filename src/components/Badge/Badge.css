@@ -7,6 +7,6 @@
   text-transform: uppercase;
   letter-spacing: 0.1ch;
   white-space: nowrap;
-  background-color: var(--chakra-colors-orange-100);
-  color: var(--chakra-colors-orange-800);
+  background-color: color-mix(in srgb, var(--color-orange-400) 25%, transparent);
+  color: var(--color-orange-700);
 }

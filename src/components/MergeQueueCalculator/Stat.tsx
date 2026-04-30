@@ -29,10 +29,10 @@ export default function Stat({
         <h3 style={{ margin: 0, display: 'flex', alignItems: 'baseline', gap: 6 }}>
           {stat ?? 0}
           {unit && (
-            <span style={{ fontSize: '0.6em', color: 'var(--theme-text-light)' }}>{unit}</span>
+            <span style={{ fontSize: '0.6em', color: 'var(--theme-text-secondary)' }}>{unit}</span>
           )}
         </h3>
-        <span style={{ color: 'var(--theme-text-light)' }}>{helperText}</span>
+        <span style={{ color: 'var(--theme-text-secondary)' }}>{helperText}</span>
       </div>
       {typeof indicatorPct === 'number' && (
         <div className="meter" title={`${Math.round(indicatorPct)}%`}>
@@ -40,7 +40,7 @@ export default function Stat({
             className="meter-fill"
             style={{
               width: `${Math.max(0, Math.min(100, indicatorPct))}%`,
-              background: indicatorColor || 'var(--theme-text-light)',
+              background: indicatorColor || 'var(--theme-text-secondary)',
             }}
           />
         </div>

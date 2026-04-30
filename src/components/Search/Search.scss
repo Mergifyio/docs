@@ -6,7 +6,7 @@
    so these styles must NOT be nested under #search-bar. */
 .modal-content {
 	mark {
-		color: #003dff;
+		color: var(--theme-link);
 		background: transparent;
 		font-weight: 500;
 	}
@@ -18,7 +18,7 @@
 
 	.page-result {
 		&.active {
-			background: var(--chakra-colors-blue-100);
+			background: var(--theme-bg-offset);
 		}
 	}
 
@@ -27,14 +27,14 @@
 	}
 
 	.result-description {
-		color: var(--theme-text-lighter);
+		color: var(--theme-text-muted);
 		font-weight: 300;
 		text-decoration: none !important;
 	}
 
 	.table-of-content {
 		a {
-			color: var(--theme-text-lighter);
+			color: var(--theme-text-muted);
 			transition: color 0.115s;
 
 			&:hover {
@@ -45,9 +45,8 @@
 }
 
 .theme-dark .modal-content .page-result.active {
-	background: var(--chakra-colors-blue-700) !important;
+	background: var(--theme-bg-hover) !important;
 }
 
-.theme-dark .modal-content mark {
-	color: #5468ff;
-}
+/* Dark mode mark color comes from --theme-link's dark-mode remap;
+   no separate override needed. */

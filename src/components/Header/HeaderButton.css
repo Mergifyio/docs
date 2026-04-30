@@ -1,7 +1,7 @@
 .header-button {
   --border-color-default: var(--theme-shade-subtle);
-  --border-color-hocus: var(--theme-text-light);
-  --text-color-default: var(--theme-text-light);
+  --border-color-hocus: var(--theme-text-secondary);
+  --text-color-default: var(--theme-text-secondary);
   --text-color-hocus: var(--theme-text);
   box-sizing: border-box;
   margin: 0;

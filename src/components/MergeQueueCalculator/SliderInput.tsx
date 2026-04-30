@@ -23,7 +23,7 @@ export default function SliderInput({
     <label style={{ display: 'flex', flexDirection: 'column', gap: 8, height: '100%' }}>
       <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         {label}
-        <span style={{ color: 'var(--theme-text-light)' }}>
+        <span style={{ color: 'var(--theme-text-secondary)' }}>
           {value}
           {unit}
         </span>
