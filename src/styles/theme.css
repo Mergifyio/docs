@@ -130,8 +130,10 @@
   --theme-code-del-border: hsl(338, 46%, 53%);
   --theme-code-del-text: hsl(338, 36%, 70%);
 
-  /* Navbar */
-  --theme-navbar-bg: var(--theme-bg);
+  /* Navbar — content surface (white in light) so it reads as a distinct
+     elevated zone over the body bg. Dark mode aliases --theme-bg-content
+     to --theme-bg, so this is unchanged from the previous behaviour there. */
+  --theme-navbar-bg: var(--theme-bg-content);
 
   /* Glow */
   --theme-glow-highlight: transparent;

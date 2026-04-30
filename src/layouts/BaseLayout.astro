@@ -98,19 +98,9 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				#left-sidebar {
 					display: flex;
 					padding-inline-end: 0.5rem;
-					top: var(--theme-navbar-height);
+					top: 0;
 					width: var(--theme-left-sidebar-width);
 					background: var(--theme-bg);
-
-					&::after {
-						content: '';
-						position: absolute;
-						top: 0;
-						right: -32px;
-						width: 32px;
-						height: 32px;
-						background: radial-gradient(circle at 100% 100%, var(--theme-bg-content) 32px, var(--theme-bg) 32px);
-					}
 				}
 			}
 
