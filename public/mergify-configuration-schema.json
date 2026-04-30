@@ -1402,7 +1402,8 @@
         },
         "auto_merge": {
           "default": false,
-          "description": "Automatically merge or queue PRs when all merge protection conditions pass",
+          "deprecated": true,
+          "description": "Automatically merge or queue PRs when all merge protection conditions pass. Deprecated: use auto_merge_conditions.",
           "title": "Auto Merge",
           "type": "boolean"
         },
