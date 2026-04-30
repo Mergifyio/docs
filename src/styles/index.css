@@ -11,7 +11,7 @@
 
 /* Firefox */
 * {
-  scrollbar-color: var(--theme-border) transparent;
+  scrollbar-color: var(--theme-divider) transparent;
 }
 
 /* Webkit */
@@ -27,7 +27,7 @@ body::-webkit-scrollbar-track {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--theme-border);
+  background-color: var(--theme-divider);
   border: 4px solid transparent;
   background-clip: content-box;
   border-radius: 10px;
@@ -275,12 +275,8 @@ thead {
   font-family: var(--font-body);
   text-transform: uppercase;
   font-size: small;
-  color: #4a5568;
+  color: var(--theme-text-secondary);
   font-weight: 100;
-}
-
-.theme-dark thead {
-  color: #a0aec0;
 }
 
 table {

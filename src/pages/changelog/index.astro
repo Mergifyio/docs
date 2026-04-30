@@ -407,71 +407,71 @@ const description = 'Latest product updates from Mergify.';
 
   /* Product-specific pill colors */
   .pill[data-tag="Workflow Automation"] {
-    background: var(--section-workflow-accent-bg);
-    color: var(--section-workflow-accent);
-    border-color: var(--section-workflow-accent);
+    background: color-mix(in srgb, var(--color-rose-400) 25%, transparent);
+    color: var(--color-rose-700);
+    border-color: var(--color-rose-700);
   }
 
   .pill[data-tag="Workflow Automation"]:hover {
-    background: var(--section-workflow-accent);
+    background: var(--color-rose-700);
     color: #fff;
   }
 
   .pill[data-tag="Workflow Automation"].active {
-    background: var(--section-workflow-accent);
+    background: var(--color-rose-700);
     color: #fff;
-    border-color: var(--section-workflow-accent);
+    border-color: var(--color-rose-700);
   }
 
   .pill[data-tag="Merge Queue"] {
-    background: var(--section-merge-queue-accent-bg);
-    color: var(--section-merge-queue-accent);
-    border-color: var(--section-merge-queue-accent);
+    background: color-mix(in srgb, var(--color-teal-400) 25%, transparent);
+    color: var(--color-teal-700);
+    border-color: var(--color-teal-700);
   }
 
   .pill[data-tag="Merge Queue"]:hover {
-    background: var(--section-merge-queue-accent);
+    background: var(--color-teal-700);
     color: #fff;
   }
 
   .pill[data-tag="Merge Queue"].active {
-    background: var(--section-merge-queue-accent);
+    background: var(--color-teal-700);
     color: #fff;
-    border-color: var(--section-merge-queue-accent);
+    border-color: var(--color-teal-700);
   }
 
   .pill[data-tag="CI Insights"] {
-    background: var(--section-ci-insights-accent-bg);
-    color: var(--section-ci-insights-accent);
-    border-color: var(--section-ci-insights-accent);
+    background: color-mix(in srgb, var(--color-purple-400) 25%, transparent);
+    color: var(--color-purple-700);
+    border-color: var(--color-purple-700);
   }
 
   .pill[data-tag="CI Insights"]:hover {
-    background: var(--section-ci-insights-accent);
+    background: var(--color-purple-700);
     color: #fff;
   }
 
   .pill[data-tag="CI Insights"].active {
-    background: var(--section-ci-insights-accent);
+    background: var(--color-purple-700);
     color: #fff;
-    border-color: var(--section-ci-insights-accent);
+    border-color: var(--color-purple-700);
   }
 
   .pill[data-tag="Merge Protections"] {
-    background: var(--section-merge-protections-accent-bg);
-    color: var(--section-merge-protections-accent);
-    border-color: var(--section-merge-protections-accent);
+    background: color-mix(in srgb, var(--color-blue-400) 25%, transparent);
+    color: var(--color-blue-700);
+    border-color: var(--color-blue-700);
   }
 
   .pill[data-tag="Merge Protections"]:hover {
-    background: var(--section-merge-protections-accent);
+    background: var(--color-blue-700);
     color: #fff;
   }
 
   .pill[data-tag="Merge Protections"].active {
-    background: var(--section-merge-protections-accent);
+    background: var(--color-blue-700);
     color: #fff;
-    border-color: var(--section-merge-protections-accent);
+    border-color: var(--color-blue-700);
   }
   /* Deprecations category (yellow) */
   .pill[data-tag="Deprecations"] {
@@ -517,10 +517,10 @@ const description = 'Latest product updates from Mergify.';
   .entry { position: relative; margin: 0; padding: 1.25rem 0 1.25rem 1.25rem; border-bottom: 1px solid var(--theme-border-color); }
   .entry:last-child { border-bottom: 0; }
   .entry::before { content: ''; position: absolute; left: -6px; top: 1.4rem; width: 10px; height: 10px; background: var(--theme-text-muted); border-radius: 50%; box-shadow: 0 0 0 2px var(--theme-bg); }
-  .entry-release::before { background: var(--section-merge-queue-accent, var(--theme-accent)); box-shadow: 0 0 0 2px var(--theme-bg), 0 0 0 6px rgba(27, 99, 243, 0.15); }
+  .entry-release::before { background: var(--color-teal-700); box-shadow: 0 0 0 2px var(--theme-bg), 0 0 0 6px rgba(27, 99, 243, 0.15); }
   .entry-release + .entry { border-top: 1px solid var(--theme-border-color); }
   .entry-release .release-title { display: inline-flex; align-items: center; gap: .4rem; font-weight: 600; font-size: 1rem; }
-  .entry-release .release-icon { width: 1rem; height: 1rem; color: var(--section-merge-queue-accent, var(--theme-accent)); }
+  .entry-release .release-icon { width: 1rem; height: 1rem; color: var(--color-teal-700); }
   .entry-release .release-summary { margin: .35rem 0 0; font-size: .85rem; color: var(--theme-text-secondary); }
   .tag-enterprise {
     background: #111;
@@ -537,27 +537,27 @@ const description = 'Latest product updates from Mergify.';
 
   /* Product-specific label colors */
   .tag[data-tag="Workflow Automation"] {
-    background: var(--section-workflow-accent-bg);
-    color: var(--section-workflow-accent);
-    border: 1px solid var(--section-workflow-accent);
+    background: color-mix(in srgb, var(--color-rose-400) 25%, transparent);
+    color: var(--color-rose-700);
+    border: 1px solid var(--color-rose-700);
   }
 
   .tag[data-tag="Merge Queue"] {
-    background: var(--section-merge-queue-accent-bg);
-    color: var(--section-merge-queue-accent);
-    border: 1px solid var(--section-merge-queue-accent);
+    background: color-mix(in srgb, var(--color-teal-400) 25%, transparent);
+    color: var(--color-teal-700);
+    border: 1px solid var(--color-teal-700);
   }
 
   .tag[data-tag="CI Insights"] {
-    background: var(--section-ci-insights-accent-bg);
-    color: var(--section-ci-insights-accent);
-    border: 1px solid var(--section-ci-insights-accent);
+    background: color-mix(in srgb, var(--color-purple-400) 25%, transparent);
+    color: var(--color-purple-700);
+    border: 1px solid var(--color-purple-700);
   }
 
   .tag[data-tag="Merge Protections"] {
-    background: var(--section-merge-protections-accent-bg);
-    color: var(--section-merge-protections-accent);
-    border: 1px solid var(--section-merge-protections-accent);
+    background: color-mix(in srgb, var(--color-blue-400) 25%, transparent);
+    color: var(--color-blue-700);
+    border: 1px solid var(--color-blue-700);
   }
   .tag[data-tag="Deprecations"] {
     background: #FEFCBF; /* yellow-100 */

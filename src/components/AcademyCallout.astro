@@ -28,9 +28,9 @@ const { title = 'Merge Queue Academy', href = 'https://merge-queue.academy/' } =
 
 <style>
   .academy-callout {
-    border-inline-start: 4px solid var(--section-merge-queue-accent);
+    border-inline-start: 4px solid var(--color-teal-700);
     padding: 1rem;
-    background-color: var(--section-merge-queue-accent-bg);
+    background-color: color-mix(in srgb, var(--color-teal-400) 25%, transparent);
     outline: 1px solid transparent;
     margin: 1rem 0;
   }
@@ -42,7 +42,7 @@ const { title = 'Merge Queue Academy', href = 'https://merge-queue.academy/' } =
     letter-spacing: 0.05em;
     font-weight: bold;
     text-transform: uppercase;
-    color: var(--section-merge-queue-accent);
+    color: var(--color-teal-700);
   }
 
   .icon svg {
@@ -54,7 +54,7 @@ const { title = 'Merge Queue Academy', href = 'https://merge-queue.academy/' } =
 
   .academy-callout :global(a),
   .academy-callout :global(a > code:not([class*='language'])) {
-    color: var(--section-merge-queue-accent);
+    color: var(--color-teal-700);
   }
 
   .academy-callout :global(p),
