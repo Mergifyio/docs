@@ -24,7 +24,7 @@ const primaryLink = isEnterpriseSection
 <header>
 	<nav class="nav-wrapper" aria-label={'Top'}>
 		<SidebarToggle client:idle />
-		<div dir="ltr" lang="en" class="logo flex">
+		<div dir="ltr" lang="en" class="logo logo-mobile flex">
 			<ul>
 				<li>
 					<a
@@ -124,8 +124,11 @@ const primaryLink = isEnterpriseSection
 		height: var(--theme-navbar-height);
 		z-index: 11;
 		padding: 0.75rem 0;
-		background-color: color-mix(in srgb, var(--theme-navbar-bg) 95%, transparent);
-		backdrop-filter: blur(5px);
+		background-color: var(--theme-navbar-bg);
+		/* Soft shadow instead of a hard border so the surface contrast carries
+		   the navbar/body boundary cleanly. Near-invisible in dark mode (where
+		   navbar bg matches body bg), which matches the original behaviour. */
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 		display: flex;
 		align-items: center;
 		justify-content: left;
@@ -243,6 +246,17 @@ const primaryLink = isEnterpriseSection
 	@media (max-width: 87em) {
 		.nav-buttons {
 			display: none !important;
+		}
+	}
+
+	/* Logo lives in the sidebar on desktop (mirrors mergify-monorepo dashboard);
+	   hide the in-header copy at >=50em where the sidebar logo is visible. */
+	@media (min-width: 50em) {
+		.logo-mobile {
+			display: none;
+		}
+		header {
+			left: var(--theme-left-sidebar-width);
 		}
 	}
 
