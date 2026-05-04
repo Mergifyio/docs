@@ -79,7 +79,7 @@ steps:
   - label: ":mag: Detect scopes"
     key: detect-scopes
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes
           token: "${MERGIFY_TOKEN}"
 
@@ -104,7 +104,7 @@ if echo "$SCOPES" | jq -e '.frontend == "true"' > /dev/null 2>&1; then
   - label: ":react: Frontend tests"
     command: npm test
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "junit.xml"
           token: "${MERGIFY_TOKEN}"
@@ -116,7 +116,7 @@ if echo "$SCOPES" | jq -e '.api == "true"' > /dev/null 2>&1; then
   - label: ":gear: API tests"
     command: pytest tests/api/
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "reports/*.xml"
           token: "${MERGIFY_TOKEN}"
