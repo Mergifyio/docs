@@ -9,7 +9,7 @@ import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
 import Docset from '~/components/DocsetGrid/Docset.astro';
 
 export const Yes = ({children}) => (
-  <span style={{color: 'var(--chakra-colors-green-500)', fontWeight: '600'}}>
+  <span style={{color: 'var(--color-teal-700)', fontWeight: '600'}}>
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
       style={{verticalAlign: 'middle', marginRight: '4px'}} aria-hidden="true">
@@ -20,7 +20,7 @@ export const Yes = ({children}) => (
 );
 
 export const No = ({children}) => (
-  <span style={{color: 'var(--chakra-colors-red-500)', fontWeight: '600'}}>
+  <span style={{color: 'var(--color-coral-700)', fontWeight: '600'}}>
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
       style={{verticalAlign: 'middle', marginRight: '4px'}} aria-hidden="true">
@@ -41,51 +41,51 @@ export const No = ({children}) => (
     flex: '1 1 200px',
     padding: '1rem 1.25rem',
     borderRadius: '8px',
-    background: 'var(--section-merge-queue-accent-bg)',
-    borderLeft: '4px solid var(--section-merge-queue-accent)'
+    background: 'color-mix(in srgb, var(--color-teal-400) 25%, transparent)',
+    borderLeft: '4px solid var(--color-teal-700)'
   }}>
     <div style={{
       fontSize: '1.5rem',
       fontWeight: 'bold',
-      color: 'var(--section-merge-queue-accent)'
+      color: 'var(--color-teal-700)'
     }}>3-5x</div>
     <div style={{
       fontSize: '0.9rem',
-      color: 'var(--theme-text-light)'
+      color: 'var(--theme-text-secondary)'
     }}>merge throughput</div>
   </div>
   <div style={{
     flex: '1 1 200px',
     padding: '1rem 1.25rem',
     borderRadius: '8px',
-    background: 'var(--section-merge-queue-accent-bg)',
-    borderLeft: '4px solid var(--section-merge-queue-accent)'
+    background: 'color-mix(in srgb, var(--color-teal-400) 25%, transparent)',
+    borderLeft: '4px solid var(--color-teal-700)'
   }}>
     <div style={{
       fontSize: '1.5rem',
       fontWeight: 'bold',
-      color: 'var(--section-merge-queue-accent)'
+      color: 'var(--color-teal-700)'
     }}>60-90%</div>
     <div style={{
       fontSize: '0.9rem',
-      color: 'var(--theme-text-light)'
+      color: 'var(--theme-text-secondary)'
     }}>CI cost reduction</div>
   </div>
   <div style={{
     flex: '1 1 200px',
     padding: '1rem 1.25rem',
     borderRadius: '8px',
-    background: 'var(--section-merge-queue-accent-bg)',
-    borderLeft: '4px solid var(--section-merge-queue-accent)'
+    background: 'color-mix(in srgb, var(--color-teal-400) 25%, transparent)',
+    borderLeft: '4px solid var(--color-teal-700)'
   }}>
     <div style={{
       fontSize: '1.5rem',
       fontWeight: 'bold',
-      color: 'var(--section-merge-queue-accent)'
+      color: 'var(--color-teal-700)'
     }}>Zero</div>
     <div style={{
       fontSize: '0.9rem',
-      color: 'var(--theme-text-light)'
+      color: 'var(--theme-text-secondary)'
     }}>broken builds</div>
   </div>
 </div>

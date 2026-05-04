@@ -2,6 +2,17 @@
 
 > Official documentation for Mergify - the merge queue and CI optimization platform.
 
+## Design System
+
+See **[DESIGN.md](./DESIGN.md)** for the docs site's design system: tokens, typography utilities,
+dark-mode rules, and STRICT code rules.
+
+When you write or modify any styling, read `DESIGN.md` first. The rules there override defaults —
+no hex literals, no Chakra references, no `--color-mergify-blue` references, and components should
+use semantic tokens by default so dark mode works automatically. Product-specific UI elements
+(callouts, brand-colored buttons, product pills) may use `var(--color-*)` primitives directly as a
+narrow documented exception — see `DESIGN.md` for the policy.
+
 ## Quick Facts
 
 - **Framework**: Astro 5.x with MDX

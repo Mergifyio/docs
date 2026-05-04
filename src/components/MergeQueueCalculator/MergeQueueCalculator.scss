@@ -38,7 +38,7 @@
 		padding: 0;
 		margin: 0;
 		padding-left: 20px;
-		border: 1px solid var(--theme-text-lighter);
+		border: 1px solid var(--theme-border);
 		border-radius: 4px;
 	}
 
@@ -64,10 +64,10 @@
 		position: relative;
 		cursor: pointer;
 		border: none;
-		border-left: 1px solid var(--theme-text-lighter);
+		border-left: 1px solid var(--theme-border);
 		width: 20px;
 		text-align: center;
-		color: var(--theme-text-light);
+		color: var(--theme-text-secondary);
 		font-size: 13px;
 		line-height: 1.7;
 		-webkit-transform: translateX(-100%);
@@ -83,7 +83,7 @@
 		position: absolute;
 		height: 50%;
 		top: 0;
-		border-bottom: 1px solid var(--theme-text-lighter);
+		border-bottom: 1px solid var(--theme-border);
 	}
 
 	.input-number-button.input-number-down {

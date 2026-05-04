@@ -38,7 +38,7 @@ import Header from '../components/Header/Header.astro';
 				font-weight: 800;
 				letter-spacing: -0.04em;
 				line-height: 1;
-				color: var(--color-mergify-blue);
+				color: var(--theme-link);
 				margin: 0 0 1rem;
 				opacity: 0.25;
 			}
@@ -54,7 +54,7 @@ import Header from '../components/Header/Header.astro';
 
 			.error-description {
 				font-size: var(--theme-text-base);
-				color: var(--theme-text-lighter);
+				color: var(--theme-text-muted);
 				margin: 0 0 2rem;
 				line-height: 1.6;
 			}
@@ -71,7 +71,7 @@ import Header from '../components/Header/Header.astro';
 				border: 1px solid var(--theme-divider);
 				border-radius: 8px;
 				background: var(--theme-bg);
-				color: var(--theme-text-lighter);
+				color: var(--theme-text-muted);
 				font-size: var(--theme-text-sm);
 				cursor: pointer;
 				transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -79,8 +79,8 @@ import Header from '../components/Header/Header.astro';
 			}
 
 			.search-prompt:hover {
-				border-color: var(--color-mergify-blue);
-				box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-mergify-blue) 12%, transparent);
+				border-color: var(--theme-link);
+				box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-link) 12%, transparent);
 			}
 
 			.search-prompt svg {
@@ -100,7 +100,7 @@ import Header from '../components/Header/Header.astro';
 				border: 1px solid var(--theme-shade-subtle);
 				border-radius: 4px;
 				background: var(--theme-bg-offset);
-				color: var(--theme-text-lighter);
+				color: var(--theme-text-muted);
 				line-height: 1;
 			}
 
@@ -120,8 +120,8 @@ import Header from '../components/Header/Header.astro';
 			}
 
 			.home-link:hover {
-				color: var(--color-mergify-blue);
-				border-color: var(--color-mergify-blue);
+				color: var(--theme-link);
+				border-color: var(--theme-link);
 				background: var(--theme-bg-offset);
 			}
 		</style>

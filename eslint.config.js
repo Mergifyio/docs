@@ -16,6 +16,7 @@ export default [
       '.astro/**',
       'node_modules/**',
       '.github/**',
+      '.claude/**',
       'public/scalar-api-reference.js',
       'src/content/changelog/',
     ],
@@ -134,10 +135,12 @@ export default [
     },
   },
 
-  // MDX files
+  // MDX files. Note: `files` must follow the spread to override
+  // `mdxPlugin.flat`'s default glob (which matches both .md and .mdx)
+  // and restrict linting to .mdx only.
   {
-    files: ['**/*.mdx'],
     ...mdxPlugin.flat,
+    files: ['**/*.mdx'],
     plugins: {
       mdx: fixupPluginRules(mdxPlugin),
     },
