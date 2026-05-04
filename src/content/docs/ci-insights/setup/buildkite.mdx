@@ -73,7 +73,7 @@ steps:
   - label: "Run tests"
     command: pytest --junitxml=reports/junit.xml
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "reports/*.xml"
           token: "${MERGIFY_TOKEN}"
@@ -124,7 +124,7 @@ steps:
       done
       exit $$failed
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "reports/*.xml"
           token: "${MERGIFY_TOKEN}"
