@@ -5465,6 +5465,7 @@
                         "frontend",
                         "backend"
                       ],
+                      "queue_rule_name": "default",
                       "checks_summary": {
                         "passed": 45,
                         "total": 67
@@ -5519,6 +5520,7 @@
                       "scopes": [
                         "frontend"
                       ],
+                      "queue_rule_name": "default",
                       "checks_summary": {
                         "passed": 15,
                         "total": 28
@@ -5536,6 +5538,7 @@
                           "scopes": [
                             "frontend"
                           ],
+                          "queue_rule_name": "default",
                           "checks_summary": {
                             "passed": 15,
                             "total": 15
@@ -5554,6 +5557,7 @@
                           "scopes": [
                             "frontend"
                           ],
+                          "queue_rule_name": "default",
                           "checks_summary": {
                             "passed": 0,
                             "total": 13
@@ -11416,6 +11420,10 @@
             "type": "array",
             "title": "Scopes"
           },
+          "queue_rule_name": {
+            "type": "string",
+            "title": "Queue Rule Name"
+          },
           "checks_summary": {
             "$ref": "#/components/schemas/BatchChecksSummary"
           },
@@ -11436,6 +11444,7 @@
           "started_at",
           "estimated_merge_at",
           "scopes",
+          "queue_rule_name",
           "checks_summary",
           "pull_requests"
         ],
@@ -11494,6 +11503,10 @@
             "type": "array",
             "title": "Scopes"
           },
+          "queue_rule_name": {
+            "type": "string",
+            "title": "Queue Rule Name"
+          },
           "checks_summary": {
             "$ref": "#/components/schemas/BatchChecksSummary"
           },
@@ -11528,6 +11541,7 @@
           "started_at",
           "estimated_merge_at",
           "scopes",
+          "queue_rule_name",
           "checks_summary",
           "pull_requests"
         ],

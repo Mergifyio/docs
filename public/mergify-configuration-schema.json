@@ -529,14 +529,6 @@
             ]
           }
         },
-        "unqueue": {
-          "$ref": "#/$defs/CommandRestrictionsModel",
-          "default": {
-            "conditions": [
-              "sender-permission >= write"
-            ]
-          }
-        },
         "update": {
           "$ref": "#/$defs/CommandRestrictionsModel",
           "default": {
