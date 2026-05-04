@@ -8395,6 +8395,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Session Id"
+          },
+          "train_car_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train Car Id"
           }
         },
         "type": "object",
@@ -8407,7 +8419,8 @@
           "culprit_pr_numbers",
           "remaining_pr_numbers",
           "max_failure_resolution_reached",
-          "session_id"
+          "session_id",
+          "train_car_id"
         ],
         "title": "EventQueueBatchBisectionEndMetadata"
       },
@@ -8524,6 +8537,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Session Id"
+          },
+          "train_car_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train Car Id"
           }
         },
         "type": "object",
@@ -8536,7 +8561,8 @@
           "number_of_sub_batches",
           "bisection_depth",
           "is_top_level",
-          "session_id"
+          "session_id",
+          "train_car_id"
         ],
         "title": "EventQueueBatchBisectionStartMetadata"
       },
