@@ -76,7 +76,7 @@ steps:
   - label: ":mag: Get git refs"
     key: git-refs
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-git-refs
 
   - label: ":mag: Detect and upload scopes"
@@ -87,7 +87,7 @@ steps:
       SCOPES=$(npx nx show projects --affected --base="$BASE" --head="$HEAD" | paste -sd, -)
       buildkite-agent meta-data set "mergify-ci.scopes" "$SCOPES"
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-upload
           token: "${MERGIFY_TOKEN}"
 ```

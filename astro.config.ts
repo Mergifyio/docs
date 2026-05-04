@@ -19,6 +19,7 @@ import { PagefindIndex } from './integrations/pagefind-index';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
 import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
+import { remarkBuildkiteVersionPlugin } from './plugins/remark-buildkite-version';
 import { remarkEnterpriseVersionPlugin } from './plugins/remark-enterprise-version';
 import { remarkGraphvizPlugin } from './plugins/remark-graphviz';
 
@@ -133,6 +134,7 @@ export default defineConfig({
     // Override with our own config
     smartypants: false,
     remarkPlugins: [
+      remarkBuildkiteVersionPlugin(),
       remarkEnterpriseVersionPlugin(),
       remarkGraphvizPlugin(),
       [
