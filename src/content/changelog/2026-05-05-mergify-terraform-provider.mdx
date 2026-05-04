@@ -1,0 +1,37 @@
+---
+title: "Mergify Terraform Provider"
+date: 2026-05-05
+tags:
+  - Integrations
+description: "Manage Mergify product enablement declaratively with Terraform"
+---
+
+The official [Mergify Terraform provider ](https://registry.terraform.io/providers/Mergifyio/mergify/latest)is now available on the Terraform Registry.
+
+You can now manage Mergify configuration alongside the rest of your infrastructure-as-code, with two resources to start:
+
+- `mergify_repository_products` — set the products enabled on a GitHub
+repository (`merge_queue`, `merge_protections`, `ci_insights`,
+`workflow_automation`).
+- `mergify_organization_default_products` — set the products enabled
+by default on new repositories of an organization.
+```hcl
+terraform {
+  required_providers {
+    mergify = {
+      source  = "Mergifyio/mergify"
+      version = "~> 0.1"
+    }
+  }
+}
+
+resource "mergify_repository_products" "monorepo" {
+  owner      = "Mergifyio"
+  repository = "monorepo"
+  products   = ["merge_queue", "merge_protections", "ci_insights"]
+}
+```
+
+Authentication uses a Mergify application key or a GitHub personal
+access token, read from the `token` provider attribute or the
+`MERGIFY_TOKEN` / `GITHUB_TOKEN` environment variables.
