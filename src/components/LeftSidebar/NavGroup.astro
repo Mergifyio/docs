@@ -182,12 +182,12 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		:global(.left-icon) {
 			min-width: 16px;
 			min-height: 16px;
-			color: var(--theme-text-lighter);
+			color: var(--theme-text-muted);
 		}
 	}
 
 	:global(:root.theme-dark) .nav-link a[aria-current='page'] {
-		color: hsla(var(--color-base-white), 100%, 1);
+		color: var(--color-white);
 	}
 
 	.nav-group-content {

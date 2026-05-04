@@ -49,26 +49,20 @@ const { viewBox, d } = icons[type];
 </aside>
 
 <style>
+	/* note (default) */
 	aside {
-		--aside-color-base: var(--color-base-blue);
-		--aside-color-lightness: 65%;
-		--aside-accent-color: hsl(var(--aside-color-base), var(--aside-color-lightness));
-		--aside-text-lightness: 20%;
-		--aside-text-accent-color: hsl(var(--aside-color-base), var(--aside-text-lightness));
+		--aside-accent-color: var(--color-blue-400);
+		--aside-text-accent-color: var(--color-blue-700);
 
 		border-inline-start: 4px solid var(--aside-accent-color);
 		padding: 1rem;
-		background-color: hsla(
-			var(--aside-color-base),
-			var(--aside-color-lightness),
-			var(--theme-accent-opacity)
-		);
+		background-color: color-mix(in srgb, var(--aside-accent-color) 10%, transparent);
 		/* Indicates the aside boundaries for forced colors users, transparent is changed to a solid color */
 		outline: 1px solid transparent;
 	}
 
 	:global(.theme-dark) aside {
-		--aside-text-lightness: 85%;
+		--aside-text-accent-color: var(--color-blue-400);
 	}
 
 	.title {
@@ -108,17 +102,29 @@ const { viewBox, d } = icons[type];
 	}
 
 	.tip {
-		--aside-color-lightness: 42%;
-		--aside-color-base: var(--color-base-teal);
+		--aside-accent-color: var(--color-teal-400);
+		--aside-text-accent-color: var(--color-teal-700);
+	}
+
+	:global(.theme-dark) .tip {
+		--aside-text-accent-color: var(--color-teal-400);
 	}
 
 	.caution {
-		--aside-color-lightness: 59%;
-		--aside-color-base: var(--color-base-yellow);
+		--aside-accent-color: var(--color-orange-400);
+		--aside-text-accent-color: var(--color-orange-700);
+	}
+
+	:global(.theme-dark) .caution {
+		--aside-text-accent-color: var(--color-orange-400);
 	}
 
 	.danger {
-		--aside-color-lightness: 54%;
-		--aside-color-base: var(--color-base-red);
+		--aside-accent-color: var(--color-coral-400);
+		--aside-text-accent-color: var(--color-coral-700);
+	}
+
+	:global(.theme-dark) .danger {
+		--aside-text-accent-color: var(--color-coral-400);
 	}
 </style>

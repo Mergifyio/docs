@@ -28,12 +28,12 @@
 }
 
 .theme-toggle .checked {
-  color: var(--color-mergify-blue-dark);
+  color: var(--theme-text-secondary);
   opacity: 1;
 }
 
 .theme-dark .theme-toggle .checked {
-  color: var(--color-mergify-blue-light);
+  color: var(--theme-text-secondary);
   opacity: 1;
 }
 

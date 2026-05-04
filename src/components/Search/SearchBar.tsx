@@ -63,7 +63,7 @@ function RecentSearches({ onSelect }: { onSelect: (q: string) => void }) {
         style={{
           padding: '4px 16px',
           fontSize: '0.75rem',
-          color: 'var(--theme-text-light)',
+          color: 'var(--theme-text-secondary)',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
         }}
@@ -284,7 +284,7 @@ export default function SearchBar() {
             style={{
               padding: '2px 16px 6px',
               fontSize: '0.75rem',
-              color: 'var(--theme-text-light)',
+              color: 'var(--theme-text-secondary)',
             }}
           >
             {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
