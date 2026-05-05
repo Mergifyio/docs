@@ -1,0 +1,1 @@
+drop tool-specific .gitignore entries (.superpowers/, docs/superpowers/) per Julian's review — these belong in personal global gitignore, not the project's
