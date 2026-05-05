@@ -2907,6 +2907,7 @@
           "title": "Update Bot Account"
         },
         "name": {
+          "description": "Name of the queue rule.",
           "title": "Name",
           "type": "string"
         }
