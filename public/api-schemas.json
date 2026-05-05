@@ -1298,6 +1298,9 @@
                       "action.squash",
                       "action.unqueue",
                       "action.update",
+                      "ci_insights.auto_quarantine.disabled",
+                      "ci_insights.auto_quarantine.enabled",
+                      "ci_insights.auto_quarantine.modified",
                       "ci_insights.job_retried",
                       "ci_issue.created",
                       "ci_issue.linked",
@@ -5972,6 +5975,19 @@
         ],
         "title": "ApplicationResponse"
       },
+      "AutoQuarantineConfigEventLogAttributes": {
+        "properties": {
+          "ignore_broken_on_default_branch": {
+            "type": "boolean",
+            "title": "Ignore Broken On Default Branch"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ignore_broken_on_default_branch"
+        ],
+        "title": "AutoQuarantineConfigEventLogAttributes"
+      },
       "BaseRefsResponse": {
         "properties": {
           "base_refs": {
@@ -7179,6 +7195,265 @@
           "metadata"
         ],
         "title": "EventBackport"
+      },
+      "EventCiInsightsAutoQuarantineDisabled": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "ci_insights.auto_quarantine.disabled",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventCiInsightsAutoQuarantineDisabledMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventCiInsightsAutoQuarantineDisabled"
+      },
+      "EventCiInsightsAutoQuarantineDisabledMetadata": {
+        "properties": {
+          "disabled_by": {
+            "$ref": "#/components/schemas/Actor"
+          },
+          "disabled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Disabled At"
+          },
+          "auto_quarantine_config_attributes": {
+            "$ref": "#/components/schemas/AutoQuarantineConfigEventLogAttributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "disabled_by",
+          "disabled_at",
+          "auto_quarantine_config_attributes"
+        ],
+        "title": "EventCiInsightsAutoQuarantineDisabledMetadata"
+      },
+      "EventCiInsightsAutoQuarantineEnabled": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "ci_insights.auto_quarantine.enabled",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventCiInsightsAutoQuarantineEnabledMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventCiInsightsAutoQuarantineEnabled"
+      },
+      "EventCiInsightsAutoQuarantineEnabledMetadata": {
+        "properties": {
+          "enabled_by": {
+            "$ref": "#/components/schemas/Actor"
+          },
+          "enabled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Enabled At"
+          },
+          "auto_quarantine_config_attributes": {
+            "$ref": "#/components/schemas/AutoQuarantineConfigEventLogAttributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled_by",
+          "enabled_at",
+          "auto_quarantine_config_attributes"
+        ],
+        "title": "EventCiInsightsAutoQuarantineEnabledMetadata"
+      },
+      "EventCiInsightsAutoQuarantineModified": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "ci_insights.auto_quarantine.modified",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventCiInsightsAutoQuarantineModifiedMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventCiInsightsAutoQuarantineModified"
+      },
+      "EventCiInsightsAutoQuarantineModifiedMetadata": {
+        "properties": {
+          "updated_by": {
+            "$ref": "#/components/schemas/Actor"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "auto_quarantine_config_attributes_before": {
+            "$ref": "#/components/schemas/AutoQuarantineConfigEventLogAttributes"
+          },
+          "auto_quarantine_config_attributes_after": {
+            "$ref": "#/components/schemas/AutoQuarantineConfigEventLogAttributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "updated_by",
+          "updated_at",
+          "auto_quarantine_config_attributes_before",
+          "auto_quarantine_config_attributes_after"
+        ],
+        "title": "EventCiInsightsAutoQuarantineModifiedMetadata"
       },
       "EventCiInsightsJobRetried": {
         "properties": {
@@ -10749,6 +11024,15 @@
                   "$ref": "#/components/schemas/EventCiInsightsJobRetried"
                 },
                 {
+                  "$ref": "#/components/schemas/EventCiInsightsAutoQuarantineEnabled"
+                },
+                {
+                  "$ref": "#/components/schemas/EventCiInsightsAutoQuarantineDisabled"
+                },
+                {
+                  "$ref": "#/components/schemas/EventCiInsightsAutoQuarantineModified"
+                },
+                {
                   "$ref": "#/components/schemas/EventCommandQueue"
                 },
                 {
@@ -10787,6 +11071,9 @@
                   "action.squash": "#/components/schemas/EventSquash",
                   "action.unqueue": "#/components/schemas/EventUnqueue",
                   "action.update": "#/components/schemas/EventUpdate",
+                  "ci_insights.auto_quarantine.disabled": "#/components/schemas/EventCiInsightsAutoQuarantineDisabled",
+                  "ci_insights.auto_quarantine.enabled": "#/components/schemas/EventCiInsightsAutoQuarantineEnabled",
+                  "ci_insights.auto_quarantine.modified": "#/components/schemas/EventCiInsightsAutoQuarantineModified",
                   "ci_insights.job_retried": "#/components/schemas/EventCiInsightsJobRetried",
                   "command.dequeue": "#/components/schemas/EventCommandDequeue",
                   "command.queue": "#/components/schemas/EventCommandQueue",
