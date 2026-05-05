@@ -372,6 +372,7 @@ const navItems: NavItem[] = [
       { title: 'Datadog', path: '/integrations/datadog', icon: 'simple-icons:datadog' },
       { title: 'Slack', path: '/integrations/slack', icon: 'simple-icons:slack' },
       { title: 'Dependabot', path: '/integrations/dependabot', icon: 'simple-icons:dependabot' },
+      { title: 'Terraform', path: '/integrations/terraform', icon: 'simple-icons:terraform' },
     ],
   },
   {
