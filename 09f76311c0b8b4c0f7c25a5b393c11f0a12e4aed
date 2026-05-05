@@ -1,0 +1,1 @@
+address Copilot review: prefix anchor IDs with kebab-cased def name to avoid duplicates when multiple OptionsTable/ActionOptionsTable render on the same page (e.g. github_actions has two 'workflow' keys), URL-encode the fragment, and use direct-child selectors for description spacing
