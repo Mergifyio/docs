@@ -1,0 +1,105 @@
+---
+title: Managing Mergify with Terraform
+description: How to manage Mergify configuration declaratively with the official Terraform provider.
+---
+
+import terraformLogo from "../../images/integrations/terraform/logo.svg"
+import IntegrationLogo from "../../../components/IntegrationLogo.astro"
+
+<IntegrationLogo src={terraformLogo} alt="Terraform logo"/>
+
+The official [Mergify Terraform provider][registry] lets you manage your
+Mergify configuration as code, alongside the rest of your infrastructure.
+
+## Prerequisites
+
+1. The [Mergify GitHub App](/integrations/github) is installed on your
+   repositories.
+
+2. A Mergify application key or a GitHub personal access token. See
+   [Authentication](#authentication) below.
+
+## Installation
+
+Declare the provider in your Terraform configuration:
+
+```hcl
+terraform {
+  required_providers {
+    mergify = {
+      source  = "Mergifyio/mergify"
+      version = "~> 0.1"
+    }
+  }
+}
+
+provider "mergify" {
+  # Token resolution order:
+  #   1. the `token` attribute set here
+  #   2. the MERGIFY_TOKEN environment variable
+  #   3. the GITHUB_TOKEN environment variable
+}
+```
+
+Then run:
+
+```bash
+terraform init
+```
+
+## Authentication
+
+The provider authenticates against the [Mergify API](/api) with a bearer
+token. Both Mergify application keys and GitHub personal access tokens
+are accepted.
+
+Tokens are read from, in priority order:
+
+1. The `token` attribute on the `provider` block.
+2. The `MERGIFY_TOKEN` environment variable.
+3. The `GITHUB_TOKEN` environment variable.
+
+:::caution
+  The `GITHUB_TOKEN` fallback expects a **personal access token**
+  (classic `ghp_*` or fine-grained `github_pat_*`). It is **not** the
+  built-in `GITHUB_TOKEN` secret that GitHub Actions exposes to
+  workflows — that one is a short-lived installation token (`ghs_*`)
+  which the Mergify API does not accept. In CI, store a PAT or a
+  Mergify application key in a dedicated secret (commonly
+  `MERGIFY_TOKEN`).
+:::
+
+## Resources
+
+### `mergify_repository_products`
+
+Manage which Mergify products are enabled on a single GitHub repository.
+
+```hcl
+resource "mergify_repository_products" "monorepo" {
+  owner      = "Mergifyio"
+  repository = "monorepo"
+  products   = ["merge_queue", "merge_protections", "ci_insights", "workflow_automation"]
+}
+```
+
+The `products` attribute is **declarative** — applying the resource
+sets the exact set of enabled products on the repository, removing any
+that are not listed.
+
+### `mergify_organization_default_products`
+
+Manage the default set of Mergify products enabled when a new
+repository of an organization is discovered by Mergify.
+
+```hcl
+resource "mergify_organization_default_products" "defaults" {
+  organization = "Mergifyio"
+  products     = ["merge_queue", "merge_protections"]
+}
+```
+
+This only affects **new** repositories. Existing ones are managed via
+`mergify_repository_products`.
+
+[registry]: https://registry.terraform.io/providers/Mergifyio/mergify/latest
