@@ -1274,6 +1274,7 @@
                       "action.comment",
                       "action.copy",
                       "action.delete_head_branch",
+                      "action.dequeue",
                       "action.dismiss_reviews",
                       "action.edit",
                       "action.github_actions",
@@ -4583,13 +4584,99 @@
       }
     },
     "/repos/{owner}/{repository}/pulls/{number}/scopes": {
-      "post": {
+      "put": {
         "tags": [
           "pull_requests"
         ],
         "summary": "Set the scopes for a pull request",
         "description": "Set the scopes for a pull request",
+        "operationId": "put_ci_scopes_repos__owner___repository__pulls__number__scopes_put",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "maximum": 9223372036854775807,
+              "minimum": 0,
+              "description": "The pull request number",
+              "title": "Number"
+            },
+            "description": "The pull request number"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScopesBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "pull_requests"
+        ],
+        "summary": "Set the scopes for a pull request (deprecated, use PUT)",
+        "description": "Deprecated: use PUT on this endpoint instead.",
         "operationId": "set_ci_scopes_repos__owner___repository__pulls__number__scopes_post",
+        "deprecated": true,
         "security": [
           {
             "ApplicationAuth": []
@@ -8044,6 +8131,69 @@
         ],
         "title": "EventDeleteHeadBranchMetadata"
       },
+      "EventDequeue": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventNoMetadata"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.dequeue",
+            "title": "Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "metadata",
+          "type"
+        ],
+        "title": "EventDequeue"
+      },
       "EventDismissReviews": {
         "properties": {
           "id": {
@@ -10994,6 +11144,9 @@
                   "$ref": "#/components/schemas/EventUnqueue"
                 },
                 {
+                  "$ref": "#/components/schemas/EventDequeue"
+                },
+                {
                   "$ref": "#/components/schemas/EventUpdate"
                 },
                 {
@@ -11048,6 +11201,7 @@
                   "action.comment": "#/components/schemas/EventComment",
                   "action.copy": "#/components/schemas/EventCopy",
                   "action.delete_head_branch": "#/components/schemas/EventDeleteHeadBranch",
+                  "action.dequeue": "#/components/schemas/EventDequeue",
                   "action.dismiss_reviews": "#/components/schemas/EventDismissReviews",
                   "action.edit": "#/components/schemas/EventEdit",
                   "action.github_actions": "#/components/schemas/EventGithubActions",
