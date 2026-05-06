@@ -132,7 +132,7 @@ function MergeQueueCalculator() {
               <h4 style={{ marginTop: 16, marginBottom: 8 }}>Configuration to apply</h4>
               <div className="stats">
                 <Stat
-                  icon="tabler:packages"
+                  icon="lucide:boxes"
                   label="Optimal batch size"
                   helperText="per batch"
                   stat={batchSize}
@@ -140,7 +140,7 @@ function MergeQueueCalculator() {
                 />
                 <Stat
                   helperText="run concurrently"
-                  icon="tabler:arrows-split-2"
+                  icon="lucide:split"
                   label="Optimal parallel checks"
                   stat={speculativeChecks}
                   unit="checks"
@@ -150,7 +150,7 @@ function MergeQueueCalculator() {
               <h4 style={{ marginTop: 16, marginBottom: 8 }}>Expected performance</h4>
               <div className="stats">
                 <Stat
-                  icon="tabler:gauge"
+                  icon="lucide:gauge"
                   label="Average throughput"
                   helperText="target"
                   stat={prPerHour}
@@ -168,7 +168,7 @@ function MergeQueueCalculator() {
                   indicatorColor="#3b82f6"
                 />
                 <Stat
-                  icon="tabler:shield-check"
+                  icon="lucide:shield-check"
                   label="Reliability ratio"
                   helperText="probability that a batch is clean"
                   stat={reliabilityRatio}
@@ -186,7 +186,7 @@ function MergeQueueCalculator() {
 
               <div className="stats">
                 <Stat
-                  icon="tabler:coin"
+                  icon="lucide:coins"
                   label="CI cost per PR"
                   helperText="CI time consumed"
                   stat={ciCostPerPr}
@@ -199,7 +199,7 @@ function MergeQueueCalculator() {
                   indicatorColor="#f97316"
                 />
                 <Stat
-                  icon="tabler:clock"
+                  icon="lucide:clock"
                   label="Minimum latency"
                   helperText="best case (single run)"
                   stat={ciTime}
@@ -208,7 +208,7 @@ function MergeQueueCalculator() {
                   indicatorColor="#10b981"
                 />
                 <Stat
-                  icon="mdi:clock-outline"
+                  icon="lucide:clock"
                   label="Average latency"
                   helperText="time before merge"
                   stat={latency}

@@ -13,7 +13,7 @@ interface Props {
 
 const themes = ['light', 'dark'] as const;
 
-const icons = [<Icon key="light" icon="feather:sun" />, <Icon key="dark" icon="feather:moon" />];
+const icons = [<Icon key="light" icon="lucide:sun" />, <Icon key="dark" icon="lucide:moon" />];
 
 const ThemeToggle = ({ labels, isInsideHeader }: Props) => {
   const [theme, setTheme] = useState<'light' | 'dark'>();
