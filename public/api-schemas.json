@@ -12957,6 +12957,18 @@
             "title": "Url",
             "description": "Check detail url"
           },
+          "details_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details Url",
+            "description": "External integrator's direct URL (e.g. Jenkins build URL)"
+          },
           "state": {
             "type": "string",
             "enum": [
@@ -14270,6 +14282,17 @@
               }
             ],
             "title": "Url"
+          },
+          "details_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details Url"
           },
           "state": {
             "type": "string",
