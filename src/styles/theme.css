@@ -139,14 +139,6 @@
   --theme-glow-highlight: transparent;
   --theme-glow-diffuse: hsla(204, 73%, 58%, 0.5);
   --theme-glow-blur: 10px;
-
-  /* Background gradient (existing, unchanged) */
-  --theme-bg-gradient: linear-gradient(
-    180deg,
-    var(--theme-bg-gradient-top),
-    var(--theme-bg-gradient-top) calc(var(--theme-navbar-height) + var(--theme-mobile-toc-height)),
-    var(--theme-bg-gradient-bottom)
-  );
 }
 
 :root.theme-dark,
