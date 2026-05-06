@@ -153,3 +153,26 @@ export function getProductAccent(tag: string | undefined): ProductAccent {
   if (!tag) return NEUTRAL_ACCENT;
   return PRODUCT_ACCENTS[tag] ?? NEUTRAL_ACCENT;
 }
+
+export interface PrevNext {
+  previous: CollectionEntry<'changelog'> | null;
+  next: CollectionEntry<'changelog'> | null;
+}
+
+/**
+ * Given a sorted-or-unsorted list of changelog entries and a current entry id,
+ * return the chronologically previous (older) and next (newer) entries.
+ */
+export function getPrevNextEntries(
+  entries: CollectionEntry<'changelog'>[],
+  currentId: string
+): PrevNext {
+  const sorted = sortChangelog(entries);
+  const idx = sorted.findIndex((e) => e.id === currentId);
+  if (idx === -1) return { previous: null, next: null };
+  return {
+    // sorted is newest-first, so previous (older) is at idx + 1
+    previous: sorted[idx + 1] ?? null,
+    next: sorted[idx - 1] ?? null,
+  };
+}
