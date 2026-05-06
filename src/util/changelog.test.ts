@@ -44,7 +44,7 @@ describe('getProductAccent', () => {
     });
   });
 
-  test('maps Deprecations to a neutral gray', () => {
+  test('falls back to neutral for Deprecations (no explicit mapping)', () => {
     expect(getProductAccent('Deprecations')).toEqual({
       bar: 'var(--theme-text-muted)',
       text: 'var(--theme-text-secondary)',
