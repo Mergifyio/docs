@@ -1,0 +1,218 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const slackCommand = `/feed subscribe ${import.meta.env.SITE}/changelog/rss.xml`;
+---
+
+<div class="subscribe-wrap">
+  <button
+    type="button"
+    class="subscribe-btn"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    data-subscribe-toggle
+  >
+    <Icon name="heroicons:rss" class="btn-icon" />
+    Subscribe
+    <span class="caret" aria-hidden="true">▾</span>
+  </button>
+  <div class="popover" role="dialog" aria-label="Subscribe options" hidden data-subscribe-popover>
+    <h6 class="pop-h">RSS</h6>
+    <a class="pop-rss" href="/changelog/rss.xml">
+      <Icon name="heroicons:rss" class="pop-icon" />
+      <span>{import.meta.env.SITE}/changelog/rss.xml</span>
+    </a>
+    <div class="pop-divider"></div>
+    <h6 class="pop-h">Slack</h6>
+    <p class="pop-desc">Run this in any Slack channel to subscribe.</p>
+    <div class="pop-cmd">
+      <code data-slack-command>{slackCommand}</code>
+      <button type="button" class="pop-copy" data-slack-copy>Copy</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  function initSubscribePopover() {
+    const toggle = document.querySelector('[data-subscribe-toggle]');
+    const popover = document.querySelector('[data-subscribe-popover]');
+    const copyBtn = document.querySelector('[data-slack-copy]');
+    const cmd = document.querySelector('[data-slack-command]');
+    if (!toggle || !popover) return;
+
+    function setOpen(open) {
+      popover.hidden = !open;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(popover.hidden);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (popover.hidden) return;
+      if (popover.contains(e.target) || toggle.contains(e.target)) return;
+      setOpen(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !popover.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    if (copyBtn && cmd) {
+      copyBtn.addEventListener('click', function () {
+        const text = cmd.textContent || '';
+        if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+        navigator.clipboard.writeText(text).then(function () {
+          const original = copyBtn.textContent;
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('copied');
+          setTimeout(function () {
+            copyBtn.textContent = original;
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        });
+      });
+    }
+  }
+
+  initSubscribePopover();
+  if (!window.__changelogSubscribeInit__) {
+    window.__changelogSubscribeInit__ = true;
+    document.addEventListener('astro:after-swap', initSubscribePopover);
+  }
+</script>
+
+<style>
+  .subscribe-wrap {
+    position: relative;
+  }
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--theme-text-secondary);
+    background: var(--theme-bg-content);
+    border: 1px solid var(--theme-border);
+    padding: 7px 14px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .subscribe-btn:hover {
+    border-color: var(--theme-text-muted);
+    color: var(--theme-text);
+  }
+  .btn-icon {
+    width: 14px;
+    height: 14px;
+  }
+  .caret {
+    font-size: 0.7rem;
+    color: var(--theme-text-muted);
+  }
+
+  .popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--theme-bg-content);
+    border: 1px solid var(--theme-border);
+    border-radius: 12px;
+    width: 360px;
+    padding: 16px;
+    z-index: 10;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  }
+  @media (max-width: 28rem) {
+    .popover {
+      position: fixed;
+      top: auto;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      width: auto;
+    }
+  }
+
+  .pop-h {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--theme-text-muted);
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .pop-desc {
+    font-size: 0.75rem;
+    color: var(--theme-text-secondary);
+    margin: 0 0 10px;
+    line-height: 1.5;
+  }
+  .pop-rss {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    color: var(--theme-text);
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .pop-rss:hover {
+    border-color: var(--theme-text-muted);
+  }
+  .pop-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  .pop-divider {
+    height: 1px;
+    background: var(--theme-border);
+    margin: 14px -16px;
+  }
+  .pop-cmd {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px 8px 12px;
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    background: var(--theme-bg-offset);
+  }
+  .pop-cmd code {
+    flex: 1;
+    font-size: 0.7rem;
+    background: transparent;
+    padding: 0;
+    color: var(--theme-text);
+    font-family: var(--font-mono);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pop-copy {
+    background: var(--theme-text);
+    color: var(--theme-bg-content);
+    border: none;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .pop-copy.copied {
+    background: var(--color-teal-700);
+    color: #fff;
+  }
+</style>
