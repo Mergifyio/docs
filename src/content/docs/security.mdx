@@ -54,6 +54,66 @@ Some operations additionally require the GitHub organization `Owner` role.
 See the [Features Permissions](#features-permissions) table below for the
 full mapping between GitHub roles and Mergify capabilities.
 
+### Delegated Roles
+
+Some Mergify operations — such as managing the subscription, configuring CI
+Insights, or enabling integrations — require the GitHub organization
+`Owner` role by default. To avoid granting full GitHub `Owner` rights to a
+teammate who only needs one of these capabilities, GitHub `Owner`s can
+delegate scoped Mergify admin powers to any organization member or
+collaborator from the Mergify dashboard.
+
+Delegated roles are managed from **Settings → Roles** on the Mergify
+dashboard. Only GitHub `Owner`s and users holding the **Delegation Admin**
+role can grant or revoke them.
+
+Each user can hold any combination of the following roles:
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Role</th>
+      <th scope="col">Grants</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Billing Admin</th>
+      <td>
+        Manage the Mergify subscription and billing details — invoices, plan
+        changes, and the Stripe customer portal.
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">CI Admin</th>
+      <td>
+        Configure CI Insights at the organization level — self-hosted runner
+        fleet and Auto-Retry rules — and manage CI-scoped application keys.
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Integrations Admin</th>
+      <td>
+        Enable or disable Mergify products and configure the Slack and
+        Datadog notification integrations at the organization level.
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Delegation Admin</th>
+      <td>
+        Manage the delegated-role roster itself — grant or revoke any of the
+        roles above (including this one) to other users.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+:::note
+  Delegated roles only extend Mergify-side privileges. They do not grant
+  any GitHub permission, and they cannot upgrade a user past what their
+  GitHub role already allows on the underlying repositories.
+:::
+
 ## Vulnerability Disclosure
 
 Mergify hosts a public Bug Bounty program with HackerOne. If you believe
@@ -334,9 +394,21 @@ relevant account or resource. Permissions are inherited from GitHub roles.
 </table>
 
 :::note
-  Non-admin users can be granted access to manage Mergify subscription and
-  billing details on demand. <a href="mailto:support@mergify.com">Contact
-  support</a> to request it.
+  Owner-only operations marked above can be delegated to non-Owner users
+  through Mergify's [delegated roles](#delegated-roles), without granting
+  them the GitHub `Owner` role. The mapping is:
+
+  - **Billing Admin** — manage Mergify subscription.
+
+  - **CI Admin** — manage API keys (CI scope only), activate CI Insights,
+    manage CI Insights Auto-Retry rules and self-hosted runners.
+
+  - **Integrations Admin** — enable or disable Mergify products
+    and configure the Slack and Datadog notification integrations.
+
+  - **Delegation Admin** — grant or revoke any of the roles above.
+
+  API keys with the `admin` scope still require the GitHub `Owner` role.
 :::
 
 ### Command Permissions
