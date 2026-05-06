@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { CollectionEntry } from 'astro:content';
-import { getProductAccent, getPrevNextEntries } from './changelog';
+import { getProductAccent, getPrevNextEntries, getRelatedEntries } from './changelog';
 
 describe('getProductAccent', () => {
   test('maps Merge Queue to teal-700', () => {
@@ -125,5 +125,54 @@ describe('getPrevNextEntries', () => {
     const result = getPrevNextEntries(shuffled, 'b');
     expect(result.previous?.id).toBe('c');
     expect(result.next?.id).toBe('a');
+  });
+});
+
+describe('getRelatedEntries', () => {
+  function tagged(id: string, dateISO: string, tags: string[]): CollectionEntry<'changelog'> {
+    return {
+      id,
+      collection: 'changelog',
+      data: {
+        title: id,
+        date: new Date(dateISO),
+        description: '',
+        tags,
+      },
+    } as unknown as CollectionEntry<'changelog'>;
+  }
+
+  const entries = [
+    tagged('a', '2026-05-06', ['Merge Queue']),
+    tagged('b', '2026-05-05', ['Merge Queue', 'Workflow Automation']),
+    tagged('c', '2026-05-04', ['CI Insights']),
+    tagged('d', '2026-05-03', ['Merge Queue']),
+    tagged('e', '2026-05-02', ['Merge Queue']),
+    tagged('f', '2026-05-01', ['Merge Queue']),
+  ];
+
+  test('returns most-recent entries sharing the primary tag, excluding current', () => {
+    const result = getRelatedEntries(entries, 'a', 'Merge Queue', 4);
+    expect(result.map((e) => e.id)).toEqual(['b', 'd', 'e', 'f']);
+  });
+
+  test('respects the limit', () => {
+    const result = getRelatedEntries(entries, 'a', 'Merge Queue', 2);
+    expect(result.map((e) => e.id)).toEqual(['b', 'd']);
+  });
+
+  test('returns empty array when no other entry shares the tag', () => {
+    const result = getRelatedEntries(entries, 'c', 'CI Insights', 4);
+    expect(result).toEqual([]);
+  });
+
+  test('returns empty array when primary tag is undefined', () => {
+    const result = getRelatedEntries(entries, 'a', undefined, 4);
+    expect(result).toEqual([]);
+  });
+
+  test('matches when the tag is in any position of the entry tags array', () => {
+    const result = getRelatedEntries(entries, 'a', 'Workflow Automation', 4);
+    expect(result.map((e) => e.id)).toEqual(['b']);
   });
 });

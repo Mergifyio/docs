@@ -176,3 +176,20 @@ export function getPrevNextEntries(
     next: sorted[idx - 1] ?? null,
   };
 }
+
+/**
+ * Return up to `limit` most-recent entries that share the given tag,
+ * excluding the entry with `currentId`. Returns [] when tag is undefined
+ * or no other entry matches.
+ */
+export function getRelatedEntries(
+  entries: CollectionEntry<'changelog'>[],
+  currentId: string,
+  tag: string | undefined,
+  limit: number
+): CollectionEntry<'changelog'>[] {
+  if (!tag) return [];
+  return sortChangelog(entries)
+    .filter((e) => e.id !== currentId && (e.data.tags || []).includes(tag))
+    .slice(0, limit);
+}
