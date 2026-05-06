@@ -10,6 +10,7 @@ export interface Props {
   icon?: string;
   variant?: 'ghost' | 'solid' | 'primary' | 'secondary';
   target?: string;
+  rel?: string;
 }
 const {
   colorScheme,
@@ -18,7 +19,16 @@ const {
   icon,
   variant = 'solid',
   target = '_blank',
+  rel,
 } = Astro.props as Props;
+
+// Secure default: target="_blank" ALWAYS carries 'noopener noreferrer' to
+// prevent tabnabbing. If the caller passes a `rel`, we merge tokens (deduped)
+// rather than letting the caller drop the security tokens.
+const callerRelTokens = rel?.split(/\s+/).filter(Boolean) ?? [];
+const securityTokens = target === '_blank' ? ['noopener', 'noreferrer'] : [];
+const mergedRel = [...new Set([...callerRelTokens, ...securityTokens])].join(' ');
+const computedRel = mergedRel || undefined;
 
 const isPrimary = variant === 'primary';
 const isSecondary = variant === 'secondary';
@@ -30,7 +40,7 @@ const classes = [
 ---
 
 <div role="presentation" class:list={classes} {style}>
-	<a href={href} target={target}>
+	<a href={href} target={target} rel={computedRel}>
 		{icon && <Icon name={icon} />}
 		<slot />
 	</a>
