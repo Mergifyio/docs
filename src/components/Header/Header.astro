@@ -10,13 +10,13 @@ const primaryLink = isEnterpriseSection
   ? {
       label: 'Mergify Docs',
       href: '/',
-      icon: 'heroicons:book-open',
+      icon: 'lucide:book-open',
       target: '_blank',
     }
   : {
       label: 'Dashboard',
       href: 'https://dashboard.mergify.com',
-      icon: 'mdi:view-dashboard-outline',
+      icon: 'lucide:layout-dashboard',
       target: undefined,
     };
 ---
@@ -96,10 +96,10 @@ const primaryLink = isEnterpriseSection
 				{primaryLink.label}
 			</HeaderLink>
 			<HeaderLink href="https://slack.mergify.com" icon="simple-icons:slack">Slack Community</HeaderLink>
-			<HeaderLink href="https://github.com/Mergifyio/mergify/discussions" icon="mdi:github">
+			<HeaderLink href="https://github.com/Mergifyio/mergify/discussions" icon="simple-icons:github">
 				Discussions
 		        </HeaderLink>
-			<HeaderLink href="/changelog/" icon="heroicons:document-arrow-up" target="_self">
+			<HeaderLink href="/changelog/" icon="lucide:file-up" target="_self">
 				Changelog
 			</HeaderLink>
 			<HeaderLink href="https://status.mergify.com" icon="simple-icons:statuspage">Status</HeaderLink>

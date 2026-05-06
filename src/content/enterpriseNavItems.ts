@@ -1,17 +1,17 @@
 import type { NavItem } from './navItems';
 
 const enterpriseNavItems: NavItem[] = [
-  { title: 'Overview', path: '/enterprise', icon: 'fa6-solid:house' },
-  { title: 'Architecture', path: '/enterprise/architecture', icon: 'mdi:architecture' },
-  { title: 'Requirements', path: '/enterprise/requirements', icon: 'fa6-solid:clipboard-list' },
-  { title: 'Installation', path: '/enterprise/installation', icon: 'fa6-solid:screwdriver-wrench' },
+  { title: 'Overview', path: '/enterprise', icon: 'lucide:house' },
+  { title: 'Architecture', path: '/enterprise/architecture', icon: 'lucide:layout-grid' },
+  { title: 'Requirements', path: '/enterprise/requirements', icon: 'lucide:clipboard-list' },
+  { title: 'Installation', path: '/enterprise/installation', icon: 'lucide:wrench' },
   {
     title: 'Advanced Features',
     path: '/enterprise/advanced-features',
-    icon: 'bi:rocket',
+    icon: 'lucide:rocket',
   },
-  { title: 'Troubleshooting', path: '/enterprise/troubleshooting', icon: 'fa6-solid:life-ring' },
-  { title: 'Maintenance', path: '/enterprise/maintenance', icon: 'fa6-solid:toolbox' },
+  { title: 'Troubleshooting', path: '/enterprise/troubleshooting', icon: 'lucide:life-buoy' },
+  { title: 'Maintenance', path: '/enterprise/maintenance', icon: 'lucide:toolbox' },
 ];
 
 export default enterpriseNavItems;

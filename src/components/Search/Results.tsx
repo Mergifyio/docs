@@ -76,7 +76,7 @@ function PageResult({ entry, query, onHover, onNavigate, active }: PageResultPro
           </p>
         )}
       </div>
-      {active && <Icon icon="bi:arrow-return-left" />}
+      {active && <Icon icon="lucide:corner-down-left" />}
     </a>
   );
 }
