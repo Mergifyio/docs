@@ -6164,6 +6164,188 @@
           }
         }
       }
+    },
+    "/repos/{owner}/stacks/summary": {
+      "get": {
+        "tags": [
+          "stacks"
+        ],
+        "summary": "Get adoption summary metrics for Stacks",
+        "description": "Returns counts and weekly trend for Mergify Stacks across the org's repositories over a time window (default 30 days, max 90).",
+        "operationId": "get_stacks_summary_repos__owner__stacks_summary_get",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 90,
+              "minimum": 1,
+              "default": 30,
+              "title": "Days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StacksSummary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/repos/{owner}/stacks/recent": {
+      "get": {
+        "tags": [
+          "stacks"
+        ],
+        "summary": "List recent stacks across the org's repositories",
+        "description": "Returns clustered stacks for the org over a time window, newest first. Each entry includes the root PR plus all PRs in the stack with links to GitHub.",
+        "operationId": "get_recent_stacks_repos__owner__stacks_recent_get",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Repo"
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 90,
+              "minimum": 1,
+              "default": 30,
+              "title": "Days"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 25,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecentStacksResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -13288,6 +13470,35 @@
         ],
         "title": "QueuesConfig"
       },
+      "RecentStacksResponse": {
+        "properties": {
+          "stacks": {
+            "items": {
+              "$ref": "#/components/schemas/StackResponse"
+            },
+            "type": "array",
+            "title": "Stacks"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor",
+            "description": "Offset of the next page (pass back as the `cursor` query param); null if there are no more pages."
+          }
+        },
+        "type": "object",
+        "required": [
+          "stacks",
+          "next_cursor"
+        ],
+        "title": "RecentStacksResponse"
+      },
       "RepositoryBodyInput": {
         "properties": {
           "products": {
@@ -13679,6 +13890,136 @@
         ],
         "title": "SimulatorResponse"
       },
+      "StackPRResponse": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "html_url": {
+            "type": "string",
+            "title": "Html Url"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author"
+          }
+        },
+        "type": "object",
+        "required": [
+          "number",
+          "title",
+          "state",
+          "html_url",
+          "author"
+        ],
+        "title": "StackPRResponse"
+      },
+      "StackResponse": {
+        "properties": {
+          "repo": {
+            "type": "string",
+            "title": "Repo",
+            "description": "Repository full name (owner/repo)"
+          },
+          "root_pr": {
+            "$ref": "#/components/schemas/StackPRResponse"
+          },
+          "pr_count": {
+            "type": "integer",
+            "title": "Pr Count"
+          },
+          "state": {
+            "type": "string",
+            "title": "State",
+            "description": "Aggregate stack state: open, merged, or mixed"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "prs": {
+            "items": {
+              "$ref": "#/components/schemas/StackPRResponse"
+            },
+            "type": "array",
+            "title": "Prs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "repo",
+          "root_pr",
+          "pr_count",
+          "state",
+          "created_at",
+          "updated_at",
+          "prs"
+        ],
+        "title": "StackResponse"
+      },
+      "StacksSummary": {
+        "properties": {
+          "active_stacks": {
+            "type": "integer",
+            "title": "Active Stacks",
+            "description": "Currently open stacks across the org"
+          },
+          "stack_prs_in_window": {
+            "type": "integer",
+            "title": "Stack Prs In Window",
+            "description": "Total PRs that belong to a stack in the window"
+          },
+          "repos_with_stacks_in_window": {
+            "type": "integer",
+            "title": "Repos With Stacks In Window",
+            "description": "Repositories with at least one stack in the window"
+          },
+          "percent_merged_from_stack": {
+            "type": "number",
+            "title": "Percent Merged From Stack",
+            "description": "Percent of merged PRs in the window that came from a stack"
+          },
+          "weekly_buckets": {
+            "items": {
+              "$ref": "#/components/schemas/WeeklyBucket"
+            },
+            "type": "array",
+            "title": "Weekly Buckets",
+            "description": "Weekly counts of new stacks across the window"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active_stacks",
+          "stack_prs_in_window",
+          "repos_with_stacks_in_window",
+          "percent_merged_from_stack",
+          "weekly_buckets"
+        ],
+        "title": "StacksSummary"
+      },
       "TimeJSON": {
         "properties": {
           "hour": {
@@ -13887,6 +14228,27 @@
         },
         "type": "object",
         "title": "UpdateScheduledFreezePayload"
+      },
+      "WeeklyBucket": {
+        "properties": {
+          "week_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Week Start",
+            "description": "Monday of the bucket week (YYYY-MM-DD)"
+          },
+          "stacks_created": {
+            "type": "integer",
+            "title": "Stacks Created",
+            "description": "Number of stacks whose root PR was created this week"
+          }
+        },
+        "type": "object",
+        "required": [
+          "week_start",
+          "stacks_created"
+        ],
+        "title": "WeeklyBucket"
       },
       "QueueCheck_Serialized": {
         "properties": {
@@ -14501,6 +14863,10 @@
     {
       "name": "simulator",
       "description": "Mergify configuration simulator."
+    },
+    {
+      "name": "stacks",
+      "description": "Operations with Mergify Stacks adoption."
     },
     {
       "name": "statistics",
