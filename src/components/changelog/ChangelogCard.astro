@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, getProductAccent } from '~/util/changelog';
+import { formatDate, getProductAccent, renderInlineMarkdown } from '~/util/changelog';
 
 interface Props {
   entry: CollectionEntry<'changelog'>;
@@ -25,7 +25,7 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
 >
   <div class="card-body">
     <h3 class="card-title">
-      <a href={`/changelog/${entry.id}/`}>{title}</a>
+      <a href={`/changelog/${entry.id}/`} set:html={renderInlineMarkdown(title)} />
     </h3>
     {description && <p class="card-desc">{description}</p>}
   </div>

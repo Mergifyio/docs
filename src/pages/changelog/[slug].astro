@@ -8,6 +8,7 @@ import {
   getPrevNextEntries,
   getProductAccent,
   getRelatedEntries,
+  renderInlineMarkdown,
 } from '../../util/changelog';
 
 export async function getStaticPaths() {
@@ -44,7 +45,7 @@ const related = getRelatedEntries(allEntries, entry.id, primaryTag, 4);
     {primaryTag && (
       <div class="detail-eyebrow"><span class="dot" />{primaryTag}</div>
     )}
-    <h1 class="detail-title">{title}</h1>
+    <h1 class="detail-title" set:html={renderInlineMarkdown(title)} />
     <time datetime={formatDate(date)} class="detail-date">{formatDateHuman(date)}</time>
     {description && <p class="detail-lede">{description}</p>}
 
@@ -61,13 +62,13 @@ const related = getRelatedEntries(allEntries, entry.id, primaryTag, 4);
         {previous ? (
           <a class="nav-link prev" href={`/changelog/${previous.id}/`}>
             <span class="nav-label">← Previous</span>
-            <span class="nav-title">{previous.data.title}</span>
+            <span class="nav-title" set:html={renderInlineMarkdown(previous.data.title)} />
           </a>
         ) : <span />}
         {next ? (
           <a class="nav-link next" href={`/changelog/${next.id}/`}>
             <span class="nav-label">Next →</span>
-            <span class="nav-title">{next.data.title}</span>
+            <span class="nav-title" set:html={renderInlineMarkdown(next.data.title)} />
           </a>
         ) : <span />}
       </nav>
@@ -79,7 +80,7 @@ const related = getRelatedEntries(allEntries, entry.id, primaryTag, 4);
         <div class="related-grid">
           {related.map((r) => (
             <a class="related-card" href={`/changelog/${r.id}/`}>
-              <span class="related-title">{r.data.title}</span>
+              <span class="related-title" set:html={renderInlineMarkdown(r.data.title)} />
               <span class="related-date">{formatDateHuman(r.data.date)}</span>
             </a>
           ))}

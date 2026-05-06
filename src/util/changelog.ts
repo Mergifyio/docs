@@ -125,6 +125,22 @@ export function formatMonthYear(date: Date | string): string {
   });
 }
 
+/**
+ * Render a tiny subset of inline markdown for changelog titles: backtick code
+ * spans become <code>. HTML is escaped first, so the result is safe to render
+ * with set:html. We avoid a full markdown parser because titles only ever use
+ * code spans in practice.
+ */
+export function renderInlineMarkdown(text: string): string {
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  return escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
 export interface ProductAccent {
   bar: string;
   text: string;

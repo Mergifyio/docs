@@ -1,6 +1,11 @@
 import type { CollectionEntry } from 'astro:content';
 import { describe, expect, test } from 'vitest';
-import { getPrevNextEntries, getProductAccent, getRelatedEntries } from './changelog';
+import {
+  getPrevNextEntries,
+  getProductAccent,
+  getRelatedEntries,
+  renderInlineMarkdown,
+} from './changelog';
 
 describe('getProductAccent', () => {
   test('maps Merge Queue to teal-700', () => {
@@ -174,5 +179,37 @@ describe('getRelatedEntries', () => {
   test('matches when the tag is in any position of the entry tags array', () => {
     const result = getRelatedEntries(entries, 'a', 'Workflow Automation', 4);
     expect(result.map((e) => e.id)).toEqual(['b']);
+  });
+});
+
+describe('renderInlineMarkdown', () => {
+  test('passes plain text through unchanged', () => {
+    expect(renderInlineMarkdown('Hello world')).toBe('Hello world');
+  });
+
+  test('converts backtick code spans to <code> tags', () => {
+    expect(renderInlineMarkdown('Configure `auto_merge_conditions`')).toBe(
+      'Configure <code>auto_merge_conditions</code>'
+    );
+  });
+
+  test('handles multiple code spans on one line', () => {
+    expect(renderInlineMarkdown('`foo` and `bar`')).toBe('<code>foo</code> and <code>bar</code>');
+  });
+
+  test('escapes HTML in surrounding text', () => {
+    expect(renderInlineMarkdown('Use <script> tag')).toBe('Use &lt;script&gt; tag');
+  });
+
+  test('escapes HTML inside code spans too', () => {
+    expect(renderInlineMarkdown('use `<div>` here')).toBe('use <code>&lt;div&gt;</code> here');
+  });
+
+  test('leaves an unpaired backtick literal', () => {
+    expect(renderInlineMarkdown('only `one open')).toBe('only `one open');
+  });
+
+  test('escapes ampersands and quotes', () => {
+    expect(renderInlineMarkdown('Tom & Jerry "win"')).toBe('Tom &amp; Jerry &quot;win&quot;');
   });
 });
