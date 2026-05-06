@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest';
 import type { CollectionEntry } from 'astro:content';
-import { getProductAccent, getPrevNextEntries, getRelatedEntries } from './changelog';
+import { describe, expect, test } from 'vitest';
+import { getPrevNextEntries, getProductAccent, getRelatedEntries } from './changelog';
 
 describe('getProductAccent', () => {
   test('maps Merge Queue to teal-700', () => {
