@@ -91,7 +91,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/octicon": "^1.2.23",
     "@iconify-json/simple-icons": "^1.2.81",
-    "@iconify-json/tabler": "^1.2.33",
+    "@iconify-json/tabler": "^1.2.34",
     "@iconify/react": "^6.0.2",
     "@iconify/types": "^2.0.0",
     "@types/react": "^19.2.14",
