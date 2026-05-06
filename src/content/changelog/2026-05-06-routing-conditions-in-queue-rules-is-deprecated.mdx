@@ -1,0 +1,10 @@
+---
+title: "`routing_conditions` in queue rules is deprecated"
+date: 2026-05-06
+tags:
+  - Deprecations
+  - Merge Queue
+description: "The `routing_conditions` attribute in queue rules is deprecated and will be removed on 2026-07-31 — use `queue_conditions` instead."
+---
+
+The `routing_conditions` attribute in queue rules has been replaced by `queue_conditions`. Rename `routing_conditions` to `queue_conditions` in your `.mergify.yml` to migrate before the legacy attribute is removed on 2026-07-31.

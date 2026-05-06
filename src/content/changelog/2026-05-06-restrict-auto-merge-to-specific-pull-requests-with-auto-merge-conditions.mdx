@@ -1,0 +1,9 @@
+---
+title: "Restrict auto-merge to specific pull requests with `auto_merge_conditions`"
+date: 2026-05-06
+tags:
+  - Merge Protections
+description: "Configure which pull requests are eligible for auto-merge using a list of conditions instead of a global on/off toggle."
+---
+
+`merge_protection_settings.auto_merge_conditions` accepts `true` for unconditional auto-merge, or a list of conditions to restrict auto-merge to a subset of pull requests — for example `[author = dependabot[bot]]` to auto-merge bot PRs while letting humans queue manually, or `[label = ready-to-merge]` to require an explicit opt-in label. When the conditions match, the pull request is added to the merge queue (or merged directly if no merge queue is configured) once your merge protections pass.
