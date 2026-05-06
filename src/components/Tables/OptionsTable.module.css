@@ -1,0 +1,143 @@
+.list {
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+  background: var(--theme-bg-content);
+  overflow: hidden;
+}
+
+.option {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--theme-border);
+  scroll-margin-top: calc(var(--theme-navbar-height) + 1rem);
+}
+
+.option:last-child {
+  border-bottom: none;
+}
+
+.option:target {
+  background: color-mix(in srgb, var(--section-accent) 6%, transparent);
+}
+
+.option.deprecated {
+  opacity: 0.7;
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.key {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--theme-text);
+  background: var(--theme-bg-offset);
+  padding: 0.125rem 0.4rem;
+  border-radius: 4px;
+}
+
+.anchor {
+  color: var(--theme-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+
+.anchor:hover,
+.anchor:focus {
+  color: var(--theme-link);
+}
+
+.option:hover .anchor,
+.option:focus-within .anchor,
+.option:target .anchor {
+  opacity: 1;
+}
+
+.meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  color: var(--theme-text-secondary);
+  font-size: 0.875rem;
+}
+
+.metaSeparator {
+  color: var(--theme-text-muted);
+}
+
+.metaLabel {
+  color: var(--theme-text-muted);
+}
+
+.meta code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  background: var(--theme-bg-offset);
+  color: var(--theme-text);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+.meta a {
+  color: var(--theme-link);
+  text-decoration: underline;
+}
+
+.meta a:hover {
+  color: var(--theme-link-hover);
+}
+
+.defaultBlock {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--theme-bg-offset);
+  border: 1px solid var(--theme-border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--theme-text);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.description {
+  max-width: 46em;
+  color: var(--theme-text);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.description > :first-child {
+  margin-top: 0;
+}
+
+.description > :last-child {
+  margin-bottom: 0;
+}
+
+.description code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  background: var(--theme-bg-offset);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+.description a {
+  color: var(--theme-link);
+  text-decoration: underline;
+}
+
+.description a:hover {
+  color: var(--theme-link-hover);
+}
