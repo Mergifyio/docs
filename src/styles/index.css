@@ -521,93 +521,212 @@ a.current-header-link {
   }
 }
 
-/* Home page specific styles moved from inline MDX */
+/* Home page specific styles. Used only by src/content/docs/index.mdx.
+   Note: --max-width (the prose reading-column constraint) doesn't apply to
+   the homepage — landing layouts cap container width per-section instead. */
+
+/* HERO */
 .home-hero {
-  padding: 2.5rem 0 1rem;
-  text-align: left;
+  background: var(--theme-bg-content);
+  padding-block: 1rem 2.5rem;
+  padding-inline: var(--min-spacing-inline);
 }
-.hero-inner {
-  max-width: 60rem;
+.home-hero-inner {
+  max-width: 64rem;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
 }
-.hero-inner h1 {
-  font-size: clamp(var(--text-4xl), 4.5vw, 2.5rem);
+@media (min-width: 50em) {
+  .home-hero-inner {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 3rem;
+  }
+  .home-hero {
+    padding-block: 1rem 3.5rem;
+  }
+}
+.home-hero-eyebrow {
+  color: var(--theme-text-muted);
+  margin-bottom: 0.5rem;
+}
+.home-hero-title {
   margin: 0;
-  font-weight: 500;
-  letter-spacing: -0.03em;
+  color: var(--theme-text);
 }
-.home-hero .content-title {
-  margin-bottom: 0;
+.home-hero-accent {
+  color: var(--color-teal-700);
 }
-#home .home-hero .tagline {
-  margin-top: 0.65rem;
+.home-hero-subtitle {
+  margin: 0.75rem 0 0;
+  color: var(--theme-text-secondary);
+  max-width: 32em;
 }
-.tagline {
-  font-size: var(--text-lg);
-  margin: 0 0 2rem;
-  max-width: 46rem;
-  font-weight: 400;
+.home-hero-cta {
+  margin-top: 1.5rem;
 }
-.quick-links {
+.home-hero-visual {
+  display: flex;
+  justify-content: center;
+}
+.home-hero-screenshot {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--theme-border);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  background: var(--theme-bg-content);
+  display: block;
+}
+
+/* METRICS STRIP */
+.home-metrics-strip {
+  background: var(--theme-bg);
+  padding-block: 1.25rem;
+  padding-inline: var(--min-spacing-inline);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 3rem;
 }
-.quick-links .ql {
-  --ql-bg: rgba(0, 0, 0, 0.04);
-  --ql-bg-hover: rgba(0, 0, 0, 0.07);
-  --ql-bg-dark: rgba(255, 255, 255, 0.06);
-  --ql-bg-dark-hover: rgba(255, 255, 255, 0.12);
-  background: var(--ql-bg);
-  backdrop-filter: saturate(160%) blur(8px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
+.home-metric {
+  text-align: center;
+  min-width: 8rem;
+}
+.home-metric-value {
+  font-size: 1.5rem;
   font-weight: 500;
-  letter-spacing: 0.2px;
-  line-height: 1.1;
   color: var(--theme-text);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  position: relative;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.home-metric-label {
+  font-size: 0.875rem;
+  color: var(--theme-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* PROBLEM CARDS */
+.home-problems {
+  padding-block: 3rem;
+  padding-inline: var(--min-spacing-inline);
+  max-width: 64rem;
+  margin: 0 auto;
+}
+.home-problems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.home-problem-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: var(--theme-bg-content);
+  border: 1px solid var(--theme-border);
   text-decoration: none;
-  transition:
-    background 0.18s ease,
-    box-shadow 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
+  transition: border-color 0.18s ease;
 }
-.theme-dark .quick-links .ql {
-  background: var(--ql-bg-dark);
-  border-color: rgba(255, 255, 255, 0.12);
+.home-problem-card[data-product="merge-queue"]:hover {
+  border-color: var(--color-teal-700);
 }
-.quick-links .ql:hover {
-  background: var(--ql-bg-hover);
-  border-color: rgba(0, 0, 0, 0.12);
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.06),
-    0 2px 4px rgba(0, 0, 0, 0.04);
+.home-problem-card[data-product="ci-insights"]:hover {
+  border-color: var(--color-purple-700);
 }
-.theme-dark .quick-links .ql:hover {
-  background: var(--ql-bg-dark-hover);
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.4),
-    0 2px 6px -2px rgba(0, 0, 0, 0.5);
+.home-problem-card[data-product="test-insights"]:hover {
+  border-color: var(--color-orange-700);
 }
-.quick-links .ql:active {
-  transform: translateY(1px);
+.home-problem-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--theme-text);
+  margin-bottom: 0.5rem;
 }
-.quick-links .ql:focus-visible {
-  outline: 2px solid var(--theme-link);
-  outline-offset: 2px;
+.home-problem-desc {
+  font-size: 0.9375rem;
+  color: var(--theme-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1rem;
 }
-@media (hover: hover) {
-  .quick-links .ql {
-    will-change: transform;
+.home-problem-cta {
+  margin-top: auto;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.home-problem-card[data-product="merge-queue"] .home-problem-cta {
+  color: var(--color-teal-700);
+}
+.home-problem-card[data-product="ci-insights"] .home-problem-cta {
+  color: var(--color-purple-700);
+}
+.home-problem-card[data-product="test-insights"] .home-problem-cta {
+  color: var(--color-orange-700);
+}
+
+/* PRODUCTS GRID */
+.home-products {
+  padding-block: 3rem;
+  padding-inline: var(--min-spacing-inline);
+  background: var(--theme-bg-content);
+  max-width: none;
+}
+.home-products > h2,
+.home-products-grid {
+  max-width: 64rem;
+  margin-inline: auto;
+}
+.home-products > h2 {
+  margin-bottom: 1.25rem;
+}
+.home-reference-footer {
+  max-width: 64rem;
+  margin: 1.5rem auto 0;
+  font-size: 0.875rem;
+  color: var(--theme-text-secondary);
+}
+.home-reference-footer a {
+  color: var(--theme-link);
+}
+
+/* DISCOVERY CALLOUT */
+.home-discovery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  padding: 1.25rem 1.5rem;
+  margin: 0 auto;
+  max-width: 64rem;
+  margin-block: 3rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 12px;
+  background: var(--theme-bg-content);
+}
+@media (min-width: 50em) {
+  .home-discovery {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
+}
+.home-discovery-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--theme-text);
+}
+.home-discovery-desc {
+  font-size: 0.875rem;
+  color: var(--theme-text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* Community section on the homepage — heading, paragraph and icons all centered */
+.community {
+  text-align: center;
 }
 .community-buttons {
   display: flex;
@@ -615,14 +734,6 @@ a.current-header-link {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 1rem;
-}
-@media (max-width: 50em) {
-  .tagline {
-    font-size: 1rem;
-  }
-  .quick-links .ql {
-    font-size: 0.75rem;
-  }
 }
 
 /* Screenreader Only Text */
@@ -703,41 +814,6 @@ pre {
   font-size: 0.85em;
 }
 
-/* Override: rectangular ghost buttons for hero quick links (no pills) */
-.home-hero .quick-links .ql {
-  background: transparent;
-  backdrop-filter: none;
-  border-radius: 8px;
-  padding: 0.55rem 0.9rem;
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-  border: 1px solid var(--theme-border-color);
-  box-shadow: none;
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
-}
-.theme-dark .home-hero .quick-links .ql {
-  border-color: rgba(255, 255, 255, 0.18);
-}
-.home-hero .quick-links .ql:hover {
-  background: var(--theme-bg-hover);
-  transform: translateY(-1px);
-}
-.theme-dark .home-hero .quick-links .ql:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-.home-hero .quick-links .ql:active {
-  transform: translateY(0);
-}
-.home-hero .quick-links .ql:focus-visible {
-  outline: 2px solid var(--theme-link);
-  outline-offset: 2px;
-}
-
 /* Heading rules for MDX-rendered content. Properties match the
    typography utilities in typography.css — keep in sync. */
 #main-content h1,
@@ -806,112 +882,4 @@ article.content {
   margin-right: 0.55rem;
   color: var(--theme-text-muted);
   opacity: 0.6;
-}
-
-/* Home page: Value metrics cards */
-.home-metrics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin: 0 0 2rem 0;
-}
-
-.home-metric-card {
-  flex: 1 1 180px;
-  padding: 1rem 1.25rem;
-  border-radius: 8px;
-  background: var(--theme-bg-offset);
-  border-left: 4px solid var(--theme-accent);
-}
-
-.home-metric-value {
-  font-size: var(--text-2xl);
-  font-weight: 500;
-  color: var(--theme-accent);
-}
-
-.home-metric-label {
-  font-size: var(--text-sm);
-  color: var(--theme-text-secondary);
-}
-
-/* Home page: Problem-solution cards */
-.home-problems {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin: 1.5rem 0 2.5rem 0;
-}
-
-.home-problem-card {
-  display: block;
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: var(--theme-bg-offset);
-  border: 1px solid var(--theme-divider);
-  text-decoration: none;
-}
-
-.home-problem-card:hover {
-  border-color: var(--theme-accent);
-}
-
-.home-problem-title {
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--theme-text);
-  margin-bottom: 0.5rem;
-}
-
-.home-problem-desc {
-  font-size: var(--text-sm);
-  color: var(--theme-text-secondary);
-  margin-bottom: 1rem;
-  line-height: 1.5;
-}
-
-.home-problem-cta {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--theme-accent);
-}
-
-/* Home page: Get started buttons */
-.home-get-started {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
-}
-.home-get-started .button {
-  flex: 1;
-  justify-content: center;
-}
-
-/* Home page: Discovery callout — placeholder styling (B-pass will redesign) */
-.home-discovery {
-  display: block;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 12px;
-  background: var(--theme-bg-content);
-  border: 1px solid var(--theme-border);
-  border-left: 4px solid var(--color-teal-700);
-  text-decoration: none;
-  transition: border-color 0.18s ease;
-}
-
-.home-discovery:hover {
-  border-color: var(--color-teal-700);
-}
-
-.home-discovery-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--theme-text);
-  margin-bottom: 0.25rem;
-}
-
-.home-discovery-desc {
-  font-size: 0.9375rem;
-  color: var(--theme-text-muted);
 }
