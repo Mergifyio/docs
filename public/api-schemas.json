@@ -5973,6 +5973,197 @@
           }
         }
       }
+    },
+    "/products/{owner}/{repository}": {
+      "put": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Manage enabled products",
+        "description": "Manage enabled products on a repository",
+        "operationId": "manage_products_on_a_github_repository_products__owner___repository__put",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepositoryBodyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/default_products/{owner}": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Get default enabled products",
+        "description": "Get default enabled products for new repositories",
+        "operationId": "get_default_enabled_products_default_products__owner__get",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefaultProductsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Manage default enabled products",
+        "description": "Manage default enabled products for new repositories",
+        "operationId": "manage_default_enabled_products_default_products__owner__put",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepositoryBodyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6944,6 +7135,28 @@
           "times"
         ],
         "title": "DayJSON"
+      },
+      "DefaultProductsResponse": {
+        "properties": {
+          "products": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "ci_insights",
+                "merge_protections",
+                "workflow_automation",
+                "merge_queue"
+              ]
+            },
+            "type": "array",
+            "title": "Products"
+          }
+        },
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "title": "DefaultProductsResponse"
       },
       "DeleteScheduledFreezePayload": {
         "properties": {
@@ -13075,6 +13288,28 @@
         ],
         "title": "QueuesConfig"
       },
+      "RepositoryBodyInput": {
+        "properties": {
+          "products": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "ci_insights",
+                "merge_protections",
+                "workflow_automation",
+                "merge_queue"
+              ]
+            },
+            "type": "array",
+            "title": "Products"
+          }
+        },
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "title": "RepositoryBodyInput"
+      },
       "RepositoryConfigurationSimulatorResponse": {
         "properties": {
           "message": {
@@ -14246,6 +14481,10 @@
     {
       "name": "merge_queue",
       "description": "Operation with the merge queue."
+    },
+    {
+      "name": "products",
+      "description": "Operations with products."
     },
     {
       "name": "pull_requests",
