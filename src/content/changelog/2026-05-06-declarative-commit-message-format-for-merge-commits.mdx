@@ -1,0 +1,10 @@
+---
+title: "Declarative `commit_message_format` for merge commits"
+date: 2026-05-06
+tags:
+  - Merge Queue
+  - Workflow Automation
+description: "Configure merge commit titles, bodies, and trailers declaratively without writing Jinja2 templates."
+---
+
+A new `commit_message_format` option lets you control merge commit content with a simple declarative config: pick `inherit` or `pr-title` for the title, `inherit`, `pr-body`, or `empty` for the body, and opt into trailers like `co-authored-by`, `approved-by`, or `merged-by`. Use `inherit` to defer to GitHub's repository-level "default commit message" setting. Available on queue rules, the `merge` action, and `defaults`. The existing `commit_message_template` keeps working unchanged.

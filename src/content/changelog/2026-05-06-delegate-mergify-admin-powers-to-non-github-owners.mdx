@@ -1,0 +1,10 @@
+---
+title: "Delegate Mergify admin powers to Non GitHub Owners"
+date: 2026-05-06
+tags:
+description: "GitHub Owners can now delegate specific Mergify admin powers to individual users without granting them GitHub Owner rights."
+---
+
+A new Roles tab in Settings lets GitHub Owners delegate Mergify admin powers to individual users without making them GitHub Owners. Each user can hold any combination of four roles: Billing Admin (subscription and billing), CI Admin (CI Insights configuration and `ci`-scoped application keys), Default Product Action Admin (GitHub integrations and product enablement), and Delegation Admin (managing the roster itself).
+
+This is useful when a finance teammate needs billing access but shouldn't run merges, or when a CI engineer needs to tune fleet settings without becoming a GitHub Owner.

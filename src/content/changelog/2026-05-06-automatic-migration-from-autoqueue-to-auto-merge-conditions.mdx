@@ -1,0 +1,9 @@
+---
+title: "Automatic migration from `autoqueue` to `auto_merge_conditions`"
+date: 2026-05-06
+tags:
+  - Merge Queue
+description: "Mergify now opens a migration PR that converts the deprecated `queue_rules[].autoqueue` setting to the new `merge_protection_settings.auto_merge_conditions`."
+---
+
+The `queue_rules[].autoqueue` field has been deprecated in favor of `merge_protection_settings.auto_merge_conditions`. Mergify now opens a migration PR that rewrites your configuration automatically. Mixed setups — where only some queues had `autoqueue: true` — are translated into the equivalent `auto_merge_conditions`, with a YAML comment marking the queues that remain manual-only and reachable via the `/queue` command.
