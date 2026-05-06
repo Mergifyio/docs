@@ -18,16 +18,18 @@ const slackCommand = `/feed subscribe ${import.meta.env.SITE}/changelog/rss.xml`
   </button>
   <div class="popover" role="dialog" aria-label="Subscribe options" hidden data-subscribe-popover>
     <h6 class="pop-h">RSS</h6>
-    <a class="pop-rss" href="/changelog/rss.xml">
+    <p class="pop-desc">Paste this URL into your feed reader.</p>
+    <div class="pop-cmd">
       <Icon name="heroicons:rss" class="pop-icon" />
-      <span>{import.meta.env.SITE}/changelog/rss.xml</span>
-    </a>
+      <code data-copy-source>{import.meta.env.SITE}/changelog/rss.xml</code>
+      <button type="button" class="pop-copy" data-copy-target="prev">Copy</button>
+    </div>
     <div class="pop-divider"></div>
     <h6 class="pop-h">Slack</h6>
     <p class="pop-desc">Run this in any Slack channel to subscribe.</p>
     <div class="pop-cmd">
-      <code data-slack-command>{slackCommand}</code>
-      <button type="button" class="pop-copy" data-slack-copy>Copy</button>
+      <code data-copy-source>{slackCommand}</code>
+      <button type="button" class="pop-copy" data-copy-target="prev">Copy</button>
     </div>
   </div>
 </div>
@@ -36,8 +38,6 @@ const slackCommand = `/feed subscribe ${import.meta.env.SITE}/changelog/rss.xml`
   function initSubscribePopover() {
     const toggle = document.querySelector('[data-subscribe-toggle]');
     const popover = document.querySelector('[data-subscribe-popover]');
-    const copyBtn = document.querySelector('[data-slack-copy]');
-    const cmd = document.querySelector('[data-slack-command]');
     if (!toggle || !popover) return;
 
     function setOpen(open) {
@@ -63,21 +63,23 @@ const slackCommand = `/feed subscribe ${import.meta.env.SITE}/changelog/rss.xml`
       }
     });
 
-    if (copyBtn && cmd) {
-      copyBtn.addEventListener('click', function () {
-        const text = cmd.textContent || '';
+    popover.querySelectorAll('[data-copy-target="prev"]').forEach(function (btn) {
+      const source = btn.previousElementSibling;
+      if (!source) return;
+      btn.addEventListener('click', function () {
+        const text = (source.textContent || '').trim();
         if (!navigator.clipboard || !navigator.clipboard.writeText) return;
         navigator.clipboard.writeText(text).then(function () {
-          const original = copyBtn.textContent;
-          copyBtn.textContent = 'Copied!';
-          copyBtn.classList.add('copied');
+          const original = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
           setTimeout(function () {
-            copyBtn.textContent = original;
-            copyBtn.classList.remove('copied');
+            btn.textContent = original;
+            btn.classList.remove('copied');
           }, 2000);
         });
       });
-    }
+    });
   }
 
   initSubscribePopover();
@@ -154,21 +156,6 @@ const slackCommand = `/feed subscribe ${import.meta.env.SITE}/changelog/rss.xml`
     color: var(--theme-text-secondary);
     margin: 0 0 10px;
     line-height: 1.5;
-  }
-  .pop-rss {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 12px;
-    border: 1px solid var(--theme-border);
-    border-radius: 8px;
-    font-size: 0.8125rem;
-    color: var(--theme-text);
-    text-decoration: none;
-    word-break: break-all;
-  }
-  .pop-rss:hover {
-    border-color: var(--theme-text-muted);
   }
   .pop-icon {
     width: 14px;

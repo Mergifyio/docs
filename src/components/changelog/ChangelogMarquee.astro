@@ -23,11 +23,7 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
   data-title={title.toLowerCase()}
   style={`--card-accent: ${accent.bar}; --card-accent-text: ${accent.text};`}
 >
-  {image && (
-    <a href={`/changelog/${entry.id}/`} class="marquee-hero-link" aria-label={title}>
-      <img src={image.src} alt={image.alt} class="marquee-hero" loading="lazy" />
-    </a>
-  )}
+  {image && <img src={image.src} alt={image.alt} class="marquee-hero" loading="lazy" />}
   <div class="marquee-body">
     <div class="marquee-content">
       {primaryTag && (
@@ -55,10 +51,6 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
     border-color: var(--theme-text-muted);
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
     transform: translateY(-1px);
-  }
-  .marquee-hero-link {
-    display: block;
-    line-height: 0;
   }
   .marquee-hero {
     width: 100%;
@@ -118,6 +110,13 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
   }
   .marquee-title a:hover {
     color: var(--card-accent-text);
+  }
+  /* Stretched-link: title <a> covers the whole marquee, hero included. */
+  .marquee-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
   .marquee-desc {
     font-size: 0.9375rem;

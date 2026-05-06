@@ -10,7 +10,6 @@ const { entry } = Astro.props;
 const { title, description, date, tags } = entry.data;
 const primaryTag = tags[0];
 const accent = getProductAccent(primaryTag);
-const showPills = tags.length >= 2;
 
 const monthDay = new Date(date).toLocaleDateString('en-US', {
   month: 'short',
@@ -32,7 +31,7 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
   </div>
   <div class="card-aside">
     <time datetime={formatDate(date)} class="card-date">{monthDay}</time>
-    {showPills && (
+    {tags.length > 0 && (
       <div class="pills-stack">
         {tags.map((t) => <span class="card-pill">{t}</span>)}
       </div>
@@ -84,6 +83,13 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
   }
   .card-title a:hover {
     color: var(--card-accent-text);
+  }
+  /* Stretched-link: title <a> covers the whole card, so the entire card is clickable. */
+  .card-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
   .card-desc {
     font-size: 0.8125rem;
