@@ -1,0 +1,1 @@
+Update src/util/icons.ts (Iconify offline cache for React components) to import from @iconify-json/lucide. The original commit removed the bi/feather/mdi/tabler packages but left the cache file importing from them, breaking tsc and astro check in CI.
