@@ -88,7 +88,7 @@ function RecentSearches({ onSelect }: { onSelect: (q: string) => void }) {
             textAlign: 'left',
           }}
         >
-          <Icon icon="bi:clock-history" width="16" height="16" />
+          <Icon icon="lucide:history" width="16" height="16" />
           {q}
         </button>
       ))}
@@ -259,7 +259,7 @@ export default function SearchBar() {
         <div
           style={{ display: 'flex', alignItems: 'center', gap: 12, paddingLeft: 16, paddingTop: 8 }}
         >
-          <Icon icon="bi:search" width="24" height="24" />
+          <Icon icon="lucide:search" width="24" height="24" />
           <input
             autoFocus
             name="search"
