@@ -1,0 +1,1 @@
+Validate mergify: icon suffix at runtime via shared parseProductIcon helper; ProductIcon now throws on unknown name instead of rendering blank
