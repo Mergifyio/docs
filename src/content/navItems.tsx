@@ -1,19 +1,18 @@
 import { v5 } from 'uuid';
-import MergeQueueIcon from '../components/MergeQueueIcon.astro';
 
 export type NavItem = {
   title: string;
   path?: string;
   children?: NavItem[];
   id?: string;
-  icon?: string | typeof MergeQueueIcon;
+  icon?: string;
 };
 
 const navItems: NavItem[] = [
   { title: 'Home', path: '/', icon: 'lucide:house' },
   {
     title: 'Merge Queue',
-    icon: MergeQueueIcon,
+    icon: 'mergify:merge-queue',
     path: '/merge-queue',
     children: [
       { title: 'Overview', path: '/merge-queue', icon: 'lucide:lightbulb' },
@@ -84,7 +83,7 @@ const navItems: NavItem[] = [
   {
     title: 'CI Insights',
     path: '/ci-insights',
-    icon: 'lucide:lightbulb',
+    icon: 'mergify:ci-insights',
     children: [
       { title: 'Overview', path: '/ci-insights', icon: 'lucide:lightbulb' },
       { title: 'Runners', path: '/ci-insights/runners', icon: 'lucide:server' },
@@ -180,7 +179,7 @@ const navItems: NavItem[] = [
   {
     title: 'Test Insights',
     path: '/test-insights',
-    icon: 'lucide:flask-conical',
+    icon: 'mergify:test-insights',
     children: [
       { title: 'Overview', path: '/test-insights', icon: 'lucide:lightbulb' },
       { title: 'Prevention', path: '/test-insights/prevention', icon: 'lucide:shield-half' },
@@ -191,7 +190,7 @@ const navItems: NavItem[] = [
   {
     title: 'Merge Protections',
     path: '/merge-protections',
-    icon: 'lucide:shield-user',
+    icon: 'mergify:merge-protections',
     children: [
       { title: 'Overview', path: '/merge-protections', icon: 'lucide:lightbulb' },
       { title: 'Setup', path: '/merge-protections/setup', icon: 'lucide:settings' },
@@ -209,7 +208,7 @@ const navItems: NavItem[] = [
   {
     title: 'Stacks',
     path: '/stacks',
-    icon: 'lucide:layers',
+    icon: 'mergify:stacks',
     children: [
       { title: 'Overview', path: '/stacks', icon: 'lucide:lightbulb' },
       { title: 'Concepts', path: '/stacks/concepts', icon: 'lucide:network' },
@@ -274,7 +273,7 @@ const navItems: NavItem[] = [
             path: '/workflow/actions/post_check',
             icon: 'lucide:circle-check',
           },
-          { title: 'Queue', path: '/workflow/actions/queue', icon: MergeQueueIcon },
+          { title: 'Queue', path: '/workflow/actions/queue', icon: 'mergify:merge-queue' },
           { title: 'Rebase', path: '/workflow/actions/rebase', icon: 'lucide:git-branch' },
           {
             title: 'Request Reviews',

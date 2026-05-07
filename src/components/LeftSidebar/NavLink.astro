@@ -1,5 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { parseProductIcon } from '~/components/ProductIcon';
+import ProductIcon from '~/components/ProductIcon.astro';
 import type { NavItem } from '~/content/navItems';
 import { removeLeadingSlash } from '~/util';
 export interface Props {
@@ -13,14 +15,13 @@ const isHomepage = navItem.path === '/';
 const isHomepageMatch = isHomepage && currentPageMatch === '';
 const isPageMatch =
   !isHomepage && currentPageMatch.endsWith(removeLeadingSlash(navItem.path ?? ''));
-const isStringIcon = typeof navItem.icon === 'string';
-const IconComponent = !isStringIcon ? navItem.icon : null;
+const productIconName = parseProductIcon(navItem.icon);
 ---
 
 <li class="nav-link">
 	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`} title={navItem.title}>
-		{showIcon && navItem.icon && isStringIcon && <Icon name={navItem.icon as string} class="left-icon" />}
-		{showIcon && IconComponent && <IconComponent class="left-icon" />}
+		{showIcon && productIconName && <ProductIcon name={productIconName} class="left-icon" />}
+		{showIcon && !productIconName && navItem.icon && <Icon name={navItem.icon} class="left-icon" />}
 		<span class="nav-link-text" set:html={navItem.title} />
 	</a>
 </li>

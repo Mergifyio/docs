@@ -1,22 +1,29 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { parseProductIcon } from '~/components/ProductIcon';
+import ProductIcon from '~/components/ProductIcon.astro';
+
+interface Props {
+  title: string;
+  path: string;
+  icon?: string;
+}
 
 const { title, path, icon } = Astro.props;
-const isStringIcon = typeof icon === 'string';
-const IconComponent = !isStringIcon ? icon : null;
+const productIconName = parseProductIcon(icon);
 ---
 
 <div class="container">
 	<a href={path}>
 		<h4>
-			{!!icon && isStringIcon && (
+			{productIconName && (
 				<div class="docset-icon">
-					<Icon name={icon} />
+					<ProductIcon name={productIconName} />
 				</div>
 			)}
-			{IconComponent && (
+			{!productIconName && icon && (
 				<div class="docset-icon">
-					<IconComponent />
+					<Icon name={icon} />
 				</div>
 			)}
 			<span>{title}</span>
