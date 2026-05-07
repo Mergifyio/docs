@@ -67,8 +67,8 @@ const classes = [
 
 	/* Primary button — matches mergify.com */
 	.button.button-primary {
-		background-color: #000;
-		color: #fff;
+		background-color: var(--color-dark);
+		color: var(--color-white);
 		border-radius: 12px;
 		padding: 10px 16px;
 		font-size: 0.875rem;
@@ -77,14 +77,14 @@ const classes = [
 		transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
 		&:hover {
-			background-color: #3e434c;
+			background-color: var(--color-gray-700);
 		}
 	}
 
 	/* Secondary button — matches mergify.com */
 	.button.button-secondary {
 		background-color: rgba(255, 255, 255, 0.6);
-		color: #000;
+		color: var(--color-dark);
 		border-radius: 12px;
 		padding: 10px 16px;
 		font-size: 0.875rem;
@@ -98,17 +98,17 @@ const classes = [
 	}
 
 	.theme-dark .button.button-primary {
-		background-color: #fff;
-		color: #000;
+		background-color: var(--color-white);
+		color: var(--color-dark);
 
 		&:hover {
-			background-color: #d1d5db;
+			background-color: var(--color-gray-300);
 		}
 	}
 
 	.theme-dark .button.button-secondary {
 		background-color: rgba(255, 255, 255, 0.1);
-		color: #fff;
+		color: var(--color-white);
 
 		&:hover {
 			background-color: rgba(255, 255, 255, 0.2);
