@@ -2,333 +2,329 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
-import { formatDate, formatDateHuman } from '../../util/changelog';
+import {
+  formatDate,
+  formatDateHuman,
+  getPrevNextEntries,
+  getProductAccent,
+  getRelatedEntries,
+  renderInlineMarkdown,
+} from '../../util/changelog';
 
 export async function getStaticPaths() {
   const entries = await getCollection('changelog');
   return entries.map((entry) => ({
     params: { slug: entry.id },
-    props: { entry },
+    props: { entry, allEntries: entries },
   }));
 }
 
 interface Props {
   entry: CollectionEntry<'changelog'>;
+  allEntries: CollectionEntry<'changelog'>[];
 }
 
-const { entry } = Astro.props;
+const { entry, allEntries } = Astro.props;
 const { Content } = await render(entry);
-const { title, description, date, tags } = entry.data;
+const { title, description, date, tags, image } = entry.data;
+const primaryTag = tags[0];
+const accent = getProductAccent(primaryTag);
+
+const { previous, next } = getPrevNextEntries(allEntries, entry.id);
+const related = getRelatedEntries(allEntries, entry.id, primaryTag, 4);
 ---
 
-<MainLayout content={{ title, description: description || '', suppressTitle: false }} breadcrumbTitle={title}>
-  <article class="changelog-entry">
-    <header class="entry-header">
-      <div class="header-meta">
-        <time datetime={formatDate(date)} class="date">{formatDateHuman(date)}</time>
-      </div>
-      {tags && tags.length > 0 && (
-        <ul class="tag-list" role="list" aria-label="Categories">
-          {tags.map(tag => (
-            <li><span class="tag">{tag}</span></li>
-          ))}
-        </ul>
-      )}
-    </header>
+<MainLayout
+  content={{ title, description: description || '', suppressTitle: true }}
+  breadcrumbTitle={title}
+>
+  <article
+    class="changelog-detail"
+    style={`--card-accent: ${accent.bar}; --card-accent-text: ${accent.text};`}
+  >
+    {primaryTag && (
+      <div class="detail-eyebrow"><span class="dot" />{primaryTag}</div>
+    )}
+    <h1 class="detail-title" set:html={renderInlineMarkdown(title)} />
+    <time datetime={formatDate(date)} class="detail-date">{formatDateHuman(date)}</time>
+    {description && <p class="detail-lede">{description}</p>}
 
-    <div class="entry-content">
+    {image && (
+      <img src={image.src} alt={image.alt} class="detail-hero" loading="eager" />
+    )}
+
+    <div class="detail-body">
       <Content />
     </div>
 
-    <footer class="entry-footer">
-      <a href="/changelog/" class="back-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-        Back to Changelog
-      </a>
-    </footer>
+    {(previous || next) && (
+      <nav class="detail-nav" aria-label="Adjacent entries">
+        {previous ? (
+          <a class="nav-link prev" href={`/changelog/${previous.id}/`}>
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title" set:html={renderInlineMarkdown(previous.data.title)} />
+          </a>
+        ) : <span />}
+        {next ? (
+          <a class="nav-link next" href={`/changelog/${next.id}/`}>
+            <span class="nav-label">Next →</span>
+            <span class="nav-title" set:html={renderInlineMarkdown(next.data.title)} />
+          </a>
+        ) : <span />}
+      </nav>
+    )}
+
+    {related.length >= 2 && (
+      <section class="detail-related" aria-labelledby="related-h">
+        <h2 id="related-h" class="related-heading">More in {primaryTag}</h2>
+        <div class="related-grid">
+          {related.map((r) => (
+            <a class="related-card" href={`/changelog/${r.id}/`}>
+              <span class="related-title" set:html={renderInlineMarkdown(r.data.title)} />
+              <span class="related-date">{formatDateHuman(r.data.date)}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </article>
-</MainLayout>
 
-<style>
-  .changelog-entry {
-    max-width: 75ch;
-  }
-
-  /* Header section */
-  .entry-header {
-    margin-bottom: 3rem;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 2rem;
-    align-items: center;
-  }
-
-  .header-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-start;
-  }
-
-  .date {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--theme-text-secondary);
-    letter-spacing: 0.01em;
-    background: var(--theme-bg-offset);
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    border: 1px solid var(--theme-border);
-    display: inline-block;
-  }
-
-  .theme-dark .date {
-    background: var(--theme-bg-offset);
-    color: var(--theme-text-secondary);
-    border-color: var(--theme-border);
-  }
-
-  .tag-list {
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0;
-    margin: 0;
-    align-items: flex-end;
-    justify-content: flex-end;
-  }
-
-  @media (max-width: 50em) {
-    .entry-header {
-      grid-template-columns: 1fr;
+  <style>
+    .changelog-detail {
+      max-width: 45rem;
+      margin: 0 auto;
     }
 
-    .tag-list {
-      align-items: flex-start;
-      justify-content: flex-start;
+    .detail-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--card-accent-text);
+      margin-bottom: 10px;
     }
-  }
-
-  .tag {
-    background: var(--theme-bg-offset);
-    color: var(--theme-text-secondary);
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.4rem 0.75rem;
-    border-radius: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid var(--theme-border);
-  }
-
-  .theme-dark .tag {
-    background: var(--theme-bg-offset);
-    color: var(--theme-text-secondary);
-    border-color: var(--theme-border);
-  }
-
-  .entry-title {
-    font-size: 2.25rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0 0 1rem;
-    color: var(--theme-text);
-    letter-spacing: -0.02em;
-  }
-
-  @media (max-width: 50em) {
-    .entry-title {
-      font-size: 1.75rem;
+    .detail-eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 99px;
+      background: var(--card-accent);
     }
-  }
 
-  .lead {
-    font-size: 1.25rem;
-    line-height: 1.6;
-    color: var(--theme-text-secondary);
-    margin: 0;
-    font-weight: 400;
-  }
+    .detail-title {
+      font-size: 2.25rem;
+      line-height: 1.16;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.02em;
+      color: var(--theme-text);
+    }
+    .detail-title :global(code) {
+      background: var(--theme-bg-offset);
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-size: 0.92em;
+      font-family: var(--font-mono);
+    }
+    @media (max-width: 36rem) {
+      .detail-title {
+        font-size: 1.75rem;
+      }
+    }
+    /* Disable global heading auto-numbering */
+    .changelog-detail .detail-title {
+      counter-increment: none !important;
+    }
+    .changelog-detail .detail-title::before {
+      content: none !important;
+    }
 
-  @media (max-width: 50em) {
-    .lead {
+    .detail-date {
+      font-size: 0.8125rem;
+      color: var(--theme-text-muted);
+      margin-top: 14px;
+      display: block;
+    }
+
+    .detail-lede {
       font-size: 1.125rem;
+      color: var(--theme-text-secondary);
+      line-height: 1.55;
+      margin: 22px 0 0;
     }
-  }
 
-  /* Content section */
-  .entry-content {
-    font-size: 1.0625rem;
-    line-height: 1.75;
-    color: var(--theme-text);
-  }
+    .detail-hero {
+      display: block;
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-top: 28px;
+    }
 
-  .entry-content :global(h2) {
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.75rem;
-    font-weight: 600;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-  }
+    .detail-body {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--theme-text);
+      margin-top: 32px;
+    }
+    .detail-body :global(h2) {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .detail-body :global(h3) {
+      margin-top: 2rem;
+      margin-bottom: 0.875rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .detail-body :global(p) {
+      margin-bottom: 1.25rem;
+    }
+    .detail-body :global(ul),
+    .detail-body :global(ol) {
+      margin-bottom: 1.25rem;
+      padding-left: 1.75rem;
+    }
+    .detail-body :global(li) {
+      margin-bottom: 0.5rem;
+    }
+    .detail-body :global(code) {
+      background: var(--theme-bg-offset);
+      color: var(--theme-text);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+      font-family: var(--font-mono);
+    }
+    .detail-body :global(pre) {
+      margin: 1.5rem 0;
+      padding: 1.25rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      background: var(--theme-bg-offset);
+      border: 1px solid var(--theme-border);
+    }
+    .detail-body :global(pre code) {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .detail-body :global(a) {
+      color: var(--theme-accent);
+      text-decoration: underline;
+    }
+    .detail-body :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
 
-  .entry-content :global(h3) {
-    margin-top: 2rem;
-    margin-bottom: 0.875rem;
-    font-size: 1.375rem;
-    font-weight: 600;
-    line-height: 1.4;
-  }
+    .detail-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 40px;
+      border-top: 1px solid var(--theme-border);
+      padding-top: 22px;
+    }
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      border: 1px solid var(--theme-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      text-decoration: none;
+      color: var(--theme-text);
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .nav-link:hover {
+      border-color: var(--theme-text-muted);
+      transform: translateY(-1px);
+    }
+    .nav-link.next {
+      text-align: right;
+    }
+    .nav-label {
+      font-size: 0.6875rem;
+      color: var(--theme-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .nav-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    @media (max-width: 36rem) {
+      .detail-nav {
+        grid-template-columns: 1fr;
+      }
+      .nav-link.next {
+        text-align: left;
+      }
+    }
 
-  .entry-content :global(p) {
-    margin-bottom: 1.25rem;
-  }
-
-  .entry-content :global(ul),
-  .entry-content :global(ol) {
-    margin-bottom: 1.25rem;
-    padding-left: 1.75rem;
-  }
-
-  .entry-content :global(li) {
-    margin-bottom: 0.5rem;
-  }
-
-  .entry-content :global(li > p) {
-    margin-bottom: 0.5rem;
-  }
-
-  .entry-content :global(img) {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 2rem 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .theme-dark .entry-content :global(img) {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-
-  .entry-content :global(code) {
-    background: var(--theme-code-inline-bg);
-    color: var(--theme-code-inline-text);
-    padding: 0.2em 0.4em;
-    border-radius: 4px;
-    font-size: 0.9em;
-    font-family: var(--font-mono);
-  }
-
-  .entry-content :global(pre) {
-    margin: 1.5rem 0;
-    padding: 1.25rem;
-    border-radius: 8px;
-    overflow-x: auto;
-    background: var(--theme-code-bg);
-    border: 1px solid var(--theme-border-color);
-  }
-
-  .entry-content :global(pre code) {
-    background: none;
-    padding: 0;
-    color: inherit;
-    font-size: 0.875rem;
-  }
-
-  .entry-content :global(blockquote) {
-    margin: 1.5rem 0;
-    padding: 1rem 1.25rem;
-    border-left: 4px solid var(--theme-border);
-    background: var(--theme-bg-offset);
-    color: var(--theme-text-secondary);
-    font-style: italic;
-  }
-
-  .theme-dark .entry-content :global(blockquote) {
-    border-left-color: var(--theme-border);
-    background: var(--theme-bg-offset);
-  }
-
-  .entry-content :global(a) {
-    color: var(--theme-text);
-    text-decoration: underline;
-    text-decoration-color: var(--theme-border);
-    text-underline-offset: 2px;
-    transition: text-decoration-color 0.2s;
-  }
-
-  .entry-content :global(a:hover) {
-    text-decoration-color: var(--theme-text-muted);
-  }
-
-  .entry-content :global(hr) {
-    margin: 2.5rem 0;
-    border: none;
-    border-top: 1px solid var(--theme-border-color);
-  }
-
-  /* Spacing adjustments */
-  .entry-content > :global(*:first-child) {
-    margin-top: 0;
-  }
-
-  .entry-content > :global(*:last-child) {
-    margin-bottom: 0;
-  }
-
-  /* Footer */
-  .entry-footer {
-    margin-top: 4rem;
-  }
-
-  .back-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--theme-text-secondary);
-    background: var(--theme-bg-offset);
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    border: 1px solid var(--theme-border);
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .back-button:hover {
-    background: var(--theme-accent);
-    color: var(--theme-bg-content);
-    border-color: var(--theme-accent);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-  }
-
-  .back-button:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .back-button svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-  }
-
-  .theme-dark .back-button {
-    background: var(--theme-bg-offset);
-    color: var(--theme-text-secondary);
-    border-color: var(--theme-border);
-  }
-
-  .theme-dark .back-button:hover {
-    background: var(--theme-accent);
-    color: var(--theme-bg-content);
-    border-color: var(--theme-accent);
-  }
-</style>
+    .detail-related {
+      margin-top: 40px;
+      border-top: 1px solid var(--theme-border);
+      padding-top: 22px;
+    }
+    .related-heading {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--theme-text-muted);
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+    /* Disable global heading auto-numbering on related-heading */
+    .changelog-detail .related-heading {
+      counter-increment: none !important;
+    }
+    .changelog-detail .related-heading::before {
+      content: none !important;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 36rem) {
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .related-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid var(--theme-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-decoration: none;
+      color: var(--theme-text);
+      transition: border-color 0.15s;
+    }
+    .related-card:hover {
+      border-color: var(--theme-text-muted);
+    }
+    .related-title {
+      font-size: 0.84375rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    .related-date {
+      font-size: 0.6875rem;
+      color: var(--theme-text-muted);
+    }
+  </style>
+</MainLayout>

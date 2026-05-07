@@ -1,6 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
+import ChangelogCard from '../../components/changelog/ChangelogCard.astro';
+import ChangelogMarquee from '../../components/changelog/ChangelogMarquee.astro';
+import ChangelogSubscribePopover from '../../components/changelog/ChangelogSubscribePopover.astro';
 import enterpriseReleases from '../../data/enterprise-releases.json';
 import MainLayout from '../../layouts/MainLayout.astro';
 import type { TimelineEntry } from '../../util/changelog';
@@ -8,32 +11,21 @@ import { formatDate, groupTimelineByYearMonth, sortChangelog } from '../../util/
 
 const ENTERPRISE_TAG = 'Enterprise';
 const entries = sortChangelog(await getCollection('changelog'));
-// Derive tag info (entries may have no tags)
-const allTags = Array.from(new Set(entries.flatMap((e) => e.data.tags || []))).sort();
-const tagsWithEnterprise = Array.from(new Set([...allTags, ENTERPRISE_TAG]));
-type EnterpriseRelease = {
-  version: string;
-  releasedAt: string;
-};
+const productTags = Array.from(new Set(entries.flatMap((e) => e.data.tags || []))).sort();
+const allTags = [...productTags, ENTERPRISE_TAG];
 
+type EnterpriseRelease = { version: string; releasedAt: string };
 const releaseMarkers: TimelineEntry[] = (enterpriseReleases as EnterpriseRelease[]).map(
-  (release) => ({
-    kind: 'release',
-    date: release.releasedAt,
-    version: release.version,
-  })
+  (release) => ({ kind: 'release', date: release.releasedAt, version: release.version })
 );
-
 const changelogTimeline: TimelineEntry[] = entries.map((entry) => ({
   kind: 'changelog',
   date: entry.data.date,
   entry,
 }));
-
 const timelineEntries: TimelineEntry[] = [...changelogTimeline, ...releaseMarkers].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
-
 const groupedTimeline = groupTimelineByYearMonth(timelineEntries);
 const years = Object.keys(groupedTimeline).sort((a, b) => b.localeCompare(a));
 
@@ -41,544 +33,328 @@ const title = 'Changelog';
 const description = 'Latest product updates from Mergify.';
 ---
 
-<MainLayout content={{ title, description, suppressTitle: false }} showMarkdownActions={false}>
-    <div class="changelog-header">
-      <div class="search-wrap">
-        <label for="search" class="sr-only">Search changelog</label>
-        <input id="search" type="search" placeholder="Search changes..." aria-label="Search changelog" />
+<MainLayout content={{ title, description, suppressTitle: true }} showMarkdownActions={false}>
+  <div class="changelog-page">
+    <header class="cl-header">
+      <h1 class="cl-title">Changelog</h1>
+      <div class="cl-actions">
+        <label class="cl-search" for="changelog-search">
+          <Icon name="heroicons:magnifying-glass" class="search-icon" />
+          <input
+            id="changelog-search"
+            type="search"
+            placeholder="Search updates…"
+            aria-label="Search changelog"
+          />
+          <kbd class="cl-kbd">⌘K</kbd>
+        </label>
+        <ChangelogSubscribePopover />
       </div>
-      <a href="/changelog/rss.xml" class="rss-button" aria-label="Subscribe to RSS feed">
-        <Icon name="lucide:rss" />
-        Subscribe via RSS
-      </a>
-    </div>
+    </header>
 
-    <div class="slack-subscribe">
-      <div class="slack-content">
-        <Icon name="simple-icons:slack" class="slack-icon" />
-        <span class="slack-text">Stay updated on Slack! Subscribe to get changelog updates in your workspace:</span>
-      </div>
-      <div class="slack-command">
-        <code id="slack-command-text">{`/feed subscribe ${import.meta.env.SITE}/changelog/rss.xml`}</code>
-        <button id="copy-slack-command" class="copy-btn" aria-label="Copy Slack command">
-          <span class="copy-icon">📋</span>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="tag-pills tag-pills-row" id="tag-pills" aria-label="Tag filter">
-      <button data-tag="" class="pill active" aria-pressed="true">All</button>
-      {tagsWithEnterprise.map(tag => (
-        <button data-tag={tag} class="pill" aria-pressed="false">{tag}</button>
+    <nav class="cl-tabs" id="cl-tabs" aria-label="Filter by product">
+      <button data-tag="" class="cl-tab is-active" aria-pressed="true">All</button>
+      {allTags.map((tag) => (
+        <button data-tag={tag} class="cl-tab" aria-pressed="false">{tag}</button>
       ))}
-    </div>
-  {years.map(year => {
-    const months = Object.keys(groupedTimeline[year]).sort((a, b) => {
-      // Sort months in reverse chronological order
-      const dateA = new Date(`${a} 1, ${year}`);
-      const dateB = new Date(`${b} 1, ${year}`);
-      return dateB.getTime() - dateA.getTime();
-    });
+    </nav>
 
-    return (
-      <section class="year" data-year={year}>
-        <h2 class="no-counter year-heading">{year}</h2>
-        {months.map(month => (
-          <div class="month-group">
-            <h3 class="month-heading">{month}</h3>
-            <ul class="entry-list" role="list">
-              {groupedTimeline[year][month].map(item => (
-                item.kind === 'release' ? (
-                  <li
-                    class="entry entry-release"
-                    data-kind="release"
-                    data-tags={ENTERPRISE_TAG}
-                    data-title={`enterprise ${item.version}`}
-                  >
-                    <div class="row">
-                      <div class="col date-tags">
-                        <time datetime={formatDate(item.date)} class="date">
-                          {formatDate(item.date)}
-                        </time>
-                        <span class="tag tag-enterprise" data-tag={ENTERPRISE_TAG}>{ENTERPRISE_TAG}</span>
-                      </div>
-                      <div class="col content-col">
-                        <div class="release-title">
-                          <Icon name="lucide:factory" class="release-icon" aria-hidden="true" />
-                          <span class="sr-only">Enterprise release</span>
-                          <span>{ENTERPRISE_TAG} {item.version}</span>
-                        </div>
-                        <p class="summary release-summary">
-                          Enterprise bundle shipping for self-hosted customers.
-                        </p>
-                      </div>
-                    </div>
-                  </li>
-                ) : (
-                  <li
-                    class="entry"
-                    data-kind="changelog"
-                    data-tags={(item.entry.data.tags || []).join(',')}
-                    data-title={item.entry.data.title.toLowerCase()}
-                  >
-                    <div class="row">
-                      <div class="col date-tags">
-                        <time datetime={formatDate(item.entry.data.date)} class="date">
-                          {formatDate(item.entry.data.date)}
-                        </time>
-                        {item.entry.data.tags.length ? (
-                          <ul class="tag-list" aria-label="Tags">
-                            {item.entry.data.tags.map(t => (
-                              <li>
-                                <span class="tag" data-tag={t}>
-                                  {t}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </div>
-                      <div class="col content-col">
-                        <h3 class="title">
-                          <a href={`/changelog/${item.entry.id}/`}>{item.entry.data.title}</a>
-                        </h3>
-                        {item.entry.data.description && <p class="summary">{item.entry.data.description}</p>}
-                      </div>
-                      <div class="col more-col">
-                        <a
-                          class="read-more"
-                          href={`/changelog/${item.entry.id}/`}
-                          aria-label={`Read full entry: ${item.entry.data.title}`}
-                        >
-                          <span class="read-text">Read</span>
-                          <span class="read-icon" aria-hidden="true">
-                            →
-                          </span>
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                )
-              ))}
-            </ul>
-          </div>
-        ))}
-      </section>
-    );
-  })}
-  <p id="no-results" hidden>No matching entries.</p>
+    {years.map((year) => {
+      const months = Object.keys(groupedTimeline[year]).sort((a, b) => {
+        const da = new Date(`${a} 1, ${year}`);
+        const db = new Date(`${b} 1, ${year}`);
+        return db.getTime() - da.getTime();
+      });
+      return (
+        <section class="cl-year" data-year={year}>
+          <h2 class="cl-year-heading" id={`year-${year}`}>{year}</h2>
+          {months.map((month) => (
+            <div class="cl-month-group">
+              <h3 class="cl-month-heading">{month}</h3>
+              <div class="cl-feed">
+                {groupedTimeline[year][month].map((item) => (
+                  item.kind === 'release' ? (
+                    <article
+                      class="cl-release"
+                      data-tags={ENTERPRISE_TAG}
+                      data-title={`enterprise ${item.version}`}
+                    >
+                      <Icon name="fa-solid:industry" class="release-icon" aria-hidden="true" />
+                      <span class="release-text">
+                        <strong>Enterprise {item.version}</strong>
+                        <span class="release-sub">released for self-hosted</span>
+                      </span>
+                      <time datetime={formatDate(item.date)} class="release-date">
+                        {new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </time>
+                    </article>
+                  ) : (
+                    item.entry.data.image
+                      ? <ChangelogMarquee entry={item.entry} />
+                      : <ChangelogCard entry={item.entry} />
+                  )
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+      );
+    })}
+
+    <p id="cl-no-results" class="cl-no-results" hidden>No matching entries.</p>
+  </div>
+
   <script is:inline>
-    function initChangelog() {
-      var search = document.getElementById('search');
-      var pillBar = document.getElementById('tag-pills');
-      var entryRows = Array.from(document.querySelectorAll('.entry'));
-      var noResults = document.getElementById('no-results');
-      if (!search || !noResults || !pillBar) return;
+    function initChangelogIndex() {
+      var search = document.getElementById('changelog-search');
+      var tabBar = document.getElementById('cl-tabs');
+      var entryEls = Array.from(document.querySelectorAll('.cl-feed > [data-tags]'));
+      var noResults = document.getElementById('cl-no-results');
+      if (!search || !tabBar || !noResults) return;
       var activeTag = '';
 
       function applyFilter() {
         var q = (search.value || '').trim().toLowerCase();
-        var visibleCount = 0;
-        entryRows.forEach(function(el) {
-          var tags = (el.getAttribute('data-tags')||'').split(',').filter(Boolean);
-          var title = el.getAttribute('data-title') || '';
-          var matchesTag = !activeTag || tags.includes(activeTag);
-          var matchesSearch = !q || title.includes(q);
+        var visible = 0;
+        entryEls.forEach(function (el) {
+          var tags = (el.getAttribute('data-tags') || '').split(',').filter(Boolean);
+          var ttl = el.getAttribute('data-title') || '';
+          var matchesTag = !activeTag || tags.indexOf(activeTag) !== -1;
+          var matchesSearch = !q || ttl.indexOf(q) !== -1;
           var show = matchesTag && matchesSearch;
           el.style.display = show ? '' : 'none';
-          if (show) visibleCount++;
+          if (show) visible++;
         });
-        noResults.hidden = visibleCount !== 0;
-        var monthGroups = Array.from(document.querySelectorAll('.month-group'));
-        monthGroups.forEach(function(group) {
-          var entriesInGroup = Array.from(group.querySelectorAll('.entry'));
-          var anyVisible = entriesInGroup.some(function(e) { return e.style.display !== 'none'; });
-          if (activeTag) {
-            group.style.display = anyVisible ? '' : 'none';
-          } else {
-            group.style.display = '';
-          }
+        noResults.hidden = visible !== 0;
+
+        Array.from(document.querySelectorAll('.cl-month-group')).forEach(function (g) {
+          var any = Array.from(g.querySelectorAll('[data-tags]')).some(function (e) {
+            return e.style.display !== 'none';
+          });
+          g.style.display = activeTag || q ? (any ? '' : 'none') : '';
         });
-        var yearSections = Array.from(document.querySelectorAll('section.year'));
-        yearSections.forEach(function(year) {
-          var months = Array.from(year.querySelectorAll('.month-group'));
-          var anyMonthVisible = months.some(function(m) { return m.style.display !== 'none'; });
-          if (activeTag) {
-            year.style.display = anyMonthVisible ? '' : 'none';
-          } else {
-            year.style.display = '';
-          }
+        Array.from(document.querySelectorAll('.cl-year')).forEach(function (y) {
+          var any = Array.from(y.querySelectorAll('.cl-month-group')).some(function (g) {
+            return g.style.display !== 'none';
+          });
+          y.style.display = activeTag || q ? (any ? '' : 'none') : '';
         });
       }
 
-      pillBar.addEventListener('click', function(e) {
-        if (!e.target) return;
-        var btn = e.target.closest('button[data-tag]');
+      tabBar.addEventListener('click', function (e) {
+        var btn = e.target && e.target.closest('button[data-tag]');
         if (!btn) return;
         activeTag = btn.dataset.tag || '';
-        pillBar.querySelectorAll('button[data-tag]').forEach(function(b) {
-          var on = (b === btn);
-          b.classList.toggle('active', on);
+        tabBar.querySelectorAll('button[data-tag]').forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle('is-active', on);
           b.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
         applyFilter();
       });
-
       search.addEventListener('input', applyFilter);
+    }
 
-      // Copy Slack command functionality
-      var copyBtn = document.getElementById('copy-slack-command');
-      var commandText = document.getElementById('slack-command-text');
+    initChangelogIndex();
+    if (!window.__changelogIndexInit__) {
+      window.__changelogIndexInit__ = true;
+      document.addEventListener('astro:after-swap', initChangelogIndex);
+    }
+  </script>
 
-      if (copyBtn && commandText) {
-        copyBtn.addEventListener('click', function() {
-          var text = commandText.textContent || '';
-          if (!navigator.clipboard || !navigator.clipboard.writeText) return;
-          navigator.clipboard.writeText(text).then(function() {
-            var copyTextSpan = copyBtn.querySelector('.copy-text');
-            if (copyTextSpan) {
-              var originalText = copyTextSpan.textContent;
-              copyTextSpan.textContent = 'Copied!';
-              copyBtn.classList.add('copied');
-              setTimeout(function() {
-                copyTextSpan.textContent = originalText;
-                copyBtn.classList.remove('copied');
-              }, 2000);
-            }
-          }).catch(function(err) {
-            console.error('Failed to copy:', err);
-          });
-        });
+  <style>
+    .changelog-page {
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .cl-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .cl-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.025em;
+      color: var(--theme-text);
+    }
+    .cl-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .cl-search {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--theme-bg-content);
+      border: 1px solid var(--theme-border);
+      border-radius: 9px;
+      padding: 6px 12px;
+      transition: border-color 0.15s;
+    }
+    .cl-search:focus-within {
+      border-color: var(--theme-text-muted);
+    }
+    .search-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--theme-text-muted);
+    }
+    .cl-search input {
+      border: none;
+      background: transparent;
+      font: inherit;
+      font-size: 0.8125rem;
+      color: var(--theme-text);
+      outline: none;
+      width: 200px;
+    }
+    .cl-search input::placeholder {
+      color: var(--theme-text-muted);
+    }
+    .cl-kbd {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      background: var(--theme-bg-offset);
+      color: var(--theme-text-secondary);
+      border: 1px solid var(--theme-border);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    @media (max-width: 36rem) {
+      .cl-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .cl-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .cl-search input {
+        width: 100%;
+        min-width: 0;
+      }
+      .cl-kbd {
+        display: none;
       }
     }
 
-    initChangelog();
-    if (!window.__changelogSwapInitialized__) {
-      window.__changelogSwapInitialized__ = true;
-      document.addEventListener('astro:after-swap', initChangelog);
-    }
-  </script>
-  <style>
-    .cl-header { margin-bottom: 2rem; }
-    .changelog-header {
+    /* Tabs */
+    .cl-tabs {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      gap: 28px;
+      border-bottom: 1px solid var(--theme-border);
+      margin-top: 24px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
-    .search-wrap {
-      flex: 1;
-      max-width: 400px;
-    }
-    .lead {
+    .cl-tab {
+      font-size: 0.8125rem;
+      padding: 14px 0;
       color: var(--theme-text-secondary);
-      margin: 0;
-      font-size: 1rem;
+      font-weight: 500;
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+      background: none;
+      border: none;
+      transition: color 0.15s;
     }
-    #search { width: 100%; padding: .6rem .75rem; border: 1px solid var(--theme-border-color); border-radius: .6rem; font: inherit; background: var(--theme-bg); }
-    #search:focus { outline: 2px solid var(--theme-accent); outline-offset: 2px; }
-    .rss-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      font-size: 0.875rem;
+    .cl-tab:hover {
+      color: var(--theme-text);
+    }
+    .cl-tab.is-active {
+      color: var(--theme-text);
       font-weight: 600;
-      color: var(--theme-text-secondary);
+    }
+    .cl-tab.is-active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: var(--theme-text);
+    }
+
+    /* Year / month headings — disable global numbering */
+    .changelog-page .cl-year > .cl-year-heading {
+      counter-increment: none !important;
+    }
+    .changelog-page .cl-year > .cl-year-heading::before {
+      content: none !important;
+    }
+    .cl-year {
+      margin-bottom: 0;
+    }
+    .cl-year-heading {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--theme-text);
+      margin: 44px 0 6px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--theme-border);
+    }
+    .cl-month-heading {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--theme-text-muted);
+      margin: 28px 0 14px;
+    }
+
+    /* Feed */
+    .cl-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Enterprise release marker */
+    .cl-release {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border: 1px dashed var(--theme-border);
+      border-radius: 999px;
       background: var(--theme-bg-offset);
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      border: 1px solid var(--theme-border);
-      transition: all 0.2s ease;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    }
-    .rss-button:hover {
-      background: var(--theme-accent);
-      color: var(--theme-bg-content);
-      border-color: var(--theme-accent);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transform: translateY(-1px);
-    }
-    .rss-button:active {
-      transform: translateY(0);
-    }
-    .rss-button svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-    .theme-dark .rss-button {
-      background: var(--theme-bg-offset);
       color: var(--theme-text-secondary);
-      border-color: var(--theme-border);
+      font-size: 0.8125rem;
     }
-    .theme-dark .rss-button:hover {
-      background: var(--theme-accent);
-      color: var(--theme-bg-content);
-      border-color: var(--theme-accent);
+    .release-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--theme-text);
+    }
+    .release-text strong {
+      color: var(--theme-text);
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .release-sub {
+      color: var(--theme-text-muted);
+    }
+    .release-date {
+      margin-left: auto;
+      font-weight: 600;
+      color: var(--theme-text-muted);
+      font-size: 0.7rem;
     }
 
-  .slack-subscribe {
-    background: var(--theme-bg-offset);
-    border: 1px solid var(--theme-border-color);
-    border-radius: 6px;
-    padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
-  }
-
-  .slack-content {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .slack-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    flex-shrink: 0;
-    color: var(--theme-text);
-  }
-
-  .slack-text {
-    font-size: 0.9rem;
-    color: var(--theme-text);
-    font-weight: 500;
-  }
-
-  .slack-command {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--theme-code-inline-bg);
-    border: 1px solid var(--theme-border-color);
-    border-radius: 6px;
-    padding: 0.5rem 0.75rem;
-  }
-
-  .slack-command code {
-    flex: 1;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--theme-code-inline-text);
-    background: transparent;
-    padding: 0;
-    border: none;
-    word-break: break-all;
-  }
-
-  .copy-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    background: var(--theme-accent);
-    color: var(--theme-bg-content);
-    border: none;
-    padding: 0.4rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .copy-btn:hover {
-    background: var(--theme-accent-secondary);
-  }
-
-  .copy-btn.copied {
-    background: #10b981;
-  }
-
-  .copy-icon {
-    font-size: 0.9rem;
-  }
-
-  .tag-pills { display: flex; flex-wrap: wrap; gap: .65rem; }
-  .tag-pills-row { margin-top: 1rem; }
-  .pill { border: 1px solid var(--theme-border-color); background: var(--theme-bg-offset); color: var(--theme-text-secondary); padding: .5rem .95rem; border-radius: 999px; font-size: .85rem; font-weight: 600; cursor: pointer; line-height: 1; transition: background .15s, color .15s, border-color .15s, transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-    .pill:hover { background: var(--theme-bg-hover); }
-  .pill.active { background: var(--theme-accent); color: var(--theme-bg-content); border-color: var(--theme-accent); box-shadow: 0 2px 4px rgba(0,0,0,0.12); }
-  .pill:active { transform: translateY(1px); }
-
-  /* Product-specific pill colors */
-  .pill[data-tag="Workflow Automation"] {
-    background: color-mix(in srgb, var(--color-rose-400) 25%, transparent);
-    color: var(--color-rose-700);
-    border-color: var(--color-rose-700);
-  }
-
-  .pill[data-tag="Workflow Automation"]:hover {
-    background: var(--color-rose-700);
-    color: #fff;
-  }
-
-  .pill[data-tag="Workflow Automation"].active {
-    background: var(--color-rose-700);
-    color: #fff;
-    border-color: var(--color-rose-700);
-  }
-
-  .pill[data-tag="Merge Queue"] {
-    background: color-mix(in srgb, var(--color-teal-400) 25%, transparent);
-    color: var(--color-teal-700);
-    border-color: var(--color-teal-700);
-  }
-
-  .pill[data-tag="Merge Queue"]:hover {
-    background: var(--color-teal-700);
-    color: #fff;
-  }
-
-  .pill[data-tag="Merge Queue"].active {
-    background: var(--color-teal-700);
-    color: #fff;
-    border-color: var(--color-teal-700);
-  }
-
-  .pill[data-tag="CI Insights"] {
-    background: color-mix(in srgb, var(--color-purple-400) 25%, transparent);
-    color: var(--color-purple-700);
-    border-color: var(--color-purple-700);
-  }
-
-  .pill[data-tag="CI Insights"]:hover {
-    background: var(--color-purple-700);
-    color: #fff;
-  }
-
-  .pill[data-tag="CI Insights"].active {
-    background: var(--color-purple-700);
-    color: #fff;
-    border-color: var(--color-purple-700);
-  }
-
-  .pill[data-tag="Merge Protections"] {
-    background: color-mix(in srgb, var(--color-blue-400) 25%, transparent);
-    color: var(--color-blue-700);
-    border-color: var(--color-blue-700);
-  }
-
-  .pill[data-tag="Merge Protections"]:hover {
-    background: var(--color-blue-700);
-    color: #fff;
-  }
-
-  .pill[data-tag="Merge Protections"].active {
-    background: var(--color-blue-700);
-    color: #fff;
-    border-color: var(--color-blue-700);
-  }
-  /* Deprecations category (yellow) */
-  .pill[data-tag="Deprecations"] {
-    background: #FEFCBF; /* yellow-100 */
-    color: #975A16; /* yellow-700 */
-    border-color: #ECC94B; /* yellow-400 */
-  }
-  .pill[data-tag="Deprecations"]:hover {
-    background: #ECC94B; /* yellow-400 */
-    color: #473307; /* darken for contrast */
-  }
-  .pill[data-tag="Deprecations"].active {
-    background: #B7791F; /* yellow-600 */
-    color: #fff;
-    border-color: #B7791F;
-  }
-  .pill[data-tag="Enterprise"] {
-    background: #111;
-    color: #fff;
-    border-color: #000;
-  }
-  .pill[data-tag="Enterprise"]:hover,
-  .pill[data-tag="Enterprise"].active {
-    background: #000;
-    color: #fff;
-    border-color: #000;
-  }
-  /* Disable global automatic numbering for year headings (global rule targets .content h2) */
-  .content section.year > h2.no-counter { counter-increment: none !important; }
-  .content section.year > h2.no-counter::before { content: none !important; }
-  .year { margin-bottom: 3rem; }
-  .year-heading { font-size: 1.75rem; margin-bottom: 1.5rem; }
-  .month-group { margin-bottom: 2rem; position: relative; }
-  .month-heading {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--theme-text-secondary);
-    margin: 0 0 1rem 0;
-    padding-left: 1.25rem;
-    position: relative;
-  }
-  .entry-list { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--theme-border-color); }
-  .entry { position: relative; margin: 0; padding: 1.25rem 0 1.25rem 1.25rem; border-bottom: 1px solid var(--theme-border-color); }
-  .entry:last-child { border-bottom: 0; }
-  .entry::before { content: ''; position: absolute; left: -6px; top: 1.4rem; width: 10px; height: 10px; background: var(--theme-text-muted); border-radius: 50%; box-shadow: 0 0 0 2px var(--theme-bg); }
-  .entry-release::before { background: var(--color-teal-700); box-shadow: 0 0 0 2px var(--theme-bg), 0 0 0 6px color-mix(in srgb, var(--color-teal-400) 25%, transparent); }
-  .entry-release + .entry { border-top: 1px solid var(--theme-border-color); }
-  .entry-release .release-title { display: inline-flex; align-items: center; gap: .4rem; font-weight: 600; font-size: 1rem; }
-  .entry-release .release-icon { width: 1rem; height: 1rem; color: var(--color-teal-700); }
-  .entry-release .release-summary { margin: .35rem 0 0; font-size: .85rem; color: var(--theme-text-secondary); }
-  .tag-enterprise {
-    background: #111;
-    color: #fff;
-    border: 1px solid #111;
-  }
-  .row { display: grid; gap: .9rem; align-items: flex-start; grid-template-columns: 1fr; }
-  @media (min-width: 50em) { .row { grid-template-columns: 10rem 1fr auto; } }
-  .date-tags { display: flex; flex-direction: column; gap: .5rem; align-items: flex-start; }
-  .date { font-size: .65rem; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--theme-text-muted); background: var(--theme-bg-offset); padding: 3px 8px; border-radius: 6px; width: fit-content; }
-  .tag-list { list-style: none; display: flex; flex-direction: column; gap: .4rem; padding: 0; margin: 0; }
-  .tag-list li { margin: 0; padding: 0; display: block; line-height: 1; }
-  .tag { background: var(--theme-bg-offset); color: var(--theme-text); font-size: .6rem; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; display: inline-block; line-height: 1; overflow-wrap: anywhere; border: 1px solid var(--theme-border-color); }
-
-  /* Product-specific label colors */
-  .tag[data-tag="Workflow Automation"] {
-    background: color-mix(in srgb, var(--color-rose-400) 25%, transparent);
-    color: var(--color-rose-700);
-    border: 1px solid var(--color-rose-700);
-  }
-
-  .tag[data-tag="Merge Queue"] {
-    background: color-mix(in srgb, var(--color-teal-400) 25%, transparent);
-    color: var(--color-teal-700);
-    border: 1px solid var(--color-teal-700);
-  }
-
-  .tag[data-tag="CI Insights"] {
-    background: color-mix(in srgb, var(--color-purple-400) 25%, transparent);
-    color: var(--color-purple-700);
-    border: 1px solid var(--color-purple-700);
-  }
-
-  .tag[data-tag="Merge Protections"] {
-    background: color-mix(in srgb, var(--color-blue-400) 25%, transparent);
-    color: var(--color-blue-700);
-    border: 1px solid var(--color-blue-700);
-  }
-  .tag[data-tag="Deprecations"] {
-    background: #FEFCBF; /* yellow-100 */
-    color: #975A16; /* yellow-700 */
-    border: 1px solid #ECC94B;
-  }
-  .tag[data-tag="Enterprise"] {
-    background: #111;
-    color: #fff;
-    border-color: #000;
-  }
-  .title { font-size: 1.05rem; margin: 0 0 .4rem; line-height: 1.3; }
-  .title a { text-decoration: none; color: var(--theme-text); }
-  .title a:hover { text-decoration: underline; color: var(--theme-text-secondary); }
-  .summary { font-size: .85rem; margin: .1rem 0 0; color: var(--theme-text-secondary); line-height: 1.5; }
-  .more-col { align-self: center; justify-self: start; }
-  .read-more { display: inline-flex; align-items: center; gap: .35rem; font-size: .8rem; text-decoration: none; font-weight: 700; padding: .4rem .7rem; border-radius: .6rem; background: var(--theme-bg-offset); color: var(--theme-text); transition: background .15s, color .15s, transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
-  .read-more .read-icon { transition: transform .15s ease; }
-  .read-more:hover { background: var(--theme-accent); color: var(--theme-bg-content); }
-  .read-more:hover .read-icon { transform: translateX(2px); }
-  @media (min-width: 50em) { .more-col { justify-self: end; } }
-    #no-results { text-align: center; font-size: .875rem; margin: 3rem 0; }
+    .cl-no-results {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: var(--theme-text-secondary);
+      margin: 3rem 0;
+    }
   </style>
 </MainLayout>
