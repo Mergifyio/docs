@@ -1,0 +1,157 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, getProductAccent, renderInlineMarkdown } from '~/util/changelog';
+
+interface Props {
+  entry: CollectionEntry<'changelog'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, date, tags } = entry.data;
+const primaryTag = tags[0];
+const accent = getProductAccent(primaryTag);
+
+const monthDay = new Date(date).toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<article
+  class="card"
+  data-tags={tags.join(',')}
+  data-title={title.toLowerCase()}
+  style={`--card-accent: ${accent.bar}; --card-accent-text: ${accent.text};`}
+>
+  <div class="card-body">
+    <h3 class="card-title">
+      <a href={`/changelog/${entry.id}/`} set:html={renderInlineMarkdown(title)} />
+    </h3>
+    {description && <p class="card-desc">{description}</p>}
+  </div>
+  <div class="card-aside">
+    <time datetime={formatDate(date)} class="card-date">{monthDay}</time>
+    {tags.length > 0 && (
+      <div class="pills-stack">
+        {tags.map((t) => <span class="card-pill">{t}</span>)}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  .card {
+    background: var(--theme-bg-content);
+    border: 1px solid var(--theme-border);
+    border-radius: 12px;
+    padding: 18px 22px 18px 24px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 22px;
+    align-items: start;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+  .card:hover {
+    border-color: var(--theme-text-muted);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+    transform: translateY(-1px);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    bottom: 16px;
+    left: 0;
+    width: 3px;
+    background: var(--card-accent);
+    border-radius: 0 3px 3px 0;
+  }
+  .card-body {
+    min-width: 0;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+    line-height: 1.3;
+    color: var(--theme-text);
+  }
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .card-title a:hover {
+    color: var(--card-accent-text);
+  }
+  /* Stretched-link: title <a> covers the whole card, so the entire card is clickable. */
+  .card-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .card-desc {
+    font-size: 0.8125rem;
+    color: var(--theme-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .card-desc :global(code),
+  .card-title :global(code) {
+    background: var(--theme-bg-offset);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.92em;
+    font-family: var(--font-mono);
+  }
+
+  .card-aside {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    padding-top: 3px;
+  }
+  .card-date {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--theme-text-muted);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+  .pills-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+  }
+  .card-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.65rem;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: var(--theme-bg-offset);
+    color: var(--theme-text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 36rem) {
+    .card {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .card-aside {
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .pills-stack {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+</style>

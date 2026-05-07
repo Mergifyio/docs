@@ -124,3 +124,88 @@ export function formatMonthYear(date: Date | string): string {
     month: 'long',
   });
 }
+
+/**
+ * Render a tiny subset of inline markdown for changelog titles: backtick code
+ * spans become <code>. HTML is escaped first, so the result is safe to render
+ * with set:html. We avoid a full markdown parser because titles only ever use
+ * code spans in practice.
+ */
+export function renderInlineMarkdown(text: string): string {
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  return escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
+export interface ProductAccent {
+  bar: string;
+  text: string;
+}
+
+const PRODUCT_ACCENTS: Record<string, ProductAccent> = {
+  'Merge Queue': { bar: 'var(--color-teal-700)', text: 'var(--color-teal-700)' },
+  'Workflow Automation': { bar: 'var(--color-rose-700)', text: 'var(--color-rose-700)' },
+  'CI Insights': { bar: 'var(--color-purple-700)', text: 'var(--color-purple-700)' },
+  'Test Insights': { bar: 'var(--color-orange-700)', text: 'var(--color-orange-700)' },
+  'Merge Protections': { bar: 'var(--color-blue-700)', text: 'var(--color-blue-700)' },
+  Stacks: { bar: 'var(--color-coral-700)', text: 'var(--color-coral-700)' },
+  Enterprise: { bar: 'var(--theme-text)', text: 'var(--theme-text)' },
+};
+
+const NEUTRAL_ACCENT: ProductAccent = {
+  bar: 'var(--theme-text-muted)',
+  text: 'var(--theme-text-secondary)',
+};
+
+/**
+ * Map a changelog tag to its left-bar accent color and detail-page eyebrow color.
+ * Unknown tags (and Deprecations) fall back to a neutral gray.
+ */
+export function getProductAccent(tag: string | undefined): ProductAccent {
+  if (!tag) return NEUTRAL_ACCENT;
+  return PRODUCT_ACCENTS[tag] ?? NEUTRAL_ACCENT;
+}
+
+export interface PrevNext {
+  previous: CollectionEntry<'changelog'> | null;
+  next: CollectionEntry<'changelog'> | null;
+}
+
+/**
+ * Given a sorted-or-unsorted list of changelog entries and a current entry id,
+ * return the chronologically previous (older) and next (newer) entries.
+ */
+export function getPrevNextEntries(
+  entries: CollectionEntry<'changelog'>[],
+  currentId: string
+): PrevNext {
+  const sorted = sortChangelog(entries);
+  const idx = sorted.findIndex((e) => e.id === currentId);
+  if (idx === -1) return { previous: null, next: null };
+  return {
+    // sorted is newest-first, so previous (older) is at idx + 1
+    previous: sorted[idx + 1] ?? null,
+    next: sorted[idx - 1] ?? null,
+  };
+}
+
+/**
+ * Return up to `limit` most-recent entries that share the given tag,
+ * excluding the entry with `currentId`. Returns [] when tag is undefined
+ * or no other entry matches.
+ */
+export function getRelatedEntries(
+  entries: CollectionEntry<'changelog'>[],
+  currentId: string,
+  tag: string | undefined,
+  limit: number
+): CollectionEntry<'changelog'>[] {
+  if (!tag) return [];
+  return sortChangelog(entries)
+    .filter((e) => e.id !== currentId && (e.data.tags || []).includes(tag))
+    .slice(0, limit);
+}
