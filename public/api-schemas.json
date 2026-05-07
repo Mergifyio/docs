@@ -11319,69 +11319,6 @@
         ],
         "title": "EventSquash"
       },
-      "EventUnqueue": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "received_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Received At"
-          },
-          "trigger": {
-            "type": "string",
-            "title": "Trigger"
-          },
-          "repository": {
-            "type": "string",
-            "title": "Repository"
-          },
-          "pull_request": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Pull Request"
-          },
-          "base_ref": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Base Ref"
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/EventNoMetadata"
-          },
-          "type": {
-            "type": "string",
-            "const": "action.unqueue",
-            "title": "Type"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "received_at",
-          "trigger",
-          "repository",
-          "pull_request",
-          "base_ref",
-          "metadata",
-          "type"
-        ],
-        "title": "EventUnqueue"
-      },
       "EventUpdate": {
         "properties": {
           "id": {
@@ -11536,9 +11473,6 @@
                   "$ref": "#/components/schemas/EventSquash"
                 },
                 {
-                  "$ref": "#/components/schemas/EventUnqueue"
-                },
-                {
                   "$ref": "#/components/schemas/EventDequeue"
                 },
                 {
@@ -11618,7 +11552,6 @@
                   "action.request_reviews": "#/components/schemas/EventRequestReviews",
                   "action.review": "#/components/schemas/EventReview",
                   "action.squash": "#/components/schemas/EventSquash",
-                  "action.unqueue": "#/components/schemas/EventUnqueue",
                   "action.update": "#/components/schemas/EventUpdate",
                   "ci_insights.auto_quarantine.disabled": "#/components/schemas/EventCiInsightsAutoQuarantineDisabled",
                   "ci_insights.auto_quarantine.enabled": "#/components/schemas/EventCiInsightsAutoQuarantineEnabled",
