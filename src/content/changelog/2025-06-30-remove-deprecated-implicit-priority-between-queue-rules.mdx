@@ -3,7 +3,7 @@ title: "Remove deprecated implicit priority between queue rules"
 date: 2025-06-30
 tags:
   - Merge Queue
-description: ""
+description: "Implicit ordering by queue-rule definition is gone — use `priority_rules` to control merge order."
 ---
 
 The priorities that were implied by the order of definition of your queue rules is no more. Only `priority_rules` are now applied to determine the order in which the pull request will be tested and merged in the queue.
