@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { escape } from './html-entities';
 
 type DateCarrier = {
   date: Date | string;
@@ -123,4 +124,44 @@ export function formatMonthYear(date: Date | string): string {
     year: 'numeric',
     month: 'long',
   });
+}
+
+/**
+ * Render a tiny subset of inline markdown for changelog titles: backtick code
+ * spans become <code>. The shared `escape` helper handles HTML entity escaping
+ * (kept consistent with the rest of the codebase), then code-span pairs are
+ * substituted with real <code> tags. We avoid a full markdown parser because
+ * titles only ever use code spans in practice.
+ */
+export function renderInlineMarkdown(text: string): string {
+  return escape(text).replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
+export interface ProductAccent {
+  bar: string;
+  text: string;
+}
+
+const PRODUCT_ACCENTS: Record<string, ProductAccent> = {
+  'Merge Queue': { bar: 'var(--color-teal-700)', text: 'var(--color-teal-700)' },
+  'Workflow Automation': { bar: 'var(--color-rose-700)', text: 'var(--color-rose-700)' },
+  'CI Insights': { bar: 'var(--color-purple-700)', text: 'var(--color-purple-700)' },
+  'Test Insights': { bar: 'var(--color-orange-700)', text: 'var(--color-orange-700)' },
+  'Merge Protections': { bar: 'var(--color-blue-700)', text: 'var(--color-blue-700)' },
+  Stacks: { bar: 'var(--color-coral-700)', text: 'var(--color-coral-700)' },
+  Enterprise: { bar: 'var(--theme-text)', text: 'var(--theme-text)' },
+};
+
+const NEUTRAL_ACCENT: ProductAccent = {
+  bar: 'var(--theme-text-muted)',
+  text: 'var(--theme-text-secondary)',
+};
+
+/**
+ * Map a changelog tag to its left-bar accent color and detail-page eyebrow color.
+ * Unknown tags (and Deprecations) fall back to a neutral gray.
+ */
+export function getProductAccent(tag: string | undefined): ProductAccent {
+  if (!tag) return NEUTRAL_ACCENT;
+  return PRODUCT_ACCENTS[tag] ?? NEUTRAL_ACCENT;
 }
