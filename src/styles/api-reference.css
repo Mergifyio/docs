@@ -7,7 +7,7 @@
    --------------------------------------------------------------------------- */
 
 .api-reference {
-  --api-border: var(--theme-border-color, #e2e8f0);
+  --api-border: var(--theme-border-color);
   --api-radius: 8px;
   --api-bg-subtle: var(--theme-bg-offset);
 }
@@ -178,24 +178,28 @@
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--color-white);
   flex-shrink: 0;
 }
 
+/* HTTP method badges — colors map to product palette by semantic role,
+   following the same convention as the response-code badges defined
+   later in this file: GET=success, POST=info, PUT=caution,
+   DELETE=destructive, PATCH=secondary. */
 .method-get {
-  background: #16a34a;
+  background: var(--color-teal-700);
 }
 .method-post {
-  background: #2563eb;
+  background: var(--color-blue-700);
 }
 .method-put {
-  background: #d97706;
+  background: var(--color-orange-700);
 }
 .method-delete {
-  background: #dc2626;
+  background: var(--color-coral-700);
 }
 .method-patch {
-  background: #7c3aed;
+  background: var(--color-purple-700);
 }
 
 /* ---------------------------------------------------------------------------
@@ -375,7 +379,7 @@
 .schema-type-badge {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--theme-code-inline-text, #b83280);
+  color: var(--theme-code-inline-text);
   background: var(--theme-code-inline-bg);
   padding: 0.1rem 0.4rem;
   border-radius: 3px;
