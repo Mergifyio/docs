@@ -3,6 +3,8 @@ title: Mergify Backport Command
 description: Copy a pull request to another branch after merge.
 ---
 
+import BackportLimitations from '../workflow/actions/_backport_limitations.mdx';
+
 The `backport` command is one of Mergify's most useful features, especially for
 projects that maintain multiple branches simultaneously. This command automates
 the process of creating a new pull request to apply changes from a merged pull
@@ -54,6 +56,8 @@ This command is also [available as an action](/workflow/actions/backport).
 
 - `<target-branch>`: The name of the branch to which the changes should be
   backported.
+
+<BackportLimitations />
 
 ## Example
 
