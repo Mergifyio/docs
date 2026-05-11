@@ -68,3 +68,32 @@ command as follows:
 Upon executing this command, Mergify will attempt to automatically create a new
 pull request with the changes onto the `v2.0-stable` branch as soon as the
 original pull request is merged.
+
+## Limitations
+
+:::caution
+  Pull requests containing internal merge commits cannot be backported.
+:::
+
+The `backport` command replays each commit on the target branch with
+`git cherry-pick`, which refuses merge commits unless given a parent number.
+Any pull request whose history includes a non-base merge commit will fail
+with `is a merge but no -m option was given`.
+
+For example, the following history cannot be backported:
+
+```text
+* abc1234 (HEAD) Add feature
+*   def5678 Merge pull request #42 from teammate/helper
+|\
+| * 9abcdef Helper improvement
+|/
+* fedcba9 Earlier commit
+```
+
+Merges of the base branch into the pull request (for example,
+`Merge branch 'main'`) are ignored, so those are safe. Any other merge commit,
+such as merging a teammate's branch into yours, blocks the backport.
+
+To avoid this, squash-merge or rebase your pull request before merging so its
+history stays linear.
