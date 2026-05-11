@@ -1,0 +1,42 @@
+---
+import ciInsights from '@mergifyio/icons/ci-insights.svg?raw';
+import mergeProtections from '@mergifyio/icons/merge-protections.svg?raw';
+import mergeQueue from '@mergifyio/icons/merge-queue.svg?raw';
+import stacks from '@mergifyio/icons/stacks.svg?raw';
+import testInsights from '@mergifyio/icons/test-insights.svg?raw';
+import type { ProductIconName } from './ProductIcon';
+
+export interface Props {
+  name: ProductIconName;
+  class?: string;
+}
+
+const icons: Record<ProductIconName, string> = {
+  'merge-queue': mergeQueue,
+  'ci-insights': ciInsights,
+  'test-insights': testInsights,
+  'merge-protections': mergeProtections,
+  stacks: stacks,
+};
+
+const { name, class: className } = Astro.props;
+const svg = icons[name];
+
+if (!svg) {
+  throw new Error(`Unknown product icon: ${String(name)}`);
+}
+---
+
+<span aria-hidden="true" class:list={['product-icon', className]} set:html={svg} />
+
+<style>
+	.product-icon {
+		display: inline-flex;
+		width: 1em;
+		height: 1em;
+	}
+	.product-icon :global(svg) {
+		width: 100%;
+		height: 100%;
+	}
+</style>

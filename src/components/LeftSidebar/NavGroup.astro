@@ -1,5 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { parseProductIcon } from '~/components/ProductIcon';
+import ProductIcon from '~/components/ProductIcon.astro';
 import type { NavItem } from '~/content/navItems';
 import NavLink from './NavLink.astro';
 export interface Props {
@@ -9,8 +11,7 @@ export interface Props {
 }
 
 const { navGroup, currentPageMatch, depth = 0 } = Astro.props as Props;
-const isStringIcon = typeof navGroup.icon === 'string';
-const IconComponent = !isStringIcon ? navGroup.icon : null;
+const productIconName = parseProductIcon(navGroup.icon);
 ---
 
 <li class:list={{
@@ -27,8 +28,8 @@ const IconComponent = !isStringIcon ? navGroup.icon : null;
 		<div class="nav-details">
 			<button class="nav-group-title" type="button" title={navGroup.title} aria-expanded="false">
 				<h2>
-					{depth === 0 && navGroup.icon && isStringIcon && <Icon name={navGroup.icon as string} class="left-icon" />}
-					{depth === 0 && IconComponent && <IconComponent class="left-icon" />}
+					{depth === 0 && productIconName && <ProductIcon name={productIconName} class="left-icon" />}
+					{depth === 0 && !productIconName && navGroup.icon && <Icon name={navGroup.icon} class="left-icon" />}
 					<span class="nav-group-label">{navGroup.title}</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
