@@ -1346,10 +1346,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range. Defaults to `received_to - 1 day`.",
+              "description": "Start of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `received_to - 1 day`.",
               "title": "Received From"
             },
-            "description": "Start of the time range. Defaults to `received_to - 1 day`."
+            "description": "Start of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `received_to - 1 day`."
           },
           {
             "name": "received_to",
@@ -1365,10 +1365,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range. Defaults to `now`.",
+              "description": "End of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `now`.",
               "title": "Received To"
             },
-            "description": "End of the time range. Defaults to `now`."
+            "description": "End of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `now`."
           },
           {
             "name": "cursor",
