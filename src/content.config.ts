@@ -13,6 +13,7 @@ const docs = defineCollection({
     title: z.string(),
     description: z.string(),
     suppressTitle: z.boolean().optional(),
+    hubAccent: z.boolean().optional(),
   }),
 });
 
