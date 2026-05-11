@@ -55,20 +55,6 @@ This command is also [available as an action](/workflow/actions/backport).
 - `<target-branch>`: The name of the branch to which the changes should be
   backported.
 
-## Limitations
-
-:::caution
-  Pull requests containing merge commits cannot be backported.
-:::
-
-Mergify cannot backport a pull request that contains a merge commit, such as
-when you merge a teammate's branch into yours. Merges of the base branch into
-your pull request (for example, `Merge branch 'main'`) are an exception and
-don't block the backport.
-
-To avoid this, squash-merge or rebase your pull request before merging so its
-history stays linear.
-
 ## Example
 
 Suppose you have a pull request that was merged into `main`, but you also want
@@ -82,3 +68,17 @@ command as follows:
 Upon executing this command, Mergify will attempt to automatically create a new
 pull request with the changes onto the `v2.0-stable` branch as soon as the
 original pull request is merged.
+
+## Limitations
+
+:::caution
+  Pull requests containing merge commits cannot be backported.
+:::
+
+Mergify cannot backport a pull request that contains a merge commit, such as
+when you merge a teammate's branch into yours. Merges of the base branch into
+your pull request (for example, `Merge branch 'main'`) are an exception and
+don't block the backport.
+
+To avoid this, squash-merge or rebase your pull request before merging so its
+history stays linear.
