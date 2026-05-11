@@ -1,5 +1,5 @@
 ---
-import { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 export interface Props {
   content: CollectionEntry<'docs'>['data'];
 }
@@ -18,7 +18,13 @@ const suppressTitle = content.suppressTitle;
 		<section class="main-section">
 			<header>
 				<slot name="before-title" />
-				{!suppressTitle && <h1 class="content-title" id="overview" set:html={title} />}
+				{!suppressTitle && (
+					<h1
+						class:list={['content-title', content.hubAccent && 'hero-accent']}
+						id="overview"
+						set:html={title}
+					/>
+				)}
 				{!suppressTitle && (
 					<h2 class="content-subtitle" data-toc-ignore set:html={description} />
 				)}
