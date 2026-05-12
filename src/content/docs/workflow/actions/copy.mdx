@@ -4,6 +4,7 @@ description: Copy a pull request to another branch.
 ---
 
 import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
+import CopyLimitations from './_copy_limitations.mdx';
 
 The `copy` action enables you to automatically create a copy of a pull request.
 When the conditions you specify are met, Mergify will create a new pull request
@@ -45,6 +46,8 @@ On top of that, you can also use the following additional variables:
 
 - `{{ cherry_pick_error }}`: the cherry pick error message if any (only
     available in body).
+
+<CopyLimitations />
 
 ## Examples
 

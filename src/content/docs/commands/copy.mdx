@@ -3,6 +3,8 @@ title: Mergify Copy Command
 description: Copy a pull request to another branch.
 ---
 
+import CopyLimitations from '../workflow/actions/_copy_limitations.mdx';
+
 The `copy` command is a convenient tool in Mergify's suite, allowing users to
 replicate changes from a pull request to another branch within the same
 repository. This is particularly useful for teams working with multiple
@@ -50,6 +52,8 @@ The `copy` command is especially handy for:
 ## Parameters
 
 - `<target-branch>`: The destination branch within the same repository.
+
+<CopyLimitations />
 
 ## Example
 
