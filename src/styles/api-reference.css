@@ -113,11 +113,6 @@
   margin: 0 0 0.5rem !important;
   color: var(--theme-text);
   scroll-margin-top: calc(var(--theme-navbar-height) + 1rem);
-  counter-increment: none;
-}
-
-.endpoint-heading::before {
-  content: none !important;
 }
 
 .endpoint-head {
