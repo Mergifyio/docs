@@ -48,9 +48,9 @@ MERGIFYENGINE_LOG_DATADOG=udp://<my-datadog-agent-host>:10518
 
 CI test traces can be exported to Mergify CI Insights and Test Insights by backing these features
 with object storage. Set `MERGIFYENGINE_CI_TRACES_BACKEND` and bucket credentials according to your
-provider. Both providers support two authentication modes: a static credential set you manage
-yourself, or automatic discovery through your cloud workload identity (recommended when running
-on GKE, EKS, GCE, or EC2 to avoid manual key rotation).
+provider. Both providers support two authentication modes: automatic discovery through your cloud
+workload identity (recommended when running on GKE, EKS, GCE, or EC2 to avoid manual key rotation),
+or a static credential set you manage yourself.
 
 ### Google Cloud Storage
 
@@ -69,21 +69,7 @@ MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
 MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
 ```
 
-#### Option A: Service Account JSON key
-
-Generate a JSON key for the Service Account and base64-encode it:
-
-```sh
-base64 < credentials.json | tr -d '\n'
-```
-
-Add the encoded key to the engine:
-
-```ini
-MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json"
-```
-
-#### Option B: Application Default Credentials
+#### Option A: Application Default Credentials (recommended)
 
 Set `MERGIFYENGINE_GCS_CREDENTIALS="auto"` to let Mergify resolve credentials from the Google
 [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials)
@@ -100,6 +86,20 @@ Bind the Kubernetes Service Account that runs the engine to the Google Service A
 bucket access. Google issues and rotates the credentials automatically, so no further
 configuration is needed.
 
+#### Option B: Service Account JSON key
+
+Generate a JSON key for the Service Account and base64-encode it:
+
+```sh
+base64 < credentials.json | tr -d '\n'
+```
+
+Add the encoded key to the engine:
+
+```ini
+MERGIFYENGINE_GCS_CREDENTIALS="base64-encoded-credentials-json"
+```
+
 ### Amazon S3
 
 Requirements:
@@ -109,44 +109,26 @@ Requirements:
 
 - An IAM identity with read/write/delete rights on those buckets
 
-Common settings. Mergify reads the standard AWS environment variables, so no `MERGIFYENGINE_`
-prefix is required:
+Mergify reads the standard AWS environment variables, so no `MERGIFYENGINE_` prefix is required
+for the common settings below:
 
 ```ini
 MERGIFYENGINE_CI_TRACES_BACKEND="s3"
 MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
 MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
-AWS_ACCOUNT_ID=123456789012
-# Optional
-AWS_REGION=us-west-2
 # Custom S3 implementation endpoint
 AWS_ENDPOINT_URL_S3=https://my-s3-domain.example.com:1234/
 ```
 
-:::note
-  The `MERGIFYENGINE_AWS_*` variants (`MERGIFYENGINE_AWS_ACCOUNT_ID`,
-  `MERGIFYENGINE_AWS_ACCESS_KEY_ID`, `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY`,
-  `MERGIFYENGINE_AWS_REGION_NAME`, `MERGIFYENGINE_AWS_ENDPOINT_URL_S3`) are still accepted for
-  backwards compatibility but are deprecated. Prefer the unprefixed `AWS_*` names. They are the
-  same variables the AWS CLI and SDKs use.
-:::
+#### Option A: IAM role discovery (recommended)
 
-#### Option A: IAM user access key
+Mergify uses the standard
+[boto3 credential chain](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html)
+to resolve credentials. Attach an IAM role granting access to the two buckets to the workload
+running the engine, and there is nothing else to configure. AWS issues and rotates short-lived
+credentials automatically, so no key rotation is required.
 
-Create an IAM user, attach a policy granting access to the two buckets, generate an access key,
-and provide it to the engine:
-
-```ini
-AWS_ACCESS_KEY_ID=<access-key-id>
-AWS_SECRET_ACCESS_KEY=<secret-access-key>
-```
-
-#### Option B: IAM role discovery
-
-Leave both `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` unset. Mergify falls back to the
-standard
-[boto3 credential chain](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html),
-which can resolve credentials from any of:
+The credential chain can resolve credentials from any of:
 
 - IAM Roles for Service Accounts ([IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html))
   or [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html)
@@ -158,8 +140,25 @@ which can resolve credentials from any of:
 
 - A profile or shared credentials file mounted into the container
 
-Attach an IAM role granting access to the two buckets to the workload running the engine. AWS
-issues and rotates short-lived credentials automatically, so no key rotation is required.
+#### Option B: IAM user access key
+
+Create an IAM user, attach a policy granting access to the two buckets, generate an access key,
+and provide it to the engine:
+
+```ini
+AWS_ACCESS_KEY_ID=<access-key-id>
+AWS_SECRET_ACCESS_KEY=<secret-access-key>
+# Optional
+AWS_REGION=us-west-2
+```
+
+:::note
+  The `MERGIFYENGINE_AWS_*` variants (`MERGIFYENGINE_AWS_ACCESS_KEY_ID`,
+  `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY`, `MERGIFYENGINE_AWS_REGION_NAME`,
+  `MERGIFYENGINE_AWS_ENDPOINT_URL_S3`, `MERGIFYENGINE_AWS_ACCOUNT_ID`) are still accepted for
+  backwards compatibility but are deprecated. Prefer the unprefixed `AWS_*` names. The standard
+  names match what the AWS CLI and SDKs use; `AWS_ACCOUNT_ID` is no longer required for S3 access.
+:::
 
 ## Slack Integration
 
