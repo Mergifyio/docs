@@ -826,6 +826,10 @@ pre {
   margin-bottom: 0.25em;
 }
 
+.content-title.hero-accent {
+  color: var(--section-accent);
+}
+
 #main-content h2.content-subtitle,
 .content-subtitle {
   font-size: 1.125rem;
@@ -865,21 +869,4 @@ pre {
 
 header .nav-wrapper {
   height: 100%;
-}
-
-article.content {
-  counter-reset: h2-section;
-}
-
-.content h2:not(.content-subtitle):not(.no-counter) {
-  counter-increment: h2-section;
-  position: relative;
-}
-
-.content h2:not(.content-subtitle):not(.no-counter)::before {
-  content: counter(h2-section);
-  font-weight: 500;
-  margin-right: 0.55rem;
-  color: var(--theme-text-muted);
-  opacity: 0.6;
 }
