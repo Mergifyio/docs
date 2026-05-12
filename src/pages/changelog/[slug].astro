@@ -147,14 +147,6 @@ const accent = getProductAccent(primaryTag);
         font-size: 1.75rem;
       }
     }
-    /* Disable global heading auto-numbering */
-    .changelog-detail .detail-title {
-      counter-increment: none !important;
-    }
-    .changelog-detail .detail-title::before {
-      content: none !important;
-    }
-
     .detail-date {
       font-size: 0.8125rem;
       color: var(--theme-text-muted);
@@ -299,13 +291,6 @@ const accent = getProductAccent(primaryTag);
       color: var(--theme-text-muted);
       font-weight: 700;
       margin: 0 0 14px;
-    }
-    /* Disable global heading auto-numbering on related-heading */
-    .changelog-detail .related-heading {
-      counter-increment: none !important;
-    }
-    .changelog-detail .related-heading::before {
-      content: none !important;
     }
     .related-grid {
       display: grid;

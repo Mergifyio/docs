@@ -23,7 +23,7 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 ---
 
 <BaseLayout {...Astro.props}>
-	<RightSidebar slot="secondary-sidebar" {...{ content, headings }} />
+	<RightSidebar slot="secondary-sidebar" headings={headings} />
 	<PageContent {...{ content }}>
 		{
 			Astro.url.pathname !== '/' && (
@@ -63,10 +63,24 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 		{
 			Astro.url.pathname !== '/' && (
 				<Fragment slot="after-content">
-					<PageFeedback />
+					{/* PageFeedback also lives in the right sidebar (visible ≥82em).
+					    Hide this footer copy on wide viewports so it doesn't double up. */}
+					<div class="article-page-feedback">
+						<PageFeedback />
+					</div>
 					{showMarkdownActions && <PageMeta pathname={Astro.url.pathname} />}
 				</Fragment>
 			)
 		}
 	</PageContent>
 </BaseLayout>
+
+<style>
+	/* The right sidebar (≥82em) hosts a PageFeedback widget. To avoid showing
+	   the same widget twice on wide viewports, hide the article-footer copy. */
+	@media (min-width: 82em) {
+		.article-page-feedback {
+			display: none;
+		}
+	}
+</style>
