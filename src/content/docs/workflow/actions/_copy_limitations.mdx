@@ -1,0 +1,14 @@
+## Limitations
+
+:::caution
+  Pull requests containing merge commits cannot be copied (except for
+  merges of the base branch).
+:::
+
+Mergify cannot copy a pull request that contains a merge commit, such as
+when you merge a teammate's branch into yours. Merges of the base branch into
+your pull request (for example, `Merge branch 'main'`) are an exception and
+don't block the copy.
+
+To avoid this, rebase your pull request or squash its commits so its history
+stays linear.
