@@ -261,25 +261,32 @@
       "type": "object"
     },
     "AutoMergeConditionsModel": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "BackportActionModel": {
       "additionalProperties": false,
@@ -417,25 +424,32 @@
       "type": "object"
     },
     "CommandRestrictionsConditionsModel": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "CommandRestrictionsModel": {
       "additionalProperties": false,
@@ -1216,25 +1230,32 @@
       "type": "object"
     },
     "ListOfRuleConditions": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "MergeActionModel": {
       "additionalProperties": false,
@@ -1307,25 +1328,32 @@
       "type": "object"
     },
     "MergeProtectionRuleConditionsModel": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "MergeProtectionRuleModel": {
       "additionalProperties": false,
@@ -1402,11 +1430,10 @@
         "auto_merge_conditions": {
           "anyOf": [
             {
-              "const": true,
-              "type": "boolean"
+              "$ref": "#/$defs/AutoMergeConditionsModel"
             },
             {
-              "$ref": "#/$defs/AutoMergeConditionsModel"
+              "type": "null"
             }
           ],
           "default": null,
@@ -1532,25 +1559,32 @@
       "type": "object"
     },
     "PartitionRuleConditionsModel": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "PartitionRuleModel": {
       "additionalProperties": false,
@@ -1631,25 +1665,32 @@
       "type": "object"
     },
     "PriorityRuleConditionsModel": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "PriorityRuleModel": {
       "additionalProperties": false,
@@ -2386,25 +2427,32 @@
       "type": "object"
     },
     "PullRequestRuleConditionsModel": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "PullRequestRuleModel": {
       "additionalProperties": false,
@@ -2653,25 +2701,32 @@
       "type": "object"
     },
     "QueueRuleMergeConditionsModel": {
-      "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/AndCondition"
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AndCondition"
+              },
+              {
+                "$ref": "#/$defs/OrCondition"
+              },
+              {
+                "$ref": "#/$defs/NegationCondition"
+              },
+              {
+                "$ref": "#/$defs/RuleConditionModel"
+              }
+            ]
           },
-          {
-            "$ref": "#/$defs/OrCondition"
-          },
-          {
-            "$ref": "#/$defs/NegationCondition"
-          },
-          {
-            "$ref": "#/$defs/RuleConditionModel"
-          }
-        ]
-      },
-      "maxItems": 500,
-      "title": "List of conditions",
-      "type": "array"
+          "maxItems": 500,
+          "type": "array"
+        },
+        {
+          "const": true
+        }
+      ],
+      "title": "List of conditions"
     },
     "QueueRuleModel": {
       "additionalProperties": false,
