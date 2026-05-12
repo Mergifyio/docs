@@ -5541,6 +5541,8 @@
                       },
                       "started_at": "2025-11-05T14:05:00Z",
                       "estimated_merge_at": "2025-11-05T14:35:00Z",
+                      "estimated_ci_finish_at": "2025-11-05T14:34:30Z",
+                      "ci_finished_at": "2025-11-05T14:34:30Z",
                       "scopes": [
                         "frontend",
                         "backend"
@@ -5597,6 +5599,8 @@
                       },
                       "started_at": "2025-11-05T13:35:00Z",
                       "estimated_merge_at": "2025-11-05T15:35:00Z",
+                      "estimated_ci_finish_at": "2025-11-05T15:34:30Z",
+                      "ci_finished_at": "2025-11-05T14:34:30Z",
                       "scopes": [
                         "frontend"
                       ],
@@ -5615,6 +5619,8 @@
                           },
                           "started_at": "2025-11-05T13:40:00Z",
                           "estimated_merge_at": "2025-11-05T13:50:00Z",
+                          "estimated_ci_finish_at": "2025-11-05T13:49:30Z",
+                          "ci_finished_at": "2025-11-05T13:49:30Z",
                           "scopes": [
                             "frontend"
                           ],
@@ -5634,6 +5640,8 @@
                           },
                           "started_at": "2025-11-05T13:50:00Z",
                           "estimated_merge_at": "2025-11-05T14:00:00Z",
+                          "estimated_ci_finish_at": "2025-11-05T13:59:30Z",
+                          "ci_finished_at": "2025-11-05T14:34:30Z",
                           "scopes": [
                             "frontend"
                           ],
@@ -12198,6 +12206,30 @@
             ],
             "title": "Estimated Merge At"
           },
+          "estimated_ci_finish_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Ci Finish At"
+          },
+          "ci_finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ci Finished At"
+          },
           "scopes": {
             "items": {
               "type": "string"
@@ -12228,6 +12260,8 @@
           "status",
           "started_at",
           "estimated_merge_at",
+          "estimated_ci_finish_at",
+          "ci_finished_at",
           "scopes",
           "queue_rule_name",
           "checks_summary",
@@ -12281,6 +12315,30 @@
             ],
             "title": "Estimated Merge At"
           },
+          "estimated_ci_finish_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Ci Finish At"
+          },
+          "ci_finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ci Finished At"
+          },
           "scopes": {
             "items": {
               "type": "string"
@@ -12325,6 +12383,8 @@
           "status",
           "started_at",
           "estimated_merge_at",
+          "estimated_ci_finish_at",
+          "ci_finished_at",
           "scopes",
           "queue_rule_name",
           "checks_summary",
@@ -12404,6 +12464,18 @@
               }
             ],
             "title": "Estimated Merge At"
+          },
+          "estimated_ci_finish_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Ci Finish At"
           },
           "conflict_with_pull_requests": {
             "anyOf": [
