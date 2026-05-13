@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react';
-import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import Preview, { prefetchSectionHtml } from './PageDetails';
 import type { SearchEntry } from './types';
@@ -25,6 +24,23 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/** Map URL prefix to a known section key. Returns empty string for paths
+ * that don't match any product section; CSS then uses the default accent. */
+const SECTION_KEYS = [
+  'merge-queue',
+  'ci-insights',
+  'test-insights',
+  'merge-protections',
+  'stacks',
+  'workflow',
+] as const;
+
+function getSectionFromUrl(url: string): string {
+  const path = url.split('#')[0].replace(/^\/|\/$/g, '');
+  const first = path.split('/')[0];
+  return SECTION_KEYS.includes(first as (typeof SECTION_KEYS)[number]) ? first : '';
+}
+
 interface PageResultProps {
   entry: SearchEntry;
   query: string;
@@ -34,47 +50,22 @@ interface PageResultProps {
 }
 
 function PageResult({ entry, query, onHover, onNavigate, active }: PageResultProps) {
-  const breadcrumb = entry.breadcrumb;
-
+  const section = getSectionFromUrl(entry.url);
   return (
     <a
-      className={classNames({ 'page-result': true, active })}
-      style={{
-        justifyContent: 'space-between',
-        display: 'flex',
-        width: '100%',
-        overflow: 'hidden',
-        padding: '8px 16px',
-        cursor: 'pointer',
-      }}
+      className={`page-result${active ? ' active' : ''}`}
+      data-section={section || undefined}
       onMouseOver={onHover}
       onClick={onNavigate}
       href={entry.url}
       id={entry.id}
     >
-      <div
-        style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', gap: 4 }}
-      >
+      <div className="page-result-body">
         <div
           className="result-title"
           dangerouslySetInnerHTML={{ __html: highlightTerms(entry.title, query) }}
         />
-        {breadcrumb && (
-          <p
-            className="result-description"
-            style={{
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              width: '100%',
-              margin: 0,
-              fontSize: '0.875rem',
-              color: 'var(--theme-text-secondary)',
-            }}
-          >
-            {breadcrumb}
-          </p>
-        )}
+        {entry.breadcrumb && <p className="result-description">{entry.breadcrumb}</p>}
       </div>
       {active && <Icon icon="lucide:corner-down-left" />}
     </a>
@@ -150,36 +141,16 @@ export default function Results({ results, query, onNavigate }: ResultsProps) {
 
   if (results.length === 0) {
     return (
-      <div
-        style={{
-          padding: '32px 16px',
-          textAlign: 'center',
-          color: 'var(--theme-text-secondary)',
-          fontSize: '0.9375rem',
-        }}
-      >
-        No results found. Try different keywords.
+      <div className="search-state-no-results">
+        <p className="search-state-title">No results for &quot;{query}&quot;</p>
+        <p className="search-state-subtitle">Try simpler terms or check spelling.</p>
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        flex: 1,
-        overflow: 'hidden',
-        display: 'flex',
-      }}
-    >
-      <div
-        style={{
-          flex: 1,
-          alignItems: 'flex-start',
-          height: '100%',
-          overflow: 'auto',
-          position: 'relative',
-        }}
-      >
+    <div className="search-results-split">
+      <div className="search-results-list">
         {results.map((entry, i) => (
           <PageResult
             key={entry.id}
@@ -191,7 +162,7 @@ export default function Results({ results, query, onNavigate }: ResultsProps) {
           />
         ))}
       </div>
-      <hr />
+      <hr className="search-results-preview-divider" />
       {focusedEntry && <Preview entry={focusedEntry} />}
     </div>
   );

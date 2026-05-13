@@ -58,40 +58,59 @@ function RecentSearches({ onSelect }: { onSelect: (q: string) => void }) {
   if (recent.length === 0) return null;
 
   return (
-    <div style={{ padding: '8px 0' }}>
-      <div
-        style={{
-          padding: '4px 16px',
-          fontSize: '0.75rem',
-          color: 'var(--theme-text-secondary)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}
-      >
-        Recent searches
-      </div>
-      {recent.map((q) => (
-        <button
-          key={q}
-          onClick={() => onSelect(q)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            width: '100%',
-            padding: '8px 16px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '0.9375rem',
-            color: 'var(--theme-text)',
-            textAlign: 'left',
-          }}
-        >
-          <Icon icon="lucide:history" width="16" height="16" />
-          {q}
-        </button>
-      ))}
+    <div>
+      <div className="search-eyebrow">Recent searches</div>
+      <ul className="recent-list">
+        {recent.map((q) => (
+          <li key={q}>
+            <button type="button" className="recent-item" onClick={() => onSelect(q)}>
+              <Icon icon="lucide:history" width="16" height="16" />
+              {q}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="search-state-empty">
+      <p className="search-state-title">Search the docs</p>
+      <p className="search-state-subtitle">
+        Try a config key, a feature name, or &quot;merge queue&quot;.
+      </p>
+    </div>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="search-skeleton" aria-hidden="true">
+      <div className="search-skeleton-row" />
+      <div className="search-skeleton-row" />
+      <div className="search-skeleton-row" />
+    </div>
+  );
+}
+
+function KbdHints() {
+  return (
+    <div className="search-footer">
+      <span className="search-footer-hint">
+        <kbd className="search-footer-kbd">↑</kbd>
+        <kbd className="search-footer-kbd">↓</kbd>
+        navigate
+      </span>
+      <span className="search-footer-hint">
+        <kbd className="search-footer-kbd">↵</kbd>
+        open
+      </span>
+      <span className="search-footer-hint">
+        <kbd className="search-footer-kbd">esc</kbd>
+        close
+      </span>
     </div>
   );
 }
@@ -114,16 +133,17 @@ function preloadPagefind() {
 
 function usePagefindSearch(query: string, open: boolean) {
   const [results, setResults] = useState<SearchEntry[]>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!open || !query || query.length < 2) {
       setResults(undefined);
+      setLoading(false);
       return;
     }
 
-    // Clear stale results immediately so the old list doesn't linger
-    // while the new search is in flight.
     setResults(undefined);
+    setLoading(true);
 
     let cancelled = false;
 
@@ -135,7 +155,6 @@ function usePagefindSearch(query: string, open: boolean) {
       const loaded = await Promise.all(response.results.slice(0, 30).map((r) => r.data()));
       if (cancelled) return;
 
-      // Deduplicate: keep only the best match per page
       const seen = new Set<string>();
       const entries: SearchEntry[] = [];
       for (const page of loaded) {
@@ -154,16 +173,21 @@ function usePagefindSearch(query: string, open: boolean) {
       }
 
       setResults(entries);
+      setLoading(false);
     };
 
     search();
 
+    // React runs this cleanup before the next effect body fires, so any
+    // in-flight search sees cancelled=true and won't call setLoading(false)
+    // after the new query's setLoading(true) has already fired. Order is
+    // load-bearing — don't reorder the cleanup and the body's setLoading.
     return () => {
       cancelled = true;
     };
   }, [query, open]);
 
-  return results;
+  return { results, loading };
 }
 
 export default function SearchBar() {
@@ -172,7 +196,7 @@ export default function SearchBar() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  const searchResults = usePagefindSearch(search, open);
+  const { results: searchResults, loading } = usePagefindSearch(search, open);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -212,8 +236,6 @@ export default function SearchBar() {
     button?.addEventListener('mouseenter', preloadPagefind, { once: true });
     window.addEventListener('keydown', openModalKeydown);
 
-    // Also preload during page idle so the first search is instant
-    // even if the user never hovered the button (e.g. keyboard-only users).
     const idleHandle =
       typeof requestIdleCallback !== 'undefined'
         ? requestIdleCallback(() => preloadPagefind())
@@ -237,7 +259,6 @@ export default function SearchBar() {
     }
   }, [open]);
 
-  // Escape: clear query first; if already empty, close the modal.
   useEffect(() => {
     if (!open) return;
     const handleEscape = (e: KeyboardEvent) => {
@@ -253,46 +274,60 @@ export default function SearchBar() {
     return () => window.removeEventListener('keydown', handleEscape, { capture: true });
   }, [open, search]);
 
+  // Track hasRecent in state so we don't hit localStorage on every render.
+  // Refresh whenever the modal opens — that's the only time it can change
+  // (a successful search calls saveRecentSearch while the modal is open).
+  const [hasRecent, setHasRecent] = useState(false);
+  useEffect(() => {
+    if (open) setHasRecent(loadRecentSearches().length > 0);
+  }, [open]);
+  const showRecent = !search && hasRecent;
+  const showEmpty = !search && !hasRecent;
+
   return (
     <div id="search-bar">
       <Modal open={open} onClose={handleClose}>
-        <div
-          style={{ display: 'flex', alignItems: 'center', gap: 12, paddingLeft: 16, paddingTop: 8 }}
-        >
-          <Icon icon="lucide:search" width="24" height="24" />
+        <div className="search-input-row">
+          <Icon icon="lucide:search" width="20" height="20" />
           <input
             autoFocus
             name="search"
             ref={inputRef}
             value={search}
             onChange={handleSearchChange}
-            style={{
-              border: 'none',
-              height: 46,
-              fontSize: 'large',
-              outline: 'none',
-              flex: 1,
-              background: 'transparent',
-            }}
-            placeholder="Search Mergify Docs"
+            className="search-input"
+            placeholder="Search docs…"
           />
+          {search && (
+            <button
+              type="button"
+              className="search-clear"
+              onClick={() => setSearch('')}
+              aria-label="Clear search"
+            >
+              <Icon icon="lucide:x" width="16" height="16" />
+            </button>
+          )}
         </div>
-        <hr style={{ margin: '8px 0' }} />
-        {!search && <RecentSearches onSelect={setSearch} />}
-        {searchResults && searchResults.length > 0 && (
-          <div
-            style={{
-              padding: '2px 16px 6px',
-              fontSize: '0.75rem',
-              color: 'var(--theme-text-secondary)',
-            }}
-          >
-            {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
-          </div>
-        )}
-        {searchResults && (
-          <Results results={searchResults} query={search} onNavigate={handleNavigate} />
-        )}
+
+        <div className="search-body">
+          {showRecent && <RecentSearches onSelect={setSearch} />}
+          {showEmpty && <EmptyState />}
+          {loading && <LoadingSkeleton />}
+          {searchResults && searchResults.length > 0 && (
+            <>
+              <div className="search-eyebrow">
+                {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
+              </div>
+              <Results results={searchResults} query={search} onNavigate={handleNavigate} />
+            </>
+          )}
+          {searchResults && searchResults.length === 0 && (
+            <Results results={searchResults} query={search} onNavigate={handleNavigate} />
+          )}
+        </div>
+
+        <KbdHints />
       </Modal>
     </div>
   );
