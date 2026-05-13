@@ -2741,7 +2741,7 @@
         },
         "branch_protection_injection_mode": {
           "default": "queue",
-          "description": "Branch protections conditions injection mode to use.\n\n- `queue` will inject branch protections conditions as required conditions for queuing and merging pull requests.\n- `merge` will inject branch protections conditions as required conditions only for merging pull requests.\n- `none` will disable branch protections. This mode is supported only on queues using a `merge_bot_account` with admin rights.",
+          "description": "Branch protections conditions injection mode to use.\n\n- `queue` will inject branch protections conditions as required conditions for queuing and merging pull requests.\n- `merge` will inject branch protections conditions as required conditions only for merging pull requests.\n\nTo skip injection for a specific ruleset, see [bypass actors and injection](https://docs.mergify.com/merge-queue/github-rulesets/#bypass-actors-and-injection).",
           "enum": [
             "queue",
             "merge",
@@ -2986,7 +2986,7 @@
         },
         "branch_protection_injection_mode": {
           "default": "queue",
-          "description": "Branch protections conditions injection mode to use.\n\n- `queue` will inject branch protections conditions as required conditions for queuing and merging pull requests.\n- `merge` will inject branch protections conditions as required conditions only for merging pull requests.\n- `none` will disable branch protections. This mode is supported only on queues using a `merge_bot_account` with admin rights.",
+          "description": "Branch protections conditions injection mode to use.\n\n- `queue` will inject branch protections conditions as required conditions for queuing and merging pull requests.\n- `merge` will inject branch protections conditions as required conditions only for merging pull requests.\n\nTo skip injection for a specific ruleset, see [bypass actors and injection](https://docs.mergify.com/merge-queue/github-rulesets/#bypass-actors-and-injection).",
           "enum": [
             "queue",
             "merge",
