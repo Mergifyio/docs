@@ -85,6 +85,7 @@
   /* Text */
   --theme-text: var(--color-gray-900);
   --theme-text-secondary: var(--color-gray-700);
+  --theme-text-tertiary: var(--color-gray-600);
   --theme-text-muted: var(--color-gray-500);
 
   /* Surfaces */
@@ -99,6 +100,7 @@
 
   /* Borders */
   --theme-border: var(--color-gray-300);
+  --theme-border-subtle: var(--color-gray-200);
   --theme-divider: var(--color-gray-200);
   --theme-border-color: var(--theme-border);
   --theme-shade-subtle: var(--color-gray-200);
@@ -148,6 +150,7 @@
   /* Text */
   --theme-text: var(--color-gray-50);
   --theme-text-secondary: var(--color-gray-300);
+  --theme-text-tertiary: var(--color-gray-400);
   --theme-text-muted: var(--color-gray-400);
 
   /* Surfaces */
@@ -166,6 +169,7 @@
 
   /* Borders */
   --theme-border: var(--color-gray-700);
+  --theme-border-subtle: var(--color-gray-800);
   --theme-divider: var(--color-gray-800);
   --theme-border-color: var(--theme-border);
   --theme-shade-subtle: var(--color-gray-700);
