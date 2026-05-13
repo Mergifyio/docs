@@ -5,48 +5,276 @@
 /* Modal content is portaled to document.body (outside #search-bar),
    so these styles must NOT be nested under #search-bar. */
 .modal-content {
+	/* ----- Modal frame ----- */
+	background: var(--theme-bg-content);
+	border: 1px solid var(--theme-border);
+	border-radius: 12px;
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+
+	/* ----- Input row ----- */
+	.search-input-row {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.875rem 1rem;
+		border-bottom: 1px solid var(--theme-divider);
+	}
+	.search-input-row [data-icon] {
+		flex-shrink: 0;
+		color: var(--theme-text-muted);
+	}
+	.search-input {
+		flex: 1;
+		border: none;
+		outline: none;
+		background: transparent;
+		font-size: 1rem;
+		color: var(--theme-text);
+		border-radius: 4px;
+	}
+	/* Focus-visible affordance for keyboard users — the bare `outline: none`
+	   above clears the browser default; restore on keyboard focus only so
+	   mouse clicks don't show a ring. */
+	.search-input:focus-visible {
+		outline: 2px solid var(--theme-link);
+		outline-offset: 2px;
+	}
+	.search-input::placeholder {
+		color: var(--theme-text-muted);
+	}
+	.search-clear {
+		flex-shrink: 0;
+		background: none;
+		border: none;
+		padding: 0.25rem;
+		cursor: pointer;
+		color: var(--theme-text-muted);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 4px;
+	}
+	.search-clear:hover {
+		background: var(--theme-bg-offset);
+		color: var(--theme-text);
+	}
+
+	/* ----- Body (between input and footer) ----- */
+	.search-body {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	/* ----- Section eyebrow (Recent / N results) ----- */
+	.search-eyebrow {
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--theme-text-muted);
+		padding: 0.75rem 1rem 0.5rem;
+	}
+
+	/* ----- Recent searches ----- */
+	.recent-list {
+		list-style: none;
+		margin: 0;
+		padding: 0 0 0.5rem;
+	}
+	.recent-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.5rem 1rem;
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 0.9375rem;
+		color: var(--theme-text);
+		text-align: left;
+	}
+	.recent-item:hover {
+		background: var(--theme-bg-offset);
+	}
+	.recent-item [data-icon] {
+		color: var(--theme-text-muted);
+	}
+
+	/* ----- Empty state (no query, no recent) ----- */
+	.search-state-empty,
+	.search-state-no-results {
+		padding: 2.5rem 1.5rem;
+		text-align: center;
+		color: var(--theme-text-muted);
+	}
+	.search-state-title {
+		font-size: 1rem;
+		font-weight: 500;
+		color: var(--theme-text);
+		margin: 0 0 0.25rem;
+	}
+	.search-state-subtitle {
+		font-size: 0.875rem;
+		margin: 0;
+	}
+
+	/* ----- Loading skeleton ----- */
+	.search-skeleton {
+		padding: 0.5rem 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.search-skeleton-row {
+		height: 2.5rem;
+		border-radius: 6px;
+		background: var(--theme-bg-offset);
+		animation: search-skeleton-pulse 1.4s ease-in-out infinite;
+	}
+	@keyframes search-skeleton-pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.55; }
+	}
+
+	/* ----- Results container ----- */
+	.search-results-split {
+		flex: 1;
+		display: flex;
+		min-height: 0;
+		overflow: hidden;
+	}
+	.search-results-list {
+		flex: 1;
+		overflow: auto;
+		min-width: 0;
+	}
+	.search-results-preview-divider {
+		border: none;
+		border-left: 1px solid var(--theme-divider);
+		margin: 0;
+	}
+
+	/* ----- Result row ----- */
+	.page-result {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.625rem 1rem;
+		text-decoration: none;
+		color: var(--theme-text);
+		border-left: 3px solid transparent;
+		cursor: pointer;
+		overflow: hidden;
+	}
+	.page-result.active,
+	.page-result:hover {
+		background: var(--theme-bg-offset);
+		border-left-color: var(--theme-link);
+	}
+	.page-result[data-section="merge-queue"].active,
+	.page-result[data-section="merge-queue"]:hover {
+		border-left-color: var(--color-teal-700);
+	}
+	.page-result[data-section="ci-insights"].active,
+	.page-result[data-section="ci-insights"]:hover {
+		border-left-color: var(--color-purple-700);
+	}
+	.page-result[data-section="test-insights"].active,
+	.page-result[data-section="test-insights"]:hover {
+		border-left-color: var(--color-orange-700);
+	}
+	.page-result[data-section="merge-protections"].active,
+	.page-result[data-section="merge-protections"]:hover {
+		border-left-color: var(--color-blue-700);
+	}
+	.page-result[data-section="stacks"].active,
+	.page-result[data-section="stacks"]:hover {
+		border-left-color: var(--color-coral-700);
+	}
+	.page-result[data-section="workflow"].active,
+	.page-result[data-section="workflow"]:hover {
+		border-left-color: var(--color-rose-700);
+	}
+	.page-result-body {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+	}
+	.result-title {
+		font-size: 0.9375rem;
+		font-weight: 500;
+		color: var(--theme-text);
+	}
+	.result-description {
+		font-size: 0.8125rem;
+		color: var(--theme-text-muted);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* ----- Highlight ----- */
 	mark {
 		color: var(--theme-link);
 		background: transparent;
 		font-weight: 500;
 	}
 
-	a {
-		text-decoration: none;
-		color: var(--theme-text);
-	}
-
-	.page-result {
-		&.active {
-			background: var(--theme-bg-offset);
-		}
-	}
-
-	.result-title {
-		font-size: var(--theme-text-lg);
-	}
-
-	.result-description {
+	/* ----- Footer kbd hints ----- */
+	.search-footer {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1.25rem;
+		padding: 0.5rem 1rem;
+		background: var(--theme-bg-offset);
+		border-top: 1px solid var(--theme-divider);
+		font-size: 0.75rem;
 		color: var(--theme-text-muted);
-		font-weight: 300;
-		text-decoration: none !important;
+	}
+	.search-footer-hint {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+	}
+	.search-footer-kbd {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 1.25rem;
+		height: 1.25rem;
+		padding: 0 0.25rem;
+		border: 1px solid var(--theme-border);
+		border-radius: 4px;
+		background: var(--theme-bg-content);
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		line-height: 1;
+		color: var(--theme-text-secondary);
 	}
 
-	.table-of-content {
-		a {
-			color: var(--theme-text-muted);
-			transition: color 0.115s;
-
-			&:hover {
-				color: var(--theme-text);
-			}
-		}
+	/* ----- Preview pane (right side, existing component) ----- */
+	.table-of-content a {
+		color: var(--theme-text-muted);
+		transition: color 0.115s;
+	}
+	.table-of-content a:hover {
+		color: var(--theme-text);
 	}
 }
 
+/* Dark mode tweak — the active state should be slightly stronger
+   so it reads clearly against the dark bg. */
 .theme-dark .modal-content .page-result.active {
 	background: var(--theme-bg-hover) !important;
 }
-
-/* Dark mode mark color comes from --theme-link's dark-mode remap;
-   no separate override needed. */
