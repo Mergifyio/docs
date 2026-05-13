@@ -56,8 +56,8 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.14)
       '@viz-js/viz':
-        specifier: ^3.26.0
-        version: 3.26.0
+        specifier: ^3.27.0
+        version: 3.27.0
       astro-icon:
         specifier: ^1.1.5
         version: 1.1.5
@@ -1869,8 +1869,8 @@ packages:
   '@vitest/utils@4.1.6':
     resolution: {integrity: sha512-FxIY+U81R3LGKCxaHHFRQ5+g6/iRgGLmeHWdp2Amj4ljQRrEIWHmZyDfDYBRZlpyqA7qKxtS9DD1dhk8RnRIVQ==}
 
-  '@viz-js/viz@3.26.0':
-    resolution: {integrity: sha512-q/m3rj4aTs38yezZsWABRSsI1auZIWXk5X2aOdz9B7oPR1eYIn9JMEBXY/HbTJwhgS1vEOESC+m0eO6p3imFyQ==}
+  '@viz-js/viz@3.27.0':
+    resolution: {integrity: sha512-XjU8elLpbRieto/kHYWqT01yXDDYBTZB/Ny8ZUuheQw3Kc61I5Eto5+3Lb1PMdjEkh+DKA4Or5b2kxUY3cEfnA==}
 
   '@volar/kit@2.4.28':
     resolution: {integrity: sha512-cKX4vK9dtZvDRaAzeoUdaAJEew6IdxHNCRrdp5Kvcl6zZOqb6jTOfk3kXkIkG3T7oTFXguEMt5+9ptyqYR84Pg==}
@@ -6793,7 +6793,7 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.0
 
-  '@viz-js/viz@3.26.0': {}
+  '@viz-js/viz@3.27.0': {}
 
   '@volar/kit@2.4.28(typescript@6.0.3)':
     dependencies:
