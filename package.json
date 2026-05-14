@@ -20,7 +20,7 @@
     "@actions/core": "^3.0.1",
     "@astrojs/mdx": "^5.0.5",
     "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/ts-plugin": "^1.10.7",
+    "@astrojs/ts-plugin": "^1.10.8",
     "@babel/core": "^7.29.0",
     "@biomejs/biome": "^2.4.15",
     "@eslint/compat": "^2.1.0",
