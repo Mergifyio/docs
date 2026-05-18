@@ -7,7 +7,7 @@ import ChangelogSubscribePopover from '../../components/changelog/ChangelogSubsc
 import enterpriseReleases from '../../data/enterprise-releases.json';
 import MainLayout from '../../layouts/MainLayout.astro';
 import type { TimelineEntry } from '../../util/changelog';
-import { formatDate, groupTimelineByYearMonth, sortChangelog } from '../../util/changelog';
+import { formatDayLabel, groupTimelineByYearDay, sortChangelog } from '../../util/changelog';
 
 const ENTERPRISE_TAG = 'Enterprise';
 const entries = sortChangelog(await getCollection('changelog'));
@@ -26,7 +26,7 @@ const changelogTimeline: TimelineEntry[] = entries.map((entry) => ({
 const timelineEntries: TimelineEntry[] = [...changelogTimeline, ...releaseMarkers].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
-const groupedTimeline = groupTimelineByYearMonth(timelineEntries);
+const groupedTimeline = groupTimelineByYearDay(timelineEntries);
 const years = Object.keys(groupedTimeline).sort((a, b) => b.localeCompare(a));
 
 const title = 'Changelog';
@@ -60,19 +60,17 @@ const description = 'Latest product updates from Mergify.';
     </nav>
 
     {years.map((year) => {
-      const months = Object.keys(groupedTimeline[year]).sort((a, b) => {
-        const da = new Date(`${a} 1, ${year}`);
-        const db = new Date(`${b} 1, ${year}`);
-        return db.getTime() - da.getTime();
-      });
+      const days = Object.keys(groupedTimeline[year]).sort((a, b) => b.localeCompare(a));
       return (
         <section class="cl-year" data-year={year}>
           <h2 class="cl-year-heading" id={`year-${year}`}>{year}</h2>
-          {months.map((month) => (
-            <div class="cl-month-group">
-              <h3 class="cl-month-heading">{month}</h3>
+          {days.map((day) => (
+            <div class="cl-day-group">
+              <h3 class="cl-day-heading">
+                <time datetime={day}>{formatDayLabel(day)}</time>
+              </h3>
               <div class="cl-feed">
-                {groupedTimeline[year][month].map((item) => (
+                {groupedTimeline[year][day].map((item) => (
                   item.kind === 'release' ? (
                     <article
                       class="cl-release"
@@ -84,9 +82,6 @@ const description = 'Latest product updates from Mergify.';
                         <strong>Enterprise {item.version}</strong>
                         <span class="release-sub">released for self-hosted</span>
                       </span>
-                      <time datetime={formatDate(item.date)} class="release-date">
-                        {new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </time>
                     </article>
                   ) : (
                     item.entry.data.image
@@ -127,15 +122,15 @@ const description = 'Latest product updates from Mergify.';
         });
         noResults.hidden = visible !== 0;
 
-        Array.from(document.querySelectorAll('.cl-month-group')).forEach(function (g) {
-          var any = Array.from(g.querySelectorAll('[data-tags]')).some(function (e) {
+        Array.from(document.querySelectorAll('.cl-day-group')).forEach(function (d) {
+          var any = Array.from(d.querySelectorAll('[data-tags]')).some(function (e) {
             return e.style.display !== 'none';
           });
-          g.style.display = activeTag || q ? (any ? '' : 'none') : '';
+          d.style.display = activeTag || q ? (any ? '' : 'none') : '';
         });
         Array.from(document.querySelectorAll('.cl-year')).forEach(function (y) {
-          var any = Array.from(y.querySelectorAll('.cl-month-group')).some(function (g) {
-            return g.style.display !== 'none';
+          var any = Array.from(y.querySelectorAll('.cl-day-group')).some(function (d) {
+            return d.style.display !== 'none';
           });
           y.style.display = activeTag || q ? (any ? '' : 'none') : '';
         });
@@ -295,13 +290,20 @@ const description = 'Latest product updates from Mergify.';
       padding-bottom: 10px;
       border-bottom: 1px solid var(--theme-border);
     }
-    .cl-month-heading {
-      font-size: 0.6875rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--theme-text-muted);
-      margin: 28px 0 14px;
+    .cl-day-group {
+      margin-top: 28px;
+    }
+    .cl-day-group:first-child {
+      margin-top: 18px;
+    }
+    .cl-day-heading {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--theme-text-secondary);
+      margin: 0 0 12px;
+    }
+    .cl-day-heading time {
+      color: inherit;
     }
 
     /* Feed */
@@ -335,12 +337,6 @@ const description = 'Latest product updates from Mergify.';
     }
     .release-sub {
       color: var(--theme-text-muted);
-    }
-    .release-date {
-      margin-left: auto;
-      font-weight: 600;
-      color: var(--theme-text-muted);
-      font-size: 0.7rem;
     }
 
     .cl-no-results {

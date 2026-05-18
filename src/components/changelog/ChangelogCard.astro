@@ -1,20 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, getProductAccent, renderInlineMarkdown } from '~/util/changelog';
+import { getProductAccent, renderInlineMarkdown } from '~/util/changelog';
 
 interface Props {
   entry: CollectionEntry<'changelog'>;
 }
 
 const { entry } = Astro.props;
-const { title, description, date, tags } = entry.data;
+const { title, description, tags } = entry.data;
 const primaryTag = tags[0];
 const accent = getProductAccent(primaryTag);
-
-const monthDay = new Date(date).toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-});
 ---
 
 <article
@@ -29,14 +24,13 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
     </h3>
     {description && <p class="card-desc">{description}</p>}
   </div>
-  <div class="card-aside">
-    <time datetime={formatDate(date)} class="card-date">{monthDay}</time>
-    {tags.length > 0 && (
+  {tags.length > 0 && (
+    <div class="card-aside">
       <div class="pills-stack">
         {tags.map((t) => <span class="card-pill">{t}</span>)}
       </div>
-    )}
-  </div>
+    </div>
+  )}
 </article>
 
 <style>
@@ -113,13 +107,6 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
     gap: 8px;
     align-items: flex-end;
     padding-top: 3px;
-  }
-  .card-date {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--theme-text-muted);
-    white-space: nowrap;
-    letter-spacing: 0.02em;
   }
   .pills-stack {
     display: flex;

@@ -1,32 +1,6 @@
 import type { CollectionEntry } from 'astro:content';
 import { escape } from './html-entities';
 
-type DateCarrier = {
-  date: Date | string;
-};
-
-function groupByYearMonthGeneric<T extends DateCarrier>(
-  entries: T[]
-): Record<string, Record<string, T[]>> {
-  return entries.reduce(
-    (acc, entry) => {
-      const date = new Date(entry.date);
-      const year = date.getFullYear().toString();
-      const month = date.toLocaleDateString('en-US', { month: 'long' });
-
-      if (!acc[year]) {
-        acc[year] = {};
-      }
-      if (!acc[year][month]) {
-        acc[year][month] = [];
-      }
-      acc[year][month].push(entry);
-      return acc;
-    },
-    {} as Record<string, Record<string, T[]>>
-  );
-}
-
 export type TimelineEntry =
   | { kind: 'changelog'; date: Date | string; entry: CollectionEntry<'changelog'> }
   | { kind: 'release'; date: Date | string; version: string };
@@ -109,10 +83,45 @@ export function groupByYearMonth(
   );
 }
 
-export function groupTimelineByYearMonth(
+/**
+ * Group timeline entries by year and day. The day key is the ISO
+ * `YYYY-MM-DD` string, which sorts lexicographically the same as
+ * chronologically and is trivial to re-format for display. Year and day
+ * are both derived in UTC so an entry never lands under a year that
+ * disagrees with its day key (e.g., a December 31 release published at
+ * UTC midnight in a westerly zone).
+ */
+export function groupTimelineByYearDay(
   entries: TimelineEntry[]
 ): Record<string, Record<string, TimelineEntry[]>> {
-  return groupByYearMonthGeneric(entries);
+  return entries.reduce(
+    (acc, entry) => {
+      const date = new Date(entry.date);
+      const year = date.getUTCFullYear().toString();
+      const day = formatDate(entry.date);
+
+      if (!acc[year]) acc[year] = {};
+      if (!acc[year][day]) acc[year][day] = [];
+      acc[year][day].push(entry);
+      return acc;
+    },
+    {} as Record<string, Record<string, TimelineEntry[]>>
+  );
+}
+
+/**
+ * Format a date as a short, human-readable day label (e.g., "May 6").
+ * Formatted in UTC to match the UTC-based day key used for grouping —
+ * otherwise zones west of UTC would render an ISO `YYYY-MM-DD` (UTC
+ * midnight) as the previous day.
+ */
+export function formatDayLabel(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
 }
 
 /**

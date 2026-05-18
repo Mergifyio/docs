@@ -1,20 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, getProductAccent, renderInlineMarkdown } from '~/util/changelog';
+import { getProductAccent, renderInlineMarkdown } from '~/util/changelog';
 
 interface Props {
   entry: CollectionEntry<'changelog'>;
 }
 
 const { entry } = Astro.props;
-const { title, description, date, tags, image } = entry.data;
+const { title, description, tags, image } = entry.data;
 const primaryTag = tags[0];
 const accent = getProductAccent(primaryTag);
-
-const monthDay = new Date(date).toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-});
 ---
 
 <article
@@ -34,7 +29,6 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
       </h3>
       {description && <p class="marquee-desc">{description}</p>}
     </div>
-    <time datetime={formatDate(date)} class="marquee-date">{monthDay}</time>
   </div>
 </article>
 
@@ -74,10 +68,6 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
   }
   .marquee-body {
     padding: 24px 26px 24px 28px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 22px;
-    align-items: start;
   }
   .marquee-content {
     min-width: 0;
@@ -136,22 +126,10 @@ const monthDay = new Date(date).toLocaleDateString('en-US', {
     font-size: 0.92em;
     font-family: var(--font-mono);
   }
-  .marquee-date {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--theme-text-muted);
-    white-space: nowrap;
-    letter-spacing: 0.02em;
-    padding-top: 3px;
-  }
 
   @media (max-width: 36rem) {
     .marquee-hero {
       height: 160px;
-    }
-    .marquee-body {
-      grid-template-columns: 1fr;
-      gap: 8px;
     }
     .marquee-title {
       font-size: 1.25rem;
