@@ -11,48 +11,101 @@ interface Props {
 
 const { title, path, icon } = Astro.props;
 const productIconName = parseProductIcon(icon);
+const productKey = productIconName ?? (path === '/workflow' ? 'workflow' : null);
 ---
 
-<div class="container">
-	<a href={path}>
-		<h4>
-			{productIconName && (
-				<div class="docset-icon">
-					<ProductIcon name={productIconName} />
-				</div>
-			)}
-			{!productIconName && icon && (
-				<div class="docset-icon">
-					<Icon name={icon} />
-				</div>
-			)}
-			<span>{title}</span>
-		</h4>
-	</a>
-	<p>
+<a href={path} class="container" data-product={productKey}>
+	<h4>
+		{productIconName && (
+			<div class="docset-icon" data-product={productKey}>
+				<ProductIcon name={productIconName} />
+			</div>
+		)}
+		{!productIconName && icon && (
+			<div class="docset-icon" data-product={productKey}>
+				<Icon name={icon} />
+			</div>
+		)}
+		<span>{title}</span>
+	</h4>
+	<div class="description">
 		<slot />
-	</p>
-</div>
+	</div>
+</a>
 
 <style lang="scss">
 	.container {
+		display: block;
 		border: 1px solid var(--theme-border);
 		padding: 24px;
-		border-radius: 6px;
+		border-radius: 12px;
+		text-decoration: none;
+		color: var(--theme-text);
+		transition: border-color 0.18s ease;
 	}
 
-	a {
-		text-decoration: none;
+	.container:hover {
+		color: var(--theme-text);
+	}
+
+	.container[data-product='merge-queue']:hover {
+		border-color: var(--color-teal-700);
+	}
+	.container[data-product='ci-insights']:hover {
+		border-color: var(--color-purple-700);
+	}
+	.container[data-product='test-insights']:hover {
+		border-color: var(--color-orange-700);
+	}
+	.container[data-product='merge-protections']:hover {
+		border-color: var(--color-blue-700);
+	}
+	.container[data-product='stacks']:hover {
+		border-color: var(--color-coral-700);
+	}
+	.container[data-product='workflow']:hover {
+		border-color: var(--color-rose-700);
 	}
 
 	h4 {
 		display: flex;
 		align-items: center;
+		margin: 0 0 0.5rem;
+		color: var(--theme-text);
 
 		.docset-icon {
 			display: flex;
 			align-items: center;
 			margin-right: 8px;
 		}
+
+		.docset-icon[data-product='merge-queue'] {
+			color: var(--color-teal-700);
+		}
+		.docset-icon[data-product='ci-insights'] {
+			color: var(--color-purple-700);
+		}
+		.docset-icon[data-product='test-insights'] {
+			color: var(--color-orange-700);
+		}
+		.docset-icon[data-product='merge-protections'] {
+			color: var(--color-blue-700);
+		}
+		.docset-icon[data-product='stacks'] {
+			color: var(--color-coral-700);
+		}
+		.docset-icon[data-product='workflow'] {
+			color: var(--color-rose-700);
+		}
+	}
+
+	.description {
+		font-size: 0.9375rem;
+		line-height: 1.5;
+		color: var(--theme-text-secondary);
+	}
+
+	.description :global(p) {
+		margin: 0;
 	}
 </style>
