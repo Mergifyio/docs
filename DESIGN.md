@@ -89,15 +89,22 @@ usage is reserved for the narrow product-accent exception above.
 ```css
 --theme-text            /* primary text */
 --theme-text-secondary  /* supporting text */
+--theme-text-tertiary   /* third-tier text, between secondary and muted */
 --theme-text-muted      /* de-emphasized text, captions */
 --theme-bg              /* page background */
 --theme-bg-content      /* card / content surface */
 --theme-bg-offset       /* raised surface (inline code bg, sidebar) */
 --theme-border          /* borders, dividers */
+--theme-border-subtle   /* softer border for low-emphasis surfaces */
 --theme-link            /* link color */
 --theme-link-hover      /* link hover */
 --theme-accent          /* primary action / heading emphasis */
 ```
+
+The dark gray scale is compressed (no `gray-350`-equivalent), so `--theme-text-tertiary`
+and `--theme-text-muted` resolve to the same primitive (`gray-400`) in dark mode. The
+semantic distinction is preserved in light mode and in source; treat them as distinct
+consumers, not as aliases.
 
 ### Layer 3 — Section accents (`index.css`)
 
