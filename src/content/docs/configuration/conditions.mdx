@@ -204,6 +204,62 @@ For a pull request with labels `(bug, work-in-progress)`:
 - label != bug
 ```
 
+## Qualifying Checks by GitHub App
+
+Two GitHub Apps can publish a check with the same name (for example, both a
+GitHub Actions workflow and a third-party CI emit a `pep8` check). The bare
+form is ambiguous in that case: `check-success = pep8` matches whichever app
+reported success.
+
+To disambiguate, prefix the check name with `@<github-app-slug>/`:
+
+`@<github-app-slug>/<check-name>`
+
+- The leading `@` is the opt-in marker; without it, the check name is matched
+  literally as before.
+
+- `<github-app-slug>` is the GitHub App slug as it appears in the check's
+  URL on GitHub (e.g. `github-actions`, `semantic-pull-request`).
+
+- `<check-name>` is the check name exactly as GitHub reports it.
+
+The qualified form is supported on every `check-*` attribute that takes a
+check name: `check-success`, `check-success-or-neutral`, `check-failure`,
+`check-neutral`, `check-skipped`, `check-timed-out`, `check-pending`, and
+`check-stale`.
+
+The bare form keeps its original meaning and continues to match a check from
+any app, so existing configurations do not need to change.
+
+### Example: Two Apps Reporting `pep8`
+
+When both apps publish a `pep8` check and you only want to gate on the one
+from a specific app, pin it with `@<slug>/`:
+
+```yaml
+queue_rules:
+  - name: default
+    merge_conditions:
+      # Require the pep8 check published by the GitHub Actions app,
+      # not the one published by semantic-pull-request.
+      - check-success = @github-actions/pep8
+```
+
+To require both, repeat the condition with each app slug:
+
+```yaml
+queue_rules:
+  - name: default
+    merge_conditions:
+      - check-success = @github-actions/pep8
+      - check-success = @semantic-pull-request/pep8
+```
+
+A value starting with `@` that does not match the `@<slug>/<name>` shape is
+rejected at configuration validation time. Branch-protection-synthesised
+conditions and legacy GitHub commit statuses carry no GitHub App identity
+and remain reachable only via the bare form.
+
 ## Combining Conditions Using Logical Operators
 
 Combine conditions with `and`, `or`, and `not`.
