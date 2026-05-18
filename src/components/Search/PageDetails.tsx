@@ -113,7 +113,7 @@ export default function Preview({ entry }: PreviewProps) {
     <div
       style={{
         display: 'flex',
-        padding: 16,
+        padding: '0.625rem 1.25rem 1rem',
         justifyContent: 'flex-start',
         alignItems: 'start',
         flex: 2,
@@ -127,7 +127,6 @@ export default function Preview({ entry }: PreviewProps) {
         <div
           className="search-preview-html"
           style={{
-            margin: '8px 0',
             lineHeight: 1.6,
             width: '100%',
             overflow: 'hidden',

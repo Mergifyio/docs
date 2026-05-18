@@ -80,6 +80,7 @@ interface ResultsProps {
 
 export default function Results({ results, query, onNavigate }: ResultsProps) {
   const [focusedIndex, setFocusedIndex] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
 
   const scrollToIndex = (index: number) => {
     const entry = results[index];
@@ -126,6 +127,7 @@ export default function Results({ results, query, onNavigate }: ResultsProps) {
 
   useEffect(() => {
     setFocusedIndex(0);
+    setScrolled(false);
     // Prefetch preview HTML for the top results so the preview pane is instant.
     for (const entry of results.slice(0, 5)) {
       prefetchSectionHtml(entry);
@@ -149,8 +151,11 @@ export default function Results({ results, query, onNavigate }: ResultsProps) {
   }
 
   return (
-    <div className="search-results-split">
-      <div className="search-results-list">
+    <div className="search-results-split" data-scrolled={scrolled ? '' : undefined}>
+      <div
+        className="search-results-list"
+        onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 4)}
+      >
         {results.map((entry, i) => (
           <PageResult
             key={entry.id}
