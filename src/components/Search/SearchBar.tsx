@@ -77,6 +77,9 @@ function RecentSearches({ onSelect }: { onSelect: (q: string) => void }) {
 function EmptyState() {
   return (
     <div className="search-state-empty">
+      <div className="search-state-icon" aria-hidden="true">
+        <Icon icon="lucide:search" width="28" height="28" />
+      </div>
       <p className="search-state-title">Search the docs</p>
       <p className="search-state-subtitle">
         Try a config key, a feature name, or &quot;merge queue&quot;.
@@ -218,6 +221,11 @@ export default function SearchBar() {
       setOpen(true);
     };
     const openModalKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey) {
+        e.preventDefault();
+        openModal();
+        return;
+      }
       if (e.key === '/' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
         const active = document.activeElement as HTMLElement | null;
         const isTypingTarget =
