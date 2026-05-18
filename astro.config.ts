@@ -19,6 +19,7 @@ import { PagefindIndex } from './integrations/pagefind-index';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
 import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
+import { rehypeWrapTables } from './plugins/rehype-wrap-tables';
 import { remarkBuildkiteVersionPlugin } from './plugins/remark-buildkite-version';
 import { remarkEnterpriseVersionPlugin } from './plugins/remark-enterprise-version';
 import { remarkGraphvizPlugin } from './plugins/remark-graphviz';
@@ -140,6 +141,8 @@ export default defineConfig({
       [rehypeAutolinkHeadings, autolinkConfig],
       // Tweak GFM task list syntax
       rehypeTasklistEnhancer(),
+      // Wrap markdown tables in a scrollable container
+      rehypeWrapTables(),
       // Collapse static parts of the hast to html
 
       /** Issue with graphviz where inline styles get transformed: `font-size` => `fontsize` whch breaks rendered graphs SVG */
