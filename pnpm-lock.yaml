@@ -1281,9 +1281,6 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
-  '@rolldown/pluginutils@1.0.0-rc.13':
-    resolution: {integrity: sha512-3ngTAv6F/Py35BsYbeeLeecvhMKdsKm4AoOETVhAA+Qc8nrA2I0kF7oa93mE9qnIurngOSpMnQ0x2nQY2FPviA==}
-
   '@rolldown/pluginutils@1.0.0-rc.3':
     resolution: {integrity: sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q==}
 
@@ -1797,8 +1794,8 @@ packages:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
       vue: ^3.0.0
 
-  '@vitejs/plugin-vue@6.0.6':
-    resolution: {integrity: sha512-u9HHgfrq3AjXlysn0eINFnWQOJQLO9WN6VprZ8FXl7A2bYisv3Hui9Ij+7QZ41F/WYWarHjwBbXtD7dKg3uxbg==}
+  '@vitejs/plugin-vue@6.0.7':
+    resolution: {integrity: sha512-km+p+XdSz9Sxm5rqUbqcSfZYaAniKxWBj1KURl+Jr7UaPvvX7BmaWMdP69I5rrFDeQGyxAG7NXdc57vz+snhWg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -5382,7 +5379,7 @@ snapshots:
 
   '@astrojs/vue@6.0.1(@types/node@25.7.0)(astro@6.3.3(@types/node@25.7.0)(rollup@4.60.3)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(sass-embedded@1.99.0)(sass@1.99.0)(vue@3.5.33(typescript@6.0.3))(yaml@2.9.0)':
     dependencies:
-      '@vitejs/plugin-vue': 6.0.6(vite@7.3.2(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(vue@3.5.33(typescript@6.0.3))
+      '@vitejs/plugin-vue': 6.0.7(vite@7.3.2(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(vue@3.5.33(typescript@6.0.3))
       '@vitejs/plugin-vue-jsx': 5.1.5(vite@7.3.2(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(vue@3.5.33(typescript@6.0.3))
       '@vue/compiler-sfc': 3.5.34
       astro: 6.3.3(@types/node@25.7.0)(rollup@4.60.3)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
@@ -6223,8 +6220,6 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
-  '@rolldown/pluginutils@1.0.0-rc.13': {}
-
   '@rolldown/pluginutils@1.0.0-rc.3': {}
 
   '@rolldown/pluginutils@1.0.1': {}
@@ -6669,9 +6664,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@6.0.6(vite@7.3.2(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(vue@3.5.33(typescript@6.0.3))':
+  '@vitejs/plugin-vue@6.0.7(vite@7.3.2(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(vue@3.5.33(typescript@6.0.3))':
     dependencies:
-      '@rolldown/pluginutils': 1.0.0-rc.13
+      '@rolldown/pluginutils': 1.0.1
       vite: 7.3.2(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       vue: 3.5.33(typescript@6.0.3)
 
