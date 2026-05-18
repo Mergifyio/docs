@@ -235,7 +235,7 @@ const navItems: NavItem[] = [
   },
   {
     title: 'Workflow Automation',
-    icon: 'lucide:settings',
+    icon: 'lucide:zap',
     path: '/workflow',
     children: [
       { title: 'Workflow Automation', path: '/workflow/', icon: 'lucide:bot' },
@@ -364,7 +364,7 @@ const navItems: NavItem[] = [
   },
   {
     title: 'Integrations',
-    icon: 'lucide:plug',
+    icon: 'lucide:blocks',
     path: '/integrations',
     children: [
       { title: 'GitHub', path: '/integrations/github', icon: 'simple-icons:github' },
