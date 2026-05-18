@@ -18,7 +18,7 @@ importers:
         version: 0.9.9(prettier@3.8.3)(typescript@6.0.3)
       '@astrojs/react':
         specifier: ^5.0.5
-        version: 5.0.5(@types/node@25.7.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
+        version: 5.0.5(@types/node@25.7.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.6))(react@19.2.6)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       '@astrojs/rss':
         specifier: ^4.0.18
         version: 4.0.18
@@ -42,7 +42,7 @@ importers:
         version: 1.2.82
       '@iconify/react':
         specifier: ^6.0.2
-        version: 6.0.2(react@19.2.5)
+        version: 6.0.2(react@19.2.6)
       '@iconify/types':
         specifier: ^2.0.0
         version: 2.0.0
@@ -80,11 +80,11 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1
       react:
-        specifier: ^19.0.0
-        version: 19.2.5
+        specifier: ^19.2.6
+        version: 19.2.6
       react-dom:
         specifier: ^19.2.5
-        version: 19.2.5(react@19.2.5)
+        version: 19.2.5(react@19.2.6)
       rehype-autolink-headings:
         specifier: ^7.1.0
         version: 7.1.0
@@ -190,7 +190,7 @@ importers:
         version: 8.59.3(eslint@10.4.0)(typescript@6.0.3)
       agentation:
         specifier: ^3.0.2
-        version: 3.0.2(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        version: 3.0.2(react-dom@19.2.5(react@19.2.6))(react@19.2.6)
       astro:
         specifier: ^6.3.3
         version: 6.3.3(@types/node@25.7.0)(rollup@4.60.3)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
@@ -3861,8 +3861,8 @@ packages:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
 
-  react@19.2.5:
-    resolution: {integrity: sha512-llUJLzz1zTUBrskt2pwZgLq59AemifIftw4aB7JxOqf1HY2FDaGDxgwpAPVzHU1kdWabH7FauP4i1oEeer2WCA==}
+  react@19.2.6:
+    resolution: {integrity: sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q==}
     engines: {node: '>=0.10.0'}
 
   read-package-json-fast@3.0.2:
@@ -5325,15 +5325,15 @@ snapshots:
     dependencies:
       prismjs: 1.30.0
 
-  '@astrojs/react@5.0.5(@types/node@25.7.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
+  '@astrojs/react@5.0.5(@types/node@25.7.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.6))(react@19.2.6)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
     dependencies:
       '@astrojs/internal-helpers': 0.9.1
       '@types/react': 19.2.14
       '@types/react-dom': 19.2.3(@types/react@19.2.14)
       '@vitejs/plugin-react': 5.2.0(vite@7.3.3(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))
       devalue: 5.8.1
-      react: 19.2.5
-      react-dom: 19.2.5(react@19.2.5)
+      react: 19.2.6
+      react-dom: 19.2.5(react@19.2.6)
       ultrahtml: 1.6.0
       vite: 7.3.3(@types/node@25.7.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
     transitivePeerDependencies:
@@ -5871,10 +5871,10 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/react@6.0.2(react@19.2.5)':
+  '@iconify/react@6.0.2(react@19.2.6)':
     dependencies:
       '@iconify/types': 2.0.0
-      react: 19.2.5
+      react: 19.2.6
 
   '@iconify/tools@4.2.0':
     dependencies:
@@ -6937,10 +6937,10 @@ snapshots:
 
   acorn@8.16.0: {}
 
-  agentation@3.0.2(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
+  agentation@3.0.2(react-dom@19.2.5(react@19.2.6))(react@19.2.6):
     optionalDependencies:
-      react: 19.2.5
-      react-dom: 19.2.5(react@19.2.5)
+      react: 19.2.6
+      react-dom: 19.2.5(react@19.2.6)
 
   ajv-draft-04@1.0.0(ajv@8.20.0):
     optionalDependencies:
@@ -9524,16 +9524,16 @@ snapshots:
 
   radix3@1.1.2: {}
 
-  react-dom@19.2.5(react@19.2.5):
+  react-dom@19.2.5(react@19.2.6):
     dependencies:
-      react: 19.2.5
+      react: 19.2.6
       scheduler: 0.27.0
 
   react-is@16.13.1: {}
 
   react-refresh@0.18.0: {}
 
-  react@19.2.5: {}
+  react@19.2.6: {}
 
   read-package-json-fast@3.0.2:
     dependencies:
