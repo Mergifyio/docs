@@ -45,10 +45,10 @@ shared:
 queue_rules:
   - name: hotfix
     queue_conditions:
-      - and: *my_ci
+      - and: *common_checks
   - name: default
     queue_conditions:
-      - and: *my_ci
+      - and: *common_checks
       - schedule = Mon-Fri 09:00-17:30[Europe/Paris]
 ```
 
