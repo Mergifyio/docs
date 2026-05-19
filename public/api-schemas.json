@@ -4749,7 +4749,7 @@
     "/ci/{owner}/repositories/{repository}/quarantines": {
       "get": {
         "tags": [
-          "ci_insights"
+          "test_insights"
         ],
         "summary": "List quarantined tests",
         "description": "List the tests currently quarantined in the repository, ordered by quarantine creation time ascending. A quarantine applies to a specific branch or to all branches when `branch` is `null`.",
@@ -4875,7 +4875,7 @@
     "/ci/{owner}/repositories/{repository}/quarantines/{quarantine_id}": {
       "get": {
         "tags": [
-          "ci_insights"
+          "test_insights"
         ],
         "summary": "Get a quarantined test",
         "description": "Retrieve a single quarantined test by its quarantine ID.",
@@ -14853,10 +14853,6 @@
       "description": "Operations with badges."
     },
     {
-      "name": "ci_insights",
-      "description": "Operations with ci insights."
-    },
-    {
       "name": "eventlogs",
       "description": "Operations with event logs."
     },
@@ -14891,6 +14887,10 @@
     {
       "name": "statistics",
       "description": "Operations with statistics."
+    },
+    {
+      "name": "test_insights",
+      "description": "Operations with test insights."
     }
   ]
 }
