@@ -147,7 +147,7 @@ const primaryLink = isEnterpriseSection
 		gap: 0.75rem;
 		width: 100%;
 		padding-inline: var(--min-spacing-inline);
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 	}
 
 	.nav-buttons {
@@ -172,14 +172,6 @@ const primaryLink = isEnterpriseSection
 	.nav-actions :global(.search-input) {
 		margin-left: 0;
 		flex-shrink: 0;
-	}
-
-	@media (max-width: 35em) {
-		.nav-actions {
-			flex-basis: 100%;
-			margin-left: 0;
-			padding-top: 0.5rem;
-		}
 	}
 
 	/* If the device is likely to show a scrollbar gutter, reserve space for it */
@@ -243,9 +235,31 @@ const primaryLink = isEnterpriseSection
 		margin: 0;
 	}
 
-	@media (max-width: 68em) {
+	/* Tight viewports: hide the nav links entirely. The sidebar logo +
+	   search + theme toggle already nearly fill the row. Boundary is
+	   exclusive of 60em so the icon-only rule below owns that pixel. */
+	@media (max-width: 59.99em) {
 		.nav-buttons {
 			display: none !important;
+		}
+	}
+
+	/* Intermediate range (~60em–80em): the labels don't fit alongside
+	   search and theme toggle, but the icons still do. Visually hide the
+	   labels — they stay in the DOM so screen readers announce the link
+	   name and keyboard users get a focus target. */
+	@media (min-width: 60em) and (max-width: 80em) {
+		.nav-wrapper :global(.header-btn-label) {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+			clip-path: inset(50%);
+			white-space: nowrap;
+			border: 0;
 		}
 	}
 
