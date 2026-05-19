@@ -27,9 +27,18 @@ import SearchBar from './SearchBar';
 	</svg>
 	<span class="search-placeholder">Search Mergify Docs</span>
 	<span class="search-keyboard-hint">
-		<kbd aria-hidden="true">/</kbd>
+		<kbd aria-hidden="true" data-search-shortcut>⌘K</kbd>
 	</span>
 </button>
+<script is:inline>
+	(() => {
+		const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+		if (isMac) return;
+		for (const el of document.querySelectorAll('[data-search-shortcut]')) {
+			el.textContent = 'Ctrl K';
+		}
+	})();
+</script>
 <SearchBar client:only="react" />
 <style>
 	/** Style search header button */
