@@ -4746,6 +4746,340 @@
         }
       }
     },
+    "/ci/{owner}/repositories/{repository_name}/search/tests": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Search tests by name",
+        "description": "Resolve test identities by name in a repository. Returns one entry per (test_name, pipeline_name, job_name) running on the default branch. Supports glob patterns in `test_name` (e.g. `*test_login*`).",
+        "operationId": "ci-search-tests",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repository_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository Name"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "test_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 255
+              },
+              "minItems": 1,
+              "maxItems": 255,
+              "description": "Test name to search for. Pass multiple times to combine matches. Supports glob patterns (`*`, `?`).",
+              "title": "Test Name"
+            },
+            "description": "Test name to search for. Pass multiple times to combine matches. Supports glob patterns (`*`, `?`)."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "executions_count",
+                "test_name",
+                "pipeline_name",
+                "job_name"
+              ],
+              "type": "string",
+              "description": "Sort field",
+              "default": "executions_count",
+              "title": "Sort"
+            },
+            "description": "Sort field"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string",
+              "description": "Sort direction",
+              "default": "desc",
+              "title": "Direction"
+            },
+            "description": "Sort direction"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to filter on",
+              "title": "Pipeline Name"
+            },
+            "description": "The pipeline name to filter on"
+          },
+          {
+            "name": "pipeline_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to exclude",
+              "title": "Pipeline Name Exclude"
+            },
+            "description": "The pipeline name to exclude"
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to filter on",
+              "title": "Job Name"
+            },
+            "description": "The job name to filter on"
+          },
+          {
+            "name": "job_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to exclude",
+              "title": "Job Name Exclude"
+            },
+            "description": "The job name to exclude"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages",
+              "title": "Cursor"
+            },
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "The number of items per page",
+              "default": 10,
+              "title": "Per Page"
+            },
+            "description": "The number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchTestsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Get detailed information about a test",
+        "description": "Get detailed information about a test.",
+        "operationId": "get_test_details_ci__owner__repositories__repository_name__tests__test_id__get",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repository_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository Name"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the test",
+              "title": "Test Id"
+            },
+            "description": "ID of the test"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestDetailsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/ci/{owner}/repositories/{repository}/quarantines": {
       "get": {
         "tags": [
@@ -8043,6 +8377,14 @@
             },
             "type": "array",
             "title": "Condition Matches"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "retried",
+              "skipped_quota_exceeded"
+            ],
+            "title": "Outcome"
           }
         },
         "type": "object",
@@ -8052,7 +8394,8 @@
           "max_retry",
           "retry_mode",
           "retry_attempt",
-          "condition_matches"
+          "condition_matches",
+          "outcome"
         ],
         "title": "EventCiInsightsJobRetriedMetadata"
       },
@@ -11693,6 +12036,227 @@
         ],
         "title": "GetScheduledFreezesResponse"
       },
+      "GetTestDetailsResponse": {
+        "properties": {
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "test_name": {
+            "type": "string",
+            "title": "Test Name"
+          },
+          "test_id": {
+            "type": "string",
+            "format": "uuid5",
+            "title": "Test Id"
+          },
+          "health_status": {
+            "type": "string",
+            "title": "Health Status"
+          },
+          "last_conclusion": {
+            "type": "string",
+            "title": "Last Conclusion"
+          },
+          "failure_ratio": {
+            "type": "number",
+            "title": "Failure Ratio"
+          },
+          "flakiness_ratio": {
+            "type": "number",
+            "title": "Flakiness Ratio"
+          },
+          "success_ratio": {
+            "type": "number",
+            "title": "Success Ratio"
+          },
+          "flaky_detection_enabled": {
+            "type": "boolean",
+            "title": "Flaky Detection Enabled"
+          },
+          "first_failure_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Failure At"
+          },
+          "first_failure_commit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Failure Commit"
+          },
+          "first_failure_pull": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GetTestDetailsResponsePull"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "last_failure_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Failure At"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "test_framework": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Framework"
+          },
+          "test_framework_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Framework Version"
+          },
+          "test_programming_language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Programming Language"
+          },
+          "test_filepath": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Filepath"
+          },
+          "test_function_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Function Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "repository",
+          "test_name",
+          "test_id",
+          "health_status",
+          "last_conclusion",
+          "failure_ratio",
+          "flakiness_ratio",
+          "success_ratio",
+          "flaky_detection_enabled",
+          "first_failure_at",
+          "first_failure_commit",
+          "first_failure_pull",
+          "last_failure_at",
+          "last_success_at",
+          "test_framework",
+          "test_framework_version",
+          "test_programming_language",
+          "test_filepath",
+          "test_function_name"
+        ],
+        "title": "GetTestDetailsResponse"
+      },
+      "GetTestDetailsResponsePull": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "user": {
+            "$ref": "#/components/schemas/GetTestDetailsResponseUser"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "title",
+          "user"
+        ],
+        "title": "GetTestDetailsResponsePull"
+      },
+      "GetTestDetailsResponseUser": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "login": {
+            "type": "string",
+            "title": "Login"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "login"
+        ],
+        "title": "GetTestDetailsResponseUser"
+      },
       "GitHubAccount": {
         "properties": {
           "login": {
@@ -13837,6 +14401,35 @@
         ],
         "title": "ScopesBody"
       },
+      "SearchTestsResponse": {
+        "properties": {
+          "size": {
+            "type": "integer",
+            "title": "Size",
+            "description": "The number of items in this page"
+          },
+          "per_page": {
+            "type": "integer",
+            "title": "Per Page",
+            "description": "The number of items per page"
+          },
+          "tests": {
+            "items": {
+              "$ref": "#/components/schemas/TestSearchResult"
+            },
+            "type": "array",
+            "title": "Tests",
+            "description": "Test identities matching the search query, ordered by total executions."
+          }
+        },
+        "type": "object",
+        "required": [
+          "size",
+          "per_page",
+          "tests"
+        ],
+        "title": "SearchTestsResponse"
+      },
       "SimpleConditionMatchSerialized": {
         "properties": {
           "attribute": {
@@ -14028,6 +14621,39 @@
           "weekly_buckets"
         ],
         "title": "StacksSummary"
+      },
+      "TestSearchResult": {
+        "properties": {
+          "test_id": {
+            "type": "string",
+            "format": "uuid5",
+            "title": "Test Id",
+            "description": "Stable identifier of the test. Pass it to the per-test endpoints to fetch details, metrics, or failures."
+          },
+          "test_name": {
+            "type": "string",
+            "title": "Test Name",
+            "description": "Fully qualified name of the test as reported by the CI provider."
+          },
+          "pipeline_name": {
+            "type": "string",
+            "title": "Pipeline Name",
+            "description": "Name of the pipeline (workflow) that ran the test."
+          },
+          "job_name": {
+            "type": "string",
+            "title": "Job Name",
+            "description": "Name of the job within the pipeline that ran the test."
+          }
+        },
+        "type": "object",
+        "required": [
+          "test_id",
+          "test_name",
+          "pipeline_name",
+          "job_name"
+        ],
+        "title": "TestSearchResult"
       },
       "TimeJSON": {
         "properties": {
