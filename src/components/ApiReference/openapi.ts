@@ -168,6 +168,7 @@ export const TAG_LABELS: Record<string, string> = {
   merge_queue: 'Merge Queue',
   pull_requests: 'Pull Requests',
   ci_insights: 'CI Insights',
+  test_insights: 'Test Insights',
 };
 
 // Tag descriptions for sub-page intros
@@ -182,6 +183,7 @@ export const TAG_DESCRIPTIONS: Record<string, string> = {
   merge_queue: 'Control merge queue state — pause, unpause, and inspect status.',
   pull_requests: 'Push scopes and other per-pull-request data to Mergify.',
   ci_insights: 'Access data from CI Insights.',
+  test_insights: 'Access data from Test Insights.',
 };
 
 export function humanizeTag(tag: string): string {
