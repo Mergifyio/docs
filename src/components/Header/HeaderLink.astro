@@ -12,7 +12,7 @@ const { href, icon, target } = Astro.props as Props;
 
 <div class="header-btn">
 	<Button colorScheme="blue" variant="ghost" icon={icon} href={href} target={target}>
-		<slot />
+		<span class="header-btn-label"><slot /></span>
 	</Button>
 </div>
 
