@@ -1,0 +1,1 @@
+address review: also match group nodes with a path but no leaf child for that path (e.g. /integrations, /workflow/actions)
