@@ -1798,6 +1798,11 @@
           "description": "The review decision computed by GitHub from its `pullRequest.reviewDecision` field, driven by either classic branch protection or repository / organization rulesets. Typically reflects whether required approvals and `CODEOWNERS` reviews have been satisfied.",
           "title": "GitHub review decision"
         },
+        "github-require-review-from-specific-teams": {
+          "description": "Whether every `required_reviewers` entry on the branch's active GitHub rulesets is satisfied (each named team has the requested number of approvals, each named user has approved). When the rule scopes the requirement to a subset of files via `file_patterns`, the check only applies to PRs that touch a matching file. Returns `false` if an entry references a team or user id that cannot be resolved.",
+          "title": "GitHub require review from specific teams",
+          "type": "boolean"
+        },
         "number": {
           "description": "The pull request number.",
           "maximum": 9223372036854775807,
@@ -2342,6 +2347,7 @@
         "linear-history",
         "conflict",
         "github-review-decision",
+        "github-require-review-from-specific-teams",
         "number",
         "queue-position",
         "author",
