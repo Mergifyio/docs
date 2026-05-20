@@ -5086,7 +5086,7 @@
           "test_insights"
         ],
         "summary": "List quarantined tests",
-        "description": "List the tests currently quarantined in the repository, ordered by quarantine creation time ascending. A quarantine applies to a specific branch or to all branches when `branch` is `null`.",
+        "description": "List the tests currently quarantined in the repository, ordered by quarantine creation time ascending. A quarantine applies to a specific branch or to all branches when `branch` is `null`.\n\nPagination is opt-in: pass `per_page` (and optionally `cursor`) to receive a bounded page with RFC 5988 navigation links. Omitting `per_page` returns the full list in a single response \u2014 this shortcut exists for backward compatibility and is expected to go away once all callers paginate.",
         "operationId": "get_quarantined_tests_with_params_token_auth_ci__owner__repositories__repository__quarantines_get",
         "security": [
           {
@@ -5178,6 +5178,44 @@
               ],
               "title": "Source"
             }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages.",
+              "title": "Cursor"
+            },
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages."
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The number of items per page. Omit to receive the full list in a single response; pass a value to opt into RFC 5988 cursor pagination.",
+              "title": "Per Page"
+            },
+            "description": "The number of items per page. Omit to receive the full list in a single response; pass a value to opt into RFC 5988 cursor pagination."
           }
         ],
         "responses": {
@@ -5187,6 +5225,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/QuarantinedTestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "Link": {
+                "description": "Pagination links (rfc5988)",
+                "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=xyz&per_page=20>; rel=\"last\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"first\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -13458,6 +13505,23 @@
       },
       "QuarantinedTestsResponse": {
         "properties": {
+          "size": {
+            "type": "integer",
+            "title": "Size",
+            "description": "The number of items in this page"
+          },
+          "per_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Per Page",
+            "description": "The number of items per page, or `null` when the endpoint was called without `per_page` and returned the full list in a single response."
+          },
           "quarantined_tests": {
             "items": {
               "$ref": "#/components/schemas/QuarantinedTest"
@@ -13468,6 +13532,8 @@
         },
         "type": "object",
         "required": [
+          "size",
+          "per_page",
           "quarantined_tests"
         ],
         "title": "QuarantinedTestsResponse"
