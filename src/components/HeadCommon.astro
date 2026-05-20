@@ -12,6 +12,12 @@ import '../styles/tokens.css';
 import '../styles/theme.css';
 import '../styles/typography.css';
 import '../styles/index.css';
+
+export interface Props {
+  activePageGroupIds?: string[];
+}
+
+const { activePageGroupIds = [] } = Astro.props as Props;
 ---
 
 <!-- Global Metadata -->
@@ -65,30 +71,37 @@ import '../styles/index.css';
 	});
 </script>
 
-<!-- Restore sidebar nav-group open/closed state from localStorage to avoid FOUC.
-     Generates CSS rules in <head> so groups render at the correct height from the
-     very first paint, before the body is parsed. Cleaned up by LeftSidebar. -->
-<script is:inline>
+<!-- Restore sidebar nav-group open/closed state to avoid FOUC. Merges localStorage
+     state with the current page's ancestor group IDs so deep-link visits paint with
+     the active section already expanded. Generates CSS in <head> before the body
+     parses; cleaned up by LeftSidebar. -->
+<script is:inline define:vars={{ activePageGroupIds }}>
 	{
+		const safe = /^[\w-]+$/;
+		const openIds = new Set();
 		const raw = localStorage.getItem('navState');
 		if (raw) {
 			try {
 				const state = JSON.parse(raw);
-				const safe = /^[\w-]+$/;
-				const css = Object.entries(state)
-					.filter(([id, open]) => open && safe.test(id))
-					.map(([id]) =>
-						`nav-group[data-uuid="${id}"]>.nav-details>.nav-group-content{grid-template-rows:1fr}` +
-						`nav-group[data-uuid="${id}"]>.nav-details>.nav-group-title .chevron{transform:rotate(90deg)}`
-					)
-					.join('');
-				if (css) {
-					const s = document.createElement('style');
-					s.id = 'nav-restore';
-					s.textContent = css;
-					document.head.appendChild(s);
+				for (const [id, open] of Object.entries(state)) {
+					if (open && safe.test(id)) openIds.add(id);
 				}
 			} catch { /* ignore corrupted localStorage */ }
+		}
+		for (const id of activePageGroupIds) {
+			if (safe.test(id)) openIds.add(id);
+		}
+		const css = Array.from(openIds)
+			.map((id) =>
+				`nav-group[data-uuid="${id}"]>.nav-details>.nav-group-content{grid-template-rows:1fr}` +
+				`nav-group[data-uuid="${id}"]>.nav-details>.nav-group-title .chevron{transform:rotate(90deg)}`
+			)
+			.join('');
+		if (css) {
+			const s = document.createElement('style');
+			s.id = 'nav-restore';
+			s.textContent = css;
+			document.head.appendChild(s);
 		}
 	}
 </script>
