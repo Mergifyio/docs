@@ -1,6 +1,6 @@
 ---
-title: RSpec Integration with CI Insights
-description: Report your test results from RSpec to CI Insights
+title: RSpec Integration with Mergify
+description: Report your test results from RSpec to Mergify
 ---
 
 import rspecLogo from "../../../images/ci-insights/rspec/logo.svg"
@@ -9,15 +9,15 @@ import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astr
 
 <IntegrationLogo src={rspecLogo} alt="RSpec logo" />
 
-This guide explains how to integrate RSpec with CI Insights using the
+This guide explains how to integrate RSpec with Test Insights using the
 `rspec-mergify` gem. Once installed, test results are automatically uploaded to
-CI Insights without any extra workflow changes.
+Test Insights without any extra workflow changes.
 
 ## Installation
 
 You need to install the
 [`rspec-mergify`](https://rubygems.org/gems/rspec-mergify) gem to automatically
-upload your test results to **CI Insights**.
+upload your test results to **Test Insights**.
 
 ### Gemfile
 
@@ -80,9 +80,9 @@ steps:
       MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
 
-The gem automatically collects your test results and sends them to CI Insights.
+The gem automatically collects your test results and sends them to Test Insights.
 
-Check the CI Insights dashboard afterward to view execution metrics, detect
+Check the Test Insights dashboard afterward to view execution metrics, detect
 flaky tests, and review test trends.
 
 ## Environment Variables
@@ -102,6 +102,6 @@ variable). To enable it outside CI, set `RSPEC_MERGIFY_ENABLE=true`.
 :::
 
 :::tip
-Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in CI Insights, especially
+Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights, especially
 when running multiple test suites or using a matrix strategy.
 :::
