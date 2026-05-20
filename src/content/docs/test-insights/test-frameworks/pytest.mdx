@@ -9,15 +9,15 @@ import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astr
 
 <IntegrationLogo src={pytestLogo} alt="Pytest logo" />
 
-This guide explains how to integrate Pytest with CI Insights using the
+This guide explains how to integrate Pytest with Test Insights using the
 `pytest-mergify` plugin. Once installed, test results are automatically
-uploaded to CI Insights without any extra workflow changes.
+uploaded to Test Insights without any extra workflow changes.
 
 ## Installation
 
 You need to install the
 [`pytest-mergify`](https://pypi.python.org/pypi/pytest-mergify) plugin to
-automatically upload your test results to **CI Insights**. This can be done in
+automatically upload your test results to **Test Insights**. This can be done in
 different ways depending on your Python dependency setup. Below are a few
 examples:
 
@@ -100,9 +100,9 @@ steps:
       MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
 
-The plugin collects your test results and sends them to CI Insights.
+The plugin collects your test results and sends them to Test Insights.
 
-Check the CI Insights dashboard afterward to view execution metrics, detect
+Check the Test Insights dashboard afterward to view execution metrics, detect
 flaky tests, and review test trends.
 
 ## Using with Tox
@@ -147,7 +147,7 @@ will work for all of them as long as the token is set correctly.
 
 If you’re running multiple Tox environments (e.g., py38, py39, etc.), we
 recommend setting the `MERGIFY_TEST_JOB_NAME` environment variable to identify each
-environment’s report in CI Insights:
+environment’s report in Test Insights:
 
 In your CI workflow:
 
@@ -175,6 +175,6 @@ steps:
 ```
 
 :::tip
-Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in CI Insights, especially when
+Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights, especially when
 running multiple Tox environments or using a matrix.
 :::

@@ -9,15 +9,15 @@ import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astr
 
 <IntegrationLogo src={vitestLogo} alt="Vitest logo" />
 
-This guide explains how to integrate [Vitest](https://vitest.dev/) with CI
+This guide explains how to integrate [Vitest](https://vitest.dev/) with Test
 Insights using the `@mergifyio/vitest` reporter. Once installed, test results
-are automatically uploaded to CI Insights without any extra workflow changes.
+are automatically uploaded to Test Insights without any extra workflow changes.
 
 ## Installation
 
 You need to install the
 [`@mergifyio/vitest`](https://www.npmjs.com/package/@mergifyio/vitest) package
-to automatically upload your test results to **CI Insights**.
+to automatically upload your test results to **Test Insights**.
 
 ### npm
 
@@ -92,10 +92,10 @@ steps:
       MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
 
-The reporter automatically collects your test results and sends them to CI
+The reporter automatically collects your test results and sends them to Test
 Insights.
 
-Check the CI Insights dashboard afterward to view execution metrics, detect
+Check the Test Insights dashboard afterward to view execution metrics, detect
 flaky tests, and review test trends.
 
 ## Environment Variables
@@ -116,6 +116,6 @@ flaky tests, and review test trends.
 :::
 
 :::tip
-  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in CI Insights,
+  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights,
   especially when running multiple test suites or using a matrix strategy.
 :::
