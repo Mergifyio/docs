@@ -224,7 +224,7 @@ article > section iframe {
 a > code {
   position: relative;
   color: var(--theme-link);
-  text-underline-offset: var(--padding-block);
+  text-underline-offset: 0.2rem;
 }
 
 strong {
@@ -232,15 +232,11 @@ strong {
   color: inherit;
 }
 
-/* Supporting Content */
+/* Cross-cutting `code` properties. Inline-vs-block specifics live in
+   the more-specific selectors below (`pre > code`,
+   `:not(pre) > code:not([class*="language"])`). */
 code {
-  --border-radius: 3px;
-  --padding-block: 0.2rem;
   font-family: var(--font-mono);
-  font-size: 0.85em;
-  background-color: var(--theme-code-inline-bg);
-  margin: calc(var(--padding-block) * -1) 0;
-  border-radius: var(--border-radius);
   word-break: break-word;
 }
 
@@ -833,7 +829,9 @@ pre {
 /* Inline code */
 :not(pre) > code:not([class*="language"]) {
   background: var(--theme-code-inline-bg);
-  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--theme-border);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
   font-size: 0.85em;
 }
 
