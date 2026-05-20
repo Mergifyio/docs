@@ -224,7 +224,7 @@ article > section iframe {
 a > code {
   position: relative;
   color: var(--theme-link);
-  text-underline-offset: var(--padding-block);
+  text-underline-offset: 0.2rem;
 }
 
 strong {
@@ -232,15 +232,12 @@ strong {
   color: inherit;
 }
 
-/* Supporting Content */
+/* Cross-cutting `code` properties. Inline-vs-block specifics live in
+   the more-specific selectors below (`pre > code`,
+   `:not(pre) > code:not([class*="language"])`). */
 code {
-  --border-radius: 3px;
-  --padding-block: 0.2rem;
   font-family: var(--font-mono);
   font-size: 0.85em;
-  background-color: var(--theme-code-inline-bg);
-  margin: calc(var(--padding-block) * -1) 0;
-  border-radius: var(--border-radius);
   word-break: break-word;
 }
 
@@ -830,11 +827,66 @@ pre {
   border-radius: 8px;
 }
 
+/* Expressive Code's terminal frame ships a macOS-style window titlebar
+   (three colored dots + empty space). We don't use titled terminal blocks,
+   so the bar is decorative chrome — hide it entirely. File frames keep
+   their tab bar (it carries the filename).
+
+   The header carries the top border + top corner radius of the frame;
+   with it hidden, restore both on the `<pre>` underneath so the code
+   block looks like a regular standalone card. !important because EC's
+   inline stylesheet competes for load order. */
+.expressive-code .frame.is-terminal .header {
+  display: none !important;
+}
+.expressive-code .frame.is-terminal pre {
+  border-top: var(--ec-brdWd) solid var(--ec-brdCol) !important;
+  border-top-left-radius: var(--ec-brdRad) !important;
+  border-top-right-radius: var(--ec-brdRad) !important;
+}
+/* Copy button position is offset assuming a header — reset to a
+   value that lines up with the code's own block padding now that
+   the terminal header is hidden. */
+.expressive-code .frame.is-terminal {
+  --button-spacing: 0.5rem !important;
+}
+/* Match the horizontal offset to the new vertical offset for the
+   terminal copy button so the button sits a consistent distance
+   from both edges. File/editor frames keep EC's default placement
+   (next to the tab bar). */
+.expressive-code .frame.is-terminal .copy {
+  inset-inline-end: 0.5rem !important;
+}
+
+/* EC's defaults give the copy button `align-self: flex-end` and the
+   feedback tooltip `align-self: center`, plus the tooltip is much
+   shorter than the 2.5rem button — so even when "centered" they
+   look misaligned. Force both to center and make the tooltip's
+   box match the button height with internally-centered text. */
+.expressive-code .frame .copy button,
+.expressive-code .frame .copy .feedback {
+  align-self: center !important;
+}
+.expressive-code .frame .copy .feedback {
+  height: 2.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
 /* Inline code */
 :not(pre) > code:not([class*="language"]) {
   background: var(--theme-code-inline-bg);
-  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--theme-border);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
   font-size: 0.85em;
+}
+
+/* Shiki dual-theme switch for inline `<Code inline themes={...} />`.
+   Astro emits spans with inline style `color: var(--shiki-light);
+   --shiki-dark: #abc;`. In dark mode swap the active variable. */
+.theme-dark :not(pre) > code span[style*="--shiki-dark"] {
+  color: var(--shiki-dark) !important;
 }
 
 /* Heading rules for MDX-rendered content. Properties match the
