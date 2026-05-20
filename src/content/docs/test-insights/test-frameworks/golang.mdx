@@ -1,9 +1,9 @@
 ---
-title: Jest Integration with CI Insights
-description: Report your test results from Jest tests to CI Insights
+title: Go Integration with Mergify
+description: Report your test results from Go tests to Mergify
 ---
 
-import jestLogo from "../../../images/ci-insights/jest/logo.svg"
+import golangLogo from "../../../images/ci-insights/golang/logo.svg"
 import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
@@ -15,50 +15,28 @@ import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploa
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 
-<IntegrationLogo src={jestLogo} alt="Jest logo" />
+<IntegrationLogo src={golangLogo} alt="Golang logo" />
 
-This guide shows how to generate JUnit reports from your Jest tests and upload
+This guide shows how to generate JUnit reports from your Go tests and upload
 them to **CI Insights** using your CI workflow.
 
-## Generate a JUnit Report with Jest
+## Generate a JUnit Report with Go Tests
 
-Jest has built-in support for JUnit XML reports. You can configure Jest to
-output JUnit reports by updating your Jest configuration or using command-line
-options.
+By default, `go test` does not output JUnit-format reports. To generate one,
+pipe the verbose test output into a tool like
+[go-junit-report](https://github.com/jstemmer/go-junit-report) or use
+[gotestsum](https://github.com/gotestyourself/gotestsum).
 
-### Using Jest Configuration
-
-Add the following to your `jest.config.js` or `package.json`:
-
-```javascript
-// jest.config.js
-module.exports = {
-  reporters: [
-    'default',
-    ['jest-junit', {
-      outputDirectory: '.',
-      outputName: 'junit.xml'
-    }]
-  ]
-};
-```
-
-First, install the `jest-junit` reporter:
+### Using go-junit-report
 
 ```bash
-npm install --save-dev jest-junit
+go test -v ./... 2>&1 | go-junit-report > junit.xml
 ```
 
-### Using Command Line Options
+### Using gotestsum
 
 ```bash
-npx jest --reporters=default --reporters=jest-junit
-```
-
-You can also set the output file location:
-
-```bash
-JEST_JUNIT_OUTPUT_DIR=. JEST_JUNIT_OUTPUT_NAME=junit.xml npx jest --reporters=default --reporters=jest-junit
+gotestsum --junitfile junit.xml
 ```
 
 ## Update Your CI Workflow
@@ -73,12 +51,9 @@ Insights using the mergifyio/gha-mergify-ci action.
 For example, in your workflow file:
 
 ```yaml
-- name: Run Jest Tests and Generate JUnit Report
+- name: Run Go Tests and Generate JUnit Report
   continue-on-error: true
-  env:
-    JEST_JUNIT_OUTPUT_DIR: .
-    JEST_JUNIT_OUTPUT_NAME: junit.xml
-  run: npx jest --reporters=default --reporters=jest-junit
+  run: go test -v ./... 2>&1 | go-junit-report > junit.xml
 ```
 
 <MergifyCIUploadStep reportPath="junit.xml" />
@@ -95,14 +70,14 @@ For example, in your workflow file:
 
 ### Any CI (Mergify CLI)
 
-<MergifyCliUploadStep reportPath="junit.xml" testCommand="npx jest --reporters=default --reporters=jest-junit" />
+<MergifyCliUploadStep reportPath="junit.xml" testCommand="go test -v ./... 2>&1 | go-junit-report > junit.xml" />
 
 ## Verify and Review in CI Insights
 
 After pushing these changes:
 
-1. Your GitHub Actions workflow will execute your Jest tests.
-2. A JUnit report (`junit.xml`) is generated.
+1. Your GitHub Actions workflow will execute your Go tests.
+2. A JUnit report (junit.xml) is generated.
 3. The Mergify CI action uploads the report to CI Insights.
 
 You can then review your test results, including any failures or flaky tests,
@@ -112,7 +87,5 @@ dashboard](https://dashboard.mergify.com/ci-insights/jobs).
 ## Troubleshooting Tips
 
 <ul>
-  <li>Jest Configuration: Ensure `jest-junit` is properly installed and configured in your Jest setup.</li>
-
   <CommonTroubleshootingTips />
 </ul>

@@ -1,6 +1,6 @@
 ---
-title: PHPUnit Integration with CI Insights
-description: Report your test results from PHPUnit tests to CI Insights
+title: Pest Integration with Mergify
+description: Report your test results from Pest tests to Mergify
 ---
 
 import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
@@ -13,23 +13,24 @@ import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploa
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 
-This guide shows how to generate JUnit reports from your PHPUnit tests and upload
+This guide shows how to generate JUnit reports from your Pest tests and upload
 them to **CI Insights** using your CI workflow.
 
-## Generate a JUnit Report with PHPUnit
+## Generate a JUnit Report with Pest
 
-PHPUnit has built-in support for JUnit XML reports. You can configure PHPUnit
-to output JUnit reports using command-line options or configuration files.
+Pest is built on top of PHPUnit and supports JUnit XML reports through PHPUnit's
+logging capabilities. You can configure Pest to output JUnit reports using
+command-line options or configuration files.
 
 ### Using Command Line Options
 
 ```bash
-./vendor/bin/phpunit --log-junit junit.xml
+./vendor/bin/pest --log-junit junit.xml
 ```
 
-### Using PHPUnit Configuration
+### Using Pest Configuration
 
-Add the logging configuration to your `phpunit.xml` or `phpunit.xml.dist`:
+Add the logging configuration to your `phpunit.xml` or `phpunit.xml.dist` (Pest uses PHPUnit's configuration):
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -50,7 +51,7 @@ Add the logging configuration to your `phpunit.xml` or `phpunit.xml.dist`:
 Then run:
 
 ```bash
-./vendor/bin/phpunit
+./vendor/bin/pest
 ```
 
 ### Using Composer Scripts
@@ -60,7 +61,7 @@ You can also add a script to your `composer.json`:
 ```json
 {
     "scripts": {
-        "test": "phpunit --log-junit junit.xml"
+        "test": "pest --log-junit junit.xml"
     }
 }
 ```
@@ -69,6 +70,18 @@ Then run:
 
 ```bash
 composer test
+```
+
+### Using Pest Configuration File
+
+You can also configure logging in your `Pest.php` file:
+
+```php
+<?php
+
+use Pest\TestSuite;
+
+TestSuite::getInstance()->log('junit', 'junit.xml');
 ```
 
 ## Update Your CI Workflow
@@ -83,9 +96,9 @@ Insights using the mergifyio/gha-mergify-ci action.
 For example, in your workflow file:
 
 ```yaml
-- name: Run PHPUnit Tests and Generate JUnit Report
+- name: Run Pest Tests and Generate JUnit Report
   continue-on-error: true
-  run: ./vendor/bin/phpunit --log-junit junit.xml
+  run: ./vendor/bin/pest --log-junit junit.xml
 ```
 
 <MergifyCIUploadStep reportPath="junit.xml" />
@@ -102,13 +115,13 @@ For example, in your workflow file:
 
 ### Any CI (Mergify CLI)
 
-<MergifyCliUploadStep reportPath="junit.xml" testCommand="./vendor/bin/phpunit --log-junit junit.xml" />
+<MergifyCliUploadStep reportPath="junit.xml" testCommand="./vendor/bin/pest --log-junit junit.xml" />
 
 ## Verify and Review in CI Insights
 
 After pushing these changes:
 
-1. Your GitHub Actions workflow will execute your PHPUnit tests.
+1. Your GitHub Actions workflow will execute your Pest tests.
 2. A JUnit report (junit.xml) is generated.
 3. The Mergify CI action uploads the report to CI Insights.
 
@@ -120,7 +133,8 @@ dashboard](https://dashboard.mergify.com/ci-insights/jobs).
 
 <ul>
   <li>
-    PHPUnit Configuration: Ensure PHPUnit is properly installed via Composer and the logging configuration is correct.
+    Pest Configuration: Ensure Pest is properly installed via Composer and the logging configuration is correct in your
+    PHPUnit configuration file.
   </li>
 
   <CommonTroubleshootingTips />

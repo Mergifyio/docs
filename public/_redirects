@@ -71,4 +71,7 @@
 /integrations/teamcity/ /integrations/ci-status-checks 301
 /integrations/gitlab /integrations/ci-status-checks 301
 /integrations/gitlab/ /integrations/ci-status-checks 301
+/ci-insights/test-frameworks/* /test-insights/test-frameworks/:splat 301
+/ci-insights/quarantine /test-insights/quarantine 301
+/ci-insights/quarantine/ /test-insights/quarantine 301
 

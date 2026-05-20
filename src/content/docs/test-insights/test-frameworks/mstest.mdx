@@ -1,6 +1,6 @@
 ---
-title: Pest Integration with CI Insights
-description: Report your test results from Pest tests to CI Insights
+title: MSTest Integration with Mergify
+description: Report your test results from MSTest tests to Mergify
 ---
 
 import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
@@ -13,75 +13,64 @@ import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploa
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 
-This guide shows how to generate JUnit reports from your Pest tests and upload
+This guide shows how to generate JUnit reports from your MSTest tests and upload
 them to **CI Insights** using your CI workflow.
 
-## Generate a JUnit Report with Pest
+## Generate a JUnit Report with MSTest
 
-Pest is built on top of PHPUnit and supports JUnit XML reports through PHPUnit's
-logging capabilities. You can configure Pest to output JUnit reports using
-command-line options or configuration files.
+MSTest can generate JUnit-compatible XML reports using the built-in logger or
+third-party tools. The `dotnet test` command supports various loggers including
+JUnit format.
 
-### Using Command Line Options
+### Using dotnet test with JUnit Logger
+
+Install the JUnit test logger:
 
 ```bash
-./vendor/bin/pest --log-junit junit.xml
+dotnet add package JunitXml.TestLogger
 ```
 
-### Using Pest Configuration
+Run tests with JUnit output:
 
-Add the logging configuration to your `phpunit.xml` or `phpunit.xml.dist` (Pest uses PHPUnit's configuration):
+```bash
+dotnet test --logger "junit;LogFilePath=junit.xml"
+```
+
+### Using TRX to JUnit Conversion
+
+You can also generate TRX files and convert them to JUnit:
+
+```bash
+dotnet test --logger trx --results-directory ./TestResults
+```
+
+Then use a tool like `trx2junit` to convert:
+
+```bash
+dotnet tool install -g trx2junit
+trx2junit ./TestResults/*.trx
+```
+
+### Using MSTest with Test Results
+
+Add the JUnit logger package to your test project:
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php">
-    <testsuites>
-        <testsuite name="Test Suite">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
-    <logging>
-        <junit outputFile="junit.xml"/>
-    </logging>
-</phpunit>
+<PackageReference Include="JunitXml.TestLogger" Version="6.1.0" />
 ```
 
 Then run:
 
 ```bash
-./vendor/bin/pest
+dotnet test --logger junit
 ```
 
-### Using Composer Scripts
+### Using Multiple Loggers
 
-You can also add a script to your `composer.json`:
-
-```json
-{
-    "scripts": {
-        "test": "pest --log-junit junit.xml"
-    }
-}
-```
-
-Then run:
+You can combine multiple loggers:
 
 ```bash
-composer test
-```
-
-### Using Pest Configuration File
-
-You can also configure logging in your `Pest.php` file:
-
-```php
-<?php
-
-use Pest\TestSuite;
-
-TestSuite::getInstance()->log('junit', 'junit.xml');
+dotnet test --logger "console;verbosity=detailed" --logger "junit;LogFilePath=junit.xml"
 ```
 
 ## Update Your CI Workflow
@@ -96,9 +85,9 @@ Insights using the mergifyio/gha-mergify-ci action.
 For example, in your workflow file:
 
 ```yaml
-- name: Run Pest Tests and Generate JUnit Report
+- name: Run MSTest Tests and Generate JUnit Report
   continue-on-error: true
-  run: ./vendor/bin/pest --log-junit junit.xml
+  run: dotnet test --logger "junit;LogFilePath=junit.xml"
 ```
 
 <MergifyCIUploadStep reportPath="junit.xml" />
@@ -115,13 +104,13 @@ For example, in your workflow file:
 
 ### Any CI (Mergify CLI)
 
-<MergifyCliUploadStep reportPath="junit.xml" testCommand="./vendor/bin/pest --log-junit junit.xml" />
+<MergifyCliUploadStep reportPath="junit.xml" testCommand={`dotnet test --logger "junit;LogFilePath=junit.xml"`} />
 
 ## Verify and Review in CI Insights
 
 After pushing these changes:
 
-1. Your GitHub Actions workflow will execute your Pest tests.
+1. Your GitHub Actions workflow will execute your MSTest tests.
 2. A JUnit report (junit.xml) is generated.
 3. The Mergify CI action uploads the report to CI Insights.
 
@@ -132,10 +121,8 @@ dashboard](https://dashboard.mergify.com/ci-insights/jobs).
 ## Troubleshooting Tips
 
 <ul>
-  <li>
-    Pest Configuration: Ensure Pest is properly installed via Composer and the logging configuration is correct in your
-    PHPUnit configuration file.
-  </li>
+  <li>Logger Package: Ensure the JunitXml.TestLogger package is added to your test project.</li>
+  <li>.NET Version: Make sure you're using a compatible version of .NET that supports the test loggers.</li>
 
   <CommonTroubleshootingTips />
 </ul>
