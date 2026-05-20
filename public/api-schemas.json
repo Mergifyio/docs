@@ -6552,7 +6552,7 @@
           "stacks"
         ],
         "summary": "Get adoption summary metrics for Stacks",
-        "description": "Returns counts and weekly trend for Mergify Stacks across the org's repositories over a time window (default 30 days, max 90).",
+        "description": "Returns counts, score, period delta, sparklines, top authors, and weekly trend for Mergify Stacks across the org's repositories over a time window (default 30 days, max 90).",
         "operationId": "get_stacks_summary_repos__owner__stacks_summary_get",
         "security": [
           {
@@ -6727,6 +6727,76 @@
           }
         }
       }
+    },
+    "/repos/{owner}/stacks/impact": {
+      "get": {
+        "tags": [
+          "stacks"
+        ],
+        "summary": "Compare stack PRs vs non-stack PRs",
+        "description": "Returns median time-to-merge, PR size, time-to-first-review, and review-thread count for stack PRs vs all other merged PRs in the window. Bots and Mergify merge-queue PRs are excluded from the 'other' cohort to keep the comparison honest.",
+        "operationId": "get_stacks_impact_repos__owner__stacks_impact_get",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 90,
+              "minimum": 1,
+              "default": 30,
+              "title": "Days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StacksImpact"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6765,6 +6835,38 @@
           "name"
         ],
         "title": "Actor"
+      },
+      "AdoptionScoreResponse": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Composite 0-100"
+          },
+          "coverage": {
+            "type": "integer",
+            "title": "Coverage",
+            "description": "Coverage component, 0-50"
+          },
+          "authors": {
+            "type": "integer",
+            "title": "Authors",
+            "description": "Authors component, 0-25"
+          },
+          "repos": {
+            "type": "integer",
+            "title": "Repos",
+            "description": "Repos component, 0-25"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "coverage",
+          "authors",
+          "repos"
+        ],
+        "title": "AdoptionScoreResponse"
       },
       "ApplicationAccountScope": {
         "properties": {
@@ -6815,6 +6917,36 @@
           "scope"
         ],
         "title": "ApplicationResponse"
+      },
+      "AuthorResponse": {
+        "properties": {
+          "login": {
+            "type": "string",
+            "title": "Login"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
+          "stack_pr_count": {
+            "type": "integer",
+            "title": "Stack Pr Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "login",
+          "avatar_url",
+          "stack_pr_count"
+        ],
+        "title": "AuthorResponse"
       },
       "AutoQuarantineConfigEventLogAttributes": {
         "properties": {
@@ -7604,6 +7736,51 @@
           "groups"
         ],
         "title": "ChecksRetriesResponse"
+      },
+      "CohortMedianResponse": {
+        "properties": {
+          "stack": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stack"
+          },
+          "other": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other"
+          },
+          "delta_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta Percent",
+            "description": "Signed percent. Positive means the stack cohort's median is lower than the other cohort's (the typical 'win' direction for time-to-merge, PR size, first-review, comments)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "stack",
+          "other",
+          "delta_percent"
+        ],
+        "title": "CohortMedianResponse"
       },
       "CreateScheduledQueueFreezePayload": {
         "properties": {
@@ -13208,6 +13385,75 @@
         ],
         "title": "MergedInInterval"
       },
+      "PeriodDeltaResponse": {
+        "properties": {
+          "active_stacks": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Stacks"
+          },
+          "stack_prs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stack Prs"
+          },
+          "repos_with_stacks": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repos With Stacks"
+          },
+          "percent_merged_from_stack_pp": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent Merged From Stack Pp",
+            "description": "Delta in percentage points (not percent)"
+          },
+          "score_total": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active_stacks",
+          "stack_prs",
+          "repos_with_stacks",
+          "percent_merged_from_stack_pp",
+          "score_total"
+        ],
+        "title": "PeriodDeltaResponse"
+      },
       "PrExitReasonGroupResponse": {
         "properties": {
           "base_ref": {
@@ -14558,6 +14804,46 @@
         ],
         "title": "SimulatorResponse"
       },
+      "SparklinesResponse": {
+        "properties": {
+          "active_stacks": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Active Stacks"
+          },
+          "stack_prs": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Stack Prs"
+          },
+          "repos_with_stacks": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Repos With Stacks"
+          },
+          "percent_merged_from_stack": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Percent Merged From Stack"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active_stacks",
+          "stack_prs",
+          "repos_with_stacks",
+          "percent_merged_from_stack"
+        ],
+        "title": "SparklinesResponse"
+      },
       "StackPRResponse": {
         "properties": {
           "number": {
@@ -14647,6 +14933,40 @@
         ],
         "title": "StackResponse"
       },
+      "StacksImpact": {
+        "properties": {
+          "time_to_merge_hours": {
+            "$ref": "#/components/schemas/CohortMedianResponse"
+          },
+          "pr_size_lines": {
+            "$ref": "#/components/schemas/CohortMedianResponse"
+          },
+          "time_to_first_review_hours": {
+            "$ref": "#/components/schemas/CohortMedianResponse"
+          },
+          "review_threads": {
+            "$ref": "#/components/schemas/CohortMedianResponse"
+          },
+          "stack_pr_count": {
+            "type": "integer",
+            "title": "Stack Pr Count"
+          },
+          "other_pr_count": {
+            "type": "integer",
+            "title": "Other Pr Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "time_to_merge_hours",
+          "pr_size_lines",
+          "time_to_first_review_hours",
+          "review_threads",
+          "stack_pr_count",
+          "other_pr_count"
+        ],
+        "title": "StacksImpact"
+      },
       "StacksSummary": {
         "properties": {
           "active_stacks": {
@@ -14676,6 +14996,22 @@
             "type": "array",
             "title": "Weekly Buckets",
             "description": "Weekly counts of new stacks across the window"
+          },
+          "score": {
+            "$ref": "#/components/schemas/AdoptionScoreResponse"
+          },
+          "delta_vs_prior_period": {
+            "$ref": "#/components/schemas/PeriodDeltaResponse"
+          },
+          "sparklines": {
+            "$ref": "#/components/schemas/SparklinesResponse"
+          },
+          "top_authors": {
+            "items": {
+              "$ref": "#/components/schemas/AuthorResponse"
+            },
+            "type": "array",
+            "title": "Top Authors"
           }
         },
         "type": "object",
@@ -14684,7 +15020,11 @@
           "stack_prs_in_window",
           "repos_with_stacks_in_window",
           "percent_merged_from_stack",
-          "weekly_buckets"
+          "weekly_buckets",
+          "score",
+          "delta_vs_prior_period",
+          "sparklines",
+          "top_authors"
         ],
         "title": "StacksSummary"
       },
