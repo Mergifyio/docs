@@ -94,7 +94,6 @@ const navItems: NavItem[] = [
         path: '/ci-insights/flaky-test-detection',
         icon: 'lucide:bug',
       },
-      { title: 'Quarantine', path: '/ci-insights/quarantine', icon: 'lucide:radiation' },
       {
         title: 'CI Setup',
         icon: 'lucide:settings',
@@ -112,68 +111,6 @@ const navItems: NavItem[] = [
           { title: 'Jenkins', path: '/ci-insights/setup/jenkins', icon: 'simple-icons:jenkins' },
         ],
       },
-      {
-        title: 'Test Frameworks Setup',
-        path: '/ci-insights#test-framework-configuration',
-        icon: 'lucide:flask-conical',
-        children: [
-          {
-            title: 'Cypress',
-            path: '/ci-insights/test-frameworks/cypress',
-            icon: 'simple-icons:cypress',
-          },
-          { title: 'Go', path: '/ci-insights/test-frameworks/golang', icon: 'simple-icons:go' },
-          { title: 'Jest', path: '/ci-insights/test-frameworks/jest', icon: 'simple-icons:jest' },
-          {
-            title: 'JUnit',
-            path: '/ci-insights/test-frameworks/junit',
-            icon: 'simple-icons:junit5',
-          },
-          {
-            title: 'minitest',
-            path: '/ci-insights/test-frameworks/minitest',
-            icon: 'simple-icons:ruby',
-          },
-          {
-            title: 'MSTest',
-            path: '/ci-insights/test-frameworks/mstest',
-            icon: 'simple-icons:dotnet',
-          },
-          {
-            title: 'NUnit',
-            path: '/ci-insights/test-frameworks/nunit',
-            icon: 'simple-icons:dotnet',
-          },
-          { title: 'Pest', path: '/ci-insights/test-frameworks/pest', icon: 'simple-icons:php' },
-          {
-            title: 'PHPUnit',
-            path: '/ci-insights/test-frameworks/phpunit',
-            icon: 'simple-icons:php',
-          },
-          {
-            title: 'Playwright',
-            path: '/ci-insights/test-frameworks/playwright',
-            icon: 'simple-icons:playwright',
-          },
-          {
-            title: 'pytest',
-            path: '/ci-insights/test-frameworks/pytest',
-            icon: 'simple-icons:pytest',
-          },
-          { title: 'RSpec', path: '/ci-insights/test-frameworks/rspec', icon: 'simple-icons:ruby' },
-          { title: 'Rust', path: '/ci-insights/test-frameworks/rust', icon: 'simple-icons:rust' },
-          {
-            title: 'TestNG',
-            path: '/ci-insights/test-frameworks/testng',
-            icon: 'simple-icons:testinglibrary',
-          },
-          {
-            title: 'Vitest',
-            path: '/ci-insights/test-frameworks/vitest',
-            icon: 'simple-icons:vitest',
-          },
-        ],
-      },
     ],
   },
   {
@@ -185,6 +122,73 @@ const navItems: NavItem[] = [
       { title: 'Prevention', path: '/test-insights/prevention', icon: 'lucide:shield-half' },
       { title: 'Detection', path: '/test-insights/detection', icon: 'lucide:search' },
       { title: 'Mitigation', path: '/test-insights/mitigation', icon: 'lucide:radiation' },
+      { title: 'Quarantine', path: '/test-insights/quarantine', icon: 'lucide:radiation' },
+      {
+        title: 'Test Frameworks Setup',
+        path: '/test-insights#test-framework-configuration',
+        icon: 'lucide:flask-conical',
+        children: [
+          {
+            title: 'Cypress',
+            path: '/test-insights/test-frameworks/cypress',
+            icon: 'simple-icons:cypress',
+          },
+          { title: 'Go', path: '/test-insights/test-frameworks/golang', icon: 'simple-icons:go' },
+          { title: 'Jest', path: '/test-insights/test-frameworks/jest', icon: 'simple-icons:jest' },
+          {
+            title: 'JUnit',
+            path: '/test-insights/test-frameworks/junit',
+            icon: 'simple-icons:junit5',
+          },
+          {
+            title: 'minitest',
+            path: '/test-insights/test-frameworks/minitest',
+            icon: 'simple-icons:ruby',
+          },
+          {
+            title: 'MSTest',
+            path: '/test-insights/test-frameworks/mstest',
+            icon: 'simple-icons:dotnet',
+          },
+          {
+            title: 'NUnit',
+            path: '/test-insights/test-frameworks/nunit',
+            icon: 'simple-icons:dotnet',
+          },
+          { title: 'Pest', path: '/test-insights/test-frameworks/pest', icon: 'simple-icons:php' },
+          {
+            title: 'PHPUnit',
+            path: '/test-insights/test-frameworks/phpunit',
+            icon: 'simple-icons:php',
+          },
+          {
+            title: 'Playwright',
+            path: '/test-insights/test-frameworks/playwright',
+            icon: 'simple-icons:playwright',
+          },
+          {
+            title: 'pytest',
+            path: '/test-insights/test-frameworks/pytest',
+            icon: 'simple-icons:pytest',
+          },
+          {
+            title: 'RSpec',
+            path: '/test-insights/test-frameworks/rspec',
+            icon: 'simple-icons:ruby',
+          },
+          { title: 'Rust', path: '/test-insights/test-frameworks/rust', icon: 'simple-icons:rust' },
+          {
+            title: 'TestNG',
+            path: '/test-insights/test-frameworks/testng',
+            icon: 'simple-icons:testinglibrary',
+          },
+          {
+            title: 'Vitest',
+            path: '/test-insights/test-frameworks/vitest',
+            icon: 'simple-icons:vitest',
+          },
+        ],
+      },
     ],
   },
   {

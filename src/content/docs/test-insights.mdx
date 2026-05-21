@@ -4,6 +4,9 @@ description: Monitor, detect, and manage unreliable tests across your repositori
 hubAccent: true
 ---
 
+import Docset from '../../components/DocsetGrid/Docset.astro';
+import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
+
 Test Insights helps you manage test reliability across the full lifecycle.
 It catches flaky tests on pull requests before they merge, surfaces unhealthy
 tests across your repositories, and lets you quarantine problematic tests so
@@ -53,4 +56,121 @@ framework:
 
 - [GitHub Actions setup](/ci-insights/setup/github-actions)
 - [Jenkins setup](/ci-insights/setup/jenkins)
-- [Test framework configuration](/ci-insights#test-framework-configuration)
+- [Test framework configuration](#test-framework-configuration)
+
+## Test Framework Configuration
+
+Test Insights supports many test frameworks and captures test-level data from
+them. Each framework requires a quick setup to ensure test results are parsed
+and uploaded properly.
+
+Refer to the dedicated page for your specific framework to configure and
+verify your test output.
+
+<DocsetGrid>
+  <Docset
+    title="Cypress"
+    path="/test-insights/test-frameworks/cypress"
+    icon="simple-icons:cypress"
+  >
+    Integrate Cypress with Test Insights.
+  </Docset>
+  <Docset
+    title="Go"
+    path="/test-insights/test-frameworks/golang"
+    icon="simple-icons:go"
+  >
+    Integrate Go with Test Insights.
+  </Docset>
+  <Docset
+    title="Jest"
+    path="/test-insights/test-frameworks/jest"
+    icon="simple-icons:jest"
+  >
+    Integrate Jest with Test Insights.
+  </Docset>
+  <Docset
+    title="JUnit"
+    path="/test-insights/test-frameworks/junit"
+    icon="simple-icons:junit5"
+  >
+    Integrate JUnit with Test Insights.
+  </Docset>
+  <Docset
+    title="Minitest"
+    path="/test-insights/test-frameworks/minitest"
+    icon="simple-icons:ruby"
+  >
+    Integrate Minitest with Test Insights.
+  </Docset>
+  <Docset
+    title="MSTest"
+    path="/test-insights/test-frameworks/mstest"
+    icon="simple-icons:dotnet"
+  >
+    Integrate MSTest with Test Insights.
+  </Docset>
+  <Docset
+    title="NUnit"
+    path="/test-insights/test-frameworks/nunit"
+    icon="simple-icons:dotnet"
+  >
+    Integrate NUnit with Test Insights.
+  </Docset>
+  <Docset
+    title="Pest"
+    path="/test-insights/test-frameworks/pest"
+    icon="simple-icons:php"
+  >
+    Integrate Pest with Test Insights.
+  </Docset>
+  <Docset
+    title="PHPUnit"
+    path="/test-insights/test-frameworks/phpunit"
+    icon="simple-icons:php"
+  >
+    Integrate PHPUnit with Test Insights.
+  </Docset>
+  <Docset
+    title="Playwright"
+    path="/test-insights/test-frameworks/playwright"
+    icon="simple-icons:playwright"
+  >
+    Integrate Playwright with Test Insights.
+  </Docset>
+  <Docset
+    title="Pytest"
+    path="/test-insights/test-frameworks/pytest"
+    icon="simple-icons:pytest"
+  >
+    Integrate Pytest with Test Insights.
+  </Docset>
+  <Docset
+    title="RSpec"
+    path="/test-insights/test-frameworks/rspec"
+    icon="simple-icons:ruby"
+  >
+    Integrate RSpec with Test Insights.
+  </Docset>
+  <Docset
+    title="Rust"
+    path="/test-insights/test-frameworks/rust"
+    icon="simple-icons:rust"
+  >
+    Integrate Rust with Test Insights.
+  </Docset>
+  <Docset
+    title="TestNG"
+    path="/test-insights/test-frameworks/testng"
+    icon="simple-icons:testinglibrary"
+  >
+    Integrate TestNG with Test Insights.
+  </Docset>
+  <Docset
+    title="Vitest"
+    path="/test-insights/test-frameworks/vitest"
+    icon="simple-icons:vitest"
+  >
+    Integrate Vitest with Test Insights.
+  </Docset>
+</DocsetGrid>
