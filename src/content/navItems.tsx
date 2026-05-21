@@ -242,7 +242,7 @@ const navItems: NavItem[] = [
     icon: 'lucide:zap',
     path: '/workflow',
     children: [
-      { title: 'Workflow Automation', path: '/workflow/', icon: 'lucide:bot' },
+      { title: 'Workflow Automation', path: '/workflow/', icon: 'lucide:zap' },
       { title: 'Rule Syntax', path: '/workflow/rule-syntax', icon: 'lucide:badge-question-mark' },
       {
         title: 'Actions',
