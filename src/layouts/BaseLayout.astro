@@ -9,6 +9,7 @@ import HeadSEO from '../components/HeadSEO.astro';
 import ImageZoom from '../components/ImageZoom.astro';
 import LeftSidebar from '../components/LeftSidebar/LeftSidebar.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
+import { getActivePageGroupIds } from '../util/activePageGroupIds';
 
 export interface Props {
   content: CollectionEntry<'docs'>['data'];
@@ -17,6 +18,7 @@ export interface Props {
 const { content } = Astro.props;
 const url = Astro.url;
 const currentPage = url.pathname;
+const activePageGroupIds = getActivePageGroupIds(currentPage);
 const formatTitle = (content: { title?: string }) => content.title;
 // Ensures the canonicalURL always has a trailing slash.
 const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro.site);
@@ -24,7 +26,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 
 <html dir={'ltr'} lang={'en'} class="initial">
 	<head>
-		<HeadCommon />
+		<HeadCommon activePageGroupIds={activePageGroupIds} />
 		<HeadSEO content={content} canonicalURL={canonicalURL} />
 		<title set:html={formatTitle(content)} />
 		<ClientRouter />
@@ -133,7 +135,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 		<main class="layout">
 			<aside id="left-sidebar" class="sidebar" transition:animate="none">
 				<slot name="primary-sidebar">
-					<LeftSidebar currentPage={currentPage} />
+					<LeftSidebar currentPage={currentPage} activePageGroupIds={activePageGroupIds} />
 				</slot>
 			</aside>
 			<aside id="right-sidebar" class="sidebar" transition:animate={fade({ duration: '150ms' })}>
