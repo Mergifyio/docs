@@ -1,5 +1,5 @@
 ---
-import { Code } from 'astro:components';
+import { Code } from 'astro-expressive-code/components';
 
 import Aside from '~/components/Aside.astro';
 
@@ -28,7 +28,6 @@ const { reportPath } = Astro.props;
           report_path: ${reportPath}
           token: "\${MERGIFY_TOKEN}"`}
 	lang="yaml"
-	theme="slack-ochin"
 />
 <Aside type="tip">
 	<p>
