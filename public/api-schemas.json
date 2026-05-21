@@ -5080,6 +5080,192 @@
         }
       }
     },
+    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/executions": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "List a test's executions",
+        "description": "List the identities under which this test ran on the default branch over the requested time window, ordered by total executions.",
+        "operationId": "ci-test-executions",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repository_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository Name"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the test",
+              "title": "Test Id"
+            },
+            "description": "ID of the test"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "executions_count",
+                "pipeline_name",
+                "job_name"
+              ],
+              "type": "string",
+              "description": "Sort field",
+              "default": "executions_count",
+              "title": "Sort"
+            },
+            "description": "Sort field"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string",
+              "description": "Sort direction",
+              "default": "desc",
+              "title": "Direction"
+            },
+            "description": "Sort direction"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages",
+              "title": "Cursor"
+            },
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "The number of items per page",
+              "default": 10,
+              "title": "Per Page"
+            },
+            "description": "The number of items per page"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "title": "Start"
+            },
+            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "title": "End"
+            },
+            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListTestExecutionsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/ci/{owner}/repositories/{repository}/quarantines": {
       "get": {
         "tags": [
@@ -12511,6 +12697,35 @@
         ],
         "title": "GitHubAccount"
       },
+      "ListTestExecutionsResponse": {
+        "properties": {
+          "size": {
+            "type": "integer",
+            "title": "Size",
+            "description": "The number of items in this page"
+          },
+          "per_page": {
+            "type": "integer",
+            "title": "Per Page",
+            "description": "The number of items per page"
+          },
+          "executions": {
+            "items": {
+              "$ref": "#/components/schemas/TestExecutionResult"
+            },
+            "type": "array",
+            "title": "Executions",
+            "description": "Test identities under which this test ran on the default branch over the requested time window, ordered by total executions."
+          }
+        },
+        "type": "object",
+        "required": [
+          "size",
+          "per_page",
+          "executions"
+        ],
+        "title": "ListTestExecutionsResponse"
+      },
       "LogPatternAnnotationConditionMatchSerialized": {
         "properties": {
           "attribute": {
@@ -15027,6 +15242,45 @@
           "top_authors"
         ],
         "title": "StacksSummary"
+      },
+      "TestExecutionResult": {
+        "properties": {
+          "test_id": {
+            "type": "string",
+            "format": "uuid5",
+            "title": "Test Id",
+            "description": "Stable identifier of the test. Matches the `test_id` in the URL."
+          },
+          "test_name": {
+            "type": "string",
+            "title": "Test Name",
+            "description": "Fully qualified name of the test as reported by the CI provider."
+          },
+          "pipeline_name": {
+            "type": "string",
+            "title": "Pipeline Name",
+            "description": "Name of the pipeline (workflow) that ran the test."
+          },
+          "job_name": {
+            "type": "string",
+            "title": "Job Name",
+            "description": "Name of the job within the pipeline that ran the test."
+          },
+          "executions_count": {
+            "type": "integer",
+            "title": "Executions Count",
+            "description": "Number of executions of this test under this identity over the requested time window."
+          }
+        },
+        "type": "object",
+        "required": [
+          "test_id",
+          "test_name",
+          "pipeline_name",
+          "job_name",
+          "executions_count"
+        ],
+        "title": "TestExecutionResult"
       },
       "TestSearchResult": {
         "properties": {
