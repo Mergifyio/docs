@@ -1,5 +1,5 @@
 ---
-import { Code } from 'astro:components';
+import { Code } from 'astro-expressive-code/components';
 
 import Aside from '~/components/Aside.astro';
 
@@ -23,7 +23,6 @@ const { reportPath } = Astro.props;
       matrix:
         version: [10, 12, 14]`}
 	lang="yaml"
-	theme="slack-ochin"
 />
 <p>Your upload step should look like:</p>
 <Code
@@ -36,7 +35,6 @@ const { reportPath } = Astro.props;
     report_path: ${reportPath}
     test_step_outcome: \${{ steps.tests.outcome }}`}
 	lang="yaml"
-	theme="slack-ochin"
 />
 <Aside type="tip">
 	<p>

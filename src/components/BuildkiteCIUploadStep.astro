@@ -1,5 +1,8 @@
 ---
-import { Code } from 'astro:components';
+import { Code as InlineCode } from 'astro:components';
+import { Code } from 'astro-expressive-code/components';
+
+const inlineThemes = { light: 'github-light', dark: 'github-dark' } as const;
 
 export interface Props {
   reportPath: string;
@@ -17,7 +20,6 @@ const { reportPath } = Astro.props;
           report_path: ${reportPath}
           token: "\${MERGIFY_TOKEN}"`}
 	lang="yaml"
-	theme="slack-ochin"
 />
 <p>Key Points:</p>
 <ul>
@@ -25,7 +27,7 @@ const { reportPath } = Astro.props;
 		The plugin runs in the <code>post-command</code> hook, so it uploads results <strong>after</strong> your tests finish, even if they fail.
 	</li>
 	<li>
-		<Code code={`report_path: ${reportPath}`} inline lang="yaml" theme="slack-ochin" />: Points to
+		<InlineCode code={`report_path: ${reportPath}`} inline lang="yaml" themes={inlineThemes} />: Points to
 		where your JUnit file is located. Make sure it matches the path you set in your test configuration.
 	</li>
 	<li>
