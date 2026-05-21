@@ -5080,6 +5080,335 @@
         }
       }
     },
+    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/stats/{stat}": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Get a single test stat as a time series",
+        "description": "Return one of the test stats bucketed over the requested time range, with a summary value over the full window. Binning adapts to the requested window (1h, 4h, 1d, 2d).",
+        "operationId": "ci-test-stats",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repository_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository Name"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the test",
+              "title": "Test Id"
+            },
+            "description": "ID of the test"
+          },
+          {
+            "name": "stat",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "success_count",
+                "failure_count",
+                "mean_duration"
+              ],
+              "type": "string",
+              "title": "Stat"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "title": "Start"
+            },
+            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "title": "End"
+            },
+            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TestCountStatsResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TestDurationStatsResponse"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "stat",
+                    "mapping": {
+                      "success_count": "#/components/schemas/TestCountStatsResponse",
+                      "failure_count": "#/components/schemas/TestCountStatsResponse",
+                      "mean_duration": "#/components/schemas/TestDurationStatsResponse"
+                    }
+                  },
+                  "title": "Response Ci-Test-Stats"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/failures": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Get test failures",
+        "description": "Get test failures.",
+        "operationId": "ci-test-failures",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repository_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository Name"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the test",
+              "title": "Test Id"
+            },
+            "description": "ID of the test"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestFailuresResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/failures/{failure_id}": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Get test failure",
+        "description": "Get test failure.",
+        "operationId": "ci-test-failure",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repository_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository Name"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the test",
+              "title": "Test Id"
+            },
+            "description": "ID of the test"
+          },
+          {
+            "name": "failure_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the failure",
+              "title": "Failure Id"
+            },
+            "description": "ID of the failure"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestFailureResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/executions": {
       "get": {
         "tags": [
@@ -12667,6 +12996,71 @@
         ],
         "title": "GetTestDetailsResponseUser"
       },
+      "GetTestFailureResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid5",
+            "title": "Id"
+          },
+          "exception_type": {
+            "type": "string",
+            "title": "Exception Type"
+          },
+          "exception_message": {
+            "type": "string",
+            "title": "Exception Message"
+          },
+          "failure_count": {
+            "type": "integer",
+            "title": "Failure Count"
+          },
+          "first_failure_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "First Failure At"
+          },
+          "last_failure_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Failure At"
+          },
+          "latest_events": {
+            "items": {
+              "$ref": "#/components/schemas/TestFailureEvent"
+            },
+            "type": "array",
+            "title": "Latest Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "exception_type",
+          "exception_message",
+          "failure_count",
+          "first_failure_at",
+          "last_failure_at",
+          "latest_events"
+        ],
+        "title": "GetTestFailureResponse"
+      },
+      "GetTestFailuresResponse": {
+        "properties": {
+          "failures": {
+            "items": {
+              "$ref": "#/components/schemas/TestFailure"
+            },
+            "type": "array",
+            "title": "Failures"
+          }
+        },
+        "type": "object",
+        "required": [
+          "failures"
+        ],
+        "title": "GetTestFailuresResponse"
+      },
       "GitHubAccount": {
         "properties": {
           "login": {
@@ -15243,6 +15637,63 @@
         ],
         "title": "StacksSummary"
       },
+      "TestCountStatsResponse": {
+        "properties": {
+          "value": {
+            "type": "integer",
+            "title": "Value"
+          },
+          "value_over_time": {
+            "items": {
+              "$ref": "#/components/schemas/_TestStatsBucket_int_"
+            },
+            "type": "array",
+            "title": "Value Over Time"
+          },
+          "stat": {
+            "type": "string",
+            "enum": [
+              "success_count",
+              "failure_count"
+            ],
+            "title": "Stat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "value_over_time",
+          "stat"
+        ],
+        "title": "TestCountStatsResponse"
+      },
+      "TestDurationStatsResponse": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "value_over_time": {
+            "items": {
+              "$ref": "#/components/schemas/_TestStatsBucket_float_"
+            },
+            "type": "array",
+            "title": "Value Over Time"
+          },
+          "stat": {
+            "type": "string",
+            "const": "mean_duration",
+            "title": "Stat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "value_over_time",
+          "stat"
+        ],
+        "title": "TestDurationStatsResponse"
+      },
       "TestExecutionResult": {
         "properties": {
           "test_id": {
@@ -15281,6 +15732,113 @@
           "executions_count"
         ],
         "title": "TestExecutionResult"
+      },
+      "TestFailure": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid5",
+            "title": "Id"
+          },
+          "exception_type": {
+            "type": "string",
+            "title": "Exception Type"
+          },
+          "exception_message": {
+            "type": "string",
+            "title": "Exception Message"
+          },
+          "failure_count": {
+            "type": "integer",
+            "title": "Failure Count"
+          },
+          "first_failure_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "First Failure At"
+          },
+          "last_failure_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Failure At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "exception_type",
+          "exception_message",
+          "failure_count",
+          "first_failure_at",
+          "last_failure_at"
+        ],
+        "title": "TestFailure"
+      },
+      "TestFailureEvent": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "failed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Failed At"
+          },
+          "exception_stacktrace": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exception Stacktrace"
+          },
+          "test_filepath": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Filepath"
+          },
+          "test_programming_language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Programming Language"
+          },
+          "job_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "failed_at",
+          "exception_stacktrace",
+          "test_filepath",
+          "test_programming_language"
+        ],
+        "title": "TestFailureEvent"
       },
       "TestSearchResult": {
         "properties": {
@@ -15544,6 +16102,56 @@
           "stacks_created"
         ],
         "title": "WeeklyBucket"
+      },
+      "_TestStatsBucket_float_": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "value"
+        ],
+        "title": "_TestStatsBucket[float]"
+      },
+      "_TestStatsBucket_int_": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "value": {
+            "type": "integer",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "value"
+        ],
+        "title": "_TestStatsBucket[int]"
       },
       "QueueCheck_Serialized": {
         "properties": {
