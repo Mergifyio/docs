@@ -2,6 +2,9 @@
   --border-color-default: transparent;
   margin-inline-end: -0.25rem;
   transition-property: border-color, background-color, color;
+  /* Stack above the backdrop so it stays tappable while the drawer is open. */
+  position: relative;
+  z-index: 21;
 }
 
 .mobile-sidebar-toggle #menu-toggle {
@@ -11,7 +14,8 @@
 }
 
 @media (min-width: 50em) {
-  #menu-toggle {
+  #menu-toggle,
+  #mobile-sidebar-backdrop {
     display: none;
   }
 }

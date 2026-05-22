@@ -45,6 +45,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				display: none;
 				z-index: 10;
 				inset-inline-start: 0;
+				background: var(--theme-bg-content);
 			}
 			#right-sidebar {
 				display: none;
@@ -65,28 +66,48 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 				min-height: calc(100vh - var(--theme-navbar-height));
 			}
 
-			/* Allow showing left sidebar as an overlay, but only while viewport stays narrow */
+			/* Backdrop lives at the layout level (sibling of the sidebar) so
+			   it isn't trapped inside the Header's stacking context. */
+			#mobile-sidebar-backdrop {
+				display: none;
+				position: fixed;
+				top: var(--theme-navbar-height);
+				inset-inline: 0;
+				bottom: 0;
+				z-index: 9;
+				background: var(--theme-backdrop-overlay);
+				opacity: 0;
+				transition: opacity 0.2s ease;
+			}
+
+			/* Mobile drawer: a partial-width panel slides in from the left,
+			   sitting above a tappable backdrop. The drawer is always in the
+			   DOM and just translates off-screen when closed, so the transition
+			   stays smooth. */
 			@media not screen and (min-width: 50em) {
-				/* Make the left sidebar visible and fill the entire viewport below the navbar */
-				:global(.mobile-sidebar-toggle #left-sidebar) {
+				#left-sidebar {
 					display: block;
 					top: var(--theme-navbar-height);
-					inset-inline-end: 0;
+					width: min(85vw, 20rem);
+					box-shadow: 4px 0 16px rgba(0, 0, 0, 0.08);
+					transform: translateX(-100%);
+					transition: transform 0.22s ease;
 				}
-				/*
-					Try to prevent the rest of the page from scrolling,
-					and the main content from being visible below the overlay.
-
-					Unfortunately, iOS Safari doesn't currently play well with this
-					and will sometimes still scroll the page even though it shouldn't.
-
-					Once overscroll-behavior is properly supported, this should be fixed.
-				*/
+				:global(.mobile-sidebar-toggle #left-sidebar) {
+					transform: translateX(0);
+				}
+				#mobile-sidebar-backdrop {
+					display: block;
+					pointer-events: none;
+				}
+				:global(.mobile-sidebar-toggle #mobile-sidebar-backdrop) {
+					opacity: 1;
+					pointer-events: auto;
+					cursor: pointer;
+				}
+				/* Lock body scroll so the drawer can scroll independently. */
 				:global(.mobile-sidebar-toggle) {
 					overflow: hidden;
-				}
-				:global(.mobile-sidebar-toggle .main-column) {
-					visibility: hidden;
 				}
 				:global(.mobile-sidebar-toggle #left-sidebar ul) {
 					overscroll-behavior: contain;
@@ -132,6 +153,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 			'section-workflow': currentPage.startsWith('/workflow')
 	}}>
 		<Header currentPage={currentPage} transition:animate="none" />
+		<div id="mobile-sidebar-backdrop" aria-hidden="true"></div>
 		<main class="layout">
 			<aside id="left-sidebar" class="sidebar" transition:animate="none">
 				<slot name="primary-sidebar">
