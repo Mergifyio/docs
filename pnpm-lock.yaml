@@ -335,8 +335,8 @@ packages:
   '@astrojs/internal-helpers@0.9.1':
     resolution: {integrity: sha512-1pWuARqYom/TzuU3+0ZugsTrKlUydWKuULmDqSMTuonY+9IRDUEGKX/8PXQ1nBxRq3w85uGtd9q9SXfqEldMIQ==}
 
-  '@astrojs/language-server@2.16.8':
-    resolution: {integrity: sha512-yg1pZF6hs9FaKr2fgXMOGbW7pDLgFexFjuhWilPAc8VybTU+WSnbfbhYaUL1exm6dAK4sM3aKXGcfVwss+HXbg==}
+  '@astrojs/language-server@2.16.9':
+    resolution: {integrity: sha512-L9kddTg+ZSO3X0Pwfx0ZPO+Z+eSSq0/39jXRyIkHzcBICzusdn2T464R4P6K0WcDZ6pMkLlFpuGS73u1pOnMSw==}
     hasBin: true
     peerDependencies:
       prettier: ^3.0.0
@@ -5058,7 +5058,7 @@ snapshots:
 
   '@astrojs/check@0.9.9(prettier@3.8.3)(typescript@6.0.3)':
     dependencies:
-      '@astrojs/language-server': 2.16.8(prettier@3.8.3)(typescript@6.0.3)
+      '@astrojs/language-server': 2.16.9(prettier@3.8.3)(typescript@6.0.3)
       chokidar: 4.0.3
       kleur: 4.1.5
       typescript: 6.0.3
@@ -5077,7 +5077,7 @@ snapshots:
     dependencies:
       picomatch: 4.0.4
 
-  '@astrojs/language-server@2.16.8(prettier@3.8.3)(typescript@6.0.3)':
+  '@astrojs/language-server@2.16.9(prettier@3.8.3)(typescript@6.0.3)':
     dependencies:
       '@astrojs/compiler': 2.13.1
       '@astrojs/yaml2ts': 0.2.4
