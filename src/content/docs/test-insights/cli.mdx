@@ -1,0 +1,83 @@
+---
+title: CLI
+description: Interact with Test Insights data from the terminal — search for tests, branch on health via exit codes, and chain into AI coding agents like Claude Code and Cursor.
+---
+
+The [Mergify CLI](/cli) lets you interact with Test Insights data from
+the terminal. It's handy when you want to triage a failing test
+quickly, or when an AI coding agent needs to decide whether to retry,
+fix, or ignore a failure.
+
+## `mergify tests show`
+
+Search the Test Insights catalog by test name and print health, ratios,
+and the most recent failure context for each match.
+
+```bash
+mergify tests show -r owner/repo "tests/auth/test_login.py::test_login_timeout"
+```
+
+Names accept glob patterns (`*`, `?`), and several can be passed in one
+call. Add `--json` for a machine-readable payload. Run
+`mergify tests show --help` for the full list of flags, and see the
+[API reference](/api/test-insights) for the underlying endpoints and
+response schemas.
+
+### Exit codes
+
+The exit code reflects the worst health observed across the matched
+tests, so callers can branch without parsing output:
+
+| Code | Meaning |
+|---|---|
+| `0` | All matched tests are healthy or unknown, or nothing matched. |
+| `1` | At least one matched test is flaky. |
+| `6` | At least one matched test is broken. |
+
+Exit code `2` is reserved for CLI argument errors.
+
+## AI coding agent recipes
+
+The exit-code contract is designed to be chained from agents that ran
+a test, saw it fail, and need to decide what to do next.
+
+### Should the agent retry, fix, or ignore?
+
+```bash
+if mergify tests show -r owner/repo "$FAILED_TEST" --json > /tmp/health.json; then
+  status=0
+else
+  status=$?
+fi
+
+case $status in
+  0) echo "Healthy or unknown: investigate as a real regression." ;;
+  1) echo "Known flaky: retry before touching code." ;;
+  6) echo "Broken: fix is required; skip the retry loop." ;;
+esac
+```
+
+### Claude Code
+
+Add a [skill](https://docs.claude.com/en/docs/claude-code/skills) or a
+prompt snippet that points the agent at the CLI:
+
+```md
+When a test fails locally or in CI, before attempting a fix, run:
+
+  mergify tests show -r OWNER/REPO --json "<failed-test-name>"
+
+Then branch on the exit code:
+- 0, non-empty payload → healthy in Mergify; investigate as a real
+  regression.
+- 0, empty payload → unknown to Mergify; treat as a new test or one on
+  a non-default branch.
+- 1 → known flaky. Rerun once; only investigate if it fails again.
+- 6 → known broken (pre-existing). Surface to the user instead of
+  attempting a fix.
+```
+
+### Cursor
+
+In Cursor, add the same guidance to a project rule
+(`.cursor/rules/test-triage.mdc`) so it auto-loads in agent sessions.
