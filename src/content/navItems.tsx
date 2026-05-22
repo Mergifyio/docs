@@ -123,6 +123,7 @@ const navItems: NavItem[] = [
       { title: 'Detection', path: '/test-insights/detection', icon: 'lucide:search' },
       { title: 'Mitigation', path: '/test-insights/mitigation', icon: 'lucide:radiation' },
       { title: 'Quarantine', path: '/test-insights/quarantine', icon: 'lucide:radiation' },
+      { title: 'CLI', path: '/test-insights/cli', icon: 'lucide:terminal' },
       {
         title: 'Test Frameworks Setup',
         path: '/test-insights#test-framework-configuration',
