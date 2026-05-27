@@ -7450,6 +7450,11 @@
             ],
             "title": "Avatar Url"
           },
+          "html_url": {
+            "type": "string",
+            "title": "Html Url",
+            "description": "Author profile URL on the configured GitHub host. Use this rather than composing github.com/<login> client-side, which breaks on GHE/on-prem deployments."
+          },
           "stack_pr_count": {
             "type": "integer",
             "title": "Stack Pr Count"
@@ -7459,6 +7464,7 @@
         "required": [
           "login",
           "avatar_url",
+          "html_url",
           "stack_pr_count"
         ],
         "title": "AuthorResponse"
