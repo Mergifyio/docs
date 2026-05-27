@@ -17,6 +17,16 @@ import Header from '../components/Header/Header.astro';
 				display: none;
 			}
 
+			/* 404 has no left sidebar, so undo the docs layout's reservations:
+			   pull the navbar back flush with the viewport and keep the
+			   mobile logo visible at all widths so the brand is there. */
+			:global(header) {
+				left: 0 !important;
+			}
+			:global(.logo-mobile) {
+				display: flex !important;
+			}
+
 			.not-found {
 				display: flex;
 				flex-direction: column;
