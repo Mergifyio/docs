@@ -264,10 +264,6 @@ pre > code {
   background-color: var(--theme-divider);
 }
 
-.theme-dark g#logo {
-  fill: white;
-}
-
 .table-wrap {
   border: 1px solid var(--theme-border);
   border-radius: 8px;
