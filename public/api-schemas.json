@@ -13348,13 +13348,20 @@
             "title": "Id"
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "User",
-              "Organization",
-              "Bot",
-              "Mannequin",
-              "Enterprise"
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "User",
+                  "Organization",
+                  "Bot",
+                  "Mannequin",
+                  "Enterprise"
+                ]
+              },
+              {
+                "type": "null"
+              }
             ],
             "title": "Type"
           }
