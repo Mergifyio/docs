@@ -1308,7 +1308,9 @@
                       "queue.pause.update",
                       "scheduled_freeze.create",
                       "scheduled_freeze.delete",
-                      "scheduled_freeze.update"
+                      "scheduled_freeze.update",
+                      "test.dequarantined",
+                      "test.quarantined"
                     ],
                     "type": "string"
                   }
@@ -12410,6 +12412,263 @@
         ],
         "title": "EventSquash"
       },
+      "EventTestDequarantined": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "test.dequarantined",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventTestDequarantinedMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventTestDequarantined"
+      },
+      "EventTestDequarantinedMetadata": {
+        "properties": {
+          "quarantine_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Quarantine Id"
+          },
+          "test_name": {
+            "type": "string",
+            "title": "Test Name"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "auto"
+            ],
+            "title": "Source"
+          },
+          "original_quarantine": {
+            "$ref": "#/components/schemas/TestQuarantineSnapshot"
+          },
+          "health_status_at_event": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "flaky",
+              "broken"
+            ],
+            "title": "Health Status At Event"
+          },
+          "dequarantined_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Dequarantined At"
+          },
+          "dequarantined_by": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Actor"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "quarantine_id",
+          "test_name",
+          "source",
+          "original_quarantine",
+          "health_status_at_event",
+          "dequarantined_at",
+          "dequarantined_by"
+        ],
+        "title": "EventTestDequarantinedMetadata"
+      },
+      "EventTestQuarantined": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "type": {
+            "type": "string",
+            "const": "test.quarantined",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventTestQuarantinedMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "type",
+          "metadata"
+        ],
+        "title": "EventTestQuarantined"
+      },
+      "EventTestQuarantinedMetadata": {
+        "properties": {
+          "quarantine_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Quarantine Id"
+          },
+          "test_name": {
+            "type": "string",
+            "title": "Test Name"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "auto"
+            ],
+            "title": "Source"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch"
+          },
+          "quarantined_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Quarantined At"
+          },
+          "health_status_at_event": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "flaky",
+              "broken"
+            ],
+            "title": "Health Status At Event"
+          },
+          "quarantined_by": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Actor"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "quarantine_id",
+          "test_name",
+          "source",
+          "reason",
+          "branch",
+          "quarantined_at",
+          "health_status_at_event",
+          "quarantined_by"
+        ],
+        "title": "EventTestQuarantinedMetadata"
+      },
       "EventUpdate": {
         "properties": {
           "id": {
@@ -12610,6 +12869,12 @@
                 },
                 {
                   "$ref": "#/components/schemas/EventCommandDequeue"
+                },
+                {
+                  "$ref": "#/components/schemas/EventTestQuarantined"
+                },
+                {
+                  "$ref": "#/components/schemas/EventTestDequarantined"
                 }
               ],
               "discriminator": {
@@ -12655,7 +12920,9 @@
                   "queue.pause.update": "#/components/schemas/EventQueuePauseUpdate",
                   "scheduled_freeze.create": "#/components/schemas/EventScheduledFreezeCreate",
                   "scheduled_freeze.delete": "#/components/schemas/EventScheduledFreezeDelete",
-                  "scheduled_freeze.update": "#/components/schemas/EventScheduledFreezeUpdate"
+                  "scheduled_freeze.update": "#/components/schemas/EventScheduledFreezeUpdate",
+                  "test.dequarantined": "#/components/schemas/EventTestDequarantined",
+                  "test.quarantined": "#/components/schemas/EventTestQuarantined"
                 }
               }
             },
@@ -15855,6 +16122,46 @@
           "test_programming_language"
         ],
         "title": "TestFailureEvent"
+      },
+      "TestQuarantineSnapshot": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "auto"
+            ],
+            "title": "Source"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "reason",
+          "branch",
+          "created_at"
+        ],
+        "title": "TestQuarantineSnapshot"
       },
       "TestSearchResult": {
         "properties": {
