@@ -5130,6 +5130,7 @@
               "enum": [
                 "success_count",
                 "failure_count",
+                "flaky_count",
                 "mean_duration"
               ],
               "type": "string",
@@ -5208,6 +5209,7 @@
                     "mapping": {
                       "success_count": "#/components/schemas/TestCountStatsResponse",
                       "failure_count": "#/components/schemas/TestCountStatsResponse",
+                      "flaky_count": "#/components/schemas/TestCountStatsResponse",
                       "mean_duration": "#/components/schemas/TestDurationStatsResponse"
                     }
                   },
@@ -15660,7 +15662,8 @@
             "type": "string",
             "enum": [
               "success_count",
-              "failure_count"
+              "failure_count",
+              "flaky_count"
             ],
             "title": "Stat"
           }
