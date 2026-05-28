@@ -10753,6 +10753,7 @@
                   "CONFLICT_WITH_PULL_AHEAD",
                   "BRANCH_UPDATE_FAILED",
                   "DRAFT_PULL_REQUEST_CHANGED",
+                  "BATCH_PULL_REQUEST_CLOSED",
                   "PULL_REQUEST_UPDATED",
                   "MERGE_QUEUE_RESET",
                   "INCOMPATIBILITY_WITH_BRANCH_PROTECTIONS",
@@ -14553,6 +14554,12 @@
             "type": "integer",
             "title": "Draft Pull Request Changed",
             "description": "New commits have been added to the draft pull request that were not made by Mergify",
+            "default": 0
+          },
+          "BATCH_PULL_REQUEST_CLOSED": {
+            "type": "integer",
+            "title": "Batch Pull Request Closed",
+            "description": "The batch pull request has been closed",
             "default": 0
           },
           "INCOMPATIBILITY_WITH_BRANCH_PROTECTIONS": {

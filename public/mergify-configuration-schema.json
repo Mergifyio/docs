@@ -1930,6 +1930,7 @@
                 "CONFLICT_WITH_PULL_AHEAD",
                 "BRANCH_UPDATE_FAILED",
                 "DRAFT_PULL_REQUEST_CHANGED",
+                "BATCH_PULL_REQUEST_CLOSED",
                 "PULL_REQUEST_UPDATED",
                 "MERGE_QUEUE_RESET",
                 "INCOMPATIBILITY_WITH_BRANCH_PROTECTIONS",
