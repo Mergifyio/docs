@@ -26,22 +26,22 @@ compute**.
 
 ## Requirements
 
-### GitHub Actions
+With file-pattern scopes, Mergify evaluates the patterns itself: it matches each pull request's
+changed files against your `.mergify.yml` definitions and batches by scope. Nothing else is required
+for the merge queue.
 
-You need the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
-GitHub Action to detect scopes and report CI status. It handles:
+The [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) GitHub Action is optional and
+needed only when you want to:
 
-- Reading your scope definitions from `.mergify.yml`
-- Comparing the pull request diff against file patterns
-- Exposing scope outputs so downstream jobs can be conditionally skipped
-- Aggregating job results so required checks always report
+- Skip CI jobs whose scope a pull request doesn't touch, and aggregate results so required checks
+  always report.
 
-If you use a monorepo build tool, `gha-mergify-ci` also provides git refs for
-accurate affected-project detection:
+- Compute scopes with a monorepo build tool instead of file patterns. In this case, `gha-mergify-ci`
+  also provides git refs for accurate affected-project detection:
 
 | Build Tool | How scopes are detected |
 |---|---|
-| **File patterns** | `gha-mergify-ci` matches changed files against patterns in `.mergify.yml` |
+| **File patterns** | Mergify matches changed files against patterns in `.mergify.yml` |
 | **Nx** | `nx show projects --affected` using refs from `gha-mergify-ci` |
 | **Turborepo** | `turbo run build --dry=json --filter` using refs from `gha-mergify-ci` |
 | **Bazel** | `bazel query` for affected packages using refs from `gha-mergify-ci` |
@@ -134,10 +134,15 @@ Partition rules use **regex** conditions (`files~=^pattern/`), while scopes use
 | `files~=^apps/web/.*\.(js\|ts)$` | `apps/web/**/*.{js,ts}` |
 | `files~=^(config\|docker)/` | Two includes: `config/**/*` and `docker/**/*` |
 
-### 2. Update your GitHub Actions workflow
+### 2. (Optional) Wire scopes into your CI
 
-Add a job that detects and submits scopes on every pull request using
-[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci):
+For the merge queue to batch by scope, you don't need to touch your CI: Mergify evaluates the file
+patterns from step 1 on its own. This step is only needed if you also want to **skip CI jobs** whose
+scope a pull request doesn't touch.
+
+Add a job that detects scopes on every pull request using
+[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci), then condition your other jobs on
+its outputs:
 
 ```yaml
 name: Scopes
@@ -150,7 +155,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Detect and submit scopes
+      - name: Detect scopes
         uses: Mergifyio/gha-mergify-ci@v11
         with:
           action: scopes

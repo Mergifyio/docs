@@ -46,9 +46,17 @@ Mergify will intelligently batch PRs with overlapping scopes together. For examp
 they share a common scope.
 :::
 
-## Setting Up CI with Scopes
+## How Mergify Evaluates File-Pattern Scopes
 
-To wire scopes into GitHub Actions, follow the
+Mergify evaluates file-pattern scopes itself. For each pull request, it matches the changed files
+against your `include` (and optional `exclude`) patterns and tags the pull request with the scopes
+it touches. This happens in the merge queue automatically, with no CI job or GitHub Action to set
+up: declare the patterns above and the queue batches by scope.
+
+## Conditioning CI Jobs on Scopes (Optional)
+
+The same scopes can also drive your CI, letting you skip jobs whose scope a pull request doesn't
+touch. This is optional and independent of merge queue batching. To wire it up, follow the
 [Monorepo CI GitHub Actions guide](/monorepo-ci/github-actions). It walks through:
 
 - Adding the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
@@ -124,8 +132,8 @@ With this configuration:
 
 ### Scope Detection is PR-Specific
 
-The `gha-mergify-ci` action only analyzes files changed by the specific pull request, **not** files
-from other PRs in the merge queue batch. This ensures:
+Mergify evaluates the files changed by the specific pull request, **not** files from other PRs in
+the merge queue batch. This ensures:
 
 - Each PR's scopes reflect only its own changes
 - Batching decisions remain consistent even as the queue changes
