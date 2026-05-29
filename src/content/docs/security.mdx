@@ -38,21 +38,40 @@ A Data Processing Addendum (DPA) is available on request. Contact <a
 ## Access Control
 
 Mergify does not maintain a separate identity or permission system. All
-authentication and authorization are delegated to GitHub:
-
-- **Single sign-on:** users sign in through GitHub, so any SSO policy you
-  enforce on your GitHub organization (including SAML SSO) applies to
-  Mergify.
-
-- **Roles and permissions:** Mergify users inherit their roles directly from
-  [GitHub
-  roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization).
-  A user with the `Read` role on a repository in GitHub also has the `Read`
-  role in Mergify.
+authentication and authorization are delegated to GitHub. Users sign in
+through GitHub, and roles are inherited directly from [GitHub
+roles](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization).
+A user with the `Read` role on a repository in GitHub also has the
+`Read` role in Mergify.
 
 Some operations additionally require the GitHub organization `Owner` role.
 See the [Features Permissions](#features-permissions) table below for the
 full mapping between GitHub roles and Mergify capabilities.
+
+### Single Sign-On (SSO)
+
+GitHub is the only way to sign in to Mergify. There is no native Mergify
+login (no email/password) and no way to connect your identity provider
+directly to Mergify. Sign-in goes through GitHub OAuth, so whatever
+authentication policy you enforce on your GitHub organization (including
+SAML SSO with Okta, Azure AD, Google Workspace, or any other identity
+provider) applies automatically to Mergify.
+
+To enforce SSO for your team's Mergify access, configure SAML SSO on your
+GitHub organization. GitHub's documentation covers the steps for each
+identity provider: [About identity and access management with SAML single
+sign-on](https://docs.github.com/en/organizations/managing-saml-single-sign-on-for-your-organization/about-identity-and-access-management-with-saml-single-sign-on).
+
+:::note
+  Once SAML SSO is enforced on your GitHub organization, users signing in
+  to Mergify are redirected through your identity provider on session
+  expiry, just like any other GitHub-authenticated tool. No additional
+  Mergify configuration is required.
+:::
+
+If your organization also restricts GitHub access by IP, see [Managing IP
+Addresses](#managing-ip-addresses-allowed-for-the-github-app). Mergify's
+IPs must be allowlisted for OAuth sign-in to succeed.
 
 ### Delegated Roles
 
