@@ -15974,6 +15974,18 @@
               }
             ],
             "title": "Author"
+          },
+          "author_html_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author Html Url",
+            "description": "Author profile URL on the configured GitHub host, or null when the author is unknown. Use this rather than composing github.com/<login> client-side, which breaks on GHE."
           }
         },
         "type": "object",
@@ -15982,7 +15994,8 @@
           "title",
           "state",
           "html_url",
-          "author"
+          "author",
+          "author_html_url"
         ],
         "title": "StackPRResponse"
       },
