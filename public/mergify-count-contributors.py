@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # This script counts the number of contributors for repositories over the last 30 days.
 #
+# A contributor is a user who contributed commits to a pull request in the last
+# 30 days, either by opening it or by pushing commits to it. This matches how
+# Mergify counts active users for billing.
+#
 # See https://docs.mergify.com/billing/ for context.
 #
 # Keep in mind that this is not 100% accurate but gives a ballpark estimate.
@@ -98,67 +102,30 @@ def is_user_ignored(user):
 
 
 def get_users_from_pr(api_endpoint, repo_name, pr):
-    """Extract all active users from a PR: creator, reviewers, commenters, and label changers."""
+    """Extract the billable users from a PR: its author and the users who pushed commits to it."""
     users = set()
 
-    # Get PR creator
+    # The PR author (counted when the pull request is opened).
     user = pr["user"]
     if not is_user_ignored(user):
         users.add(user["login"])
 
-    # Get PR reviewers
+    # The users who pushed commits to the PR. Mergify bills the pusher on each
+    # push; the commit author and committer are the closest proxy available
+    # from the API.
     try:
-        reviews_response = _requests_get(
-            f"{api_endpoint}/repos/{repo_name}/pulls/{pr['number']}/reviews?per_page=100",
+        commits_response = _requests_get(
+            f"{api_endpoint}/repos/{repo_name}/pulls/{pr['number']}/commits?per_page=100",
             headers=HEADERS,
         )
-        reviews_response.raise_for_status()
+        commits_response.raise_for_status()
     except Exception:
-        print("W: Unable to retrieve PR reviews, ignoring, error below:")
+        print("W: Unable to retrieve PR commits, ignoring")
     else:
-        for reviewer in reviews_response.json():
-            if not is_user_ignored(reviewer["user"]):
-                users.add(reviewer["user"]["login"])
-
-    # Get PR comments authors
-    try:
-        comments_response = _requests_get(
-            f"{api_endpoint}/repos/{repo_name}/issues/{pr['number']}/comments?per_page=100",
-            headers=HEADERS,
-        )
-        comments_response.raise_for_status()
-    except Exception:
-        print("W: Unable to retrieve PR comments, ignoring")
-    else:
-        for comment in comments_response.json():
-            if not is_user_ignored(comment["user"]):
-                users.add(comment["user"]["login"])
-
-    try:
-        # Get users from the timeline
-        users |= get_users_from_timeline(api_endpoint, repo_name, pr["number"])
-    except Exception:
-        print("W: Unable to retrieve PR timeline, ignoring")
-
-    return users
-
-
-def get_users_from_timeline(api_endpoint, repo_name, pr_number):
-    """Extract users who added or removed labels from a PR timeline."""
-    users = set()
-
-    timeline_events = _requests_get(
-        f"{api_endpoint}/repos/{repo_name}/issues/{pr_number}/timeline",
-        params={"per_page": 100},
-        headers=HEADERS,
-    )
-    timeline_events.raise_for_status()
-
-    for event in timeline_events.json():
-        if event.get("event") in {"labeled", "unlabeled"}:
-            actor = event.get("actor")
-            if actor and not is_user_ignored(actor):
-                users.add(actor["login"])
+        for commit in commits_response.json():
+            for actor in (commit.get("author"), commit.get("committer")):
+                if actor and not is_user_ignored(actor):
+                    users.add(actor["login"])
 
     return users
 
