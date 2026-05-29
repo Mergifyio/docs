@@ -83,11 +83,10 @@ changes in the batch because they touch the same areas of the codebase.
 
 Scopes can be attached to pull requests automatically or manually:
 
-- **File pattern detection:** Define scopes directly in your configuration so Mergify infers them
-  from changed paths once your CI uploads the results via
-  [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) or an equivalent integration.
-  See [file-pattern scopes](/merge-queue/scopes/file-patterns) for a
-  step-by-step setup.
+- **File pattern detection:** Define scopes directly in your configuration and Mergify evaluates
+  them itself, matching each pull request's changed files against your patterns. No CI job or GitHub
+  Action is required for the queue to batch by scope. See
+  [file-pattern scopes](/merge-queue/scopes/file-patterns) for a step-by-step setup.
 
 - **Manual upload:** Use the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
   GitHub Action, the [REST API](/api/pull-requests), or the `mergify scopes-send` CLI to push scopes

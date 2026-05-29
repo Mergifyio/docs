@@ -39,21 +39,26 @@ With scopes, Mergify can:
 1. **Define scopes** in `.mergify.yml` using either file patterns or data emitted by your build
    system. Start with the [Scopes reference](/merge-queue/scopes).
 
-2. **Collect scopes in CI** via [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) so
-   every workflow knows which services a pull request touches.
+2. **Batch by scope in Merge Queue** to group compatible pull requests and keep unrelated work
+   apart. With file patterns, Mergify evaluates them itself, so the queue batches by scope with no
+   extra setup.
 
-3. **Reuse scopes in Merge Queue** to batch compatible pull requests, keep unrelated work apart,
-   and gate expensive tests only when those scopes are present.
+3. **Optionally, collect scopes in CI** via
+   [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) when you compute scopes with a
+   build system (Nx, Bazel, Turborepo) or want to gate expensive tests on the scopes a pull request
+   touches.
 
 Need scope-aware CI without the merge queue? Explore [Monorepo CI](/monorepo-ci) for workflows that
 target GitHub Actions today.
 
 ### No monorepo tooling yet?
 
-Start with [Monorepo CI](/monorepo-ci) and its GitHub Actions guide. It ships a ready-made
-[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) workflow that detects scopes through file
-patterns, so you can adopt scope-aware batching without introducing Nx, Bazel, or Turborepo first. As
-your repository grows you can swap in more advanced tooling—your scopes stay the same.
+Just declare file-pattern scopes in `.mergify.yml`. Mergify evaluates them and the merge queue
+batches by scope with no workflow to add, so you get scope-aware batching without introducing Nx,
+Bazel, or Turborepo first. When you also want scope-aware CI, the
+[Monorepo CI](/monorepo-ci) GitHub Actions guide ships a ready-made
+[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) workflow. As your repository grows
+you can swap in more advanced tooling, and your scopes stay the same.
 
 ## Understanding Scopes
 
