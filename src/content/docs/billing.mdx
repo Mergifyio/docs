@@ -21,16 +21,17 @@ Mergify, we firmly believe in billing you only for what you actively use.
 This is why our billing system operates on the principle of contributors.
 Here's how it works:
 
-- A contributor is any individual who **engages in activities on a
-  repository**. This includes opening, closing, commenting, pushing or
-  reviewing a pull request.
+- A contributor is any user who **contributes commits to a pull request**,
+  either by opening it or by pushing new commits to it. Other activity, such
+  as reviewing, commenting on, closing, or reopening a pull request, does not
+  make someone a contributor.
 
-- Each user is counted **only once**, even if they're active across multiple
-  repositories.
+- Each user is counted **only once**, even if they contribute to pull requests
+  across multiple repositories.
 
-- The system uses a 30-day sliding window approach. This means a user is
-  regarded as a contributor for 30 days from their last activity. Post this
-  period, if no further activity is detected, they are no longer considered
+- The system uses a 30-day sliding window. A user is counted as a contributor
+  for 30 days after they open a pull request or push commits to one. After that
+  period, if they make no further contributions, they are no longer considered
   active for billing purposes.
 
 - Usage is prorated to the day: if a contributor is seen active during 48 days,
