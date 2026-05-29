@@ -1492,10 +1492,11 @@
         },
         "mode": {
           "default": "serial",
-          "description": "Defines how the merge queue schedules pull requests.\n- `serial`: PRs are tested cumulatively.\n- `parallel`: PRs whose scopes don't overlap are tested in parallel.\n",
+          "description": "Defines how the merge queue schedules pull requests.\n- `serial`: PRs are tested cumulatively.\n- `parallel`: PRs whose scopes don't overlap are tested in parallel.\n- `isolated`: PRs are grouped into batches by changed-files similarity; each batch runs as a fully isolated car, with no dependency on any other batch.\n",
           "enum": [
             "serial",
-            "parallel"
+            "parallel",
+            "isolated"
           ],
           "title": "Mode",
           "type": "string"

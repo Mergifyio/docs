@@ -5770,6 +5770,85 @@
             "description": "Unprocessable entity"
           }
         }
+      },
+      "post": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Mark a test as quarantined",
+        "description": "Add a test to the CI Quarantine for a repository",
+        "operationId": "add_ci_quarantine_ci__owner__repositories__repository__quarantines_post",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTestToQuarantinePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestAddedToQuarantineResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
       }
     },
     "/ci/{owner}/repositories/{repository}/quarantines/{quarantine_id}": {
@@ -5849,6 +5928,86 @@
           },
           "422": {
             "description": "Unprocessable entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Remove a quarantine",
+        "description": "Remove a quarantine with its id",
+        "operationId": "remove_quarantine_by_id_ci__owner__repositories__repository__quarantines__quarantine_id__delete",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "quarantine_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Quarantine Id"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "204": {
+            "description": "No content"
           }
         }
       }
@@ -7354,6 +7513,41 @@
           "name"
         ],
         "title": "Actor"
+      },
+      "AddTestToQuarantinePayload": {
+        "properties": {
+          "test_name": {
+            "type": "string",
+            "maxLength": 10000,
+            "title": "Test Name",
+            "description": "The fully qualified name of the test that needs to be quarantined"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 10000,
+            "title": "Reason",
+            "description": "Reason for the test being added to the quarantine"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch",
+            "description": "Branch name or pattern on which the test should be quarantined. If not specified, it will be quarantined on all branches."
+          }
+        },
+        "type": "object",
+        "required": [
+          "test_name",
+          "reason"
+        ],
+        "title": "AddTestToQuarantinePayload"
       },
       "AdoptionScoreResponse": {
         "properties": {
@@ -15935,6 +16129,21 @@
           "top_authors"
         ],
         "title": "StacksSummary"
+      },
+      "TestAddedToQuarantineResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "The ID of the created quarantine"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "TestAddedToQuarantineResponse"
       },
       "TestCountStatsResponse": {
         "properties": {
