@@ -12482,6 +12482,11 @@
             "format": "uuid",
             "title": "Quarantine Id"
           },
+          "test_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Test Id"
+          },
           "test_name": {
             "type": "string",
             "title": "Test Name"
@@ -12603,6 +12608,11 @@
             "type": "string",
             "format": "uuid",
             "title": "Quarantine Id"
+          },
+          "test_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Test Id"
           },
           "test_name": {
             "type": "string",
