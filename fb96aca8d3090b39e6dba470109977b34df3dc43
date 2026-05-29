@@ -1,0 +1,1 @@
+Make explicit that GitHub OAuth is the only sign-in method (no native login, no direct IdP connection) — addresses the underlying customer question more directly.
