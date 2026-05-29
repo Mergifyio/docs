@@ -36,6 +36,50 @@ tests, so callers can branch without parsing output:
 
 Exit code `2` is reserved for CLI argument errors.
 
+## `mergify tests quarantine`
+
+Add a test to [quarantine](/test-insights/quarantine) so its failures
+stop blocking merges and no longer mark the pipeline as failed. The
+test keeps running, and its results keep flowing into Test Insights.
+
+```bash
+mergify tests quarantine -r owner/repo \
+  --reason "flaky — tracked in MRGFY-1234" \
+  "tests/auth/test_login.py::test_login_timeout"
+```
+
+Pass the fully qualified test name and a `--reason` (both required). The
+quarantine applies to every branch by default; scope it to one branch or
+pattern with `--branch` (`-b`). The command prints a quarantine ID you
+can pass to `unquarantine`. Add `--json` for a machine-readable payload,
+and run `mergify tests quarantine --help` for the full list of flags.
+
+The command exits `0` on success and `6` on a Mergify API error, for
+example when the test is already quarantined.
+
+## `mergify tests unquarantine`
+
+Remove a test from quarantine, addressed either by its fully qualified
+name or by the quarantine ID that `quarantine` printed.
+
+```bash
+# By test name.
+mergify tests unquarantine -r owner/repo \
+  "tests/auth/test_login.py::test_login_timeout"
+
+# By quarantine ID.
+mergify tests unquarantine -r owner/repo \
+  12345678-1234-5678-1234-567812345678
+```
+
+A UUID-shaped argument is treated as the quarantine ID and removed
+directly; anything else is looked up by name. Add `--json` for a
+machine-readable payload, and run `mergify tests unquarantine --help`
+for the full list of flags.
+
+The command exits `0` on success and `6` on a Mergify API error, for
+example when the test is not quarantined.
+
 ## AI coding agent recipes
 
 The exit-code contract is designed to be chained from agents that ran
