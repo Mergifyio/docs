@@ -4,7 +4,7 @@ description: Ignore problematic tests in your CI
 ---
 
 The Quarantine feature lets you isolate broken or flaky tests in your CI pipeline without removing them entirely.
-Once a test is quarantined via the Mergify dashboard, it will still run in your CI — but its failure
+Once a test is quarantined, it will still run in your CI, but its failure
 will be ignored for the purposes of blocking merges or marking a pipeline as failed.
 
 This helps you keep your CI green while maintaining full visibility into test reliability and ongoing issues.
@@ -26,3 +26,21 @@ To ensure the correct setup, refer to [the documentation for your test framework
 The [Mitigation page](https://dashboard.mergify.com/test-insights/mitigation) on the dashboard contains the list of
 tests that were retrieved from the CI Insights integration.
 From there, you can add or remove a test from quarantine.
+
+### From The Mergify CLI
+
+The [Mergify CLI](/test-insights/cli) can add and remove quarantines from the terminal,
+which is handy for scripting or for letting an AI coding agent quarantine a flaky test it just hit:
+
+```bash
+# Quarantine a test.
+mergify tests quarantine -r owner/repo \
+  --reason "flaky — tracked in MRGFY-1234" \
+  "tests/auth/test_login.py::test_login_timeout"
+
+# Remove it from quarantine.
+mergify tests unquarantine -r owner/repo \
+  "tests/auth/test_login.py::test_login_timeout"
+```
+
+See the [Test Insights CLI](/test-insights/cli) reference for all flags and exit codes.
