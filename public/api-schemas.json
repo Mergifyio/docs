@@ -4941,6 +4941,58 @@
             "description": "The job name to exclude"
           },
           {
+            "name": "health_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "healthy",
+                      "flaky",
+                      "broken"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health status to filter on",
+              "title": "Health Status"
+            },
+            "description": "The health status to filter on"
+          },
+          {
+            "name": "health_confidence",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health confidence to filter on",
+              "title": "Health Confidence"
+            },
+            "description": "The health confidence to filter on"
+          },
+          {
             "name": "cursor",
             "in": "query",
             "required": false,
@@ -16424,6 +16476,26 @@
             "type": "string",
             "title": "Job Name",
             "description": "Name of the job within the pipeline that ran the test."
+          },
+          "health_status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "flaky",
+              "broken"
+            ],
+            "title": "Health Status",
+            "description": "Current health classification of the test: healthy, flaky, or broken."
+          },
+          "health_confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Health Confidence",
+            "description": "Confidence in the health classification, derived from how many times the test has been rerun."
           }
         },
         "type": "object",
@@ -16431,7 +16503,9 @@
           "test_id",
           "test_name",
           "pipeline_name",
-          "job_name"
+          "job_name",
+          "health_status",
+          "health_confidence"
         ],
         "title": "TestSearchResult"
       },
