@@ -18,7 +18,12 @@ semantic conflicts.
   serial mode with [batching](/merge-queue/batches) may be a better fit.
 :::
 
-## Serial vs. Parallel at a Glance
+**Isolated mode** goes one step further. Every batch runs as a fully independent unit with no
+dependency on any other batch — even when their changes overlap. Scopes become optional: when set,
+Mergify groups similar pull requests into the same batch; when omitted, it batches by priority and
+arrival order. See [Isolated Mode](#isolated-mode) below.
+
+## Serial, Parallel, and Isolated at a Glance
 
 In **serial mode**, every batch depends on the one before it. Even if PR #3 (docs) has nothing in
 common with PR #1 (api) or PR #2 (frontend), it still waits:
@@ -98,6 +103,36 @@ strict digraph {
 
 Here PR #4 touches the `api` scope, just like PR #1 — so it must wait for PR #1 to merge first.
 Meanwhile PR #3 (docs) proceeds independently.
+
+In **isolated mode**, there are no dependencies at all. Every batch runs on its own, even when two
+batches touch the same code, so an overlap like the one above never creates a wait:
+
+```dot class="graph"
+strict digraph {
+  fontname="sans-serif";
+  rankdir="TB";
+  label="Isolated Mode\nEvery Batch Independent";
+  nodesep=0.8;
+  ranksep=0.6;
+
+  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+  edge [style=invis];
+
+  subgraph cluster_running {
+    style="rounded,filled";
+    fillcolor="#1CB893";
+    color="#1CB893";
+    fontcolor="#000000";
+    label="Tested simultaneously";
+
+    PR1 [label="Batch 1\nPR #1", fillcolor="#347D39"];
+    PR2 [label="Batch 2\nPR #2", fillcolor="#347D39"];
+    PR3 [label="Batch 3\nPR #3", fillcolor="#347D39"];
+  }
+
+  { rank=same; PR1; PR2; PR3; }
+}
+```
 
 ## Setting Up Parallel Mode
 
@@ -341,19 +376,76 @@ The net effect: **pull requests merge faster when their scopes don't collide**, 
 that do collide are still tested in the right order to avoid semantic conflicts reaching your main
 branch.
 
+## Isolated Mode
+
+Parallel mode keeps dependencies between batches that share a scope. **Isolated mode** drops them
+entirely: every batch is a self-contained unit that is tested and merged on its own, with no parent
+batch and no child batch. A failure in one batch never blocks any other.
+
+Use isolated mode when your pull requests are genuinely independent and you want maximum throughput
+without maintaining a scope map — for example when each pull request targets its own service or
+package and you don't need Mergify to serialize overlapping changes.
+
+### Enable isolated mode
+
+Set `mode: isolated` under `merge_queue`. Unlike parallel mode, scopes are **optional**:
+
+```yaml
+merge_queue:
+  mode: isolated
+  max_parallel_checks: 5
+
+queue_rules:
+  - name: default
+    batch_size: 5
+    queue_conditions:
+      - check-success = ci
+```
+
+### How batches form
+
+How Mergify fills a batch depends on whether you configure
+[scopes](/merge-queue/scopes):
+
+- **With scopes.** Mergify groups the most similar pull requests — those sharing the most scopes —
+  into the same batch, using the same [scope-aware batching](/merge-queue/scopes) as the other
+  modes. This keeps related changes tested together and maximizes CI reuse.
+
+- **Without scopes.** Mergify fills batches by queue priority and arrival order, up to `batch_size`.
+
+Either way, the batches that result are fully independent. They run concurrently up to
+`max_parallel_checks`, and Mergify merges each one as soon as its own CI passes — there is never a
+parent batch to wait for.
+
+### Isolated vs. parallel
+
+| | Parallel mode | Isolated mode |
+|--|--|--|
+| Scopes | Required | Optional |
+| Cross-batch dependencies | Yes, when scopes overlap | Never |
+| A batch can block another | Yes (shared scope) | No |
+| Batch formation | By shared scopes | By shared scopes, or by priority + arrival order when no scopes |
+
+Batch failure handling is the same as in the other modes: Mergify splits the failed batch and
+retests the parts to isolate the culprit. See
+[Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout).
+
 ## Compatibility and Limitations
 
-Parallel mode changes how the queue operates. Some features that rely on strict single-queue
-ordering are not available:
+Parallel and isolated modes change how the queue operates. Some features that rely on strict
+single-queue ordering are not available:
 
-- **Scopes are required.** You must configure `scopes.source` (either `files` or `manual`).
-  Without scopes, Mergify cannot determine which pull requests are independent.
+- **Scopes are required in parallel mode.** You must configure `scopes.source` (either `files` or
+  `manual`) so Mergify can tell which pull requests are independent. Isolated mode does not require
+  scopes — see [Isolated Mode](#isolated-mode).
 
 - **`fast-forward` merge is not supported.** Because batches merge independently, Mergify needs to
   rebase them. Use `merge` or `rebase` as your `merge_method`.
 
 - **`skip_intermediate_results` is not available.** This feature depends on the strict cumulative
   ordering of serial mode.
+
+- **`partition_rules` are not supported.** Partitions rely on serial ordering; use scopes instead.
 
 ## Next Steps
 
