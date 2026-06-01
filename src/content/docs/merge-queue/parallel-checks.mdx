@@ -6,14 +6,24 @@ description: Accelerates the merging process by testing the compatibility of mul
 import { Image } from "astro:assets"
 import specChecksListScreenshot from "../../images/merge-queue/parallel-checks/spec-checks-list.png"
 
-Parallel Checks let Mergify test multiple queued pull requests together so you
-ship faster. Mergify creates temporary batch PRs that represent cumulative
-merges (PR#1), (PR#1+PR#2), (PR#1+PR#2+PR#3), runs CI on them in parallel, then
-merges the original PRs once checks pass.
+Parallel checks are how Mergify tests the queue **speculatively**: instead of
+validating one pull request at a time, it tests several queued pull requests
+ahead of time so you ship faster. Mergify creates temporary batch PRs that
+represent cumulative merges (PR#1), (PR#1+PR#2), (PR#1+PR#2+PR#3), runs CI on
+them in parallel, then merges the original PRs once checks pass. The
+`max_parallel_checks` setting controls how far ahead it tests.
 
 :::tip
   Learn how speculative checks work conceptually at the
   [Merge Queue Academy](https://merge-queue.academy/features/speculative-merging/).
+:::
+
+:::note
+  Parallel checks are not the same as **parallel mode**. Parallel checks are
+  speculative CI that speed up any single ordered queue, in serial or parallel
+  mode alike. [Parallel mode](/merge-queue/queue-modes) is a separate choice
+  about whether independent [scopes](/merge-queue/scopes) form independent
+  queues. The two are configured separately and work together.
 :::
 
 ## How Parallel Checks Work
@@ -126,7 +136,7 @@ to match your CI capacity and typical PR size/complexity.
 
 ## When Things Change
 
-Parallel Checks adapt automatically as your code and rules evolve:
+Parallel checks adapt automatically as your code and rules evolve:
 
 - Failed checks: Mergify removes the failing PR and continues with the rest.
 
@@ -246,7 +256,7 @@ increase concurrency; choose a value your CI can handle reliably. For deeper
 guidance and trade‑offs (including batching), see [Merge queue
 performance](/merge-queue/performance).
 
-In [parallel mode](/merge-queue/parallel-scopes), you can also cap concurrency
-for an individual scope while leaving the rest free to use the global ceiling.
-See [Limiting concurrency per
-scope](/merge-queue/parallel-scopes#limiting-concurrency-per-scope).
+In [parallel mode](/merge-queue/queue-modes#parallel-mode), you can also cap
+concurrency for an individual scope while leaving the rest free to use the
+global ceiling. See [Limiting concurrency per
+scope](/merge-queue/queue-modes#limiting-concurrency-per-scope).
