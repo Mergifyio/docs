@@ -190,6 +190,142 @@ retests the parts to isolate the problematic pull request. See
 Because batches in parallel mode are scoped, a failure in one scope queue does **not** block
 unrelated scope queues. Only batches that depend on the failed one (via shared scopes) are affected.
 
+## Limiting Concurrency per Scope
+
+`max_parallel_checks` caps how many speculative checks run at once across **all** scopes. Sometimes
+you want to bound a **single** scope on top of that: a scope whose tests are expensive or hit a shared
+resource that can't take many concurrent runs (a staging environment or a rate-limited external
+service), while the rest of your scopes can use whatever capacity the global ceiling leaves them.
+
+`scopes.capacities` maps a scope name to the number of speculative checks that scope may run at the
+same time:
+
+```yaml
+merge_queue:
+  mode: parallel
+  max_parallel_checks: 5
+
+scopes:
+  source:
+    files:
+      frontend:
+        include:
+          - apps/web/**/*
+      backend:
+        include:
+          - services/api/**/*
+      docs:
+        include:
+          - docs/**/*
+  capacities:
+    frontend: 2
+    backend: 2
+```
+
+Here `frontend` and `backend` are each limited to 2 concurrent speculative checks. `docs` is absent
+from the map, so it stays uncapped: only the global ceiling applies to it.
+
+### How capacities relate to the global ceiling
+
+`max_parallel_checks` is the **global ceiling**: the most speculative checks a train will ever run at
+once. Each `scopes.capacities` entry is a **sub-limit inside that ceiling, not an extra budget on
+top of it**:
+
+- A speculative check consumes one global slot **and** one slot in every capped scope its batch
+  belongs to.
+
+- It starts only when the global ceiling has room **and** each of its capped scopes has room.
+
+- A scope that isn't listed in `capacities` is unlimited; it draws on the global ceiling alone.
+
+Because every check always takes a global slot, the total running at once **never exceeds
+`max_parallel_checks`**, whatever you put in `capacities`. Capacities can only ever hold a scope
+below the global ceiling; they never raise the total, so adding them to an existing configuration
+cannot increase your CI load.
+
+### Worked example
+
+Take the configuration above (`max_parallel_checks: 5`, `frontend: 2`, `backend: 2`, `docs`
+uncapped) and suppose the queue is ready to test three `frontend` batches, three `backend` batches,
+and two `docs` batches. The slots might fill like this:
+
+```dot class="graph"
+strict digraph {
+  fontname="sans-serif";
+  rankdir="TB";
+  label="Per-scope capacities — ceiling 5, frontend: 2, backend: 2, docs uncapped";
+  nodesep=0.5;
+  ranksep=0.7;
+
+  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+  edge [style=invis];
+
+  subgraph cluster_running {
+    style="rounded,filled";
+    fillcolor="#1CB893";
+    color="#1CB893";
+    fontcolor="#000000";
+    label="Running now — 5 of 5 slots used";
+
+    F1 [label="frontend #1", fillcolor="#347D39"];
+    F2 [label="frontend #2", fillcolor="#347D39"];
+    B1 [label="backend #1", fillcolor="#347D39"];
+    B2 [label="backend #2", fillcolor="#347D39"];
+    D1 [label="docs #1", fillcolor="#347D39"];
+
+    { rank=same; F1; F2; B1; B2; D1; }
+  }
+
+  subgraph cluster_waiting {
+    style="rounded";
+    color="#6B7280";
+    fontcolor="#6B7280";
+    label="Waiting";
+
+    F3 [label="frontend #3\nfrontend full", fillcolor="#6B7280"];
+    B3 [label="backend #3\nbackend full", fillcolor="#6B7280"];
+    D2 [label="docs #2\nceiling full", fillcolor="#6B7280"];
+
+    { rank=same; F3; B3; D2; }
+  }
+}
+```
+
+- `frontend` and `backend` each run at most 2 batches, so each holds back its third; those wait for
+  a free slot in their own scope.
+
+- `docs` is uncapped, but only as many `docs` batches run as there is room under the ceiling of 5.
+  Here that is 1, so the second `docs` batch waits, not because `docs` is capped (it isn't) but
+  because the global ceiling is full.
+
+Two things always hold: no capped scope runs more than its limit, and no more than
+`max_parallel_checks` run at once. Exactly which batches fill the slots, and whether the last free
+slot goes to `docs` or to a capped scope still below its limit, follows queue order, so the split
+can differ from one cycle to the next. As soon as a running check finishes, its freed global slot
+(and its freed scope slot, if any) go to the next waiting batch that fits both.
+
+### Pull requests in several scopes
+
+A batch that touches more than one capped scope must fit in **all** of them at once. A batch
+carrying both `frontend` and `backend` consumes one `frontend` slot and one `backend` slot, and
+starts only when both scopes, and the global ceiling, have room. This keeps every scope's limit
+honored even when changes span scopes.
+
+### Source-agnostic
+
+`capacities` only sets the limit; it does not decide which pull requests belong to a scope.
+Membership comes from your [`scopes.source`](/merge-queue/scopes), so capacities behave the same
+whether scopes are derived from [file patterns](/merge-queue/scopes/file-patterns) (`source: files`)
+or pushed from an external build system (`source: manual`). You declare the limit once, no matter how
+membership is computed.
+
+:::note
+  Strict branch protection (*Require branches to be up to date before merging*) clamps the whole
+  train to one check at a time, so each scope's effective capacity becomes 1 and `capacities` has no
+  further effect. See [Require Branches to Be Up to
+  Date](/merge-queue/github-rulesets#require-branches-to-be-up-to-date).
+:::
+
 ## The Monorepo Trade-Off
 
 Parallel mode is built for the reality of monorepos: most pull requests are independent, but some

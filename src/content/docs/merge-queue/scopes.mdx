@@ -131,6 +131,10 @@ queue_rules:
 - `scopes.merge_queue_scope`: optional name automatically applied to temporary merge queue pull
   requests (defaults to `merge-queue`). Set it to `null` to disable.
 
+- `scopes.capacities`: optional map of scope name to the number of speculative checks that scope may
+  run at the same time, used to limit per-scope concurrency in parallel mode. See [Limiting
+  concurrency per scope](/merge-queue/parallel-scopes#limiting-concurrency-per-scope).
+
 ### Manual source example
 
 ```yaml

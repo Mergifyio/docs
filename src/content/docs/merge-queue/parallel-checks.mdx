@@ -245,3 +245,8 @@ Adjust `max_parallel_checks` to balance throughput and CI usage. Higher values
 increase concurrency; choose a value your CI can handle reliably. For deeper
 guidance and trade‑offs (including batching), see [Merge queue
 performance](/merge-queue/performance).
+
+In [parallel mode](/merge-queue/parallel-scopes), you can also cap concurrency
+for an individual scope while leaving the rest free to use the global ceiling.
+See [Limiting concurrency per
+scope](/merge-queue/parallel-scopes#limiting-concurrency-per-scope).
