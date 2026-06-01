@@ -10,6 +10,16 @@ updates:
     allow:
       - dependency-name: "*"
         dependency-type: "all"
+    groups:
+      # Astro requires react and react-dom to be the exact same version,
+      # so they must be bumped together in a single PR.
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+          - "@astrojs/react"
     commit-message:
       prefix: chore
       prefix-development: chore
