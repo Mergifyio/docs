@@ -1175,7 +1175,7 @@
           "eventlogs"
         ],
         "summary": "Get the events log",
-        "description": "Get the events logs of the requested repository",
+        "description": "Get the events logs of the requested repository. Supports filtering by `event_type`, derived `outcome` (`success` / `failure` / `pending` / `neutral`), `trigger` (include only these trigger strings \u2014 Datadog `Only`), and `not_trigger` (exclude). `trigger` and `not_trigger` are mutually exclusive.",
         "operationId": "get_repository_events_repos__owner___repository__logs_get",
         "security": [
           {
@@ -1325,6 +1325,75 @@
             "description": "The specific types of events to select"
           },
           {
+            "name": "outcome",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "success",
+                      "failure",
+                      "pending",
+                      "neutral"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter events by derived outcome label (`success` / `failure` / `pending` / `neutral`). Repeatable to match several outcomes at once (e.g. `?outcome=success&outcome=failure`).",
+              "title": "Outcome"
+            },
+            "description": "Filter events by derived outcome label (`success` / `failure` / `pending` / `neutral`). Repeatable to match several outcomes at once (e.g. `?outcome=success&outcome=failure`)."
+          },
+          {
+            "name": "trigger",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Include only events whose `trigger` matches one of the given values (exact match). Repeatable. Mirrors Datadog's facet behaviour after clicking `Only`: the URL switches from exclusion mode to inclusion mode with a positive list \u2014 shorter than `not_trigger=<everything else>`. Mutually exclusive with `not_trigger`.",
+              "title": "Trigger"
+            },
+            "description": "Include only events whose `trigger` matches one of the given values (exact match). Repeatable. Mirrors Datadog's facet behaviour after clicking `Only`: the URL switches from exclusion mode to inclusion mode with a positive list \u2014 shorter than `not_trigger=<everything else>`. Mutually exclusive with `not_trigger`."
+          },
+          {
+            "name": "not_trigger",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose `trigger` matches any of the given values (exact match). Repeatable. Mirrors Datadog's facet semantics: the default state is `all triggers included`, and unchecking a trigger in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `trigger` (positive include).",
+              "title": "Not Trigger"
+            },
+            "description": "Exclude events whose `trigger` matches any of the given values (exact match). Repeatable. Mirrors Datadog's facet semantics: the default state is `all triggers included`, and unchecking a trigger in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `trigger` (positive include)."
+          },
+          {
             "name": "received_from",
             "in": "query",
             "required": false,
@@ -1411,6 +1480,295 @@
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=xyz&per_page=20>; rel=\"last\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"first\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repository}/logs/aggregate": {
+      "get": {
+        "tags": [
+          "eventlogs"
+        ],
+        "summary": "Get aggregated event counts",
+        "description": "Aggregations (total / histogram / event-type / outcome / trigger facet counts) over the same filter set as `/logs` \u2014 `event_type`, `outcome`, `trigger` (include) and `not_trigger` (exclude) all included. The response stays consistent with what the row endpoint returns: `total` matches what the table will show; unchecked values produce no row in their facet list (the sidebar hides their count rather than display `0`). `by_outcome` is derived from `event.type` (most types map directly; a few refine the label from event metadata); `by_trigger` returns the top 200 triggers by count in the window.",
+        "operationId": "get_repository_events_aggregate_repos__owner___repository__logs_aggregate_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "pull_request",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "integer",
+                    "maximum": 9223372036854775807,
+                    "minimum": 1,
+                    "exclusiveMaximum": 2147483647
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter events by pull-request number. Repeatable to match several PRs at once (e.g. `?pull_request=1&pull_request=2`).",
+              "title": "Pull Request"
+            },
+            "description": "Filter events by pull-request number. Repeatable to match several PRs at once (e.g. `?pull_request=1&pull_request=2`)."
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get events for PRs to the given base ref",
+              "title": "Base Ref"
+            },
+            "description": "Get events for PRs to the given base ref"
+          },
+          {
+            "name": "event_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "action.assign",
+                      "action.backport",
+                      "action.close",
+                      "action.comment",
+                      "action.copy",
+                      "action.delete_head_branch",
+                      "action.dequeue",
+                      "action.dismiss_reviews",
+                      "action.edit",
+                      "action.github_actions",
+                      "action.label",
+                      "action.merge",
+                      "action.post_check",
+                      "action.queue.batch_bisection_end",
+                      "action.queue.batch_bisection_start",
+                      "action.queue.change",
+                      "action.queue.checks.change",
+                      "action.queue.checks_end",
+                      "action.queue.checks_not_started",
+                      "action.queue.checks_start",
+                      "action.queue.enter",
+                      "action.queue.leave",
+                      "action.queue.merged",
+                      "action.rebase",
+                      "action.refresh",
+                      "action.request_reviews",
+                      "action.review",
+                      "action.squash",
+                      "action.update",
+                      "ci_insights.auto_quarantine.disabled",
+                      "ci_insights.auto_quarantine.enabled",
+                      "ci_insights.auto_quarantine.modified",
+                      "ci_insights.job_retried",
+                      "command.dequeue",
+                      "command.queue",
+                      "queue.pause.create",
+                      "queue.pause.delete",
+                      "queue.pause.update",
+                      "scheduled_freeze.create",
+                      "scheduled_freeze.delete",
+                      "scheduled_freeze.update",
+                      "test.dequarantined",
+                      "test.quarantined"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The specific types of events to select",
+              "title": "Event Type"
+            },
+            "description": "The specific types of events to select"
+          },
+          {
+            "name": "outcome",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "success",
+                      "failure",
+                      "pending",
+                      "neutral"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter events by derived outcome label (`success` / `failure` / `pending` / `neutral`). Repeatable to match several outcomes at once (e.g. `?outcome=success&outcome=failure`).",
+              "title": "Outcome"
+            },
+            "description": "Filter events by derived outcome label (`success` / `failure` / `pending` / `neutral`). Repeatable to match several outcomes at once (e.g. `?outcome=success&outcome=failure`)."
+          },
+          {
+            "name": "trigger",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Include only events whose `trigger` matches one of the given values (exact match). Repeatable. Mirrors Datadog's facet behaviour after clicking `Only`: the URL switches from exclusion mode to inclusion mode with a positive list \u2014 shorter than `not_trigger=<everything else>`. Mutually exclusive with `not_trigger`.",
+              "title": "Trigger"
+            },
+            "description": "Include only events whose `trigger` matches one of the given values (exact match). Repeatable. Mirrors Datadog's facet behaviour after clicking `Only`: the URL switches from exclusion mode to inclusion mode with a positive list \u2014 shorter than `not_trigger=<everything else>`. Mutually exclusive with `not_trigger`."
+          },
+          {
+            "name": "not_trigger",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose `trigger` matches any of the given values (exact match). Repeatable. Mirrors Datadog's facet semantics: the default state is `all triggers included`, and unchecking a trigger in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `trigger` (positive include).",
+              "title": "Not Trigger"
+            },
+            "description": "Exclude events whose `trigger` matches any of the given values (exact match). Repeatable. Mirrors Datadog's facet semantics: the default state is `all triggers included`, and unchecking a trigger in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `trigger` (positive include)."
+          },
+          {
+            "name": "received_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start of the time range (ISO 8601 with timezone). Defaults to `received_to - 1 day`.",
+              "title": "Received From"
+            },
+            "description": "Start of the time range (ISO 8601 with timezone). Defaults to `received_to - 1 day`."
+          },
+          {
+            "name": "received_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End of the time range (ISO 8601 with timezone). Defaults to `now`.",
+              "title": "Received To"
+            },
+            "description": "End of the time range (ISO 8601 with timezone). Defaults to `now`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventLogsAggregateResponse"
                 }
               }
             }
@@ -8898,6 +9256,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.assign",
@@ -8915,6 +9283,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -8985,6 +9354,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.backport",
@@ -9002,6 +9381,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9048,6 +9428,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "ci_insights.auto_quarantine.disabled",
@@ -9065,6 +9455,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9133,6 +9524,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "ci_insights.auto_quarantine.enabled",
@@ -9150,6 +9551,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9218,6 +9620,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "ci_insights.auto_quarantine.modified",
@@ -9235,6 +9647,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9307,6 +9720,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "ci_insights.job_retried",
@@ -9324,6 +9747,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9435,6 +9859,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.close",
@@ -9452,6 +9886,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9511,6 +9946,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "command.dequeue",
@@ -9528,6 +9973,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9604,6 +10050,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "command.queue",
@@ -9621,6 +10077,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9667,6 +10124,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.comment",
@@ -9684,6 +10151,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9743,6 +10211,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.copy",
@@ -9760,6 +10238,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9829,6 +10308,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.delete_head_branch",
@@ -9846,6 +10335,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -9905,6 +10395,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
           },
@@ -9922,6 +10422,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "metadata",
           "type"
         ],
@@ -9968,6 +10469,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.dismiss_reviews",
@@ -9985,6 +10496,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10047,6 +10559,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.edit",
@@ -10064,6 +10586,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10123,6 +10646,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.github_actions",
@@ -10140,6 +10673,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10217,6 +10751,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.label",
@@ -10234,6 +10778,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10262,6 +10807,57 @@
           "removed"
         ],
         "title": "EventLabelMetadata"
+      },
+      "EventLogsAggregateResponse": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "interval_size_seconds": {
+            "type": "integer",
+            "title": "Interval Size Seconds"
+          },
+          "histogram": {
+            "items": {
+              "$ref": "#/components/schemas/HistogramBucket"
+            },
+            "type": "array",
+            "title": "Histogram"
+          },
+          "by_event_type": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Event Type"
+          },
+          "by_outcome": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Outcome"
+          },
+          "by_trigger": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Trigger"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "interval_size_seconds",
+          "histogram",
+          "by_event_type",
+          "by_outcome",
+          "by_trigger"
+        ],
+        "title": "EventLogsAggregateResponse",
+        "description": "Aggregations over the same event set `/logs` paginates through.\n\n- `total` \u2014 count of events matching the filters (over the full set,\n  not just the current page).\n- `interval_size_seconds` \u2014 bucket width auto-picked from the time\n  range by `TimeRange.get_activity_log_interval_size()`. Dense\n  ladder tuned for per-event texture (15s \u2192 30s \u2192 2min \u2192 10min \u2192\n  20min \u2192 1h \u2192 4h \u2192 8h \u2192 1d), distinct from the smoother\n  `get_interval_size()` ladder used by queue-stats charts.\n- `histogram` \u2014 uniform list of `{start, end, count}` buckets\n  tiling the time range. Zero-filled server-side so the client\n  receives a complete grid (no missing buckets to fill in JS).\n- `by_event_type` \u2014 counts per event type, ordered by `count` desc.\n- `by_outcome` \u2014 counts per derived outcome label\n  (`success` / `failure` / `pending` / `neutral`), ordered by\n  `count` desc.\n- `by_trigger` \u2014 counts per trigger string, ordered by `count` desc.\n  Top 200 triggers by count in the window (single `GROUP BY` over\n  the filter set, capped); the dashboard uses it as the source of\n  truth for the Datadog-style trigger exclusion facet.\n\n`base_ref` and `pull_request` are input-only filters: no filter UI\nfor base_ref, and PR cardinality is unbounded so the count would\nbe both expensive to compute and useless as a sidebar facet."
       },
       "EventMerge": {
         "properties": {
@@ -10304,6 +10900,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.merge",
@@ -10321,6 +10927,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10385,6 +10992,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.post_check",
@@ -10402,6 +11019,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10471,6 +11089,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.batch_bisection_end",
@@ -10488,6 +11116,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10623,6 +11252,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.batch_bisection_start",
@@ -10640,6 +11279,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10765,6 +11405,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.change",
@@ -10782,6 +11432,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10863,6 +11514,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.checks.change",
@@ -10880,6 +11541,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -10949,6 +11611,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.checks_end",
@@ -10966,6 +11638,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11172,6 +11845,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.checks_not_started",
@@ -11189,6 +11872,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11294,6 +11978,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.checks_start",
@@ -11311,6 +12005,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11433,6 +12128,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.enter",
@@ -11450,6 +12155,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11550,6 +12256,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.leave",
@@ -11567,6 +12283,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11711,6 +12428,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.queue.merged",
@@ -11728,6 +12455,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11824,6 +12552,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "queue.pause.create",
@@ -11841,6 +12579,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11904,6 +12643,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "queue.pause.delete",
@@ -11921,6 +12670,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -11979,6 +12729,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "queue.pause.update",
@@ -11996,6 +12756,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12059,6 +12820,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
           },
@@ -12076,6 +12847,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "metadata",
           "type"
         ],
@@ -12122,6 +12894,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
           },
@@ -12139,6 +12921,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "metadata",
           "type"
         ],
@@ -12185,6 +12968,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.request_reviews",
@@ -12202,6 +12995,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12272,6 +13066,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "action.review",
@@ -12289,6 +13093,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12372,6 +13177,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "scheduled_freeze.create",
@@ -12389,6 +13204,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12457,6 +13273,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "scheduled_freeze.delete",
@@ -12474,6 +13300,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12547,6 +13374,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "scheduled_freeze.update",
@@ -12564,6 +13401,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12636,6 +13474,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
           },
@@ -12653,6 +13501,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "metadata",
           "type"
         ],
@@ -12699,6 +13548,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "test.dequarantined",
@@ -12716,6 +13575,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12826,6 +13686,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "type": {
             "type": "string",
             "const": "test.quarantined",
@@ -12843,6 +13713,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "type",
           "metadata"
         ],
@@ -12966,6 +13837,16 @@
             ],
             "title": "Base Ref"
           },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
           },
@@ -12983,6 +13864,7 @@
           "repository",
           "pull_request",
           "base_ref",
+          "outcome",
           "metadata",
           "type"
         ],
@@ -13196,6 +14078,25 @@
           "events"
         ],
         "title": "EventsResponse"
+      },
+      "FacetCount": {
+        "properties": {
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "count"
+        ],
+        "title": "FacetCount",
+        "description": "One row of a per-facet count list. `value` is the raw column\nvalue coerced to a string so JSON serialisation stays uniform \u2014\ntoday only event types use this, but the shape is reusable if we\nadd a bounded-cardinality facet later."
       },
       "FailureRateGroupResponse": {
         "properties": {
@@ -13640,6 +14541,32 @@
           "type"
         ],
         "title": "GitHubAccount"
+      },
+      "HistogramBucket": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "count"
+        ],
+        "title": "HistogramBucket",
+        "description": "One zero-fillable time bucket in the volume histogram. `start` and\n`end` are inclusive/exclusive boundaries aligned to the same EPOCH\nanchor PostgreSQL `date_bin` uses, so successive buckets tile the\nfull range without gaps or overlaps."
       },
       "ListTestExecutionsResponse": {
         "properties": {
