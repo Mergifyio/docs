@@ -156,7 +156,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Detect scopes
-        uses: Mergifyio/gha-mergify-ci@v11
+        uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           action: scopes
           token: ${{ secrets.MERGIFY_TOKEN }}
@@ -234,7 +234,7 @@ detect-scopes:
 
     - name: Get git refs
       id: refs
-      uses: Mergifyio/gha-mergify-ci@v11
+      uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
       with:
         action: scopes-git-refs
 
@@ -248,7 +248,7 @@ detect-scopes:
         echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
     - name: Upload scopes
-      uses: Mergifyio/gha-mergify-ci@v11
+      uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
       with:
         action: scopes-upload
         scopes: ${{ steps.affected.outputs.scopes }}
