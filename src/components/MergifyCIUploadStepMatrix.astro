@@ -2,6 +2,7 @@
 import { Code } from 'astro-expressive-code/components';
 
 import Aside from '~/components/Aside.astro';
+import ghaMergifyCiVersion from '~/data/gha-mergify-ci-version.json';
 
 export interface Props {
   reportPath: string;
@@ -28,7 +29,7 @@ const { reportPath } = Astro.props;
 <Code
 	code={`- name: Mergify CI Upload
   if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v8
+  uses: mergifyio/gha-mergify-ci@${ghaMergifyCiVersion.version}
   with:
     job_name: example_matrix (\${{ matrix.version }})
     token: \${{ secrets.MERGIFY_TOKEN }}

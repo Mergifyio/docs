@@ -130,7 +130,7 @@ jobs:
       # Upload all test results to CI Insights
       - name: Upload test results
         if: always()
-        uses: mergifyio/gha-mergify-ci@v6
+        uses: mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           flaky_test_detection: true
           token: ${{ secrets.MERGIFY_TOKEN }}
