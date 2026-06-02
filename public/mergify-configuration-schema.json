@@ -582,9 +582,6 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -1001,9 +998,6 @@
         "message": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -1034,9 +1028,6 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -1282,9 +1273,6 @@
         "merge_bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -2636,9 +2624,6 @@
         "draft_bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -2667,8 +2652,7 @@
         "queue_branch_prefix": {
           "default": "mergify/merge-queue/",
           "description": "Prefix for the merge queue branch name",
-          "format": "template",
-          "title": "Template",
+          "title": "Queue Branch Prefix",
           "type": "string"
         },
         "allow_queue_branch_edit": {
@@ -2772,9 +2756,6 @@
         "merge_bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -2881,9 +2862,6 @@
         "draft_bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -2912,8 +2890,7 @@
         "queue_branch_prefix": {
           "default": "mergify/merge-queue/",
           "description": "Prefix for the merge queue branch name",
-          "format": "template",
-          "title": "Template",
+          "title": "Queue Branch Prefix",
           "type": "string"
         },
         "allow_queue_branch_edit": {
@@ -3017,9 +2994,6 @@
         "merge_bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -3094,9 +3068,6 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -3222,9 +3193,6 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -3319,9 +3287,6 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
@@ -3353,9 +3318,6 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
               "type": "string"
             },
             {
