@@ -809,6 +809,14 @@ svg.graph > g.graph > polygon {
   stroke: none !important;
 }
 
+/* The graph-level label (e.g. "Merge Queue") is a <text> directly under g.graph,
+   sitting on the transparent page background. Graphviz bakes it as black, which is
+   unreadable in dark mode. Use the theme text color so it adapts. Cluster and node
+   labels live in their own <g> and keep the colors set in the diagram. */
+svg.graph > g.graph > text {
+  fill: var(--theme-text);
+}
+
 hr {
   border: none;
   border-bottom: 1px solid var(--theme-border-color);
