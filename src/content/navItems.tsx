@@ -38,7 +38,6 @@ const navItems: NavItem[] = [
         icon: 'lucide:split',
       },
       { title: 'Batches', path: '/merge-queue/batches', icon: 'lucide:boxes' },
-      { title: 'Stacked PRs', path: '/merge-queue/stacks', icon: 'lucide:layers' },
       {
         title: 'Scopes',
         path: '/merge-queue/scopes',
@@ -64,6 +63,7 @@ const navItems: NavItem[] = [
           },
         ],
       },
+      { title: 'Stacked PRs', path: '/merge-queue/stacks', icon: 'lucide:layers' },
       { title: 'Monorepo', path: '/merge-queue/monorepo', icon: 'lucide:boxes' },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: 'lucide:arrow-right-left' },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: 'lucide:rocket' },
