@@ -1,0 +1,11 @@
+---
+title: "Auto-group queued pull requests by changed files"
+date: 2026-06-02
+tags:
+  - Merge Queue
+description: "Mergify now batches queued pull requests that touch similar files together automatically, with no scopes, CI action, or API setup."
+---
+
+Mergify now groups queued pull requests by the directories they change, read straight from each pull request's diff. This kicks in whenever reported scopes don't already separate the pull requests, for example when no scopes source is configured and every pull request shares the same empty scopes. Related changes are batched together automatically, with no scopes, CI action, or API setup.
+
+Where reported scopes already differ, they keep driving the grouping; the changed directories only decide when scopes don't.

@@ -1,0 +1,9 @@
+---
+title: "Isolated merge queue mode"
+date: 2026-06-02
+tags:
+  - Merge Queue
+description: "A new `isolated` merge queue mode runs every batch as a fully independent car, so a failure or delay in one batch never blocks the others."
+---
+
+Set `merge_queue.mode` to `isolated` to run every batch as a fully isolated car, with no dependency on any other batch. Unrelated changes no longer wait on each other: a batch that fails or stalls no longer holds up the rest of the queue.
