@@ -125,6 +125,119 @@ With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
 
+## How Pull Requests Are Grouped Into a Batch
+
+When `batch_size` is greater than 1, Mergify has to decide *which* pull requests
+go into a batch together. It does **not** simply take the next few pull requests
+in the queue. Instead, it groups pull requests that touch **similar** parts of
+your codebase, so each batch is a cohesive set of related changes. This makes
+batch failures cheaper to resolve: when a batch fails and has to be
+[split](#handling-batch-failure-or-timeout), related changes stay together and
+unrelated pull requests aren't dragged into someone else's failure.
+
+This is the default merge queue behavior (serial mode). Parallel mode groups
+pull requests strictly by scope instead — see [Parallel
+Scopes](/merge-queue/parallel-scopes).
+
+### Priority comes first
+
+Grouping never overrides [priority](/merge-queue/priority) or queue order.
+Mergify seeds each batch with the pull request that is next to merge — the
+highest priority, and the oldest among equal priorities. Similarity only ever
+breaks ties **between pull requests of equal priority**: a lower-priority pull
+request is never pulled ahead of a higher-priority one just because it is
+similar. Higher-priority pull requests always fill the batch first; lower
+priorities are only considered once the batch still has room.
+
+### Filling the batch by similarity
+
+Once the batch is seeded, Mergify fills the remaining slots (up to `batch_size`)
+one at a time. At each step it ranks every waiting candidate by four criteria,
+applied **in order** — each one only breaks the ties the previous one leaves
+open:
+
+1. **[Priority](/merge-queue/priority).** Higher-priority pull requests are
+   always added first (see above); the criteria below only ever compare pull
+   requests of equal priority.
+
+2. **[Scopes](/merge-queue/scopes).** Among those, the pull requests that share
+   the most scopes with the batch are the strongest match and are grouped
+   together.
+
+3. **Changed directories.** When scopes don't separate two candidates, Mergify
+   compares the **directories each pull request changes** and prefers the one
+   touching the same areas of the repository. On very large monorepos it
+   automatically compares broader areas (parent directories) rather than every
+   individual folder, so grouping stays effective whatever the repository size.
+
+4. **Queue time.** If two pull requests are still tied, the one that has been
+   waiting longest joins the batch first, keeping first-in, first-out order.
+
+Scopes always take precedence over directories; the changed directories only
+decide the grouping when scopes leave it open. In practice this depends on your
+configuration: if you have configured [scopes](/merge-queue/scopes), pull
+requests are grouped by scope and the directory signal stays out of the way. If
+you have not, every pull request reports no scope, so that signal is a tie for
+all of them and grouping falls back entirely to the directories they change.
+
+Because of this, a pull request further down the queue may join an earlier batch
+when it is similar to what is already there, while a closer but unrelated pull
+request waits for the next batch:
+
+```dot class="graph"
+strict digraph {
+  fontname="sans-serif";
+  rankdir="LR";
+  label="batch_size: 2 — similar pull requests grouped together";
+  nodesep=0.5;
+  ranksep=0.8;
+
+  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+  edge [style=invis];
+
+  subgraph cluster_batch1 {
+    style="rounded,filled";
+    color="#1CB893";
+    fillcolor="#1CB893";
+    fontcolor="#000000";
+    label="Batch 1";
+    PR1 [label="PR #1\n(api/)", fillcolor="#347D39"];
+    PR3 [label="PR #3\n(api/)", fillcolor="#347D39"];
+  }
+
+  subgraph cluster_batch2 {
+    style="rounded,filled";
+    color="#1CB893";
+    fillcolor="#1CB893";
+    fontcolor="#000000";
+    label="Batch 2";
+    PR2 [label="PR #2\n(docs/)", fillcolor="#347D39"];
+    PR4 [label="PR #4\n(web/)", fillcolor="#347D39"];
+  }
+
+  PR1 -> PR3 -> PR2 -> PR4;
+}
+```
+
+Here the queue order is PR #1, #2, #3, #4. PR #3 changes the same area as PR #1
+(`api/`), so it joins PR #1 in the first batch even though PR #2 was queued
+earlier. PR #2 and PR #4, which touch unrelated areas, fall into the next batch.
+
+:::note
+  Grouping only considers the pull requests waiting in the queue when a batch is
+  assembled. Use [`batch_max_wait_time`](#configuring-batch-merging) to let
+  Mergify wait for more pull requests to arrive before assembling a batch, which
+  gives the grouping more candidates to work with.
+:::
+
+### Stacks stay together
+
+If a pull request depends on earlier ones still in the queue (a
+[stack](/merge-queue/stacks)), Mergify pulls those predecessors into the same
+batch so the whole stack is tested together, as long as they fit within
+`batch_size`. If they don't fit, the dependent pull request waits for a later
+batch rather than being tested without the changes it builds on.
+
 ## Merging the Batch PRs
 
 By default, Mergify creates temporary branches and batch PRs for testing
@@ -226,17 +339,6 @@ This is how it works:
 Note that this system is completely automatic and there is no need to
 intervene. The number of maximum splits can be controlled by
 [`batch_max_failure_resolution_attempts`](/configuration/file-format#queue-rules).
-
-:::note
-
-Mergify optimizes batching while always respecting queue priorities.
-When a batch is being assembled and its maximum size is not yet reached, 
-Mergify checks whether another pull request with the same queue rule can be 
-added—even if it appears later in the queue.
-If such a match is found, it is included in the batch to save an entire CI cycle and
-speed up merges, while still honoring all rules and priority ordering.
-
-:::
 
 ### Batch Failure Scenario Example
 
