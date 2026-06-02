@@ -1,0 +1,9 @@
+---
+title: "Honor GitHub ruleset required reviewers"
+date: 2026-06-02
+tags:
+  - Merge Protections
+description: "Mergify now waits for the team and user approvals required by GitHub rulesets before merging."
+---
+
+When a GitHub repository ruleset requires reviews from specific teams or users, Mergify now waits for those approvals before merging. The new `github-require-review-from-specific-teams` condition is auto-injected when the engine detects the requirement, and you can reference it explicitly in your `.mergify.yml`. File-scoped requirements (the ruleset's `file_patterns` field) are honored, so a per-directory team approval only kicks in for PRs that touch matching files.

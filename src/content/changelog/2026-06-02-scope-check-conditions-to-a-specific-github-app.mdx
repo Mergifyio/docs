@@ -1,0 +1,9 @@
+---
+title: "Scope `check-*` conditions to a specific GitHub App"
+date: 2026-06-02
+tags:
+  - Rules
+description: "Bind a `check-*` condition to the GitHub App that posted the check, so collisions from other installations cannot satisfy the rule."
+---
+
+Write `check-success=@github-actions/ci/lint` to require that the `ci/lint` check was posted by the `github-actions` app — useful when a third-party app could publish a check with the same name. The bare form (`check-success=ci/lint`) keeps matching any app, so existing rules are unaffected.
