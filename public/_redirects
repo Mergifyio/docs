@@ -74,4 +74,6 @@
 /ci-insights/test-frameworks/* /test-insights/test-frameworks/:splat 301
 /ci-insights/quarantine /test-insights/quarantine 301
 /ci-insights/quarantine/ /test-insights/quarantine 301
+/merge-queue/parallel-scopes /merge-queue/queue-modes 301
+/merge-queue/parallel-scopes/ /merge-queue/queue-modes 301
 

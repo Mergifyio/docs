@@ -111,7 +111,7 @@ Vocabulary used across these pages:
 | Term | Meaning |
 |------|---------|
 | **Queue** | The ordered line of pull requests waiting to merge. |
-| **Scopes** | Metadata describing which parts of the codebase a PR touches; used to batch PRs in monorepos. |
+| **Scopes** | Which parts of the codebase a PR touches; used to batch PRs in monorepos or check them in parallel. |
 | **Batches** | Queued PRs tested together in one CI run to reduce total CI cost and time. |
 | **Two-step CI** | Run fast tests on every PR, and run expensive tests only before merge. |
 | **Parallel checks** | Run CI speculatively on multiple queued PRs at once, instead of one at a time. |
@@ -156,7 +156,7 @@ conflicts before they hit production.
 Serial testing creates bottlenecks. Mergify tests multiple PRs in parallel
 using speculative execution, so your queue moves as fast as your CI allows.
 
-**→ [Parallel checks](/merge-queue/parallel-checks)**
+**→ [Parallel checks](/merge-queue/parallel-checks) | [Queue modes](/merge-queue/queue-modes)**
 
 ### Spiraling CI Costs
 
@@ -177,6 +177,7 @@ which services a PR affects and only batches compatible changes together.
 
 | Feature | What It Does | Impact |
 |---------|--------------|--------|
+| [Queue modes](/merge-queue/queue-modes) | Serial, parallel, or isolated scheduling | Match speed to PR independence |
 | [Parallel checks](/merge-queue/parallel-checks) | Test multiple PRs simultaneously | 3-5x faster merge throughput |
 | [Batches](/merge-queue/batches) | Combine PRs into single CI runs | 50-80% fewer CI runs |
 | [Two-step CI](/merge-queue/two-step) | Run heavy tests only at merge time | Cut CI costs on draft/WIP PRs |

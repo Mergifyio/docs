@@ -1,32 +1,40 @@
 ---
-title: Parallel Scopes
-description: Run independent pull requests through the merge queue simultaneously to merge faster in monorepos.
+title: Queue Modes
+description: Choose how the merge queue schedules pull requests — serial, parallel, or isolated.
 ---
 
-By default, Mergify's merge queue operates in **serial mode**: every pull request is tested on top
-of the previous one, forming a single ordered pipeline. This guarantees correctness but means
-unrelated changes wait for each other.
+The `merge_queue.mode` option controls how the merge queue schedules pull requests. There are three
+modes:
 
-**Parallel mode** removes that constraint. When two pull requests touch different areas of the
-codebase — different **scopes** — Mergify tests and merges them independently, at the same time. Pull
-requests that do share a scope are still queued together so they are tested as a group, preventing
-semantic conflicts.
+- **`serial`** (default) — every pull request is tested on top of the previous one, in a single
+  ordered pipeline.
 
-:::tip
-  Parallel mode is designed for monorepos and large repositories where pull requests frequently
-  change independent parts of the codebase. If most of your pull requests touch the same files,
-  serial mode with [batching](/merge-queue/batches) may be a better fit.
-:::
+- **`parallel`** — pull requests that touch different [scopes](/merge-queue/scopes) are tested and
+  merged at the same time.
 
-**Isolated mode** goes one step further. Every batch runs as a fully independent unit with no
-dependency on any other batch — even when their changes overlap. Scopes become optional: when set,
-Mergify groups similar pull requests into the same batch; when omitted, it batches by priority and
-arrival order. See [Isolated Mode](#isolated-mode) below.
+- **`isolated`** — every batch runs as a fully independent unit, with no dependency on any other
+  batch.
 
-## Serial, Parallel, and Isolated at a Glance
+All three honor your [queue rules](/merge-queue/rules) and [batch sizing](/merge-queue/batches).
+They differ only in **how batches depend on each other**.
 
-In **serial mode**, every batch depends on the one before it. Even if PR #3 (docs) has nothing in
-common with PR #1 (api) or PR #2 (frontend), it still waits:
+## Choosing a mode
+
+| Mode | Batches depend on each other? | Requires scopes? | Best for |
+|------|-------------------------------|------------------|----------|
+| `serial` | Yes — each batch builds on the previous one | No | Most repos; PRs that often touch the same code |
+| `parallel` | Only when their scopes overlap | Yes | Monorepos where pull requests usually touch independent areas |
+| `isolated` | Never | No | Independent pull requests where you want maximum throughput |
+
+The rest of this page describes each mode in turn. Serial is the default, so if you do nothing you
+are already using it.
+
+## Serial Mode
+
+Serial mode is the **default** — you don't need to configure anything to use it. Every pull request
+is tested on top of the one before it, forming a single ordered pipeline. This guarantees
+correctness: each pull request is validated against the exact state it will merge into. The
+trade-off is that unrelated changes still wait for each other.
 
 ```dot class="graph"
 strict digraph {
@@ -47,8 +55,34 @@ strict digraph {
 }
 ```
 
-In **parallel mode**, Mergify groups pull requests by scope. Batches that share no scope run at the
-same time:
+Even though PR #3 (docs) has nothing in common with PR #1 (api) or PR #2 (frontend), it still waits
+behind them.
+
+You can set it explicitly, though it is the default:
+
+```yaml
+merge_queue:
+  mode: serial
+```
+
+Serial mode still uses [batches](/merge-queue/batches) and
+[parallel checks](/merge-queue/parallel-checks) to increase throughput without giving up cumulative
+testing. If most of your pull requests touch the same files, serial mode is usually the right
+choice.
+
+## Parallel Mode
+
+Parallel mode tests and merges pull requests that touch different areas of the codebase — different
+[scopes](/merge-queue/scopes) — at the same time. Pull requests that share a scope are still queued
+together so they are tested as a group, preventing semantic conflicts.
+
+:::tip
+  Parallel mode is designed for monorepos and large repositories where pull requests frequently
+  change independent parts of the codebase. If most of your pull requests touch the same files,
+  serial mode may be a better fit.
+:::
+
+Batches that share no scope run at the same time:
 
 ```dot class="graph"
 strict digraph {
@@ -104,43 +138,12 @@ strict digraph {
 Here PR #4 touches the `api` scope, just like PR #1 — so it must wait for PR #1 to merge first.
 Meanwhile PR #3 (docs) proceeds independently.
 
-In **isolated mode**, there are no dependencies at all. Every batch runs on its own, even when two
-batches touch the same code, so an overlap like the one above never creates a wait:
+### Set up parallel mode
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="TB";
-  label="Isolated Mode\nEvery Batch Independent";
-  nodesep=0.8;
-  ranksep=0.6;
+Parallel mode requires two things: configuring [scopes](/merge-queue/scopes) so Mergify knows which
+areas of the codebase each pull request touches, and switching the mode.
 
-  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
-  edge [style=invis];
-
-  subgraph cluster_running {
-    style="rounded,filled";
-    fillcolor="#1CB893";
-    color="#1CB893";
-    fontcolor="#000000";
-    label="Tested simultaneously";
-
-    PR1 [label="Batch 1\nPR #1", fillcolor="#347D39"];
-    PR2 [label="Batch 2\nPR #2", fillcolor="#347D39"];
-    PR3 [label="Batch 3\nPR #3", fillcolor="#347D39"];
-  }
-
-  { rank=same; PR1; PR2; PR3; }
-}
-```
-
-## Setting Up Parallel Mode
-
-Parallel mode requires two things: switching the queue mode and configuring
-[scopes](/merge-queue/scopes) so Mergify knows which areas of the codebase each pull request
-touches.
-
-### 1. Define scopes
+#### 1. Define scopes
 
 Scopes can come from file patterns declared directly in `.mergify.yml`, or from an external build
 system (Nx, Bazel, Turborepo, …) via the
@@ -163,7 +166,7 @@ scopes:
 
 See [Scopes](/merge-queue/scopes) for all configuration options and build-tool integrations.
 
-### 2. Enable parallel mode
+#### 2. Enable parallel mode
 
 Add `mode: parallel` under `merge_queue`:
 
@@ -195,7 +198,7 @@ queue_rules:
 The `max_parallel_checks` setting controls how many batches Mergify tests at the same time across
 all scope queues. Tune it to match your CI capacity.
 
-## How It Works
+### How parallel mode works
 
 Once parallel mode is active, the merge queue follows these steps whenever it processes pull
 requests:
@@ -216,16 +219,12 @@ requests:
 5. **Merge.** As soon as a batch's CI passes and all its parent batches are merged, Mergify merges
    the pull requests in that batch.
 
-### What happens when a batch fails?
+When a batch fails, Mergify splits it and retests the parts to isolate the problematic pull request
+(see [Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout)). Because
+batches are scoped, a failure in one scope queue does **not** block unrelated scope queues — only
+batches that depend on the failed one (via a shared scope) are affected.
 
-The failure handling works the same way as in serial mode: Mergify splits the failed batch and
-retests the parts to isolate the problematic pull request. See
-[Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout) for details.
-
-Because batches in parallel mode are scoped, a failure in one scope queue does **not** block
-unrelated scope queues. Only batches that depend on the failed one (via shared scopes) are affected.
-
-## Limiting Concurrency per Scope
+### Limiting concurrency per scope
 
 `max_parallel_checks` caps how many speculative checks run at once across **all** scopes. Sometimes
 you want to bound a **single** scope on top of that: a scope whose tests are expensive or hit a shared
@@ -260,7 +259,7 @@ scopes:
 Here `frontend` and `backend` are each limited to 2 concurrent speculative checks. `docs` is absent
 from the map, so it stays uncapped: only the global ceiling applies to it.
 
-### How capacities relate to the global ceiling
+#### How capacities relate to the global ceiling
 
 `max_parallel_checks` is the **global ceiling**: the most speculative checks a train will ever run at
 once. Each `scopes.capacities` entry is a **sub-limit inside that ceiling, not an extra budget on
@@ -278,7 +277,7 @@ Because every check always takes a global slot, the total running at once **neve
 below the global ceiling; they never raise the total, so adding them to an existing configuration
 cannot increase your CI load.
 
-### Worked example
+#### Worked example
 
 Take the configuration above (`max_parallel_checks: 5`, `frontend: 2`, `backend: 2`, `docs`
 uncapped) and suppose the queue is ready to test three `frontend` batches, three `backend` batches,
@@ -339,14 +338,14 @@ slot goes to `docs` or to a capped scope still below its limit, follows queue or
 can differ from one cycle to the next. As soon as a running check finishes, its freed global slot
 (and its freed scope slot, if any) go to the next waiting batch that fits both.
 
-### Pull requests in several scopes
+#### Pull requests in several scopes
 
 A batch that touches more than one capped scope must fit in **all** of them at once. A batch
 carrying both `frontend` and `backend` consumes one `frontend` slot and one `backend` slot, and
 starts only when both scopes, and the global ceiling, have room. This keeps every scope's limit
 honored even when changes span scopes.
 
-### Source-agnostic
+#### Source-agnostic
 
 `capacities` only sets the limit; it does not decide which pull requests belong to a scope.
 Membership comes from your [`scopes.source`](/merge-queue/scopes), so capacities behave the same
@@ -361,7 +360,7 @@ membership is computed.
   Date](/merge-queue/github-rulesets#require-branches-to-be-up-to-date).
 :::
 
-## The Monorepo Trade-Off
+### The monorepo trade-off
 
 Parallel mode is built for the reality of monorepos: most pull requests are independent, but some
 do interact.
@@ -381,6 +380,33 @@ branch.
 Parallel mode keeps dependencies between batches that share a scope. **Isolated mode** drops them
 entirely: every batch is a self-contained unit that is tested and merged on its own, with no parent
 batch and no child batch. A failure in one batch never blocks any other.
+
+```dot class="graph"
+strict digraph {
+  fontname="sans-serif";
+  rankdir="TB";
+  label="Isolated Mode\nEvery Batch Independent";
+  nodesep=0.8;
+  ranksep=0.6;
+
+  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+  edge [style=invis];
+
+  subgraph cluster_running {
+    style="rounded,filled";
+    fillcolor="#1CB893";
+    color="#1CB893";
+    fontcolor="#000000";
+    label="Tested simultaneously";
+
+    PR1 [label="Batch 1\nPR #1", fillcolor="#347D39"];
+    PR2 [label="Batch 2\nPR #2", fillcolor="#347D39"];
+    PR3 [label="Batch 3\nPR #3", fillcolor="#347D39"];
+  }
+
+  { rank=same; PR1; PR2; PR3; }
+}
+```
 
 Use isolated mode when your pull requests are genuinely independent and you want maximum throughput
 without maintaining a scope map — for example when each pull request targets its own service or
@@ -402,10 +428,9 @@ queue_rules:
       - check-success = ci
 ```
 
-### How batches form
+### How isolated batches form
 
-How Mergify fills a batch depends on whether you configure
-[scopes](/merge-queue/scopes):
+How Mergify fills a batch depends on whether you configure [scopes](/merge-queue/scopes):
 
 - **With scopes.** Mergify groups the most similar pull requests — those sharing the most scopes —
   into the same batch, using the same [scope-aware batching](/merge-queue/scopes) as the other
@@ -413,22 +438,10 @@ How Mergify fills a batch depends on whether you configure
 
 - **Without scopes.** Mergify fills batches by queue priority and arrival order, up to `batch_size`.
 
-Either way, the batches that result are fully independent. They run concurrently up to
+Either way, the resulting batches are fully independent. They run concurrently up to
 `max_parallel_checks`, and Mergify merges each one as soon as its own CI passes — there is never a
-parent batch to wait for.
-
-### Isolated vs. parallel
-
-| | Parallel mode | Isolated mode |
-|--|--|--|
-| Scopes | Required | Optional |
-| Cross-batch dependencies | Yes, when scopes overlap | Never |
-| A batch can block another | Yes (shared scope) | No |
-| Batch formation | By shared scopes | By shared scopes, or by priority + arrival order when no scopes |
-
-Batch failure handling is the same as in the other modes: Mergify splits the failed batch and
-retests the parts to isolate the culprit. See
-[Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout).
+parent batch to wait for. Batch failures are handled the same way as in the other modes (see
+[Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout)).
 
 ## Compatibility and Limitations
 
@@ -436,8 +449,8 @@ Parallel and isolated modes change how the queue operates. Some features that re
 single-queue ordering are not available:
 
 - **Scopes are required in parallel mode.** You must configure `scopes.source` (either `files` or
-  `manual`) so Mergify can tell which pull requests are independent. Isolated mode does not require
-  scopes — see [Isolated Mode](#isolated-mode).
+  `manual`) so Mergify can tell which pull requests are independent. Serial and isolated modes do
+  not require scopes.
 
 - **`fast-forward` merge is not supported.** Because batches merge independently, Mergify needs to
   rebase them. Use `merge` or `rebase` as your `merge_method`.

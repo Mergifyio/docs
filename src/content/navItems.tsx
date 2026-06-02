@@ -17,6 +17,11 @@ const navItems: NavItem[] = [
     children: [
       { title: 'Overview', path: '/merge-queue', icon: 'lucide:lightbulb' },
       { title: 'Setup', path: '/merge-queue/setup', icon: 'lucide:settings' },
+      {
+        title: 'Queue Modes',
+        path: '/merge-queue/queue-modes',
+        icon: 'lucide:git-fork',
+      },
       { title: 'Queue Rules', path: '/merge-queue/rules', icon: 'lucide:layers' },
       {
         title: 'Merge Strategies',
@@ -60,11 +65,6 @@ const navItems: NavItem[] = [
         ],
       },
       { title: 'Monorepo', path: '/merge-queue/monorepo', icon: 'lucide:boxes' },
-      {
-        title: 'Parallel Scopes',
-        path: '/merge-queue/parallel-scopes',
-        icon: 'lucide:git-fork',
-      },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: 'lucide:arrow-right-left' },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: 'lucide:rocket' },
       {
