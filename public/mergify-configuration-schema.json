@@ -3238,6 +3238,22 @@
           "pattern": "^[A-Za-z0-9_-]+$",
           "title": "Merge Queue Scope",
           "type": "string"
+        },
+        "capacities": {
+          "description": "How many speculative checks each scope may run at the same time, as a map of scope name to capacity. Works for any `source` (file globs or the manual scopes API just decide membership; capacity is declared here). A scope listed here runs against its own independent budget; a PR in several capped scopes consumes one slot from each. PRs whose scopes are all absent from this map share the repo-wide `merge_queue.max_parallel_checks` pool. Strict branch protection still forces an effective capacity of 1.",
+          "patternProperties": {
+            "^[A-Za-z0-9_-]+$": {
+              "maximum": 128,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "propertyNames": {
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "title": "Capacities",
+          "type": "object"
         }
       },
       "title": "Scopes",
