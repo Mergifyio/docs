@@ -1,6 +1,7 @@
 ---
 import { Code as InlineCode } from 'astro:components';
 import { Code } from 'astro-expressive-code/components';
+import ghaMergifyCiVersion from '~/data/gha-mergify-ci-version.json';
 
 const inlineThemes = { light: 'github-light', dark: 'github-dark' } as const;
 
@@ -13,7 +14,7 @@ const { reportPath } = Astro.props;
 <Code
 	code={`- name: Mergify CI Upload
   if: success() || failure()
-  uses: mergifyio/gha-mergify-ci@v8
+  uses: mergifyio/gha-mergify-ci@${ghaMergifyCiVersion.version}
   with:
     token: \${{ secrets.MERGIFY_TOKEN }}
     report_path: ${reportPath}

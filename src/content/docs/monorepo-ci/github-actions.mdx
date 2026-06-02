@@ -90,7 +90,7 @@ jobs:
 
       - name: Detect scopes
         id: scopes
-        uses: Mergifyio/gha-mergify-ci@v11
+        uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           action: scopes
 
@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Report status
-        uses: Mergifyio/gha-mergify-ci@v11
+        uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           action: wait-jobs
           jobs: ${{ toJSON(needs) }}

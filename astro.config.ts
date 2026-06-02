@@ -22,6 +22,7 @@ import { rehypeTasklistEnhancer } from './plugins/rehype-tasklist-enhancer';
 import { rehypeWrapTables } from './plugins/rehype-wrap-tables';
 import { remarkBuildkiteVersionPlugin } from './plugins/remark-buildkite-version';
 import { remarkEnterpriseVersionPlugin } from './plugins/remark-enterprise-version';
+import { remarkGhaMergifyCiVersionPlugin } from './plugins/remark-gha-mergify-ci-version';
 import { remarkGraphvizPlugin } from './plugins/remark-graphviz';
 
 dotenv.config({
@@ -93,6 +94,7 @@ export default defineConfig({
     remarkPlugins: [
       remarkBuildkiteVersionPlugin(),
       remarkEnterpriseVersionPlugin(),
+      remarkGhaMergifyCiVersionPlugin(),
       remarkGraphvizPlugin(),
       [
         remarkSmartypants as RemarkPlugin,

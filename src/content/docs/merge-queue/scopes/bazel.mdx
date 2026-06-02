@@ -41,7 +41,7 @@ jobs:
 
       - name: Get git refs
         id: refs
-        uses: Mergifyio/gha-mergify-ci@v11
+        uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           action: scopes-git-refs
 
@@ -59,7 +59,7 @@ jobs:
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
       - name: Scopes upload
-        uses: Mergifyio/gha-mergify-ci@v11
+        uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           action: scopes-upload
           token: ${{ secrets.MERGIFY_TOKEN }}
