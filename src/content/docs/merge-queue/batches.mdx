@@ -136,41 +136,56 @@ batch failures cheaper to resolve: when a batch fails and has to be
 unrelated pull requests aren't dragged into someone else's failure.
 
 This is the default merge queue behavior (serial mode). Parallel mode groups
-pull requests strictly by scope instead — see [Parallel
-Scopes](/merge-queue/parallel-scopes).
+pull requests strictly by scope instead. See [Queue
+Modes](/merge-queue/queue-modes#parallel-mode).
+
+Grouping applies these rules in order of precedence: it never overrides
+[priority](/merge-queue/priority) or queue order, it always keeps a
+[stack](/merge-queue/stacks) together, and only then does similarity fill
+whatever batch slots remain. The sections below follow that order.
 
 ### Priority comes first
 
 Grouping never overrides [priority](/merge-queue/priority) or queue order.
-Mergify seeds each batch with the pull request that is next to merge — the
+Mergify seeds each batch with the pull request that is next to merge: the
 highest priority, and the oldest among equal priorities. Similarity only ever
 breaks ties **between pull requests of equal priority**: a lower-priority pull
 request is never pulled ahead of a higher-priority one just because it is
 similar. Higher-priority pull requests always fill the batch first; lower
 priorities are only considered once the batch still has room.
 
+### Stacks stay together
+
+Stacks are the next firm rule, applied before similarity is considered. When a
+pull request depends on earlier ones still in the queue (a
+[stack](/merge-queue/stacks)), Mergify keeps the whole stack in one batch:
+whenever a pull request joins a batch, its queued predecessors join with it,
+whether or not they share its scopes or changed directories.
+
+This is why stack relationships take precedence over scope and directory
+similarity. A predecessor joins the batch because the dependency requires it,
+not because it ranked highly. The only limit is `batch_size`: if the stack
+doesn't fit, the dependent pull request waits for a later batch rather than
+being tested without the changes it builds on.
+
 ### Filling the batch by similarity
 
-Once the batch is seeded, Mergify fills the remaining slots (up to `batch_size`)
-one at a time. At each step it ranks every waiting candidate by four criteria,
-applied **in order** — each one only breaks the ties the previous one leaves
-open:
+Priority and stacks decide what a batch must contain. Similarity decides the
+rest: which of the remaining equal-priority pull requests fill the slots that
+are still free (up to `batch_size`). Mergify adds them one at a time, ranking
+every waiting candidate by three criteria applied **in order**, each one only
+breaking the ties the previous one leaves open:
 
-1. **[Priority](/merge-queue/priority).** Higher-priority pull requests are
-   always added first (see above); the criteria below only ever compare pull
-   requests of equal priority.
+1. **[Scopes](/merge-queue/scopes).** The pull requests that share the most
+   scopes with the batch are the strongest match and are grouped together.
 
-2. **[Scopes](/merge-queue/scopes).** Among those, the pull requests that share
-   the most scopes with the batch are the strongest match and are grouped
-   together.
-
-3. **Changed directories.** When scopes don't separate two candidates, Mergify
+2. **Changed directories.** When scopes don't separate two candidates, Mergify
    compares the **directories each pull request changes** and prefers the one
    touching the same areas of the repository. On very large monorepos it
    automatically compares broader areas (parent directories) rather than every
    individual folder, so grouping stays effective whatever the repository size.
 
-4. **Queue time.** If two pull requests are still tied, the one that has been
+3. **Queue time.** If two pull requests are still tied, the one that has been
    waiting longest joins the batch first, keeping first-in, first-out order.
 
 Scopes always take precedence over directories; the changed directories only
@@ -229,14 +244,6 @@ earlier. PR #2 and PR #4, which touch unrelated areas, fall into the next batch.
   Mergify wait for more pull requests to arrive before assembling a batch, which
   gives the grouping more candidates to work with.
 :::
-
-### Stacks stay together
-
-If a pull request depends on earlier ones still in the queue (a
-[stack](/merge-queue/stacks)), Mergify pulls those predecessors into the same
-batch so the whole stack is tested together, as long as they fit within
-`batch_size`. If they don't fit, the dependent pull request waits for a later
-batch rather than being tested without the changes it builds on.
 
 ## Merging the Batch PRs
 
