@@ -9,7 +9,7 @@ import specChecksListScreenshot from "../../images/merge-queue/parallel-checks/s
 Parallel checks are how Mergify tests the queue **speculatively**: instead of
 validating one pull request at a time, it tests several queued pull requests
 ahead of time so you ship faster. Mergify creates temporary batch PRs that
-represent cumulative merges (PR#1), (PR#1+PR#2), (PR#1+PR#2+PR#3), runs CI on
+represent cumulative merges (PR #1), (PR #1 + PR #2), (PR #1 + PR #2 + PR #3), runs CI on
 them in parallel, then merges the original PRs once checks pass. The
 `max_parallel_checks` setting controls how far ahead it tests.
 
