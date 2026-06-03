@@ -20,11 +20,11 @@ They differ only in **how batches depend on each other**.
 
 ## Choosing a mode
 
-| Mode | Batches depend on each other? | Requires scopes? | Best for |
-|------|-------------------------------|------------------|----------|
-| `serial` | Yes — each batch builds on the previous one | No | Most repos; PRs that often touch the same code |
-| `parallel` | Only when their scopes overlap | Yes | Monorepos where pull requests usually touch independent areas |
-| `isolated` | Never | No | Independent pull requests where you want maximum throughput |
+| Mode | Batches depend on each other? | PRs tested against each other? | Requires scopes? | Best for |
+|------|-------------------------------|-------------------------------|------------------|----------|
+| `serial` | Yes, builds on the previous batch | Yes, every PR cumulatively | No | Repos where PRs touch the same code |
+| `parallel` | Only when scopes overlap | Only PRs sharing a scope | Yes | Monorepos where PRs touch independent areas |
+| `isolated` | Never | No, only against the base branch | No | Independent PRs, max throughput, accept conflict risk |
 
 The rest of this page describes each mode in turn. Serial is the default, so if you do nothing you
 are already using it.
@@ -379,7 +379,7 @@ do interact.
 | A PR touches **multiple** scopes | Linked to all relevant scope queues | Correctness preserved across scopes |
 
 The net effect: **pull requests merge faster when their scopes don't collide**, while pull requests
-that do collide are still tested in the right order to avoid semantic conflicts reaching your main
+that do collide are still tested in the right order to avoid semantic conflicts reaching your base
 branch.
 
 ## Isolated Mode
@@ -419,6 +419,13 @@ Use isolated mode when your pull requests are genuinely independent and you want
 without maintaining a scope map — for example when each pull request targets its own service or
 package and you don't need Mergify to serialize overlapping changes.
 
+:::caution
+  Isolated mode never tests pull requests against each other. Two pull requests that pass on their
+  own but conflict semantically can both merge and break your base branch. Parallel mode protects
+  against this by serializing pull requests that share a scope; isolated mode drops that safety net.
+  Use it only when your pull requests are truly independent.
+:::
+
 ### Enable isolated mode
 
 Set `mode: isolated` under `merge_queue`. Unlike parallel mode, scopes are **optional**:
@@ -434,6 +441,13 @@ queue_rules:
     queue_conditions:
       - check-success = ci
 ```
+
+:::caution
+  Isolated mode requires speculative checks to be useful: `max_parallel_checks` must be greater
+  than 1. With `max_parallel_checks: 1` (speculative checks disabled), batches still run
+  one at a time. You get no throughput gain and lose serial mode's cumulative testing. If you can't
+  run speculative checks, use `serial` instead.
+:::
 
 ### How isolated batches form
 
