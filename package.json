@@ -83,7 +83,7 @@
     "@iconify-json/simple-icons": "^1.2.84",
     "@iconify/react": "^6.0.2",
     "@iconify/types": "^2.0.0",
-    "@mergifyio/icons": "^0.0.0",
+    "@mergifyio/icons": "^0.1.0",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@viz-js/viz": "^3.27.0",
