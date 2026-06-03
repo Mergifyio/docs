@@ -29,7 +29,7 @@ From there, you can add or remove a test from quarantine.
 
 ### From The Mergify CLI
 
-The [Mergify CLI](/test-insights/cli) can add and remove quarantines from the terminal,
+The [Mergify CLI](/test-insights/cli) can manage quarantines from the terminal,
 which is handy for scripting or for letting an AI coding agent quarantine a flaky test it just hit:
 
 ```bash
@@ -41,6 +41,9 @@ mergify tests quarantine -r owner/repo \
 # Remove it from quarantine.
 mergify tests unquarantine -r owner/repo \
   "tests/auth/test_login.py::test_login_timeout"
+
+# List everything currently quarantined.
+mergify tests quarantined -r owner/repo
 ```
 
 See the [Test Insights CLI](/test-insights/cli) reference for all flags and exit codes.
