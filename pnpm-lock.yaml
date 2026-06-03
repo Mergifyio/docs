@@ -47,8 +47,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       '@mergifyio/icons':
-        specifier: ^0.0.0
-        version: 0.0.0
+        specifier: ^0.1.0
+        version: 0.1.0
       '@types/react':
         specifier: ^19.2.15
         version: 19.2.15
@@ -1118,8 +1118,8 @@ packages:
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
 
-  '@mergifyio/icons@0.0.0':
-    resolution: {integrity: sha512-3KiYXpKNkF1ykjbkjLeX2Sef5RVKlFYxp/yBBUBiLy43MSSxtnoz8AjY1MwG858030qcyD1pbmgLdALgHlol8A==}
+  '@mergifyio/icons@0.1.0':
+    resolution: {integrity: sha512-JE4sFm/ahk8cYoWQmjDWqQO6HEwbS2msxULqdJ6ntEeJ0C4k99HnBzSLBIMzzE1IqWDXlNXZehW//LoRA53N1w==}
     engines: {node: '>=22.0.0'}
 
   '@nodable/entities@2.1.0':
@@ -5887,7 +5887,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mergifyio/icons@0.0.0': {}
+  '@mergifyio/icons@0.1.0': {}
 
   '@nodable/entities@2.1.0': {}
 
