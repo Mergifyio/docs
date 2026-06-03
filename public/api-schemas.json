@@ -5111,8 +5111,8 @@
         "tags": [
           "test_insights"
         ],
-        "summary": "Search tests by name",
-        "description": "Resolve test identities by name in a repository. Returns one entry per (test_name, pipeline_name, job_name) running on the default branch. Supports glob patterns in `test_name` (e.g. `*test_login*`).",
+        "summary": "Search tests",
+        "description": "Search tests in a repository.",
         "operationId": "ci-search-tests",
         "security": [
           {
@@ -5153,20 +5153,26 @@
           {
             "name": "test_name",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 255
-              },
-              "minItems": 1,
-              "maxItems": 255,
-              "description": "Test name to search for. Pass multiple times to combine matches. Supports glob patterns (`*`, `?`).",
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by test name. Pass multiple times to combine matches. Supports glob patterns (`*`, `?`). Omit to return all test identities.",
               "title": "Test Name"
             },
-            "description": "Test name to search for. Pass multiple times to combine matches. Supports glob patterns (`*`, `?`)."
+            "description": "Filter by test name. Pass multiple times to combine matches. Supports glob patterns (`*`, `?`). Omit to return all test identities."
           },
           {
             "name": "sort",
@@ -5177,7 +5183,11 @@
                 "executions_count",
                 "test_name",
                 "pipeline_name",
-                "job_name"
+                "job_name",
+                "health_status",
+                "health_confidence",
+                "failed_executions_impact",
+                "failed_executions_ratio"
               ],
               "type": "string",
               "description": "Sort field",
@@ -5201,6 +5211,30 @@
               "title": "Direction"
             },
             "description": "Sort direction"
+          },
+          {
+            "name": "test_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The test name to exclude",
+              "title": "Test Name Exclude"
+            },
+            "description": "The test name to exclude"
           },
           {
             "name": "pipeline_name",
@@ -5349,6 +5383,84 @@
               "title": "Health Confidence"
             },
             "description": "The health confidence to filter on"
+          },
+          {
+            "name": "health_confidence_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health confidence to exclude",
+              "title": "Health Confidence Exclude"
+            },
+            "description": "The health confidence to exclude"
+          },
+          {
+            "name": "failed_executions_impact",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The failed executions impact to filter on",
+              "title": "Failed Executions Impact"
+            },
+            "description": "The failed executions impact to filter on"
+          },
+          {
+            "name": "failed_executions_impact_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The failed executions impact to exclude",
+              "title": "Failed Executions Impact Exclude"
+            },
+            "description": "The failed executions impact to exclude"
           },
           {
             "name": "cursor",
@@ -15785,6 +15897,12 @@
             "title": "Test Name",
             "description": "Fully qualified name of the quarantined test."
           },
+          "test_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Test Id",
+            "description": "Stable identifier of the test, derived from its name. Identical across every quarantine of the same test and matches the `test_id` filter on the list endpoint."
+          },
           "reason": {
             "type": "string",
             "title": "Reason",
@@ -15828,6 +15946,7 @@
         "required": [
           "id",
           "test_name",
+          "test_id",
           "reason",
           "branch",
           "created_at",
@@ -16823,14 +16942,20 @@
             },
             "type": "array",
             "title": "Tests",
-            "description": "Test identities matching the search query, ordered by total executions."
+            "description": "Test identities matching the search query."
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Total number of test identities matching the search query, across all pages."
           }
         },
         "type": "object",
         "required": [
           "size",
           "per_page",
-          "tests"
+          "tests",
+          "total"
         ],
         "title": "SearchTestsResponse"
       },
@@ -17415,6 +17540,23 @@
             "title": "Job Name",
             "description": "Name of the job within the pipeline that ran the test."
           },
+          "metrics": {
+            "$ref": "#/components/schemas/TestSearchResultMetrics",
+            "description": "Health metrics of the test identity."
+          }
+        },
+        "type": "object",
+        "required": [
+          "test_id",
+          "test_name",
+          "pipeline_name",
+          "job_name",
+          "metrics"
+        ],
+        "title": "TestSearchResult"
+      },
+      "TestSearchResultMetrics": {
+        "properties": {
           "health_status": {
             "type": "string",
             "enum": [
@@ -17434,18 +17576,32 @@
             ],
             "title": "Health Confidence",
             "description": "Confidence in the health classification, derived from how many times the test has been rerun."
+          },
+          "failed_executions_impact": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failed Executions Impact",
+            "description": "Impact of the test's failures, derived from its failure ratio. `null` for healthy tests, which have no meaningful failure impact."
           }
         },
         "type": "object",
         "required": [
-          "test_id",
-          "test_name",
-          "pipeline_name",
-          "job_name",
           "health_status",
-          "health_confidence"
+          "health_confidence",
+          "failed_executions_impact"
         ],
-        "title": "TestSearchResult"
+        "title": "TestSearchResultMetrics"
       },
       "TimeJSON": {
         "properties": {
