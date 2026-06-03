@@ -15,6 +15,7 @@ interface Props {
 
 const { endpoint, rootSchema } = Astro.props;
 const { method, path, operation, slug } = endpoint;
+const title = operation.summary ?? `${method} ${path}`;
 
 const pathParams = (operation.parameters ?? []).filter((p) => p.in === 'path');
 const queryParams = (operation.parameters ?? []).filter((p) => p.in === 'query');
@@ -81,7 +82,12 @@ function getResponseExample(response: (typeof responses)[number][1]): string | n
 ---
 
 <div class="endpoint">
-  <h2 id={slug} class="endpoint-heading">{operation.summary}</h2>
+  <h2 id={slug} class="endpoint-heading">
+    {title}
+    <a class="endpoint-anchor" href={`#${slug}`} aria-label={`Link to ${title}`}>
+      #
+    </a>
+  </h2>
   <div class="endpoint-head">
     <div class="endpoint-method-path">
       <span class={`method-badge method-${method.toLowerCase()}`}
