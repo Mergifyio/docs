@@ -68,25 +68,16 @@ Every project's copy of a test therefore shares the same name, and Test Insights
 treats them as a single test — so a test that passes on `chromium` but fails on
 `webkit` looks flaky instead of consistently broken on one browser.
 
-To keep each project's tests separate, enable `includeProjectInTestName` on the
-JUnit reporter:
+To keep each project's tests separate, add `includeProjectInTestName` to the
+JUnit reporter options shown above:
 
 ```typescript
-// playwright.config.ts
-import { defineConfig } from '@playwright/test';
-
-export default defineConfig({
-  reporter: [
-    ['list'],
-    ['junit', { outputFile: 'junit.xml', includeProjectInTestName: true }]
-  ],
-  // ... other configuration
-});
+['junit', { outputFile: 'junit.xml', includeProjectInTestName: true }]
 ```
 
-This prefixes each test name with its project, for example `[chromium]
-login.spec.ts › logs in`, so Test Insights tracks flakiness and quarantine per
-project. The option requires Playwright 1.44 or later.
+This prefixes each test name with its project, for example
+`[chromium] login.spec.ts › logs in`, so Test Insights tracks flakiness and
+quarantine per project. The option requires Playwright 1.44 or later.
 
 ## Update Your CI Workflow
 
