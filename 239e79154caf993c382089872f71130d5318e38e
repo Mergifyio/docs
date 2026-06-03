@@ -1,0 +1,1 @@
+Address review: fall back to method+path when summary is missing (avoids 'Link to undefined' and empty heading); drop dead .endpoint:target selector, keep :has() only.
