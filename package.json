@@ -21,7 +21,7 @@
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/ts-plugin": "^1.10.9",
-    "@babel/core": "^7.29.0",
+    "@babel/core": "^7.29.7",
     "@biomejs/biome": "^2.4.15",
     "@eslint/compat": "^2.1.0",
     "@eslint/js": "^10.0.0",
