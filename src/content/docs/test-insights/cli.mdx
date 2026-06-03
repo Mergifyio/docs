@@ -80,6 +80,26 @@ for the full list of flags.
 The command exits `0` on success and `6` on a Mergify API error, for
 example when the test is not quarantined.
 
+## `mergify tests quarantined`
+
+List every test currently in [quarantine](/test-insights/quarantine)
+for a repository. It's handy for reviewing what's being ignored, or for
+looking up a quarantine ID to pass to `unquarantine`.
+
+```bash
+mergify tests quarantined -r owner/repo
+```
+
+Each test is listed with its quarantine ID, the branch it's scoped to
+(`*` for all branches), the source (`manual` or `auto`), whether it
+has recovered, and the reason. Add `--json` for a machine-readable
+payload (`{"quarantined_tests": [...]}`, which also carries each
+quarantine's `created_at` timestamp), and run
+`mergify tests quarantined --help` for the full list of flags.
+
+The command always exits `0`, including when nothing is quarantined:
+an empty quarantine is a normal state, not an error.
+
 ## AI coding agent recipes
 
 The exit-code contract is designed to be chained from agents that ran
