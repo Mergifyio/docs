@@ -57,6 +57,28 @@ To specify the output file location:
 npx playwright test --reporter=list --reporter=junit:junit.xml
 ```
 
+### Multi-Project (Cross-Browser) Runs
+
+If your `playwright.config.ts` defines multiple
+[projects](https://playwright.dev/docs/test-projects), such as one per browser
+(`chromium`, `firefox`, `webkit`), the same test runs once per project.
+By default, Playwright records the project name only in the `hostname` attribute
+of each `<testsuite>`, which Test Insights does not use to distinguish tests.
+Every project's copy of a test therefore shares the same name, and Test Insights
+treats them as a single test. A test that passes on `chromium` but fails on
+`webkit` then looks flaky instead of consistently broken on one browser.
+
+To keep each project's tests separate, add `includeProjectInTestName` to the
+JUnit reporter options shown above:
+
+```typescript
+['junit', { outputFile: 'junit.xml', includeProjectInTestName: true }]
+```
+
+This prefixes each test name with its project, for example
+`[chromium] login.spec.ts › logs in`, so Test Insights tracks flakiness and
+quarantine per project. The option requires Playwright 1.44 or later.
+
 ## Update Your CI Workflow
 
 ### GitHub Actions
