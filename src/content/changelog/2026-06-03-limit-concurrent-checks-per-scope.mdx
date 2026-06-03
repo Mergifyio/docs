@@ -1,0 +1,9 @@
+---
+title: "Limit concurrent checks per scope"
+date: 2026-06-03
+tags:
+  - Merge Queue
+description: "Cap how many speculative checks run in parallel for each merge queue scope, so heavy areas of your monorepo can't starve the rest."
+---
+
+The new `scopes.capacities` map declares a per-scope checks budget on top of `merge_queue.max_parallel_checks`. A pull request is checked only when the global ceiling and every scope it touches have room, so noisy or slow scopes don't crowd out the rest of the train. The same syntax works whether scopes come from file globs (`source: files`) or the manual scopes API (`source: manual`), and scopes you don't list stay unlimited (only the global ceiling applies).
