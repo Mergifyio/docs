@@ -101,7 +101,9 @@
   transition: border-color 0.15s;
 }
 
-.endpoint:target {
+/* The slug id lives on .endpoint-heading (the TOC observer reads heading ids),
+   so :target lands on the heading — highlight the enclosing card. */
+.endpoint:has(.endpoint-heading:target) {
   border-color: var(--theme-link);
   box-shadow: 0 0 0 1px var(--theme-link);
 }
@@ -113,6 +115,28 @@
   margin: 0 0 0.5rem !important;
   color: var(--theme-text);
   scroll-margin-top: calc(var(--theme-navbar-height) + 1rem);
+}
+
+.endpoint-anchor {
+  margin-left: 0.4rem;
+  color: var(--theme-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+
+.endpoint-anchor:hover,
+.endpoint-anchor:focus {
+  color: var(--theme-link);
+}
+
+.endpoint:hover .endpoint-anchor,
+.endpoint:focus-within .endpoint-anchor,
+.endpoint-heading:target .endpoint-anchor {
+  opacity: 1;
 }
 
 .endpoint-head {
