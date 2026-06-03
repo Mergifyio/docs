@@ -5,51 +5,53 @@ import { defaultConfig as footerConfig, socialLinks } from './footer';
 
 <footer>
 	<div class="footer-inner">
-		<div class="footer-brand">
-			<a class="footer-logo" href="/" aria-label="Back to Mergify Docs homepage">
-				<Logo width={106} height={22} />
-			</a>
-			<p class="footer-tagline">Stop breaking main.<br />Keep merges safe.</p>
-			<div class="footer-social">
-				{
-					socialLinks.map((link) => (
-						<a
-							class="footer-social-link"
-							href={link.href}
-							aria-label={link.label}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<svg
-								width="20"
-								height="20"
-								viewBox={link.viewBox}
-								fill="currentColor"
-								aria-hidden="true"
+		<div class="footer-columns">
+			<div class="footer-brand">
+				<a class="footer-logo" href="/" aria-label="Back to Mergify Docs homepage">
+					<Logo width={106} height={22} />
+				</a>
+				<p class="footer-tagline">Stop breaking main.<br />Keep merges safe.</p>
+				<div class="footer-social">
+					{
+						socialLinks.map((link) => (
+							<a
+								class="footer-social-link"
+								href={link.href}
+								aria-label={link.label}
+								target="_blank"
+								rel="noopener noreferrer"
 							>
-								<path d={link.path} />
-							</svg>
-						</a>
+								<svg
+									width="20"
+									height="20"
+									viewBox={link.viewBox}
+									fill="currentColor"
+									aria-hidden="true"
+								>
+									<path d={link.path} />
+								</svg>
+							</a>
+						))
+					}
+				</div>
+			</div>
+
+			<div class="footer-grid">
+				{
+					footerConfig.map(({ links, title }) => (
+						<section class="footer-col">
+							<h2 class="footer-col-title">{title}</h2>
+							<ul class="footer-col-links">
+								{links.map(({ href, text }) => (
+									<li>
+										<a href={href}>{text}</a>
+									</li>
+								))}
+							</ul>
+						</section>
 					))
 				}
 			</div>
-		</div>
-
-		<div class="footer-grid">
-			{
-				footerConfig.map(({ links, title }) => (
-					<section class="footer-col">
-						<h2 class="footer-col-title">{title}</h2>
-						<ul class="footer-col-links">
-							{links.map(({ href, text }) => (
-								<li>
-									<a href={href}>{text}</a>
-								</li>
-							))}
-						</ul>
-					</section>
-				))
-			}
 		</div>
 	</div>
 </footer>
@@ -60,15 +62,39 @@ import { defaultConfig as footerConfig, socialLinks } from './footer';
 		color: var(--theme-text);
 	}
 
+	/* Align the footer with the article column above it. The footer lives
+	   outside the main flex layout, so at wide viewports — where the right
+	   sidebar reserves an in-flow slot that pushes #main-content right by its
+	   own width plus the column's 3rem inset — we re-create that horizontal
+	   frame here. Below 82em the footer column already shares #main-content's
+	   frame, so no offset is needed. */
+	@media (min-width: 82em) {
+		footer {
+			margin-inline-start: calc(
+				var(--theme-right-sidebar-width) + 3rem - var(--theme-left-sidebar-width)
+			);
+			margin-inline-end: var(--theme-right-sidebar-width);
+		}
+	}
+
+	/* Mirror `.content`: a max-width article box, centered, with the same
+	   inline padding as the page content. */
 	.footer-inner {
+		max-width: 74rem;
+		margin-inline: auto;
 		padding-inline: var(--min-spacing-inline);
+	}
+
+	/* Mirror `.content > section`: the readable column width the page uses. */
+	.footer-columns {
+		max-width: 1000px;
 		display: flex;
 		flex-direction: column;
 		gap: 2.5rem;
 	}
 
 	@media (min-width: 64em) {
-		.footer-inner {
+		.footer-columns {
 			flex-direction: row;
 			gap: 3rem;
 		}
