@@ -5359,6 +5359,32 @@
             "description": "The health status to filter on"
           },
           {
+            "name": "health_status_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "healthy",
+                      "flaky",
+                      "broken"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health status to exclude",
+              "title": "Health Status Exclude"
+            },
+            "description": "The health status to exclude"
+          },
+          {
             "name": "health_confidence",
             "in": "query",
             "required": false,
