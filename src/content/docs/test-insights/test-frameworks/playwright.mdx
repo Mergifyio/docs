@@ -1,138 +1,170 @@
 ---
 title: Playwright Integration with Mergify
-description: Report your test results from Playwright tests to Mergify
+description: Report your test results from Playwright to Mergify
 ---
 
 import playwrightLogo from "../../../images/ci-insights/playwright/logo.svg"
-import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
-import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
-import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
-import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
-import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
-import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
-import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
-import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 
 <IntegrationLogo src={playwrightLogo} alt="Playwright logo" />
 
-This guide shows how to generate JUnit reports from your Playwright tests and upload
-them to **Test Insights** using your CI workflow.
+This guide explains how to integrate [Playwright](https://playwright.dev/) with
+Test Insights using the `@mergifyio/playwright` reporter. Once installed, test
+results are automatically uploaded to Test Insights without any extra workflow
+changes.
 
-## Generate a JUnit Report with Playwright
+## Installation
 
-Playwright has built-in support for JUnit XML reports through its built-in
-reporter. You can configure Playwright to output JUnit reports in your
-`playwright.config.ts` file.
+Install the
+[`@mergifyio/playwright`](https://www.npmjs.com/package/@mergifyio/playwright)
+package alongside `@playwright/test` to automatically upload your test results
+to **Test Insights**.
 
-### Using Playwright Configuration
+### npm
 
-Add the JUnit reporter to your `playwright.config.ts`:
+```bash
+npm install --save-dev @mergifyio/playwright
+```
+
+### yarn
+
+```bash
+yarn add --dev @mergifyio/playwright
+```
+
+### pnpm
+
+```bash
+pnpm add --save-dev @mergifyio/playwright
+```
+
+## Configuration
+
+Setting up the reporter takes two steps.
+
+### Wrap your Playwright config
+
+Wrap your `playwright.config.ts` with `withMergify`:
 
 ```typescript
-// playwright.config.ts
 import { defineConfig } from '@playwright/test';
+import { withMergify } from '@mergifyio/playwright';
 
-export default defineConfig({
-  reporter: [
-    ['list'],
-    ['junit', { outputFile: 'junit.xml' }]
-  ],
-  // ... other configuration
+export default withMergify(
+  defineConfig({
+    // ... your existing configuration
+  })
+);
+```
+
+`withMergify` adds the Mergify reporter while preserving any reporters,
+`globalSetup`, and `globalTeardown` you already have configured.
+
+### Import `test` and `expect` from Mergify
+
+In your test files, import `test` and `expect` from `@mergifyio/playwright`
+instead of `@playwright/test`:
+
+```typescript
+import { test, expect } from '@mergifyio/playwright';
+
+test('logs in', async ({ page }) => {
+  // ...
 });
 ```
 
-### Using Command Line Options
+This import enables [test quarantine](/test-insights/quarantine): when a
+quarantined test fails, its outcome is reported as passing so it doesn't block
+your pipeline.
 
-You can also specify the reporter via command line:
-
-```bash
-npx playwright test --reporter=list,junit
-```
-
-To specify the output file location:
-
-```bash
-npx playwright test --reporter=list --reporter=junit:junit.xml
-```
-
-### Multi-Project (Cross-Browser) Runs
-
-If your `playwright.config.ts` defines multiple
-[projects](https://playwright.dev/docs/test-projects), such as one per browser
-(`chromium`, `firefox`, `webkit`), the same test runs once per project.
-By default, Playwright records the project name only in the `hostname` attribute
-of each `<testsuite>`, which Test Insights does not use to distinguish tests.
-Every project's copy of a test therefore shares the same name, and Test Insights
-treats them as a single test. A test that passes on `chromium` but fails on
-`webkit` then looks flaky instead of consistently broken on one browser.
-
-To keep each project's tests separate, add `includeProjectInTestName` to the
-JUnit reporter options shown above:
-
-```typescript
-['junit', { outputFile: 'junit.xml', includeProjectInTestName: true }]
-```
-
-This prefixes each test name with its project, for example
-`[chromium] login.spec.ts › logs in`, so Test Insights tracks flakiness and
-quarantine per project. The option requires Playwright 1.44 or later.
+:::caution
+  If you wrap your config with `withMergify` but forget to update the `test`
+  import, the quarantine list is fetched but never applied, so quarantined
+  tests still fail your pipeline.
+:::
 
 ## Update Your CI Workflow
 
-### GitHub Actions
-
 <CIInsightsSetupNote />
 
-After generating the JUnit report, add a step to upload the results to CI
-Insights using the mergifyio/gha-mergify-ci action.
+Your workflow should run your tests as usual while exporting the secret
+`MERGIFY_TOKEN` as an environment variable.
 
-For example, in your workflow file:
+### GitHub Actions
+
+Add the following to the GitHub Actions step running your tests:
 
 ```yaml
-- name: Run Playwright Tests and Generate JUnit Report
-  continue-on-error: true
-  run: npx playwright test --reporter=list --reporter=junit:junit.xml
+env:
+  MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
 ```
 
-<MergifyCIUploadStep reportPath="junit.xml" />
-<MergifyCIUploadStepMatrix reportPath="junit.xml" />
+For example:
 
-<GhaMergifyCiQuarantineSetup />
+```yaml
+- name: Run Tests 🧪
+  env:
+    MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+  run: npx playwright test
+```
 
 ### Buildkite
 
-<BuildkiteCIUploadStep reportPath="junit.xml" />
-<BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
+Set `MERGIFY_TOKEN` as an environment variable in your pipeline step:
 
-<BuildkiteCIQuarantineSetup />
+```yaml
+steps:
+  - label: "Run Tests 🧪"
+    command: npx playwright test
+    env:
+      MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
+```
 
-### Any CI (Mergify CLI)
+The reporter automatically collects your test results and sends them to Test
+Insights.
 
-<MergifyCliUploadStep
-  reportPath="junit.xml"
-  testCommand="npx playwright test --reporter=list --reporter=junit:junit.xml"
-/>
+Check the Test Insights dashboard afterward to view execution metrics, detect
+flaky tests, and review test trends.
 
-## Verify and Review in Test Insights
+## Multi-Project (Cross-Browser) Runs
 
-After pushing these changes:
+If your `playwright.config.ts` defines multiple
+[projects](https://playwright.dev/docs/test-projects), such as one per browser
+(`chromium`, `firefox`, `webkit`), the same test runs once per project. By
+default, Test Insights identifies each test by name only, so every project's
+copy of a test shares the same identity and is treated as a single test. A test
+that passes on `chromium` but fails on `webkit` then looks flaky instead of
+consistently broken on one browser.
 
-1. Your GitHub Actions workflow will execute your Playwright tests.
-2. A JUnit report (junit.xml) is generated.
-3. The Mergify CI action uploads the report to Test Insights.
+To keep each project's tests separate, set
+`PLAYWRIGHT_MERGIFY_INCLUDE_PROJECT_IN_TEST_NAME` to `true`. The reporter then
+prefixes each test name with its project, for example
+`[chromium] > login.spec.ts > logs in`, so Test Insights tracks flakiness and
+quarantine per project:
 
-You can then review your test results, including any failures or flaky tests,
-directly in the [Test Insights
-dashboard](https://dashboard.mergify.com/test-insights/jobs).
+```yaml
+env:
+  MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+  PLAYWRIGHT_MERGIFY_INCLUDE_PROJECT_IN_TEST_NAME: "true"
+```
 
-## Troubleshooting Tips
+This option is opt-in (off by default) to preserve the history of tests that
+already report without a project prefix.
 
-<ul>
-  <li>
-    Playwright Configuration: Ensure the JUnit reporter is properly configured in your `playwright.config.ts` file.
-  </li>
+## Environment Variables
 
-  <CommonTroubleshootingTips />
-</ul>
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `MERGIFY_TOKEN` | API authentication token | **Required** |
+| `MERGIFY_API_URL` | API endpoint location | `https://api.mergify.com` |
+| `PLAYWRIGHT_MERGIFY_ENABLE` | Force-enable outside CI | `false` |
+| `PLAYWRIGHT_MERGIFY_INCLUDE_PROJECT_IN_TEST_NAME` | Prefix the project name to tests in multi-project runs | `false` |
+| `MERGIFY_CI_DEBUG` | Print spans to console instead of uploading | `false` |
+| `MERGIFY_TRACEPARENT` | W3C distributed trace context | Optional |
+
+:::tip
+  The reporter auto-activates in CI environments (detected via the `CI`
+  environment variable). To enable it outside CI, set
+  `PLAYWRIGHT_MERGIFY_ENABLE=true`.
+:::
