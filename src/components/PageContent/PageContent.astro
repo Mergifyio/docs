@@ -129,7 +129,13 @@ const suppressTitle = content.suppressTitle;
 		}
 	}
 
-	@media (max-width: var(--docs-toolbar-mobile-breakpoint)) {
+	/* Stack the breadcrumb above the action buttons once they no longer fit
+	   side by side. The threshold accounts for the left sidebar (~17rem) that
+	   eats into the content width from 50em up, so the breadcrumb keeps
+	   getting squeezed until ~72em. Below it: breadcrumb on its own row,
+	   actions left-aligned underneath. (Custom properties can't be used in
+	   media query conditions, hence the literal breakpoint.) */
+	@media (max-width: 72em) {
 		:global(.page-heading-bar) {
 			grid-template-columns: 1fr;
 		}
