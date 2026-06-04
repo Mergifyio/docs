@@ -70,13 +70,6 @@ const markdownPath = getMarkdownPath(Astro.url.pathname);
 		line-height: 1;
 	}
 
-	@media (max-width: var(--docs-toolbar-mobile-breakpoint)) {
-		:global(.docs-toolbar-button) {
-			width: 100%;
-			justify-content: center;
-		}
-	}
-
 	:global(.theme-dark .docs-toolbar-button) {
 		border-color: rgba(255, 255, 255, 0.2);
 		background: rgba(255, 255, 255, 0.05);

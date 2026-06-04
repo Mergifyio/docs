@@ -38,7 +38,10 @@
 .toc-mobile-panel {
   position: absolute;
   top: calc(100% + 0.5rem);
-  inset-inline-end: 0;
+  /* Anchor to the trigger's leading edge so the panel opens into the viewport.
+     The trigger sits at the left of the (left-aligned) toolbar on mobile, so a
+     right-anchored panel would overflow the left edge of the screen. */
+  inset-inline-start: 0;
   width: 20rem;
   max-width: calc(100vw - 2rem);
   border: 1px solid var(--theme-border-color);
