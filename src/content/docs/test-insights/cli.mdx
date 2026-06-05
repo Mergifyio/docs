@@ -8,6 +8,12 @@ the terminal. It's handy when you want to triage a failing test
 quickly, or when an AI coding agent needs to decide whether to retry,
 fix, or ignore a failure.
 
+:::tip
+  Run these commands from inside a repository checkout and you can drop the
+  `-r owner/repo` flag — the CLI detects the repository from your `origin` git
+  remote, or from the CI environment when it runs in a pipeline.
+:::
+
 ## `mergify tests show`
 
 Search the Test Insights catalog by test name and print health, ratios,
@@ -36,14 +42,14 @@ tests, so callers can branch without parsing output:
 
 Exit code `2` is reserved for CLI argument errors.
 
-## `mergify tests quarantine`
+## `mergify tests quarantines add`
 
 Add a test to [quarantine](/test-insights/quarantine) so its failures
 stop blocking merges and no longer mark the pipeline as failed. The
 test keeps running, and its results keep flowing into Test Insights.
 
 ```bash
-mergify tests quarantine -r owner/repo \
+mergify tests quarantines add -r owner/repo \
   --reason "flaky — tracked in MRGFY-1234" \
   "tests/auth/test_login.py::test_login_timeout"
 ```
@@ -51,43 +57,68 @@ mergify tests quarantine -r owner/repo \
 Pass the fully qualified test name and a `--reason` (both required). The
 quarantine applies to every branch by default; scope it to one branch or
 pattern with `--branch` (`-b`). The command prints a quarantine ID you
-can pass to `unquarantine`. Add `--json` for a machine-readable payload,
-and run `mergify tests quarantine --help` for the full list of flags.
+can pass to `remove` or `get`. Add `--json` for a machine-readable
+payload, and run `mergify tests quarantines add --help` for the full
+list of flags.
 
 The command exits `0` on success and `6` on a Mergify API error, for
 example when the test is already quarantined.
 
-## `mergify tests unquarantine`
+## `mergify tests quarantines remove`
 
 Remove a test from quarantine, addressed either by its fully qualified
-name or by the quarantine ID that `quarantine` printed.
+name or by the quarantine ID that `add` printed.
 
 ```bash
 # By test name.
-mergify tests unquarantine -r owner/repo \
+mergify tests quarantines remove -r owner/repo \
   "tests/auth/test_login.py::test_login_timeout"
 
 # By quarantine ID.
-mergify tests unquarantine -r owner/repo \
+mergify tests quarantines remove -r owner/repo \
   12345678-1234-5678-1234-567812345678
 ```
 
 A UUID-shaped argument is treated as the quarantine ID and removed
 directly; anything else is looked up by name. Add `--json` for a
-machine-readable payload, and run `mergify tests unquarantine --help`
-for the full list of flags.
+machine-readable payload, and run
+`mergify tests quarantines remove --help` for the full list of flags.
 
 The command exits `0` on success and `6` on a Mergify API error, for
 example when the test is not quarantined.
 
-## `mergify tests quarantined`
+## `mergify tests quarantines get`
+
+Print a single quarantine, addressed either by its fully qualified test
+name or by the quarantine ID. The output mirrors one record of `list`.
+
+```bash
+# By test name.
+mergify tests quarantines get -r owner/repo \
+  "tests/auth/test_login.py::test_login_timeout"
+
+# By quarantine ID.
+mergify tests quarantines get -r owner/repo \
+  12345678-1234-5678-1234-567812345678
+```
+
+A UUID-shaped argument is matched against the quarantine ID; anything
+else is matched against the test name. Add `--json` for a
+machine-readable record (`id`, `test_name`, `reason`, `branch`,
+`created_at`, `source`, `is_recovered`), and run
+`mergify tests quarantines get --help` for the full list of flags.
+
+The command exits `0` when a quarantine is found and `6` on a Mergify
+API error, for example when no quarantine matches.
+
+## `mergify tests quarantines list`
 
 List every test currently in [quarantine](/test-insights/quarantine)
 for a repository. It's handy for reviewing what's being ignored, or for
-looking up a quarantine ID to pass to `unquarantine`.
+looking up a quarantine ID to pass to `remove` or `get`.
 
 ```bash
-mergify tests quarantined -r owner/repo
+mergify tests quarantines list -r owner/repo
 ```
 
 Each test is listed with its quarantine ID, the branch it's scoped to
@@ -95,7 +126,7 @@ Each test is listed with its quarantine ID, the branch it's scoped to
 has recovered, and the reason. Add `--json` for a machine-readable
 payload (`{"quarantined_tests": [...]}`, which also carries each
 quarantine's `created_at` timestamp), and run
-`mergify tests quarantined --help` for the full list of flags.
+`mergify tests quarantines list --help` for the full list of flags.
 
 The command always exits `0`, including when nothing is quarantined:
 an empty quarantine is a normal state, not an error.
