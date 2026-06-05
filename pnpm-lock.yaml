@@ -213,8 +213,8 @@ importers:
         specifier: ^10.4.0
         version: 10.4.0
       eslint-mdx:
-        specifier: ^3.7.0
-        version: 3.7.0(eslint@10.4.0)(remark-lint-file-extension@3.0.1)
+        specifier: ^3.7.1
+        version: 3.7.1(eslint@10.4.0)(remark-lint-file-extension@3.0.1)
       eslint-plugin-astro:
         specifier: ^1.7.0
         version: 1.7.0(eslint@10.4.0)
@@ -1282,10 +1282,6 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@pkgr/core@0.2.9':
-    resolution: {integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==}
-    engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
-
   '@pkgr/core@0.3.6':
     resolution: {integrity: sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -2150,8 +2146,8 @@ packages:
   brace-expansion@1.1.14:
     resolution: {integrity: sha512-MWPGfDxnyzKU7rNOW9SP/c50vi3xrmrua/+6hfPbCS2ABNWfx24vPidzvC7krjU/RTo235sV776ymlsMtGKj8g==}
 
-  brace-expansion@2.1.0:
-    resolution: {integrity: sha512-TN1kCZAgdgweJhWWpgKYrQaMNHcDULHkWwQIspdtjV4Y5aurRdZpjAqn6yX3FPqTA9ngHCc4hJxMAMgGfve85w==}
+  brace-expansion@2.1.1:
+    resolution: {integrity: sha512-WR1cURNjuvBLMZBMbqM0UoE+WAfdUcEV1ccD8PVBVOI+Z3ND4+SZbN8RsfT2bMuG1qwz5RFvPukSZm5fF2D5eA==}
 
   brace-expansion@5.0.6:
     resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
@@ -2571,18 +2567,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-mdx@3.7.0:
-    resolution: {integrity: sha512-QpPdJ6EeFthHuIrfgnWneZgwwFNOLFj/nf2jg/tOTBoiUnqNTxUUpTGAn0ZFHYEh5htVVoe5kjvD02oKtxZGeA==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      eslint: '>=8.0.0'
-      remark-lint-file-extension: '*'
-    peerDependenciesMeta:
-      remark-lint-file-extension:
-        optional: true
-
-  eslint-mdx@3.8.1:
-    resolution: {integrity: sha512-hnsqWwMOHqUANwxWEGt8XbwABPEr5sTOolAzqyUDFdlERpqjFE/icylb+mJl60VICL+kLbbvXWbnFLWZdTqJ2g==}
+  eslint-mdx@3.7.1:
+    resolution: {integrity: sha512-EBPfh1p4hHPX2o3Rd4UfpkfKrb+Bb/DkH0fZaR5XPug2G7gig43+d7Z2IWb+nqxjMlkD8qhjYLstb3NwNdhyyg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -4537,10 +4523,6 @@ packages:
     resolution: {integrity: sha512-gAQ9qrUN/UCypHtGFbbe7Rc/f9bzO88IwrG8TDo/aMKAApKyD6E3W4Cm0EfhfBb6Z6SKt59tTCTfD+n1xmAvMg==}
     engines: {node: '>=16.0.0'}
 
-  synckit@0.11.12:
-    resolution: {integrity: sha512-Bh7QjT8/SuKUIfObSXNHNSK6WHo6J1tHCqJsuaFDP7gP0fkzSfTxI8y85JrppZ0h8l0maIgc2tfuZQ6/t3GtnQ==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-
   synckit@0.11.13:
     resolution: {integrity: sha512-eNRKgb3z66Yp3D2CixVujOUvXLFUTij/zVnV8KRyvFdQwpz7I5DS8UfRkTeLzb64u+dkzDSdelE24izu+zSSUg==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -6255,8 +6237,6 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@pkgr/core@0.2.9': {}
-
   '@pkgr/core@0.3.6': {}
 
   '@polka/url@1.0.0-next.29': {}
@@ -7250,7 +7230,7 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.1.0:
+  brace-expansion@2.1.1:
     dependencies:
       balanced-match: 1.0.2
 
@@ -7749,33 +7729,12 @@ snapshots:
       eslint: 10.4.0
       semver: 7.8.1
 
-  eslint-mdx@3.7.0(eslint@10.4.0)(remark-lint-file-extension@3.0.1):
+  eslint-mdx@3.7.1(eslint@10.4.0)(remark-lint-file-extension@3.0.1):
     dependencies:
       acorn: 8.16.0
       acorn-jsx: 5.3.2(acorn@8.16.0)
       eslint: 10.4.0
       espree: 10.4.0
-      estree-util-visit: 2.0.0
-      remark-mdx: 3.1.1
-      remark-parse: 11.0.0
-      remark-stringify: 11.0.0
-      synckit: 0.11.12
-      unified: 11.0.5
-      unified-engine: 11.2.2
-      unist-util-visit: 5.1.0
-      vfile: 6.0.3
-    optionalDependencies:
-      remark-lint-file-extension: 3.0.1
-    transitivePeerDependencies:
-      - bluebird
-      - supports-color
-
-  eslint-mdx@3.8.1(eslint@10.4.0)(remark-lint-file-extension@3.0.1):
-    dependencies:
-      acorn: 8.16.0
-      acorn-jsx: 5.3.2(acorn@8.16.0)
-      eslint: 10.4.0
-      espree: 11.2.0
       estree-util-visit: 2.0.0
       remark-mdx: 3.1.1
       remark-parse: 11.0.0
@@ -7808,7 +7767,7 @@ snapshots:
   eslint-plugin-mdx@3.7.1(eslint@10.4.0)(remark-lint-file-extension@3.0.1):
     dependencies:
       eslint: 10.4.0
-      eslint-mdx: 3.8.1(eslint@10.4.0)(remark-lint-file-extension@3.0.1)
+      eslint-mdx: 3.7.1(eslint@10.4.0)(remark-lint-file-extension@3.0.1)
       mdast-util-from-markdown: 2.0.3
       mdast-util-mdx: 3.0.0
       micromark-extension-mdxjs: 3.0.0
@@ -9234,7 +9193,7 @@ snapshots:
 
   minimatch@9.0.9:
     dependencies:
-      brace-expansion: 2.1.0
+      brace-expansion: 2.1.1
 
   minipass@7.1.3: {}
 
@@ -10764,10 +10723,6 @@ snapshots:
       sync-message-port: 1.2.0
 
   sync-message-port@1.2.0: {}
-
-  synckit@0.11.12:
-    dependencies:
-      '@pkgr/core': 0.2.9
 
   synckit@0.11.13:
     dependencies:
