@@ -164,7 +164,7 @@ error.
 
 The `strict_required_status_checks_policy` setting (labeled *Require branches
 to be up to date before merging* in the GitHub UI) is incompatible with
-[parallel checks](/merge-queue/parallel-checks) and
+[parallel checks](/merge-queue/performance#parallel-checks) and
 [batches](/merge-queue/batches) when using batch PR checks.
 
 Mergify creates temporary batch PRs to test combined changes. The
@@ -190,7 +190,7 @@ tested. This setting blocks the merge.
   method](/merge-queue/merge-strategies#fast-forward), which merges the queue
   branch directly and is not affected by this setting.
 
-- **Alternative:** use [in-place checks](/merge-queue/parallel-checks#inplace-checks-no-batch-prs),
+- **Alternative:** use [in-place checks](/merge-queue/batches#in-place-checks-no-batch-prs),
   which test PRs on their own branch without creating temporary batch PRs.
 
 ### Review Requirements and Fast-Forward
@@ -212,7 +212,7 @@ are enforced.
 
 ### In-Place Checks and Review Requirements
 
-When using [in-place checks](/merge-queue/parallel-checks#inplace-checks-no-batch-prs)
+When using [in-place checks](/merge-queue/batches#in-place-checks-no-batch-prs)
 (where Mergify tests a PR on its own branch),
 the `pull_request` ruleset rules with review requirements on the PR's head
 branch can block Mergify from checking the PR. If these rules are active and

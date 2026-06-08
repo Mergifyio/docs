@@ -134,7 +134,7 @@ Jump straight to the feature that matches your pain point:
 
 | Problem | Feature |
 |---------|---------|
-| PRs waiting too long in queue | [Parallel checks](/merge-queue/parallel-checks) |
+| PRs waiting too long in queue | [Parallel checks](/merge-queue/performance#parallel-checks) |
 | CI cost getting out of hand | [Batches](/merge-queue/batches) or [Two-step CI](/merge-queue/two-step) |
 | Hotfixes blocked behind feature PRs | [Priority rules](/merge-queue/priority) |
 | Monorepo with independent packages | [Scopes](/merge-queue/scopes) and [Monorepo guide](/merge-queue/monorepo) |
@@ -156,7 +156,7 @@ conflicts before they hit production.
 Serial testing creates bottlenecks. Mergify tests multiple PRs in parallel
 using speculative execution, so your queue moves as fast as your CI allows.
 
-**→ [Parallel checks](/merge-queue/parallel-checks) | [Queue modes](/merge-queue/queue-modes)**
+**→ [Parallel checks](/merge-queue/performance#parallel-checks) | [Queue modes](/merge-queue/queue-modes)**
 
 ### Spiraling CI Costs
 
@@ -178,7 +178,7 @@ which services a PR affects and only batches compatible changes together.
 | Feature | What It Does | Impact |
 |---------|--------------|--------|
 | [Queue modes](/merge-queue/queue-modes) | Serial, parallel, or isolated scheduling | Match speed to PR independence |
-| [Parallel checks](/merge-queue/parallel-checks) | Test multiple PRs simultaneously | 3-5x faster merge throughput |
+| [Parallel checks](/merge-queue/performance) | Test multiple PRs simultaneously | 3-5x faster merge throughput |
 | [Batches](/merge-queue/batches) | Combine PRs into single CI runs | 50-80% fewer CI runs |
 | [Two-step CI](/merge-queue/two-step) | Run heavy tests only at merge time | Cut CI costs on draft/WIP PRs |
 | [Priority](/merge-queue/priority) | Let urgent PRs jump the queue | Ship hotfixes in minutes |
