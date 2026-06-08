@@ -1,0 +1,34 @@
+---
+/**
+ * A structured reference card for a single CLI command, mirroring the HTTP API
+ * reference's endpoint cards: the command sits as the card's heading, with the
+ * description as the card body.
+ *
+ * The heading is rendered by this component (not a markdown `##`), so it gives
+ * a deep-link `#` anchor but does not appear in the compile-time "on this page"
+ * TOC — that list only sees markdown headings.
+ */
+import '~/styles/cli-reference.css';
+
+interface Props {
+  /** The command shown as the card's heading, e.g. `mergify tests show`. */
+  command: string;
+}
+
+const { command } = Astro.props;
+
+const slug = command
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+---
+
+<div class="cli-command">
+  <h2 id={slug} class="cli-command-heading">
+    {command}
+    <a class="cli-anchor" href={`#${slug}`} aria-label={`Link to ${command}`}>
+      #
+    </a>
+  </h2>
+  <slot />
+</div>
