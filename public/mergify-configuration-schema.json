@@ -1505,6 +1505,12 @@
           ],
           "title": "Status Comments",
           "type": "string"
+        },
+        "queue_controls_comment": {
+          "default": true,
+          "description": "When enabled, Mergify renders task-list checkboxes in the Merge Queue status comment so developers can queue or requeue a pull request by clicking a box instead of typing `@mergifyio queue`. The checkboxes only appear for organizations enabled for the feature.",
+          "title": "Queue Controls Comment",
+          "type": "boolean"
         }
       },
       "title": "MergeQueue",
@@ -1546,67 +1552,6 @@
       ],
       "title": "OrCondition",
       "type": "object"
-    },
-    "PartitionRuleConditionsModel": {
-      "anyOf": [
-        {
-          "items": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/AndCondition"
-              },
-              {
-                "$ref": "#/$defs/OrCondition"
-              },
-              {
-                "$ref": "#/$defs/NegationCondition"
-              },
-              {
-                "$ref": "#/$defs/RuleConditionModel"
-              }
-            ]
-          },
-          "maxItems": 500,
-          "type": "array"
-        },
-        {
-          "const": true
-        }
-      ],
-      "title": "List of conditions"
-    },
-    "PartitionRuleModel": {
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "description": "Name of the partition",
-          "title": "Name",
-          "type": "string"
-        },
-        "conditions": {
-          "$ref": "#/$defs/PartitionRuleConditionsModel",
-          "description": "List of conditions to determine the partition(s) in which the pull request will be queued. If a pull request matches no partition, it is added to the fallback partition if defined. Otherwise it is added to every partition."
-        },
-        "fallback_partition": {
-          "default": false,
-          "description": "Allow the partition to work as the fallback partition. There can be only one fallback partition.",
-          "title": "Fallback Partition",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "name"
-      ],
-      "title": "PartitionRuleModel",
-      "type": "object"
-    },
-    "PartitionRulesModel": {
-      "items": {
-        "$ref": "#/$defs/PartitionRuleModel"
-      },
-      "maxItems": 50,
-      "title": "PartitionRulesModel",
-      "type": "array"
     },
     "PostCheckActionModel": {
       "additionalProperties": false,
@@ -3392,9 +3337,6 @@
     },
     "queue_rules": {
       "$ref": "#/$defs/QueueRulesModel"
-    },
-    "partition_rules": {
-      "$ref": "#/$defs/PartitionRulesModel"
     },
     "merge_protections": {
       "$ref": "#/$defs/MergeProtectionRulesModel"

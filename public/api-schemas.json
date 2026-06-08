@@ -7771,258 +7771,6 @@
           }
         }
       }
-    },
-    "/repos/{owner}/stacks/summary": {
-      "get": {
-        "tags": [
-          "stacks"
-        ],
-        "summary": "Get adoption summary metrics for Stacks",
-        "description": "Returns counts, score, period delta, sparklines, top authors, and weekly trend for Mergify Stacks across the org's repositories over a time window (default 30 days, max 90).",
-        "operationId": "get_stacks_summary_repos__owner__stacks_summary_get",
-        "security": [
-          {
-            "GitHubTokenBearerAuth": []
-          },
-          {
-            "ApplicationAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          },
-          {
-            "name": "days",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "maximum": 90,
-              "minimum": 1,
-              "default": 30,
-              "title": "Days"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StacksSummary"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          }
-        }
-      }
-    },
-    "/repos/{owner}/stacks/recent": {
-      "get": {
-        "tags": [
-          "stacks"
-        ],
-        "summary": "List recent stacks across the org's repositories",
-        "description": "Returns clustered stacks for the org over a time window, newest first. Each entry includes the root PR plus all PRs in the stack with links to GitHub.",
-        "operationId": "get_recent_stacks_repos__owner__stacks_recent_get",
-        "security": [
-          {
-            "GitHubTokenBearerAuth": []
-          },
-          {
-            "ApplicationAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          },
-          {
-            "name": "repo",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Repo"
-            }
-          },
-          {
-            "name": "days",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "maximum": 90,
-              "minimum": 1,
-              "default": 30,
-              "title": "Days"
-            }
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "maximum": 100,
-              "minimum": 1,
-              "default": 25,
-              "title": "Per Page"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "title": "Cursor"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecentStacksResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          }
-        }
-      }
-    },
-    "/repos/{owner}/stacks/impact": {
-      "get": {
-        "tags": [
-          "stacks"
-        ],
-        "summary": "Compare stack PRs vs non-stack PRs",
-        "description": "Returns median time-to-merge, PR size, time-to-first-review, and review-thread count for stack PRs vs all other merged PRs in the window. Bots and Mergify merge-queue PRs are excluded from the 'other' cohort to keep the comparison honest.",
-        "operationId": "get_stacks_impact_repos__owner__stacks_impact_get",
-        "security": [
-          {
-            "GitHubTokenBearerAuth": []
-          },
-          {
-            "ApplicationAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          },
-          {
-            "name": "days",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "maximum": 90,
-              "minimum": 1,
-              "default": 30,
-              "title": "Days"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StacksImpact"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -8097,38 +7845,6 @@
         ],
         "title": "AddTestToQuarantinePayload"
       },
-      "AdoptionScoreResponse": {
-        "properties": {
-          "total": {
-            "type": "integer",
-            "title": "Total",
-            "description": "Composite 0-100"
-          },
-          "coverage": {
-            "type": "integer",
-            "title": "Coverage",
-            "description": "Coverage component, 0-50"
-          },
-          "authors": {
-            "type": "integer",
-            "title": "Authors",
-            "description": "Authors component, 0-25"
-          },
-          "repos": {
-            "type": "integer",
-            "title": "Repos",
-            "description": "Repos component, 0-25"
-          }
-        },
-        "type": "object",
-        "required": [
-          "total",
-          "coverage",
-          "authors",
-          "repos"
-        ],
-        "title": "AdoptionScoreResponse"
-      },
       "ApplicationAccountScope": {
         "properties": {
           "id": {
@@ -8178,42 +7894,6 @@
           "scope"
         ],
         "title": "ApplicationResponse"
-      },
-      "AuthorResponse": {
-        "properties": {
-          "login": {
-            "type": "string",
-            "title": "Login"
-          },
-          "avatar_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Avatar Url"
-          },
-          "html_url": {
-            "type": "string",
-            "title": "Html Url",
-            "description": "Author profile URL on the configured GitHub host. Use this rather than composing github.com/<login> client-side, which breaks on GHE/on-prem deployments."
-          },
-          "stack_pr_count": {
-            "type": "integer",
-            "title": "Stack Pr Count"
-          }
-        },
-        "type": "object",
-        "required": [
-          "login",
-          "avatar_url",
-          "html_url",
-          "stack_pr_count"
-        ],
-        "title": "AuthorResponse"
       },
       "AutoQuarantineConfigEventLogAttributes": {
         "properties": {
@@ -8408,6 +8088,16 @@
               }
             ],
             "title": "Batch Max Start At"
+          },
+          "retries": {
+            "type": "integer",
+            "title": "Retries",
+            "default": 0
+          },
+          "max_retries": {
+            "type": "integer",
+            "title": "Max Retries",
+            "default": 0
           }
         },
         "type": "object",
@@ -9003,51 +8693,6 @@
           "groups"
         ],
         "title": "ChecksRetriesResponse"
-      },
-      "CohortMedianResponse": {
-        "properties": {
-          "stack": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Stack"
-          },
-          "other": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Other"
-          },
-          "delta_percent": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Delta Percent",
-            "description": "Signed percent. Positive means the stack cohort's median is lower than the other cohort's (the typical 'win' direction for time-to-merge, PR size, first-review, comments)."
-          }
-        },
-        "type": "object",
-        "required": [
-          "stack",
-          "other",
-          "delta_percent"
-        ],
-        "title": "CohortMedianResponse"
       },
       "CreateScheduledQueueFreezePayload": {
         "properties": {
@@ -10137,13 +9782,41 @@
               }
             ],
             "title": "Session Id"
+          },
+          "command_trigger": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "comment",
+                  "checkbox"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command Trigger"
+          },
+          "trigger_comment_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trigger Comment Url"
           }
         },
         "type": "object",
         "required": [
           "author",
           "comment_id",
-          "session_id"
+          "session_id",
+          "command_trigger",
+          "trigger_comment_url"
         ],
         "title": "EventCommandMetadata"
       },
@@ -13769,6 +13442,10 @@
                 "type": "null"
               }
             ]
+          },
+          "dequarantined_by_staff": {
+            "type": "boolean",
+            "title": "Dequarantined By Staff"
           }
         },
         "type": "object",
@@ -13779,7 +13456,8 @@
           "original_quarantine",
           "health_status_at_event",
           "dequarantined_at",
-          "dequarantined_by"
+          "dequarantined_by",
+          "dequarantined_by_staff"
         ],
         "title": "EventTestDequarantinedMetadata"
       },
@@ -13919,6 +13597,10 @@
                 "type": "null"
               }
             ]
+          },
+          "quarantined_by_staff": {
+            "type": "boolean",
+            "title": "Quarantined By Staff"
           }
         },
         "type": "object",
@@ -13930,7 +13612,8 @@
           "branch",
           "quarantined_at",
           "health_status_at_event",
-          "quarantined_by"
+          "quarantined_by",
+          "quarantined_by_staff"
         ],
         "title": "EventTestQuarantinedMetadata"
       },
@@ -15609,75 +15292,6 @@
         ],
         "title": "MergedInInterval"
       },
-      "PeriodDeltaResponse": {
-        "properties": {
-          "active_stacks": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Active Stacks"
-          },
-          "stack_prs": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Stack Prs"
-          },
-          "repos_with_stacks": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Repos With Stacks"
-          },
-          "percent_merged_from_stack_pp": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Percent Merged From Stack Pp",
-            "description": "Delta in percentage points (not percent)"
-          },
-          "score_total": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Score Total"
-          }
-        },
-        "type": "object",
-        "required": [
-          "active_stacks",
-          "stack_prs",
-          "repos_with_stacks",
-          "percent_merged_from_stack_pp",
-          "score_total"
-        ],
-        "title": "PeriodDeltaResponse"
-      },
       "PrExitReasonGroupResponse": {
         "properties": {
           "base_ref": {
@@ -16592,35 +16206,6 @@
         ],
         "title": "QueuesConfig"
       },
-      "RecentStacksResponse": {
-        "properties": {
-          "stacks": {
-            "items": {
-              "$ref": "#/components/schemas/StackResponse"
-            },
-            "type": "array",
-            "title": "Stacks"
-          },
-          "next_cursor": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Next Cursor",
-            "description": "Offset of the next page (pass back as the `cursor` query param); null if there are no more pages."
-          }
-        },
-        "type": "object",
-        "required": [
-          "stacks",
-          "next_cursor"
-        ],
-        "title": "RecentStacksResponse"
-      },
       "RepositoryBodyInput": {
         "properties": {
           "products": {
@@ -17046,243 +16631,6 @@
           "deprecations"
         ],
         "title": "SimulatorResponse"
-      },
-      "SparklinesResponse": {
-        "properties": {
-          "active_stacks": {
-            "items": {
-              "type": "integer"
-            },
-            "type": "array",
-            "title": "Active Stacks"
-          },
-          "stack_prs": {
-            "items": {
-              "type": "integer"
-            },
-            "type": "array",
-            "title": "Stack Prs"
-          },
-          "repos_with_stacks": {
-            "items": {
-              "type": "integer"
-            },
-            "type": "array",
-            "title": "Repos With Stacks"
-          },
-          "percent_merged_from_stack": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array",
-            "title": "Percent Merged From Stack"
-          }
-        },
-        "type": "object",
-        "required": [
-          "active_stacks",
-          "stack_prs",
-          "repos_with_stacks",
-          "percent_merged_from_stack"
-        ],
-        "title": "SparklinesResponse"
-      },
-      "StackPRResponse": {
-        "properties": {
-          "number": {
-            "type": "integer",
-            "title": "Number"
-          },
-          "title": {
-            "type": "string",
-            "title": "Title"
-          },
-          "state": {
-            "type": "string",
-            "title": "State"
-          },
-          "html_url": {
-            "type": "string",
-            "title": "Html Url"
-          },
-          "author": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Author"
-          },
-          "author_html_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Author Html Url",
-            "description": "Author profile URL on the configured GitHub host, or null when the author is unknown. Use this rather than composing github.com/<login> client-side, which breaks on GHE."
-          }
-        },
-        "type": "object",
-        "required": [
-          "number",
-          "title",
-          "state",
-          "html_url",
-          "author",
-          "author_html_url"
-        ],
-        "title": "StackPRResponse"
-      },
-      "StackResponse": {
-        "properties": {
-          "repo": {
-            "type": "string",
-            "title": "Repo",
-            "description": "Repository full name (owner/repo)"
-          },
-          "root_pr": {
-            "$ref": "#/components/schemas/StackPRResponse"
-          },
-          "pr_count": {
-            "type": "integer",
-            "title": "Pr Count"
-          },
-          "state": {
-            "type": "string",
-            "title": "State",
-            "description": "Aggregate stack state: open, merged, or mixed"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Updated At"
-          },
-          "prs": {
-            "items": {
-              "$ref": "#/components/schemas/StackPRResponse"
-            },
-            "type": "array",
-            "title": "Prs"
-          }
-        },
-        "type": "object",
-        "required": [
-          "repo",
-          "root_pr",
-          "pr_count",
-          "state",
-          "created_at",
-          "updated_at",
-          "prs"
-        ],
-        "title": "StackResponse"
-      },
-      "StacksImpact": {
-        "properties": {
-          "time_to_merge_hours": {
-            "$ref": "#/components/schemas/CohortMedianResponse"
-          },
-          "pr_size_lines": {
-            "$ref": "#/components/schemas/CohortMedianResponse"
-          },
-          "time_to_first_review_hours": {
-            "$ref": "#/components/schemas/CohortMedianResponse"
-          },
-          "review_threads": {
-            "$ref": "#/components/schemas/CohortMedianResponse"
-          },
-          "stack_pr_count": {
-            "type": "integer",
-            "title": "Stack Pr Count"
-          },
-          "other_pr_count": {
-            "type": "integer",
-            "title": "Other Pr Count"
-          }
-        },
-        "type": "object",
-        "required": [
-          "time_to_merge_hours",
-          "pr_size_lines",
-          "time_to_first_review_hours",
-          "review_threads",
-          "stack_pr_count",
-          "other_pr_count"
-        ],
-        "title": "StacksImpact"
-      },
-      "StacksSummary": {
-        "properties": {
-          "active_stacks": {
-            "type": "integer",
-            "title": "Active Stacks",
-            "description": "Currently open stacks across the org"
-          },
-          "stack_prs_in_window": {
-            "type": "integer",
-            "title": "Stack Prs In Window",
-            "description": "Total PRs that belong to a stack in the window"
-          },
-          "repos_with_stacks_in_window": {
-            "type": "integer",
-            "title": "Repos With Stacks In Window",
-            "description": "Repositories with at least one stack in the window"
-          },
-          "percent_merged_from_stack": {
-            "type": "number",
-            "title": "Percent Merged From Stack",
-            "description": "Percent of merged PRs in the window that came from a stack"
-          },
-          "weekly_buckets": {
-            "items": {
-              "$ref": "#/components/schemas/WeeklyBucket"
-            },
-            "type": "array",
-            "title": "Weekly Buckets",
-            "description": "Weekly counts of new stacks across the window"
-          },
-          "score": {
-            "$ref": "#/components/schemas/AdoptionScoreResponse"
-          },
-          "delta_vs_prior_period": {
-            "$ref": "#/components/schemas/PeriodDeltaResponse"
-          },
-          "sparklines": {
-            "$ref": "#/components/schemas/SparklinesResponse"
-          },
-          "top_authors": {
-            "items": {
-              "$ref": "#/components/schemas/AuthorResponse"
-            },
-            "type": "array",
-            "title": "Top Authors"
-          }
-        },
-        "type": "object",
-        "required": [
-          "active_stacks",
-          "stack_prs_in_window",
-          "repos_with_stacks_in_window",
-          "percent_merged_from_stack",
-          "weekly_buckets",
-          "score",
-          "delta_vs_prior_period",
-          "sparklines",
-          "top_authors"
-        ],
-        "title": "StacksSummary"
       },
       "TestAddedToQuarantineResponse": {
         "properties": {
@@ -17837,27 +17185,6 @@
         },
         "type": "object",
         "title": "UpdateScheduledFreezePayload"
-      },
-      "WeeklyBucket": {
-        "properties": {
-          "week_start": {
-            "type": "string",
-            "format": "date",
-            "title": "Week Start",
-            "description": "Monday of the bucket week (YYYY-MM-DD)"
-          },
-          "stacks_created": {
-            "type": "integer",
-            "title": "Stacks Created",
-            "description": "Number of stacks whose root PR was created this week"
-          }
-        },
-        "type": "object",
-        "required": [
-          "week_start",
-          "stacks_created"
-        ],
-        "title": "WeeklyBucket"
       },
       "_TestStatsBucket_float_": {
         "properties": {
@@ -18529,10 +17856,6 @@
     {
       "name": "simulator",
       "description": "Mergify configuration simulator."
-    },
-    {
-      "name": "stacks",
-      "description": "Operations with Mergify Stacks adoption."
     },
     {
       "name": "statistics",
