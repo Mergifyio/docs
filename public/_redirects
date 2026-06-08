@@ -55,8 +55,10 @@
 /stacked_prs /stacks 301
 /workflow/custom-branch-protections /merge-protections 301
 /workflow/schedule-merge /merge-protections 301
-/merge-queue/speculative-checks /merge-queue/parallel-checks 301
-/merge-queue/speculative-checks/ /merge-queue/parallel-checks 301
+/merge-queue/speculative-checks /merge-queue/performance 301
+/merge-queue/speculative-checks/ /merge-queue/performance 301
+/merge-queue/parallel-checks /merge-queue/performance 301
+/merge-queue/parallel-checks/ /merge-queue/performance 301
 /getting-started/ /integrations/github 301
 /merge-queue/freeze/ /merge-protections/freeze/ 301
 /integrations/snyk /integrations/dependabot 301

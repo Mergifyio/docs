@@ -144,7 +144,7 @@ queue_rules:
 Fast-forward merging advances the base branch ref directly to the tested
 commit(s) using the Git API instead of creating a merge via GitHub. The exact
 behavior depends on whether the queue operates in
-[inplace or batch-PR mode](/merge-queue/parallel-checks#important-considerations).
+[inplace or batch-PR mode](/merge-queue/batches#in-place-checks-no-batch-prs).
 
 ### Inplace Mode
 
@@ -357,5 +357,5 @@ from the original PR branch.
 | One commit per batch | | | | | ✔ |
 | Individual PR commits visible | ✔ | | ✔ | ✔ | |
 | See PR boundaries in `git log` | ✔ | | | | |
-| [Batches](/merge-queue/batches) and [parallel checks](/merge-queue/parallel-checks) | ✔ | ✔ | ✔ | | ✔ |
+| [Batches](/merge-queue/batches) and [parallel checks](/merge-queue/performance#parallel-checks) | ✔ | ✔ | ✔ | | ✔ |
 | Single deployment per batch | | | | ✔ | ✔ |

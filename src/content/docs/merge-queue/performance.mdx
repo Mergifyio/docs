@@ -13,6 +13,38 @@ Tune parallel checks, batch size, and CI scope to balance throughput, reliabilit
   health metrics and optimization strategies for fast-moving teams.
 :::
 
+## Parallel checks
+
+Parallel checks are how Mergify tests the queue **speculatively**: instead of
+validating one pull request at a time, it tests several queued pull requests
+ahead of time so you ship faster. Mergify creates temporary batch PRs that
+represent cumulative merges (PR #1), (PR #1 + PR #2), (PR #1 + PR #2 + PR #3),
+runs CI on them in parallel, then merges the original PRs once checks pass. If a
+batch fails, Mergify removes the culprit PR and continues with the rest.
+
+Set `merge_queue.max_parallel_checks` to control how many speculative checks run
+at once:
+
+```yaml
+merge_queue:
+  max_parallel_checks: 3
+```
+
+Higher values increase concurrency; choose a value your CI can handle reliably.
+
+:::tip
+  Learn how speculative checks work conceptually at the
+  [Merge Queue Academy](https://merge-queue.academy/features/speculative-merging/).
+:::
+
+:::note
+  Parallel checks are not the same as **parallel mode**. Parallel checks are
+  speculative CI that speed up any single ordered queue, in serial or parallel
+  mode alike. [Parallel mode](/merge-queue/queue-modes) is a separate choice
+  about whether independent [scopes](/merge-queue/scopes) form independent
+  queues. The two are configured separately and work together.
+:::
+
 ### The Trade-offs: Reliability, Cost, and Velocity (RCV Theorem)
 
 A merge queue can only optimize two of three properties at a time: reliability
@@ -23,7 +55,7 @@ and latency). We call this the **RCV theorem**, analogous to the
 The three viable combinations:
 
 - **Reliability + Velocity**: enable **[parallel speculative
-  checks](/merge-queue/parallel-checks)** to test predicted merge states
+  checks](#parallel-checks)** to test predicted merge states
   concurrently. Wasted CI runs occur when a PR ahead in the queue fails.
 
 - **Reliability + Cost**: validate pull requests sequentially. No wasted CI,
@@ -103,7 +135,7 @@ This keeps queue-time CI short without sacrificing final-merge confidence.
 ## Combining Batch Merging and Parallel Checks
 
 [Batch merging](/merge-queue/batches) tests multiple PRs as a single unit.
-[Parallel checks](/merge-queue/parallel-checks) run several batches
+[Parallel checks](#parallel-checks) run several batches
 concurrently. Together, they maximize CI utilization: if any PR in a batch
 fails, [Mergify binary-searches for the culprit, removes it, and continues
 processing](/merge-queue/batches#handling-batch-failure-or-timeout).
