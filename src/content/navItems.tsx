@@ -32,11 +32,6 @@ const navItems: NavItem[] = [
       { title: 'Priority', path: '/merge-queue/priority', icon: 'lucide:traffic-cone' },
       { title: 'Pause', path: '/merge-queue/pause', icon: 'lucide:circle-pause' },
       { title: 'Performance', path: '/merge-queue/performance', icon: 'lucide:gauge' },
-      {
-        title: 'Parallel Checks',
-        path: '/merge-queue/parallel-checks',
-        icon: 'lucide:split',
-      },
       { title: 'Batches', path: '/merge-queue/batches', icon: 'lucide:boxes' },
       {
         title: 'Scopes',

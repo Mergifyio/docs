@@ -382,6 +382,47 @@ If there's a consecutive failure in the subsequent parts, the system will
 continue to split and isolate the problematic PR(s) and retest until the split
 contains a single pull request.
 
+## In-place checks (no batch PRs)
+
+Mergify runs checks directly on the original pull request, instead of creating
+temporary batch PRs, only when all of the following are true:
+
+- `queue_rules[*].batch_size = 1`
+
+- `merge_queue.max_parallel_checks = 1`
+
+- No two-step CI is configured (no separate `merge_conditions` beyond
+  `queue_conditions`)
+
+Optionally set `update_bot_account` to avoid in-place updates blocked by GitHub
+for security reasons (for example, PRs from forks that modify workflows, or PRs
+opened by other bots).
+
+## Skip intermediate results (anti-flake protection)
+
+Flaky tests cause intermittent batch failures that block the queue. With
+`skip_intermediate_results: true`, Mergify stops requiring every intermediate
+batch to pass: if any passing batch contains a pull request's changes, an earlier
+failing batch for that pull request is treated as transient and the pull request
+still merges.
+
+```yaml
+merge_queue:
+  skip_intermediate_results: true
+```
+
+This is safe because a real bug would also fail the larger batch that contains
+the same code; only flaky failures get bypassed. Enable it when your CI has some
+flakiness and you want to maximize throughput. Consider disabling it when you
+need every intermediate state validated for compliance, or while debugging CI
+and want to see all failures.
+
+:::note
+  `skip_intermediate_results` depends on the strict cumulative ordering of serial
+  mode and is not available in [parallel
+  mode](/merge-queue/queue-modes#parallel-mode).
+:::
+
 ## Important Considerations
 
 While using batch merging and parallel checks together can significantly speed

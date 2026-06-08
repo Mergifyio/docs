@@ -66,7 +66,7 @@ merge_queue:
 ```
 
 Serial mode still uses [batches](/merge-queue/batches) and
-[parallel checks](/merge-queue/parallel-checks) to increase throughput without giving up cumulative
+[parallel checks](/merge-queue/performance#parallel-checks) to increase throughput without giving up cumulative
 testing. If most of your pull requests touch the same files, serial mode is usually the right
 choice.
 
@@ -83,7 +83,7 @@ together so they are tested as a group, preventing semantic conflicts.
 :::
 
 :::note
-  Parallel **mode** is not the same as [parallel checks](/merge-queue/parallel-checks). Parallel
+  Parallel **mode** is not the same as [parallel checks](/merge-queue/performance#parallel-checks). Parallel
   mode is about **scopes**: independent queues that don't wait on each other. Parallel checks are
   **speculative** CI that test queued pull requests ahead of time within a single ordered queue,
   and they run in serial mode too. The two are configured separately and work together.
