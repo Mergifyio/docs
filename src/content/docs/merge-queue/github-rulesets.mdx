@@ -52,6 +52,41 @@ whether injection still happens:
 - **`exempt` bypass mode** -- Mergify skips injection entirely for that
   ruleset. Use this when you want Mergify to ignore specific ruleset rules.
 
+### Required Reviewers
+
+A `pull_request` ruleset rule can require approvals from specific teams or
+users (the rule's **Required reviewers** setting). Mergify detects this and
+injects the
+[`github-require-review-from-specific-teams`](/configuration/conditions#attributes-list)
+boolean condition, so a pull request is merged only once those approvals are
+in.
+
+The condition is `true` when every required reviewer is satisfied:
+
+- each required **team** has at least the requested number of approvals from
+  its members, and
+
+- each required **user** has approved the pull request.
+
+When the requirement is scoped to a subset of files (the ruleset's
+`file_patterns` field), it only applies to pull requests that touch a matching
+file. Other pull requests are unaffected.
+
+You can also reference the condition explicitly in your `.mergify.yml`:
+
+```yaml
+queue_rules:
+  - name: default
+    merge_conditions:
+      - github-require-review-from-specific-teams
+```
+
+:::note
+  The condition evaluates to `false` if a ruleset entry points to a team or
+  user that no longer exists, so the misconfiguration surfaces instead of
+  being silently skipped. Fix the ruleset to remove the stale reviewer.
+:::
+
 ## Ruleset Rule Compatibility
 
 Mergify handles each GitHub ruleset rule type as follows.
@@ -59,7 +94,7 @@ Mergify handles each GitHub ruleset rule type as follows.
 | Ruleset rule type | Mergify behavior | Notes |
 |---|---|---|
 | `required_status_checks` | Injected as conditions | See [below](#require-branches-to-be-up-to-date) |
-| `pull_request` | Injected as conditions | Limited code owner support |
+| `pull_request` | Injected as conditions | Limited code owner support. See [Required Reviewers](#required-reviewers) |
 | `required_deployments` | Used by [Merge Protections](/merge-protections) | -- |
 | `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
 | `creation` | Checked when creating batch PRs | May block batch PR creation if Mergify is not a bypass actor |
