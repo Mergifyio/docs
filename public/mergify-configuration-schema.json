@@ -3173,7 +3173,7 @@
             }
           ],
           "default": null,
-          "description": "Where scopes come from. `files` uses file-pattern rules (`gha-mergify-ci-scopes` must have been setup on your pull request); `manual` uses scopes sent via API or `mergify scopes-send`; `None` disables scoping.",
+          "description": "Where scopes come from. `files` derives scopes from the pull request's changed files using file-pattern rules; `manual` uses scopes sent via API or `mergify scopes-send`; `None` disables scoping.",
           "title": "Source"
         },
         "merge_queue_scope": {
