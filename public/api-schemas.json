@@ -9256,13 +9256,18 @@
           },
           "auto_quarantine_config_attributes": {
             "$ref": "#/components/schemas/AutoQuarantineConfigEventLogAttributes"
+          },
+          "disabled_by_staff": {
+            "type": "boolean",
+            "title": "Disabled By Staff"
           }
         },
         "type": "object",
         "required": [
           "disabled_by",
           "disabled_at",
-          "auto_quarantine_config_attributes"
+          "auto_quarantine_config_attributes",
+          "disabled_by_staff"
         ],
         "title": "EventCiInsightsAutoQuarantineDisabledMetadata"
       },
@@ -9352,13 +9357,18 @@
           },
           "auto_quarantine_config_attributes": {
             "$ref": "#/components/schemas/AutoQuarantineConfigEventLogAttributes"
+          },
+          "enabled_by_staff": {
+            "type": "boolean",
+            "title": "Enabled By Staff"
           }
         },
         "type": "object",
         "required": [
           "enabled_by",
           "enabled_at",
-          "auto_quarantine_config_attributes"
+          "auto_quarantine_config_attributes",
+          "enabled_by_staff"
         ],
         "title": "EventCiInsightsAutoQuarantineEnabledMetadata"
       },
@@ -9451,6 +9461,10 @@
           },
           "auto_quarantine_config_attributes_after": {
             "$ref": "#/components/schemas/AutoQuarantineConfigEventLogAttributes"
+          },
+          "updated_by_staff": {
+            "type": "boolean",
+            "title": "Updated By Staff"
           }
         },
         "type": "object",
@@ -9458,7 +9472,8 @@
           "updated_by",
           "updated_at",
           "auto_quarantine_config_attributes_before",
-          "auto_quarantine_config_attributes_after"
+          "auto_quarantine_config_attributes_after",
+          "updated_by_staff"
         ],
         "title": "EventCiInsightsAutoQuarantineModifiedMetadata"
       },
