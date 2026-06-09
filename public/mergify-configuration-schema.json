@@ -1737,6 +1737,11 @@
           "title": "GitHub require review from specific teams",
           "type": "boolean"
         },
+        "github-code-owner-review-satisfied": {
+          "description": "Whether every file the pull request touches that is owned in the repository's `CODEOWNERS` file has at least one approval from one of its owners (a user, or any member of an owning team). Mirrors GitHub's 'Require review from Code Owners', covering the case where GitHub blocks the merge on a code-owner review while `pullRequest.reviewDecision` is `null`. Returns `true` when there is no `CODEOWNERS` file or no touched file is owned, and `false` when an owner cannot be resolved to a GitHub login (an email address, or a team in another org).",
+          "title": "GitHub code owner review satisfied",
+          "type": "boolean"
+        },
         "number": {
           "description": "The pull request number.",
           "maximum": 9223372036854775807,
@@ -2291,6 +2296,7 @@
         "conflict",
         "github-review-decision",
         "github-require-review-from-specific-teams",
+        "github-code-owner-review-satisfied",
         "number",
         "queue-position",
         "author",

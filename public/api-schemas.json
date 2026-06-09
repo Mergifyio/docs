@@ -2927,14 +2927,14 @@
         }
       }
     },
-    "/repos/{owner}/{repository}/stats/average_queue_time": {
+    "/repos/{owner}/{repository}/stats/idle_queue_time": {
       "get": {
         "tags": [
           "statistics"
         ],
-        "summary": "Get the average idle queue time",
+        "summary": "Get the idle queue time",
         "description": "Idle time spent in queue by the Pull Requests by intervals of time",
-        "operationId": "get_average_idle_queue_time_repos__owner___repository__stats_average_queue_time_get",
+        "operationId": "get_average_idle_queue_time_repos__owner___repository__stats_idle_queue_time_get",
         "security": [
           {
             "ApplicationAuth": []
@@ -3112,7 +3112,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AverageQueueTime_QueueAverageTimeResponse"
+                  "$ref": "#/components/schemas/AverageIdleQueueTimeResponse"
                 }
               }
             }
@@ -3317,7 +3317,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TotalQueueTime_QueueAverageTimeResponse"
+                  "$ref": "#/components/schemas/QueueAverageTimeResponse"
                 }
               }
             }
@@ -7907,6 +7907,22 @@
           "ignore_broken_on_default_branch"
         ],
         "title": "AutoQuarantineConfigEventLogAttributes"
+      },
+      "AverageIdleQueueTimeResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/IdleTimeGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "AverageIdleQueueTimeResponse"
       },
       "BaseRefsResponse": {
         "properties": {
@@ -14404,6 +14420,84 @@
         "title": "HistogramBucket",
         "description": "One zero-fillable time bucket in the volume histogram. `start` and\n`end` are inclusive/exclusive boundaries aligned to the same EPOCH\nanchor PostgreSQL `date_bin` uses, so successive buckets tile the\nfull range without gaps or overlaps."
       },
+      "IdleTimeGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/IdleTimeInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "partition_name",
+          "queue_name",
+          "priority_rule_name",
+          "stats"
+        ],
+        "title": "IdleTimeGroupResponse"
+      },
+      "IdleTimeInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "idle_capacity": {
+            "type": "number",
+            "title": "Idle Capacity"
+          },
+          "idle_schedule": {
+            "type": "number",
+            "title": "Idle Schedule"
+          },
+          "idle_freeze": {
+            "type": "number",
+            "title": "Idle Freeze"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "idle_capacity",
+          "idle_schedule",
+          "idle_freeze"
+        ],
+        "title": "IdleTimeInInterval"
+      },
       "ListTestExecutionsResponse": {
         "properties": {
           "size": {
@@ -15666,6 +15760,22 @@
         ],
         "title": "Queue"
       },
+      "QueueAverageTimeResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/QueueTimeGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "QueueAverageTimeResponse"
+      },
       "QueueCheck": {
         "properties": {
           "name": {
@@ -16186,6 +16296,84 @@
           "groups"
         ],
         "title": "QueueSizeResponse"
+      },
+      "QueueTimeGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "partition_name": {
+            "type": "string",
+            "title": "Partition Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/QueueTimeInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "partition_name",
+          "queue_name",
+          "priority_rule_name",
+          "stats"
+        ],
+        "title": "QueueTimeGroupResponse"
+      },
+      "QueueTimeInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "avg_queue_time": {
+            "type": "number",
+            "title": "Avg Queue Time"
+          },
+          "max_queue_time": {
+            "type": "number",
+            "title": "Max Queue Time"
+          },
+          "min_queue_time": {
+            "type": "number",
+            "title": "Min Queue Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "avg_queue_time",
+          "max_queue_time",
+          "min_queue_time"
+        ],
+        "title": "QueueTimeInInterval"
       },
       "Queues": {
         "properties": {
@@ -17628,199 +17816,6 @@
           "state"
         ],
         "title": "SpeculativeCheckPullRequest"
-      },
-      "AverageQueueTime_QueueAverageTimeResponse": {
-        "properties": {
-          "groups": {
-            "items": {
-              "$ref": "#/components/schemas/AverageQueueTime_QueueTimeGroupResponse"
-            },
-            "type": "array",
-            "title": "Groups"
-          }
-        },
-        "type": "object",
-        "required": [
-          "groups"
-        ],
-        "title": "QueueAverageTimeResponse"
-      },
-      "AverageQueueTime_QueueTimeGroupResponse": {
-        "properties": {
-          "base_ref": {
-            "type": "string",
-            "title": "Base Ref"
-          },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
-          "queue_name": {
-            "type": "string",
-            "title": "Queue Name"
-          },
-          "priority_rule_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Priority Rule Name"
-          },
-          "stats": {
-            "items": {
-              "$ref": "#/components/schemas/AverageQueueTime_QueueTimeInInterval"
-            },
-            "type": "array",
-            "title": "Stats"
-          }
-        },
-        "type": "object",
-        "required": [
-          "base_ref",
-          "partition_name",
-          "queue_name",
-          "priority_rule_name",
-          "stats"
-        ],
-        "title": "QueueTimeGroupResponse"
-      },
-      "AverageQueueTime_QueueTimeInInterval": {
-        "properties": {
-          "start": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Start"
-          },
-          "end": {
-            "type": "string",
-            "format": "date-time",
-            "title": "End"
-          },
-          "queue_time": {
-            "type": "number",
-            "title": "Queue Time"
-          },
-          "idle_capacity": {
-            "type": "number",
-            "title": "Idle Capacity"
-          },
-          "idle_schedule": {
-            "type": "number",
-            "title": "Idle Schedule"
-          },
-          "idle_freeze": {
-            "type": "number",
-            "title": "Idle Freeze"
-          }
-        },
-        "type": "object",
-        "required": [
-          "start",
-          "end",
-          "queue_time",
-          "idle_capacity",
-          "idle_schedule",
-          "idle_freeze"
-        ],
-        "title": "QueueTimeInInterval"
-      },
-      "TotalQueueTime_QueueAverageTimeResponse": {
-        "properties": {
-          "groups": {
-            "items": {
-              "$ref": "#/components/schemas/TotalQueueTime_QueueTimeGroupResponse"
-            },
-            "type": "array",
-            "title": "Groups"
-          }
-        },
-        "type": "object",
-        "required": [
-          "groups"
-        ],
-        "title": "QueueAverageTimeResponse"
-      },
-      "TotalQueueTime_QueueTimeGroupResponse": {
-        "properties": {
-          "base_ref": {
-            "type": "string",
-            "title": "Base Ref"
-          },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
-          "queue_name": {
-            "type": "string",
-            "title": "Queue Name"
-          },
-          "priority_rule_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Priority Rule Name"
-          },
-          "stats": {
-            "items": {
-              "$ref": "#/components/schemas/TotalQueueTime_QueueTimeInInterval"
-            },
-            "type": "array",
-            "title": "Stats"
-          }
-        },
-        "type": "object",
-        "required": [
-          "base_ref",
-          "partition_name",
-          "queue_name",
-          "priority_rule_name",
-          "stats"
-        ],
-        "title": "QueueTimeGroupResponse"
-      },
-      "TotalQueueTime_QueueTimeInInterval": {
-        "properties": {
-          "start": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Start"
-          },
-          "end": {
-            "type": "string",
-            "format": "date-time",
-            "title": "End"
-          },
-          "avg_queue_time": {
-            "type": "number",
-            "title": "Avg Queue Time"
-          },
-          "max_queue_time": {
-            "type": "number",
-            "title": "Max Queue Time"
-          },
-          "min_queue_time": {
-            "type": "number",
-            "title": "Min Queue Time"
-          }
-        },
-        "type": "object",
-        "required": [
-          "start",
-          "end",
-          "avg_queue_time",
-          "max_queue_time",
-          "min_queue_time"
-        ],
-        "title": "QueueTimeInInterval"
       }
     },
     "securitySchemes": {
