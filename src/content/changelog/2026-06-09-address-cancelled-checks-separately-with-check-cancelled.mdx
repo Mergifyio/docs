@@ -1,0 +1,9 @@
+---
+title: "Address cancelled checks separately with check-cancelled"
+date: 2026-06-09
+tags:
+  - Rules
+description: "A new check-cancelled condition attribute matches checks with a cancelled conclusion independently from check-failure."
+---
+
+Mergify now provides a `check-cancelled` condition attribute that matches checks reporting a `cancelled` conclusion — for example GitHub Actions jobs stopped by `concurrency: cancel-in-progress`. Cancelled checks are still matched by `check-failure` for backward compatibility, but you can now exclude them from failure-based rules by combining `check-failure=<check>` with `-check-cancelled=<check>`, so a cancellation no longer triggers actions meant for genuine failures.
