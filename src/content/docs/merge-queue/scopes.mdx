@@ -3,12 +3,18 @@ title: Merge Queue Scopes
 description: Understand how Mergify groups pull requests by scope to build the most effective batches.
 ---
 
+import Youtube from '../../../components/Youtube.astro'
+
 Mergify scopes describe the areas of your codebase that a pull request touches. By attaching scopes
 to pull requests, the merge queue can build smarter batches, reuse the same CI work, and avoid
 mixing unrelated changes.
 
 Looking to use scopes outside of the merge queue? Check out [Monorepo CI](/monorepo-ci) for
 scope-driven CI workflows.
+
+Here's a quick walkthrough of how we use scopes on Mergify's own monorepo:
+
+<Youtube video="GOqDmZl6EI0" title="How Mergify scopes work in a monorepo" />
 
 ## Scope-aware batching at a glance
 
