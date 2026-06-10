@@ -8024,6 +8024,14 @@
           "min_batch_size": {
             "type": "integer",
             "title": "Min Batch Size"
+          },
+          "sum_batch_size": {
+            "type": "integer",
+            "title": "Sum Batch Size"
+          },
+          "count_batch_size": {
+            "type": "integer",
+            "title": "Count Batch Size"
           }
         },
         "type": "object",
@@ -8032,7 +8040,9 @@
           "end",
           "avg_batch_size",
           "max_batch_size",
-          "min_batch_size"
+          "min_batch_size",
+          "sum_batch_size",
+          "count_batch_size"
         ],
         "title": "BatchSizeInInterval"
       },
@@ -13079,13 +13089,18 @@
             "type": "string",
             "format": "date-time",
             "title": "Created At"
+          },
+          "created_by_staff": {
+            "type": "boolean",
+            "title": "Created By Staff"
           }
         },
         "type": "object",
         "required": [
           "scheduled_freeze_attributes",
           "created_by",
-          "created_at"
+          "created_at",
+          "created_by_staff"
         ],
         "title": "EventScheduledFreezeCreateMetadata"
       },
@@ -13179,6 +13194,10 @@
             "type": "string",
             "format": "date-time",
             "title": "Deleted At"
+          },
+          "deleted_by_staff": {
+            "type": "boolean",
+            "title": "Deleted By Staff"
           }
         },
         "type": "object",
@@ -13186,7 +13205,8 @@
           "scheduled_freeze_attributes",
           "reason",
           "deleted_by",
-          "deleted_at"
+          "deleted_at",
+          "deleted_by_staff"
         ],
         "title": "EventScheduledFreezeDeleteMetadata"
       },
@@ -13279,6 +13299,10 @@
             "type": "string",
             "format": "date-time",
             "title": "Updated At"
+          },
+          "updated_by_staff": {
+            "type": "boolean",
+            "title": "Updated By Staff"
           }
         },
         "type": "object",
@@ -13286,7 +13310,8 @@
           "scheduled_freeze_attributes_before",
           "scheduled_freeze_attributes_after",
           "updated_by",
-          "updated_at"
+          "updated_at",
+          "updated_by_staff"
         ],
         "title": "EventScheduledFreezeUpdateMetadata"
       },
@@ -14501,6 +14526,22 @@
           "idle_freeze": {
             "type": "number",
             "title": "Idle Freeze"
+          },
+          "sum_idle_capacity": {
+            "type": "number",
+            "title": "Sum Idle Capacity"
+          },
+          "sum_idle_schedule": {
+            "type": "number",
+            "title": "Sum Idle Schedule"
+          },
+          "sum_idle_freeze": {
+            "type": "number",
+            "title": "Sum Idle Freeze"
+          },
+          "count_idle": {
+            "type": "integer",
+            "title": "Count Idle"
           }
         },
         "type": "object",
@@ -14509,7 +14550,11 @@
           "end",
           "idle_capacity",
           "idle_schedule",
-          "idle_freeze"
+          "idle_freeze",
+          "sum_idle_capacity",
+          "sum_idle_schedule",
+          "sum_idle_freeze",
+          "count_idle"
         ],
         "title": "IdleTimeInInterval"
       },
@@ -16378,6 +16423,14 @@
           "min_queue_time": {
             "type": "number",
             "title": "Min Queue Time"
+          },
+          "sum_queue_time": {
+            "type": "number",
+            "title": "Sum Queue Time"
+          },
+          "count_queue_time": {
+            "type": "integer",
+            "title": "Count Queue Time"
           }
         },
         "type": "object",
@@ -16386,7 +16439,9 @@
           "end",
           "avg_queue_time",
           "max_queue_time",
-          "min_queue_time"
+          "min_queue_time",
+          "sum_queue_time",
+          "count_queue_time"
         ],
         "title": "QueueTimeInInterval"
       },
@@ -16566,13 +16621,23 @@
           "runtime": {
             "type": "number",
             "title": "Runtime"
+          },
+          "sum_runtime": {
+            "type": "number",
+            "title": "Sum Runtime"
+          },
+          "count_runtime": {
+            "type": "integer",
+            "title": "Count Runtime"
           }
         },
         "type": "object",
         "required": [
           "start",
           "end",
-          "runtime"
+          "runtime",
+          "sum_runtime",
+          "count_runtime"
         ],
         "title": "RuntimeInInterval"
       },
