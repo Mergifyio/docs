@@ -12435,12 +12435,17 @@
           },
           "created_by": {
             "$ref": "#/components/schemas/Actor"
+          },
+          "created_by_staff": {
+            "type": "boolean",
+            "title": "Created By Staff"
           }
         },
         "type": "object",
         "required": [
           "reason",
-          "created_by"
+          "created_by",
+          "created_by_staff"
         ],
         "title": "EventQueuePauseCreateMetadata"
       },
@@ -12522,11 +12527,16 @@
         "properties": {
           "deleted_by": {
             "$ref": "#/components/schemas/Actor"
+          },
+          "deleted_by_staff": {
+            "type": "boolean",
+            "title": "Deleted By Staff"
           }
         },
         "type": "object",
         "required": [
-          "deleted_by"
+          "deleted_by",
+          "deleted_by_staff"
         ],
         "title": "EventQueuePauseDeleteMetadata"
       },
@@ -12612,12 +12622,17 @@
           },
           "updated_by": {
             "$ref": "#/components/schemas/Actor"
+          },
+          "updated_by_staff": {
+            "type": "boolean",
+            "title": "Updated By Staff"
           }
         },
         "type": "object",
         "required": [
           "reason",
-          "updated_by"
+          "updated_by",
+          "updated_by_staff"
         ],
         "title": "EventQueuePauseUpdateMetadata"
       },
