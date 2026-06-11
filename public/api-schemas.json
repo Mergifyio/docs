@@ -15116,6 +15116,19 @@
             },
             "type": "array",
             "title": "Pull Requests"
+          },
+          "checks_timeout_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checks Timeout At",
+            "description": "When the checks will time out and the batch be dequeued, if a checks timeout applies"
           }
         },
         "type": "object",
@@ -15225,6 +15238,19 @@
             },
             "type": "array",
             "title": "Pull Requests"
+          },
+          "checks_timeout_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checks Timeout At",
+            "description": "When the checks will time out and the batch be dequeued, if a checks timeout applies"
           },
           "sub_batches": {
             "anyOf": [

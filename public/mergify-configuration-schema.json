@@ -2567,11 +2567,15 @@
               "type": "string"
             },
             {
+              "const": "auto",
+              "type": "string"
+            },
+            {
               "type": "null"
             }
           ],
           "default": null,
-          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds.",
+          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Set to `auto` to let Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered.",
           "title": "Checks Timeout"
         },
         "max_checks_retries": {
@@ -2805,11 +2809,15 @@
               "type": "string"
             },
             {
+              "const": "auto",
+              "type": "string"
+            },
+            {
               "type": "null"
             }
           ],
           "default": null,
-          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds.",
+          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Set to `auto` to let Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered.",
           "title": "Checks Timeout"
         },
         "max_checks_retries": {
