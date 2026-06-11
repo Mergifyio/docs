@@ -1,0 +1,13 @@
+---
+title: "Set your merge queue checks timeout automatically"
+date: 2026-06-11
+tags:
+  - Merge Queue
+description: "Merge queues can now compute their checks timeout from recent CI runtimes with `checks_timeout: auto`, instead of requiring a fixed value."
+---
+
+Set `checks_timeout: auto` on a queue and Mergify derives the timeout from that queue's own recent CI runtimes (its 95th-percentile run time, plus a safety margin) — so you don't have to guess a value, and a hung CI no longer sits in the queue indefinitely.
+
+The merge queue's batch side-peek now shows when a batch's checks will time out, and the checks-timeout dequeue message states the exact budget that was exceeded (e.g. "the checks did not pass within the checks timeout of 45 minutes").
+
+This will be enabled by default on 2026-06-22.
