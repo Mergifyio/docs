@@ -14,6 +14,12 @@ const COLORS: Record<string, string> = {
   ghost: '#9CA3AF',
 };
 
+/**
+ * Neutral edge/connector color. Emitted verbatim into the Graphviz source, then
+ * swapped for `currentColor` in the rendered SVG so it follows the theme.
+ */
+const EDGE_COLOR = '#374151';
+
 // ── Types ──────────────────────────────────────────────
 
 interface PR {
@@ -127,7 +133,7 @@ function renderLinear(p: {
 
   // branch label
   push(
-    `<text x="${cx(0) - 34}" y="${COMMIT_Y + 4}" text-anchor="end" fill="${COLORS.gray}" font-size="${FONT}" font-weight="500">${branch}</text>`
+    `<text x="${cx(0) - 34}" y="${COMMIT_Y + 4}" text-anchor="end" fill="currentColor" font-size="${FONT}" font-weight="500">${branch}</text>`
   );
 
   // commits
@@ -185,7 +191,7 @@ async function renderGraph(p: {
   dot.push(
     '  node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, height=0.5, fixedsize=true];'
   );
-  dot.push('  edge [color="#374151", fontname="sans-serif"];');
+  dot.push(`  edge [color="${EDGE_COLOR}", fontname="sans-serif"];`);
 
   // nodes
   for (const n of nodes) {
@@ -212,7 +218,7 @@ async function renderGraph(p: {
       attrs.push(`style=dashed, color="${COLORS.ghost}"`);
     }
     if (e.label) {
-      const edgeColor = e.dashed ? COLORS.ghost : '#374151';
+      const edgeColor = e.dashed ? COLORS.ghost : EDGE_COLOR;
       attrs.push(`label="${e.label}", fontsize=9, fontcolor="${edgeColor}"`);
     }
     const attrStr = attrs.length ? ` [${attrs.join(', ')}]` : '';
@@ -227,7 +233,9 @@ async function renderGraph(p: {
   $('svg').attr('class', 'git-graph');
   // Strip Graphviz background
   $('svg > g > polygon').first().attr('fill', 'none').attr('stroke', 'none');
-  return $.html('svg');
+  // Route the neutral edge color through currentColor so it tracks the theme
+  // (the page sets `.git-graph { color: var(--theme-diagram-edge) }`).
+  return $.html('svg').replaceAll(EDGE_COLOR, 'currentColor');
 }
 ---
 
@@ -240,6 +248,8 @@ async function renderGraph(p: {
     max-width: 560px;
     width: 100%;
     height: auto;
+    /* Drives `currentColor` for neutral edges, arrowheads, and the branch label. */
+    color: var(--theme-diagram-edge);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 </style>
