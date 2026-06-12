@@ -347,6 +347,13 @@ Note that this system is completely automatic and there is no need to
 intervene. The number of maximum splits can be controlled by
 [`batch_max_failure_resolution_attempts`](/configuration/file-format#queue-rules).
 
+:::tip
+  Each split carries metadata about the batches it came from. You can use it to
+  [re-run only the tests that failed in the parent
+  batch](#re-running-only-the-previously-failed-tests) instead of your whole
+  suite on every split.
+:::
+
 ### Batch Failure Scenario Example
 
 Let's assume that we have a batch of 6 pull requests: `[PR1 + PR2 + PR3 + PR4 +
@@ -381,6 +388,157 @@ each PR individually, applying the algorithm again.
 If there's a consecutive failure in the subsequent parts, the system will
 continue to split and isolate the problematic PR(s) and retest until the split
 contains a single pull request.
+
+## Re-running Only the Previously Failed Tests
+
+When Mergify [splits a failed batch](#handling-batch-failure-or-timeout), every
+split is a smaller subset of the batch that failed. Instead of re-running your
+full test suite on each split, you can run only the tests that failed in the
+parent batch. Tests that passed on the larger batch pass on the smaller one;
+the only tests worth re-running are those Mergify still needs to check to
+isolate the culprit.
+
+To make this possible, Mergify exposes the batches a split descends from to your
+CI, which reads them and narrows each split run down to just the tests that
+previously failed.
+
+### Reading the Metadata
+
+The [Mergify CLI](/cli) exposes the metadata with `mergify ci queue-info`. Run
+it on a merge queue draft pull request and it prints the queue metadata as JSON:
+
+```json
+{
+  "checking_base_sha": "f4a9c1e9b2d34c5a6f7081923abcde4567890123",
+  "pull_requests": [
+    { "number": 123 },
+    { "number": 124 }
+  ],
+  "previous_failed_batches": [
+    {
+      "draft_pr_number": 980,
+      "checked_pull_requests": [123, 124, 125, 126]
+    }
+  ]
+}
+```
+
+Here the current split is testing pull requests #123 and #124, and it descends
+from draft pull request #980, which checked #123 through #126 and failed.
+
+`previous_failed_batches` is a list: when a batch is split several times, each
+ancestor adds an entry, oldest first. The batch your split came from directly is
+always the **last** entry.
+
+When `$GITHUB_OUTPUT` is set, `mergify ci queue-info` also exposes the same JSON
+as a `queue_metadata` step output, so a later step can consume it without
+re-parsing the pull request body.
+
+:::note
+  `mergify ci queue-info` only works on a merge queue draft pull request. On any
+  other pull request it exits with an error.
+:::
+
+### GitHub Actions Example
+
+This workflow reads the metadata, finds the most recent failed batch, downloads
+its failed tests, and re-runs only those. It falls back to the full suite
+whenever there is no previous failed batch or no artifact to reuse, so it is
+safe to use as your only test workflow.
+
+It assumes your test job uploads a `failed-tests` artifact on every run: a
+`failed-tests.txt` file with one test identifier per line. The
+`previous_failed_batches` optimization reuses that artifact from the parent
+batch's run.
+
+```yaml
+name: CI
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the Mergify CLI
+        uses: Mergifyio/setup-cli@v1
+
+      - name: Read the merge queue metadata
+        id: queue-info
+        # queue-info only works on a merge queue draft pull request.
+        if: startsWith(github.event.pull_request.title, 'merge queue:')
+        run: mergify ci queue-info
+
+      - name: Download the previously failed tests
+        id: failed-tests
+        if: steps.queue-info.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUEUE_METADATA: ${{ steps.queue-info.outputs.queue_metadata }}
+        run: |
+          # The batch this split came from is the last entry of the list.
+          draft_pr=$(jq -r '.previous_failed_batches[-1].draft_pr_number // empty' <<< "$QUEUE_METADATA")
+          if [ -z "$draft_pr" ]; then
+            echo "No previous failed batch: running the full test suite."
+            exit 0
+          fi
+
+          # Find the latest CI run of that batch's draft pull request.
+          sha=$(gh pr view "$draft_pr" --json headRefOid -q .headRefOid)
+          run_id=$(gh run list --commit "$sha" --workflow CI --json databaseId -q '.[0].databaseId // empty')
+          if [ -z "$run_id" ]; then
+            echo "No CI run found for the previous failed batch: running the full test suite."
+            exit 0
+          fi
+
+          # Download the failing tests it recorded.
+          if gh run download "$run_id" --name failed-tests --dir previous-failed-tests; then
+            echo "tests=$(paste -sd ' ' previous-failed-tests/failed-tests.txt)" >> "$GITHUB_OUTPUT"
+          else
+            echo "No failed-tests artifact found: running the full test suite."
+          fi
+
+      - name: Run tests
+        env:
+          ONLY_TESTS: ${{ steps.failed-tests.outputs.tests }}
+        run: |
+          if [ -n "$ONLY_TESTS" ]; then
+            echo "Re-running only the previously failed tests: $ONLY_TESTS"
+            # $ONLY_TESTS is unquoted so it splits into separate arguments, which
+            # assumes test ids are shell-safe. Replace with your own runner's
+            # filter, e.g. pytest, go test -run, etc.
+            pytest $ONLY_TESTS
+          else
+            pytest
+          fi
+
+      - name: Upload the failed tests
+        # Record the tests that failed so the next split can re-run only those.
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-tests
+          path: failed-tests.txt
+          if-no-files-found: ignore
+```
+
+:::note
+  The optimization is silent when it does not engage: a wrong `--workflow` name
+  or `failed-tests` artifact name just runs the full suite, with no error. Keep
+  both in sync. `--workflow CI` must match your workflow's `name:` exactly, or
+  use its filename, like `ci.yml`; the artifact name must match on the upload
+  and download steps. The one positive sign it engaged is the `Re-running only
+  the previously failed tests:` line in the job log.
+:::
+
+:::caution
+  This optimization assumes a test that passed on the parent batch stays green on
+  the smaller split. That holds when your tests are independent. If a test's
+  result depends on changes from another pull request in the batch, keep running
+  your full suite so Mergify always isolates the right culprit.
+:::
 
 ## In-place checks (no batch PRs)
 
