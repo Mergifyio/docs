@@ -9,8 +9,14 @@ After pushing a stack, you'll need to make changes: responding to review
 feedback, adding commits, rearranging order, or squashing. This page covers
 every common scenario.
 
-In all cases, the workflow is the same: **make your changes locally, then run
-`mergify stack push`** to sync with GitHub.
+In all cases, the workflow is the same: **edit your stack locally, then run
+`mergify stack push`** to sync with GitHub. Stacks ships dedicated commands for
+every common history rewrite, so you don't have to drive `git rebase -i` by
+hand.
+
+Each editing command accepts a commit as either a short SHA or a
+[Change-Id](/stacks/concepts#change-id) prefix. Most of them also support
+`--dry-run` (`-n`) to print the plan without touching your branch.
 
 ## Amend the Latest Commit
 
@@ -31,31 +37,15 @@ Only the PR corresponding to the amended commit is updated.
 
 ## Edit a Commit Mid-Stack
 
-To modify a commit that isn't at the top of your branch, use interactive rebase.
-Stacks provides a shortcut:
+To modify a commit that isn't at the top of your branch, point
+`mergify stack edit` at it. Pass a short SHA or Change-Id prefix and the rebase
+pauses on that commit:
 
 ```bash
-mergify stack edit
+mergify stack edit a1b2c3d
 ```
 
-This opens `git rebase -i` from the fork point of your stack. You'll see your
-commits listed:
-
-```text
-pick a1b2c3d feat: add user data model
-pick d4e5f6a feat: add user registration endpoint
-pick g7h8i9b test: add user registration tests
-```
-
-Change `pick` to `edit` for the commit you want to modify:
-
-```text
-edit a1b2c3d feat: add user data model
-pick d4e5f6a feat: add user registration endpoint
-pick g7h8i9b test: add user registration tests
-```
-
-Save and close. Git pauses at that commit so you can make changes:
+Git stops at the target so you can make changes:
 
 ```bash
 # Make your changes
@@ -70,25 +60,42 @@ Then push:
 mergify stack push
 ```
 
-## Reorder Commits
+Only the amended commit's PR (and any later PRs whose content shifts) is
+updated.
 
-Open interactive rebase and change the line order:
+## Reword a Commit Message
+
+To change a commit's message without touching its contents:
 
 ```bash
-mergify stack edit
+mergify stack reword d4e5f6a -m "feat: add user registration API endpoint"
 ```
 
-```text
-pick d4e5f6a feat: add user registration endpoint
-pick a1b2c3d feat: add user data model
-pick g7h8i9b test: add user registration tests
+The Change-Id is preserved, so the PR keeps its identity. Because Stacks
+derives the PR title and body from the commit message, the corresponding PR's
+title and body update on the next push.
+
+## Reorder Commits
+
+List every commit in the order you want, by SHA or Change-Id prefix:
+
+```bash
+mergify stack reorder d4e5f6a a1b2c3d g7h8i9b
 ```
 
-Save and close. The PRs re-chain automatically when you push.
+To move a single commit without listing the whole stack, use `move` with
+`first`, `last`, `before`, or `after`:
+
+```bash
+mergify stack move g7h8i9b first
+mergify stack move a1b2c3d after d4e5f6a
+```
+
+The PRs re-chain automatically when you push.
 
 :::caution
   Reordering can cause conflicts if later commits depend on earlier ones. Git
-  will pause and ask you to resolve conflicts during the rebase.
+  pauses and asks you to resolve conflicts during the rebase.
 :::
 
 ## Add a Commit
@@ -105,42 +112,79 @@ correct position in the chain.
 
 ## Remove a Commit
 
-Open interactive rebase and change `pick` to `drop` (or delete the line):
+Drop one or more commits by SHA or Change-Id prefix:
 
 ```bash
-mergify stack edit
-```
-
-```text
-pick a1b2c3d feat: add user data model
-drop d4e5f6a feat: add user registration endpoint
-pick g7h8i9b test: add user registration tests
+mergify stack drop d4e5f6a
 ```
 
 On push, the orphan remote branch is deleted and the remaining PRs re-chain.
 
-## Squash Commits
+## Squash or Fixup Commits
 
-To combine two commits into one, use `squash` or `fixup` in interactive rebase:
+To fold a commit into its parent and **drop** its message, use `fixup`:
 
 ```bash
-mergify stack edit
+mergify stack fixup g7h8i9b
 ```
 
-```text
-pick a1b2c3d feat: add user data model
-squash d4e5f6a feat: add user registration endpoint
-pick g7h8i9b test: add user registration tests
+To combine commits into a target while **keeping** the target's message, use
+`squash`. Sources go before the `into` token, the target after it:
+
+```bash
+mergify stack squash d4e5f6a into a1b2c3d
 ```
 
-The surviving commit keeps its Change-Id, so the corresponding PR is updated. The
-absorbed commit's remote branch is cleaned up automatically.
+Pass `-m` to rewrite the resulting message instead of keeping the target's:
+
+```bash
+mergify stack squash d4e5f6a into a1b2c3d -m "feat: add user model and endpoint"
+```
+
+The surviving commit keeps its Change-Id, so the corresponding PR is updated.
+The absorbed commit's remote branch is cleaned up automatically.
+
+## Preview Before You Rewrite
+
+The history-rewriting commands (`reword`, `reorder`, `move`, `drop`, `fixup`,
+`squash`) accept `--dry-run` (`-n`) to print the resulting plan without changing
+your branch:
+
+```bash
+mergify stack reorder d4e5f6a a1b2c3d g7h8i9b --dry-run
+```
+
+## Record Why You Amended
+
+When you amend a commit that already has a PR, reviewers see a new revision but
+not the reason behind it. Attach a note before pushing to explain the change:
+
+```bash
+git commit --amend
+mergify stack note -m "address review: rename foo() to bar()"
+mergify stack push
+```
+
+The note travels with the stack and appears in the PR's revision history, so
+reviewers understand what changed between revisions without diffing SHAs. See
+[Reviewing Stacks](/stacks/reviewing#revision-history) for the reviewer's view.
+
+By default, `mergify stack push` keeps a revision-history comment on each PR up
+to date. Pass `--no-revision-history` (or set
+`mergify-cli.stack-revision-history` to `false`) to turn it off.
 
 ## After a PR Merges
 
-When the bottom PR in your stack merges into `main`, the next PR's base
-automatically updates to `main`. To keep your local branch in sync, just push
-again:
+When the bottom PR in your stack merges into `main`, bring your local branch
+back in sync:
+
+```bash
+mergify stack sync
+```
+
+`sync` fetches the latest `main`, detects which commits already merged, drops
+them from your branch, and rebases the rest. Then push to update the remaining
+PRs:
 
 ```bash
 mergify stack push
@@ -169,5 +213,5 @@ After PR #1 merges, commit A lands on `main`. The remaining PRs re-chain:
   ]}
 />
 
-Stacks rebases on `main` automatically, detects that the merged commit is already
-in `main`, and skips it. The remaining PRs update as needed.
+`sync` rebases on `main`, detects that the merged commit is already there, and
+skips it. The remaining PRs update as needed on the next push.
