@@ -104,6 +104,11 @@
   --theme-border-color: var(--theme-border);
   --theme-shade-subtle: var(--color-gray-200);
 
+  /* Diagrams — neutral chrome (edges, arrowheads, connector labels, cluster
+     borders) for the git-graph and graphviz diagrams. Dark mode brightens it
+     so structural lines and captions stay legible over the dark surface. */
+  --theme-diagram-edge: var(--color-gray-700);
+
   /* Links + accents */
   --theme-link: var(--color-blue-700);
   --theme-link-hover: var(--color-blue-800);
@@ -172,6 +177,9 @@
   --theme-divider: var(--color-gray-800);
   --theme-border-color: var(--theme-border);
   --theme-shade-subtle: var(--color-gray-700);
+
+  /* Diagrams — brighten the neutral chrome so edges and labels read on dark. */
+  --theme-diagram-edge: var(--color-gray-400);
 
   /* Links + accents */
   --theme-link: var(--color-blue-400);
