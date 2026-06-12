@@ -294,9 +294,10 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -582,6 +583,10 @@
         "bot_account": {
           "anyOf": [
             {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -793,9 +798,10 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -1027,6 +1033,10 @@
       "properties": {
         "bot_account": {
           "anyOf": [
+            {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
             {
               "type": "string"
             },
@@ -1272,6 +1282,10 @@
         },
         "merge_bot_account": {
           "anyOf": [
+            {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
             {
               "type": "string"
             },
@@ -2588,6 +2602,10 @@
         "draft_bot_account": {
           "anyOf": [
             {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -2720,6 +2738,10 @@
         "merge_bot_account": {
           "anyOf": [
             {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -2733,9 +2755,10 @@
         "update_bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -2830,6 +2853,10 @@
         "draft_bot_account": {
           "anyOf": [
             {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -2962,6 +2989,10 @@
         "merge_bot_account": {
           "anyOf": [
             {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -2975,9 +3006,10 @@
         "update_bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -3006,9 +3038,10 @@
         "bot_account": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -3035,6 +3068,10 @@
       "properties": {
         "bot_account": {
           "anyOf": [
+            {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
             {
               "type": "string"
             },
@@ -3161,6 +3198,10 @@
         "bot_account": {
           "anyOf": [
             {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -3271,6 +3312,10 @@
         "bot_account": {
           "anyOf": [
             {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
+            {
               "type": "string"
             },
             {
@@ -3301,6 +3346,10 @@
       "properties": {
         "bot_account": {
           "anyOf": [
+            {
+              "const": "{{ author }}",
+              "title": "Pull request author"
+            },
             {
               "type": "string"
             },

@@ -1,0 +1,3652 @@
+{
+  "schemaVersion": 1,
+  "generator": "mergify _internal dump-cli-schema",
+  "cli": {
+    "name": "mergify",
+    "version": "0.0.0",
+    "about": null
+  },
+  "command": {
+    "name": "mergify",
+    "path": [
+      "mergify"
+    ],
+    "about": null,
+    "longAbout": null,
+    "usage": "mergify [OPTIONS] <COMMAND>",
+    "aliases": [],
+    "subcommandRequired": true,
+    "source": "native",
+    "args": [
+      {
+        "id": "debug",
+        "kind": "flag",
+        "short": null,
+        "long": "debug",
+        "valueNames": [],
+        "help": "Enable verbose debug logging. Mirrors the Python CLI's top-level `--debug` flag so the same invocations work against either binary; native commands accept it as a no-op today (no native code path consults it yet), shimmed ones re-inject it into the forwarded argv so the Python side can honor it",
+        "longHelp": "Enable verbose debug logging. Mirrors the Python CLI's top-level `--debug` flag so the same invocations work against either binary; native commands accept it as a no-op today (no native code path consults it yet), shimmed ones re-inject it into the forwarded argv so the Python side can honor it",
+        "required": false,
+        "global": true,
+        "default": "false",
+        "possibleValues": [],
+        "numArgs": "0",
+        "env": null,
+        "valueHint": null
+      }
+    ],
+    "commands": [
+      {
+        "name": "config",
+        "path": [
+          "mergify",
+          "config"
+        ],
+        "about": "Manage Mergify configuration",
+        "longAbout": "Manage Mergify configuration",
+        "usage": "mergify config [OPTIONS] <COMMAND>",
+        "aliases": [],
+        "subcommandRequired": true,
+        "source": "native",
+        "args": [
+          {
+            "id": "config_file",
+            "kind": "option",
+            "short": "f",
+            "long": "config-file",
+            "valueNames": [
+              "CONFIG_FILE"
+            ],
+            "help": "Path to the Mergify configuration file (auto-detected if not provided)",
+            "longHelp": "Path to the Mergify configuration file (auto-detected if not provided)",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": "anyPath"
+          }
+        ],
+        "commands": [
+          {
+            "name": "validate",
+            "path": [
+              "mergify",
+              "config",
+              "validate"
+            ],
+            "about": "Validate the Mergify configuration file against the schema",
+            "longAbout": "Validate the Mergify configuration file against the schema",
+            "usage": "mergify config validate [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [],
+            "commands": []
+          },
+          {
+            "name": "simulate",
+            "path": [
+              "mergify",
+              "config",
+              "simulate"
+            ],
+            "about": "Simulate Mergify actions on a pull request using the local configuration",
+            "longAbout": "Simulate Mergify actions on a pull request using the local configuration",
+            "usage": "mergify config simulate [OPTIONS] <PULL_REQUEST_URL>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "pull_request",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "PULL_REQUEST_URL"
+                ],
+                "help": "Pull request URL (e.g. <https://github.com/owner/repo/pull/123>)",
+                "longHelp": "Pull request URL (e.g. <https://github.com/owner/repo/pull/123>)",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": "t",
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "api_url",
+                "kind": "option",
+                "short": "u",
+                "long": "api-url",
+                "valueNames": [
+                  "API_URL"
+                ],
+                "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          }
+        ]
+      },
+      {
+        "name": "ci",
+        "path": [
+          "mergify",
+          "ci"
+        ],
+        "about": "Mergify CI-related commands",
+        "longAbout": "Mergify CI-related commands",
+        "usage": "mergify ci [OPTIONS] <COMMAND>",
+        "aliases": [],
+        "subcommandRequired": true,
+        "source": "native",
+        "args": [],
+        "commands": [
+          {
+            "name": "scopes-send",
+            "path": [
+              "mergify",
+              "ci",
+              "scopes-send"
+            ],
+            "about": "Send scopes tied to a pull request to Mergify",
+            "longAbout": "Send scopes tied to a pull request to Mergify",
+            "usage": "mergify ci scopes-send [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": "r",
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "pull_request",
+                "kind": "option",
+                "short": "p",
+                "long": "pull-request",
+                "valueNames": [
+                  "PULL_REQUEST"
+                ],
+                "help": "Pull request number. Falls back to ``GITHUB_EVENT_PATH`` (reads ``.pull_request.number``). When neither is available the command prints a skip message and exits 0",
+                "longHelp": "Pull request number. Falls back to ``GITHUB_EVENT_PATH`` (reads ``.pull_request.number``). When neither is available the command prints a skip message and exits 0",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": "t",
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "api_url",
+                "kind": "option",
+                "short": "u",
+                "long": "api-url",
+                "valueNames": [
+                  "API_URL"
+                ],
+                "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "scope",
+                "kind": "option",
+                "short": "s",
+                "long": "scope",
+                "valueNames": [
+                  "SCOPE"
+                ],
+                "help": "Scope to upload (repeatable)",
+                "longHelp": "Scope to upload (repeatable)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "scopes_json",
+                "kind": "option",
+                "short": null,
+                "long": "scopes-json",
+                "valueNames": [
+                  "SCOPES_JSON"
+                ],
+                "help": "JSON file containing scopes to upload (output of ``mergify ci scopes --write``)",
+                "longHelp": "JSON file containing scopes to upload (output of ``mergify ci scopes --write``)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": "anyPath"
+              },
+              {
+                "id": "scopes_file",
+                "kind": "option",
+                "short": null,
+                "long": "scopes-file",
+                "valueNames": [
+                  "SCOPES_FILE"
+                ],
+                "help": "Plain-text file with one scope per line",
+                "longHelp": "Plain-text file with one scope per line",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": "anyPath"
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "git-refs",
+            "path": [
+              "mergify",
+              "ci",
+              "git-refs"
+            ],
+            "about": "Print the base/head git references for the current build",
+            "longAbout": "Print the base/head git references for the current build",
+            "usage": "mergify ci git-refs [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "format",
+                "kind": "option",
+                "short": null,
+                "long": "format",
+                "valueNames": [
+                  "FORMAT"
+                ],
+                "help": "Output format: `text` (default), `shell` for eval-friendly `MERGIFY_GIT_REFS_*` lines, or `json` for a single JSON object",
+                "longHelp": "Output format: `text` (default), `shell` for eval-friendly `MERGIFY_GIT_REFS_*` lines, or `json` for a single JSON object",
+                "required": false,
+                "global": false,
+                "default": "text",
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "queue-info",
+            "path": [
+              "mergify",
+              "ci",
+              "queue-info"
+            ],
+            "about": "Print the merge queue batch metadata for the current draft PR",
+            "longAbout": "Print the merge queue batch metadata for the current draft PR",
+            "usage": "mergify ci queue-info [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [],
+            "commands": []
+          },
+          {
+            "name": "scopes",
+            "path": [
+              "mergify",
+              "ci",
+              "scopes"
+            ],
+            "about": "Give the list of scopes impacted by changed files",
+            "longAbout": "Give the list of scopes impacted by changed files",
+            "usage": "mergify ci scopes [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "config",
+                "kind": "option",
+                "short": null,
+                "long": "config",
+                "valueNames": [
+                  "CONFIG"
+                ],
+                "help": "Path to YAML config file. Falls back to the `MERGIFY_CONFIG_PATH` env var, then auto-detects `.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml`",
+                "longHelp": "Path to YAML config file. Falls back to the `MERGIFY_CONFIG_PATH` env var, then auto-detects `.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml`",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": "anyPath"
+              },
+              {
+                "id": "base",
+                "kind": "option",
+                "short": null,
+                "long": "base",
+                "valueNames": [
+                  "BASE"
+                ],
+                "help": "Base git reference to use to look for changed files",
+                "longHelp": "Base git reference to use to look for changed files",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "head",
+                "kind": "option",
+                "short": null,
+                "long": "head",
+                "valueNames": [
+                  "HEAD"
+                ],
+                "help": "Head git reference to use to look for changed files",
+                "longHelp": "Head git reference to use to look for changed files",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "write",
+                "kind": "option",
+                "short": "w",
+                "long": "write",
+                "valueNames": [
+                  "WRITE"
+                ],
+                "help": "Write the detected scopes to a file (JSON, consumed by `ci scopes-send --scopes-json`)",
+                "longHelp": "Write the detected scopes to a file (JSON, consumed by `ci scopes-send --scopes-json`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": "anyPath"
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "junit-process",
+            "path": [
+              "mergify",
+              "ci",
+              "junit-process"
+            ],
+            "about": "Upload JUnit XML reports and ignore failed tests with Mergify's CI Insights Quarantine",
+            "longAbout": "Upload JUnit XML reports and ignore failed tests with Mergify's CI Insights Quarantine",
+            "usage": "mergify ci junit-process [OPTIONS] <FILE>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "api_url",
+                "kind": "option",
+                "short": "u",
+                "long": "api-url",
+                "valueNames": [
+                  "API_URL"
+                ],
+                "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default (`https://api.mergify.com`)",
+                "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default (`https://api.mergify.com`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": "t",
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "CI Issues application key. Falls back to ``MERGIFY_TOKEN``",
+                "longHelp": "CI Issues application key. Falls back to ``MERGIFY_TOKEN``",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": "r",
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "test_framework",
+                "kind": "option",
+                "short": null,
+                "long": "test-framework",
+                "valueNames": [
+                  "TEST_FRAMEWORK"
+                ],
+                "help": "Test framework label (e.g. `pytest`). Optional; passed as a span attribute",
+                "longHelp": "Test framework label (e.g. `pytest`). Optional; passed as a span attribute",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "test_language",
+                "kind": "option",
+                "short": null,
+                "long": "test-language",
+                "valueNames": [
+                  "TEST_LANGUAGE"
+                ],
+                "help": "Test language label (e.g. `python`). Optional; passed as a span attribute",
+                "longHelp": "Test language label (e.g. `python`). Optional; passed as a span attribute",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "tests_target_branch",
+                "kind": "option",
+                "short": "b",
+                "long": "tests-target-branch",
+                "valueNames": [
+                  "TESTS_TARGET_BRANCH"
+                ],
+                "help": "Branch the quarantine API should look up tests on. Defaults to the PR base branch, or the head branch as a fallback",
+                "longHelp": "Branch the quarantine API should look up tests on. Defaults to the PR base branch, or the head branch as a fallback",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "test_exit_code",
+                "kind": "option",
+                "short": "e",
+                "long": "test-exit-code",
+                "valueNames": [
+                  "TEST_EXIT_CODE"
+                ],
+                "help": "Exit code of the test runner. When this is non-zero but no failures appear in the JUnit report, the run is flagged as a silent failure. Falls back to ``MERGIFY_TEST_EXIT_CODE``",
+                "longHelp": "Exit code of the test runner. When this is non-zero but no failures appear in the JUnit report, the run is flagged as a silent failure. Falls back to ``MERGIFY_TEST_EXIT_CODE``",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "files",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "FILE"
+                ],
+                "help": "JUnit XML files or glob patterns (e.g. `reports/**/*.xml`). At least one path or pattern is required",
+                "longHelp": "JUnit XML files or glob patterns (e.g. `reports/**/*.xml`). At least one path or pattern is required",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "junit-upload",
+            "path": [
+              "mergify",
+              "ci",
+              "junit-upload"
+            ],
+            "about": "Upload JUnit XML reports (deprecated: use `junit-process`)",
+            "longAbout": "Upload JUnit XML reports (deprecated: use `junit-process`)",
+            "usage": "mergify ci junit-upload [OPTIONS] <FILE>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "api_url",
+                "kind": "option",
+                "short": "u",
+                "long": "api-url",
+                "valueNames": [
+                  "API_URL"
+                ],
+                "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default (`https://api.mergify.com`)",
+                "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default (`https://api.mergify.com`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": "t",
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "CI Issues application key. Falls back to ``MERGIFY_TOKEN``",
+                "longHelp": "CI Issues application key. Falls back to ``MERGIFY_TOKEN``",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": "r",
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "test_framework",
+                "kind": "option",
+                "short": null,
+                "long": "test-framework",
+                "valueNames": [
+                  "TEST_FRAMEWORK"
+                ],
+                "help": "Test framework label (e.g. `pytest`). Optional; passed as a span attribute",
+                "longHelp": "Test framework label (e.g. `pytest`). Optional; passed as a span attribute",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "test_language",
+                "kind": "option",
+                "short": null,
+                "long": "test-language",
+                "valueNames": [
+                  "TEST_LANGUAGE"
+                ],
+                "help": "Test language label (e.g. `python`). Optional; passed as a span attribute",
+                "longHelp": "Test language label (e.g. `python`). Optional; passed as a span attribute",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "tests_target_branch",
+                "kind": "option",
+                "short": "b",
+                "long": "tests-target-branch",
+                "valueNames": [
+                  "TESTS_TARGET_BRANCH"
+                ],
+                "help": "Branch the quarantine API should look up tests on. Defaults to the PR base branch, or the head branch as a fallback",
+                "longHelp": "Branch the quarantine API should look up tests on. Defaults to the PR base branch, or the head branch as a fallback",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "test_exit_code",
+                "kind": "option",
+                "short": "e",
+                "long": "test-exit-code",
+                "valueNames": [
+                  "TEST_EXIT_CODE"
+                ],
+                "help": "Exit code of the test runner. When this is non-zero but no failures appear in the JUnit report, the run is flagged as a silent failure. Falls back to ``MERGIFY_TEST_EXIT_CODE``",
+                "longHelp": "Exit code of the test runner. When this is non-zero but no failures appear in the JUnit report, the run is flagged as a silent failure. Falls back to ``MERGIFY_TEST_EXIT_CODE``",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "files",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "FILE"
+                ],
+                "help": "JUnit XML files or glob patterns (e.g. `reports/**/*.xml`). At least one path or pattern is required",
+                "longHelp": "JUnit XML files or glob patterns (e.g. `reports/**/*.xml`). At least one path or pattern is required",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          }
+        ]
+      },
+      {
+        "name": "tests",
+        "path": [
+          "mergify",
+          "tests"
+        ],
+        "about": "Inspect tests tracked by Mergify CI Insights",
+        "longAbout": "Inspect tests tracked by Mergify CI Insights",
+        "usage": "mergify tests [OPTIONS] <COMMAND>",
+        "aliases": [],
+        "subcommandRequired": true,
+        "source": "native",
+        "args": [],
+        "commands": [
+          {
+            "name": "show",
+            "path": [
+              "mergify",
+              "tests",
+              "show"
+            ],
+            "about": "Look up tests by name and print their health and metrics",
+            "longAbout": "Look up tests by name and print their health and metrics",
+            "usage": "mergify tests show [OPTIONS] <NAME>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "test_names",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "NAME"
+                ],
+                "help": "Test name(s) to look up. Glob patterns (`*`, `?`) are supported by the API",
+                "longHelp": "Test name(s) to look up. Glob patterns (`*`, `?`) are supported by the API",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": "r",
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": "t",
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "api_url",
+                "kind": "option",
+                "short": "u",
+                "long": "api-url",
+                "valueNames": [
+                  "API_URL"
+                ],
+                "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "pipeline_name",
+                "kind": "option",
+                "short": null,
+                "long": "pipeline-name",
+                "valueNames": [
+                  "PIPELINE_NAME"
+                ],
+                "help": "Restrict matches to the given pipeline name(s)",
+                "longHelp": "Restrict matches to the given pipeline name(s)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "pipeline_name_exclude",
+                "kind": "option",
+                "short": null,
+                "long": "pipeline-name-exclude",
+                "valueNames": [
+                  "PIPELINE_NAME_EXCLUDE"
+                ],
+                "help": "Exclude matches from the given pipeline name(s)",
+                "longHelp": "Exclude matches from the given pipeline name(s)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "job_name",
+                "kind": "option",
+                "short": null,
+                "long": "job-name",
+                "valueNames": [
+                  "JOB_NAME"
+                ],
+                "help": "Restrict matches to the given job name(s)",
+                "longHelp": "Restrict matches to the given job name(s)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "job_name_exclude",
+                "kind": "option",
+                "short": null,
+                "long": "job-name-exclude",
+                "valueNames": [
+                  "JOB_NAME_EXCLUDE"
+                ],
+                "help": "Exclude matches from the given job name(s)",
+                "longHelp": "Exclude matches from the given job name(s)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "per_page",
+                "kind": "option",
+                "short": null,
+                "long": "per-page",
+                "valueNames": [
+                  "PER_PAGE"
+                ],
+                "help": "Maximum number of identities the search endpoint may return per page (1–100, server default is 10)",
+                "longHelp": "Maximum number of identities the search endpoint may return per page (1–100, server default is 10)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "json",
+                "kind": "flag",
+                "short": null,
+                "long": "json",
+                "valueNames": [],
+                "help": "Emit a single JSON document to stdout instead of human prose",
+                "longHelp": "Emit a single JSON document to stdout instead of human prose",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "quarantines",
+            "path": [
+              "mergify",
+              "tests",
+              "quarantines"
+            ],
+            "about": "Manage the CI Insights quarantine",
+            "longAbout": "Manage the CI Insights quarantine",
+            "usage": "mergify tests quarantines [OPTIONS] <COMMAND>",
+            "aliases": [],
+            "subcommandRequired": true,
+            "source": "native",
+            "args": [],
+            "commands": [
+              {
+                "name": "add",
+                "path": [
+                  "mergify",
+                  "tests",
+                  "quarantines",
+                  "add"
+                ],
+                "about": "Add a test to the CI Insights quarantine",
+                "longAbout": "Add a test to the CI Insights quarantine",
+                "usage": "mergify tests quarantines add [OPTIONS] --reason <REASON> <NAME>",
+                "aliases": [],
+                "subcommandRequired": false,
+                "source": "native",
+                "args": [
+                  {
+                    "id": "test_name",
+                    "kind": "positional",
+                    "short": null,
+                    "long": null,
+                    "valueNames": [
+                      "NAME"
+                    ],
+                    "help": "Fully qualified name of the test to quarantine",
+                    "longHelp": "Fully qualified name of the test to quarantine",
+                    "required": true,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "repository",
+                    "kind": "option",
+                    "short": "r",
+                    "long": "repository",
+                    "valueNames": [
+                      "REPOSITORY"
+                    ],
+                    "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "reason",
+                    "kind": "option",
+                    "short": null,
+                    "long": "reason",
+                    "valueNames": [
+                      "REASON"
+                    ],
+                    "help": "Reason recorded for quarantining the test",
+                    "longHelp": "Reason recorded for quarantining the test",
+                    "required": true,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "branch",
+                    "kind": "option",
+                    "short": "b",
+                    "long": "branch",
+                    "valueNames": [
+                      "BRANCH"
+                    ],
+                    "help": "Branch name or pattern to scope the quarantine to. Omit to quarantine on all branches",
+                    "longHelp": "Branch name or pattern to scope the quarantine to. Omit to quarantine on all branches",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "token",
+                    "kind": "option",
+                    "short": "t",
+                    "long": "token",
+                    "valueNames": [
+                      "TOKEN"
+                    ],
+                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "api_url",
+                    "kind": "option",
+                    "short": "u",
+                    "long": "api-url",
+                    "valueNames": [
+                      "API_URL"
+                    ],
+                    "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "json",
+                    "kind": "flag",
+                    "short": null,
+                    "long": "json",
+                    "valueNames": [],
+                    "help": "Emit a single JSON document to stdout instead of human prose",
+                    "longHelp": "Emit a single JSON document to stdout instead of human prose",
+                    "required": false,
+                    "global": false,
+                    "default": "false",
+                    "possibleValues": [],
+                    "numArgs": "0",
+                    "env": null,
+                    "valueHint": null
+                  }
+                ],
+                "commands": []
+              },
+              {
+                "name": "remove",
+                "path": [
+                  "mergify",
+                  "tests",
+                  "quarantines",
+                  "remove"
+                ],
+                "about": "Remove a test from the CI Insights quarantine",
+                "longAbout": "Remove a test from the CI Insights quarantine",
+                "usage": "mergify tests quarantines remove [OPTIONS] <NAME_OR_ID>",
+                "aliases": [],
+                "subcommandRequired": false,
+                "source": "native",
+                "args": [
+                  {
+                    "id": "name_or_id",
+                    "kind": "positional",
+                    "short": null,
+                    "long": null,
+                    "valueNames": [
+                      "NAME_OR_ID"
+                    ],
+                    "help": "Test to remove from quarantine: either its fully qualified name or the quarantine id (as printed by `tests quarantines add`)",
+                    "longHelp": "Test to remove from quarantine: either its fully qualified name or the quarantine id (as printed by `tests quarantines add`)",
+                    "required": true,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "repository",
+                    "kind": "option",
+                    "short": "r",
+                    "long": "repository",
+                    "valueNames": [
+                      "REPOSITORY"
+                    ],
+                    "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "token",
+                    "kind": "option",
+                    "short": "t",
+                    "long": "token",
+                    "valueNames": [
+                      "TOKEN"
+                    ],
+                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "api_url",
+                    "kind": "option",
+                    "short": "u",
+                    "long": "api-url",
+                    "valueNames": [
+                      "API_URL"
+                    ],
+                    "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "json",
+                    "kind": "flag",
+                    "short": null,
+                    "long": "json",
+                    "valueNames": [],
+                    "help": "Emit a single JSON document to stdout instead of human prose",
+                    "longHelp": "Emit a single JSON document to stdout instead of human prose",
+                    "required": false,
+                    "global": false,
+                    "default": "false",
+                    "possibleValues": [],
+                    "numArgs": "0",
+                    "env": null,
+                    "valueHint": null
+                  }
+                ],
+                "commands": []
+              },
+              {
+                "name": "get",
+                "path": [
+                  "mergify",
+                  "tests",
+                  "quarantines",
+                  "get"
+                ],
+                "about": "Print a single quarantine by test name or id",
+                "longAbout": "Print a single quarantine by test name or id",
+                "usage": "mergify tests quarantines get [OPTIONS] <NAME_OR_ID>",
+                "aliases": [],
+                "subcommandRequired": false,
+                "source": "native",
+                "args": [
+                  {
+                    "id": "name_or_id",
+                    "kind": "positional",
+                    "short": null,
+                    "long": null,
+                    "valueNames": [
+                      "NAME_OR_ID"
+                    ],
+                    "help": "Quarantine to print: either the test's fully qualified name or the quarantine id (as printed by `tests quarantines add`)",
+                    "longHelp": "Quarantine to print: either the test's fully qualified name or the quarantine id (as printed by `tests quarantines add`)",
+                    "required": true,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "repository",
+                    "kind": "option",
+                    "short": "r",
+                    "long": "repository",
+                    "valueNames": [
+                      "REPOSITORY"
+                    ],
+                    "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "token",
+                    "kind": "option",
+                    "short": "t",
+                    "long": "token",
+                    "valueNames": [
+                      "TOKEN"
+                    ],
+                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "api_url",
+                    "kind": "option",
+                    "short": "u",
+                    "long": "api-url",
+                    "valueNames": [
+                      "API_URL"
+                    ],
+                    "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "json",
+                    "kind": "flag",
+                    "short": null,
+                    "long": "json",
+                    "valueNames": [],
+                    "help": "Emit a single JSON document to stdout instead of human prose",
+                    "longHelp": "Emit a single JSON document to stdout instead of human prose",
+                    "required": false,
+                    "global": false,
+                    "default": "false",
+                    "possibleValues": [],
+                    "numArgs": "0",
+                    "env": null,
+                    "valueHint": null
+                  }
+                ],
+                "commands": []
+              },
+              {
+                "name": "list",
+                "path": [
+                  "mergify",
+                  "tests",
+                  "quarantines",
+                  "list"
+                ],
+                "about": "List the tests currently in the CI Insights quarantine",
+                "longAbout": "List the tests currently in the CI Insights quarantine",
+                "usage": "mergify tests quarantines list [OPTIONS]",
+                "aliases": [],
+                "subcommandRequired": false,
+                "source": "native",
+                "args": [
+                  {
+                    "id": "repository",
+                    "kind": "option",
+                    "short": "r",
+                    "long": "repository",
+                    "valueNames": [
+                      "REPOSITORY"
+                    ],
+                    "help": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "longHelp": "Repository full name (owner/repo). Detected from the CI environment or the local git remote when omitted",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "token",
+                    "kind": "option",
+                    "short": "t",
+                    "long": "token",
+                    "valueNames": [
+                      "TOKEN"
+                    ],
+                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "api_url",
+                    "kind": "option",
+                    "short": "u",
+                    "long": "api-url",
+                    "valueNames": [
+                      "API_URL"
+                    ],
+                    "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+                    "required": false,
+                    "global": false,
+                    "default": null,
+                    "possibleValues": [],
+                    "numArgs": "1",
+                    "env": null,
+                    "valueHint": null
+                  },
+                  {
+                    "id": "json",
+                    "kind": "flag",
+                    "short": null,
+                    "long": "json",
+                    "valueNames": [],
+                    "help": "Emit a single JSON document to stdout instead of human prose",
+                    "longHelp": "Emit a single JSON document to stdout instead of human prose",
+                    "required": false,
+                    "global": false,
+                    "default": "false",
+                    "possibleValues": [],
+                    "numArgs": "0",
+                    "env": null,
+                    "valueHint": null
+                  }
+                ],
+                "commands": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "queue",
+        "path": [
+          "mergify",
+          "queue"
+        ],
+        "about": "Manage the Mergify merge queue",
+        "longAbout": "Manage the Mergify merge queue",
+        "usage": "mergify queue [OPTIONS] <COMMAND>",
+        "aliases": [],
+        "subcommandRequired": true,
+        "source": "native",
+        "args": [
+          {
+            "id": "token",
+            "kind": "option",
+            "short": "t",
+            "long": "token",
+            "valueNames": [
+              "TOKEN"
+            ],
+            "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "api_url",
+            "kind": "option",
+            "short": "u",
+            "long": "api-url",
+            "valueNames": [
+              "API_URL"
+            ],
+            "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "repository",
+            "kind": "option",
+            "short": "r",
+            "long": "repository",
+            "valueNames": [
+              "REPOSITORY"
+            ],
+            "help": "Repository full name (owner/repo). Falls back to ``GITHUB_REPOSITORY`` env var",
+            "longHelp": "Repository full name (owner/repo). Falls back to ``GITHUB_REPOSITORY`` env var",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          }
+        ],
+        "commands": [
+          {
+            "name": "pause",
+            "path": [
+              "mergify",
+              "queue",
+              "pause"
+            ],
+            "about": "Pause the merge queue for the repository",
+            "longAbout": "Pause the merge queue for the repository",
+            "usage": "mergify queue pause [OPTIONS] --reason <REASON>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "reason",
+                "kind": "option",
+                "short": null,
+                "long": "reason",
+                "valueNames": [
+                  "REASON"
+                ],
+                "help": "Reason for pausing the queue (max 255 characters)",
+                "longHelp": "Reason for pausing the queue (max 255 characters)",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "yes_i_am_sure",
+                "kind": "flag",
+                "short": null,
+                "long": "yes-i-am-sure",
+                "valueNames": [],
+                "help": "Skip the confirmation prompt. Required in non-interactive sessions",
+                "longHelp": "Skip the confirmation prompt. Required in non-interactive sessions",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "unpause",
+            "path": [
+              "mergify",
+              "queue",
+              "unpause"
+            ],
+            "about": "Unpause the merge queue for the repository",
+            "longAbout": "Unpause the merge queue for the repository",
+            "usage": "mergify queue unpause [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [],
+            "commands": []
+          },
+          {
+            "name": "status",
+            "path": [
+              "mergify",
+              "queue",
+              "status"
+            ],
+            "about": "Show merge queue status for the repository",
+            "longAbout": "Show merge queue status for the repository",
+            "usage": "mergify queue status [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "branch",
+                "kind": "option",
+                "short": "b",
+                "long": "branch",
+                "valueNames": [
+                  "BRANCH"
+                ],
+                "help": "Filter the queue by branch name",
+                "longHelp": "Filter the queue by branch name",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "json",
+                "kind": "flag",
+                "short": null,
+                "long": "json",
+                "valueNames": [],
+                "help": "Emit the raw API response as a single JSON document",
+                "longHelp": "Emit the raw API response as a single JSON document",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "show",
+            "path": [
+              "mergify",
+              "queue",
+              "show"
+            ],
+            "about": "Show detailed state of a pull request in the merge queue",
+            "longAbout": "Show detailed state of a pull request in the merge queue",
+            "usage": "mergify queue show [OPTIONS] <PR_NUMBER>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "pr_number",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "PR_NUMBER"
+                ],
+                "help": "Pull request number to inspect",
+                "longHelp": "Pull request number to inspect",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "verbose",
+                "kind": "flag",
+                "short": "v",
+                "long": "verbose",
+                "valueNames": [],
+                "help": "Show the full checks table and the conditions tree instead of compact summaries",
+                "longHelp": "Show the full checks table and the conditions tree instead of compact summaries",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "json",
+                "kind": "flag",
+                "short": null,
+                "long": "json",
+                "valueNames": [],
+                "help": "Emit the raw API response as a single JSON document",
+                "longHelp": "Emit the raw API response as a single JSON document",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          }
+        ]
+      },
+      {
+        "name": "freeze",
+        "path": [
+          "mergify",
+          "freeze"
+        ],
+        "about": "Manage scheduled freezes",
+        "longAbout": "Manage scheduled freezes",
+        "usage": "mergify freeze [OPTIONS] <COMMAND>",
+        "aliases": [],
+        "subcommandRequired": true,
+        "source": "native",
+        "args": [
+          {
+            "id": "token",
+            "kind": "option",
+            "short": "t",
+            "long": "token",
+            "valueNames": [
+              "TOKEN"
+            ],
+            "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "api_url",
+            "kind": "option",
+            "short": "u",
+            "long": "api-url",
+            "valueNames": [
+              "API_URL"
+            ],
+            "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "repository",
+            "kind": "option",
+            "short": "r",
+            "long": "repository",
+            "valueNames": [
+              "REPOSITORY"
+            ],
+            "help": "Repository full name (owner/repo). Falls back to ``GITHUB_REPOSITORY`` env var",
+            "longHelp": "Repository full name (owner/repo). Falls back to ``GITHUB_REPOSITORY`` env var",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          }
+        ],
+        "commands": [
+          {
+            "name": "list",
+            "path": [
+              "mergify",
+              "freeze",
+              "list"
+            ],
+            "about": "List scheduled freezes for a repository",
+            "longAbout": "List scheduled freezes for a repository",
+            "usage": "mergify freeze list [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "json",
+                "kind": "flag",
+                "short": null,
+                "long": "json",
+                "valueNames": [],
+                "help": "Emit the raw `scheduled_freezes` array as a single JSON document",
+                "longHelp": "Emit the raw `scheduled_freezes` array as a single JSON document",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "create",
+            "path": [
+              "mergify",
+              "freeze",
+              "create"
+            ],
+            "about": "Create a new scheduled freeze",
+            "longAbout": "Create a new scheduled freeze",
+            "usage": "mergify freeze create [OPTIONS] --reason <REASON>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "reason",
+                "kind": "option",
+                "short": null,
+                "long": "reason",
+                "valueNames": [
+                  "REASON"
+                ],
+                "help": "Reason for the freeze",
+                "longHelp": "Reason for the freeze",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "timezone",
+                "kind": "option",
+                "short": null,
+                "long": "timezone",
+                "valueNames": [
+                  "TIMEZONE"
+                ],
+                "help": "IANA timezone name (e.g. ``Europe/Paris``, ``US/Eastern``). Defaults to the system timezone when omitted",
+                "longHelp": "IANA timezone name (e.g. ``Europe/Paris``, ``US/Eastern``). Defaults to the system timezone when omitted",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "condition",
+                "kind": "option",
+                "short": "c",
+                "long": "condition",
+                "valueNames": [
+                  "CONDITION"
+                ],
+                "help": "Matching condition (repeatable, e.g. `-c base=main`)",
+                "longHelp": "Matching condition (repeatable, e.g. `-c base=main`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "start",
+                "kind": "option",
+                "short": null,
+                "long": "start",
+                "valueNames": [
+                  "START"
+                ],
+                "help": "Start time in ISO 8601 format (default: now)",
+                "longHelp": "Start time in ISO 8601 format (default: now)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "end",
+                "kind": "option",
+                "short": null,
+                "long": "end",
+                "valueNames": [
+                  "END"
+                ],
+                "help": "End time in ISO 8601 format (default: no end / emergency freeze)",
+                "longHelp": "End time in ISO 8601 format (default: no end / emergency freeze)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "exclude",
+                "kind": "option",
+                "short": "e",
+                "long": "exclude",
+                "valueNames": [
+                  "EXCLUDE"
+                ],
+                "help": "Exclude condition (repeatable, e.g. `-e label=hotfix`)",
+                "longHelp": "Exclude condition (repeatable, e.g. `-e label=hotfix`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "update",
+            "path": [
+              "mergify",
+              "freeze",
+              "update"
+            ],
+            "about": "Update an existing scheduled freeze",
+            "longAbout": "Update an existing scheduled freeze",
+            "usage": "mergify freeze update [OPTIONS] <FREEZE_ID>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "freeze_id",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "FREEZE_ID"
+                ],
+                "help": "Freeze ID (UUID)",
+                "longHelp": "Freeze ID (UUID)",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "reason",
+                "kind": "option",
+                "short": null,
+                "long": "reason",
+                "valueNames": [
+                  "REASON"
+                ],
+                "help": "Reason for the freeze",
+                "longHelp": "Reason for the freeze",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "timezone",
+                "kind": "option",
+                "short": null,
+                "long": "timezone",
+                "valueNames": [
+                  "TIMEZONE"
+                ],
+                "help": "IANA timezone name",
+                "longHelp": "IANA timezone name",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "condition",
+                "kind": "option",
+                "short": "c",
+                "long": "condition",
+                "valueNames": [
+                  "CONDITION"
+                ],
+                "help": "Matching condition (repeatable, e.g. `-c base=main`). Passing the flag one or more times replaces the existing list with the values supplied. Omitting `-c` entirely leaves the stored list untouched",
+                "longHelp": "Matching condition (repeatable, e.g. `-c base=main`). Passing the flag one or more times replaces the existing list with the values supplied. Omitting `-c` entirely leaves the stored list untouched",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "start",
+                "kind": "option",
+                "short": null,
+                "long": "start",
+                "valueNames": [
+                  "START"
+                ],
+                "help": "Start time in ISO 8601 format",
+                "longHelp": "Start time in ISO 8601 format",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "end",
+                "kind": "option",
+                "short": null,
+                "long": "end",
+                "valueNames": [
+                  "END"
+                ],
+                "help": "End time in ISO 8601 format",
+                "longHelp": "End time in ISO 8601 format",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "exclude",
+                "kind": "option",
+                "short": "e",
+                "long": "exclude",
+                "valueNames": [
+                  "EXCLUDE"
+                ],
+                "help": "Exclude condition (repeatable)",
+                "longHelp": "Exclude condition (repeatable)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "delete",
+            "path": [
+              "mergify",
+              "freeze",
+              "delete"
+            ],
+            "about": "Delete a scheduled freeze",
+            "longAbout": "Delete a scheduled freeze",
+            "usage": "mergify freeze delete [OPTIONS] <FREEZE_ID>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "freeze_id",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "FREEZE_ID"
+                ],
+                "help": "Freeze ID (UUID)",
+                "longHelp": "Freeze ID (UUID)",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "delete_reason",
+                "kind": "option",
+                "short": null,
+                "long": "reason",
+                "valueNames": [
+                  "DELETE_REASON"
+                ],
+                "help": "Reason for deleting the freeze (required if the freeze is currently active)",
+                "longHelp": "Reason for deleting the freeze (required if the freeze is currently active)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          }
+        ]
+      },
+      {
+        "name": "stack",
+        "path": [
+          "mergify",
+          "stack"
+        ],
+        "about": "Manage stacked pull requests",
+        "longAbout": "Manage stacked pull requests",
+        "usage": "mergify stack [OPTIONS]",
+        "aliases": [],
+        "subcommandRequired": false,
+        "source": "native",
+        "args": [],
+        "commands": [
+          {
+            "name": "checkout",
+            "path": [
+              "mergify",
+              "stack",
+              "checkout"
+            ],
+            "about": "Checkout the pull requests stack",
+            "longAbout": "Checkout the pull requests stack",
+            "usage": "mergify stack checkout [OPTIONS] <NAME>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "name",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "NAME"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "author",
+                "kind": "option",
+                "short": null,
+                "long": "author",
+                "valueNames": [
+                  "AUTHOR"
+                ],
+                "help": "Author of the stack. Defaults to the token's user",
+                "longHelp": "Author of the stack. Defaults to the token's user",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": null,
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "longHelp": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch",
+                "kind": "option",
+                "short": null,
+                "long": "branch",
+                "valueNames": [
+                  "BRANCH"
+                ],
+                "help": "Local branch name. Defaults to the normalised NAME",
+                "longHelp": "Local branch name. Defaults to the normalised NAME",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch_prefix",
+                "kind": "option",
+                "short": null,
+                "long": "branch-prefix",
+                "valueNames": [
+                  "BRANCH_PREFIX"
+                ],
+                "help": "Override the stack branch prefix",
+                "longHelp": "Override the stack branch prefix",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without checking out",
+                "longHelp": "Show the plan without checking out",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "trunk",
+                "kind": "option",
+                "short": "t",
+                "long": "trunk",
+                "valueNames": [
+                  "TRUNK"
+                ],
+                "help": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "longHelp": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": null,
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "longHelp": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "drop",
+            "path": [
+              "mergify",
+              "stack",
+              "drop"
+            ],
+            "about": "Drop commits from the stack",
+            "longAbout": "Drop commits from the stack",
+            "usage": "mergify stack drop [OPTIONS] <COMMITS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commits",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMITS"
+                ],
+                "help": "Commits to drop. Each accepts a SHA prefix or a Change-Id prefix",
+                "longHelp": "Commits to drop. Each accepts a SHA prefix or a Change-Id prefix",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without dropping",
+                "longHelp": "Show the plan without dropping",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "edit",
+            "path": [
+              "mergify",
+              "stack",
+              "edit"
+            ],
+            "about": "Edit the stack history",
+            "longAbout": "Edit the stack history",
+            "usage": "mergify stack edit [COMMIT]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": "Commit to pause the rebase on. Accepts a SHA prefix or a Change-Id prefix; omit for a fully interactive rebase",
+                "longHelp": "Commit to pause the rebase on. Accepts a SHA prefix or a Change-Id prefix; omit for a fully interactive rebase",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "fixup",
+            "path": [
+              "mergify",
+              "stack",
+              "fixup"
+            ],
+            "about": "Fixup commits into their parent (drops their messages)",
+            "longAbout": "Fixup commits into their parent (drops their messages)",
+            "usage": "mergify stack fixup [OPTIONS] <COMMITS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commits",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMITS"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without rebasing",
+                "longHelp": "Show the plan without rebasing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "hooks",
+            "path": [
+              "mergify",
+              "stack",
+              "hooks"
+            ],
+            "about": "Show git hooks status and manage installation",
+            "longAbout": "Show git hooks status and manage installation",
+            "usage": "mergify stack hooks [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "do_setup",
+                "kind": "flag",
+                "short": null,
+                "long": "setup",
+                "valueNames": [],
+                "help": "Install or upgrade hooks",
+                "longHelp": "Install or upgrade hooks",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "force",
+                "kind": "flag",
+                "short": "f",
+                "long": "force",
+                "valueNames": [],
+                "help": "Force reinstall wrappers (use with --setup)",
+                "longHelp": "Force reinstall wrappers (use with --setup)",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "list",
+            "path": [
+              "mergify",
+              "stack",
+              "list"
+            ],
+            "about": "List the stack's commits and their associated PRs",
+            "longAbout": "List the stack's commits and their associated PRs",
+            "usage": "mergify stack list [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "author",
+                "kind": "option",
+                "short": null,
+                "long": "author",
+                "valueNames": [
+                  "AUTHOR"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": null,
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch_prefix",
+                "kind": "option",
+                "short": null,
+                "long": "branch-prefix",
+                "valueNames": [
+                  "BRANCH_PREFIX"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "trunk",
+                "kind": "option",
+                "short": "t",
+                "long": "trunk",
+                "valueNames": [
+                  "TRUNK"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": null,
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "json",
+                "kind": "flag",
+                "short": null,
+                "long": "json",
+                "valueNames": [],
+                "help": "Emit machine-readable JSON",
+                "longHelp": "Emit machine-readable JSON",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "verbose",
+                "kind": "flag",
+                "short": "v",
+                "long": "verbose",
+                "valueNames": [],
+                "help": "Show per-check / per-reviewer detail",
+                "longHelp": "Show per-check / per-reviewer detail",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "move",
+            "path": [
+              "mergify",
+              "stack",
+              "move"
+            ],
+            "about": "Move a commit within the stack",
+            "longAbout": "Move a commit within the stack",
+            "usage": "mergify stack move [OPTIONS] <COMMIT> <POSITION> [TARGET]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": "Commit to move",
+                "longHelp": "Commit to move",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "position",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "POSITION"
+                ],
+                "help": "Where to put it: `first`, `last`, `before`, `after`",
+                "longHelp": "Where to put it: `first`, `last`, `before`, `after`",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [
+                  {
+                    "name": "first",
+                    "help": null
+                  },
+                  {
+                    "name": "last",
+                    "help": null
+                  },
+                  {
+                    "name": "before",
+                    "help": null
+                  },
+                  {
+                    "name": "after",
+                    "help": null
+                  }
+                ],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "target",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "TARGET"
+                ],
+                "help": "Required when `position` is `before` or `after`",
+                "longHelp": "Required when `position` is `before` or `after`",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without moving",
+                "longHelp": "Show the plan without moving",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "new",
+            "path": [
+              "mergify",
+              "stack",
+              "new"
+            ],
+            "about": "Create a new stack branch",
+            "longAbout": "Create a new stack branch",
+            "usage": "mergify stack new [OPTIONS] <NAME>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "name",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "NAME"
+                ],
+                "help": "Name of the new branch",
+                "longHelp": "Name of the new branch",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "base",
+                "kind": "option",
+                "short": "b",
+                "long": "base",
+                "valueNames": [
+                  "BASE"
+                ],
+                "help": "Base branch to fork from, formatted as `REMOTE/BRANCH` (e.g. `origin/main`). When omitted, the trunk is resolved from the current branch's tracking info or `refs/remotes/origin/HEAD`",
+                "longHelp": "Base branch to fork from, formatted as `REMOTE/BRANCH` (e.g. `origin/main`). When omitted, the trunk is resolved from the current branch's tracking info or `refs/remotes/origin/HEAD`",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "checkout",
+                "kind": "flag",
+                "short": null,
+                "long": "checkout",
+                "valueNames": [],
+                "help": "Checkout the new branch after creation. This is the default. Pass `--no-checkout` to keep the current branch checked out",
+                "longHelp": "Checkout the new branch after creation. This is the default. Pass `--no-checkout` to keep the current branch checked out",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "no_checkout",
+                "kind": "flag",
+                "short": null,
+                "long": "no-checkout",
+                "valueNames": [],
+                "help": "Leave the current branch checked out and just create the new branch ref",
+                "longHelp": "Leave the current branch checked out and just create the new branch ref",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "note",
+            "path": [
+              "mergify",
+              "stack",
+              "note"
+            ],
+            "about": "Attach a 'why was this commit amended' note to a commit",
+            "longAbout": "Attach a 'why was this commit amended' note to a commit",
+            "usage": "mergify stack note [OPTIONS] [COMMIT]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": "Target commit. Accepts a SHA prefix, a ref (`HEAD~1`, branch name, …), or a Change-Id prefix (resolved against the stack walk). Defaults to HEAD",
+                "longHelp": "Target commit. Accepts a SHA prefix, a ref (`HEAD~1`, branch name, …), or a Change-Id prefix (resolved against the stack walk). Defaults to HEAD",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "message",
+                "kind": "option",
+                "short": "m",
+                "long": "message",
+                "valueNames": [
+                  "MESSAGE"
+                ],
+                "help": "Note message. If omitted, opens `$GIT_EDITOR` / `$VISUAL` / `$EDITOR` / `vi` on a tempfile",
+                "longHelp": "Note message. If omitted, opens `$GIT_EDITOR` / `$VISUAL` / `$EDITOR` / `vi` on a tempfile",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "append",
+                "kind": "flag",
+                "short": null,
+                "long": "append",
+                "valueNames": [],
+                "help": "Append to an existing note instead of replacing",
+                "longHelp": "Append to an existing note instead of replacing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "remove",
+                "kind": "flag",
+                "short": null,
+                "long": "remove",
+                "valueNames": [],
+                "help": "Remove the note on the target commit. Mutually exclusive with `--message` and `--append`",
+                "longHelp": "Remove the note on the target commit. Mutually exclusive with `--message` and `--append`",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "open",
+            "path": [
+              "mergify",
+              "stack",
+              "open"
+            ],
+            "about": "Open a PR from the stack in the browser",
+            "longAbout": "Open a PR from the stack in the browser",
+            "usage": "mergify stack open [OPTIONS] [COMMIT]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "author",
+                "kind": "option",
+                "short": null,
+                "long": "author",
+                "valueNames": [
+                  "AUTHOR"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": null,
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch_prefix",
+                "kind": "option",
+                "short": null,
+                "long": "branch-prefix",
+                "valueNames": [
+                  "BRANCH_PREFIX"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "trunk",
+                "kind": "option",
+                "short": "t",
+                "long": "trunk",
+                "valueNames": [
+                  "TRUNK"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": null,
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "push",
+            "path": [
+              "mergify",
+              "stack",
+              "push"
+            ],
+            "about": "Push/sync the stack's pull requests on GitHub",
+            "longAbout": "Push/sync the stack's pull requests on GitHub",
+            "usage": "mergify stack push [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "author",
+                "kind": "option",
+                "short": null,
+                "long": "author",
+                "valueNames": [
+                  "AUTHOR"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": null,
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch_prefix",
+                "kind": "option",
+                "short": null,
+                "long": "branch-prefix",
+                "valueNames": [
+                  "BRANCH_PREFIX"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "trunk",
+                "kind": "option",
+                "short": "t",
+                "long": "trunk",
+                "valueNames": [
+                  "TRUNK"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": null,
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "skip_rebase",
+                "kind": "flag",
+                "short": "R",
+                "long": "skip-rebase",
+                "valueNames": [],
+                "help": "Skip the rebase step. By default `stack push` rebases on trunk before pushing when there are no approvals to dismiss",
+                "longHelp": "Skip the rebase step. By default `stack push` rebases on trunk before pushing when there are no approvals to dismiss",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "force_rebase",
+                "kind": "flag",
+                "short": null,
+                "long": "force-rebase",
+                "valueNames": [],
+                "help": "Force the rebase even when PRs are approved (the rebase will dismiss the reviews). Mutually exclusive with `--skip-rebase`",
+                "longHelp": "Force the rebase even when PRs are approved (the rebase will dismiss the reviews). Mutually exclusive with `--skip-rebase`",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "next_only",
+                "kind": "flag",
+                "short": "x",
+                "long": "next-only",
+                "valueNames": [],
+                "help": "Only push the bottom commit of the stack",
+                "longHelp": "Only push the bottom commit of the stack",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Dry-run: render the plan + the rebase decision and exit",
+                "longHelp": "Dry-run: render the plan + the rebase decision and exit",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "create_as_draft",
+                "kind": "option",
+                "short": "d",
+                "long": "draft",
+                "valueNames": [
+                  "CREATE_AS_DRAFT"
+                ],
+                "help": "Open new PRs as drafts. Default falls back to git config `mergify-cli.stack-create-as-draft` (`false` when unset)",
+                "longHelp": "Open new PRs as drafts. Default falls back to git config `mergify-cli.stack-create-as-draft` (`false` when unset)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "keep_pull_request_title_and_body",
+                "kind": "option",
+                "short": "k",
+                "long": "keep-pull-request-title-and-body",
+                "valueNames": [
+                  "KEEP_PULL_REQUEST_TITLE_AND_BODY"
+                ],
+                "help": "Don't rewrite the PR title + body from the commit message; only update the rendered Depends-On chain in the body. Default falls back to git config `mergify-cli.stack-keep-pr-title-body` (`false` when unset)",
+                "longHelp": "Don't rewrite the PR title + body from the commit message; only update the rendered Depends-On chain in the body. Default falls back to git config `mergify-cli.stack-keep-pr-title-body` (`false` when unset)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "only_update_existing_pulls",
+                "kind": "flag",
+                "short": "u",
+                "long": "only-update-existing-pulls",
+                "valueNames": [],
+                "help": "Don't create new PRs; surface would-be-created ones in the plan instead",
+                "longHelp": "Don't create new PRs; surface would-be-created ones in the plan instead",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "revision_history",
+                "kind": "option",
+                "short": null,
+                "long": "no-revision-history",
+                "valueNames": [
+                  "REVISION_HISTORY"
+                ],
+                "help": "Suppress the revision-history sticky comment update. Default falls back to git config `mergify-cli.stack-revision-history` (`true` when unset)",
+                "longHelp": "Suppress the revision-history sticky comment update. Default falls back to git config `mergify-cli.stack-revision-history` (`true` when unset)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "no_verify",
+                "kind": "flag",
+                "short": null,
+                "long": "no-verify",
+                "valueNames": [],
+                "help": "Pass `--no-verify` to `git push` (skips local pre-push hooks)",
+                "longHelp": "Pass `--no-verify` to `git push` (skips local pre-push hooks)",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "reorder",
+            "path": [
+              "mergify",
+              "stack",
+              "reorder"
+            ],
+            "about": "Reorder the stack's commits",
+            "longAbout": "Reorder the stack's commits",
+            "usage": "mergify stack reorder [OPTIONS] <COMMITS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commits",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMITS"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without reordering",
+                "longHelp": "Show the plan without reordering",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "reword",
+            "path": [
+              "mergify",
+              "stack",
+              "reword"
+            ],
+            "about": "Change a commit's message",
+            "longAbout": "Change a commit's message",
+            "usage": "mergify stack reword [OPTIONS] <COMMIT>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "message",
+                "kind": "option",
+                "short": "m",
+                "long": "message",
+                "valueNames": [
+                  "MESSAGE"
+                ],
+                "help": "New message. When omitted, `git rebase -i` pauses at the target and opens `$GIT_EDITOR`",
+                "longHelp": "New message. When omitted, `git rebase -i` pauses at the target and opens `$GIT_EDITOR`",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without rebasing",
+                "longHelp": "Show the plan without rebasing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "setup",
+            "path": [
+              "mergify",
+              "stack",
+              "setup"
+            ],
+            "about": "Configure git hooks (alias for 'stack hooks --setup')",
+            "longAbout": "Configure git hooks (alias for 'stack hooks --setup')",
+            "usage": "mergify stack setup [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "force",
+                "kind": "flag",
+                "short": "f",
+                "long": "force",
+                "valueNames": [],
+                "help": "Force reinstall of hook wrappers, even if user modified them",
+                "longHelp": "Force reinstall of hook wrappers, even if user modified them",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "check",
+                "kind": "flag",
+                "short": null,
+                "long": "check",
+                "valueNames": [],
+                "help": "Check status only (use 'stack hooks' instead)",
+                "longHelp": "Check status only (use 'stack hooks' instead)",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "squash",
+            "path": [
+              "mergify",
+              "stack",
+              "squash"
+            ],
+            "about": "Squash commits into a target commit",
+            "longAbout": "Squash commits into a target commit",
+            "usage": "mergify stack squash [OPTIONS] <TOKENS> <TOKENS> <TOKENS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "tokens",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "TOKENS"
+                ],
+                "help": "`SRC1 SRC2 ... into TARGET` — must contain exactly one `into` token; everything before is a source, the single token after is the target",
+                "longHelp": "`SRC1 SRC2 ... into TARGET` — must contain exactly one `into` token; everything before is a source, the single token after is the target",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "3..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "message",
+                "kind": "option",
+                "short": "m",
+                "long": "message",
+                "valueNames": [
+                  "MESSAGE"
+                ],
+                "help": "Final commit message (required to rename; otherwise the target's message is kept)",
+                "longHelp": "Final commit message (required to rename; otherwise the target's message is kept)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without rebasing",
+                "longHelp": "Show the plan without rebasing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "sync",
+            "path": [
+              "mergify",
+              "stack",
+              "sync"
+            ],
+            "about": "Sync the stack: fetch trunk, remove merged commits, rebase",
+            "longAbout": "Sync the stack: fetch trunk, remove merged commits, rebase",
+            "usage": "mergify stack sync [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "author",
+                "kind": "option",
+                "short": null,
+                "long": "author",
+                "valueNames": [
+                  "AUTHOR"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": null,
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch_prefix",
+                "kind": "option",
+                "short": null,
+                "long": "branch-prefix",
+                "valueNames": [
+                  "BRANCH_PREFIX"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "trunk",
+                "kind": "option",
+                "short": "t",
+                "long": "trunk",
+                "valueNames": [
+                  "TRUNK"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": null,
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": null,
+                "longHelp": null,
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          }
+        ]
+      }
+    ]
+  }
+}
