@@ -8,6 +8,68 @@ const viz = await instance();
 
 const validLanguages = [`dot`, `circo`, `neato`];
 
+// Dark neutral colors used for structural chrome (edges, arrowheads, connector
+// labels, cluster borders/labels). These vanish on the dark-mode surface, so we
+// swap them for `currentColor` and let the page drive the value via
+// --theme-diagram-edge. Saturated/product colors are intentional highlights and
+// are left untouched. Compared case-insensitively.
+const DARK_NEUTRALS = new Set([
+  '#374151', // gray-700
+  '#4b5563', // gray-600
+  '#6b7280', // gray-500
+  '#000000',
+  'black',
+  '#999999',
+]);
+
+/** Replace an element's stroke/fill with currentColor when it is a dark neutral. */
+function themeNeutral($el: ReturnType<ReturnType<typeof load>>): void {
+  for (const attr of ['stroke', 'fill'] as const) {
+    const value = $el.attr(attr);
+    if (value === undefined) {
+      // Graphviz omits `fill` on default-black text (edge/cluster labels), so an
+      // absent fill on a <text> is an implicit dark neutral that must be themed.
+      if (attr === 'fill' && $el.is('text')) {
+        $el.attr('fill', 'currentColor');
+      }
+      continue;
+    }
+    if (DARK_NEUTRALS.has(value.toLowerCase())) {
+      $el.attr(attr, 'currentColor');
+    }
+  }
+}
+
+/**
+ * Make the neutral structural chrome of a rendered Graphviz SVG theme-aware so
+ * it stays legible in dark mode. Content nodes (their fills and labels) and
+ * saturated edge colors are deliberately left alone.
+ */
+function themeDiagram($: ReturnType<typeof load>): void {
+  // Drop the opaque canvas background so the page surface shows through.
+  $('svg > g.graph > polygon').first().attr('fill', 'none').attr('stroke', 'none');
+
+  // Edges: lines, arrowheads, and connector labels all sit on the page surface.
+  $('g.edge').each((_, edge) => {
+    $(edge)
+      .find('path, polygon, text')
+      .each((__, el) => themeNeutral($(el)));
+  });
+
+  // Clusters: only re-theme the border and label when the cluster has no fill,
+  // so labels that sit on a tinted cluster background keep their color.
+  $('g.cluster').each((_, cluster) => {
+    const $cluster = $(cluster);
+    const clusterFill = $cluster.find('> polygon').first().attr('fill');
+    if (!clusterFill || clusterFill.toLowerCase() === 'none') {
+      $cluster.find('polygon, path, text').each((__, el) => themeNeutral($(el)));
+    }
+  });
+
+  // Graph-level captions (text rendered directly under the graph group).
+  $('svg > g.graph > text').each((_, el) => themeNeutral($(el)));
+}
+
 // Layered style defaults injected into dot blocks based on their CSS classes.
 // Diagrams can override any of these by redeclaring the same attributes.
 const themes: Record<string, string> = {
@@ -64,9 +126,15 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
           const source = injectDefaults(value, attrString);
           // Perform actual render
           const svgString = viz.renderString(source, { format: 'svg', engine: lang });
-          // Add default inline styling
+          // Add default inline styling. `color` drives `currentColor` for the
+          // neutral chrome re-themed in themeDiagram().
           const $ = load(svgString);
-          $(`svg`).attr(`style`, `max-width: 100%; height: auto;`);
+          $(`svg`).attr(
+            `style`,
+            `max-width: 100%; height: auto; color: var(--theme-diagram-edge);`
+          );
+          // Make structural chrome track the theme so diagrams read in dark mode.
+          themeDiagram($);
           // Merge custom attributes if provided by user (adds and overwrites)
           if (attrString) {
             const attrElement = load(`<element ${attrString}></element>`);
