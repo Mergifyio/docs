@@ -11538,7 +11538,8 @@
                   "PR_MANUALLY_DEQUEUED",
                   "STACK_PREDECESSOR_DEQUEUED",
                   "INTERMEDIATE_RESULTS_SKIPPED",
-                  "CHECKS_RETRIED"
+                  "CHECKS_RETRIED",
+                  "SCHEDULE_BLOCKED_AHEAD_YIELDED"
                 ]
               },
               {
@@ -16136,6 +16137,12 @@
             "type": "integer",
             "title": "Scheduled Freeze Status Changed",
             "description": "The batch has been split because a scheduled freeze changed the freeze status of its pull requests",
+            "default": 0
+          },
+          "SCHEDULE_BLOCKED_AHEAD_YIELDED": {
+            "type": "integer",
+            "title": "Schedule Blocked Ahead Yielded",
+            "description": "A pull request ahead was waiting for its merge schedule, so it yielded its position to let ready pull requests merge first",
             "default": 0
           }
         },

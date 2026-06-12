@@ -1895,7 +1895,8 @@
                 "PR_MANUALLY_DEQUEUED",
                 "STACK_PREDECESSOR_DEQUEUED",
                 "INTERMEDIATE_RESULTS_SKIPPED",
-                "CHECKS_RETRIED"
+                "CHECKS_RETRIED",
+                "SCHEDULE_BLOCKED_AHEAD_YIELDED"
               ],
               "type": "string"
             },
