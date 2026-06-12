@@ -6,6 +6,7 @@
       "!.astro/*",
       "!src/@types/*",
       "!public/api-schemas.json",
+      "!public/cli-schema.json",
       "!public/mergify-configuration-schema.json",
       "!dist/*"
     ]
