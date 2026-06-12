@@ -304,6 +304,14 @@ tbody th {
   font-weight: 600;
 }
 
+/* Don't break short inline code (mode names, config keys) mid-word in
+   narrow table columns. `.table-wrap` scrolls horizontally if a token
+   is genuinely too long to fit. */
+:is(td, th) code:not([class*="language"]) {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
 tbody tr:last-child td,
 tbody tr:last-child th {
   border-bottom: none;
