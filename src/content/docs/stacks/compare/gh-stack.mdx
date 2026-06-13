@@ -6,6 +6,7 @@ description: An honest comparison of Mergify Stacks and GitHub's gh-stack CLI fo
 import GitGraph from '~/components/GitGraph.astro';
 import StacksLocalModel from '~/components/StacksLocalModel.astro';
 import ComparisonLogo from '~/components/ComparisonLogo.astro';
+import InstallSetup from '../_install-setup.mdx';
 
 <ComparisonLogo icon="simple-icons:github" alt="GitHub logo" />
 
@@ -134,7 +135,7 @@ platform.
 
 **Distribution.** gh-stack ships as a `gh` CLI extension and will likely get
 deeper GitHub integration over time. Mergify CLI is a standalone install
-(`uv tool install mergify-cli`).
+via a one-line `install.sh` script.
 
 **Pricing.** Both are free. Mergify Stacks is a standalone CLI that doesn't
 require a Mergify subscription.
@@ -147,10 +148,7 @@ commit per PR on a single branch."
 
 ### Install and setup
 
-```bash
-uv tool install mergify-cli
-mergify stack setup
-```
+<InstallSetup />
 
 This installs the CLI and adds a `commit-msg` hook that generates
 [Change-Ids](/stacks/concepts#change-id) for your commits. See the

@@ -7,6 +7,8 @@ import { Image } from 'astro:assets';
 import StacksLocalModel from '~/components/StacksLocalModel.astro';
 import ComparisonLogo from '~/components/ComparisonLogo.astro';
 import StackComment from '../../../images/stack-comment.png';
+import InstallSetup from '../_install-setup.mdx';
+import Quickstart from '../_quickstart.mdx';
 
 <ComparisonLogo icon="simple-icons:git" alt="Git logo" />
 
@@ -121,10 +123,7 @@ If you already wrap `git rebase` and `gh pr create`, you don't have to throw
 anything away. Stacks runs on the same Git primitives, so you can adopt it
 incrementally:
 
-```bash
-uv tool install mergify-cli
-mergify stack setup
-```
+<InstallSetup />
 
 Setup installs the `commit-msg` hook that adds Change-Ids and a `pre-push` hook
 that nudges you toward `mergify stack push`. From there:
@@ -145,11 +144,7 @@ that nudges you toward `mergify stack push`. From there:
 
 ## Getting Started
 
-```bash
-uv tool install mergify-cli
-mergify stack setup
-mergify stack push
-```
+<Quickstart />
 
 See the [setup guide](/stacks/setup) for the full walkthrough, or
 [Creating Stacks](/stacks/creating) to push your first stack.
