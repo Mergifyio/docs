@@ -7,6 +7,7 @@ import Button from '~/components/Button.astro';
 import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
 import Docset from '~/components/DocsetGrid/Docset.astro';
 import GitGraph from '~/components/GitGraph.astro';
+import Quickstart from './stacks/_quickstart.mdx';
 
 AI can write 1,000 lines of code in minutes, but nobody wants to review a
 1,000-line pull request. Reviewers skim instead of reading, bugs slip through,
@@ -77,11 +78,7 @@ Your agent installs the CLI and the Stacks skill itself, then you prompt it as u
 
 **For yourself:**
 
-```bash
-uv tool install mergify-cli
-mergify stack setup
-mergify stack push
-```
+<Quickstart />
 
 See the [setup guide](/stacks/setup) for the full walkthrough.
 
