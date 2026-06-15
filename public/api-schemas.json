@@ -12237,6 +12237,13 @@
             "type": "array",
             "title": "Checks"
           },
+          "unsuccessful_checks": {
+            "items": {
+              "$ref": "#/components/schemas/QueueCheck_Serialized"
+            },
+            "type": "array",
+            "title": "Unsuccessful Checks"
+          },
           "pull_request_head_sha": {
             "type": "string",
             "title": "Pull Request Head Sha"
@@ -12267,6 +12274,7 @@
           "priority_rule_name",
           "conditions_evaluation",
           "checks",
+          "unsuccessful_checks",
           "pull_request_head_sha",
           "session_id"
         ],
