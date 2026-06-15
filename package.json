@@ -84,7 +84,7 @@
     "@iconify/react": "^6.0.2",
     "@iconify/types": "^2.0.0",
     "@mergifyio/icons": "^0.1.0",
-    "@types/react": "^19.2.16",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@viz-js/viz": "^3.28.0",
     "astro-icon": "^1.1.5",
