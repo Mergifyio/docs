@@ -8,24 +8,24 @@ terminal.
 
 ## Installation
 
-Install the CLI using [uv](https://docs.astral.sh/uv/):
+Install the CLI with the install script:
 
 ```bash
-uv tool install mergify-cli
+curl -fsSL https://raw.githubusercontent.com/Mergifyio/mergify-cli/main/install.sh | sh
 ```
 
-Or using [pipx](https://pipx.pypa.io/):
+## Updating
+
+Update an existing install to the latest release in place:
 
 ```bash
-pipx install mergify-cli
+mergify self-update
 ```
 
-On macOS, you can install these tools via Homebrew:
-
-```bash
-brew install uv
-uv tool install mergify-cli
-```
+This downloads the latest binary, verifies it against the published
+`SHA256SUMS`, and swaps it in. Pass `--check` to print your current and the
+latest version without changing anything, or `--force` to reinstall the current
+version (useful for repairing a broken install).
 
 ## Authentication
 
