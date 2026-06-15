@@ -478,27 +478,21 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QUEUE_METADATA: ${{ steps.queue-info.outputs.queue_metadata }}
         run: |
+          # Anything we can't optimize falls back to the full suite.
+          fallback() { echo "$1, running the full test suite."; exit 0; }
+
           # The batch this split came from is the last entry of the list.
           draft_pr=$(jq -r '.previous_failed_batches[-1].draft_pr_number // empty' <<< "$QUEUE_METADATA")
-          if [ -z "$draft_pr" ]; then
-            echo "No previous failed batch: running the full test suite."
-            exit 0
-          fi
+          [ -n "$draft_pr" ] || fallback "No previous failed batch"
 
-          # Find the latest CI run of that batch's draft pull request.
+          # Resolve the latest CI run of that batch's draft pull request.
           sha=$(gh pr view "$draft_pr" --json headRefOid -q .headRefOid)
           run_id=$(gh run list --commit "$sha" --workflow CI --json databaseId -q '.[0].databaseId // empty')
-          if [ -z "$run_id" ]; then
-            echo "No CI run found for the previous failed batch: running the full test suite."
-            exit 0
-          fi
+          [ -n "$run_id" ] || fallback "No CI run for the previous failed batch"
 
           # Download the failing tests it recorded.
-          if gh run download "$run_id" --name failed-tests --dir previous-failed-tests; then
-            echo "tests=$(paste -sd ' ' previous-failed-tests/failed-tests.txt)" >> "$GITHUB_OUTPUT"
-          else
-            echo "No failed-tests artifact found: running the full test suite."
-          fi
+          gh run download "$run_id" --name failed-tests --dir previous-failed-tests || fallback "No failed-tests artifact"
+          echo "tests=$(paste -sd ' ' previous-failed-tests/failed-tests.txt)" >> "$GITHUB_OUTPUT"
 
       - name: Run tests
         env:
