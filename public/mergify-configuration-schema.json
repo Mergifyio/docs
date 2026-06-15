@@ -404,6 +404,38 @@
       "title": "BackportActionModel",
       "type": "object"
     },
+    "BatchSizeBounds": {
+      "anyOf": [
+        {
+          "maximum": 128,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "maximum": 128,
+              "minimum": 1,
+              "title": "Min",
+              "type": "integer"
+            },
+            "max": {
+              "maximum": 128,
+              "minimum": 1,
+              "title": "Max",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "min",
+            "max"
+          ],
+          "title": "BatchSizeBounds",
+          "type": "object"
+        }
+      ]
+    },
     "BranchName": {
       "description": "A Git branch name.",
       "properties": {},
@@ -2554,12 +2586,8 @@
           "type": "string"
         },
         "batch_size": {
-          "default": 1,
-          "description": "The maximum number of pull requests per speculative check in the queue. Must be between 1 and 128.",
-          "maximum": 128,
-          "minimum": 1,
-          "title": "Batch Size",
-          "type": "integer"
+          "$ref": "#/$defs/BatchSizeBounds",
+          "description": "The number of pull requests per speculative check in the queue. Either a single integer (fixed size, 1-128) or an object `{min, max}` for dynamic batching: the queue uses `min` when parallel-check slots are plentiful and grows toward `max` to keep the backlog at zero. Dynamic batching currently applies to serial queues only; parallel queues use `max`."
         },
         "batch_max_wait_time": {
           "default": "30 seconds",
@@ -2805,12 +2833,8 @@
           "type": "string"
         },
         "batch_size": {
-          "default": 1,
-          "description": "The maximum number of pull requests per speculative check in the queue. Must be between 1 and 128.",
-          "maximum": 128,
-          "minimum": 1,
-          "title": "Batch Size",
-          "type": "integer"
+          "$ref": "#/$defs/BatchSizeBounds",
+          "description": "The number of pull requests per speculative check in the queue. Either a single integer (fixed size, 1-128) or an object `{min, max}` for dynamic batching: the queue uses `min` when parallel-check slots are plentiful and grows toward `max` to keep the backlog at zero. Dynamic batching currently applies to serial queues only; parallel queues use `max`."
         },
         "batch_max_wait_time": {
           "default": "30 seconds",

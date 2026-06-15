@@ -7958,6 +7958,38 @@
         ],
         "title": "BatchChecksSummary"
       },
+      "BatchSizeBounds": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "maximum": 128.0,
+            "minimum": 1.0
+          },
+          {
+            "properties": {
+              "min": {
+                "type": "integer",
+                "maximum": 128.0,
+                "minimum": 1.0,
+                "title": "Min"
+              },
+              "max": {
+                "type": "integer",
+                "maximum": 128.0,
+                "minimum": 1.0,
+                "title": "Max"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "min",
+              "max"
+            ],
+            "title": "BatchSizeBounds"
+          }
+        ]
+      },
       "BatchSizeGroupResponse": {
         "properties": {
           "base_ref": {
