@@ -75,12 +75,12 @@ IPs must be allowlisted for OAuth sign-in to succeed.
 
 ### Delegated Roles
 
-Some Mergify operations — such as managing the subscription, configuring CI
-Insights, or enabling integrations — require the GitHub organization
-`Owner` role by default. To avoid granting full GitHub `Owner` rights to a
-teammate who only needs one of these capabilities, GitHub `Owner`s can
-delegate scoped Mergify admin powers to any organization member or
-collaborator from the Mergify dashboard.
+Some Mergify operations (such as managing the subscription, managing CI
+Insights self-hosted runners, or configuring third-party integrations)
+require the GitHub organization `Owner` role by default. To avoid granting
+full GitHub `Owner` rights to a teammate who only needs one of these
+capabilities, GitHub `Owner`s can delegate scoped Mergify admin powers to any
+organization member or collaborator from the Mergify dashboard.
 
 Delegated roles are managed from **Settings → Roles** on the Mergify
 dashboard. Only GitHub `Owner`s and users holding the **Delegation Admin**
@@ -113,7 +113,7 @@ Each user can hold any combination of the following roles:
     <tr>
       <th scope="row">Integrations Admin</th>
       <td>
-        Enable or disable Mergify products and configure the Slack and
+        Configure the default products for new repositories and the Slack and
         Datadog notification integrations at the organization level.
       </td>
     </tr>
@@ -328,12 +328,12 @@ relevant account or resource. Permissions are inherited from GitHub roles.
       <td>✓</td>
     </tr>
     <tr>
-      <td>Activate CI Insights or configure its repositories</td>
+      <td>Activate CI Insights on a repository</td>
       <td>✗</td>
       <td>✗</td>
-      <td>✗</td>
-      <td>✗</td>
-      <td>✗</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
       <td>✓</td>
     </tr>
     <tr>
@@ -451,12 +451,11 @@ relevant account or resource. Permissions are inherited from GitHub roles.
 
   - **Billing Admin** — manage Mergify subscription.
 
-  - **CI Admin** — manage API keys (CI scope only), activate CI Insights,
-    and manage CI Insights self-hosted runners.
+  - **CI Admin** — manage API keys (CI scope only) and manage CI Insights
+    self-hosted runners.
 
-  - **Integrations Admin** — enable or disable Mergify products,
-    configure default products for new repositories, and configure third-party
-    integrations (Slack, Datadog, etc.).
+  - **Integrations Admin** — configure default products for new repositories
+    and configure third-party integrations (Slack, Datadog, etc.).
 
   - **Delegation Admin** — grant or revoke any of the roles above.
 
