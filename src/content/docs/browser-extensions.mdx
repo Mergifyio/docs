@@ -1,23 +1,25 @@
 ---
 title: 'Browser Extensions'
-description: 'Install the Chrome or Firefox helpers that surface queue controls directly inside GitHub pull requests.'
+description: 'Install the Chrome or Firefox extension to surface Mergify Merge Queue and stack controls directly inside GitHub pull requests.'
 ---
 
 import { Image } from "astro:assets";
-import extensionListScreen from "../../images/merge-queue/browser-extensions/list.png";
-import extensionPrScreen from "../../images/merge-queue/browser-extensions/pr.png";
+import extensionListScreen from "../images/browser-extensions/list.png";
+import extensionPrScreen from "../images/browser-extensions/pr.png";
+import stacksPanel from "../images/stacks-revision-history.png";
 
-## Why use the browser extensions?
+## Why Use the Browser Extensions?
 
-The Chrome and Firefox extensions inject a small Mergify toolbar into every GitHub pull request you
-open. The toolbar exposes the most common merge queue actions (such as queueing a pull request)
-without having to type [commands](/commands). Use it when you want to:
+The Chrome and Firefox extensions inject a small Mergify panel into every GitHub pull request you
+open. The panel surfaces the most common actions without typing [commands](/commands) and shows
+Mergify context (queue state, stack position) directly in the pull request. Use them when you want to:
 
 - Enqueue a pull request as soon as you review it.
 - Quickly dequeue without context switching.
 - See at a glance whether the pull request is already in one of your queues.
+- See a [stack's](/stacks) chain and revision history without opening the CLI.
 
-## Locate the official download links
+## Locate the Official Download Links
 
 The dashboard keeps the canonical links to the Chrome Web Store and Firefox Add-ons listing so you
 always grab the signed builds.
@@ -43,7 +45,7 @@ always grab the signed builds.
 1. Click **Add to Firefox** from the dashboard page.
 2. Approve the requested permissions in the Firefox Add-ons prompt.
 
-## Use the queue controls inside GitHub
+## Merge Queue Controls
 
 After installation, reload any pull request on GitHub. A Mergify toolbar appears near the GitHub
 merge box and displays queue-specific controls:
@@ -56,4 +58,16 @@ merge box and displays queue-specific controls:
 <Image
   src={extensionPrScreen}
   alt="Mergify browser extension toolbar injected into a GitHub pull request"
+/>
+
+## Stacks Panel
+
+For repositories using [Stacks](/stacks), the extension renders the Mergify Stacks panel inside the
+pull request. It shows the full chain of stacked PRs, highlights where the current PR sits, and
+includes the [revision-history](/stacks/reviewing#revision-history) timeline so you can see how each
+commit evolved across pushes without leaving GitHub.
+
+<Image
+  src={stacksPanel}
+  alt="Mergify Stacks panel with the stack and its revision history timeline on a pull request"
 />

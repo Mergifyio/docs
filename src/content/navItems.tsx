@@ -67,11 +67,6 @@ const navItems: NavItem[] = [
         path: '/merge-queue/github-rulesets',
         icon: 'simple-icons:github',
       },
-      {
-        title: 'Browser Extensions',
-        path: '/merge-queue/browser-extensions',
-        icon: 'lucide:puzzle',
-      },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: 'lucide:layout-dashboard' },
     ],
   },
@@ -398,7 +393,14 @@ const navItems: NavItem[] = [
       },
     ],
   },
-  { title: 'CLI', path: '/cli', icon: 'lucide:terminal' },
+  {
+    title: 'Tools',
+    icon: 'lucide:wrench',
+    children: [
+      { title: 'CLI', path: '/cli', icon: 'lucide:terminal' },
+      { title: 'Browser Extensions', path: '/browser-extensions', icon: 'lucide:puzzle' },
+    ],
+  },
   { title: 'Security', path: '/security', icon: 'lucide:shield' },
   { title: 'Support', path: '/support', icon: 'lucide:life-buoy' },
   { title: 'Billing', path: '/billing', icon: 'lucide:banknote' },
