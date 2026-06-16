@@ -78,11 +78,11 @@ between them with `gt up`, `gt down`, `gt top`, and `gt bottom`.
 | Create a stack | `mergify stack new` + commits | `gt create [name]` per branch |
 | Push changes | `mergify stack push` (rebase + push + PRs) | `gt submit` (force-push + PRs) |
 | View the stack | `mergify stack list` | `gt log` |
-| Edit mid-stack | `mergify stack edit` (interactive rebase) | `gt modify` (auto-restacks) |
+| Edit mid-stack | `mergify stack edit <commit>` (targeted pause) | `gt modify` (auto-restacks) |
 | Absorb fixups | Not supported | `gt absorb` (auto-routes staged hunks) |
 | Split a commit | Not supported | `gt split` (by commit, hunk, or file) |
-| Reorder changes | `mergify stack edit` (rebase -i) | `gt reorder` (interactive) |
-| Squash / fold | `mergify stack edit` (squash/fixup) | `gt squash` / `gt fold` |
+| Reorder changes | `mergify stack reorder` or `mergify stack move` | `gt reorder` (interactive) |
+| Squash / fold | `mergify stack squash` or `mergify stack fixup` | `gt squash` / `gt fold` |
 | Undo | Git reflog | `gt undo` (reverts recent `gt` operations) |
 | Sync after merge | `mergify stack sync` | `gt sync` |
 | Navigate between PRs | N/A (single branch) | `gt up` / `down` / `top` / `bottom` |
@@ -215,13 +215,13 @@ This installs the CLI and adds a `commit-msg` hook that generates
 | Graphite | Mergify Stacks |
 |---|---|
 | `gt create` (create a branch) | `git commit` (create a commit) |
-| `gt modify` | `git commit --amend` or `mergify stack edit` |
+| `gt modify` | `git commit --amend` or `mergify stack edit <commit>` |
 | `gt submit` | `mergify stack push` |
 | `gt up` / `down` / `top` / `bottom` | Not needed (single branch) |
 | `gt restack` | Automatic on `mergify stack push` |
 | `gt sync` | `mergify stack sync` |
 | `gt log` | `mergify stack list` |
-| `gt absorb` | `git commit --fixup` + `mergify stack edit` |
+| `gt absorb` | No direct equivalent (amend each commit by hand) |
 
 ### Workflow before and after
 
