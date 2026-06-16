@@ -88,6 +88,26 @@ Weigh these factors when picking `batch_size` and `max_parallel_checks`:
 5. **Team distribution**: globally distributed teams produce a steady PR flow;
    concentrated teams spike and need headroom for bursts.
 
+### Letting Mergify Tune Batch Size Automatically
+
+The factors above help you pick a fixed `batch_size`, but the ideal value shifts
+with load: small batches are best when the queue is quiet, larger ones when it
+backs up. Instead of committing to one number, give `batch_size` a range and let
+Mergify adapt it in real time:
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size:
+      min: 1
+      max: 10
+```
+
+Mergify spreads the queued pull requests across the available [parallel
+checks](#parallel-checks), keeping batches at `min` while the queue is light and
+growing them toward `max` only when it backs up. See [Dynamic Batch
+Sizing](/merge-queue/batches#dynamic-batch-sizing) for details.
+
 ### Performance Configuration Calculator
 
 Provide the inputs below and the calculator will suggest a configuration:
