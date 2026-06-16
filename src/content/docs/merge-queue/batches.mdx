@@ -125,6 +125,43 @@ With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
 
+## Dynamic Batch Sizing
+
+The examples above use a fixed `batch_size`: every batch holds the same number of
+pull requests. Picking that number is a trade-off. Small batches keep latency low
+and make failures cheap to isolate, but spend more CI. Large batches conserve CI
+and clear a backlog faster, but a single failure forces Mergify to [split and
+retest](#handling-batch-failure-or-timeout) more pull requests.
+
+Dynamic batch sizing lets Mergify make that trade-off for you, in real time.
+Instead of a single integer, set `batch_size` to a `min` and `max` range:
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size:
+      min: 1
+      max: 10
+```
+
+Mergify then spreads the queued pull requests across the available
+[parallel checks](/merge-queue/performance#parallel-checks) and sizes each batch
+to stay small while keeping up with the queue:
+
+- When the queue is light, batches stay at `min`, so each one is fast to validate
+  and cheap to split when it fails.
+
+- When the queue grows deeper than the parallel checks can drain at the smaller
+  size, Mergify grows the batches toward `max` to keep the queue moving.
+
+For example, with `max_parallel_checks: 5` and a `batch_size` range of `min: 1`
+to `max: 2`, three queued pull requests each become a batch of one, while ten
+queued pull requests become five batches of two.
+
+This gives low latency when traffic is light and high throughput when it spikes,
+without retuning `batch_size` for every load pattern. Dynamic batch sizing works
+the same way in every [queue mode](/merge-queue/queue-modes).
+
 ## How Pull Requests Are Grouped Into a Batch
 
 When `batch_size` is greater than 1, Mergify has to decide *which* pull requests
