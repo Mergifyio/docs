@@ -1,0 +1,155 @@
+---
+title: Mergify Stacks vs Plain Git
+description: An honest comparison of Mergify Stacks and stacking by hand with git rebase and gh pr create.
+---
+
+import { Image } from 'astro:assets';
+import StacksLocalModel from '~/components/StacksLocalModel.astro';
+import ComparisonLogo from '~/components/ComparisonLogo.astro';
+import StackComment from '../../../images/stack-comment.png';
+
+<ComparisonLogo icon="simple-icons:git" alt="Git logo" />
+
+You don't need a tool to stack pull requests. Git already lets you split work
+into a chain of commits, and `gh pr create` opens a PR for each one. Plenty of
+teams run a small shell wrapper around exactly that. This page is an honest
+look at what you give up, and what you get back, by letting Stacks manage the
+chain instead of doing it by hand.
+
+## Stacking by Hand
+
+The manual recipe is straightforward, at least at first. You create a branch
+per change, rebase each branch onto the one below it, push them all, and open a
+PR for each with the right base:
+
+```bash
+git checkout -b feat/model main
+# work, commit
+git checkout -b feat/endpoint feat/model
+# work, commit
+git checkout -b feat/tests feat/endpoint
+# work, commit
+
+git push -u origin feat/model feat/endpoint feat/tests
+gh pr create --base main      --head feat/model
+gh pr create --base feat/model --head feat/endpoint
+gh pr create --base feat/endpoint --head feat/tests
+```
+
+It works. The cost shows up later, every time the stack changes. Amend the
+bottom commit and you re-push three branches by hand. Reorder two changes and
+you rebase each dependent branch in turn. When the bottom PR merges, you
+re-target the next PR to `main` yourself and clean up the merged branch. Each
+of these is a few commands, and each is easy to get subtly wrong.
+
+## One Branch Instead of a Tree
+
+Stacks keeps you on a single branch of ordinary commits. There are no per-PR
+branches to create, name, or rebase:
+
+<StacksLocalModel />
+
+A [Change-Id](/stacks/concepts#change-id) trailer (added by a `commit-msg`
+hook) ties each commit to its PR, so the mapping survives amends, rebases, and
+reorders. `mergify stack push` rebases on the target branch, pushes a remote
+branch per commit, opens or updates one PR each, and chains them in dependency
+order, in one command.
+
+## Feature Comparison
+
+| Task | Plain Git + `gh` | Mergify Stacks |
+|---|---|---|
+| Model | One branch per PR, rebased in a tree | One branch, many commits |
+| Map commit to PR | You track which branch is which PR | Change-Id trailer, automatic |
+| Open PRs | `gh pr create` per branch, set each base | Included in `mergify stack push` |
+| Amend mid-stack | Rebase every dependent branch, re-push each | `mergify stack edit <commit>`, then push |
+| Reorder | Manual `git rebase -i` across branches | `mergify stack reorder` / `mergify stack move` |
+| Squash / drop | `git rebase -i`, then re-push affected branches | `mergify stack squash` / `fixup` / `drop` |
+| Push only what changed | You decide which branches to push | Smart updates: only changed PRs are touched |
+| After a merge | Re-target next PR, delete merged branch | `mergify stack sync` detects and drops merged commits |
+| Re-targeting on merge | Manual base change per PR | Automatic when the bottom PR lands |
+| Stack overview on the PR | None (or hand-written) | Stack comment + revision history on every PR |
+| Merge Queue | Per-PR, no stack awareness | [Stack-aware queueing](/merge-queue/stacks) |
+
+## Where Plain Git Is Enough
+
+Stacks earns its keep on changes that span several commits and get reworked
+during review. If that's not your situation, the manual path is fine, and
+honestly simpler:
+
+- **Your changes are already small.** A one-commit fix is one PR. There's
+  nothing to stack, so `gh pr create` is all you need.
+
+- **You rarely reorder or amend mid-stack.** The manual cost is in reworking a
+  chain. If you push once and merge, you never pay it.
+
+- **You only stack occasionally.** For a one-off pair of dependent PRs, three
+  `gh` commands beat installing a tool.
+
+Stacks doesn't change this calculus by force. Even with the CLI installed, a
+single small commit is still a single small PR.
+
+## Where Mergify Is Stronger
+
+**The chain maintains itself.** Most of the work is keeping a stack correct
+through review, not creating it. Smart updates push only the PRs whose commits
+changed, re-targeting happens automatically as PRs merge, and `mergify stack
+sync` drops already-merged commits and rebases the rest. By hand, each of those
+is a manual step you can forget.
+
+**Identity survives history rewrites.** Because the Change-Id lives in the
+commit message, amending or reordering a commit keeps it mapped to the same PR.
+A hand-rolled script keyed on branch names loses that mapping the moment you
+rebase, which is why homegrown wrappers tend to recreate PRs or orphan
+branches.
+
+**Reviewers get context for free.** Every PR carries a stack comment and a
+revision-history timeline showing where it sits in the chain and what changed
+between pushes. A custom script would have to generate and maintain that
+itself.
+
+<Image src={StackComment} alt="Stack comment showing a PR's position in the chain" style={{ maxWidth: '66%' }} />
+
+**Merge Queue integration.** Stacks are queued as a unit:
+[`@mergifyio queue`](/commands/queue) on the top PR enqueues the whole chain
+bottom-up, and a failure cascades cleanly to the rest. See
+[Stacked PRs in the Merge Queue](/merge-queue/stacks).
+
+## Coming From a Custom Script
+
+If you already wrap `git rebase` and `gh pr create`, you don't have to throw
+anything away. Stacks runs on the same Git primitives, so you can adopt it
+incrementally:
+
+```bash
+uv tool install mergify-cli
+mergify stack setup
+```
+
+Setup installs the `commit-msg` hook that adds Change-Ids and a `pre-push` hook
+that nudges you toward `mergify stack push`. From there:
+
+- **Existing commits without Change-Ids** get one when you reword them: run
+  `git rebase -i <base>`, mark each commit `reword`, and the hook fills in the
+  trailer on save.
+
+- **Re-runs are safe.** `mergify stack push` compares each commit's Change-Id
+  and SHA against GitHub and only touches what changed, so running it twice
+  does no extra work.
+
+- **There's an off-ramp.** On GitHub, Stacks creates ordinary branches and PRs,
+  plus the stack and revision-history comments it posts on each PR. None of it
+  is a proprietary format. The only local artifact is the `Change-Id:` trailer
+  in your commit messages. Stop using the CLI and your history is still clean,
+  standard Git; the trailer is just an inert line of text.
+
+## Getting Started
+
+```bash
+uv tool install mergify-cli
+mergify stack setup
+mergify stack push
+```
+
+See the [setup guide](/stacks/setup) for the full walkthrough, or
+[Creating Stacks](/stacks/creating) to push your first stack.

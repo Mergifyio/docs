@@ -223,6 +223,7 @@ const navItems: NavItem[] = [
         icon: 'lucide:scale',
         children: [
           { title: 'Overview', path: '/stacks/compare', icon: 'lucide:lightbulb' },
+          { title: 'vs Plain Git', path: '/stacks/compare/plain-git', icon: 'simple-icons:git' },
           { title: 'vs gh-stack', path: '/stacks/compare/gh-stack', icon: 'simple-icons:github' },
           {
             title: 'vs Graphite',
