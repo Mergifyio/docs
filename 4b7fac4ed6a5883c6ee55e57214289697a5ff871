@@ -1,0 +1,1 @@
+Correct dynamic batch sizing behavior per engine code (Mergifyio/monorepo#33845): sizing spreads PRs across parallel-check slots and is identical in all queue modes; drop the serial-only/parallel-mode claim and soften the backlog wording. Addresses Copilot review comments.
