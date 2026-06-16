@@ -225,10 +225,15 @@
       "properties": {
         "users": {
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "{{ author }}",
+                "title": "Pull request author"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "maxItems": 10,
           "title": "Users",
@@ -236,10 +241,15 @@
         },
         "add_users": {
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "{{ author }}",
+                "title": "Pull request author"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "maxItems": 10,
           "title": "Add Users",
@@ -247,10 +257,15 @@
         },
         "remove_users": {
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "{{ author }}",
+                "title": "Pull request author"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "maxItems": 40,
           "title": "Remove Users",
@@ -334,12 +349,21 @@
           "type": "boolean"
         },
         "assignees": {
-          "description": "Users to assign the newly created pull request to. As the type is a data type template, you could use, e.g., `{{author}}` to assign the pull request to its original author.",
+          "description": "Users to assign the newly created pull request to. Accepts GitHub logins, or one of the named actor options `{{ author }}` (the original pull request author) and `{{ merged_by }}` (the user who merged it).",
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "{{ author }}",
+                "title": "Pull request author"
+              },
+              {
+                "const": "{{ merged_by }}",
+                "title": "User who merged the pull request"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "maxItems": 10,
           "title": "Assignees",
@@ -870,12 +894,21 @@
           "type": "boolean"
         },
         "assignees": {
-          "description": "Users to assign the newly created pull request to. As the type is a data type template, you could use, e.g., `{{author}}` to assign the pull request to its original author.",
+          "description": "Users to assign the newly created pull request to. Accepts GitHub logins, or one of the named actor options `{{ author }}` (the original pull request author) and `{{ merged_by }}` (the user who merged it).",
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
-            "type": "string"
+            "anyOf": [
+              {
+                "const": "{{ author }}",
+                "title": "Pull request author"
+              },
+              {
+                "const": "{{ merged_by }}",
+                "title": "User who merged the pull request"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "maxItems": 10,
           "title": "Assignees",
