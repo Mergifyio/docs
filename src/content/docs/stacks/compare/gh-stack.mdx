@@ -73,9 +73,9 @@ between them with `gh stack up` and `gh stack down`.
 | Push changes | `mergify stack push` | `gh stack push` |
 | Create PRs | Included in `mergify stack push` | Separate `gh stack submit` command |
 | View the stack | `mergify stack list` | `gh stack view` |
-| Edit mid-stack | `mergify stack edit` (interactive rebase) | Checkout the branch, edit, rebase |
+| Edit mid-stack | `mergify stack edit <commit>` (targeted pause) | Checkout the branch, edit, rebase |
 | Reorder changes | `mergify stack reorder` or `mergify stack move` | Manual rebase + `gh stack rebase` |
-| Squash changes | `mergify stack edit` (squash/fixup) | Manual |
+| Squash changes | `mergify stack squash` or `mergify stack fixup` | Manual |
 | Cascading rebase | Automatic on push | `gh stack rebase --upstack` / `--downstack` |
 | Sync after merge | `mergify stack sync` | `gh stack sync` |
 | Open PR in browser | `mergify stack open` (interactive picker) | Links from `gh stack view` |
@@ -83,7 +83,7 @@ between them with `gh stack up` and `gh stack down`.
 | Draft PRs | `mergify stack push --draft` | `gh stack submit --draft` |
 | Merge Queue | [Native Mergify integration](/merge-queue) | GitHub's built-in merge queue |
 | Merge a stack | Bottom-up via Merge Queue | `gh stack merge` (not yet implemented) |
-| Stack visualization | Stack comment on each PR | Native GitHub UI stack map |
+| Stack visualization | Stack comment + browser-extension panel | Native GitHub UI stack map |
 | Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen or auto-numbered |
 | Navigate between PRs | N/A (single branch) | `gh stack up` / `down` / `top` / `bottom` |
 | Unstack | Not needed (standard Git branches) | `gh stack unstack` |
@@ -121,8 +121,10 @@ yet implemented.
 ## Where gh-stack Is Stronger
 
 **Native GitHub UI.** gh-stack gets a stack map rendered directly in the PR
-interface. Mergify posts a stack comment on each PR, which works well but is
-a comment rather than a native UI element.
+interface. Mergify posts a stack comment on each PR and, with the
+[browser extension](/merge-queue/browser-extensions) installed, renders the
+stack and its revision history as an in-PR panel. Both work well, but neither
+is a built-in GitHub UI element.
 
 ## Other Considerations
 

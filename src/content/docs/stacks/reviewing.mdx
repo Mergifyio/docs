@@ -5,6 +5,7 @@ description: A reviewer's guide to navigating and reviewing stacked pull request
 
 import { Image } from 'astro:assets';
 import StackComment from '../../images/stack-comment.png';
+import RevisionHistory from '../../images/stacks-revision-history.png';
 
 Stacked PRs look and feel like regular pull requests, just smaller. You don't
 need to install anything or learn new tools to review them.
@@ -54,6 +55,25 @@ Review comments work exactly like any other PR:
 
 When the author addresses your feedback, they'll rebase and push. The PR updates
 in place, and your review comments stay attached to the relevant lines.
+
+## Revision History
+
+Each push keeps a revision-history comment on the PR, so you can see how the
+commit evolved between reviews instead of guessing what changed since you last
+looked. The timeline marks every revision, from the initial push through later
+rebases and content edits, and links to the underlying commit SHAs:
+
+<Image src={RevisionHistory} alt="Mergify Stacks panel with the stack and its revision history timeline on a PR" />
+
+When the author amends a commit, they can attach a short note explaining why.
+That reason shows up against the matching revision, so you don't have to diff
+old and new SHAs to understand what moved.
+
+:::tip
+  The [Mergify browser extension](/merge-queue/browser-extensions) renders the
+  stack and its revision history directly in the GitHub pull request, as shown
+  above.
+:::
 
 ## Merging Stacked PRs
 
