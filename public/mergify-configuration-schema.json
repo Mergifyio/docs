@@ -1936,7 +1936,7 @@
               "type": "null"
             }
           ],
-          "description": "A dequeue code for when a pull request has been disembarked from the merge queue.",
+          "description": "A dequeue code for when a pull request has been dequeued from the merge queue.",
           "title": "Queue dequeue reason"
         },
         "queue-name": {

@@ -1793,8 +1793,8 @@
         "tags": [
           "statistics"
         ],
-        "summary": "Time to merge statistics for every queues and partitions",
-        "description": "Get the average time to merge statistics, in seconds, for all the queues and partitions in the repository",
+        "summary": "Time to merge statistics for every queue",
+        "description": "Get the average time to merge statistics, in seconds, for all the queues in the repository",
         "operationId": "get_time_to_merge_stats_for_all_queues_and_partitions_endpoint_repos__owner___repository__stats_time_to_merge_get",
         "deprecated": true,
         "security": [
@@ -1969,30 +1969,6 @@
               "title": "Base Ref"
             },
             "description": "Base reference(s) of the pull requests"
-          },
-          {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
           },
           {
             "name": "queue_name",
@@ -2176,30 +2152,6 @@
             "description": "Base reference(s) of the pull requests"
           },
           {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
-          },
-          {
             "name": "queue_name",
             "in": "query",
             "required": false,
@@ -2379,30 +2331,6 @@
               "title": "Base Ref"
             },
             "description": "Base reference(s) of the pull requests"
-          },
-          {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
           },
           {
             "name": "queue_name",
@@ -2586,30 +2514,6 @@
             "description": "Base reference(s) of the pull requests"
           },
           {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
-          },
-          {
             "name": "queue_name",
             "in": "query",
             "required": false,
@@ -2789,30 +2693,6 @@
               "title": "Base Ref"
             },
             "description": "Base reference(s) of the pull requests"
-          },
-          {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
           },
           {
             "name": "queue_name",
@@ -2996,30 +2876,6 @@
             "description": "Base reference(s) of the pull requests"
           },
           {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
-          },
-          {
             "name": "queue_name",
             "in": "query",
             "required": false,
@@ -3199,30 +3055,6 @@
               "title": "Base Ref"
             },
             "description": "Base reference(s) of the pull requests"
-          },
-          {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
           },
           {
             "name": "queue_name",
@@ -3406,30 +3238,6 @@
             "description": "Base reference(s) of the pull requests"
           },
           {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
-          },
-          {
             "name": "queue_name",
             "in": "query",
             "required": false,
@@ -3608,27 +3416,6 @@
             "description": "Base reference(s) of the pull requests"
           },
           {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
-          },
-          {
             "name": "queue_name",
             "in": "query",
             "required": false,
@@ -3778,27 +3565,6 @@
               "title": "Base Ref"
             },
             "description": "Base reference(s) of the pull requests"
-          },
-          {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
           },
           {
             "name": "queue_name",
@@ -3971,27 +3737,6 @@
               "title": "Base Ref"
             },
             "description": "Base reference(s) of the pull requests"
-          },
-          {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
           },
           {
             "name": "queue_name",
@@ -4278,30 +4023,6 @@
             "description": "Base reference(s) of the pull requests"
           },
           {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
-          },
-          {
             "name": "queue_name",
             "in": "query",
             "required": false,
@@ -4483,30 +4204,6 @@
             "description": "Base reference(s) of the pull requests"
           },
           {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
-          },
-          {
             "name": "queue_name",
             "in": "query",
             "required": false,
@@ -4686,30 +4383,6 @@
               "title": "Base Ref"
             },
             "description": "Base reference(s) of the pull requests"
-          },
-          {
-            "name": "partition_name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "maxItems": 255
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Partition name(s) of the pull requests",
-              "title": "Partition Name"
-            },
-            "description": "Partition name(s) of the pull requests"
           },
           {
             "name": "queue_name",
@@ -7996,10 +7669,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8026,7 +7695,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -8170,10 +7838,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8200,7 +7864,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -8272,10 +7935,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8302,7 +7961,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -8457,10 +8115,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8487,7 +8141,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -8530,10 +8183,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8560,7 +8209,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -8589,10 +8237,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8615,7 +8259,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -8644,10 +8287,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8674,7 +8313,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -8941,10 +8579,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -8971,7 +8605,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -14037,10 +13670,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -14067,7 +13696,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -14507,10 +14135,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -14537,7 +14161,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -15463,13 +15086,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_names": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Partition Names"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -15496,7 +15112,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_names",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -15534,10 +15149,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -15564,7 +15175,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -16342,10 +15952,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -16372,7 +15978,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -16436,10 +16041,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -16466,7 +16067,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "priority_rule_name",
           "stats"
@@ -16603,10 +16203,6 @@
             "type": "string",
             "title": "Base Ref"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -16622,7 +16218,6 @@
         "type": "object",
         "required": [
           "base_ref",
-          "partition_name",
           "queue_name",
           "stats"
         ],
@@ -17369,23 +16964,17 @@
       },
       "TimeToMergePerPartition": {
         "properties": {
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name",
-            "description": "The name of the partition, if no partition are used the partition name will be `__default__`"
-          },
           "queues": {
             "items": {
               "$ref": "#/components/schemas/TimeToMergePerQueue"
             },
             "type": "array",
             "title": "Queues",
-            "description": "The time to merge data for each queue in the current partition"
+            "description": "The time to merge data for each queue"
           }
         },
         "type": "object",
         "required": [
-          "partition_name",
           "queues"
         ],
         "title": "TimeToMergePerPartition"
@@ -17399,7 +16988,7 @@
           },
           "time_to_merge": {
             "$ref": "#/components/schemas/TimeToMergeResponse",
-            "description": "The time to merge data for the partition's queue"
+            "description": "The time to merge data for the queue"
           }
         },
         "type": "object",
