@@ -38,7 +38,7 @@
     "astro": "^6.4.6",
     "astro-auto-import": "^0.5.1",
     "astro-eslint-parser": "^1.4.0",
-    "astro-expressive-code": "^0.43.0",
+    "astro-expressive-code": "^0.43.1",
     "astro-og-canvas": "^0.11.1",
     "canvaskit-wasm": "^0.41.1",
     "eslint": "^10.4.1",

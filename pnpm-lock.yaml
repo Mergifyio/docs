@@ -201,8 +201,8 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
       astro-expressive-code:
-        specifier: ^0.43.0
-        version: 0.43.0(astro@6.4.6(@types/node@25.9.2)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
+        specifier: ^0.43.1
+        version: 0.43.1(astro@6.4.6(@types/node@25.9.2)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
       astro-og-canvas:
         specifier: ^0.11.1
         version: 0.11.1(astro@6.4.6(@types/node@25.9.2)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
@@ -2085,8 +2085,8 @@ packages:
     resolution: {integrity: sha512-+QDcgc7e+au6EZ0YjMmRRjNoQo5bDMlaR45aWDoFsuxQTCM9qmCHRoiKJPELgckJ8Wmr7vcfpa9eCDHBFh6G4w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  astro-expressive-code@0.43.0:
-    resolution: {integrity: sha512-5ldBUY+5K9BTlEhsEiXJ8yfK5RIse1zoCMhxRX02/mVNLm8+MA7xxTduYY9OnITCNGE1hThAI2mquZ/IB7kJ+g==}
+  astro-expressive-code@0.43.1:
+    resolution: {integrity: sha512-xddgwQxFRwpnnAnU7kSfrO82SsOAq7sQrYpXxVcrN9k/0aqNlTH2+mLrOMm1wXm6jdFKepst3hd8/qWojwuunw==}
     peerDependencies:
       astro: ^4.0.0-beta || ^5.0.0-beta || ^3.3.0 || ^6.0.0-beta
 
@@ -7090,7 +7090,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  astro-expressive-code@0.43.0(astro@6.4.6(@types/node@25.9.2)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)):
+  astro-expressive-code@0.43.1(astro@6.4.6(@types/node@25.9.2)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)):
     dependencies:
       astro: 6.4.6(@types/node@25.9.2)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
       rehype-expressive-code: 0.43.1
