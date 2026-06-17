@@ -2620,7 +2620,7 @@
         },
         "batch_size": {
           "$ref": "#/$defs/BatchSizeBounds",
-          "description": "The number of pull requests per speculative check in the queue. Either a single integer (fixed size, 1-128) or an object `{min, max}` for dynamic batching: the queue uses `min` when parallel-check slots are plentiful and grows toward `max` to keep the backlog at zero. Dynamic batching currently applies to serial queues only; parallel queues use `max`."
+          "description": "The number of pull requests per speculative check in the queue. Either a single integer (fixed size, 1-128) or an object `{min, max}` for dynamic batching: the queue uses `min` when parallel-check slots are plentiful and grows toward `max` to keep the backlog at zero."
         },
         "batch_max_wait_time": {
           "default": "30 seconds",
@@ -2867,7 +2867,7 @@
         },
         "batch_size": {
           "$ref": "#/$defs/BatchSizeBounds",
-          "description": "The number of pull requests per speculative check in the queue. Either a single integer (fixed size, 1-128) or an object `{min, max}` for dynamic batching: the queue uses `min` when parallel-check slots are plentiful and grows toward `max` to keep the backlog at zero. Dynamic batching currently applies to serial queues only; parallel queues use `max`."
+          "description": "The number of pull requests per speculative check in the queue. Either a single integer (fixed size, 1-128) or an object `{min, max}` for dynamic batching: the queue uses `min` when parallel-check slots are plentiful and grows toward `max` to keep the backlog at zero."
         },
         "batch_max_wait_time": {
           "default": "30 seconds",
