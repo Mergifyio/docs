@@ -1252,9 +1252,6 @@
         "add": {
           "description": "The list of labels to add.",
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
             "type": "string"
           },
           "maxItems": 50,
@@ -1264,9 +1261,6 @@
         "remove": {
           "description": "The list of labels to remove.",
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
             "type": "string"
           },
           "maxItems": 50,
@@ -1282,9 +1276,6 @@
         "toggle": {
           "description": "Toggle labels in the list based on the conditions. If all the conditions are a success, all the labels in the list will be added, otherwise, they will all be removed.",
           "items": {
-            "description": "A string template using the Jinja2 syntax.",
-            "format": "template",
-            "title": "Template",
             "type": "string"
           },
           "maxItems": 50,
