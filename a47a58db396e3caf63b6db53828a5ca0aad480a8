@@ -1,0 +1,1 @@
+use $HOME/bin in MERGIFY_INSTALL_DIR example; /usr/local/bin needs sudo on Linux (Copilot review)
