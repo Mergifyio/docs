@@ -7508,7 +7508,7 @@
               }
             ],
             "title": "Branch",
-            "description": "Branch name or pattern on which the test should be quarantined. If not specified, it will be quarantined on all branches."
+            "description": "Branch name on which the test should be quarantined. If not specified, it will be quarantined on all branches."
           }
         },
         "type": "object",
@@ -15404,7 +15404,7 @@
               }
             ],
             "title": "Branch",
-            "description": "Branch name or pattern this quarantine applies to. `null` means the test is quarantined on every branch."
+            "description": "Branch name this quarantine applies to. `null` means the test is quarantined on every branch."
           },
           "created_at": {
             "type": "string",
