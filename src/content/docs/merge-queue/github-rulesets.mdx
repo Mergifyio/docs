@@ -103,6 +103,11 @@ Mergify handles each GitHub ruleset rule type as follows.
 | `required_review_thread_resolution` | Injected as conditions | -- |
 | All other rule types | Ignored | See [below](#ignored-rule-types) |
 
+Mergify supports only the ruleset rule types named above. Every other rule
+type is ignored: Mergify neither injects it as a condition nor checks it for
+compatibility. Do not assume full ruleset parity. Enforce any
+unlisted rule through GitHub directly.
+
 :::caution
   Branch protection support has some limitations. For example, GitHub does
   not provide an API to support [code
