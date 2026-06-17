@@ -94,7 +94,7 @@ Mergify handles each GitHub ruleset rule type as follows.
 | Ruleset rule type | Mergify behavior | Notes |
 |---|---|---|
 | `required_status_checks` | Injected as conditions | See [below](#require-branches-to-be-up-to-date) |
-| `pull_request` | Injected as conditions | Limited code owner support. See [Required Reviewers](#required-reviewers) |
+| `pull_request` | Injected as conditions | Required reviewers injected as [`github-require-review-from-specific-teams`](#required-reviewers). Limited code owner support. |
 | `required_deployments` | Used by [Merge Protections](/merge-protections) | -- |
 | `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
 | `creation` | Checked when creating batch PRs | May block batch PR creation if Mergify is not a bypass actor |
