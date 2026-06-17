@@ -1,0 +1,1 @@
+switch install snippets from 'uv tool install' to the official install.sh one-liner (matches mergify-cli README)
