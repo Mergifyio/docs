@@ -8,6 +8,8 @@ terminal.
 
 ## Installation
 
+### macOS (Homebrew)
+
 On macOS, the recommended way to install the CLI is through Mergify's
 [Homebrew tap](https://github.com/Mergifyio/homebrew-tap):
 
@@ -15,18 +17,31 @@ On macOS, the recommended way to install the CLI is through Mergify's
 brew install mergifyio/tap/mergify-cli
 ```
 
-On other platforms, or if you prefer a Python-based install, use
-[uv](https://docs.astral.sh/uv/):
+Upgrade with `brew upgrade mergify-cli`.
+
+### Linux and macOS (install script)
+
+On Linux, or on macOS if you'd rather not use Homebrew, install with the
+official script:
 
 ```bash
-uv tool install mergify-cli
+curl -fsSL https://raw.githubusercontent.com/Mergifyio/mergify-cli/main/install.sh | sh
 ```
 
-Or [pipx](https://pipx.pypa.io/):
+This installs `mergify` to `~/.local/bin`. Set `MERGIFY_INSTALL_DIR` to pick a
+different location, or `MERGIFY_VERSION` to pin a specific release:
 
 ```bash
-pipx install mergify-cli
+curl -fsSL https://raw.githubusercontent.com/Mergifyio/mergify-cli/main/install.sh | MERGIFY_INSTALL_DIR="$HOME/bin" sh
 ```
+
+Once installed this way, upgrade with `mergify self-update`.
+
+### Windows
+
+Download `mergify-<version>-x86_64-pc-windows-msvc.zip` from the
+[latest release](https://github.com/Mergifyio/mergify-cli/releases/latest),
+extract it, and put `mergify.exe` anywhere on your `PATH`.
 
 ## Authentication
 
