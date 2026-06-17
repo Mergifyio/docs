@@ -14690,128 +14690,6 @@
         ],
         "title": "MergeQueueStatus"
       },
-      "MergeQueueStatusBatchBase": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "parent_ids": {
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "type": "array",
-            "title": "Parent Ids"
-          },
-          "status": {
-            "$ref": "#/components/schemas/BatchStatus"
-          },
-          "started_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Started At"
-          },
-          "estimated_merge_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Estimated Merge At"
-          },
-          "estimated_ci_finish_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Estimated Ci Finish At"
-          },
-          "ci_finished_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Ci Finished At"
-          },
-          "scopes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Scopes"
-          },
-          "queue_rule_name": {
-            "type": "string",
-            "title": "Queue Rule Name"
-          },
-          "checks_summary": {
-            "$ref": "#/components/schemas/BatchChecksSummary"
-          },
-          "pull_requests": {
-            "items": {
-              "$ref": "#/components/schemas/MergeQueueStatusPullRequest"
-            },
-            "type": "array",
-            "title": "Pull Requests"
-          },
-          "checks_timeout_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Checks Timeout At",
-            "description": "When the checks will time out and the batch be dequeued, if a checks timeout applies"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name",
-          "parent_ids",
-          "status",
-          "started_at",
-          "estimated_merge_at",
-          "estimated_ci_finish_at",
-          "ci_finished_at",
-          "scopes",
-          "queue_rule_name",
-          "checks_summary",
-          "pull_requests"
-        ],
-        "title": "MergeQueueStatusBatchBase"
-      },
       "MergeQueueStatusBatchWithSubBatch": {
         "properties": {
           "id": {
@@ -14920,7 +14798,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/MergeQueueStatusBatchBase"
+                  "$ref": "#/components/schemas/MergeQueueStatusBatchWithSubBatch"
                 },
                 "type": "array"
               },
