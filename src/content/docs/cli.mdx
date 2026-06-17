@@ -8,23 +8,24 @@ terminal.
 
 ## Installation
 
-Install the CLI using [uv](https://docs.astral.sh/uv/):
+On macOS, the recommended way to install the CLI is through Mergify's
+[Homebrew tap](https://github.com/Mergifyio/homebrew-tap):
+
+```bash
+brew install mergifyio/tap/mergify-cli
+```
+
+On other platforms, or if you prefer a Python-based install, use
+[uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv tool install mergify-cli
 ```
 
-Or using [pipx](https://pipx.pypa.io/):
+Or [pipx](https://pipx.pypa.io/):
 
 ```bash
 pipx install mergify-cli
-```
-
-On macOS, you can install these tools via Homebrew:
-
-```bash
-brew install uv
-uv tool install mergify-cli
 ```
 
 ## Authentication
