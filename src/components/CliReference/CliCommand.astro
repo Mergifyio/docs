@@ -1,14 +1,26 @@
 ---
 /**
  * A structured reference card for a single CLI command, mirroring the HTTP API
- * reference's endpoint cards: the command sits as the card's heading, with the
- * description as the card body.
+ * reference's endpoint cards. Everything — description, usage, arguments,
+ * options, and inherited global options — is generated from
+ * `public/cli-schema.json`, the single source of truth; the card carries no
+ * hand-written prose. Enrich a command's clap definition to enrich the card.
  *
  * The heading is rendered by this component (not a markdown `##`), so it gives
  * a deep-link `#` anchor but does not appear in the compile-time "on this page"
  * TOC — that list only sees markdown headings.
  */
+import { slugify } from '~/util/slugify';
 import '~/styles/cli-reference.css';
+import CliArgRow from './CliArgRow.astro';
+import {
+  collectInheritedGlobals,
+  findCommand,
+  helpToHtml,
+  loadCliSchema,
+  partitionArgs,
+  splitCommand,
+} from './cli-schema';
 
 interface Props {
   /** The command shown as the card's heading, e.g. `mergify tests show`. */
@@ -16,11 +28,27 @@ interface Props {
 }
 
 const { command } = Astro.props;
+const slug = slugify(command);
 
-const slug = command
-  .toLowerCase()
-  .replace(/[^a-z0-9]+/g, '-')
-  .replace(/^-+|-+$/g, '');
+const schema = loadCliSchema();
+const path = splitCommand(command);
+const node = findCommand(schema.command, path);
+if (!node) {
+  throw new Error(
+    `CliCommand: "${command}" not found in public/cli-schema.json. ` +
+      `Check the command name or regenerate the schema.`
+  );
+}
+if (node.commands.length > 0) {
+  throw new Error(
+    `CliCommand: "${command}" is a command group, not a runnable command. ` +
+      `Point the card at one of its subcommands.`
+  );
+}
+
+const description = node.longAbout ?? node.about;
+const { positionals, options } = partitionArgs(node.args);
+const globals = collectInheritedGlobals(schema.command, path);
 ---
 
 <div class="cli-command">
@@ -30,5 +58,64 @@ const slug = command
       #
     </a>
   </h2>
-  <slot />
+
+  {description && <p class="cli-command-description" set:html={helpToHtml(description)} />}
+
+  <div class="cli-usage">
+    <span class="cli-section-label">Usage</span>
+    <pre><code>{node.usage}</code></pre>
+  </div>
+
+  {
+    node.aliases.length > 0 && (
+      <p class="cli-aliases">
+        Alias{node.aliases.length > 1 ? 'es' : ''}:{' '}
+        {node.aliases.map((a, i) => (
+          <>
+            {i > 0 && ', '}
+            <code>{a}</code>
+          </>
+        ))}
+      </p>
+    )
+  }
+
+  {
+    positionals.length > 0 && (
+      <div class="cli-section">
+        <span class="cli-section-label">Arguments</span>
+        <div class="cli-args">
+          {positionals.map((arg) => (
+            <CliArgRow arg={arg} positional />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    options.length > 0 && (
+      <div class="cli-section">
+        <span class="cli-section-label">Options</span>
+        <div class="cli-args">
+          {options.map((arg) => (
+            <CliArgRow arg={arg} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    globals.length > 0 && (
+      <div class="cli-section">
+        <span class="cli-section-label">Global options</span>
+        <div class="cli-args">
+          {globals.map((arg) => (
+            <CliArgRow arg={arg} />
+          ))}
+        </div>
+      </div>
+    )
+  }
 </div>

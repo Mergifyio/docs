@@ -55,6 +55,166 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Generated sections — usage, arguments, options.
+
+   Rendered from public/cli-schema.json by CliCommand.astro, parallel to the API
+   reference's parameter tables. Section dividers and badges mirror
+   api-reference.css so the two references read the same.
+   --------------------------------------------------------------------------- */
+
+/* Usage block and each labelled section share a top divider — parallels
+   .endpoint-section. */
+.cli-usage,
+.cli-section {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--theme-border-color);
+}
+
+.cli-section-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--theme-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* The command's description, sourced from the schema's about/long-about. */
+.cli-command-description {
+  margin: 0 0 0.5rem;
+  color: var(--theme-text);
+  line-height: 1.6;
+}
+
+.cli-command-description code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--theme-code-inline-text);
+  background: var(--theme-code-inline-bg);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+/* Reset the global code-block padding (pre + pre>code double up) and let long
+   usage strings scroll within the box rather than overflowing the card. */
+.cli-usage pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.cli-usage pre > code {
+  display: block;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--theme-text);
+}
+
+.cli-aliases {
+  font-size: 0.85rem;
+  color: var(--theme-text-muted);
+  margin: 0.75rem 0 0;
+}
+
+/* Argument / option rows — parallels .params-table / .param-row */
+.cli-args {
+  display: flex;
+  flex-direction: column;
+}
+
+.cli-arg {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--theme-divider);
+}
+
+.cli-arg:last-child {
+  border-bottom: none;
+}
+
+.cli-arg-signature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cli-arg-name {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--theme-text);
+}
+
+.cli-arg-value {
+  font-weight: 400;
+  color: var(--theme-link);
+  font-style: italic;
+}
+
+.cli-arg-description {
+  font-size: 0.8rem;
+  color: var(--theme-text-muted);
+  margin: 0.2rem 0 0;
+  line-height: 1.5;
+}
+
+.cli-arg-description code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--theme-code-inline-text);
+  background: var(--theme-code-inline-bg);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+.cli-arg-enum,
+.cli-arg-meta {
+  font-size: 0.75rem;
+  color: var(--theme-text-muted);
+  margin: 0.2rem 0 0;
+}
+
+.cli-arg-enum code,
+.cli-arg-meta code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--theme-code-inline-text);
+  background: var(--theme-code-inline-bg);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+/* Badges — same look as the API reference, but CLI-scoped class names so the
+   two global stylesheets can't collide or silently override each other. */
+.cli-type-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--theme-code-inline-text);
+  background: var(--theme-code-inline-bg);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+}
+
+.cli-required-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-orange-700);
+}
+
+.cli-optional-badge,
+.cli-hint-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--theme-text-muted);
+}
+
+/* ---------------------------------------------------------------------------
    Responsive — mirrors the api-reference 50em breakpoint
    --------------------------------------------------------------------------- */
 
