@@ -1,0 +1,76 @@
+---
+/**
+ * One row in a command's Arguments / Options / Global options table. Renders a
+ * positional, an option, or a flag uniformly so the three sections stay in sync.
+ */
+import {
+  type CliArg,
+  helpToHtml,
+  isVariadic,
+  optionSignature,
+  typeLabel,
+  valuePlaceholder,
+} from './cli-schema';
+
+interface Props {
+  arg: CliArg;
+  /** Positionals show their value placeholder as the name and an "optional" badge. */
+  positional?: boolean;
+}
+
+const { arg, positional = false } = Astro.props;
+
+const value = valuePlaceholder(arg);
+// Row description: the short help, falling back to the long help.
+const description = arg.help ?? arg.longHelp;
+---
+
+<div class="cli-arg">
+  <div class="cli-arg-signature">
+    <code class="cli-arg-name">
+      {positional ? (value ?? arg.id) : optionSignature(arg)}
+      {!positional && value && (
+        <>
+          {' '}
+          <span class="cli-arg-value">{value}</span>
+        </>
+      )}
+    </code>
+    <span class="cli-type-badge">{typeLabel(arg)}</span>
+    {arg.required && <span class="cli-required-badge">required</span>}
+    {positional && !arg.required && <span class="cli-optional-badge">optional</span>}
+    {isVariadic(arg) && <span class="cli-hint-badge">repeatable</span>}
+  </div>
+
+  {description && <p class="cli-arg-description" set:html={helpToHtml(description)} />}
+
+  {
+    arg.possibleValues.length > 0 && (
+      <p class="cli-arg-enum">
+        Values:{' '}
+        {arg.possibleValues.map((v, i) => (
+          <>
+            {i > 0 && ' '}
+            <code>{v.name}</code>
+          </>
+        ))}
+      </p>
+    )
+  }
+
+  {
+    arg.default && arg.kind !== 'flag' && (
+      <p class="cli-arg-meta">
+        Default: <code>{arg.default}</code>
+      </p>
+    )
+  }
+
+  {
+    arg.env && (
+      <p class="cli-arg-meta">
+        Environment variable: <code>{arg.env}</code>
+      </p>
+    )
+  }
+</div>
