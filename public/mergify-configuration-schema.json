@@ -1952,7 +1952,8 @@
                 "STACK_PREDECESSOR_DEQUEUED",
                 "INTERMEDIATE_RESULTS_SKIPPED",
                 "CHECKS_RETRIED",
-                "SCHEDULE_BLOCKED_AHEAD_YIELDED"
+                "SCHEDULE_BLOCKED_AHEAD_YIELDED",
+                "BASE_REF_ALIGNMENT_TIMEOUT"
               ],
               "type": "string"
             },

@@ -11204,7 +11204,8 @@
                   "STACK_PREDECESSOR_DEQUEUED",
                   "INTERMEDIATE_RESULTS_SKIPPED",
                   "CHECKS_RETRIED",
-                  "SCHEDULE_BLOCKED_AHEAD_YIELDED"
+                  "SCHEDULE_BLOCKED_AHEAD_YIELDED",
+                  "BASE_REF_ALIGNMENT_TIMEOUT"
                 ]
               },
               {
@@ -15671,6 +15672,12 @@
             "type": "integer",
             "title": "Schedule Blocked Ahead Yielded",
             "description": "A pull request ahead was waiting for its merge schedule, so it yielded its position to let ready pull requests merge first",
+            "default": 0
+          },
+          "BASE_REF_ALIGNMENT_TIMEOUT": {
+            "type": "integer",
+            "title": "Base Ref Alignment Timeout",
+            "description": "The stacked pull request's base branch could not be retargeted onto the queue base branch and was dequeued",
             "default": 0
           }
         },
