@@ -7631,6 +7631,51 @@
         ],
         "title": "BatchChecksSummary"
       },
+      "BatchReason": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "scope",
+              "directory",
+              "queue_order"
+            ],
+            "title": "Kind"
+          },
+          "shared_scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Shared Scopes"
+          },
+          "shared_directories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Shared Directories"
+          },
+          "peer_pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "maximum": 9.223372036854776e+18,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Peer Pull Request Numbers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "shared_scopes",
+          "shared_directories",
+          "peer_pull_request_numbers"
+        ],
+        "title": "BatchReason",
+        "description": "Why a PR shares its batch (train car) with the other PRs in it.\n\nRe-derived at serialization time from each member's persisted similarity\nsignals \u2014 the same ``scopes`` / ``changed_directories`` the batching\nalgorithm groups on \u2014 so it stays correct as a car is bisected and members\nleave. It reports the signal the car's *current* members actually share,\nnot a replay of the formation-time greedy pick order. ``None`` when the car\nholds a single PR (nothing to explain) or for a not-yet-batched waiting PR."
+      },
       "BatchSizeBounds": {
         "anyOf": [
           {
@@ -14927,6 +14972,16 @@
               }
             ],
             "title": "Conflict With Pull Requests"
+          },
+          "batch_reason": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BatchReason"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
