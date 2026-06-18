@@ -47,3 +47,11 @@ mergify tests quarantines list -r owner/repo
 ```
 
 See the [Test Insights CLI](/test-insights/cli) reference for all flags and exit codes.
+
+## Staying Notified
+
+Quarantine and dequarantine actions, whether you make them yourself or Mergify
+applies them automatically, are recorded as events you can review on the
+dashboard and act on. You can also have Mergify post them to a Slack channel as
+they happen: see [Test Insights notifications](/integrations/slack#test-insights-notifications)
+to set one up.
