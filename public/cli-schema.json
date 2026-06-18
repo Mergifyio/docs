@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.6.16.1",
+    "version": "2026.6.18.1",
     "about": null
   },
   "command": {
@@ -357,50 +357,13 @@
               "ci",
               "queue-info"
             ],
-            "about": "Print the merge queue batch metadata for a merge queue draft PR",
-            "longAbout": "Print the merge queue batch metadata for a merge queue draft PR",
-            "usage": "mergify ci queue-info [OPTIONS] [PULL_REQUEST_URL]",
+            "about": "Print the current build's merge queue batch metadata (from the Mergify git note)",
+            "longAbout": "Print the current build's merge queue batch metadata (from the Mergify git note)",
+            "usage": "mergify ci queue-info [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
             "source": "native",
-            "args": [
-              {
-                "id": "pull_request",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "PULL_REQUEST_URL"
-                ],
-                "help": "Pull request URL (e.g. <https://github.com/owner/repo/pull/123>). When omitted, reads the metadata from the CI event payload (`GITHUB_EVENT_PATH`) — the in-CI default",
-                "longHelp": "Pull request URL (e.g. <https://github.com/owner/repo/pull/123>). When omitted, reads the metadata from the CI event payload (`GITHUB_EVENT_PATH`) — the in-CI default",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "token",
-                "kind": "option",
-                "short": "t",
-                "long": "token",
-                "valueNames": [
-                  "TOKEN"
-                ],
-                "help": "GitHub token used to fetch the pull request. Falls back to ``MERGIFY_TOKEN``, then ``GITHUB_TOKEN``, then `gh auth token`. Only used when a pull request URL is given",
-                "longHelp": "GitHub token used to fetch the pull request. Falls back to ``MERGIFY_TOKEN``, then ``GITHUB_TOKEN``, then `gh auth token`. Only used when a pull request URL is given",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              }
-            ],
+            "args": [],
             "commands": []
           },
           {
