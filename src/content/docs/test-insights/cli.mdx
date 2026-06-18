@@ -1,76 +1,20 @@
 ---
 title: CLI
-description: Interact with Test Insights data from the terminal — search for tests, branch on health via exit codes, and chain into AI coding agents like Claude Code and Cursor.
+description: Search Test Insights test health and manage quarantine from the terminal with the Mergify CLI.
 ---
 
 import CliCommand from '~/components/CliReference/CliCommand.astro';
 
-The [Mergify CLI](/cli) lets you interact with Test Insights data from
-the terminal. It's handy when you want to triage a failing test
-quickly, or when an AI coding agent needs to decide whether to retry,
-fix, or ignore a failure.
+The [Mergify CLI](/cli) lets you search Test Insights test health and manage
+quarantine from the terminal. Run any command with `--help` for the same
+reference shown below.
 
-:::tip
-  Run these commands from inside a repository checkout and you can drop the
-  `-r owner/repo` flag — the CLI detects the repository from your `origin` git
-  remote, or from the CI environment when it runs in a pipeline.
-:::
+<CliCommand command="mergify tests show" />
 
-Every command also accepts `--json` for machine-readable output and `--help`
-for the full list of flags.
+<CliCommand command="mergify tests quarantines add" />
 
-<CliCommand command="mergify tests show">
+<CliCommand command="mergify tests quarantines remove" />
 
-Search the Test Insights catalog by test name and print each match's health,
-failure ratios, and most recent failure context. Names accept glob patterns
-(`*`, `?`), and several can be passed in one call. See the
-[API reference](/api/test-insights) for the underlying endpoints and response
-schemas.
+<CliCommand command="mergify tests quarantines get" />
 
-</CliCommand>
-
-<CliCommand command="mergify tests quarantines add">
-
-Add a test to [quarantine](/test-insights/quarantine) so its failures stop
-blocking merges and no longer mark the pipeline as failed. The test keeps
-running, and its results keep flowing into Test Insights. Pass the fully
-qualified test name and a `--reason`; the quarantine covers every branch unless
-you scope it with `--branch`. The command prints a quarantine ID you can pass to
-`remove` or `get`.
-
-</CliCommand>
-
-<CliCommand command="mergify tests quarantines remove">
-
-Remove a test from quarantine, addressed either by its fully qualified name or
-by the quarantine ID that `add` printed. A UUID-shaped argument is treated as
-the ID and removed directly; anything else is looked up by name.
-
-</CliCommand>
-
-<CliCommand command="mergify tests quarantines get">
-
-Print a single quarantine, addressed by the test's fully qualified name or its
-quarantine ID (a UUID-shaped argument is matched against the ID). The output
-mirrors one record of `list`.
-
-</CliCommand>
-
-<CliCommand command="mergify tests quarantines list">
-
-List every test currently in [quarantine](/test-insights/quarantine) for a
-repository. It's handy for reviewing what's being ignored, or for looking up a
-quarantine ID to pass to `remove` or `get`. Each record carries its quarantine
-ID, the branch it's scoped to (`*` for all branches), the source (`manual` or
-`auto`), whether it has recovered, and the reason.
-
-</CliCommand>
-
-## Use with AI coding agents
-
-`mergify tests show` reports a test's health through its exit code, so an agent
-can branch on a failure without parsing output: `0` healthy or unknown, `1`
-flaky, `6` broken. Wire it into Claude Code as a
-[skill](https://docs.claude.com/en/docs/claude-code/skills) or Cursor as a
-project rule to rerun flaky tests, surface broken ones, and treat healthy ones
-as real regressions.
+<CliCommand command="mergify tests quarantines list" />

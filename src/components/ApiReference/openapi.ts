@@ -1,3 +1,5 @@
+import { slugify } from '~/util/slugify';
+
 export interface OpenAPISpec {
   openapi: string;
   info: {
@@ -192,13 +194,6 @@ export function humanizeTag(tag: string): string {
 
 export function slugifyTag(tag: string): string {
   return tag.toLowerCase().replace(/_/g, '-');
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
 }
 
 export function groupByTag(schema: OpenAPISpec): Map<string, GroupedEndpoint[]> {
