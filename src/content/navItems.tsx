@@ -113,7 +113,6 @@ const navItems: NavItem[] = [
       { title: 'Detection', path: '/test-insights/detection', icon: 'lucide:search' },
       { title: 'Mitigation', path: '/test-insights/mitigation', icon: 'lucide:radiation' },
       { title: 'Quarantine', path: '/test-insights/quarantine', icon: 'lucide:radiation' },
-      { title: 'CLI', path: '/test-insights/cli', icon: 'lucide:terminal' },
       {
         title: 'Test Frameworks Setup',
         path: '/test-insights#test-framework-configuration',
@@ -359,6 +358,27 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    title: 'CLI',
+    icon: 'lucide:terminal',
+    children: [
+      { title: 'Usage', path: '/cli/usage', icon: 'lucide:terminal' },
+      {
+        title: 'Reference',
+        path: '/cli/',
+        icon: 'lucide:list',
+        children: [
+          { title: 'Merge Queue', path: '/cli/queue' },
+          { title: 'Stacked Pull Requests', path: '/cli/stack' },
+          { title: 'CI Insights', path: '/cli/ci' },
+          { title: 'Test Health', path: '/cli/tests' },
+          { title: 'Scheduled Freezes', path: '/cli/freeze' },
+          { title: 'Configuration', path: '/cli/config' },
+          { title: 'Maintenance', path: '/cli/self-update' },
+        ],
+      },
+    ],
+  },
+  {
     title: 'Integrations',
     icon: 'lucide:blocks',
     path: '/integrations',
@@ -393,14 +413,7 @@ const navItems: NavItem[] = [
       },
     ],
   },
-  {
-    title: 'Tools',
-    icon: 'lucide:wrench',
-    children: [
-      { title: 'CLI', path: '/cli', icon: 'lucide:terminal' },
-      { title: 'Browser Extensions', path: '/browser-extensions', icon: 'lucide:puzzle' },
-    ],
-  },
+  { title: 'Browser Extensions', path: '/browser-extensions', icon: 'lucide:puzzle' },
   { title: 'Security', path: '/security', icon: 'lucide:shield' },
   { title: 'Support', path: '/support', icon: 'lucide:life-buoy' },
   { title: 'Billing', path: '/billing', icon: 'lucide:banknote' },

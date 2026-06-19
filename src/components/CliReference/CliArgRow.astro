@@ -6,6 +6,7 @@
 import {
   type CliArg,
   helpToHtml,
+  isFlagLike,
   isVariadic,
   optionSignature,
   typeLabel,
@@ -59,7 +60,7 @@ const description = arg.help ?? arg.longHelp;
   }
 
   {
-    arg.default && arg.kind !== 'flag' && (
+    arg.default && !isFlagLike(arg) && (
       <p class="cli-arg-meta">
         Default: <code>{arg.default}</code>
       </p>
