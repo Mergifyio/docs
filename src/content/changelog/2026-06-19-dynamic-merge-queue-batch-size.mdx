@@ -1,0 +1,9 @@
+---
+title: "Dynamic merge queue batch size"
+date: 2026-06-19
+tags:
+  - Merge Queue
+description: "Configure batch_size as a {min, max} range and the merge queue scales batch size automatically — small when quiet, larger to absorb backlog."
+---
+
+You can now set `batch_size` to a `{min, max}` range instead of a fixed number. When the queue is quiet, Mergify keeps batches at `min` for the smallest possible blast radius; when pull requests pile up and all parallel-check slots are busy, it grows batches toward `max` to drain the backlog faster. Existing fixed `batch_size` values keep working unchanged.

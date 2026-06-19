@@ -1,0 +1,9 @@
+---
+title: "Merge protections honor GitHub's \"require approval of most recent push\""
+date: 2026-06-19
+tags:
+  - Merge Protections
+description: "Mergify now respects GitHub's \"Require approval of the most recent push\" branch-protection option when evaluating merge protections."
+---
+
+When your branch protection enables GitHub's "Require approval of the most recent push" option, Mergify now automatically adds a matching condition to your merge protections. A pull request won't merge until its latest push has been approved by someone other than the author, keeping Mergify aligned with GitHub's own enforcement.

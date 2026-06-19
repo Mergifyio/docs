@@ -1,0 +1,9 @@
+---
+title: "Built-in author and merger options for assignee fields"
+date: 2026-06-19
+tags:
+  - Rules
+description: "The assign, copy, and backport actions now accept {{ author }} (and {{ merged_by }} for copy/backport) as named, built-in options for their assignee lists."
+---
+
+You can now assign pull requests to their author with the `{{ author }}` option — and, in `copy` and `backport`, to the user who merged the original pull request with `{{ merged_by }}`. The dashboard offers them as named choices ("Pull request author" and "User who merged the pull request"), and existing configurations keep working unchanged.

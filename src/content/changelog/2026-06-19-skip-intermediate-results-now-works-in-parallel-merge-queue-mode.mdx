@@ -1,0 +1,9 @@
+---
+title: "skip_intermediate_results now works in parallel merge queue mode"
+date: 2026-06-19
+tags:
+  - Merge Queue
+description: "The skip_intermediate_results option, previously serial-only, now also speeds up merges in parallel mode within each scope's dependency chain."
+---
+
+When `skip_intermediate_results` is enabled, Mergify merges a pull request as soon as a later batch that includes it passes its checks, instead of waiting for the PR's own speculative check. Previously available only in serial mode, it now applies in parallel mode too — within each scope's dependency chain, a passing batch promotes its not-yet-merged ancestors so busy scopes get the same speedup serial queues already enjoy.

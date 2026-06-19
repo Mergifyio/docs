@@ -1,0 +1,9 @@
+---
+title: "Reference the pull request author in conditions with {{ author }}"
+date: 2026-06-19
+tags:
+  - Rules
+description: "Rule conditions now accept {{ author }} as a built-in value for matching an attribute against the pull request author."
+---
+
+You can now use `{{ author }}` in rule conditions — for example `sender = {{ author }}` or `commits[*].author = {{ author }}` — to match an attribute against the pull request's author. It's resolved as a native, built-in value, accepted everywhere, and existing configurations keep working unchanged.

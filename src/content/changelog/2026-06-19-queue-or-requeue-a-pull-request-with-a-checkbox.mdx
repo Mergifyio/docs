@@ -1,0 +1,13 @@
+---
+title: "Queue or requeue a pull request with a checkbox"
+date: 2026-06-19
+tags:
+  - Merge Queue
+description: "Queue or requeue a pull request by ticking a checkbox in the Mergify status comment, without typing a command."
+---
+
+Mergify now posts a Merge Queue status comment with a GitHub task-list checkbox. Tick **Queue this pull request** to add a pull request to the merge queue, or **Requeue this pull request** after a failed attempt — no need to type `@mergifyio queue`.
+
+Clicking a checkbox runs the same action as the command, with the same write-permission and command-restriction checks, so nothing is queued by someone who couldn't queue it manually.
+
+Turn it off with `queue_controls_comment` in your merge queue configuration.

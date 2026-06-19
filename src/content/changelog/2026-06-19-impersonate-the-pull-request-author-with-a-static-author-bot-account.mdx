@@ -1,0 +1,9 @@
+---
+title: "Impersonate the pull request author with a static `{{ author }}` bot account"
+date: 2026-06-19
+tags:
+  - Rules
+description: "`{{ author }}` is now a static `bot_account` value that impersonates the pull request author in every action and queue rule, accepted anywhere."
+---
+
+Set any `bot_account` (or `merge_bot_account` / `update_bot_account`) to `{{ author }}` to act on behalf of the pull request's author. Mergify now treats it as a static value rather than a Jinja2 template, so it works consistently across all actions and queue rules, and appears as a "Pull request author" choice in your configuration. Jinja2 templating in these fields is being deprecated in favor of this static form.
