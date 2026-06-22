@@ -17303,10 +17303,6 @@
             ],
             "title": "Schedule"
           },
-          "is_scheduled_freeze": {
-            "type": "boolean",
-            "title": "Is Scheduled Freeze"
-          },
           "subconditions": {
             "items": {
               "$ref": "#/components/schemas/QueueConditionEvaluationResult_Serialized"
