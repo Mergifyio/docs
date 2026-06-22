@@ -2642,8 +2642,8 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Set to `auto` to let Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered.",
+          "default": "auto",
+          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Defaults to `auto`, which lets Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered. Set to `null` to disable the checks timeout entirely.",
           "title": "Checks Timeout"
         },
         "max_checks_retries": {
@@ -2889,8 +2889,8 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Set to `auto` to let Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered.",
+          "default": "auto",
+          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Defaults to `auto`, which lets Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered. Set to `null` to disable the checks timeout entirely.",
           "title": "Checks Timeout"
         },
         "max_checks_retries": {
