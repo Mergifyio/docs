@@ -1,0 +1,1 @@
+Export Props interface + cast Astro.props as Props in CliInstall/ScopesDetection (Copilot review nit) — matches the repo convention used by the *UploadStep components.
