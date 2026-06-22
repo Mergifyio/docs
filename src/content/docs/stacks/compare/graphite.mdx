@@ -6,7 +6,7 @@ description: An honest comparison of Mergify Stacks and Graphite's stacking work
 import GitGraph from '~/components/GitGraph.astro';
 import StacksLocalModel from '~/components/StacksLocalModel.astro';
 import ComparisonLogo from '~/components/ComparisonLogo.astro';
-import InstallSetup from '../_install-setup.mdx';
+import CliInstall from '~/components/CliInstall.astro';
 
 <ComparisonLogo icon="simple-icons:graphite" alt="Graphite logo" />
 
@@ -202,7 +202,7 @@ is moving from "one branch per PR" to "one commit per PR on a single branch."
 
 ### Install and setup
 
-<InstallSetup />
+<CliInstall steps={['mergify stack setup']} />
 
 This installs the CLI and adds a `commit-msg` hook that generates
 [Change-Ids](/stacks/concepts#change-id) for your commits. See the
