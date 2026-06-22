@@ -1325,6 +1325,72 @@
             "description": "The specific types of events to select"
           },
           {
+            "name": "not_event_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "action.assign",
+                      "action.backport",
+                      "action.close",
+                      "action.comment",
+                      "action.copy",
+                      "action.delete_head_branch",
+                      "action.dequeue",
+                      "action.dismiss_reviews",
+                      "action.edit",
+                      "action.github_actions",
+                      "action.label",
+                      "action.merge",
+                      "action.post_check",
+                      "action.queue.batch_bisection_end",
+                      "action.queue.batch_bisection_start",
+                      "action.queue.change",
+                      "action.queue.checks.change",
+                      "action.queue.checks_end",
+                      "action.queue.checks_not_started",
+                      "action.queue.checks_start",
+                      "action.queue.enter",
+                      "action.queue.leave",
+                      "action.queue.merged",
+                      "action.rebase",
+                      "action.refresh",
+                      "action.request_reviews",
+                      "action.review",
+                      "action.squash",
+                      "action.update",
+                      "ci_insights.auto_quarantine.disabled",
+                      "ci_insights.auto_quarantine.enabled",
+                      "ci_insights.auto_quarantine.modified",
+                      "ci_insights.job_retried",
+                      "command.dequeue",
+                      "command.queue",
+                      "queue.pause.create",
+                      "queue.pause.delete",
+                      "queue.pause.update",
+                      "scheduled_freeze.create",
+                      "scheduled_freeze.delete",
+                      "scheduled_freeze.update",
+                      "test.dequarantined",
+                      "test.quarantined"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include).",
+              "title": "Not Event Type"
+            },
+            "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include)."
+          },
+          {
             "name": "outcome",
             "in": "query",
             "required": false,
@@ -1350,6 +1416,33 @@
               "title": "Outcome"
             },
             "description": "Filter events by derived outcome label (`success` / `failure` / `pending` / `neutral`). Repeatable to match several outcomes at once (e.g. `?outcome=success&outcome=failure`)."
+          },
+          {
+            "name": "not_outcome",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "success",
+                      "failure",
+                      "pending",
+                      "neutral"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose derived outcome label matches any of the given values (`success` / `failure` / `pending` / `neutral`). Repeatable. Mirrors Datadog's facet semantics: unchecking an outcome in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `outcome` (positive include).",
+              "title": "Not Outcome"
+            },
+            "description": "Exclude events whose derived outcome label matches any of the given values (`success` / `failure` / `pending` / `neutral`). Repeatable. Mirrors Datadog's facet semantics: unchecking an outcome in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `outcome` (positive include)."
           },
           {
             "name": "trigger",
@@ -1392,6 +1485,31 @@
               "title": "Not Trigger"
             },
             "description": "Exclude events whose `trigger` matches any of the given values (exact match). Repeatable. Mirrors Datadog's facet semantics: the default state is `all triggers included`, and unchecking a trigger in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `trigger` (positive include)."
+          },
+          {
+            "name": "not_pull_request",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "integer",
+                    "maximum": 9223372036854775807,
+                    "minimum": 1,
+                    "exclusiveMaximum": 2147483647
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose pull request matches any of the given numbers. Mutually exclusive with `pull_request` (positive include).",
+              "title": "Not Pull Request"
+            },
+            "description": "Exclude events whose pull request matches any of the given numbers. Mutually exclusive with `pull_request` (positive include)."
           },
           {
             "name": "received_from",
@@ -1655,6 +1773,72 @@
             "description": "The specific types of events to select"
           },
           {
+            "name": "not_event_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "action.assign",
+                      "action.backport",
+                      "action.close",
+                      "action.comment",
+                      "action.copy",
+                      "action.delete_head_branch",
+                      "action.dequeue",
+                      "action.dismiss_reviews",
+                      "action.edit",
+                      "action.github_actions",
+                      "action.label",
+                      "action.merge",
+                      "action.post_check",
+                      "action.queue.batch_bisection_end",
+                      "action.queue.batch_bisection_start",
+                      "action.queue.change",
+                      "action.queue.checks.change",
+                      "action.queue.checks_end",
+                      "action.queue.checks_not_started",
+                      "action.queue.checks_start",
+                      "action.queue.enter",
+                      "action.queue.leave",
+                      "action.queue.merged",
+                      "action.rebase",
+                      "action.refresh",
+                      "action.request_reviews",
+                      "action.review",
+                      "action.squash",
+                      "action.update",
+                      "ci_insights.auto_quarantine.disabled",
+                      "ci_insights.auto_quarantine.enabled",
+                      "ci_insights.auto_quarantine.modified",
+                      "ci_insights.job_retried",
+                      "command.dequeue",
+                      "command.queue",
+                      "queue.pause.create",
+                      "queue.pause.delete",
+                      "queue.pause.update",
+                      "scheduled_freeze.create",
+                      "scheduled_freeze.delete",
+                      "scheduled_freeze.update",
+                      "test.dequarantined",
+                      "test.quarantined"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include).",
+              "title": "Not Event Type"
+            },
+            "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include)."
+          },
+          {
             "name": "outcome",
             "in": "query",
             "required": false,
@@ -1680,6 +1864,33 @@
               "title": "Outcome"
             },
             "description": "Filter events by derived outcome label (`success` / `failure` / `pending` / `neutral`). Repeatable to match several outcomes at once (e.g. `?outcome=success&outcome=failure`)."
+          },
+          {
+            "name": "not_outcome",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "success",
+                      "failure",
+                      "pending",
+                      "neutral"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose derived outcome label matches any of the given values (`success` / `failure` / `pending` / `neutral`). Repeatable. Mirrors Datadog's facet semantics: unchecking an outcome in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `outcome` (positive include).",
+              "title": "Not Outcome"
+            },
+            "description": "Exclude events whose derived outcome label matches any of the given values (`success` / `failure` / `pending` / `neutral`). Repeatable. Mirrors Datadog's facet semantics: unchecking an outcome in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `outcome` (positive include)."
           },
           {
             "name": "trigger",
@@ -1722,6 +1933,31 @@
               "title": "Not Trigger"
             },
             "description": "Exclude events whose `trigger` matches any of the given values (exact match). Repeatable. Mirrors Datadog's facet semantics: the default state is `all triggers included`, and unchecking a trigger in the dashboard sidebar adds it to the exclusion list. Mutually exclusive with `trigger` (positive include)."
+          },
+          {
+            "name": "not_pull_request",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "integer",
+                    "maximum": 9223372036854775807,
+                    "minimum": 1,
+                    "exclusiveMaximum": 2147483647
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exclude events whose pull request matches any of the given numbers. Mutually exclusive with `pull_request` (positive include).",
+              "title": "Not Pull Request"
+            },
+            "description": "Exclude events whose pull request matches any of the given numbers. Mutually exclusive with `pull_request` (positive include)."
           },
           {
             "name": "received_from",
@@ -10407,6 +10643,13 @@
             },
             "type": "array",
             "title": "By Trigger"
+          },
+          "by_pull_request": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Pull Request"
           }
         },
         "type": "object",
@@ -10416,10 +10659,11 @@
           "histogram",
           "by_event_type",
           "by_outcome",
-          "by_trigger"
+          "by_trigger",
+          "by_pull_request"
         ],
         "title": "EventLogsAggregateResponse",
-        "description": "Aggregations over the same event set `/logs` paginates through.\n\n- `total` \u2014 count of events matching the filters (over the full set,\n  not just the current page).\n- `interval_size_seconds` \u2014 bucket width auto-picked from the time\n  range by `TimeRange.get_activity_log_interval_size()`. Dense\n  ladder tuned for per-event texture (15s \u2192 30s \u2192 2min \u2192 10min \u2192\n  20min \u2192 1h \u2192 4h \u2192 8h \u2192 1d), distinct from the smoother\n  `get_interval_size()` ladder used by queue-stats charts.\n- `histogram` \u2014 uniform list of `{start, end, count}` buckets\n  tiling the time range. Zero-filled server-side so the client\n  receives a complete grid (no missing buckets to fill in JS).\n- `by_event_type` \u2014 counts per event type, ordered by `count` desc.\n- `by_outcome` \u2014 counts per derived outcome label\n  (`success` / `failure` / `pending` / `neutral`), ordered by\n  `count` desc.\n- `by_trigger` \u2014 counts per trigger string, ordered by `count` desc.\n  Top 200 triggers by count in the window (single `GROUP BY` over\n  the filter set, capped); the dashboard uses it as the source of\n  truth for the Datadog-style trigger exclusion facet.\n\n`base_ref` and `pull_request` are input-only filters: no filter UI\nfor base_ref, and PR cardinality is unbounded so the count would\nbe both expensive to compute and useless as a sidebar facet."
+        "description": "Aggregations over the same event set `/logs` paginates through.\n\n- `total` \u2014 count of events matching the filters (over the full set,\n  not just the current page).\n- `interval_size_seconds` \u2014 bucket width auto-picked from the time\n  range by `TimeRange.get_activity_log_interval_size()`. Dense\n  ladder tuned for per-event texture (15s \u2192 30s \u2192 2min \u2192 10min \u2192\n  20min \u2192 1h \u2192 4h \u2192 8h \u2192 1d), distinct from the smoother\n  `get_interval_size()` ladder used by queue-stats charts.\n- `histogram` \u2014 uniform list of `{start, end, count}` buckets\n  tiling the time range. Zero-filled server-side so the client\n  receives a complete grid (no missing buckets to fill in JS).\n- `by_event_type` \u2014 counts per event type, ordered by `count` desc.\n- `by_outcome` \u2014 counts per derived outcome label\n  (`success` / `failure` / `pending` / `neutral`), ordered by\n  `count` desc.\n- `by_trigger` \u2014 counts per trigger string, ordered by `count` desc.\n  Top 200 triggers by count in the window (single `GROUP BY` over\n  the filter set, capped); the dashboard uses it as the source of\n  truth for the Datadog-style trigger exclusion facet.\n- `by_pull_request` \u2014 counts per pull-request number in the window,\n  ordered by `count` desc, top 200. Window-derived facet (mirrors\n  `by_trigger`): self-excludes both `pull_request` and\n  `not_pull_request` filters so the sidebar always shows the full\n  window distribution. Events with `pull_request=null` are excluded.\n  PR number is returned as a string for uniform JSON serialisation.\n\n`base_ref` is an input-only filter: no filter UI and its cardinality\nmakes it unsuitable as a sidebar facet."
       },
       "EventMerge": {
         "properties": {
