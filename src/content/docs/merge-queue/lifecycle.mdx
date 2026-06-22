@@ -230,6 +230,42 @@ merge_queue:
   reset_on_external_merge: never
 ```
 
+## Queue Branch Cleanup
+
+To test a pull request, Mergify creates a queue branch, runs the required
+checks against it, and deletes that branch once the pull request leaves the
+queue. This deletion is normally immediate, triggered by a GitHub webhook.
+
+When that deletion fails, the queue branch is left behind. To keep these
+orphaned branches from piling up, Mergify periodically scans your
+repository for leftover queue branches and deletes them in the background.
+There is nothing to clean up by hand.
+
+### How Leftover Branches Are Matched
+
+Mergify identifies a leftover queue branch by its name alone. A branch is
+deleted only when **both** of the following are true:
+
+- Its name is the
+  [`queue_branch_prefix`](/configuration/file-format/#queue-rules), optionally
+  prefixed with `tmp-`, followed by exactly 10 hexadecimal characters
+  (`0`–`9`, `a`–`f`).
+
+- It is not in use by an active queue.
+
+With the default prefix, a matching branch looks like
+`mergify/merge-queue/a76b1f3d25`. With a custom `queue_branch_prefix` such as
+`mergify-`, it looks like `mergify-a76b1f3d25`. The temporary `tmp-` branch
+Mergify creates during setup (for example, `tmp-mergify/merge-queue/a76b1f3d25`)
+is matched the same way. A CI retry generates a fresh name of the same shape,
+with no extra suffix.
+
+:::caution
+  Matching is by name only: Mergify does not track which branches it created.
+  A branch **you** create will be deleted if its name matches the pattern
+  above. Avoid naming your own branches this way.
+:::
+
 ## Monitoring the Status of PRs in the Merge Queue
 
 To keep track of the status and progress of your pull requests in the merge
