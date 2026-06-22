@@ -1,0 +1,1 @@
+Remove duplicate 'Responsive' CSS section header (Copilot review nit) — stray header left above the index/grid block when the @media edit replaced only the rule.
