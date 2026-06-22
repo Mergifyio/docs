@@ -1,0 +1,50 @@
+---
+/**
+ * The "detect scopes from any CI with the Mergify CLI" block shared by the
+ * monorepo scopes pages. The git-refs preamble, the scopes-send upload, and the
+ * batch-aware note are identical across build tools — only the command that
+ * turns the BASE..HEAD diff into scopes.json differs, passed as `command`.
+ *
+ * Pass `command` with String.raw so the bash keeps its literal backslashes
+ * (line continuations, `\n` in awk/jq) instead of the JS template literal eating
+ * them.
+ */
+import { Code as InlineCode } from 'astro:components';
+import { Code } from 'astro-expressive-code/components';
+import Aside from '~/components/Aside.astro';
+
+const inlineThemes = { light: 'github-light', dark: 'github-dark' } as const;
+
+export interface Props {
+  /** The build-tool command that writes the affected projects to scopes.json. */
+  command: string;
+}
+
+const { command } = Astro.props as Props;
+
+const code = `REFS=$(mergify ci git-refs)
+BASE=$(echo "$REFS" | awk '/^Base:/ {print $2}')
+HEAD=$(echo "$REFS" | awk '/^Head:/ {print $2}')
+
+${command}
+
+mergify ci scopes-send --file scopes.json`;
+---
+
+<p>
+  Install the <a href="/cli/usage">Mergify CLI</a> in your pipeline and export
+  <InlineCode code="MERGIFY_TOKEN" inline lang="bash" themes={inlineThemes} />. Use
+  <InlineCode code="mergify ci git-refs" inline lang="bash" themes={inlineThemes} /> to get the
+  merge-queue-aware base and head SHAs and
+  <InlineCode code="mergify ci scopes-send" inline lang="bash" themes={inlineThemes} /> to upload the
+  detected scopes:
+</p>
+
+<Code code={code} lang="bash" />
+
+<Aside type="note">
+  In the context of merge queue pull requests, the <code>HEAD</code> and <code>BASE</code> git
+  references are specifically calculated to detect changed projects in the current batch only, not in
+  the batches this one depends on. This ensures that your monorepo tool identifies only the projects
+  affected by the PRs in the current batch, allowing for more granular and efficient testing.
+</Aside>

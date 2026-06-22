@@ -1,0 +1,22 @@
+---
+/**
+ * The Mergify CLI install command as a single themed code block — one source of
+ * truth for the install line, which otherwise gets copy-pasted across the stacks
+ * and CI docs. Pass `steps` to append follow-up commands (e.g. the `stack setup`
+ * / `stack push` a quickstart shows right after install).
+ */
+import { Code } from 'astro-expressive-code/components';
+
+const INSTALL_COMMAND =
+  'curl -fsSL https://raw.githubusercontent.com/Mergifyio/mergify-cli/main/install.sh | sh';
+
+export interface Props {
+  /** Commands appended after the install line, shown in the same block. */
+  steps?: string[];
+}
+
+const { steps = [] } = Astro.props as Props;
+const code = [INSTALL_COMMAND, ...steps].join('\n');
+---
+
+<Code code={code} lang="bash" />
