@@ -3,6 +3,8 @@ title: CLI Installation & Authentication
 description: Install the Mergify CLI and authenticate it to manage your merge queue, freezes, and stacked pull requests from the terminal.
 ---
 
+import CliInstall from '~/components/CliInstall.astro';
+
 The Mergify CLI lets you interact with Mergify features directly from your
 terminal. This page covers installation and authentication; for the commands
 themselves, see the [CLI reference](/cli).
@@ -25,9 +27,7 @@ Upgrade with `brew upgrade mergify-cli`.
 On Linux, or on macOS if you'd rather not use Homebrew, install with the
 official script:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/Mergifyio/mergify-cli/main/install.sh | sh
-```
+<CliInstall />
 
 This installs `mergify` to `~/.local/bin`. Set `MERGIFY_INSTALL_DIR` to pick a
 different location, or `MERGIFY_VERSION` to pin a specific release:
