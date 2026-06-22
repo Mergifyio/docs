@@ -1,0 +1,1 @@
+Address Copilot review: fold the optional tmp- prefix into the match rule and point the caution at that pattern (resolves the tmp- inconsistency). Keep :::caution — repo reserves :::danger for deprecation notices.
