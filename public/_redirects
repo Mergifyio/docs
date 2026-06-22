@@ -81,3 +81,5 @@
 /merge-queue/parallel-scopes /merge-queue/queue-modes 301
 /merge-queue/parallel-scopes/ /merge-queue/queue-modes 301
 
+/test-insights/cli /cli/tests 301
+/test-insights/cli/ /cli/tests 301

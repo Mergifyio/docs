@@ -1,10 +1,11 @@
 ---
-title: Command Line Interface (CLI)
-description: Install and configure the Mergify CLI to manage your merge queue, freezes, and stacked PRs from the terminal.
+title: CLI Installation & Authentication
+description: Install the Mergify CLI and authenticate it to manage your merge queue, freezes, and stacked pull requests from the terminal.
 ---
 
 The Mergify CLI lets you interact with Mergify features directly from your
-terminal.
+terminal. This page covers installation and authentication; for the commands
+themselves, see the [CLI reference](/cli).
 
 ## Installation
 
@@ -66,21 +67,5 @@ Or pass it directly to any command:
 mergify --token your_token_here <command>
 ```
 
-## Global Options
-
-| Option | Description |
-|---|---|
-| `--token`, `-t` | GitHub or Mergify authentication token |
-| `--repository`, `-r` | Repository full name (`owner/repo`) |
-| `--api-url`, `-u` | Mergify API URL (default: `https://api.mergify.com`) |
-
-## Available Commands
-
-| Command | Description | Documentation |
-|---|---|---|
-| `mergify stack` | Create and manage stacked pull requests | [Stacks](/stacks) |
-| `mergify freeze` | Schedule and manage merge freezes | [Scheduling Freezes](/merge-protections/freeze) |
-| `mergify queue` | Monitor and control merge queue | [Monitoring](/merge-queue/monitoring) |
-| `mergify config` | Validate and simulate config | [Config](/configuration/file-format#validating-with-the-cli) |
-| `mergify ci` | Upload and analyze CI results | [CI Insights](/ci-insights) |
-| `mergify tests` | Search test health and manage quarantine | [Test Insights CLI](/test-insights/cli) |
+Each command lists the authentication and other options it accepts under its
+**Global options** in the [CLI reference](/cli).

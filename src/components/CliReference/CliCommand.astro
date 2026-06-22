@@ -15,8 +15,10 @@ import '~/styles/cli-reference.css';
 import CliArgRow from './CliArgRow.astro';
 import {
   collectInheritedGlobals,
+  deprecationReplacement,
   findCommand,
   helpToHtml,
+  isDeprecated,
   loadCliSchema,
   partitionArgs,
   splitCommand,
@@ -49,15 +51,34 @@ if (node.commands.length > 0) {
 const description = node.longAbout ?? node.about;
 const { positionals, options } = partitionArgs(node.args);
 const globals = collectInheritedGlobals(schema.command, path);
+
+// clap exposes deprecation only in the about text. Surface it as a badge plus a
+// note linking to the replacement's card, which sits on the same group page.
+const deprecated = isDeprecated(node);
+const replacement = deprecationReplacement(node);
+const replacementCommand = replacement ? [...node.path.slice(0, -1), replacement].join(' ') : null;
 ---
 
 <div class="cli-command">
   <h2 id={slug} class="cli-command-heading">
     {command}
+    {deprecated && <span class="cli-deprecated-badge">deprecated</span>}
     <a class="cli-anchor" href={`#${slug}`} aria-label={`Link to ${command}`}>
       #
     </a>
   </h2>
+
+  {
+    deprecated && replacementCommand && (
+      <p class="cli-deprecated-note">
+        Deprecated — use{' '}
+        <a href={`#${slugify(replacementCommand)}`}>
+          <code>{replacementCommand}</code>
+        </a>{' '}
+        instead.
+      </p>
+    )
+  }
 
   {description && <p class="cli-command-description" set:html={helpToHtml(description)} />}
 

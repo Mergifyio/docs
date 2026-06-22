@@ -215,6 +215,177 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Reference index & group pages — intro block, command-group grid, deprecation.
+
+   Parallels the API reference's .api-intro / .api-section-grid on /api. Scoped
+   under .cli-reference (the index/group page wrapper) so the grid tokens stay
+   off the per-card .cli-command styles above, which also ship on feature pages.
+   --------------------------------------------------------------------------- */
+
+.cli-reference {
+  --cli-border: var(--theme-border-color);
+  --cli-radius: 8px;
+  --cli-bg-subtle: var(--theme-bg-offset);
+}
+
+.cli-intro {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cli-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--theme-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* Binary + version line — the CLI counterpart of the API's base-URL block. */
+.cli-binary code {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  background: var(--cli-bg-subtle);
+  border: 1px solid var(--cli-border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.cli-version {
+  margin-left: 0.5rem;
+  color: var(--theme-text-muted);
+  font-size: 0.85rem;
+}
+
+.cli-auth-summary {
+  padding: 1rem 1.25rem;
+  background: var(--cli-bg-subtle);
+  border: 1px solid var(--cli-border);
+  border-radius: var(--cli-radius);
+}
+
+.cli-auth-summary p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.cli-auth-summary p:first-child {
+  margin-top: 0;
+}
+
+.cli-auth-summary p:last-child {
+  margin-bottom: 0;
+}
+
+/* Command-group grid — parallels .api-section-grid / .api-section-card. */
+.cli-group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cli-group-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--cli-border);
+  border-radius: var(--cli-radius);
+  background: var(--theme-bg-content);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.cli-group-card:hover {
+  border-color: var(--theme-link);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--theme-link) 10%, transparent);
+  color: inherit;
+}
+
+/* Maintenance card — de-emphasized so the capability cards lead the index. */
+.cli-group-card--muted {
+  background: var(--cli-bg-subtle);
+}
+
+.cli-group-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cli-group-card h2 {
+  font-family: var(--font-brand);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.cli-group-count {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--theme-text-muted);
+  background: var(--cli-bg-subtle);
+  border-radius: 10px;
+  padding: 0.15rem 0.5rem;
+  white-space: nowrap;
+}
+
+.cli-group-card--muted .cli-group-count {
+  background: var(--theme-bg-content);
+}
+
+.cli-group-description {
+  font-size: 0.85rem;
+  color: var(--theme-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Back-link to a group's conceptual home, above its command cards. */
+.cli-group-backlink {
+  font-size: 0.85rem;
+  color: var(--theme-text-muted);
+  margin: 0 0 1.5rem;
+}
+
+/* Deprecation — surfaced on the command card, parallel to .cli-required-badge. */
+.cli-deprecated-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-orange-700);
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.cli-deprecated-note {
+  font-size: 0.8rem;
+  color: var(--theme-text-muted);
+  margin: 0.2rem 0 0.5rem;
+}
+
+.cli-deprecated-note code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--theme-code-inline-text);
+  background: var(--theme-code-inline-bg);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+/* ---------------------------------------------------------------------------
    Responsive — mirrors the api-reference 50em breakpoint
    --------------------------------------------------------------------------- */
 

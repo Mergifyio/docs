@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { escape } from '~/util/html-entities';
+import { slugify } from '~/util/slugify';
 
 /**
  * Types and helpers for the CLI reference, mirroring the HTTP API reference's
@@ -132,7 +133,7 @@ export function optionSignature(arg: CliArg): string {
 
 /** The value placeholder for an option/positional, e.g. `<REPOSITORY>`; null for flags. */
 export function valuePlaceholder(arg: CliArg): string | null {
-  if (arg.kind === 'flag' || arg.valueNames.length === 0) return null;
+  if (isFlagLike(arg) || arg.valueNames.length === 0) return null;
   const placeholder = arg.valueNames.map((n) => `<${n}>`).join(' ');
   return isVariadic(arg) ? `${placeholder}...` : placeholder;
 }
@@ -178,7 +179,167 @@ export function typeLabel(arg: CliArg): string {
   if (arg.possibleValues.length > 0) {
     return arg.possibleValues.map((v) => v.name).join(' | ');
   }
-  if (arg.kind === 'flag') return 'flag';
+  if (isFlagLike(arg)) return 'flag';
   if (arg.valueHint) return VALUE_HINT_LABELS[arg.valueHint] ?? 'string';
   return 'string';
+}
+
+/**
+ * A flag, or a zero-arg option clap models as a boolean switch (e.g.
+ * `stack push --draft`: an option with `numArgs: '0'` and a value name). Without
+ * this, such switches render a bogus `<VALUE>` placeholder and a `string` type.
+ */
+export function isFlagLike(arg: CliArg): boolean {
+  return arg.kind === 'flag' || (arg.kind === 'option' && arg.numArgs === '0');
+}
+
+// ---------------------------------------------------------------------------
+// Top-level grouping — the CLI counterpart of openapi.ts's tag grouping.
+//
+// `/cli/[group]` and the `/cli` index grid both derive from `groupTopLevel`, so
+// a command added to the schema reaches the docs on the next build with no
+// hand-editing — the same contract as the OpenAPI-driven `/api` reference.
+// ---------------------------------------------------------------------------
+
+/** A top-level command: a group (e.g. `tests`) or a lone leaf (e.g. `self-update`). */
+export interface CliGroup {
+  /** Top-level node name: `queue`, `self-update`, … */
+  name: string;
+  /** URL slug; single-segment lowercase names slug to themselves. */
+  slug: string;
+  /** Outward-facing card/page heading. */
+  label: string;
+  /** The top-level node itself (group or lone leaf). */
+  node: CliCommandNode;
+  /** Display strings of every runnable leaf, DFS pre-order (`mergify tests show`). */
+  leaves: string[];
+  /** Whether any leaf is deprecated — surfaced as a grid indicator. */
+  deprecated: boolean;
+}
+
+/**
+ * Editorial order for the index grid and nav — capability-first, not clap's
+ * registration order; maintenance (`self-update`) trails. A top-level command
+ * missing here still renders, appended after these.
+ */
+export const GROUP_ORDER: string[] = [
+  'queue',
+  'stack',
+  'ci',
+  'tests',
+  'freeze',
+  'config',
+  'self-update',
+];
+
+/** Card/page headings — the CLI counterpart of `TAG_LABELS`. */
+export const GROUP_LABELS: Record<string, string> = {
+  queue: 'Merge Queue',
+  stack: 'Stacked Pull Requests',
+  ci: 'CI Insights',
+  tests: 'Test Health',
+  freeze: 'Scheduled Freezes',
+  config: 'Configuration',
+  'self-update': 'Maintenance',
+};
+
+/**
+ * Outward-facing one-line value props for the index grid — the CLI counterpart
+ * of `TAG_DESCRIPTIONS`. Written for evaluators, not copied from the schema's
+ * inward-facing `about` strings.
+ */
+export const GROUP_DESCRIPTIONS: Record<string, string> = {
+  queue: 'Pause, unpause, and inspect the merge queue from scripts and incident runbooks.',
+  stack: 'Create, reorder, sync, and push stacked pull requests entirely from git.',
+  ci: 'Send JUnit results and pull request scopes from any CI provider into Mergify.',
+  tests: 'Look up test health by name and manage the flaky-test quarantine.',
+  freeze: 'Schedule and manage merge freezes for release windows and maintenance.',
+  config: 'Validate your Mergify configuration and simulate actions before you merge.',
+  'self-update': 'Update the Mergify CLI to the latest release.',
+};
+
+/**
+ * Conceptual "learn more" home for each group, linked above its command cards
+ * so a generated reference page never orphans the user's mental model. Optional
+ * — a group without an entry (e.g. `self-update`) simply omits the link.
+ */
+export const GROUP_BACKLINKS: Record<string, { text: string; href: string }> = {
+  queue: { text: 'Merge queue monitoring', href: '/merge-queue/monitoring' },
+  stack: { text: 'Stacked pull requests', href: '/stacks' },
+  ci: { text: 'CI Insights', href: '/ci-insights' },
+  tests: { text: 'Test quarantine', href: '/test-insights/quarantine' },
+  freeze: { text: 'Scheduled freezes', href: '/merge-protections/freeze' },
+  config: { text: 'Configuration file', href: '/configuration/file-format' },
+};
+
+/** Outward-facing label, falling back to a title-cased name for new commands. */
+export function humanizeCommand(name: string): string {
+  return (
+    GROUP_LABELS[name] ??
+    name
+      .split('-')
+      .map((word) => (word === 'ci' ? 'CI' : word.charAt(0).toUpperCase() + word.slice(1)))
+      .join(' ')
+  );
+}
+
+/** Slug for a top-level command name; shares the reference-wide slug convention. */
+export function slugifyCommand(name: string): string {
+  return slugify(name);
+}
+
+/** clap exposes no deprecated flag; the only signal is a note in the about text. */
+export function isDeprecated(node: CliCommandNode): boolean {
+  return /\bdeprecat/i.test(node.about ?? '');
+}
+
+/** The replacement command named in a deprecation note (`use \`junit-process\``). */
+export function deprecationReplacement(node: CliCommandNode): string | null {
+  const match = (node.about ?? '').match(/deprecated:\s*use\s*`([^`]+)`/i);
+  return match ? match[1] : null;
+}
+
+/** Every runnable leaf under a node, DFS pre-order. */
+function collectLeafNodes(node: CliCommandNode): CliCommandNode[] {
+  return node.commands.length === 0 ? [node] : node.commands.flatMap(collectLeafNodes);
+}
+
+/**
+ * Every top-level command as a group, ordered by `GROUP_ORDER` with unknown
+ * commands appended. A top-level leaf (`self-update`) becomes a single-leaf
+ * group, so every command in the schema owns a page and a grid card.
+ */
+export function groupTopLevel(root: CliCommandNode): CliGroup[] {
+  const byName = new Map(root.commands.map((c) => [c.name, c]));
+  const ordered = [
+    ...GROUP_ORDER.filter((name) => byName.has(name)),
+    ...root.commands.map((c) => c.name).filter((name) => !GROUP_ORDER.includes(name)),
+  ];
+  return ordered.map((name) => {
+    const node = byName.get(name) as CliCommandNode;
+    const leafNodes = collectLeafNodes(node);
+    return {
+      name,
+      slug: slugifyCommand(name),
+      label: humanizeCommand(name),
+      node,
+      leaves: leafNodes.map((leaf) => leaf.path.join(' ')),
+      deprecated: leafNodes.some(isDeprecated),
+    };
+  });
+}
+
+/**
+ * Right-sidebar TOC entries for a group page, one per leaf command. The slug
+ * matches the `<h2 id>` that `CliCommand` renders (component-owned, not a
+ * markdown heading) — the same wiring `getHeadingsForEndpoints` uses for `/api`.
+ */
+export function getHeadingsForCommands(
+  commands: string[]
+): Array<{ depth: number; slug: string; text: string }> {
+  return commands.map((command) => ({
+    depth: 2,
+    slug: slugify(command),
+    text: command,
+  }));
 }
