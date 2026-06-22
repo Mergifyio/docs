@@ -165,6 +165,13 @@ error.
   [`queue_branch_prefix`](/configuration/file-format/#queue-rules), substitute
   your prefix and its `tmp-` counterpart.
 
+:::note
+  Mergify also periodically deletes leftover queue branches that match these
+  prefixes. See [Queue Branch
+  Cleanup](/merge-queue/lifecycle#queue-branch-cleanup) for how branches are
+  matched and an important caveat about naming your own branches.
+:::
+
 ### Require Branches to Be Up to Date
 
 The `strict_required_status_checks_policy` setting (labeled *Require branches
