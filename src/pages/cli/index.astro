@@ -1,0 +1,73 @@
+---
+import {
+  GROUP_DESCRIPTIONS,
+  groupTopLevel,
+  loadCliSchema,
+} from '~/components/CliReference/cli-schema';
+import MainLayout from '~/layouts/MainLayout.astro';
+import '~/styles/cli-reference.css';
+
+// The CLI reference landing page — the counterpart of api/index.astro. The
+// command-group grid is generated from the schema, so it tracks the binary.
+const schema = loadCliSchema();
+const groups = groupTopLevel(schema.command);
+
+const headings = groups.map((group) => ({
+  depth: 2,
+  slug: group.slug,
+  text: group.label,
+}));
+
+const content = {
+  title: 'CLI Reference',
+  description: 'Manage Mergify from your terminal and your CI pipelines.',
+};
+
+// The maintenance group (self-update) is de-emphasized in the grid so the
+// capability cards lead the page — editorial, see GROUP_ORDER.
+const isMuted = (name: string) => name === 'self-update';
+---
+
+<MainLayout content={content} headings={headings} showMarkdownActions={false}>
+  <div class="cli-reference">
+    <div class="cli-intro">
+      <div class="cli-binary">
+        <span class="cli-label">Command</span>
+        <code>mergify</code>
+        <span class="cli-version">v{schema.cli.version}</span>
+      </div>
+      <div class="cli-auth-summary">
+        <p>
+          The Mergify CLI brings the merge queue, stacked pull requests, and CI
+          Insights to your terminal and your pipelines. It reuses your existing
+          <code>gh</code> login, so most commands work the moment it's installed.
+        </p>
+        <p>
+          New to the CLI? <a href="/cli/usage">Install it and set up authentication</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="cli-group-grid">
+      {
+        groups.map((group) => (
+          <a
+            href={`/cli/${group.slug}`}
+            class={`cli-group-card${isMuted(group.name) ? ' cli-group-card--muted' : ''}`}
+            id={group.slug}
+          >
+            <div class="cli-group-card-head">
+              <h2>{group.label}</h2>
+              <span class="cli-group-count">
+                {group.leaves.length} command{group.leaves.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+            <p class="cli-group-description">
+              {GROUP_DESCRIPTIONS[group.name] ?? group.node.about}
+            </p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</MainLayout>

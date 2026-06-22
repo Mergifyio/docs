@@ -1,0 +1,48 @@
+---
+import CliCommand from '~/components/CliReference/CliCommand.astro';
+import {
+  GROUP_BACKLINKS,
+  GROUP_DESCRIPTIONS,
+  getHeadingsForCommands,
+  groupTopLevel,
+  loadCliSchema,
+} from '~/components/CliReference/cli-schema';
+import MainLayout from '~/layouts/MainLayout.astro';
+import '~/styles/cli-reference.css';
+
+// One page per top-level command, generated from the schema — the CLI
+// counterpart of api/[tag].astro. Adding a command to public/cli-schema.json
+// adds its card (and, for a new group, its page) on the next build.
+export function getStaticPaths() {
+  const schema = loadCliSchema();
+  return groupTopLevel(schema.command).map((group) => ({
+    params: { group: group.slug },
+    props: { group },
+  }));
+}
+
+const { group } = Astro.props;
+// Headings match the component-owned <h2 id> in CliCommand (not markdown
+// headings), exactly as getHeadingsForEndpoints feeds the /api TOC.
+const headings = getHeadingsForCommands(group.leaves);
+const backlink = GROUP_BACKLINKS[group.name];
+
+const content = {
+  title: group.label,
+  description:
+    GROUP_DESCRIPTIONS[group.name] ?? group.node.about ?? `Commands for mergify ${group.name}.`,
+};
+---
+
+<MainLayout content={content} headings={headings} showMarkdownActions={false}>
+  <div class="cli-reference">
+    {
+      backlink && (
+        <p class="cli-group-backlink">
+          Learn more: <a href={backlink.href}>{backlink.text}</a>
+        </p>
+      )
+    }
+    {group.leaves.map((command) => <CliCommand command={command} />)}
+  </div>
+</MainLayout>
