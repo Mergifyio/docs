@@ -1,13 +1,103 @@
 ---
 title: Rule Syntax
-description: Overview of the syntax used in Mergify rules for Workflow Automation and Merge Queue.
+description: How to write a Mergify workflow rule, from the structure of pull_request_rules to its conditions and actions.
 ---
 
-This page is a placeholder stub to consolidate references to configuration file
-format, conditions, data types, and sharing configuration.
+import OptionsTable from '~/components/Tables/OptionsTable';
 
-Use the existing reference pages for full details:
-- [Configuration File Format](/configuration/file-format)
-- [Conditions](/configuration/conditions)
-- [Data Types](/configuration/data-types)
-- [Sharing Configuration](/configuration/sharing)
+Workflow Automation rules live under the `pull_request_rules` key in your
+[configuration file](/configuration/file-format), where each rule pairs a set of
+conditions with the actions Mergify runs when a pull request matches them. For a
+gentle introduction, see the [Workflow Automation overview](/workflow). This
+page is the field-by-field reference.
+
+## Fields
+
+`pull_request_rules` is a list, and each entry is a single rule: a YAML
+dictionary where `name`, `conditions`, and `actions` are required, while
+`description` and `disabled` are optional.
+
+<OptionsTable def="PullRequestRuleModel" />
+
+## Conditions
+
+`conditions` is a list of expressions describing which pull requests the rule
+applies to. A pull request must satisfy **every** condition in the list for the
+rule to match:
+
+```yaml
+conditions:
+  - base = main
+  - label = ready-to-merge
+```
+
+Each condition is built from an attribute (such as `base`, `label`, or
+`#approved-reviews-by`), an operator (such as `=`, `>=`, or `~=`), and usually a
+value. See the [attributes list](/configuration/conditions#attributes-list) and
+[operators list](/configuration/conditions#operators-list) for the full set.
+
+To express "any of" or "none of" instead of "all of", group conditions with the
+[`and`, `or`, and `not` operators](/configuration/conditions#combining-conditions-using-logical-operators).
+The same condition syntax also powers [Merge Queue](/merge-queue) and
+[Merge Protections](/merge-protections), so what you learn here carries over.
+
+## Actions
+
+`actions` is a dictionary that maps an action name to its parameters. A single
+rule can run several actions, and Mergify runs them all when the conditions
+match:
+
+```yaml
+pull_request_rules:
+  - name: warn and label pull requests in conflict
+    conditions:
+      - conflict
+    actions:
+      comment:
+        message: "@{{author}} this pull request is now in conflict 😩"
+      label:
+        toggle:
+          - conflict
+```
+
+The `{{author}}` placeholder is a [template](/configuration/data-types#template)
+that Mergify fills in with the pull request's data. Browse every available
+action and its parameters in the [Actions catalog](/workflow/actions).
+
+## Combining Rules
+
+Rules are evaluated independently: Mergify checks each one against the pull
+request, and every rule whose conditions match runs its actions. Order the rules
+however reads best, since matching does not stop at the first hit. For when an
+action re-runs versus stays put, see
+[how rules are evaluated](/workflow#how-rules-are-evaluated).
+
+## Disabling a Rule
+
+Set `disabled` with a `reason` to keep a rule in the file but stop it from
+running. The reason is shown in the configuration check so others know why:
+
+```yaml
+pull_request_rules:
+  - name: automatic merge
+    disabled:
+      reason: paused during the release freeze
+    conditions:
+      - "#approved-reviews-by >= 1"
+    actions:
+      merge: # merge with default options
+```
+
+## Validating Your Rules
+
+Mergify validates your configuration on every push and reports problems in the
+"Checks" tab of your pull request. To catch mistakes earlier, validate and
+simulate rules locally with the [Mergify CLI](/cli/config):
+
+```bash
+mergify config validate
+mergify config simulate https://github.com/owner/repo/pull/142
+```
+
+See [Validation and Troubleshooting](/configuration/file-format#validation-and-troubleshooting)
+for the full workflow.
