@@ -1578,7 +1578,7 @@
         },
         "queue_controls_comment": {
           "default": true,
-          "description": "When enabled, Mergify renders task-list checkboxes in the Merge Queue status comment so developers can queue or requeue a pull request by clicking a box instead of typing `@mergifyio queue`. The checkboxes only appear for organizations enabled for the feature.",
+          "description": "When enabled, Mergify renders task-list checkboxes in the Merge Queue status comment so developers can queue or requeue a pull request by clicking a box instead of typing `@mergifyio queue`.",
           "title": "Queue Controls Comment",
           "type": "boolean"
         }
