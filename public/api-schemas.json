@@ -12182,6 +12182,17 @@
               }
             ],
             "title": "Session Id"
+          },
+          "dequeue_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dequeue Code"
           }
         },
         "type": "object",
@@ -12199,7 +12210,8 @@
           "checks",
           "unsuccessful_checks",
           "pull_request_head_sha",
-          "session_id"
+          "session_id",
+          "dequeue_code"
         ],
         "title": "EventQueueLeaveMetadata"
       },
@@ -15083,6 +15095,12 @@
             ],
             "title": "Checks Timeout At",
             "description": "When the checks will time out and the batch be dequeued, if a checks timeout applies"
+          },
+          "intermediate_results_skipped": {
+            "type": "boolean",
+            "title": "Intermediate Results Skipped",
+            "description": "True when this batch merged (or is set to merge) without its own CI passing, because a later downstream batch that includes its changes succeeded (skip_intermediate_results).",
+            "default": false
           },
           "sub_batches": {
             "anyOf": [

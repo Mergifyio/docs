@@ -2687,7 +2687,7 @@
         },
         "queue_branch_prefix": {
           "default": "mergify/merge-queue/",
-          "description": "Prefix for the merge queue branch name",
+          "description": "Prefix for the merge queue branch name. Branches under this prefix are eligible for automatic [queue branch cleanup](https://docs.mergify.com/merge-queue/lifecycle#queue-branch-cleanup).",
           "title": "Queue Branch Prefix",
           "type": "string"
         },
@@ -2934,7 +2934,7 @@
         },
         "queue_branch_prefix": {
           "default": "mergify/merge-queue/",
-          "description": "Prefix for the merge queue branch name",
+          "description": "Prefix for the merge queue branch name. Branches under this prefix are eligible for automatic [queue branch cleanup](https://docs.mergify.com/merge-queue/lifecycle#queue-branch-cleanup).",
           "title": "Queue Branch Prefix",
           "type": "string"
         },
