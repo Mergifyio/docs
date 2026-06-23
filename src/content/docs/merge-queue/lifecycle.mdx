@@ -169,6 +169,52 @@ to the queue by re-applying the `queue` command and by re-satisfying the
 These methods provide granular control over your merge queue, ensuring that
 only the appropriate pull requests get processed and merged.
 
+## Checks Timeout
+
+When a pull request reaches the front of the queue, Mergify validates it by
+re-running your CI against a temporary merge commit. If those checks never
+report back (because of a stuck CI job or a provider outage),
+the pull request would block the queue indefinitely. The `checks_timeout`
+option in your [`queue_rules`](/merge-queue/rules) caps how
+long Mergify waits for pending checks before removing the pull request from the
+queue.
+
+You can set `checks_timeout` in three ways:
+
+- **`auto`** (the default): Mergify computes the timeout from the queue's own
+  recent CI runtime, using the 95th-percentile duration of successful runs plus
+  a safety margin. The value adapts as your CI gets faster or slower, so you don't
+  have to guess one. Until the queue has gathered enough CI history, `auto`
+  applies no timeout.
+
+- **A fixed [duration](/configuration/data-types#duration)**, such as `30 min`
+  or `2 hours`. The timeout cannot be shorter than 60 seconds.
+
+- **`null`**, which disables the timeout. Mergify waits on pending checks
+  indefinitely.
+
+```yaml
+queue_rules:
+  - name: default
+    checks_timeout: 45 min
+```
+
+:::note
+  `auto` is the default. Before it existed, a queue without a `checks_timeout`
+  had no timeout and would wait on pending checks indefinitely. Queues that
+  already set an explicit duration, or `null`, keep their configured behavior.
+
+  Because `auto` applies no timeout until a queue has built up CI history, set an
+  explicit duration if you want a guaranteed timeout on a brand-new queue.
+:::
+
+When a pull request is dequeued because its checks timed out, Mergify states how
+long it waited (for example, "the checks did not pass within the checks timeout
+of 45 minutes") under the
+[`checks-timeout`](/configuration/data-types#queue-dequeue-reason) dequeue
+reason. For batches, see [Handling Batch Failure or
+Timeout](/merge-queue/batches#handling-batch-failure-or-timeout).
+
 ## Handling PRs that Fail Validation Checks
 
 Even with all the automated checks and balances in place, it's possible for a
