@@ -233,7 +233,7 @@ const navItems: NavItem[] = [
     icon: 'lucide:zap',
     path: '/workflow',
     children: [
-      { title: 'Workflow Automation', path: '/workflow/', icon: 'lucide:zap' },
+      { title: 'Overview', path: '/workflow', icon: 'lucide:lightbulb' },
       { title: 'Rule Syntax', path: '/workflow/rule-syntax', icon: 'lucide:badge-question-mark' },
       {
         title: 'Actions',
@@ -244,7 +244,7 @@ const navItems: NavItem[] = [
           { title: 'Backport', path: '/workflow/actions/backport', icon: 'lucide:git-branch' },
           { title: 'Close', path: '/workflow/actions/close', icon: 'lucide:circle-x' },
           { title: 'Copy', path: '/workflow/actions/copy', icon: 'lucide:share-2' },
-          { title: 'Comment', path: '/workflow/actions/comment', icon: 'lucide:list' },
+          { title: 'Comment', path: '/workflow/actions/comment', icon: 'lucide:message-square' },
           {
             title: 'Delete Head Branch (Deprecated)',
             path: '/workflow/actions/delete_head_branch',
@@ -255,7 +255,11 @@ const navItems: NavItem[] = [
             path: '/workflow/actions/dismiss_reviews',
             icon: 'lucide:message-square-x',
           },
-          { title: 'Edit', path: '/workflow/actions/edit', icon: 'lucide:type' },
+          {
+            title: 'Edit',
+            path: '/workflow/actions/edit',
+            icon: 'octicon:git-pull-request-draft-16',
+          },
           {
             title: 'GitHub Actions',
             path: '/workflow/actions/github_actions',
