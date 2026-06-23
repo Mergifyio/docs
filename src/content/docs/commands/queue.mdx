@@ -3,6 +3,9 @@ title: Mergify Queue Command
 description: Add a pull request to a merge queue.
 ---
 
+import { Image } from "astro:assets"
+import queueControlCheckbox from "../../images/commands/queue-control-checkbox.png"
+
 The `queue` command in Mergify offers users a direct way to interact with the
 [Mergify merge queue](/merge-queue), right from their pull request
 comments. By utilizing this command, users can add a pull request to a merge
@@ -72,3 +75,30 @@ queue, allowing Mergify to retry validation.
   The `requeue` command is deprecated. Use `@mergifyio queue` for both
   initial queuing and re-queuing.
 :::
+
+## Queueing with a Checkbox
+
+If you'd rather not type a command, Mergify can post a merge queue status
+comment with a checkbox you can tick to queue your pull request:
+
+<Image src={queueControlCheckbox} alt="Merge queue status comment with a checkbox to queue the pull request" />
+
+- **Queue this pull request** appears when the pull request is ready to be
+  queued. Tick it to add the pull request to the merge queue.
+
+- **Requeue this pull request** appears after a pull request leaves the queue
+  following a failed attempt. Tick it to put the pull request back in the queue.
+
+Ticking a checkbox does exactly what the `@mergifyio queue` command does. The
+action is attributed to the person who ticked it, and the same
+[command restrictions](/commands/restrictions) and write-permission checks
+apply, so a checkbox can't queue a pull request that the person couldn't queue
+manually.
+
+This is enabled by default. To turn it off, set `queue_controls_comment` to
+`false` in your `merge_queue` configuration:
+
+```yaml
+merge_queue:
+  queue_controls_comment: false
+```
