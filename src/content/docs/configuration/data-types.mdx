@@ -4,6 +4,7 @@ description: The different data types you can find in Mergify configuration file
 ---
 
 import OptionsTable from '../../../components/Tables/OptionsTable';
+import TemplateVariablesTable from '../../../components/Tables/TemplateVariablesTable';
 
 When using templates or conditions, data are made of different types. You will
 find below the different data types that are available and exposed in Mergify
@@ -256,7 +257,67 @@ priority_rules:
     priority: 550
 ```
 
-## Template
+## Templates
+
+Some fields are rendered as templates before Mergify uses them. Most accept
+*variable substitution* (short `{{ name }}` placeholders filled with pull
+request data); a few still use the legacy [Jinja2](#legacy-template) language.
+
+### Variable substitution
+
+Several fields let you insert pull request data using variables:
+
+```text
+Thank you {{ author }} for your contribution!
+```
+
+renders to:
+
+```text
+Thank you jd for your contribution!
+```
+
+when the pull request author login is `jd`.
+
+A variable is written as `{{ name }}` (surrounding spaces are optional). Every
+other character is kept as-is. Each templated field accepts a specific set of
+variables, documented as its data type below.
+
+### Message template
+
+Used by the [`comment`](/workflow/actions/comment),
+[`review`](/workflow/actions/review) and [`close`](/workflow/actions/close)
+message fields.
+
+<TemplateVariablesTable def="CommentActionModel" field="message" />
+
+### Copy title template
+
+Used by the [`copy`](/workflow/actions/copy) and
+[`backport`](/workflow/actions/backport) `title` field.
+
+<TemplateVariablesTable def="CopyActionModel" field="title" />
+
+### Copy body template
+
+Used by the [`copy`](/workflow/actions/copy) and
+[`backport`](/workflow/actions/backport) `body` field.
+
+<TemplateVariablesTable def="CopyActionModel" field="body" />
+
+### Workflow input template
+
+Used by the [`github_actions`](/workflow/actions/github_actions) workflow input
+values.
+
+<TemplateVariablesTable def="GhaActionModelDispatch" field="inputs" />
+
+### Legacy template
+
+:::note
+  Jinja2 is deprecated for fields that support [variable
+  substitution](#variable-substitution) and stops working on 2026-09-30.
+:::
 
 The template data type is a regular string that is rendered using the [Jinja2
 template language](https://jinja.palletsprojects.com/templates/).

@@ -32,19 +32,6 @@ strings.
 
 <ActionOptionsTable def="BackportActionModel" />
 
-As the title and body are templates, you can leverage any pull request
-attributes to use as content, e.g., `{{author}}`.
-
-Note that the `commits` attribute here will be the list of cherry
-picked commits.
-
-On top of that, you can also use the following additional variables:
-
-- `{{ destination_branch }}`: the name of the destination branch.
-
-- `{{ cherry_pick_error }}`: the cherry pick error message if any (only
-    available in body).
-
 <BackportLimitations />
 
 ## Examples
@@ -101,10 +88,11 @@ In this configuration, a pull request is backported when it has the label `backp
 Then, when the backport is created and passes the check named
 `continuous-integration`, it will be automatically merged.
 
-### Implementing `-x` option
+### Including the cherry-picked commits
 
-If you are used to the `-x` option of `git cherry-pick` that includes which
-commits has been cherry-picked, you can implement the same thing with Mergify:
+To record which commits were cherry-picked (similar to the `-x` option of `git
+cherry-pick`), include their SHAs in the backport body with the
+`{{ cherry_picked_commits }}` variable:
 
 ```yaml
 pull_request_rules:
@@ -116,9 +104,7 @@ pull_request_rules:
         body: |
           {{ body }}
 
-          {% for c in commits %}
-          (cherry picked from commit {{ c.sha }})
-          {% endfor %}
+          {{ cherry_picked_commits }}
         branches:
           - stable
 ```
