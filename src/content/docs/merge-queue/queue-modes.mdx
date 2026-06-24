@@ -476,8 +476,9 @@ single-queue ordering are not available:
 - **`fast-forward` merge is not supported.** Because batches merge independently, Mergify needs to
   rebase them. Use `merge` or `rebase` as your `merge_method`.
 
-- **`skip_intermediate_results` is not available.** This feature depends on the strict cumulative
-  ordering of serial mode.
+- **`skip_intermediate_results` is not supported in isolated mode.** Isolated batches are fully
+  independent, so a passing batch can't vouch for another. It does work in parallel mode, where
+  batches sharing a scope build on one another.
 
 - **`partition_rules` are not supported.** Partitions rely on serial ordering; use scopes instead.
 
