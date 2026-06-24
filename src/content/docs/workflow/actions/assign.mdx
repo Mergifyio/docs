@@ -16,9 +16,8 @@ pull requests that require their attention.
 
 <ActionOptionsTable def="AssignActionModel"/>
 
-As the list of users in `add_users` or `remove_users` is based on
-[templates](/configuration/data-types#legacy-template), you can use, e.g.,
-`{{author}}` to assign the pull request to its author.
+Each entry in `add_users` and `remove_users` is a GitHub login. You can also use
+`{{ author }}` to target the pull request author.
 
 :::caution
   Make sure the users you specify in the assign action have the necessary
@@ -57,5 +56,5 @@ pull_request_rules:
     actions:
       assign:
         add_users:
-          - "{{author}}"
+          - "{{ author }}"
 ```

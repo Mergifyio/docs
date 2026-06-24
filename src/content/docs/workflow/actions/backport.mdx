@@ -54,6 +54,12 @@ pull_request_rules:
           - "{{ author }}"
 ```
 
+:::note
+  In `assignees`, `{{ author }}` and `{{ merged_by }}` are built-in shortcuts for
+  the pull request author and its merger; `bot_account` accepts `{{ author }}`.
+  They resolve automatically.
+:::
+
 ### Combining Automatic Merge
 
 You can also combine the `backport` action with other actions like `merge`.
