@@ -18,9 +18,18 @@ const valueTypeLinks: { [key: string]: string } = {
 };
 
 const valueTypeFormatLinks: { [key: string]: string } = {
-  template: '/configuration/data-types#template',
+  template: '/configuration/data-types#legacy-template',
   'date-time': '/configuration/data-types#timestamp',
   duration: '/configuration/data-types#duration',
+};
+
+// A simple-template field carries a per-set title (e.g. "Message template"); render
+// the title as the field type, linking to the matching data-types section.
+const simpleTemplateTitleLinks: { [key: string]: string } = {
+  'Message template': '/configuration/data-types#message-template',
+  'Copy title template': '/configuration/data-types#copy-title-template',
+  'Copy body template': '/configuration/data-types#copy-body-template',
+  'Workflow input template': '/configuration/data-types#workflow-input-template',
 };
 
 export type OptionDefinitionRef = string;
@@ -189,6 +198,19 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
     );
   } else if ('const' in definition) {
     valueType = <HighlightCode>{definition.const}</HighlightCode>;
+  } else if (definition.format === 'simple-template') {
+    // A simple-template field IS a named data type: show its title and link to the
+    // matching data-types section, like Template/Timestamp/Duration.
+    const title: string = definition.title ?? 'simple-template';
+    const titleLink = simpleTemplateTitleLinks[title];
+    valueType =
+      titleLink !== undefined ? (
+        <a color="primary" style={{ textDecoration: 'underline' }} href={titleLink}>
+          {title}
+        </a>
+      ) : (
+        <HighlightCode>{title}</HighlightCode>
+      );
   } else if ('format' in definition) {
     const formatLink = valueTypeFormatLinks[definition.format];
     if (formatLink !== undefined) {
@@ -198,6 +220,13 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
         </a>
       );
     }
+  } else if (
+    definition.additionalProperties &&
+    typeof definition.additionalProperties === 'object'
+  ) {
+    // A map field (e.g. github_actions inputs): show "map of <value type>" so the
+    // templated value type still links to its data-types section.
+    valueType = <>map of {getValueType(schema, definition.additionalProperties)}</>;
   } else {
     valueType = <HighlightCode>{definition.type}</HighlightCode>;
   }
