@@ -11,7 +11,7 @@ up-to-date with the latest changes from the base branch.
 
 :::note
   You do not need to use this action if you use the [merge
-  queue](/merge-queue). The merge queue automatically update the pull requests
+  queue](/merge-queue). The merge queue automatically updates the pull requests
   it processes as necessary, making sure they are tested with up-to-date code
   before being merged.
 :::
@@ -25,4 +25,21 @@ up-to-date with the latest changes from the base branch.
 
 ## Parameters
 
-<ActionOptionsTable def='RebaseActionModel'/>
+<ActionOptionsTable def="RebaseActionModel" />
+
+## Examples
+
+### Autosquash Fixup Commits
+
+Rebase a pull request and fold in any `fixup!`, `squash!`, or `amend!` commits
+once it is ready to merge.
+
+```yaml
+pull_request_rules:
+  - name: autosquash fixup commits
+    conditions:
+      - label = ready-to-merge
+    actions:
+      rebase:
+        autosquash: true
+```

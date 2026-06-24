@@ -16,3 +16,21 @@ certain pull requests.
 ## Parameters
 
 <ActionOptionsTable def="RequestReviewsActionModel" />
+
+## Examples
+
+### Request a Review for Sensitive Files
+
+Ask the security team to review whenever a pull request changes files under
+`security/`.
+
+```yaml
+pull_request_rules:
+  - name: request a security review
+    conditions:
+      - files ~= ^security/
+    actions:
+      request_reviews:
+        teams:
+          - security
+```
