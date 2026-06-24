@@ -9574,6 +9574,28 @@
               "skipped_quota_exceeded"
             ],
             "title": "Outcome"
+          },
+          "workflow_run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workflow Run Id"
+          },
+          "job_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Url"
           }
         },
         "type": "object",
@@ -9584,7 +9606,9 @@
           "retry_mode",
           "retry_attempt",
           "condition_matches",
-          "outcome"
+          "outcome",
+          "workflow_run_id",
+          "job_url"
         ],
         "title": "EventCiInsightsJobRetriedMetadata"
       },
