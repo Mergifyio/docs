@@ -13,3 +13,21 @@ reviews in your pull request workflow.
 ## Parameters
 
 <ActionOptionsTable def="DismissReviewsActionModel" />
+
+## Examples
+
+### Dismiss Approvals When New Commits Are Pushed
+
+Keep approvals fresh by removing them whenever new commits are pushed, while
+leaving change requests in place.
+
+```yaml
+pull_request_rules:
+  - name: dismiss stale approvals
+    conditions:
+      - base = main
+    actions:
+      dismiss_reviews:
+        approved: true
+        changes_requested: false
+```
