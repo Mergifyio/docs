@@ -1,6 +1,7 @@
 import * as yaml from 'js-yaml';
 
 import configSchema from '../../util/sanitizedConfigSchema';
+import { extractTemplateVariables } from '../../util/templateVariables';
 import Badge from '../Badge/Badge';
 import {
   ConfigSchema,
@@ -50,6 +51,19 @@ export function OptionsTableBase(
             : '';
           const defaultIsMultiline = hasDefault && defaultDump.includes('\n');
           const isDeprecated = Boolean(definition.deprecated);
+          // A simple-template field's description carries an "Allowed variables: …"
+          // list. Once the schema publishes x-mergify-template-variables, the data
+          // type renders a richer <TemplateVariablesTable>, so the duplicate list is
+          // stripped here. Until that annotation is synced in, keep the list — it is
+          // the only variable reference readers have.
+          const rawDescription = (definition as OptionDefinition).description;
+          const hasPublishedVariables =
+            definition.format === 'simple-template' &&
+            extractTemplateVariables(definition).length > 0;
+          const description =
+            hasPublishedVariables && typeof rawDescription === 'string'
+              ? rawDescription.replace(/\s*Allowed variables:.*$/s, '').trim()
+              : rawDescription;
           const id = `${idPrefix}${optionKey}`;
           const href = `#${encodeURIComponent(id)}`;
 
@@ -86,11 +100,11 @@ export function OptionsTableBase(
                   <code>{defaultDump}</code>
                 </pre>
               )}
-              {definition.description !== undefined && (
+              {description !== undefined && (
                 <div
                   className={styles.description}
                   dangerouslySetInnerHTML={{
-                    __html: renderMarkdown(definition.description),
+                    __html: renderMarkdown(description),
                   }}
                 />
               )}
