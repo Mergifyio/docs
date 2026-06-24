@@ -1,30 +1,84 @@
 ---
 title: Workflow Automation
-description: An overview of Mergify Workflow Automation and its capabilities to automate your pull request process.
+description: Automate the routine work on your pull requests with rules that react to a pull request's state to label, comment, assign, rebase, merge, and more.
+hubAccent: true
 ---
 
-Mergify Workflow Automation is a rule-based system that automates pull request
-tasks using `pull_request_rules` in your Mergify configuration file.
+import Docset from '~/components/DocsetGrid/Docset.astro';
+import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
 
-## How It Works
+Workflow Automation handles the routine work on your pull requests. You write
+rules in your Mergify configuration file, and Mergify carries them out: labeling,
+commenting, assigning, rebasing, merging, and more. Your team spends less time on
+pull request housekeeping.
 
-Mergify evaluates the state of a pull request rather than individual events.
-This means it checks the current status of a pull request and acts based on
-defined conditions. This behavior is known as "edge triggering."
+## Anatomy of a Rule
 
-An action will only be re-triggered for a pull request if the state flips back
-from being unmatched to matched.
+Every rule lives under `pull_request_rules` and pairs a set of **conditions**
+with the **actions** to run when a pull request matches them:
+
+```yaml
+pull_request_rules:
+  - name: add "WIP" label when the title contains "WIP"
+    conditions:
+      - title ~= WIP
+    actions:
+      label:
+        toggle:
+          - WIP
+```
+
+Here, any pull request whose title contains `WIP` gets the `WIP` label. Once the
+title no longer matches, Mergify removes it.
+
+## How Rules Are Evaluated
+
+Mergify evaluates the *state* of a pull request rather than individual events. It
+checks the current status of a pull request and acts based on the conditions you
+defined. This behavior is known as "edge triggering": an action only re-runs for
+a pull request when its state flips back from unmatched to matched.
 
 :::note
   Mergify never evaluates rules for pull request drafts it creates while
   processing the [merge queue](/merge-queue).
 :::
 
-## Reference
+## Building Blocks
 
-- [Rule Syntax](/workflow/rule-syntax) for the `pull_request_rules` format
+<DocsetGrid>
+  <Docset title="Rule Syntax" path="/workflow/rule-syntax" icon="lucide:badge-question-mark">
+    The `pull_request_rules` format and how to structure a rule.
+  </Docset>
+  <Docset title="Conditions" path="/configuration/conditions" icon="lucide:list-checks">
+    Match pull requests on title, labels, CI status, files, authorship, and more.
+  </Docset>
+  <Docset title="Actions" path="/workflow/actions" icon="lucide:rocket">
+    The full catalog of tasks Mergify can run when a rule matches.
+  </Docset>
+  <Docset title="Configuration File" path="/configuration/file-format" icon="lucide:braces">
+    Where rules live and how the overall config file is structured.
+  </Docset>
+</DocsetGrid>
 
-- [Actions](/workflow/actions) for the full list of available actions
+## Popular Actions
 
-- [Configuration File](/configuration/file-format) for the overall config
-  structure
+<DocsetGrid>
+  <Docset title="Merge" path="/workflow/actions/merge" icon="octicon:git-merge-16">
+    Automate the merging of your pull requests.
+  </Docset>
+  <Docset title="Queue" path="/workflow/actions/queue" icon="mergify:merge-queue">
+    Add the pull request to the merge queue.
+  </Docset>
+  <Docset title="Label" path="/workflow/actions/label" icon="lucide:badge-check">
+    Add, remove, or toggle labels on a pull request.
+  </Docset>
+  <Docset title="Comment" path="/workflow/actions/comment" icon="lucide:message-square">
+    Post a comment on a pull request.
+  </Docset>
+  <Docset title="Backport" path="/workflow/actions/backport" icon="lucide:git-branch">
+    Copy a pull request to another branch once it is merged.
+  </Docset>
+  <Docset title="Rebase" path="/workflow/actions/rebase" icon="lucide:git-branch">
+    Rebase the pull request on top of its base branch.
+  </Docset>
+</DocsetGrid>
