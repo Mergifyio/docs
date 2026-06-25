@@ -6,7 +6,7 @@ import {
   humanizeTag,
   preprocessSchema,
   slugifyTag,
-  TAG_DESCRIPTIONS,
+  tagDescription,
 } from '~/components/ApiReference/openapi';
 import MainLayout from '~/layouts/MainLayout.astro';
 import '~/styles/api-reference.css';
@@ -20,7 +20,7 @@ const sections = [...groups.entries()].map(([tag, endpoints]) => ({
   tag,
   label: humanizeTag(tag),
   slug: slugifyTag(tag),
-  description: TAG_DESCRIPTIONS[tag] ?? '',
+  description: tagDescription(tag),
   count: endpoints.length,
   methods: [...new Set(endpoints.map((e) => e.method))],
 }));
