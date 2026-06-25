@@ -14992,6 +14992,15 @@
             "type": "array",
             "title": "Waiting Pull Requests"
           },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "serial",
+              "parallel",
+              "isolated"
+            ],
+            "title": "Mode"
+          },
           "scope_queues": {
             "additionalProperties": {
               "items": {
@@ -15017,7 +15026,8 @@
         "type": "object",
         "required": [
           "batches",
-          "waiting_pull_requests"
+          "waiting_pull_requests",
+          "mode"
         ],
         "title": "MergeQueueStatus"
       },

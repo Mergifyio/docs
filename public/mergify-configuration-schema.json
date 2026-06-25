@@ -387,16 +387,72 @@
         "title": {
           "default": "{{ title }} (backport #{{ number }})",
           "description": "The pull request's title.",
-          "format": "template",
-          "title": "Template",
-          "type": "string"
+          "format": "simple-template",
+          "title": "Title template",
+          "type": "string",
+          "x-mergify-template-variables": [
+            {
+              "description": "The pull request title.",
+              "name": "title"
+            },
+            {
+              "description": "The pull request number.",
+              "name": "number"
+            },
+            {
+              "description": "The branch the pull request is copied to.",
+              "name": "destination_branch"
+            },
+            {
+              "description": "The base branch name.",
+              "name": "base"
+            },
+            {
+              "description": "The pull request author's login.",
+              "name": "author"
+            }
+          ]
         },
         "body": {
           "default": "{{ body }}<hr>This is an automatic backport of pull request #{{number}} done by [Mergify](https://mergify.com).\n",
           "description": "The pull request's body.",
-          "format": "template",
-          "title": "Template",
-          "type": "string"
+          "format": "simple-template",
+          "title": "Body template",
+          "type": "string",
+          "x-mergify-template-variables": [
+            {
+              "description": "The pull request title.",
+              "name": "title"
+            },
+            {
+              "description": "The pull request number.",
+              "name": "number"
+            },
+            {
+              "description": "The branch the pull request is copied to.",
+              "name": "destination_branch"
+            },
+            {
+              "description": "The base branch name.",
+              "name": "base"
+            },
+            {
+              "description": "The pull request author's login.",
+              "name": "author"
+            },
+            {
+              "description": "The pull request description (body).",
+              "name": "body"
+            },
+            {
+              "description": "The cherry-pick error message, when the copy hit a conflict (body only).",
+              "name": "cherry_pick_error"
+            },
+            {
+              "description": "The cherry-picked commit SHAs, newline-joined.",
+              "name": "cherry_picked_commits"
+            }
+          ]
         },
         "report_mode": {
           "default": [
@@ -1016,16 +1072,72 @@
         "title": {
           "default": "{{ title }} (copy #{{ number }})",
           "description": "The pull request's title.",
-          "format": "template",
-          "title": "Template",
-          "type": "string"
+          "format": "simple-template",
+          "title": "Title template",
+          "type": "string",
+          "x-mergify-template-variables": [
+            {
+              "description": "The pull request title.",
+              "name": "title"
+            },
+            {
+              "description": "The pull request number.",
+              "name": "number"
+            },
+            {
+              "description": "The branch the pull request is copied to.",
+              "name": "destination_branch"
+            },
+            {
+              "description": "The base branch name.",
+              "name": "base"
+            },
+            {
+              "description": "The pull request author's login.",
+              "name": "author"
+            }
+          ]
         },
         "body": {
           "default": "{{ body }}<hr>This is an automatic copy of pull request #{{number}} done by [Mergify](https://mergify.com).\n",
           "description": "The pull request's body.",
-          "format": "template",
-          "title": "Template",
-          "type": "string"
+          "format": "simple-template",
+          "title": "Body template",
+          "type": "string",
+          "x-mergify-template-variables": [
+            {
+              "description": "The pull request title.",
+              "name": "title"
+            },
+            {
+              "description": "The pull request number.",
+              "name": "number"
+            },
+            {
+              "description": "The branch the pull request is copied to.",
+              "name": "destination_branch"
+            },
+            {
+              "description": "The base branch name.",
+              "name": "base"
+            },
+            {
+              "description": "The pull request author's login.",
+              "name": "author"
+            },
+            {
+              "description": "The pull request description (body).",
+              "name": "body"
+            },
+            {
+              "description": "The cherry-pick error message, when the copy hit a conflict (body only).",
+              "name": "cherry_pick_error"
+            },
+            {
+              "description": "The cherry-picked commit SHAs, newline-joined.",
+              "name": "cherry_picked_commits"
+            }
+          ]
         },
         "report_mode": {
           "default": [
@@ -1281,10 +1393,36 @@
                 "type": "boolean"
               },
               {
-                "description": "A string template using the Jinja2 syntax.",
-                "format": "template",
-                "title": "Template",
-                "type": "string"
+                "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`, `base`, `head`, `number`, `repository_full_name`, `title`.",
+                "format": "simple-template",
+                "title": "Workflow input template",
+                "type": "string",
+                "x-mergify-template-variables": [
+                  {
+                    "description": "The pull request author's login.",
+                    "name": "author"
+                  },
+                  {
+                    "description": "The pull request number.",
+                    "name": "number"
+                  },
+                  {
+                    "description": "The pull request title.",
+                    "name": "title"
+                  },
+                  {
+                    "description": "The base branch name.",
+                    "name": "base"
+                  },
+                  {
+                    "description": "The head branch name.",
+                    "name": "head"
+                  },
+                  {
+                    "description": "The repository's full name (`owner/repo`).",
+                    "name": "repository_full_name"
+                  }
+                ]
               }
             ]
           },

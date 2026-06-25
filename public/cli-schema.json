@@ -3,34 +3,123 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.6.18.1",
-    "about": null
+    "version": "2026.6.25.1",
+    "about": "Mergify command-line interface"
   },
+  "exitCodes": [
+    {
+      "code": 0,
+      "name": "Success",
+      "description": "Command completed successfully."
+    },
+    {
+      "code": 1,
+      "name": "GenericError",
+      "description": "Unclassified runtime failure (I/O error, bug, or captured panic)."
+    },
+    {
+      "code": 3,
+      "name": "StackNotFound",
+      "description": "Stack, branch, or commit not found."
+    },
+    {
+      "code": 4,
+      "name": "Conflict",
+      "description": "Rebase or merge conflict."
+    },
+    {
+      "code": 5,
+      "name": "GitHubApiError",
+      "description": "GitHub API request failed."
+    },
+    {
+      "code": 6,
+      "name": "MergifyApiError",
+      "description": "Mergify API request failed."
+    },
+    {
+      "code": 7,
+      "name": "InvalidState",
+      "description": "CLI invariant violated (e.g. command run outside a valid context)."
+    },
+    {
+      "code": 8,
+      "name": "ConfigurationError",
+      "description": "Configuration file missing, unparseable, or failing validation."
+    }
+  ],
   "command": {
     "name": "mergify",
     "path": [
       "mergify"
     ],
-    "about": null,
-    "longAbout": null,
+    "about": "Mergify command-line interface",
+    "longAbout": "Mergify command-line interface.\n\nDrive Mergify from your terminal. Validate and simulate your configuration, manage and inspect the merge queue, schedule merge freezes, look at the tests tracked by CI Insights, and create and maintain stacked pull requests.\n\nMost commands talk to the Mergify API and need a token. Set `MERGIFY_TOKEN` (or `GITHUB_TOKEN`) to apply it to every command, or pass `--token` to an individual command — there is no global `--token` on `mergify` itself. Run `mergify <command> --help` for detailed help and options on any command.",
     "usage": "mergify [OPTIONS] <COMMAND>",
     "aliases": [],
     "subcommandRequired": true,
     "source": "native",
     "args": [
       {
+        "id": "verbose",
+        "kind": "flag",
+        "short": "v",
+        "long": "verbose",
+        "valueNames": [],
+        "help": "Increase log verbosity: -v info, -vv debug, -vvv trace. Logs go to stderr so stdout stays clean for piping. `RUST_LOG` overrides this",
+        "longHelp": "Increase log verbosity: -v info, -vv debug, -vvv trace. Logs go to stderr so stdout stays clean for piping. `RUST_LOG` overrides this",
+        "required": false,
+        "global": true,
+        "default": "0",
+        "possibleValues": [],
+        "numArgs": "0",
+        "env": null,
+        "valueHint": null
+      },
+      {
         "id": "debug",
         "kind": "flag",
         "short": null,
         "long": "debug",
         "valueNames": [],
-        "help": "Enable verbose debug logging. Mirrors the Python CLI's top-level `--debug` flag so the same invocations work against either binary; native commands accept it as a no-op today (no native code path consults it yet), shimmed ones re-inject it into the forwarded argv so the Python side can honor it",
-        "longHelp": "Enable verbose debug logging. Mirrors the Python CLI's top-level `--debug` flag so the same invocations work against either binary; native commands accept it as a no-op today (no native code path consults it yet), shimmed ones re-inject it into the forwarded argv so the Python side can honor it",
+        "help": "Shorthand for at least debug-level logging (like -vv)",
+        "longHelp": "Shorthand for at least debug-level logging (like -vv)",
         "required": false,
         "global": true,
         "default": "false",
         "possibleValues": [],
         "numArgs": "0",
+        "env": null,
+        "valueHint": null
+      },
+      {
+        "id": "color",
+        "kind": "option",
+        "short": null,
+        "long": "color",
+        "valueNames": [
+          "COLOR"
+        ],
+        "help": "When to use color in terminal output",
+        "longHelp": "When to use color in terminal output",
+        "required": false,
+        "global": true,
+        "default": "auto",
+        "possibleValues": [
+          {
+            "name": "auto",
+            "help": null
+          },
+          {
+            "name": "always",
+            "help": null
+          },
+          {
+            "name": "never",
+            "help": null
+          }
+        ],
+        "numArgs": "1",
         "env": null,
         "valueHint": null
       }
@@ -42,8 +131,8 @@
           "mergify",
           "config"
         ],
-        "about": "Manage Mergify configuration",
-        "longAbout": "Manage Mergify configuration",
+        "about": "Validate and simulate your Mergify configuration",
+        "longAbout": "Validate and simulate your Mergify configuration.\n\nCheck your `.mergify.yml` against the schema before pushing it, or simulate how Mergify's rules would evaluate against a given pull request using your local configuration.",
         "usage": "mergify config [OPTIONS] <COMMAND>",
         "aliases": [],
         "subcommandRequired": true,
@@ -77,7 +166,7 @@
               "validate"
             ],
             "about": "Validate the Mergify configuration file against the schema",
-            "longAbout": "Validate the Mergify configuration file against the schema",
+            "longAbout": "Validate the Mergify configuration file against the schema.\n\nCheck that your configuration file parses and conforms to the Mergify schema, reporting the first error with its location. Run it locally or in CI to catch mistakes before they reach the default branch. The file is auto-detected unless you pass `--config-file`.",
             "usage": "mergify config validate [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -93,7 +182,7 @@
               "simulate"
             ],
             "about": "Simulate Mergify actions on a pull request using the local configuration",
-            "longAbout": "Simulate Mergify actions on a pull request using the local configuration",
+            "longAbout": "Simulate Mergify actions on a pull request using the local configuration.\n\nEvaluate your local configuration against a real pull request and report which rules match and what actions Mergify would take — without changing anything on GitHub. Useful to test a configuration change before pushing it.",
             "usage": "mergify config simulate [OPTIONS] <PULL_REQUEST_URL>",
             "aliases": [],
             "subcommandRequired": false,
@@ -164,8 +253,8 @@
           "mergify",
           "ci"
         ],
-        "about": "Mergify CI-related commands",
-        "longAbout": "Mergify CI-related commands",
+        "about": "Run Mergify CI Insights commands from your pipeline",
+        "longAbout": "Run Mergify CI Insights commands from your pipeline.\n\nHelpers meant to run inside a CI job: upload test reports, detect the build's git references, report the merge queue batch the build belongs to, and compute the scopes impacted by the changed files.",
         "usage": "mergify ci [OPTIONS] <COMMAND>",
         "aliases": [],
         "subcommandRequired": true,
@@ -180,7 +269,7 @@
               "scopes-send"
             ],
             "about": "Send scopes tied to a pull request to Mergify",
-            "longAbout": "Send scopes tied to a pull request to Mergify",
+            "longAbout": "Send scopes tied to a pull request to Mergify.\n\nUpload the scopes affected by a pull request so CI Insights can attribute test results to them. Reads scopes from repeated --scope flags or from a file produced by \"mergify ci scopes --write\". Exits 0 without doing anything when no pull request can be determined.",
             "usage": "mergify ci scopes-send [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -323,7 +412,7 @@
               "git-refs"
             ],
             "about": "Print the base/head git references for the current build",
-            "longAbout": "Print the base/head git references for the current build",
+            "longAbout": "Print the base/head git references for the current build.\n\nDetect and print the base and head git references for the build from the CI environment, as plain text, eval-friendly shell lines, or JSON. Useful for wiring later steps to the same refs Mergify computed.",
             "usage": "mergify ci git-refs [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -358,7 +447,7 @@
               "queue-info"
             ],
             "about": "Print the current build's merge queue batch metadata (from the Mergify git note)",
-            "longAbout": "Print the current build's merge queue batch metadata (from the Mergify git note)",
+            "longAbout": "Print the current build's merge queue batch metadata (from the Mergify git note).\n\nRead the Mergify git note attached to the current HEAD and print the merge queue batch the build belongs to. Needs only plain git and no token, so it works in any CI runner.",
             "usage": "mergify ci queue-info [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -374,7 +463,7 @@
               "scopes"
             ],
             "about": "Give the list of scopes impacted by changed files",
-            "longAbout": "Give the list of scopes impacted by changed files",
+            "longAbout": "Give the list of scopes impacted by changed files.\n\nCompute the configured scopes impacted by the files changed between two git references, using your Mergify configuration. Print them, or write them to a file with --write for a later \"mergify ci scopes-send\".",
             "usage": "mergify ci scopes [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -463,7 +552,7 @@
               "junit-process"
             ],
             "about": "Upload JUnit XML reports and ignore failed tests with Mergify's CI Insights Quarantine",
-            "longAbout": "Upload JUnit XML reports and ignore failed tests with Mergify's CI Insights Quarantine",
+            "longAbout": "Upload JUnit XML reports and ignore failed tests with Mergify's CI Insights Quarantine.\n\nParse one or more JUnit XML reports, upload the results to CI Insights, and reconcile them against the quarantine so known-flaky tests don't fail the build. Accepts file paths or glob patterns; pass the runner's exit code with --test-exit-code to detect silent failures.",
             "usage": "mergify ci junit-process [OPTIONS] <FILE>...",
             "aliases": [],
             "subcommandRequired": false,
@@ -623,8 +712,8 @@
               "ci",
               "junit-upload"
             ],
-            "about": "Upload JUnit XML reports (deprecated: use `junit-process`)",
-            "longAbout": "Upload JUnit XML reports (deprecated: use `junit-process`)",
+            "about": "Upload JUnit XML reports (deprecated: use junit-process)",
+            "longAbout": "Upload JUnit XML reports (deprecated: use junit-process).\n\nDeprecated alias for junit-process, kept for backward compatibility. It runs the same processing and prints a deprecation warning; use junit-process instead.",
             "usage": "mergify ci junit-upload [OPTIONS] <FILE>...",
             "aliases": [],
             "subcommandRequired": false,
@@ -785,8 +874,8 @@
           "mergify",
           "tests"
         ],
-        "about": "Inspect tests tracked by Mergify CI Insights",
-        "longAbout": "Inspect tests tracked by Mergify CI Insights",
+        "about": "Inspect the tests tracked by Mergify CI Insights",
+        "longAbout": "Inspect the tests tracked by Mergify CI Insights.\n\nLook up a test's health and flakiness metrics, and manage the quarantine that keeps known-flaky tests from failing the merge queue.",
         "usage": "mergify tests [OPTIONS] <COMMAND>",
         "aliases": [],
         "subcommandRequired": true,
@@ -801,7 +890,7 @@
               "show"
             ],
             "about": "Look up tests by name and print their health and metrics",
-            "longAbout": "Look up tests by name and print their health and metrics",
+            "longAbout": "Look up tests by name and print their health and metrics.\n\nSearch CI Insights for one or more tests (by exact name or glob) and report their flakiness, failure rate, and recent history. Pass `--json` for machine-readable output.",
             "usage": "mergify tests show [OPTIONS] <NAME>...",
             "aliases": [],
             "subcommandRequired": false,
@@ -996,7 +1085,7 @@
               "quarantines"
             ],
             "about": "Manage the CI Insights quarantine",
-            "longAbout": "Manage the CI Insights quarantine",
+            "longAbout": "Manage the CI Insights quarantine.\n\nAdd, remove, inspect, and list the tests held in the CI Insights quarantine — the set of known-flaky tests whose failures are ignored so they don't block the merge queue.",
             "usage": "mergify tests quarantines [OPTIONS] <COMMAND>",
             "aliases": [],
             "subcommandRequired": true,
@@ -1012,7 +1101,7 @@
                   "add"
                 ],
                 "about": "Add a test to the CI Insights quarantine",
-                "longAbout": "Add a test to the CI Insights quarantine",
+                "longAbout": "Add a test to the CI Insights quarantine.\n\nQuarantine a test by its fully qualified name so its failures stop blocking the merge queue. A reason is required; scope it to a branch with `--branch`, or quarantine on all branches by default.",
                 "usage": "mergify tests quarantines add [OPTIONS] --reason <REASON> <NAME>",
                 "aliases": [],
                 "subcommandRequired": false,
@@ -1154,7 +1243,7 @@
                   "remove"
                 ],
                 "about": "Remove a test from the CI Insights quarantine",
-                "longAbout": "Remove a test from the CI Insights quarantine",
+                "longAbout": "Remove a test from the CI Insights quarantine.\n\nTake a test out of the quarantine so its results count again. Identify it by test name or by quarantine id.",
                 "usage": "mergify tests quarantines remove [OPTIONS] <NAME_OR_ID>",
                 "aliases": [],
                 "subcommandRequired": false,
@@ -1260,7 +1349,7 @@
                   "get"
                 ],
                 "about": "Print a single quarantine by test name or id",
-                "longAbout": "Print a single quarantine by test name or id",
+                "longAbout": "Print a single quarantine by test name or id.\n\nShow the details of one quarantined test — its reason, branch scope, and when it was added. Identify it by test name or by quarantine id.",
                 "usage": "mergify tests quarantines get [OPTIONS] <NAME_OR_ID>",
                 "aliases": [],
                 "subcommandRequired": false,
@@ -1366,7 +1455,7 @@
                   "list"
                 ],
                 "about": "List the tests currently in the CI Insights quarantine",
-                "longAbout": "List the tests currently in the CI Insights quarantine",
+                "longAbout": "List the tests currently in the CI Insights quarantine.\n\nPrint every test currently held in the quarantine for the repository. Pass `--json` for machine-readable output.",
                 "usage": "mergify tests quarantines list [OPTIONS]",
                 "aliases": [],
                 "subcommandRequired": false,
@@ -1455,8 +1544,8 @@
           "mergify",
           "queue"
         ],
-        "about": "Manage the Mergify merge queue",
-        "longAbout": "Manage the Mergify merge queue",
+        "about": "Inspect and control the Mergify merge queue",
+        "longAbout": "Inspect and control the Mergify merge queue.\n\nCheck the status of queued pull requests, inspect a single pull request's queue state, and pause or resume merging for a repository.",
         "usage": "mergify queue [OPTIONS] <COMMAND>",
         "aliases": [],
         "subcommandRequired": true,
@@ -1526,7 +1615,7 @@
               "pause"
             ],
             "about": "Pause the merge queue for the repository",
-            "longAbout": "Pause the merge queue for the repository",
+            "longAbout": "Pause the merge queue for the repository.\n\nStop the queue from merging any pull request until it is resumed — useful during an incident or release window. A reason is required and shown to your team; queued pull requests stay in place.",
             "usage": "mergify queue pause [OPTIONS] --reason <REASON>",
             "aliases": [],
             "subcommandRequired": false,
@@ -1577,7 +1666,7 @@
               "unpause"
             ],
             "about": "Unpause the merge queue for the repository",
-            "longAbout": "Unpause the merge queue for the repository",
+            "longAbout": "Unpause the merge queue for the repository.\n\nResume merging after a pause. The queue picks up where it left off with the pull requests still queued.",
             "usage": "mergify queue unpause [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -1593,7 +1682,7 @@
               "status"
             ],
             "about": "Show merge queue status for the repository",
-            "longAbout": "Show merge queue status for the repository",
+            "longAbout": "Show merge queue status for the repository.\n\nList the pull requests currently in the queue with their position and state. Filter by branch with `--branch`, or pass `--json` for machine-readable output.",
             "usage": "mergify queue status [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -1644,7 +1733,7 @@
               "show"
             ],
             "about": "Show detailed state of a pull request in the merge queue",
-            "longAbout": "Show detailed state of a pull request in the merge queue",
+            "longAbout": "Show detailed state of a pull request in the merge queue.\n\nReport the full queue state of a single pull request: its checks, the conditions it still needs to satisfy, and why it is or isn't mergeable. Pass `--verbose` for the full checks table and conditions tree, or `--json` for the raw response.",
             "usage": "mergify queue show [OPTIONS] <PR_NUMBER>",
             "aliases": [],
             "subcommandRequired": false,
@@ -1665,22 +1754,6 @@
                 "default": null,
                 "possibleValues": [],
                 "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "verbose",
-                "kind": "flag",
-                "short": "v",
-                "long": "verbose",
-                "valueNames": [],
-                "help": "Show the full checks table and the conditions tree instead of compact summaries",
-                "longHelp": "Show the full checks table and the conditions tree instead of compact summaries",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
                 "env": null,
                 "valueHint": null
               },
@@ -1711,8 +1784,8 @@
           "mergify",
           "freeze"
         ],
-        "about": "Manage scheduled freezes",
-        "longAbout": "Manage scheduled freezes",
+        "about": "Schedule and manage merge freezes",
+        "longAbout": "Schedule and manage merge freezes.\n\nCreate, list, update, and delete freezes that temporarily stop the merge queue from merging — for release windows, incidents, or code freezes.",
         "usage": "mergify freeze [OPTIONS] <COMMAND>",
         "aliases": [],
         "subcommandRequired": true,
@@ -1782,7 +1855,7 @@
               "list"
             ],
             "about": "List scheduled freezes for a repository",
-            "longAbout": "List scheduled freezes for a repository",
+            "longAbout": "List scheduled freezes for a repository.\n\nShow the freezes currently configured for the repository, with their name, schedule, and state. Pass `--json` for machine-readable output.",
             "usage": "mergify freeze list [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -1815,7 +1888,7 @@
               "create"
             ],
             "about": "Create a new scheduled freeze",
-            "longAbout": "Create a new scheduled freeze",
+            "longAbout": "Create a new scheduled freeze.\n\nAdd a freeze that stops the merge queue from merging while it is active — for a release window, incident, or code freeze.",
             "usage": "mergify freeze create [OPTIONS] --reason <REASON>",
             "aliases": [],
             "subcommandRequired": false,
@@ -1940,7 +2013,7 @@
               "update"
             ],
             "about": "Update an existing scheduled freeze",
-            "longAbout": "Update an existing scheduled freeze",
+            "longAbout": "Update an existing scheduled freeze.\n\nChange the settings of an existing freeze, identified by its ID. Only the fields you pass are changed; the rest are left as they are.",
             "usage": "mergify freeze update [OPTIONS] <FREEZE_ID>",
             "aliases": [],
             "subcommandRequired": false,
@@ -2083,7 +2156,7 @@
               "delete"
             ],
             "about": "Delete a scheduled freeze",
-            "longAbout": "Delete a scheduled freeze",
+            "longAbout": "Delete a scheduled freeze.\n\nRemove a freeze by its ID. If the freeze is currently active a reason is required, and the queue resumes merging once it's gone.",
             "usage": "mergify freeze delete [OPTIONS] <FREEZE_ID>",
             "aliases": [],
             "subcommandRequired": false,
@@ -2136,14 +2209,614 @@
           "mergify",
           "stack"
         ],
-        "about": "Manage stacked pull requests",
-        "longAbout": "Manage stacked pull requests",
-        "usage": "mergify stack [OPTIONS]",
+        "about": "Create and maintain stacked pull requests",
+        "longAbout": "Create and maintain stacked pull requests.\n\nManage a stack of dependent branches and their pull requests: create, push, sync, reorder, reword, squash, and check out stacks built on top of your trunk.",
+        "usage": "mergify stack [OPTIONS] <COMMAND>",
         "aliases": [],
-        "subcommandRequired": false,
+        "subcommandRequired": true,
         "source": "native",
         "args": [],
         "commands": [
+          {
+            "name": "new",
+            "path": [
+              "mergify",
+              "stack",
+              "new"
+            ],
+            "about": "Create a new stack branch",
+            "longAbout": "Create a new stack branch.\n\nCreate a branch that tracks your trunk and start a fresh stack on top of it. The new branch is checked out by default; pass `--no-checkout` to only create the ref and stay on the current branch.",
+            "usage": "mergify stack new [OPTIONS] <NAME>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "name",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "NAME"
+                ],
+                "help": "Name of the new branch",
+                "longHelp": "Name of the new branch",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "base",
+                "kind": "option",
+                "short": "b",
+                "long": "base",
+                "valueNames": [
+                  "BASE"
+                ],
+                "help": "Base branch to fork from, formatted as `REMOTE/BRANCH` (e.g. `origin/main`). When omitted, the trunk is resolved from the current branch's tracking info or `refs/remotes/origin/HEAD`",
+                "longHelp": "Base branch to fork from, formatted as `REMOTE/BRANCH` (e.g. `origin/main`). When omitted, the trunk is resolved from the current branch's tracking info or `refs/remotes/origin/HEAD`",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "checkout",
+                "kind": "flag",
+                "short": null,
+                "long": "checkout",
+                "valueNames": [],
+                "help": "Checkout the new branch after creation. This is the default. Pass `--no-checkout` to keep the current branch checked out",
+                "longHelp": "Checkout the new branch after creation. This is the default. Pass `--no-checkout` to keep the current branch checked out",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "no_checkout",
+                "kind": "flag",
+                "short": null,
+                "long": "no-checkout",
+                "valueNames": [],
+                "help": "Leave the current branch checked out and just create the new branch ref",
+                "longHelp": "Leave the current branch checked out and just create the new branch ref",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "note",
+            "path": [
+              "mergify",
+              "stack",
+              "note"
+            ],
+            "about": "Attach a note explaining why a commit was amended",
+            "longAbout": "Attach a note explaining why a commit was amended.\n\nRecord a note on a stack commit describing why it changed; the note is surfaced when reviewing the stack. Edit it in your editor or pass `-m`, add to an existing note with `--append`, or clear it with `--remove`. Defaults to the commit at HEAD.",
+            "usage": "mergify stack note [OPTIONS] [COMMIT]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": "Target commit. Accepts a SHA prefix, a ref (`HEAD~1`, branch name, …), or a Change-Id prefix (resolved against the stack walk). Defaults to HEAD",
+                "longHelp": "Target commit. Accepts a SHA prefix, a ref (`HEAD~1`, branch name, …), or a Change-Id prefix (resolved against the stack walk). Defaults to HEAD",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "message",
+                "kind": "option",
+                "short": "m",
+                "long": "message",
+                "valueNames": [
+                  "MESSAGE"
+                ],
+                "help": "Note message. If omitted, opens `$GIT_EDITOR` / `$VISUAL` / `$EDITOR` / `vi` on a tempfile",
+                "longHelp": "Note message. If omitted, opens `$GIT_EDITOR` / `$VISUAL` / `$EDITOR` / `vi` on a tempfile",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "append",
+                "kind": "flag",
+                "short": null,
+                "long": "append",
+                "valueNames": [],
+                "help": "Append to an existing note instead of replacing",
+                "longHelp": "Append to an existing note instead of replacing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "remove",
+                "kind": "flag",
+                "short": null,
+                "long": "remove",
+                "valueNames": [],
+                "help": "Remove the note on the target commit. Mutually exclusive with `--message` and `--append`",
+                "longHelp": "Remove the note on the target commit. Mutually exclusive with `--message` and `--append`",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "edit",
+            "path": [
+              "mergify",
+              "stack",
+              "edit"
+            ],
+            "about": "Edit a commit in the stack",
+            "longAbout": "Edit a commit in the stack.\n\nPause an interactive rebase on the target commit so you can amend it, then resume. Omit the commit to start a fully interactive rebase of the whole stack.",
+            "usage": "mergify stack edit [OPTIONS] [COMMIT]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": "Commit to pause the rebase on. Accepts a SHA prefix or a Change-Id prefix; omit for a fully interactive rebase",
+                "longHelp": "Commit to pause the rebase on. Accepts a SHA prefix or a Change-Id prefix; omit for a fully interactive rebase",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "drop",
+            "path": [
+              "mergify",
+              "stack",
+              "drop"
+            ],
+            "about": "Drop commits from the stack",
+            "longAbout": "Drop commits from the stack.\n\nRemove one or more commits from the stack and rebase the commits above them down. Each accepts a SHA prefix or a Change-Id prefix. Use `--dry-run` to preview the resulting order first.",
+            "usage": "mergify stack drop [OPTIONS] <COMMITS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commits",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMITS"
+                ],
+                "help": "Commits to drop. Each accepts a SHA prefix or a Change-Id prefix",
+                "longHelp": "Commits to drop. Each accepts a SHA prefix or a Change-Id prefix",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without dropping",
+                "longHelp": "Show the plan without dropping",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "fixup",
+            "path": [
+              "mergify",
+              "stack",
+              "fixup"
+            ],
+            "about": "Fold commits into their parent",
+            "longAbout": "Fold commits into their parent.\n\nSquash each given commit into the commit below it, discarding the folded commit's message (the parent's message is kept). Each accepts a SHA prefix or a Change-Id prefix. Use `--dry-run` to preview.",
+            "usage": "mergify stack fixup [OPTIONS] <COMMITS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commits",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMITS"
+                ],
+                "help": "Commits to fold into their parent",
+                "longHelp": "Commits to fold into their parent",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without rebasing",
+                "longHelp": "Show the plan without rebasing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "reword",
+            "path": [
+              "mergify",
+              "stack",
+              "reword"
+            ],
+            "about": "Change a commit's message",
+            "longAbout": "Change a commit's message.\n\nRewrite the message of a commit in the stack. Pass `-m` to set the new message inline, or omit it to edit the message in your editor. Use `--dry-run` to preview.",
+            "usage": "mergify stack reword [OPTIONS] <COMMIT>",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": "Commit to reword. Accepts a SHA prefix or a Change-Id prefix",
+                "longHelp": "Commit to reword. Accepts a SHA prefix or a Change-Id prefix",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "message",
+                "kind": "option",
+                "short": "m",
+                "long": "message",
+                "valueNames": [
+                  "MESSAGE"
+                ],
+                "help": "New message. When omitted, `git rebase -i` pauses at the target and opens `$GIT_EDITOR`",
+                "longHelp": "New message. When omitted, `git rebase -i` pauses at the target and opens `$GIT_EDITOR`",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without rebasing",
+                "longHelp": "Show the plan without rebasing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "reorder",
+            "path": [
+              "mergify",
+              "stack",
+              "reorder"
+            ],
+            "about": "Reorder the stack's commits",
+            "longAbout": "Reorder the stack's commits.\n\nRebase the stack into the commit order you list. Commits you don't mention keep their relative order. Each accepts a SHA prefix or a Change-Id prefix. Use `--dry-run` to preview.",
+            "usage": "mergify stack reorder [OPTIONS] <COMMITS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commits",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMITS"
+                ],
+                "help": "Commits in the order you want them rebased into",
+                "longHelp": "Commits in the order you want them rebased into",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without reordering",
+                "longHelp": "Show the plan without reordering",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "move",
+            "path": [
+              "mergify",
+              "stack",
+              "move"
+            ],
+            "about": "Move a commit within the stack",
+            "longAbout": "Move a commit within the stack.\n\nMove one commit to a new position in the stack: to the `first` or `last` slot, or `before`/`after` another commit (passed as TARGET). Use `--dry-run` to preview.",
+            "usage": "mergify stack move [OPTIONS] <COMMIT> <POSITION> [TARGET]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "commit",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "COMMIT"
+                ],
+                "help": "Commit to move. Accepts a SHA prefix or a Change-Id prefix",
+                "longHelp": "Commit to move. Accepts a SHA prefix or a Change-Id prefix",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "position",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "POSITION"
+                ],
+                "help": "Where to put it: `first`, `last`, `before`, `after`",
+                "longHelp": "Where to put it: `first`, `last`, `before`, `after`",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [
+                  {
+                    "name": "first",
+                    "help": null
+                  },
+                  {
+                    "name": "last",
+                    "help": null
+                  },
+                  {
+                    "name": "before",
+                    "help": null
+                  },
+                  {
+                    "name": "after",
+                    "help": null
+                  }
+                ],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "target",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "TARGET"
+                ],
+                "help": "Required when `position` is `before` or `after`",
+                "longHelp": "Required when `position` is `before` or `after`",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without moving",
+                "longHelp": "Show the plan without moving",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "squash",
+            "path": [
+              "mergify",
+              "stack",
+              "squash"
+            ],
+            "about": "Squash commits into a target commit",
+            "longAbout": "Squash commits into a target commit.\n\nFold one or more source commits into a target commit, reordering them adjacent to it first. Use the form `SRC... into TARGET`. Pass `-m` to set the combined message; otherwise the target's message is kept. Use `--dry-run` to preview.",
+            "usage": "mergify stack squash [OPTIONS] <TOKENS> <TOKENS> <TOKENS>...",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "tokens",
+                "kind": "positional",
+                "short": null,
+                "long": null,
+                "valueNames": [
+                  "TOKENS"
+                ],
+                "help": "`SRC1 SRC2 ... into TARGET` — must contain exactly one `into` token; everything before is a source, the single token after is the target",
+                "longHelp": "`SRC1 SRC2 ... into TARGET` — must contain exactly one `into` token; everything before is a source, the single token after is the target",
+                "required": true,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "3..",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "message",
+                "kind": "option",
+                "short": "m",
+                "long": "message",
+                "valueNames": [
+                  "MESSAGE"
+                ],
+                "help": "Final commit message (required to rename; otherwise the target's message is kept)",
+                "longHelp": "Final commit message (required to rename; otherwise the target's message is kept)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "dry_run",
+                "kind": "flag",
+                "short": "n",
+                "long": "dry-run",
+                "valueNames": [],
+                "help": "Show the plan without rebasing",
+                "longHelp": "Show the plan without rebasing",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
           {
             "name": "checkout",
             "path": [
@@ -2151,8 +2824,8 @@
               "stack",
               "checkout"
             ],
-            "about": "Checkout the pull requests stack",
-            "longAbout": "Checkout the pull requests stack",
+            "about": "Check out a pull request stack from GitHub",
+            "longAbout": "Check out a pull request stack from GitHub.\n\nFetch a stack of pull requests by name and create a local branch that tracks its leaf, so you can continue working on a stack created elsewhere (a teammate's, or your own from another machine).",
             "usage": "mergify stack checkout [OPTIONS] <NAME>",
             "aliases": [],
             "subcommandRequired": false,
@@ -2166,8 +2839,8 @@
                 "valueNames": [
                   "NAME"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "Name of the stack to check out",
+                "longHelp": "Name of the stack to check out",
                 "required": true,
                 "global": false,
                 "default": null,
@@ -2304,201 +2977,15 @@
             "commands": []
           },
           {
-            "name": "drop",
+            "name": "sync",
             "path": [
               "mergify",
               "stack",
-              "drop"
+              "sync"
             ],
-            "about": "Drop commits from the stack",
-            "longAbout": "Drop commits from the stack",
-            "usage": "mergify stack drop [OPTIONS] <COMMITS>...",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "commits",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "COMMITS"
-                ],
-                "help": "Commits to drop. Each accepts a SHA prefix or a Change-Id prefix",
-                "longHelp": "Commits to drop. Each accepts a SHA prefix or a Change-Id prefix",
-                "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1..",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "dry_run",
-                "kind": "flag",
-                "short": "n",
-                "long": "dry-run",
-                "valueNames": [],
-                "help": "Show the plan without dropping",
-                "longHelp": "Show the plan without dropping",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "edit",
-            "path": [
-              "mergify",
-              "stack",
-              "edit"
-            ],
-            "about": "Edit the stack history",
-            "longAbout": "Edit the stack history",
-            "usage": "mergify stack edit [COMMIT]",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "commit",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "COMMIT"
-                ],
-                "help": "Commit to pause the rebase on. Accepts a SHA prefix or a Change-Id prefix; omit for a fully interactive rebase",
-                "longHelp": "Commit to pause the rebase on. Accepts a SHA prefix or a Change-Id prefix; omit for a fully interactive rebase",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "fixup",
-            "path": [
-              "mergify",
-              "stack",
-              "fixup"
-            ],
-            "about": "Fixup commits into their parent (drops their messages)",
-            "longAbout": "Fixup commits into their parent (drops their messages)",
-            "usage": "mergify stack fixup [OPTIONS] <COMMITS>...",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "commits",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "COMMITS"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1..",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "dry_run",
-                "kind": "flag",
-                "short": "n",
-                "long": "dry-run",
-                "valueNames": [],
-                "help": "Show the plan without rebasing",
-                "longHelp": "Show the plan without rebasing",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "hooks",
-            "path": [
-              "mergify",
-              "stack",
-              "hooks"
-            ],
-            "about": "Show git hooks status and manage installation",
-            "longAbout": "Show git hooks status and manage installation",
-            "usage": "mergify stack hooks [OPTIONS]",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "do_setup",
-                "kind": "flag",
-                "short": null,
-                "long": "setup",
-                "valueNames": [],
-                "help": "Install or upgrade hooks",
-                "longHelp": "Install or upgrade hooks",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "force",
-                "kind": "flag",
-                "short": "f",
-                "long": "force",
-                "valueNames": [],
-                "help": "Force reinstall wrappers (use with --setup)",
-                "longHelp": "Force reinstall wrappers (use with --setup)",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "list",
-            "path": [
-              "mergify",
-              "stack",
-              "list"
-            ],
-            "about": "List the stack's commits and their associated PRs",
-            "longAbout": "List the stack's commits and their associated PRs",
-            "usage": "mergify stack list [OPTIONS]",
+            "about": "Sync the stack with its trunk",
+            "longAbout": "Sync the stack with its trunk.\n\nFetch the latest trunk, drop commits whose pull request has already merged, and rebase the remaining stack on top. Use `--dry-run` to preview.",
+            "usage": "mergify stack sync [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
             "source": "native",
@@ -2511,8 +2998,8 @@
                 "valueNames": [
                   "AUTHOR"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "Author of the stack. Defaults to the token's user",
+                "longHelp": "Author of the stack. Defaults to the token's user",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -2529,8 +3016,8 @@
                 "valueNames": [
                   "REPOSITORY"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "longHelp": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -2547,164 +3034,8 @@
                 "valueNames": [
                   "BRANCH_PREFIX"
                 ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "trunk",
-                "kind": "option",
-                "short": "t",
-                "long": "trunk",
-                "valueNames": [
-                  "TRUNK"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "token",
-                "kind": "option",
-                "short": null,
-                "long": "token",
-                "valueNames": [
-                  "TOKEN"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "json",
-                "kind": "flag",
-                "short": null,
-                "long": "json",
-                "valueNames": [],
-                "help": "Emit machine-readable JSON",
-                "longHelp": "Emit machine-readable JSON",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "verbose",
-                "kind": "flag",
-                "short": "v",
-                "long": "verbose",
-                "valueNames": [],
-                "help": "Show per-check / per-reviewer detail",
-                "longHelp": "Show per-check / per-reviewer detail",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "move",
-            "path": [
-              "mergify",
-              "stack",
-              "move"
-            ],
-            "about": "Move a commit within the stack",
-            "longAbout": "Move a commit within the stack",
-            "usage": "mergify stack move [OPTIONS] <COMMIT> <POSITION> [TARGET]",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "commit",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "COMMIT"
-                ],
-                "help": "Commit to move",
-                "longHelp": "Commit to move",
-                "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "position",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "POSITION"
-                ],
-                "help": "Where to put it: `first`, `last`, `before`, `after`",
-                "longHelp": "Where to put it: `first`, `last`, `before`, `after`",
-                "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [
-                  {
-                    "name": "first",
-                    "help": null
-                  },
-                  {
-                    "name": "last",
-                    "help": null
-                  },
-                  {
-                    "name": "before",
-                    "help": null
-                  },
-                  {
-                    "name": "after",
-                    "help": null
-                  }
-                ],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "target",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "TARGET"
-                ],
-                "help": "Required when `position` is `before` or `after`",
-                "longHelp": "Required when `position` is `before` or `after`",
+                "help": "Override the stack branch prefix",
+                "longHelp": "Override the stack branch prefix",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -2719,272 +3050,13 @@
                 "short": "n",
                 "long": "dry-run",
                 "valueNames": [],
-                "help": "Show the plan without moving",
-                "longHelp": "Show the plan without moving",
+                "help": "Show the plan without changing anything",
+                "longHelp": "Show the plan without changing anything",
                 "required": false,
                 "global": false,
                 "default": "false",
                 "possibleValues": [],
                 "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "new",
-            "path": [
-              "mergify",
-              "stack",
-              "new"
-            ],
-            "about": "Create a new stack branch",
-            "longAbout": "Create a new stack branch",
-            "usage": "mergify stack new [OPTIONS] <NAME>",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "name",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "NAME"
-                ],
-                "help": "Name of the new branch",
-                "longHelp": "Name of the new branch",
-                "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "base",
-                "kind": "option",
-                "short": "b",
-                "long": "base",
-                "valueNames": [
-                  "BASE"
-                ],
-                "help": "Base branch to fork from, formatted as `REMOTE/BRANCH` (e.g. `origin/main`). When omitted, the trunk is resolved from the current branch's tracking info or `refs/remotes/origin/HEAD`",
-                "longHelp": "Base branch to fork from, formatted as `REMOTE/BRANCH` (e.g. `origin/main`). When omitted, the trunk is resolved from the current branch's tracking info or `refs/remotes/origin/HEAD`",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "checkout",
-                "kind": "flag",
-                "short": null,
-                "long": "checkout",
-                "valueNames": [],
-                "help": "Checkout the new branch after creation. This is the default. Pass `--no-checkout` to keep the current branch checked out",
-                "longHelp": "Checkout the new branch after creation. This is the default. Pass `--no-checkout` to keep the current branch checked out",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "no_checkout",
-                "kind": "flag",
-                "short": null,
-                "long": "no-checkout",
-                "valueNames": [],
-                "help": "Leave the current branch checked out and just create the new branch ref",
-                "longHelp": "Leave the current branch checked out and just create the new branch ref",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "note",
-            "path": [
-              "mergify",
-              "stack",
-              "note"
-            ],
-            "about": "Attach a 'why was this commit amended' note to a commit",
-            "longAbout": "Attach a 'why was this commit amended' note to a commit",
-            "usage": "mergify stack note [OPTIONS] [COMMIT]",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "commit",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "COMMIT"
-                ],
-                "help": "Target commit. Accepts a SHA prefix, a ref (`HEAD~1`, branch name, …), or a Change-Id prefix (resolved against the stack walk). Defaults to HEAD",
-                "longHelp": "Target commit. Accepts a SHA prefix, a ref (`HEAD~1`, branch name, …), or a Change-Id prefix (resolved against the stack walk). Defaults to HEAD",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "message",
-                "kind": "option",
-                "short": "m",
-                "long": "message",
-                "valueNames": [
-                  "MESSAGE"
-                ],
-                "help": "Note message. If omitted, opens `$GIT_EDITOR` / `$VISUAL` / `$EDITOR` / `vi` on a tempfile",
-                "longHelp": "Note message. If omitted, opens `$GIT_EDITOR` / `$VISUAL` / `$EDITOR` / `vi` on a tempfile",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "append",
-                "kind": "flag",
-                "short": null,
-                "long": "append",
-                "valueNames": [],
-                "help": "Append to an existing note instead of replacing",
-                "longHelp": "Append to an existing note instead of replacing",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "remove",
-                "kind": "flag",
-                "short": null,
-                "long": "remove",
-                "valueNames": [],
-                "help": "Remove the note on the target commit. Mutually exclusive with `--message` and `--append`",
-                "longHelp": "Remove the note on the target commit. Mutually exclusive with `--message` and `--append`",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "open",
-            "path": [
-              "mergify",
-              "stack",
-              "open"
-            ],
-            "about": "Open a PR from the stack in the browser",
-            "longAbout": "Open a PR from the stack in the browser",
-            "usage": "mergify stack open [OPTIONS] [COMMIT]",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "commit",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "COMMIT"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "author",
-                "kind": "option",
-                "short": null,
-                "long": "author",
-                "valueNames": [
-                  "AUTHOR"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "repository",
-                "kind": "option",
-                "short": null,
-                "long": "repository",
-                "valueNames": [
-                  "REPOSITORY"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "branch_prefix",
-                "kind": "option",
-                "short": null,
-                "long": "branch-prefix",
-                "valueNames": [
-                  "BRANCH_PREFIX"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
                 "env": null,
                 "valueHint": null
               },
@@ -2996,8 +3068,8 @@
                 "valueNames": [
                   "TRUNK"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "longHelp": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3014,8 +3086,8 @@
                 "valueNames": [
                   "TOKEN"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "longHelp": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3034,8 +3106,8 @@
               "stack",
               "push"
             ],
-            "about": "Push/sync the stack's pull requests on GitHub",
-            "longAbout": "Push/sync the stack's pull requests on GitHub",
+            "about": "Push the stack and create or update its pull requests",
+            "longAbout": "Push the stack and create or update its pull requests.\n\nWalk the local stack, optionally rebase it on trunk, push each commit to its own branch, and create or update the matching pull request and its Depends-On chain on GitHub. Use `--dry-run` to preview the plan and the rebase decision without touching anything.",
             "usage": "mergify stack push [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -3049,8 +3121,8 @@
                 "valueNames": [
                   "AUTHOR"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "Author of the stack. Defaults to the token's user",
+                "longHelp": "Author of the stack. Defaults to the token's user",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3067,8 +3139,8 @@
                 "valueNames": [
                   "REPOSITORY"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "longHelp": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3085,8 +3157,8 @@
                 "valueNames": [
                   "BRANCH_PREFIX"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "Override the stack branch prefix",
+                "longHelp": "Override the stack branch prefix",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3103,8 +3175,8 @@
                 "valueNames": [
                   "TRUNK"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "longHelp": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3121,8 +3193,8 @@
                 "valueNames": [
                   "TOKEN"
                 ],
-                "help": null,
-                "longHelp": null,
+                "help": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "longHelp": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3285,45 +3357,117 @@
             "commands": []
           },
           {
-            "name": "reorder",
+            "name": "list",
             "path": [
               "mergify",
               "stack",
-              "reorder"
+              "list"
             ],
-            "about": "Reorder the stack's commits",
-            "longAbout": "Reorder the stack's commits",
-            "usage": "mergify stack reorder [OPTIONS] <COMMITS>...",
+            "about": "List the stack's commits and their pull requests",
+            "longAbout": "List the stack's commits and their pull requests.\n\nShow each commit in the current stack alongside its pull request, CI, and review state. Pass `--verbose` for per-check and per-reviewer detail, or `--json` for machine-readable output.",
+            "usage": "mergify stack list [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
             "source": "native",
             "args": [
               {
-                "id": "commits",
-                "kind": "positional",
+                "id": "author",
+                "kind": "option",
                 "short": null,
-                "long": null,
+                "long": "author",
                 "valueNames": [
-                  "COMMITS"
+                  "AUTHOR"
                 ],
-                "help": null,
-                "longHelp": null,
-                "required": true,
+                "help": "Author of the stack. Defaults to the token's user",
+                "longHelp": "Author of the stack. Defaults to the token's user",
+                "required": false,
                 "global": false,
                 "default": null,
                 "possibleValues": [],
-                "numArgs": "1..",
+                "numArgs": "1",
                 "env": null,
                 "valueHint": null
               },
               {
-                "id": "dry_run",
+                "id": "repository",
+                "kind": "option",
+                "short": null,
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "longHelp": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch_prefix",
+                "kind": "option",
+                "short": null,
+                "long": "branch-prefix",
+                "valueNames": [
+                  "BRANCH_PREFIX"
+                ],
+                "help": "Override the stack branch prefix",
+                "longHelp": "Override the stack branch prefix",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "trunk",
+                "kind": "option",
+                "short": "t",
+                "long": "trunk",
+                "valueNames": [
+                  "TRUNK"
+                ],
+                "help": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "longHelp": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": null,
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "longHelp": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "json",
                 "kind": "flag",
-                "short": "n",
-                "long": "dry-run",
+                "short": null,
+                "long": "json",
                 "valueNames": [],
-                "help": "Show the plan without reordering",
-                "longHelp": "Show the plan without reordering",
+                "help": "Emit machine-readable JSON",
+                "longHelp": "Emit machine-readable JSON",
                 "required": false,
                 "global": false,
                 "default": "false",
@@ -3336,15 +3480,15 @@
             "commands": []
           },
           {
-            "name": "reword",
+            "name": "open",
             "path": [
               "mergify",
               "stack",
-              "reword"
+              "open"
             ],
-            "about": "Change a commit's message",
-            "longAbout": "Change a commit's message",
-            "usage": "mergify stack reword [OPTIONS] <COMMIT>",
+            "about": "Open a stack commit's pull request in the browser",
+            "longAbout": "Open a stack commit's pull request in the browser.\n\nOpen the GitHub pull request for a commit in the stack in your default browser. Defaults to the commit at HEAD.",
+            "usage": "mergify stack open [OPTIONS] [COMMIT]",
             "aliases": [],
             "subcommandRequired": false,
             "source": "native",
@@ -3357,26 +3501,8 @@
                 "valueNames": [
                   "COMMIT"
                 ],
-                "help": null,
-                "longHelp": null,
-                "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "message",
-                "kind": "option",
-                "short": "m",
-                "long": "message",
-                "valueNames": [
-                  "MESSAGE"
-                ],
-                "help": "New message. When omitted, `git rebase -i` pauses at the target and opens `$GIT_EDITOR`",
-                "longHelp": "New message. When omitted, `git rebase -i` pauses at the target and opens `$GIT_EDITOR`",
+                "help": "Commit whose pull request to open. Accepts a SHA prefix or a Change-Id prefix; defaults to HEAD",
+                "longHelp": "Commit whose pull request to open. Accepts a SHA prefix or a Change-Id prefix; defaults to HEAD",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3386,13 +3512,136 @@
                 "valueHint": null
               },
               {
-                "id": "dry_run",
+                "id": "author",
+                "kind": "option",
+                "short": null,
+                "long": "author",
+                "valueNames": [
+                  "AUTHOR"
+                ],
+                "help": "Author of the stack. Defaults to the token's user",
+                "longHelp": "Author of the stack. Defaults to the token's user",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "repository",
+                "kind": "option",
+                "short": null,
+                "long": "repository",
+                "valueNames": [
+                  "REPOSITORY"
+                ],
+                "help": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "longHelp": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "branch_prefix",
+                "kind": "option",
+                "short": null,
+                "long": "branch-prefix",
+                "valueNames": [
+                  "BRANCH_PREFIX"
+                ],
+                "help": "Override the stack branch prefix",
+                "longHelp": "Override the stack branch prefix",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "trunk",
+                "kind": "option",
+                "short": "t",
+                "long": "trunk",
+                "valueNames": [
+                  "TRUNK"
+                ],
+                "help": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "longHelp": "Target trunk as `REMOTE/BRANCH`. Defaults to the resolved trunk for the current branch",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "token",
+                "kind": "option",
+                "short": null,
+                "long": "token",
+                "valueNames": [
+                  "TOKEN"
+                ],
+                "help": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "longHelp": "GitHub token (falls back to `MERGIFY_TOKEN` / `GITHUB_TOKEN` / `gh auth token`)",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
+              }
+            ],
+            "commands": []
+          },
+          {
+            "name": "hooks",
+            "path": [
+              "mergify",
+              "stack",
+              "hooks"
+            ],
+            "about": "Show or install the stack git hooks",
+            "longAbout": "Show or install the stack git hooks.\n\nReport the status of the git hooks that keep `Change-Id` trailers on your commits (stacks rely on them to track commits across rebases). Pass `--setup` to install or upgrade them.",
+            "usage": "mergify stack hooks [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [
+              {
+                "id": "do_setup",
                 "kind": "flag",
-                "short": "n",
-                "long": "dry-run",
+                "short": null,
+                "long": "setup",
                 "valueNames": [],
-                "help": "Show the plan without rebasing",
-                "longHelp": "Show the plan without rebasing",
+                "help": "Install or upgrade hooks",
+                "longHelp": "Install or upgrade hooks",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "force",
+                "kind": "flag",
+                "short": "f",
+                "long": "force",
+                "valueNames": [],
+                "help": "Force reinstall wrappers (use with --setup)",
+                "longHelp": "Force reinstall wrappers (use with --setup)",
                 "required": false,
                 "global": false,
                 "default": "false",
@@ -3411,8 +3660,8 @@
               "stack",
               "setup"
             ],
-            "about": "Configure git hooks (alias for 'stack hooks --setup')",
-            "longAbout": "Configure git hooks (alias for 'stack hooks --setup')",
+            "about": "Install the stack git hooks",
+            "longAbout": "Install the stack git hooks.\n\nInstall or upgrade the git hooks that add `Change-Id` trailers to your commits. This is an alias for `stack hooks --setup`; pass `--check` to report status instead of installing.",
             "usage": "mergify stack setup [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -3452,198 +3701,6 @@
               }
             ],
             "commands": []
-          },
-          {
-            "name": "squash",
-            "path": [
-              "mergify",
-              "stack",
-              "squash"
-            ],
-            "about": "Squash commits into a target commit",
-            "longAbout": "Squash commits into a target commit",
-            "usage": "mergify stack squash [OPTIONS] <TOKENS> <TOKENS> <TOKENS>...",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "tokens",
-                "kind": "positional",
-                "short": null,
-                "long": null,
-                "valueNames": [
-                  "TOKENS"
-                ],
-                "help": "`SRC1 SRC2 ... into TARGET` — must contain exactly one `into` token; everything before is a source, the single token after is the target",
-                "longHelp": "`SRC1 SRC2 ... into TARGET` — must contain exactly one `into` token; everything before is a source, the single token after is the target",
-                "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "3..",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "message",
-                "kind": "option",
-                "short": "m",
-                "long": "message",
-                "valueNames": [
-                  "MESSAGE"
-                ],
-                "help": "Final commit message (required to rename; otherwise the target's message is kept)",
-                "longHelp": "Final commit message (required to rename; otherwise the target's message is kept)",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "dry_run",
-                "kind": "flag",
-                "short": "n",
-                "long": "dry-run",
-                "valueNames": [],
-                "help": "Show the plan without rebasing",
-                "longHelp": "Show the plan without rebasing",
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
-          },
-          {
-            "name": "sync",
-            "path": [
-              "mergify",
-              "stack",
-              "sync"
-            ],
-            "about": "Sync the stack: fetch trunk, remove merged commits, rebase",
-            "longAbout": "Sync the stack: fetch trunk, remove merged commits, rebase",
-            "usage": "mergify stack sync [OPTIONS]",
-            "aliases": [],
-            "subcommandRequired": false,
-            "source": "native",
-            "args": [
-              {
-                "id": "author",
-                "kind": "option",
-                "short": null,
-                "long": "author",
-                "valueNames": [
-                  "AUTHOR"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "repository",
-                "kind": "option",
-                "short": null,
-                "long": "repository",
-                "valueNames": [
-                  "REPOSITORY"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "branch_prefix",
-                "kind": "option",
-                "short": null,
-                "long": "branch-prefix",
-                "valueNames": [
-                  "BRANCH_PREFIX"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "dry_run",
-                "kind": "flag",
-                "short": "n",
-                "long": "dry-run",
-                "valueNames": [],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": "false",
-                "possibleValues": [],
-                "numArgs": "0",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "trunk",
-                "kind": "option",
-                "short": "t",
-                "long": "trunk",
-                "valueNames": [
-                  "TRUNK"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "token",
-                "kind": "option",
-                "short": null,
-                "long": "token",
-                "valueNames": [
-                  "TOKEN"
-                ],
-                "help": null,
-                "longHelp": null,
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              }
-            ],
-            "commands": []
           }
         ]
       },
@@ -3653,8 +3710,8 @@
           "mergify",
           "self-update"
         ],
-        "about": "Replace the running binary with the latest release. Verifies the download against `SHA256SUMS` before swap, matching the curl|sh installer's contract",
-        "longAbout": "Replace the running binary with the latest release. Verifies the download against `SHA256SUMS` before swap, matching the curl|sh installer's contract",
+        "about": "Update mergify to the latest release",
+        "longAbout": "Update mergify to the latest release.\n\nDownload the newest published binary, verify it against the release `SHA256SUMS`, and atomically replace the running executable. Uses the same artifact and checksum contract as the `curl | sh` installer.",
         "usage": "mergify self-update [OPTIONS]",
         "aliases": [],
         "subcommandRequired": false,
@@ -3689,6 +3746,61 @@
             "default": "false",
             "possibleValues": [],
             "numArgs": "0",
+            "env": null,
+            "valueHint": null
+          }
+        ],
+        "commands": []
+      },
+      {
+        "name": "completions",
+        "path": [
+          "mergify",
+          "completions"
+        ],
+        "about": "Print a shell completion script (e.g. `mergify completions zsh`)",
+        "longAbout": "Print a shell completion script (e.g. `mergify completions zsh`)",
+        "usage": "mergify completions [OPTIONS] <SHELL>",
+        "aliases": [],
+        "subcommandRequired": false,
+        "source": "native",
+        "args": [
+          {
+            "id": "shell",
+            "kind": "positional",
+            "short": null,
+            "long": null,
+            "valueNames": [
+              "SHELL"
+            ],
+            "help": "Shell to generate a completion script for",
+            "longHelp": "Shell to generate a completion script for",
+            "required": true,
+            "global": false,
+            "default": null,
+            "possibleValues": [
+              {
+                "name": "bash",
+                "help": null
+              },
+              {
+                "name": "elvish",
+                "help": null
+              },
+              {
+                "name": "fish",
+                "help": null
+              },
+              {
+                "name": "powershell",
+                "help": null
+              },
+              {
+                "name": "zsh",
+                "help": null
+              }
+            ],
+            "numArgs": "1",
             "env": null,
             "valueHint": null
           }
