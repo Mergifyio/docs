@@ -471,10 +471,52 @@
       "properties": {
         "message": {
           "default": "This pull request has been automatically closed by Mergify.",
-          "description": "A string template using the Jinja2 syntax.",
-          "format": "template",
-          "title": "Template",
-          "type": "string"
+          "description": "A string with `{{ variable }}` placeholders. Allowed variables: `approvers`, `assignees`, `author`, `base`, `body`, `head`, `labels`, `number`, `queue_dequeue_reason`, `title`.",
+          "format": "simple-template",
+          "title": "Message template",
+          "type": "string",
+          "x-mergify-template-variables": [
+            {
+              "description": "The pull request author's login.",
+              "name": "author"
+            },
+            {
+              "description": "The pull request number.",
+              "name": "number"
+            },
+            {
+              "description": "The pull request title.",
+              "name": "title"
+            },
+            {
+              "description": "The pull request description (body).",
+              "name": "body"
+            },
+            {
+              "description": "The base branch name.",
+              "name": "base"
+            },
+            {
+              "description": "The head branch name.",
+              "name": "head"
+            },
+            {
+              "description": "The pull request's labels as a comma-separated list (e.g. `bug, feat`); empty when none.",
+              "name": "labels"
+            },
+            {
+              "description": "Assignees as a ready-to-use @mention list (e.g. `@alice, @bob`); empty when none.",
+              "name": "assignees"
+            },
+            {
+              "description": "Reviewers who approved, as a @mention list (e.g. `@alice, @bob`); empty when none.",
+              "name": "approvers"
+            },
+            {
+              "description": "Why the pull request left the merge queue; empty outside queue contexts.",
+              "name": "queue_dequeue_reason"
+            }
+          ]
         }
       },
       "title": "CloseActionModel",
@@ -623,10 +665,52 @@
         "message": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `approvers`, `assignees`, `author`, `base`, `body`, `head`, `labels`, `number`, `queue_dequeue_reason`, `title`.",
+              "format": "simple-template",
+              "title": "Message template",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                },
+                {
+                  "description": "The pull request number.",
+                  "name": "number"
+                },
+                {
+                  "description": "The pull request title.",
+                  "name": "title"
+                },
+                {
+                  "description": "The pull request description (body).",
+                  "name": "body"
+                },
+                {
+                  "description": "The base branch name.",
+                  "name": "base"
+                },
+                {
+                  "description": "The head branch name.",
+                  "name": "head"
+                },
+                {
+                  "description": "The pull request's labels as a comma-separated list (e.g. `bug, feat`); empty when none.",
+                  "name": "labels"
+                },
+                {
+                  "description": "Assignees as a ready-to-use @mention list (e.g. `@alice, @bob`); empty when none.",
+                  "name": "assignees"
+                },
+                {
+                  "description": "Reviewers who approved, as a @mention list (e.g. `@alice, @bob`); empty when none.",
+                  "name": "approvers"
+                },
+                {
+                  "description": "Why the pull request left the merge queue; empty outside queue contexts.",
+                  "name": "queue_dequeue_reason"
+                }
+              ]
             },
             {
               "type": "null"
@@ -1812,6 +1896,11 @@
           "title": "GitHub code owner review satisfied",
           "type": "boolean"
         },
+        "github-review-approved": {
+          "description": "Whether GitHub's effective review enforcement is satisfied: the required approvals are in and no eligible reviewer is blocking with an active 'Request changes'. When the rule requires at least one approval, this mirrors GitHub's `pullRequest.reviewDecision` (so a blocking review from a reviewer other than the approver is honored, unlike a bare approval count). When the rule requires a pull request with no approval count, it blocks only on a write+ reviewer's active 'Request changes'. Returns `true` when no rule on the base branch requires a review.",
+          "title": "GitHub review approved",
+          "type": "boolean"
+        },
         "number": {
           "description": "The pull request number.",
           "maximum": 9223372036854775807,
@@ -2369,6 +2458,7 @@
         "github-review-decision",
         "github-require-review-from-specific-teams",
         "github-code-owner-review-satisfied",
+        "github-review-approved",
         "number",
         "queue-position",
         "author",
@@ -3232,10 +3322,52 @@
         "message": {
           "anyOf": [
             {
-              "description": "A string template using the Jinja2 syntax.",
-              "format": "template",
-              "title": "Template",
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `approvers`, `assignees`, `author`, `base`, `body`, `head`, `labels`, `number`, `queue_dequeue_reason`, `title`.",
+              "format": "simple-template",
+              "title": "Message template",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                },
+                {
+                  "description": "The pull request number.",
+                  "name": "number"
+                },
+                {
+                  "description": "The pull request title.",
+                  "name": "title"
+                },
+                {
+                  "description": "The pull request description (body).",
+                  "name": "body"
+                },
+                {
+                  "description": "The base branch name.",
+                  "name": "base"
+                },
+                {
+                  "description": "The head branch name.",
+                  "name": "head"
+                },
+                {
+                  "description": "The pull request's labels as a comma-separated list (e.g. `bug, feat`); empty when none.",
+                  "name": "labels"
+                },
+                {
+                  "description": "Assignees as a ready-to-use @mention list (e.g. `@alice, @bob`); empty when none.",
+                  "name": "assignees"
+                },
+                {
+                  "description": "Reviewers who approved, as a @mention list (e.g. `@alice, @bob`); empty when none.",
+                  "name": "approvers"
+                },
+                {
+                  "description": "Why the pull request left the merge queue; empty outside queue contexts.",
+                  "name": "queue_dequeue_reason"
+                }
+              ]
             },
             {
               "type": "null"

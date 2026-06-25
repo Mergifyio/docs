@@ -5015,7 +5015,7 @@
         }
       }
     },
-    "/ci/{owner}/repositories/{repository_name}/search/tests": {
+    "/ci/{owner}/repositories/{repository}/search/tests": {
       "get": {
         "tags": [
           "test_insights"
@@ -5025,26 +5025,13 @@
         "operationId": "ci-search-tests",
         "security": [
           {
-            "GitHubTokenBearerAuth": []
+            "ApplicationAuth": []
           },
           {
-            "ApplicationAuth": []
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
-          {
-            "name": "repository_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository Name"
-            },
-            "description": "The name of the repository"
-          },
           {
             "name": "owner",
             "in": "path",
@@ -5058,6 +5045,19 @@
               "title": "Owner"
             },
             "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
           },
           {
             "name": "test_name",
@@ -5456,36 +5456,23 @@
         }
       }
     },
-    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}": {
+    "/ci/{owner}/repositories/{repository}/tests/{test_id}": {
       "get": {
         "tags": [
           "test_insights"
         ],
         "summary": "Get detailed information about a test",
         "description": "Get detailed information about a test.",
-        "operationId": "get_test_details_ci__owner__repositories__repository_name__tests__test_id__get",
+        "operationId": "get_test_details_ci__owner__repositories__repository__tests__test_id__get",
         "security": [
           {
-            "GitHubTokenBearerAuth": []
+            "ApplicationAuth": []
           },
           {
-            "ApplicationAuth": []
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
-          {
-            "name": "repository_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository Name"
-            },
-            "description": "The name of the repository"
-          },
           {
             "name": "test_id",
             "in": "path",
@@ -5511,6 +5498,19 @@
               "title": "Owner"
             },
             "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
           }
         ],
         "responses": {
@@ -5539,7 +5539,7 @@
         }
       }
     },
-    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/stats/{stat}": {
+    "/ci/{owner}/repositories/{repository}/tests/{test_id}/stats/{stat}": {
       "get": {
         "tags": [
           "test_insights"
@@ -5549,26 +5549,13 @@
         "operationId": "ci-test-stats",
         "security": [
           {
-            "GitHubTokenBearerAuth": []
+            "ApplicationAuth": []
           },
           {
-            "ApplicationAuth": []
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
-          {
-            "name": "repository_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository Name"
-            },
-            "description": "The name of the repository"
-          },
           {
             "name": "test_id",
             "in": "path",
@@ -5609,6 +5596,19 @@
               "title": "Owner"
             },
             "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
           },
           {
             "name": "start",
@@ -5692,7 +5692,7 @@
         }
       }
     },
-    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/failures": {
+    "/ci/{owner}/repositories/{repository}/tests/{test_id}/failures": {
       "get": {
         "tags": [
           "test_insights"
@@ -5702,26 +5702,13 @@
         "operationId": "ci-test-failures",
         "security": [
           {
-            "GitHubTokenBearerAuth": []
+            "ApplicationAuth": []
           },
           {
-            "ApplicationAuth": []
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
-          {
-            "name": "repository_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository Name"
-            },
-            "description": "The name of the repository"
-          },
           {
             "name": "test_id",
             "in": "path",
@@ -5747,6 +5734,19 @@
               "title": "Owner"
             },
             "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
           }
         ],
         "responses": {
@@ -5775,7 +5775,7 @@
         }
       }
     },
-    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/failures/{failure_id}": {
+    "/ci/{owner}/repositories/{repository}/tests/{test_id}/failures/{failure_id}": {
       "get": {
         "tags": [
           "test_insights"
@@ -5785,26 +5785,13 @@
         "operationId": "ci-test-failure",
         "security": [
           {
-            "GitHubTokenBearerAuth": []
+            "ApplicationAuth": []
           },
           {
-            "ApplicationAuth": []
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
-          {
-            "name": "repository_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository Name"
-            },
-            "description": "The name of the repository"
-          },
           {
             "name": "test_id",
             "in": "path",
@@ -5842,6 +5829,19 @@
               "title": "Owner"
             },
             "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
           }
         ],
         "responses": {
@@ -5870,7 +5870,7 @@
         }
       }
     },
-    "/ci/{owner}/repositories/{repository_name}/tests/{test_id}/executions": {
+    "/ci/{owner}/repositories/{repository}/tests/{test_id}/executions": {
       "get": {
         "tags": [
           "test_insights"
@@ -5880,26 +5880,13 @@
         "operationId": "ci-test-executions",
         "security": [
           {
-            "GitHubTokenBearerAuth": []
+            "ApplicationAuth": []
           },
           {
-            "ApplicationAuth": []
+            "GitHubTokenBearerAuth": []
           }
         ],
         "parameters": [
-          {
-            "name": "repository_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository Name"
-            },
-            "description": "The name of the repository"
-          },
           {
             "name": "test_id",
             "in": "path",
@@ -5925,6 +5912,19 @@
               "title": "Owner"
             },
             "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
           },
           {
             "name": "sort",
@@ -7900,6 +7900,10 @@
             },
             "type": "array",
             "title": "Peer Pull Request Numbers"
+          },
+          "affinity_score": {
+            "type": "number",
+            "title": "Affinity Score"
           }
         },
         "type": "object",
@@ -7907,7 +7911,8 @@
           "kind",
           "shared_scopes",
           "shared_directories",
-          "peer_pull_request_numbers"
+          "peer_pull_request_numbers",
+          "affinity_score"
         ],
         "title": "BatchReason",
         "description": "Why a PR shares its batch (train car) with the other PRs in it.\n\nRe-derived at serialization time from each member's persisted similarity\nsignals \u2014 the same ``scopes`` / ``changed_directories`` the batching\nalgorithm groups on \u2014 so it stays correct as a car is bisected and members\nleave. It reports the signal the car's *current* members actually share,\nnot a replay of the formation-time greedy pick order. ``None`` when the car\nholds a single PR (nothing to explain) or for a not-yet-batched waiting PR."
@@ -15268,6 +15273,18 @@
                 "type": "null"
               }
             ]
+          },
+          "is_frozen": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Frozen",
+            "description": "Whether an ongoing scheduled freeze holds this pull request's merge, independent of its CI status \u2014 it can be running CI and `is_frozen` at once. `false` when no freeze affects it."
           }
         },
         "type": "object",
