@@ -1,8 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import {
+  type CliCommandNode,
   findCommand,
+  GROUP_BACKLINKS,
   GROUP_DESCRIPTIONS,
   GROUP_LABELS,
+  groupDescription,
   groupTopLevel,
   isFlagLike,
   loadCliSchema,
@@ -20,16 +23,21 @@ describe('CLI reference grouping', () => {
     expect(groupNames).toEqual(schemaNames);
   });
 
-  // Mirrors the API reference's TAG_DESCRIPTIONS discipline: a new top-level
-  // command must be given outward-facing copy, caught here rather than shipping
-  // a bare fallback to the storefront grid and the nav.
-  test('every group has an editorial label and description', () => {
-    for (const group of groups) {
-      expect(GROUP_LABELS[group.name], `GROUP_LABELS missing "${group.name}"`).toBeDefined();
-      expect(
-        GROUP_DESCRIPTIONS[group.name],
-        `GROUP_DESCRIPTIONS missing "${group.name}"`
-      ).toBeDefined();
+  // A new command auto-derives its copy (humanizeCommand + the schema `about`),
+  // so it needs no hand-written entry. The remaining risk runs the other way: an
+  // editorial entry orphaned when a command is renamed or dropped in the schema.
+  // Guard that drift — the blank-copy case is impossible by construction.
+  test('editorial maps carry no entry for a missing command', () => {
+    const commands = new Set(schema.command.commands.map((c) => c.name));
+    const editorial: Array<[string, Record<string, unknown>]> = [
+      ['GROUP_LABELS', GROUP_LABELS],
+      ['GROUP_DESCRIPTIONS', GROUP_DESCRIPTIONS],
+      ['GROUP_BACKLINKS', GROUP_BACKLINKS],
+    ];
+    for (const [mapName, map] of editorial) {
+      for (const name of Object.keys(map)) {
+        expect(commands.has(name), `${mapName} has a stale entry "${name}"`).toBe(true);
+      }
     }
   });
 
@@ -50,6 +58,46 @@ describe('CLI reference grouping', () => {
     const tests = groups.find((g) => g.name === 'tests');
     expect(tests?.leaves).toContain('mergify tests show');
     expect(tests?.leaves).toContain('mergify tests quarantines add');
+  });
+});
+
+describe('groupDescription fallback', () => {
+  // Every shipped group has an editorial entry, so the schema alone never
+  // exercises the lower tiers — drive them with a synthetic command node.
+  const node = (about: string | null): CliCommandNode => ({
+    name: 'demo',
+    path: ['mergify', 'demo'],
+    about,
+    longAbout: null,
+    usage: 'mergify demo',
+    aliases: [],
+    subcommandRequired: false,
+    source: 'test',
+    args: [],
+    commands: [],
+  });
+
+  test('prefers an editorial entry over the schema about', () => {
+    expect(groupDescription('queue', node('inward-facing help'))).toBe(GROUP_DESCRIPTIONS.queue);
+  });
+
+  test('falls back to the schema about for a command with no entry', () => {
+    expect(groupDescription('newcmd', node('Inspect the thing.'))).toBe('Inspect the thing.');
+  });
+
+  test('treats a whitespace-only editorial entry as absent', () => {
+    const original = GROUP_DESCRIPTIONS.queue;
+    GROUP_DESCRIPTIONS.queue = '   ';
+    try {
+      expect(groupDescription('queue', node('Inspect the thing.'))).toBe('Inspect the thing.');
+    } finally {
+      GROUP_DESCRIPTIONS.queue = original;
+    }
+  });
+
+  test('falls back to a generated sentence when about is blank or missing', () => {
+    expect(groupDescription('newcmd', node('   '))).toBe('Commands for mergify newcmd.');
+    expect(groupDescription('newcmd', node(null))).toBe('Commands for mergify newcmd.');
   });
 });
 

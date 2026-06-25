@@ -2,7 +2,6 @@
 import CliCommand from '~/components/CliReference/CliCommand.astro';
 import {
   GROUP_BACKLINKS,
-  GROUP_DESCRIPTIONS,
   getHeadingsForCommands,
   groupTopLevel,
   loadCliSchema,
@@ -29,8 +28,7 @@ const backlink = GROUP_BACKLINKS[group.name];
 
 const content = {
   title: group.label,
-  description:
-    GROUP_DESCRIPTIONS[group.name] ?? group.node.about ?? `Commands for mergify ${group.name}.`,
+  description: group.description,
 };
 ---
 
