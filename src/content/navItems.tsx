@@ -76,7 +76,6 @@ const navItems: NavItem[] = [
     icon: 'mergify:ci-insights',
     children: [
       { title: 'Overview', path: '/ci-insights', icon: 'lucide:lightbulb' },
-      { title: 'Runners', path: '/ci-insights/runners', icon: 'lucide:server' },
       { title: 'Jobs', path: '/ci-insights/jobs', icon: 'lucide:list-checks' },
       { title: 'Auto-Retry', path: '/ci-insights/auto-retry', icon: 'lucide:rotate-cw' },
       {
@@ -84,6 +83,7 @@ const navItems: NavItem[] = [
         path: '/ci-insights/flaky-test-detection',
         icon: 'lucide:bug',
       },
+      { title: 'Self-hosted runners', path: '/ci-insights/runners', icon: 'lucide:server' },
       {
         title: 'CI Setup',
         icon: 'lucide:settings',
