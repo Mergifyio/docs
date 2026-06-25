@@ -18,14 +18,14 @@ by merging the base branch into the pull request branch.
 
 :::note
   You do not need to use this action if you use the [merge
-  queue](/merge-queue). The merge queue automatically update the pull requests
+  queue](/merge-queue). The merge queue automatically updates the pull requests
   it processes as necessary, making sure they are tested with up-to-date code
   before being merged.
 :::
 
 ## Parameters
 
-<ActionOptionsTable def='UpdateActionModel' />
+<ActionOptionsTable def="UpdateActionModel" />
 
 ## Examples
 
@@ -36,7 +36,7 @@ behind their base branch, for example:
 
 ```yaml
 pull_request_rules:
-  - name: automatic update of pull requests where more 5 commits behind
+  - name: automatic update of pull requests that are more than 5 commits behind
     conditions:
       - base = main
       - "#commits-behind > 5"
@@ -54,7 +54,7 @@ pull requests.
 
 ```yaml
 pull_request_rules:
-  - name: automatic update for PR marked as “keep-up-to-date“
+  - name: automatic update for pull requests marked as "keep-up-to-date"
     conditions:
       - -draft # filter-out draft PRs
       - label = keep-up-to-date
