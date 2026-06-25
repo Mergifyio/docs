@@ -230,6 +230,7 @@ export const GROUP_ORDER: string[] = [
   'freeze',
   'config',
   'self-update',
+  'completions',
 ];
 
 /** Card/page headings — the CLI counterpart of `TAG_LABELS`. */
@@ -241,6 +242,7 @@ export const GROUP_LABELS: Record<string, string> = {
   freeze: 'Scheduled Freezes',
   config: 'Configuration',
   'self-update': 'Maintenance',
+  completions: 'Shell Completions',
 };
 
 /**
@@ -256,6 +258,7 @@ export const GROUP_DESCRIPTIONS: Record<string, string> = {
   freeze: 'Schedule and manage merge freezes for release windows and maintenance.',
   config: 'Validate your Mergify configuration and simulate actions before you merge.',
   'self-update': 'Update the Mergify CLI to the latest release.',
+  completions: 'Generate a shell completion script to tab-complete Mergify CLI commands and flags.',
 };
 
 /**
