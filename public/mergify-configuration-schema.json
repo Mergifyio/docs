@@ -225,13 +225,14 @@
       "properties": {
         "users": {
           "items": {
-            "anyOf": [
+            "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+            "format": "simple-template",
+            "title": "User",
+            "type": "string",
+            "x-mergify-template-variables": [
               {
-                "const": "{{ author }}",
-                "title": "Pull request author"
-              },
-              {
-                "type": "string"
+                "description": "The pull request author's login.",
+                "name": "author"
               }
             ]
           },
@@ -241,13 +242,14 @@
         },
         "add_users": {
           "items": {
-            "anyOf": [
+            "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+            "format": "simple-template",
+            "title": "User",
+            "type": "string",
+            "x-mergify-template-variables": [
               {
-                "const": "{{ author }}",
-                "title": "Pull request author"
-              },
-              {
-                "type": "string"
+                "description": "The pull request author's login.",
+                "name": "author"
               }
             ]
           },
@@ -257,13 +259,14 @@
         },
         "remove_users": {
           "items": {
-            "anyOf": [
+            "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+            "format": "simple-template",
+            "title": "User",
+            "type": "string",
+            "x-mergify-template-variables": [
               {
-                "const": "{{ author }}",
-                "title": "Pull request author"
-              },
-              {
-                "type": "string"
+                "description": "The pull request author's login.",
+                "name": "author"
               }
             ]
           },
@@ -349,19 +352,20 @@
           "type": "boolean"
         },
         "assignees": {
-          "description": "Users to assign the newly created pull request to. Accepts GitHub logins, or one of the named actor options `{{ author }}` (the original pull request author) and `{{ merged_by }}` (the user who merged it).",
+          "description": "Users to assign the newly created pull request to. Accepts a GitHub login, or `{{ author }}` (the original pull request author) or `{{ merged_by }}` (the user who merged it).",
           "items": {
-            "anyOf": [
+            "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`, `merged_by`.",
+            "format": "simple-template",
+            "title": "Assignee",
+            "type": "string",
+            "x-mergify-template-variables": [
               {
-                "const": "{{ author }}",
-                "title": "Pull request author"
+                "description": "The pull request author's login.",
+                "name": "author"
               },
               {
-                "const": "{{ merged_by }}",
-                "title": "User who merged the pull request"
-              },
-              {
-                "type": "string"
+                "description": "The login of the user who merged the pull request.",
+                "name": "merged_by"
               }
             ]
           },
@@ -1034,19 +1038,20 @@
           "type": "boolean"
         },
         "assignees": {
-          "description": "Users to assign the newly created pull request to. Accepts GitHub logins, or one of the named actor options `{{ author }}` (the original pull request author) and `{{ merged_by }}` (the user who merged it).",
+          "description": "Users to assign the newly created pull request to. Accepts a GitHub login, or `{{ author }}` (the original pull request author) or `{{ merged_by }}` (the user who merged it).",
           "items": {
-            "anyOf": [
+            "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`, `merged_by`.",
+            "format": "simple-template",
+            "title": "Assignee",
+            "type": "string",
+            "x-mergify-template-variables": [
               {
-                "const": "{{ author }}",
-                "title": "Pull request author"
+                "description": "The pull request author's login.",
+                "name": "author"
               },
               {
-                "const": "{{ merged_by }}",
-                "title": "User who merged the pull request"
-              },
-              {
-                "type": "string"
+                "description": "The login of the user who merged the pull request.",
+                "name": "merged_by"
               }
             ]
           },
