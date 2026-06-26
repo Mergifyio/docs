@@ -3,6 +3,7 @@ import {
   GROUP_DESCRIPTIONS,
   groupTopLevel,
   loadCliSchema,
+  MAINTENANCE_GROUPS,
 } from '~/components/CliReference/cli-schema';
 import MainLayout from '~/layouts/MainLayout.astro';
 import '~/styles/cli-reference.css';
@@ -11,6 +12,17 @@ import '~/styles/cli-reference.css';
 // command-group grid is generated from the schema, so it tracks the binary.
 const schema = loadCliSchema();
 const groups = groupTopLevel(schema.command);
+
+// Non-blocking nudge: a freshly synced command renders on auto-derived copy.
+// Surface that in the build log so editorial copy still gets written, without
+// failing the build.
+const unedited = groups.filter((group) => !GROUP_DESCRIPTIONS[group.name]?.trim());
+if (unedited.length > 0) {
+  console.warn(
+    `[cli-reference] ${unedited.length} command group(s) on fallback copy — ` +
+      `add a GROUP_DESCRIPTIONS entry: ${unedited.map((group) => group.name).join(', ')}`
+  );
+}
 
 const headings = groups.map((group) => ({
   depth: 2,
@@ -23,9 +35,9 @@ const content = {
   description: 'Manage Mergify from your terminal and your CI pipelines.',
 };
 
-// The maintenance group (self-update) is de-emphasized in the grid so the
-// capability cards lead the page — editorial, see GROUP_ORDER.
-const isMuted = (name: string) => name === 'self-update';
+// Maintenance groups are de-emphasized in the grid so the capability cards lead
+// the page — editorial, see MAINTENANCE_GROUPS.
+const isMuted = (name: string) => MAINTENANCE_GROUPS.has(name);
 ---
 
 <MainLayout content={content} headings={headings} showMarkdownActions={false}>
@@ -62,9 +74,7 @@ const isMuted = (name: string) => name === 'self-update';
                 {group.leaves.length} command{group.leaves.length !== 1 ? 's' : ''}
               </span>
             </div>
-            <p class="cli-group-description">
-              {GROUP_DESCRIPTIONS[group.name] ?? group.node.about}
-            </p>
+            <p class="cli-group-description">{group.description}</p>
           </a>
         ))
       }

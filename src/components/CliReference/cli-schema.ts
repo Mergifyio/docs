@@ -209,6 +209,8 @@ export interface CliGroup {
   slug: string;
   /** Outward-facing card/page heading. */
   label: string;
+  /** Outward-facing grid/meta description, resolved via `groupDescription`. */
+  description: string;
   /** The top-level node itself (group or lone leaf). */
   node: CliCommandNode;
   /** Display strings of every runnable leaf, DFS pre-order (`mergify tests show`). */
@@ -219,8 +221,8 @@ export interface CliGroup {
 
 /**
  * Editorial order for the index grid and nav — capability-first, not clap's
- * registration order; maintenance (`self-update`) trails. A top-level command
- * missing here still renders, appended after these.
+ * registration order. A top-level command missing here still renders, slotted
+ * among the capabilities ahead of the maintenance tail.
  */
 export const GROUP_ORDER: string[] = [
   'queue',
@@ -232,6 +234,12 @@ export const GROUP_ORDER: string[] = [
   'self-update',
   'completions',
 ];
+
+/**
+ * Maintenance, not capability: de-emphasized in the grid and sorted to the end,
+ * so a freshly synced command lands among the capabilities, never below these.
+ */
+export const MAINTENANCE_GROUPS = new Set(['self-update']);
 
 /** Card/page headings — the CLI counterpart of `TAG_LABELS`. */
 export const GROUP_LABELS: Record<string, string> = {
@@ -247,8 +255,8 @@ export const GROUP_LABELS: Record<string, string> = {
 
 /**
  * Outward-facing one-line value props for the index grid — the CLI counterpart
- * of `TAG_DESCRIPTIONS`. Written for evaluators, not copied from the schema's
- * inward-facing `about` strings.
+ * of `TAG_DESCRIPTIONS`. Editorial copy for evaluators; a command without an
+ * entry falls back to its schema `about` via `groupDescription`.
  */
 export const GROUP_DESCRIPTIONS: Record<string, string> = {
   queue: 'Pause, unpause, and inspect the merge queue from scripts and incident runbooks.',
@@ -274,6 +282,18 @@ export const GROUP_BACKLINKS: Record<string, { text: string; href: string }> = {
   freeze: { text: 'Scheduled freezes', href: '/merge-protections/freeze' },
   config: { text: 'Configuration file', href: '/configuration/file-format' },
 };
+
+/**
+ * Outward-facing group description: editorial copy, else the schema's `about`,
+ * else a generated sentence. Always non-blank, so a command renders before it
+ * has hand-written copy. `||` over trimmed values: a blank editorial entry falls
+ * through rather than rendering as empty copy.
+ */
+export function groupDescription(name: string, node: CliCommandNode): string {
+  const editorial = GROUP_DESCRIPTIONS[name]?.trim();
+  const about = node.about?.trim();
+  return editorial || about || `Commands for mergify ${name}.`;
+}
 
 /** Outward-facing label, falling back to a title-cased name for new commands. */
 export function humanizeCommand(name: string): string {
@@ -314,9 +334,13 @@ function collectLeafNodes(node: CliCommandNode): CliCommandNode[] {
  */
 export function groupTopLevel(root: CliCommandNode): CliGroup[] {
   const byName = new Map(root.commands.map((c) => [c.name, c]));
+  const known = GROUP_ORDER.filter((name) => byName.has(name));
+  const unknown = root.commands.map((c) => c.name).filter((name) => !GROUP_ORDER.includes(name));
+  // New commands slot among the capabilities, ahead of the maintenance tail.
   const ordered = [
-    ...GROUP_ORDER.filter((name) => byName.has(name)),
-    ...root.commands.map((c) => c.name).filter((name) => !GROUP_ORDER.includes(name)),
+    ...known.filter((name) => !MAINTENANCE_GROUPS.has(name)),
+    ...unknown,
+    ...known.filter((name) => MAINTENANCE_GROUPS.has(name)),
   ];
   return ordered.map((name) => {
     const node = byName.get(name) as CliCommandNode;
@@ -325,6 +349,7 @@ export function groupTopLevel(root: CliCommandNode): CliGroup[] {
       name,
       slug: slugifyCommand(name),
       label: humanizeCommand(name),
+      description: groupDescription(name, node),
       node,
       leaves: leafNodes.map((leaf) => leaf.path.join(' ')),
       deprecated: leafNodes.some(isDeprecated),
