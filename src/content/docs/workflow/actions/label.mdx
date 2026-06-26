@@ -92,16 +92,17 @@ pull_request_rules:
           - "CI:fail"
 ```
 
-### Add A Label Based on The Name of The Branch
+### Add A Label Based on The Target Branch
 
-This rule add a label with the name of the branch.
+This rule adds a static label to pull requests targeting a given branch.
 
 ```yaml
 pull_request_rules:
-  - name: add a label with the name of the branch
-    conditions: []
+  - name: label pull requests targeting the release branch
+    conditions:
+      - base = release
     actions:
       label:
         add:
-          - "branch:{{base}}"
+          - "release"
 ```
