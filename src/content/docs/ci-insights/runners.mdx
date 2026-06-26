@@ -1,57 +1,80 @@
 ---
-title: Runners
-description: Monitor your CI runner fleet's performance, cost, and reliability to detect issues before they impact your pipelines.
+title: Self-hosted runners
+description: Monitor the self-hosted CI runners behind your pipelines so you can spot capacity bottlenecks, degraded machines, and wasted spend.
 ---
 
-The Runners page gives you visibility into your CI runner fleet. Track
-performance, spot bottlenecks, and identify degraded runners before they
-slow down your pipelines.
+Self-hosted runners are the machines that execute your CI. Mergify doesn't provision
+or control them. It watches the jobs they run and turns that data into metrics about
+capacity, performance, cost, and reliability.
 
-Whether you're optimizing costs, investigating slow queue times, or
-monitoring runner health, this page centralizes the metrics you need to
-keep your CI infrastructure running smoothly.
+That fleet is infrastructure you own and pay for, but it usually runs as a black
+box: you only hear about it once builds start queuing or failing. These metrics let
+you base scaling and reliability decisions on what the fleet actually does.
 
 :::note
-  Before using the Runners page, you need to have CI Insights enabled on
-  your repository. See the [CI Insights setup guides](/ci-insights) to
-  get started.
+  Self-hosted runners are part of CI Insights. Enable CI Insights on your repository
+  first. See the [setup guides](/ci-insights) to get started.
 :::
 
-## Configuring Your Fleet
+## Why monitor your runners
 
-Before any runner data appears, you need to configure which runners to
-track. Click **Configure Runner Groups** to set up your fleet.
+The metrics answer a few recurring questions:
 
-**Runner groups** let you organize runners by their group name. You can
-track one or more groups at a time. **Labels** let you optionally filter
-runners further (e.g., by operating system or architecture).
+- **Is the fleet the right size?** Idle runners mean you pay for capacity you don't
+  use. Saturated runners mean jobs wait. Both are expensive, in different ways.
 
-Only runners matching your configuration will appear in the table. You
-can edit this configuration at any time by clicking the **Edit** button
-in the fleet configuration section.
+- **Is a runner degraded?** One slow or flaky machine drags down every job scheduled
+  on it, often without an obvious failure.
 
-:::tip
-  Start with a single runner group to get familiar with the metrics,
-  then expand your configuration as needed.
-:::
+- **Where is CI time going?** Time spent *waiting* for a runner and time spent
+  *running* on it are different problems with different fixes.
 
-## Monitoring Your Runners
+- **What is the fleet costing?** Cost per runner and per job shows where spend
+  concentrates.
 
-Once configured, the runners table gives you an at-a-glance view of each
-runner's performance, queue times, throughput, and health status. Use the
-date range selector to focus on a specific time window.
+## What Mergify tracks
 
-Expanding any runner row reveals detailed metrics including duration
-percentiles (median, p95, p99), queue time breakdowns, total runs, failure
-rate, and cost data.
+Mergify groups these metrics into three areas.
 
-Each runner is assigned a **health status** (Healthy, Unstable, or
-Degraded) that surfaces runners needing attention based on their success
-rate and relative performance compared to their group.
+### Queue: is work waiting for a runner?
 
-:::tip
-  High average queue times may indicate your fleet needs scaling. If a
-  runner shows a Degraded status, investigate potential infrastructure
-  issues. Use the "vs Group" comparison to quickly spot outliers
-  underperforming relative to their peers.
+The queue tracks how long jobs wait to get a runner and how many are waiting,
+grouped by the labels they request. Read the two signals together: rising wait
+times with steady demand point to a capacity problem, so add runners; a spike in
+queued jobs points to a demand surge instead. The aim is to keep runners ahead of
+demand, before queue time starts delaying pull requests.
+
+### Fleet: how is each runner performing?
+
+The fleet is your runners seen one at a time: throughput, speed, success rate, and
+how each runner compares to its peers. Each runner carries a health status, so an
+underperforming or unstable one is easy to single out. You can also follow each
+runner's trends over time and see how heavily it is being used.
+
+### Settings: what does Mergify monitor?
+
+You decide which runner groups and labels Mergify watches. Because metrics are
+aggregated by runner group, this is also how you scope monitoring to the runners that
+matter.
+
+## Key concepts
+
+- **Runner groups and labels.** Runners are organized into groups, and labels (the
+  `runs-on` values a job requests) identify which kind of runner handled the work.
+  Mergify uses the group to scope what it monitors and to compare each runner against
+  its peers.
+
+- **Long-lived runners only.** This page tracks persistent runners. Ephemeral runners
+  that exist for a single job aren't tracked here; use the [Jobs](/ci-insights/jobs)
+  page for those.
+
+- **Wait time vs. run time.** Wait time is how long a job sits before a runner picks
+  it up; run time is how long it executes once started.
+
+- **Health status.** Derived from a runner's success rate and its speed relative to
+  its group, so machines that need attention surface on their own.
+
+:::note
+  GitHub-hosted runners aren't monitored here. They use a new identity on every run,
+  which makes per-runner metrics unreliable.
 :::
