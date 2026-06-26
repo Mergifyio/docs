@@ -54,15 +54,16 @@ pull_request_rules:
       - conflict
     actions:
       comment:
-        message: "@{{author}} this pull request is now in conflict 😩"
+        message: "@{{ author }} this pull request is now in conflict 😩"
       label:
         toggle:
           - conflict
 ```
 
-The `{{author}}` placeholder is a [template](/configuration/data-types#legacy-template)
-that Mergify fills in with the pull request's data. Browse every available
-action and its parameters in the [Actions catalog](/workflow/actions).
+The `{{ author }}` placeholder uses [variable
+substitution](/configuration/data-types#variable-substitution): Mergify fills it
+in with the pull request's data. Browse every available action and its
+parameters in the [Actions catalog](/workflow/actions).
 
 ## Combining Rules
 

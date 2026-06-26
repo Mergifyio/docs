@@ -17,15 +17,7 @@ commit](https://docs.github.com/en/pull-requests/committing-changes-to-your-proj
 
 <OptionsTable def="Commit" />
 
-You can use a commit object in templates:
-
-```jinja
-{% for commit in commits %}
-Co-Authored-By: {{ commit.author }} <{{ commit.email_author }}>
-{% endfor %}
-```
-
-You can also use those objects in conditions:
+You can use commit objects in conditions:
 
 ```yaml
 pull_request_rules:
