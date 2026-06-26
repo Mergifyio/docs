@@ -27,9 +27,12 @@ const valueTypeFormatLinks: { [key: string]: string } = {
 // the title as the field type, linking to the matching data-types section.
 const simpleTemplateTitleLinks: { [key: string]: string } = {
   'Message template': '/configuration/data-types#message-template',
-  'Copy title template': '/configuration/data-types#copy-title-template',
-  'Copy body template': '/configuration/data-types#copy-body-template',
+  'Title template': '/configuration/data-types#title-template',
+  'Body template': '/configuration/data-types#body-template',
   'Workflow input template': '/configuration/data-types#workflow-input-template',
+  User: '/configuration/data-types#user',
+  Assignee: '/configuration/data-types#assignee',
+  'Bot account': '/configuration/data-types#bot-account',
 };
 
 export type OptionDefinitionRef = string;

@@ -291,14 +291,14 @@ message fields.
 
 <TemplateVariablesTable def="CommentActionModel" field="message" />
 
-### Copy title template
+### Title template
 
 Used by the [`copy`](/workflow/actions/copy) and
 [`backport`](/workflow/actions/backport) `title` field.
 
 <TemplateVariablesTable def="CopyActionModel" field="title" />
 
-### Copy body template
+### Body template
 
 Used by the [`copy`](/workflow/actions/copy) and
 [`backport`](/workflow/actions/backport) `body` field.
@@ -311,6 +311,37 @@ Used by the [`github_actions`](/workflow/actions/github_actions) workflow input
 values.
 
 <TemplateVariablesTable def="GhaActionModelDispatch" field="inputs" />
+
+### User
+
+A GitHub login. You can also use the `{{ author }}` variable to target the pull
+request author. Used by the [`assign`](/workflow/actions/assign) `users`,
+`add_users` and `remove_users` fields.
+
+<TemplateVariablesTable def="AssignActionModel" field="add_users" />
+
+### Assignee
+
+A GitHub login. You can also use `{{ author }}` (the pull request author) and
+`{{ merged_by }}` (the user who merged the original pull request). Used by the
+[`copy`](/workflow/actions/copy) and [`backport`](/workflow/actions/backport)
+`assignees` field.
+
+<TemplateVariablesTable def="CopyActionModel" field="assignees" />
+
+### Bot account
+
+A GitHub login Mergify impersonates to perform an action. You can also use the
+`{{ author }}` variable to act as the pull request author. Used by the
+`bot_account` field of the [`comment`](/workflow/actions/comment),
+[`edit`](/workflow/actions/edit), [`copy`](/workflow/actions/copy),
+[`merge`](/workflow/actions/merge), [`rebase`](/workflow/actions/rebase),
+[`request_reviews`](/workflow/actions/request_reviews),
+[`review`](/workflow/actions/review), [`squash`](/workflow/actions/squash) and
+[`update`](/workflow/actions/update) actions, and the merge queue
+`draft_bot_account`, `merge_bot_account` and `update_bot_account`.
+
+<TemplateVariablesTable def="CommentActionModel" field="bot_account" />
 
 ### Legacy template
 
