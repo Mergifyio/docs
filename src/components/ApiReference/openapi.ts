@@ -196,6 +196,14 @@ export function slugifyTag(tag: string): string {
   return tag.toLowerCase().replace(/_/g, '-');
 }
 
+/**
+ * Outward-facing tag description: editorial copy, else a generated sentence.
+ * Always non-blank, so a new tag renders on the index grid before it has copy.
+ */
+export function tagDescription(tag: string): string {
+  return TAG_DESCRIPTIONS[tag] || `${humanizeTag(tag)} endpoints for the Mergify API.`;
+}
+
 export function groupByTag(schema: OpenAPISpec): Map<string, GroupedEndpoint[]> {
   const groups = new Map<string, GroupedEndpoint[]>();
   const methods = ['get', 'post', 'put', 'delete', 'patch'];

@@ -8,7 +8,7 @@ import {
   humanizeTag,
   preprocessSchema,
   slugifyTag,
-  TAG_DESCRIPTIONS,
+  tagDescription,
 } from '~/components/ApiReference/openapi';
 import MainLayout from '~/layouts/MainLayout.astro';
 import '~/styles/api-reference.css';
@@ -27,7 +27,7 @@ export function getStaticPaths() {
 const { tag, endpoints, schema } = Astro.props;
 const headings = getHeadingsForEndpoints(endpoints);
 const label = humanizeTag(tag);
-const description = TAG_DESCRIPTIONS[tag] ?? `${label} endpoints for the Mergify API.`;
+const description = tagDescription(tag);
 
 const content = {
   title: label,
