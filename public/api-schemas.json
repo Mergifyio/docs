@@ -11904,6 +11904,19 @@
             ],
             "title": "Train Car Id"
           },
+          "previous_batch_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Batch Id",
+            "description": "The ID of the batch checked just before this one for the same pull request, when this check is a restart. Null on the first check."
+          },
           "session_id": {
             "type": "string",
             "format": "uuid",
@@ -11920,6 +11933,7 @@
           "start_reason",
           "speculative_check_pull_request",
           "train_car_id",
+          "previous_batch_id",
           "session_id"
         ],
         "title": "EventQueueChecksStartMetadata"

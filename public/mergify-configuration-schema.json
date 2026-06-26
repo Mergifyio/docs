@@ -312,11 +312,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -783,11 +788,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -998,11 +1008,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -1300,11 +1315,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -1566,11 +1586,16 @@
         "merge_bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -2904,11 +2929,16 @@
         "draft_bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3040,11 +3070,16 @@
         "merge_bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3057,11 +3092,16 @@
         "update_bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3151,11 +3191,16 @@
         "draft_bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3287,11 +3332,16 @@
         "merge_bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3304,11 +3354,16 @@
         "update_bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3336,11 +3391,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3367,11 +3427,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3538,11 +3603,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3652,11 +3722,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
@@ -3687,11 +3762,16 @@
         "bot_account": {
           "anyOf": [
             {
-              "const": "{{ author }}",
-              "title": "Pull request author"
-            },
-            {
-              "type": "string"
+              "description": "A string with `{{ variable }}` placeholders. Allowed variables: `author`.",
+              "format": "simple-template",
+              "title": "Bot account",
+              "type": "string",
+              "x-mergify-template-variables": [
+                {
+                  "description": "The pull request author's login.",
+                  "name": "author"
+                }
+              ]
             },
             {
               "type": "null"
