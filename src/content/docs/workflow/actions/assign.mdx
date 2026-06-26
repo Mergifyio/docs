@@ -16,9 +16,10 @@ pull requests that require their attention.
 
 <ActionOptionsTable def="AssignActionModel"/>
 
-As the list of users in `add_users` or `remove_users` is based on
-[templates](/configuration/data-types#legacy-template), you can use, e.g.,
-`{{author}}` to assign the pull request to its author.
+Each entry in `users`, `add_users` or `remove_users` is a
+[`User`](/configuration/data-types#user): a GitHub login, or the `{{ author }}`
+variable to assign the pull request to its author. Other Jinja2 templating in
+these fields is deprecated.
 
 :::caution
   Make sure the users you specify in the assign action have the necessary
@@ -57,5 +58,5 @@ pull_request_rules:
     actions:
       assign:
         add_users:
-          - "{{author}}"
+          - "{{ author }}"
 ```
