@@ -46,8 +46,9 @@ days.
 
 1. Go to
    [https://github.com/settings/tokens](https://github.com/settings/tokens) (or
-   equivalent on your GHES installation) to create a token. The token must have
-   the permissions to access the repository (read permission is enough);
+   the equivalent page on your GitHub Enterprise Server installation, at
+   `https://<your-ghes-host>/settings/tokens`) to create a token. The token must
+   have the permissions to access the repository (read permission is enough);
 
 2. Export the token as an environment variable with `export
    GITHUB_TOKEN=<your-token>`;
@@ -57,11 +58,22 @@ days.
 
 4. Run the script with `python3 mergify-count-contributors.py <repo1-url>
    <repo2-url> etc`, passing the list of repositories where Mergify will be
-   deployed.
+   deployed. Use the full repository URLs, including the host, so the script can
+   reach the right API endpoint (for example
+   `https://github.com/org/repo` for GitHub.com or
+   `https://github.example.com/org/repo` for GitHub Enterprise Server).
 
 The script will run and print its progress. It can take several minutes for the
 script to complete depending on the number of repositories scanned and the
 number of active pull requests they have.
+
+:::note
+  The script automatically targets the GitHub Enterprise Server REST API
+  (`https://<your-ghes-host>/api/v3`) based on the repository URLs you pass. If
+  your installation serves a self-signed or internal-CA certificate, you can
+  disable TLS verification by setting `export GITHUB_SKIP_SSL_VERIFY=1` before
+  running the script.
+:::
 
 :::caution
   This script provides an **approximate estimate** of the number of users that
