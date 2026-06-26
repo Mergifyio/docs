@@ -68,6 +68,11 @@ const navItems: NavItem[] = [
         icon: 'simple-icons:github',
       },
       { title: 'Monitoring', path: '/merge-queue/monitoring', icon: 'lucide:layout-dashboard' },
+      {
+        title: 'Production Readiness',
+        path: '/merge-queue/production-readiness',
+        icon: 'lucide:shield-check',
+      },
     ],
   },
   {

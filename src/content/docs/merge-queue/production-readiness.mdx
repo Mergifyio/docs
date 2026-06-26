@@ -1,0 +1,168 @@
+---
+title: Production Readiness
+description: Common pitfalls teams hit when running a merge queue at scale, and how to get ahead of them before going to production.
+---
+
+Most merge queue problems in production are predictable. They come from a
+handful of recurring causes: flaky tests, CI capacity, timeouts, and conditions
+that don't gate what you think they gate. This page collects the issues we see
+most often at scale and how to avoid them, so you can plan for them before your
+first production PR rather than debugging them live.
+
+:::tip
+  Validate on a dormant repository that shares your production CI setup before
+  enabling the queue on a busy one. You get real signal at zero risk.
+:::
+
+## Readiness checklist
+
+Before you flip the queue on for a production repository (see
+[Setup](/merge-queue/setup) if you haven't configured the queue yet):
+
+- Disable GitHub's native merge queue on the target repository so it doesn't
+  conflict with Mergify's.
+
+- Add the Mergify app to your [GitHub
+  ruleset](/merge-queue/github-rulesets) bypass list so it can update and
+  merge.
+
+- Gate the queue on your **required checks**, not on dynamic conditions.
+
+- Set `checks_timeout` above your worst-case CI duration.
+
+- Pick `batch_size` and `max_parallel_checks` from your real CI time, success
+  rate, and runner capacity ([Performance](/merge-queue/performance)).
+
+- Quarantine known flaky tests so they don't destabilize the queue.
+
+- For a monorepo, define [scopes](/merge-queue/scopes) so unrelated changes
+  merge in parallel instead of serializing.
+
+## Flaky tests destabilize the queue
+
+A single flaky test has an outsized impact on a queue. When a batch fails,
+Mergify [bisects it](/merge-queue/batches#handling-batch-failure-or-timeout) to
+find the culprit, which costs additional CI runs; if the failure was just
+flakiness, that work is wasted and otherwise-good PRs get delayed or dequeued.
+The faster your CI flakes, the more the queue churns.
+
+**How to get ahead of it:**
+
+- Quarantine flaky tests with [Test Insights](/test-insights) so they stop
+  gating merges while you fix them.
+
+- Use [CI Insights](/ci-insights) to find which tests and jobs fail
+  intermittently and prioritize the worst offenders.
+
+- Set `max_checks_retries` on the queue to absorb transient infrastructure
+  failures.
+
+- On flaky repositories, run smaller batches and lower parallelism so a bad run
+  invalidates less work.
+
+## CI capacity and runner saturation
+
+Speculative [parallel checks](/merge-queue/performance#parallel-checks) and
+[batches](/merge-queue/batches) multiply the CI that runs concurrently. If your
+runner pool can't absorb the peak, jobs queue up at the CI level and the merge
+queue appears slow even though it is working correctly.
+
+**How to get ahead of it:**
+
+- Size `merge_queue.max_parallel_checks` to what your runners can actually run
+  at once, not higher.
+
+- Shorten queue-time CI with [Two-step CI](/merge-queue/two-step) so the
+  expensive suite runs once per batch instead of on every PR.
+
+- Plan for **peak** developer hours, not the daily average.
+
+## Long CI and check timeouts
+
+If a CI run exceeds `checks_timeout`, Mergify treats it as failed and removes
+the PR from the queue. On long pipelines this shows up as PRs being dequeued
+"for no reason" during busy periods when CI is also slower than usual.
+
+**How to get ahead of it:**
+
+- Set `checks_timeout` comfortably above your worst-case CI duration, not your
+  average.
+
+- Combine with `max_checks_retries` so a single slow or infra-failed run
+  doesn't drop the PR.
+
+## Gate on required checks, not dynamic conditions
+
+A condition like `#check-failure=0` is dynamic: it can be satisfied *before any
+CI has started*, because at that moment there are no failing checks. Gating
+queue entry or merge on it lets PRs through prematurely.
+
+**How to get ahead of it:**
+
+- Define your required checks in your [GitHub
+  ruleset](/merge-queue/github-rulesets); Mergify injects them into the queue
+  automatically.
+
+- Write explicit `check-success=<name>` conditions for anything else you depend
+  on, so a check must actually succeed, not merely "not be failing yet."
+
+## Don't drive CI gating off labels
+
+Skipping CI with a label (for example `label=skip-heavy-tests`) is convenient
+but fragile at scale. A label can be added or removed after a PR is queued, so
+the same PR can behave differently from one run to the next, and the label is
+read from the original PR rather than the draft batch PR, which surprises people
+debugging a run.
+
+**How to get ahead of it:**
+
+- Prefer always-running jobs that **report a neutral "skipped" status** when
+  there is nothing to do. The check is always present and consistent, and your
+  conditions stay a plain `check-success=...` with no label logic.
+
+- If you do keep label-based skips, treat the label as part of the PR contract
+  and avoid changing it mid-flight.
+
+## Monorepos: unrelated PRs serializing
+
+In a single shared queue, a change to one module waits behind changes to every
+other module. At scale this caps throughput and frustrates teams whose code is
+unrelated to whatever is currently being tested.
+
+**How to get ahead of it:**
+
+- Define [scopes](/merge-queue/scopes) so independent parts of the repository
+  form independent queues that merge in parallel. Scopes can be derived from
+  file paths or pushed from your own build tool
+  ([Nx](/merge-queue/scopes/nx), [Bazel](/merge-queue/scopes/bazel),
+  [Turborepo](/merge-queue/scopes/turborepo)).
+
+- See the [Monorepo](/merge-queue/monorepo) guide for the full pattern.
+
+## Predictable queue entry
+
+When many rules can queue a PR automatically, it gets hard to reason about *why*
+a given PR entered and when. For teams that want engineers in explicit control,
+unpredictable auto-queueing is itself a problem.
+
+**How to get ahead of it:**
+
+- Use label-based queueing so a PR enters only when an engineer adds the
+  agreed label, while your `queue_conditions` still enforce the gating.
+
+- Use [priority rules](/merge-queue/priority) for urgent changes instead of
+  manually reordering the queue, which wastes in-flight testing.
+
+## Before you scale up
+
+Once the queue is stable on one repository, watch it with the
+[monitoring](/merge-queue/monitoring) dashboard for a week before widening
+rollout. The metrics that matter most early are PRs merged per day, queue
+latency, and the rate of batch failures, which together tell you whether your
+`batch_size`, parallelism, and CI reliability are tuned correctly.
+
+:::tip
+  For a production issue not covered here, reach out through
+  [support](/support). Sharing the PR timeline from the moment something looked
+  wrong is usually all we need to explain what happened.
+:::
