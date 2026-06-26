@@ -2039,6 +2039,11 @@
           "title": "GitHub review approved",
           "type": "boolean"
         },
+        "github-require-last-push-approval": {
+          "description": "Whether GitHub's 'Require approval of the most recent reviewable push' is satisfied: the required number of approvals are in from reviewers other than the user who pushed the most recent commit, and approvals submitted against an earlier head no longer count. Mirrors how GitHub's `pullRequest.reviewDecision` evaluates the `require_last_push_approval` branch protection / ruleset option. Returns `true` when no rule on the base branch requires last-push approval, and (leniently) when Mergify has not recorded the most recent push, such as pull requests opened before push tracking.",
+          "title": "GitHub require last push approval",
+          "type": "boolean"
+        },
         "number": {
           "description": "The pull request number.",
           "maximum": 9223372036854775807,
@@ -2265,6 +2270,14 @@
             "type": "string"
           },
           "title": "Check success",
+          "type": "array"
+        },
+        "check-success-or-neutral": {
+          "description": "The list of checks that successfully passed or are neutral for the pull request.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Check success or neutral",
           "type": "array"
         },
         "check-failure": {
@@ -2597,6 +2610,7 @@
         "github-require-review-from-specific-teams",
         "github-code-owner-review-satisfied",
         "github-review-approved",
+        "github-require-last-push-approval",
         "number",
         "queue-position",
         "author",
@@ -2621,6 +2635,7 @@
         "changes-requested-reviews-by",
         "commented-reviews-by",
         "check-success",
+        "check-success-or-neutral",
         "check-failure",
         "check-neutral",
         "check-timed-out",
