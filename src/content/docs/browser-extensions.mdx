@@ -1,6 +1,6 @@
 ---
 title: 'Browser Extensions'
-description: 'Install the Chrome or Firefox extension to surface Mergify Merge Queue and stack controls directly inside GitHub pull requests.'
+description: 'Install the Chrome or Firefox extension to surface Mergify Merge Queue and stack controls, plus read report timestamps in your own timezone, directly inside GitHub pull requests.'
 ---
 
 import { Image } from "astro:assets";
@@ -18,6 +18,7 @@ Mergify context (queue state, stack position) directly in the pull request. Use 
 - Quickly dequeue without context switching.
 - See at a glance whether the pull request is already in one of your queues.
 - See a [stack's](/stacks) chain and revision history without opening the CLI.
+- Read the timestamps in merge queue reports in your own timezone instead of UTC.
 
 ## Locate the Official Download Links
 
@@ -59,6 +60,21 @@ merge box and displays queue-specific controls:
   src={extensionPrScreen}
   alt="Mergify browser extension toolbar injected into a GitHub pull request"
 />
+
+## Timestamps in Your Timezone
+
+The extension rewrites the UTC timestamps in Mergify's merge queue reports into your browser's
+timezone, so the times already match your local clock. The Mergify engine writes those timestamps in
+UTC so a report reads the same way for everyone, wherever they are. Without the extension, you have to
+convert each timestamp in your head to tell whether a pull request entered the queue during your
+workday, or when it is expected to merge.
+
+There is nothing to set up: the extension follows your browser, so the times stay correct when you
+travel or switch machines.
+
+Hovering a converted timestamp reveals the original UTC value, so the source time is never lost when
+you compare notes with a teammate in another timezone. The extension only rewrites Mergify's own
+comments and leaves the rest of the pull request as GitHub renders it.
 
 ## Stacks Panel
 
