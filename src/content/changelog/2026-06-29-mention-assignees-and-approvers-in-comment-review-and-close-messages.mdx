@@ -1,0 +1,15 @@
+---
+title: "Mention assignees and approvers in comment, review, and close messages"
+date: 2026-06-29
+tags:
+  - Workflow Automation
+description: "The comment, review, and close actions can now reference a pull request's assignees and approvers as ready-to-use @-mentions in their messages."
+---
+
+Use the new `{{ assignees }}` and `{{ approvers }}` variables in your `comment`, `review`, and `close` action messages to @-mention a pull request's assignees and the people who approved it (for example, `@alice, @bob`).
+
+They're part of Mergify's new safe message-templating engine. Plain `{{ variable }}` placeholders keep working, but richer Jinja2 expressions in these fields are now deprecated and will stop working in a future release — for example:
+
+- `@{{ assignee | join(', @') }}` → use `{{ assignees }}`
+- `@{{ approved_reviews_by | join(', @') }}` → use `{{ approvers }}`
+- filters and logic like `{{ author | upper }}` or `{% for ... %}` are no longer supported
