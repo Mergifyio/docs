@@ -607,9 +607,13 @@ need every intermediate state validated for compliance, or while debugging CI
 and want to see all failures.
 
 :::note
-  `skip_intermediate_results` depends on the strict cumulative ordering of serial
-  mode and is not available in [parallel
-  mode](/merge-queue/queue-modes#parallel-mode).
+  `skip_intermediate_results` works in serial and [parallel
+  mode](/merge-queue/queue-modes#parallel-mode). In parallel mode it applies
+  within each [scope](/merge-queue/scopes), where batches build on one another: a
+  passing batch vouches for the earlier batches whose changes it includes, so they
+  still merge even if their own checks were flaky. It is not supported in [isolated
+  mode](/merge-queue/queue-modes#isolated-mode), where batches are fully
+  independent, so no batch can vouch for another.
 :::
 
 ## Important Considerations
