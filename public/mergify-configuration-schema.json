@@ -2302,14 +2302,6 @@
           "title": "Check success",
           "type": "array"
         },
-        "check-success-or-neutral": {
-          "description": "The list of checks that successfully passed or are neutral for the pull request.",
-          "items": {
-            "type": "string"
-          },
-          "title": "Check success or neutral",
-          "type": "array"
-        },
         "check-failure": {
           "description": "The list of checks that failed for the pull request. Checks that report being cancelled, timed out, and action required are also considered as failures.",
           "items": {
@@ -2665,7 +2657,6 @@
         "changes-requested-reviews-by",
         "commented-reviews-by",
         "check-success",
-        "check-success-or-neutral",
         "check-failure",
         "check-neutral",
         "check-timed-out",
