@@ -466,8 +466,8 @@ parent batch to wait for. Batch failures are handled the same way as in the othe
 
 ## Compatibility and Limitations
 
-Parallel and isolated modes change how the queue operates. Some features that rely on strict
-single-queue ordering are not available:
+Parallel and isolated modes change how the queue operates, so some features behave differently or
+aren't available depending on the mode:
 
 - **Scopes are required in parallel mode.** You must configure `scopes.source` (either `files` or
   `manual`) so Mergify can tell which pull requests are independent. Serial and isolated modes do
@@ -476,8 +476,9 @@ single-queue ordering are not available:
 - **`fast-forward` merge is not supported.** Because batches merge independently, Mergify needs to
   rebase them. Use `merge` or `rebase` as your `merge_method`.
 
-- **`skip_intermediate_results` is not available.** This feature depends on the strict cumulative
-  ordering of serial mode.
+- **`skip_intermediate_results` is not supported in isolated mode.** Isolated batches are fully
+  independent, so a passing batch can't vouch for any other. It works in serial and parallel modes,
+  where a passing batch vouches for the earlier changes it was tested on top of.
 
 - **`partition_rules` are not supported.** Partitions rely on serial ordering; use scopes instead.
 
