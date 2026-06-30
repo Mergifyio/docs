@@ -1,0 +1,9 @@
+---
+title: "Safe templating for GitHub Actions workflow inputs"
+date: 2026-06-29
+tags:
+  - Workflow Automation
+description: "Workflow-dispatch inputs in the github_actions action now use safe {{ variable }} templating, with raw Jinja2 deprecated."
+---
+
+The inputs you pass to a dispatched GitHub Actions workflow now support Mergify's simple, safe `{{ variable }}` interpolation — the same allowlisted templating rolling out across comment, review, and copy/backport message fields. Your existing `{{ }}` inputs keep working unchanged; raw Jinja2 templating in these inputs is now deprecated and will be removed in a future release.

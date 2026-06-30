@@ -1,0 +1,9 @@
+---
+title: "Safe templating for backport and copy titles & bodies"
+date: 2026-06-29
+tags:
+  - Workflow Automation
+description: "The copy and backport actions' title and body now use Mergify's safe {{ variable }} templating, and Jinja2 expressions in these fields are deprecated."
+---
+
+The `title` and `body` of the `copy` and `backport` actions now render with Mergify's safe message-templating engine: literal text plus allowlisted `{{ variable }}` placeholders, with no expression evaluation. Plain `{{ variable }}` placeholders keep working, but richer Jinja2 in these fields — filters, loops, and `{% … %}` logic (for example `{{ title | upper }}` or `{% for … %}`) — is now deprecated and will stop working in a future release.

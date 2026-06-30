@@ -1,0 +1,11 @@
+---
+title: "Merge queues use an automatic checks timeout by default"
+date: 2026-06-29
+tags:
+  - Merge Queue
+description: "Merge queues now default to an automatically computed checks timeout based on each queue's recent CI runtime."
+---
+
+Previously, a merge queue had no checks timeout unless you configured one explicitly. The `checks_timeout` option now defaults to `auto`, so Mergify computes a sensible timeout from your queue's recent CI runtime once enough history has been gathered.
+
+Nothing changes for queues that already set an explicit timeout, or that set `null` to disable the timeout entirely.
