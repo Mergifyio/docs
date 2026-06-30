@@ -18,7 +18,7 @@ export default function OptionsTable({ def }: Def) {
   return OptionsTableBase(configSchema, options, def);
 }
 
-function defToIdPrefix(def: string): string {
+export function defToIdPrefix(def: string): string {
   return def.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
