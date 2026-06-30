@@ -26,6 +26,9 @@ The grammar for a condition is:
 Attributes represent properties of a pull request: number of approvals, labels,
 status of CI checks, and so on.
 
+The `scope` attribute holds the list of [scopes](/merge-queue/scopes) associated
+with the pull request, so you can match conditions against them.
+
 ### Operators
 
 When the attribute is a list, comparison operators behave as if "any" is used on
@@ -58,6 +61,19 @@ Boolean attributes are used on their own or negated with `-`:
 - merged
 # True if the PR is open
 - -closed
+```
+
+### Matching the Pull Request Author
+
+Use `{{ author }}` as a value to match an attribute against the pull request's
+author. It's resolved as a native, built-in value and is accepted everywhere a
+value can appear, so existing configurations keep working unchanged.
+
+```yaml
+# True if the event sender is the pull request author
+- sender = {{ author }}
+# True if a commit is authored by the pull request author
+- commits[*].author = {{ author }}
 ```
 
 ## Attributes List
@@ -259,6 +275,21 @@ A value starting with `@` that does not match the `@<slug>/<name>` shape is
 rejected at configuration validation time. Branch-protection-synthesised
 conditions and legacy GitHub commit statuses carry no GitHub App identity
 and remain reachable only via the bare form.
+
+## Matching Cancelled Checks
+
+The `check-cancelled` attribute matches checks that report a `cancelled`
+conclusion, such as a GitHub Actions job stopped by
+`concurrency: cancel-in-progress`. Cancelled checks are also matched by
+`check-failure` for backward compatibility. To keep a cancellation from
+triggering rules meant for genuine failures, pair `check-failure` with a
+negated `check-cancelled`:
+
+```yaml
+# Match a genuine failure but ignore a cancellation
+- check-failure = test
+- -check-cancelled = test
+```
 
 ## Combining Conditions Using Logical Operators
 
