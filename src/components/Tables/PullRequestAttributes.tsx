@@ -1,7 +1,10 @@
+import { getAttributeSource } from '../../util/attributeMetadata';
 import configSchema from '../../util/sanitizedConfigSchema';
 import { getValueType } from './ConfigOptions';
 
 import { renderMarkdown } from './utils';
+
+type Attributes = typeof configSchema.$defs.PullRequestAttributes.properties;
 
 // The engine annotates each condition attribute with its authoritative operators
 // and modifiers (`x-allowed-operators` / `x-modifiers`). The generated TypeScript
@@ -15,7 +18,10 @@ interface ConditionMeta {
 }
 
 interface Props {
-  staticAttributes: typeof configSchema.$defs.PullRequestAttributes.properties;
+  staticAttributes?: Attributes;
+  // When set, render only attributes whose metadata source matches (e.g. "github").
+  // When unset, render only attributes that have no source (config-writable ones).
+  source?: string;
 }
 
 function renderOperators(operators: string[]) {
@@ -60,8 +66,17 @@ function renderModifiers(modifiers: ConditionMeta['x-modifiers']) {
   return parts.flatMap((part, index) => (index === 0 ? [part] : [' ', part]));
 }
 
-export default function PullRequestAttributes({ staticAttributes }: Props) {
-  const attributes = staticAttributes ?? configSchema.$defs.PullRequestAttributes.properties;
+export default function PullRequestAttributes({ staticAttributes, source }: Props) {
+  // The search-highlight path passes a pre-filtered subset; render it as-is.
+  // Otherwise partition the canonical list by metadata source.
+  const attributes =
+    staticAttributes ??
+    (Object.fromEntries(
+      Object.entries(configSchema.$defs.PullRequestAttributes.properties).filter(([, value]) => {
+        const attributeSource = getAttributeSource(value);
+        return source ? attributeSource === source : attributeSource === undefined;
+      })
+    ) as Attributes);
 
   const entries = Object.entries(attributes).sort(([keyA], [keyB]) => (keyA > keyB ? 1 : -1));
 
