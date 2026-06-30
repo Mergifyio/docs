@@ -1802,7 +1802,7 @@
         },
         "mode": {
           "default": "serial",
-          "description": "Defines how the merge queue schedules pull requests.\n- `serial`: PRs are tested cumulatively.\n- `parallel`: PRs whose scopes don't overlap are tested in parallel.\n- `isolated`: PRs are grouped into batches by changed-files similarity; each batch runs as a fully isolated car, with no dependency on any other batch.\n",
+          "description": "Defines how the merge queue schedules pull requests.\n- `serial`: PRs are tested cumulatively.\n- `parallel`: PRs whose scopes don't overlap are tested in parallel.\n- `isolated`: PRs are grouped into batches by changed-files similarity; each batch runs as a fully isolated batch, with no dependency on any other batch.\n",
           "enum": [
             "serial",
             "parallel",
@@ -2052,27 +2052,42 @@
             }
           ],
           "description": "The review decision computed by GitHub from its `pullRequest.reviewDecision` field, driven by either classic branch protection or repository / organization rulesets. Typically reflects whether required approvals and `CODEOWNERS` reviews have been satisfied.",
-          "title": "GitHub review decision"
+          "title": "GitHub review decision",
+          "x-mergify-attribute-metadata": {
+            "source": "github"
+          }
         },
         "github-require-review-from-specific-teams": {
           "description": "Whether every `required_reviewers` entry on the branch's active GitHub rulesets is satisfied (each named team has the requested number of approvals, each named user has approved). When the rule scopes the requirement to a subset of files via `file_patterns`, the check only applies to PRs that touch a matching file. Returns `false` if an entry references a team or user id that cannot be resolved.",
           "title": "GitHub require review from specific teams",
-          "type": "boolean"
+          "type": "boolean",
+          "x-mergify-attribute-metadata": {
+            "source": "github"
+          }
         },
         "github-code-owner-review-satisfied": {
           "description": "Whether every file the pull request touches that is owned in the repository's `CODEOWNERS` file has at least one approval from one of its owners (a user, or any member of an owning team). Mirrors GitHub's 'Require review from Code Owners', covering the case where GitHub blocks the merge on a code-owner review while `pullRequest.reviewDecision` is `null`. Returns `true` when there is no `CODEOWNERS` file or no touched file is owned, and `false` when an owner cannot be resolved to a GitHub login (an email address, or a team in another org).",
           "title": "GitHub code owner review satisfied",
-          "type": "boolean"
+          "type": "boolean",
+          "x-mergify-attribute-metadata": {
+            "source": "github"
+          }
         },
         "github-review-approved": {
           "description": "Whether GitHub's effective review enforcement is satisfied: the required approvals are in and no eligible reviewer is blocking with an active 'Request changes'. When the rule requires at least one approval, this mirrors GitHub's `pullRequest.reviewDecision` (so a blocking review from a reviewer other than the approver is honored, unlike a bare approval count). When the rule requires a pull request with no approval count, it blocks only on a write+ reviewer's active 'Request changes'. Returns `true` when no rule on the base branch requires a review.",
           "title": "GitHub review approved",
-          "type": "boolean"
+          "type": "boolean",
+          "x-mergify-attribute-metadata": {
+            "source": "github"
+          }
         },
         "github-require-last-push-approval": {
           "description": "Whether GitHub's 'Require approval of the most recent reviewable push' is satisfied: the required number of approvals are in from reviewers other than the user who pushed the most recent commit, and approvals submitted against an earlier head no longer count. Mirrors how GitHub's `pullRequest.reviewDecision` evaluates the `require_last_push_approval` branch protection / ruleset option. Returns `true` when no rule on the base branch requires last-push approval, and (leniently) when Mergify has not recorded the most recent push, such as pull requests opened before push tracking.",
           "title": "GitHub require last push approval",
-          "type": "boolean"
+          "type": "boolean",
+          "x-mergify-attribute-metadata": {
+            "source": "github"
+          }
         },
         "number": {
           "description": "The pull request number.",

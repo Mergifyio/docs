@@ -7915,7 +7915,7 @@
           "affinity_score"
         ],
         "title": "BatchReason",
-        "description": "Why a PR shares its batch (train car) with the other PRs in it.\n\nRe-derived at serialization time from each member's persisted similarity\nsignals \u2014 the same ``scopes`` / ``changed_directories`` the batching\nalgorithm groups on \u2014 so it stays correct as a car is bisected and members\nleave. It reports the signal the car's *current* members actually share,\nnot a replay of the formation-time greedy pick order. ``None`` when the car\nholds a single PR (nothing to explain) or for a not-yet-batched waiting PR."
+        "description": "Why a PR shares its batch with the other PRs in it.\n\nRe-derived at serialization time from each member's persisted similarity\nsignals \u2014 the same ``scopes`` / ``changed_directories`` the batching\nalgorithm groups on \u2014 so it stays correct as a batch is bisected and members\nleave. It reports the signal the batch's *current* members actually share,\nnot a replay of the formation-time greedy pick order. ``None`` when the batch\nholds a single PR (nothing to explain) or for a not-yet-batched waiting PR."
       },
       "BatchSizeBounds": {
         "anyOf": [
