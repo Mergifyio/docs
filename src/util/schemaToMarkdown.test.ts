@@ -30,6 +30,20 @@ describe('expandMdxComponents', () => {
     expect(result).not.toContain('PullRequestAttributesTable');
   });
 
+  test('default PullRequestAttributesTable excludes GitHub-sourced attributes', () => {
+    const result = expandMdxComponents('<PullRequestAttributesTable />');
+    expect(result).toContain('`author`');
+    expect(result).not.toContain('`github-review-approved`');
+  });
+
+  test('PullRequestAttributesTable source="github" lists only GitHub-sourced attributes', () => {
+    const result = expandMdxComponents('<PullRequestAttributesTable source="github" />');
+    expect(result).toContain('`github-review-approved`');
+    expect(result).toContain('`github-code-owner-review-satisfied`');
+    expect(result).not.toContain('`author`');
+    expect(result).not.toContain('PullRequestAttributesTable');
+  });
+
   test('removes import statements', () => {
     const input = [
       'import OptionsTable from "../../../components/Tables/OptionsTable";',

@@ -1,14 +1,29 @@
+import { getAttributeSource } from '../../util/attributeMetadata';
 import configSchema from '../../util/sanitizedConfigSchema';
 import { getValueType } from './ConfigOptions';
 
 import { renderMarkdown } from './utils';
 
+type Attributes = typeof configSchema.$defs.PullRequestAttributes.properties;
+
 interface Props {
-  staticAttributes: typeof configSchema.$defs.PullRequestAttributes.properties;
+  staticAttributes?: Attributes;
+  // When set, render only attributes whose metadata source matches (e.g. "github").
+  // When unset, render only attributes that have no source (config-writable ones).
+  source?: string;
 }
 
-export default function PullRequestAttributes({ staticAttributes }: Props) {
-  const attributes = staticAttributes ?? configSchema.$defs.PullRequestAttributes.properties;
+export default function PullRequestAttributes({ staticAttributes, source }: Props) {
+  // The search-highlight path passes a pre-filtered subset; render it as-is.
+  // Otherwise partition the canonical list by metadata source.
+  const attributes =
+    staticAttributes ??
+    (Object.fromEntries(
+      Object.entries(configSchema.$defs.PullRequestAttributes.properties).filter(([, value]) => {
+        const attributeSource = getAttributeSource(value);
+        return source ? attributeSource === source : attributeSource === undefined;
+      })
+    ) as Attributes);
 
   return (
     <div className="table-wrap">
