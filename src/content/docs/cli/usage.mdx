@@ -44,6 +44,40 @@ Download `mergify-<version>-x86_64-pc-windows-msvc.zip` from the
 [latest release](https://github.com/Mergifyio/mergify-cli/releases/latest),
 extract it, and put `mergify.exe` anywhere on your `PATH`.
 
+### GitHub Actions
+
+To install the CLI in a GitHub Actions workflow, use the
+[`Mergifyio/setup-cli`](https://github.com/Mergifyio/setup-cli) action. It
+downloads the prebuilt `mergify` binary, verifies it against the release
+`SHA256SUMS`, and adds it to the `PATH`. No Python or extra toolchain is
+required, and it runs on Linux and macOS runners.
+
+```yaml
+- uses: Mergifyio/setup-cli@v2
+- run: mergify --version
+```
+
+By default the action installs a pinned version, which keeps your CI
+reproducible. Set the `mergify_cli_version` input to `latest` to install the
+newest release instead. The action also exposes the version it actually
+installed as the `mergify_cli_version` output:
+
+```yaml
+- uses: Mergifyio/setup-cli@v2
+  id: setup-cli
+  with:
+    mergify_cli_version: latest
+
+- run: echo "Installed mergify-cli ${{ steps.setup-cli.outputs.mergify_cli_version }}"
+```
+
+:::tip
+  Pinning a specific version is the default and works well with
+  [Renovate](https://docs.renovatebot.com/), which can open pull requests to
+  bump the version as new releases ship. Use `latest` only when you always want
+  the most recent build.
+:::
+
 ## Authentication
 
 The CLI needs an authentication token to interact with your repositories.
