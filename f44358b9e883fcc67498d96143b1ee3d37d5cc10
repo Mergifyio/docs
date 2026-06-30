@@ -1,0 +1,1 @@
+review: trim editorial entries so a blank one falls back instead of rendering empty (groupDescription + unedited-groups warning)
