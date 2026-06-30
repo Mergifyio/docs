@@ -1617,8 +1617,13 @@
               "type": "null"
             }
           ],
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "`commit_message_template` is deprecated and will be removed on 2026-09-30. Use the declarative `commit_message_format` instead: https://docs.mergify.com/workflow/actions/merge#migrating-from-commit_message_template",
+            "deprecated_summary_saas_mode": "`commit_message_template` is deprecated and will be removed on 2026-09-30. Use the declarative `commit_message_format` instead: https://docs.mergify.com/workflow/actions/merge#migrating-from-commit_message_template"
+          },
           "default": null,
-          "description": "Template to use as the commit message when using the merge or squash merge method.",
+          "deprecated": true,
+          "description": "Template to use as the commit message when using the merge or squash merge method. Deprecated: use `commit_message_format` instead.",
           "title": "Commit Message Template"
         },
         "commit_message_format": {
@@ -3057,8 +3062,13 @@
               "type": "null"
             }
           ],
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "`commit_message_template` is deprecated and will be removed on 2026-09-30. Use the declarative `commit_message_format` instead: https://docs.mergify.com/workflow/actions/merge#migrating-from-commit_message_template",
+            "deprecated_summary_saas_mode": "`commit_message_template` is deprecated and will be removed on 2026-09-30. Use the declarative `commit_message_format` instead: https://docs.mergify.com/workflow/actions/merge#migrating-from-commit_message_template"
+          },
           "default": null,
-          "description": "Template to use as the commit message when using the merge or squash merge method.",
+          "deprecated": true,
+          "description": "Template to use as the commit message when using the merge or squash merge method. Deprecated: use `commit_message_format` instead.",
           "title": "Commit Message Template"
         },
         "commit_message_format": {
@@ -3319,8 +3329,13 @@
               "type": "null"
             }
           ],
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "`commit_message_template` is deprecated and will be removed on 2026-09-30. Use the declarative `commit_message_format` instead: https://docs.mergify.com/workflow/actions/merge#migrating-from-commit_message_template",
+            "deprecated_summary_saas_mode": "`commit_message_template` is deprecated and will be removed on 2026-09-30. Use the declarative `commit_message_format` instead: https://docs.mergify.com/workflow/actions/merge#migrating-from-commit_message_template"
+          },
           "default": null,
-          "description": "Template to use as the commit message when using the merge or squash merge method.",
+          "deprecated": true,
+          "description": "Template to use as the commit message when using the merge or squash merge method. Deprecated: use `commit_message_format` instead.",
           "title": "Commit Message Template"
         },
         "commit_message_format": {
