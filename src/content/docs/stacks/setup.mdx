@@ -24,13 +24,12 @@ creating fixups, and follow stack conventions automatically.
 **Claude Code:**
 
 ```text
-/plugin marketplace add Mergifyio/mergify-cli
-/plugin install mergify-stack@mergify
-/reload-plugins
+/plugin install mergify@claude-plugins-official
 ```
 
-Or run `/plugin` on its own and use the **Marketplaces** tab to add
-`Mergifyio/mergify-cli`, then pick `mergify-stack` from **Discover**.
+The `claude-plugins-official` marketplace ships with Claude Code, so there's
+nothing to add first. Or run `/plugin` on its own, open **Discover**, and
+search for `mergify`.
 
 **Any agent supporting [skills.sh](https://skills.sh)** (Cursor, Cline, and
 others):
@@ -46,15 +45,11 @@ npx skills add Mergifyio/mergify-cli
 :::
 
 :::tip
-  The same marketplace ships plugins for other Mergify features: merge queue,
-  CI insights, config validation, and scheduled freezes. Open `/plugin` and
-  browse **Discover** to pick the ones you want.
-:::
-
-:::tip
-  Third-party marketplaces don't auto-update by default. Open `/plugin`, go to
-  **Marketplaces**, select **mergify**, and choose **Enable auto-update** to
-  receive new skills and fixes as we ship them.
+  The `mergify` plugin also ships skills for other Mergify features:
+  [Merge Queue](/merge-queue), [CI Insights](/ci-insights),
+  [config validation](/configuration/file-format), and
+  [scheduled freezes](/merge-protections/freeze). Installing it enables all of
+  them.
 :::
 
 ## 3. Configure GitHub
