@@ -67,7 +67,22 @@ Boolean attributes are used on their own or negated with `-`:
 
 ## Attributes List
 
+Conditions are evaluated against the following pull request attributes, split
+into Mergify attributes and a read-only set loaded from GitHub.
+
+### Mergify Attributes
+
 <PullRequestAttributesTable />
+
+### GitHub Rulesets and Branch Protection Attributes
+
+Mergify loads these attributes from the GitHub rulesets and branch protection
+rules active on the pull request's base branch. They are read-only: Mergify
+populates their values from GitHub, so you cannot set them in your
+configuration. Use them in conditions to gate on the same review and protection
+requirements that GitHub enforces.
+
+<PullRequestAttributesTable source="github" />
 
 ## Operators List
 

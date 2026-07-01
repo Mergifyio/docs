@@ -1,5 +1,6 @@
 import jsonpointer from 'jsonpointer';
 
+import { getAttributeSource } from './attributeMetadata';
 import configSchema from './sanitizedConfigSchema';
 
 type Schema = typeof configSchema;
@@ -99,9 +100,14 @@ function generateOptionsTable(defName: string): string {
   return [headerLine, separatorLine, ...rowLines].join('\n');
 }
 
-function generatePullRequestAttributesTable(): string {
+function generatePullRequestAttributesTable(source?: string): string {
   const attributes = (configSchema as any).$defs.PullRequestAttributes.properties;
-  const entries = Object.entries<any>(attributes).sort(([a], [b]) => a.localeCompare(b));
+  const entries = Object.entries<any>(attributes)
+    .filter(([, value]) => {
+      const attributeSource = getAttributeSource(value);
+      return source ? attributeSource === source : attributeSource === undefined;
+    })
+    .sort(([a], [b]) => a.localeCompare(b));
 
   const rows: string[][] = [];
   for (const [key, value] of entries) {
@@ -178,9 +184,10 @@ export function expandMdxComponents(source: string): string {
     generateOptionsTable(def)
   );
 
-  // Replace <PullRequestAttributesTable />
-  source = source.replace(/<PullRequestAttributesTable\s*\/?>/g, () =>
-    generatePullRequestAttributesTable()
+  // Replace <PullRequestAttributesTable /> (optionally filtered by source)
+  source = source.replace(
+    /<PullRequestAttributesTable(?:\s+source=["'](\w+)["'])?\s*\/?>/g,
+    (_match, attributeSource) => generatePullRequestAttributesTable(attributeSource)
   );
 
   // Collapse runs of 3+ blank lines to 2
