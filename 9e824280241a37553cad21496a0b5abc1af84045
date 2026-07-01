@@ -1,0 +1,1 @@
+address Copilot review: hoist getAttributeSource(value) into a local var in both filter predicates
