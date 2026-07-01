@@ -122,6 +122,12 @@ standard](https://en.wikipedia.org/wiki/ISO_8601). If the timezone is missing,
 the timestamp is assumed to be in UTC. The supported timezones come from the
 [IANA database](https://www.iana.org/time-zones).
 
+:::caution
+Timestamp attributes support only the ordering operators `>=`, `<=`, `<`, and
+`>`. The `=` and `!=` operators are not available, and timestamps cannot be
+negated with the `-` prefix.
+:::
+
 Supported formats:
 
 ```text

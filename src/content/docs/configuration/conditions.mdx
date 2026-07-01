@@ -18,8 +18,13 @@ The grammar for a condition is:
 
 ### Modifiers
 
-- The optional minus (`-`) prefix negates the condition ("not").
-- The optional hash (`#`) prefix evaluates the length of a list attribute.
+- The optional minus (`-`) prefix negates the condition ("not"). Time-based
+  attributes (timestamps, `schedule`, and `current-datetime`) cannot be negated
+  this way.
+
+- The optional hash (`#`) prefix evaluates the length of an attribute (for
+  example, the number of items in a list). The `commits-behind` attribute is
+  only available in this counted form and always requires the `#` prefix.
 
 ### Attributes
 
