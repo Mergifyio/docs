@@ -1,0 +1,1 @@
+address Copilot review: make mergify config validate the primary validator with --config-file (skill optional), make Linear MCP optional with a UI fallback, note capture-screenshots targets the claude-in-chrome MCP, fix extract_yaml.py closing-fence comment
