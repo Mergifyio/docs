@@ -56,16 +56,20 @@ re-running all failed jobs while preserving successful ones.
 
 Auto-Retry uses a rule-based system to determine which workflow runs should be
 retried. Rules are evaluated against individual jobs, but retries occur at the
-workflow level.
+workflow level. Each rule belongs to a single repository, chosen from the
+repository selector at the top of the Auto-Retry page.
 
 ### Basic Setup
 
-To enable Auto-Retry for your repositories:
+To set up Auto-Retry for a repository:
 
 1. Navigate to your Mergify dashboard
 2. Go to **CI Insights** → **Auto-Retry**
-3. Select the repositories you want to enable Auto-Retry for
-4. Configure your retry rules
+3. Pick a repository from the selector at the top of the page
+4. Configure your retry rules for that repository
+
+You can view, create, edit, or delete rules scoped to the selected repository.
+Switch repositories from the selector to manage another one.
 
 <Image src={ruleConfig} alt="CI Insights retry rule configuration" />
 
@@ -96,8 +100,6 @@ The following condition attributes are available:
 - **Pipeline name**: Match against the name of the workflow (pipeline) that
   contains the failed job.
 
-- **Repository**: Restrict the rule to specific repositories.
-
 - **Branch**: Restrict the rule to specific branches. You can also enter custom
   branch names that are not yet in the list.
 
@@ -113,4 +115,6 @@ The following condition attributes are available:
   evaluated against individual log lines. You can specify multiple
   patterns — a retry is triggered if any of the patterns match. For
   example, `timeout|connection refused` would match any log line
-  containing either "timeout" or "connection refused".
+  containing either "timeout" or "connection refused". The rule builder
+  includes a **Test your log patterns** panel to check your log-pattern
+  regex against sample log text before saving.

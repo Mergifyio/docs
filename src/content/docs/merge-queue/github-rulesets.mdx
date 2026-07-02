@@ -87,6 +87,14 @@ queue_rules:
   being silently skipped. Fix the ruleset to remove the stale reviewer.
 :::
 
+### Require Approval of the Most Recent Push
+
+When your branch protection enables GitHub's *Require approval of the most
+recent push* option (`require_last_push_approval`), Mergify injects a matching
+condition into your Merge Protections. A pull request is not merged until its
+latest push has been approved by someone other than the author, so Mergify
+stays aligned with GitHub's own enforcement.
+
 ## Ruleset Rule Compatibility
 
 Mergify handles each GitHub ruleset rule type as follows.
