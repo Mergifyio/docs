@@ -76,6 +76,9 @@ queue_rules:
     <<: *DefaultQueueOptions
     queue_conditions:
       - label = hotfix
+    commit_message_format:
+      title: pr-title
+      body: pr-body
     merge_conditions:
       - and: *CheckRuns
 
@@ -84,6 +87,9 @@ queue_rules:
     queue_conditions:
       - author != mergify-ci-bot
       - author != dependabot[bot]
+    commit_message_format:
+      title: pr-title
+      body: pr-body
     merge_conditions:
       - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
 
