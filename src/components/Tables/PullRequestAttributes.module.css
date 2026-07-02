@@ -1,0 +1,33 @@
+.row {
+  scroll-margin-top: calc(var(--theme-navbar-height) + 1rem);
+}
+
+.row:target > td {
+  background-color: color-mix(in srgb, var(--section-accent) 6%, transparent);
+}
+
+.name {
+  white-space: nowrap;
+}
+
+.anchor {
+  margin-left: 0.4rem;
+  color: var(--theme-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+
+.anchor:hover,
+.anchor:focus {
+  color: var(--theme-link);
+}
+
+.row:hover .anchor,
+.row:focus-within .anchor,
+.row:target .anchor {
+  opacity: 1;
+}
