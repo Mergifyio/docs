@@ -1,6 +1,8 @@
 import { getAttributeSource } from '../../util/attributeMetadata';
 import configSchema from '../../util/sanitizedConfigSchema';
 import { getValueType } from './ConfigOptions';
+import { defToIdPrefix } from './OptionsTable';
+import styles from './PullRequestAttributes.module.css';
 
 import { renderMarkdown } from './utils';
 
@@ -16,6 +18,10 @@ interface ConditionMeta {
     length: 'forbidden' | 'optional' | 'required';
   };
 }
+
+// Mirror the config-option anchor scheme: `<def>-<key>`, e.g.
+// `pull-request-attributes-author`.
+const ID_PREFIX = defToIdPrefix('PullRequestAttributes');
 
 interface Props {
   staticAttributes?: Attributes;
@@ -108,11 +114,16 @@ export default function PullRequestAttributes({ staticAttributes, source }: Prop
           {rows.map(([key, value]) => {
             const valueType = getValueType(configSchema, value);
             const meta = value as ConditionMeta;
+            const id = `${ID_PREFIX}-${key}`;
+            const href = `#${encodeURIComponent(id)}`;
 
             return (
-              <tr key={key}>
-                <td style={{ whiteSpace: 'nowrap' }}>
+              <tr key={key} id={id} className={styles.row}>
+                <td className={styles.name}>
                   <code>{key}</code>
+                  <a className={styles.anchor} href={href} aria-label={`Link to ${key}`}>
+                    #
+                  </a>
                 </td>
                 <td>{valueType}</td>
                 {hasConditionMetadata && (
