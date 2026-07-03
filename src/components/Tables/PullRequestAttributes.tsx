@@ -11,12 +11,13 @@ type Attributes = typeof configSchema.$defs.PullRequestAttributes.properties;
 // The engine annotates each condition attribute with its authoritative operators
 // and modifiers (`x-allowed-operators` / `x-modifiers`). The generated TypeScript
 // types drop `x-` keys, so they are read from the imported JSON via this shape.
+// `x-modifiers` is a forbidden-by-default list: a modifier appears iff it is
+// available, and each object carries only the fields that modifier needs.
+type ConditionModifier = { type: 'negate' } | { type: 'length'; required?: boolean };
+
 interface ConditionMeta {
   'x-allowed-operators'?: string[];
-  'x-modifiers'?: {
-    negate: 'forbidden' | 'optional';
-    length: 'forbidden' | 'optional' | 'required';
-  };
+  'x-modifiers'?: ConditionModifier[];
 }
 
 // Mirror the config-option anchor scheme: `<def>-<key>`, e.g.
@@ -52,17 +53,21 @@ function renderModifiers(modifiers: ConditionMeta['x-modifiers']) {
   }
 
   const parts: React.ReactNode[] = [];
-  if (modifiers.negate === 'optional') {
+  if (modifiers.some((modifier) => modifier.type === 'negate')) {
     parts.push(<code key="negate">-</code>);
   }
-  if (modifiers.length === 'optional') {
-    parts.push(<code key="length">#</code>);
-  } else if (modifiers.length === 'required') {
+  const lengthModifier = modifiers.find(
+    (modifier): modifier is Extract<ConditionModifier, { type: 'length' }> =>
+      modifier.type === 'length'
+  );
+  if (lengthModifier?.required) {
     parts.push(
       <span key="length" style={{ whiteSpace: 'nowrap' }}>
         <code>#</code> (required)
       </span>
     );
+  } else if (lengthModifier) {
+    parts.push(<code key="length">#</code>);
   }
 
   if (parts.length === 0) {
