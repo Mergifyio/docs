@@ -2011,43 +2011,78 @@
           "description": "Whether the pull request is in draft state.",
           "title": "Draft",
           "type": "boolean",
-          "x-allowed-operators": []
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "merged": {
           "description": "Whether the pull request is merged.",
           "title": "Merged",
           "type": "boolean",
-          "x-allowed-operators": []
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "mergify-configuration-changed": {
           "description": "Whether the pull request contains changes in the configuration file.",
           "title": "Mergify configuration changed",
           "type": "boolean",
-          "x-allowed-operators": []
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "closed": {
           "description": "Whether the pull request is closed.",
           "title": "Closed",
           "type": "boolean",
-          "x-allowed-operators": []
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "locked": {
           "description": "Whether the pull request is locked.",
           "title": "Locked",
           "type": "boolean",
-          "x-allowed-operators": []
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "linear-history": {
           "description": "Whether the pull request commits history is linear (no merge commit).",
           "title": "Linear history",
           "type": "boolean",
-          "x-allowed-operators": []
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "conflict": {
           "description": "Whether the pull request is conflicting with its base branch.",
           "title": "Conflict",
           "type": "boolean",
-          "x-allowed-operators": []
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "github-review-decision": {
           "anyOf": [
@@ -2072,7 +2107,15 @@
           ],
           "x-mergify-attribute-metadata": {
             "source": "github"
-          }
+          },
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
+          ]
         },
         "github-require-review-from-specific-teams": {
           "description": "Whether every `required_reviewers` entry on the branch's active GitHub rulesets is satisfied (each named team has the requested number of approvals, each named user has approved). When the rule scopes the requirement to a subset of files via `file_patterns`, the check only applies to PRs that touch a matching file. Returns `false` if an entry references a team or user id that cannot be resolved.",
@@ -2081,7 +2124,12 @@
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
             "source": "github"
-          }
+          },
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "github-code-owner-review-satisfied": {
           "description": "Whether every file the pull request touches that is owned in the repository's `CODEOWNERS` file has at least one approval from one of its owners (a user, or any member of an owning team). Mirrors GitHub's 'Require review from Code Owners', covering the case where GitHub blocks the merge on a code-owner review while `pullRequest.reviewDecision` is `null`. Returns `true` when there is no `CODEOWNERS` file or no touched file is owned, and `false` when an owner cannot be resolved to a GitHub login (an email address, or a team in another org).",
@@ -2090,7 +2138,12 @@
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
             "source": "github"
-          }
+          },
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "github-review-approved": {
           "description": "Whether GitHub's effective review enforcement is satisfied: the required approvals are in and no eligible reviewer is blocking with an active 'Request changes'. When the rule requires at least one approval, this mirrors GitHub's `pullRequest.reviewDecision` (so a blocking review from a reviewer other than the approver is honored, unlike a bare approval count). When the rule requires a pull request with no approval count, it blocks only on a write+ reviewer's active 'Request changes'. Returns `true` when no rule on the base branch requires a review.",
@@ -2099,7 +2152,12 @@
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
             "source": "github"
-          }
+          },
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "github-require-last-push-approval": {
           "description": "Whether GitHub's 'Require approval of the most recent reviewable push' is satisfied: the required number of approvals are in from reviewers other than the user who pushed the most recent commit, and approvals submitted against an earlier head no longer count. Mirrors how GitHub's `pullRequest.reviewDecision` evaluates the `require_last_push_approval` branch protection / ruleset option. Returns `true` when no rule on the base branch requires last-push approval, and (leniently) when Mergify has not recorded the most recent push, such as pull requests opened before push tracking.",
@@ -2108,7 +2166,12 @@
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
             "source": "github"
-          }
+          },
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
         },
         "number": {
           "description": "The pull request number.",
@@ -2123,6 +2186,11 @@
             "<=",
             "<",
             ">"
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
           ]
         },
         "queue-position": {
@@ -2136,6 +2204,11 @@
             "<=",
             "<",
             ">"
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
           ]
         },
         "author": {
@@ -2151,6 +2224,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "merged-by": {
@@ -2173,6 +2254,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "merge-commit-sha": {
@@ -2195,6 +2284,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "milestone": {
@@ -2216,6 +2313,14 @@
             "<=",
             "<",
             ">"
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "base": {
@@ -2231,6 +2336,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "head": {
@@ -2246,6 +2359,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "head-repo-full-name": {
@@ -2261,6 +2382,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "title": {
@@ -2276,6 +2405,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "body": {
@@ -2291,6 +2428,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "body-raw": {
@@ -2306,6 +2451,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "repository-name": {
@@ -2321,6 +2474,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "repository-full-name": {
@@ -2336,6 +2497,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "queue-dequeue-reason": {
@@ -2400,6 +2569,14 @@
             "=",
             "!=",
             "~="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "queue-name": {
@@ -2422,6 +2599,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "assignee": {
@@ -2440,6 +2625,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "label": {
@@ -2458,6 +2651,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "review-requested": {
@@ -2476,6 +2677,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "approved-reviews-by": {
@@ -2494,6 +2703,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "dismissed-reviews-by": {
@@ -2512,6 +2729,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "changes-requested-reviews-by": {
@@ -2530,6 +2755,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "commented-reviews-by": {
@@ -2548,6 +2781,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check-success": {
@@ -2566,6 +2807,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check-failure": {
@@ -2584,6 +2833,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check-neutral": {
@@ -2602,6 +2859,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check-timed-out": {
@@ -2620,6 +2885,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check-skipped": {
@@ -2638,6 +2911,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check-cancelled": {
@@ -2656,6 +2937,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check-pending": {
@@ -2674,6 +2963,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "check": {
@@ -2700,6 +2997,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "commits-unverified": {
@@ -2718,6 +3023,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "deployment-success": {
@@ -2736,6 +3049,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "deployment-failure": {
@@ -2754,6 +3075,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "review-threads-resolved": {
@@ -2772,6 +3101,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "review-threads-unresolved": {
@@ -2790,6 +3127,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "files": {
@@ -2808,6 +3153,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "added-files": {
@@ -2826,6 +3179,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "modified-files": {
@@ -2844,6 +3205,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "removed-files": {
@@ -2862,6 +3231,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "added-lines": {
@@ -2880,6 +3257,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "modified-lines": {
@@ -2898,6 +3283,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "deleted-lines": {
@@ -2916,6 +3309,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "co-authors": {
@@ -2942,6 +3343,15 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "required": true,
+              "type": "length"
+            }
           ]
         },
         "depends-on": {
@@ -2960,6 +3370,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "dependabot-dependency-name": {
@@ -2978,6 +3396,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "dependabot-dependency-type": {
@@ -2996,6 +3422,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "dependabot-update-type": {
@@ -3014,6 +3448,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "scope": {
@@ -3032,6 +3474,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "commits": {
@@ -3050,6 +3500,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "current-datetime": {
@@ -3064,7 +3522,8 @@
             "<=",
             "<",
             ">"
-          ]
+          ],
+          "x-modifiers": []
         },
         "updated-at": {
           "description": "The time the pull request was updated at.",
@@ -3076,7 +3535,8 @@
             "<=",
             "<",
             ">"
-          ]
+          ],
+          "x-modifiers": []
         },
         "created-at": {
           "description": "The time the pull request was created at.",
@@ -3088,7 +3548,8 @@
             "<=",
             "<",
             ">"
-          ]
+          ],
+          "x-modifiers": []
         },
         "closed-at": {
           "anyOf": [
@@ -3107,7 +3568,8 @@
             "<=",
             "<",
             ">"
-          ]
+          ],
+          "x-modifiers": []
         },
         "merged-at": {
           "anyOf": [
@@ -3126,7 +3588,8 @@
             "<=",
             "<",
             ">"
-          ]
+          ],
+          "x-modifiers": []
         },
         "queued-at": {
           "anyOf": [
@@ -3145,7 +3608,8 @@
             "<=",
             "<",
             ">"
-          ]
+          ],
+          "x-modifiers": []
         },
         "queue-merge-started-at": {
           "anyOf": [
@@ -3164,7 +3628,8 @@
             "<=",
             "<",
             ">"
-          ]
+          ],
+          "x-modifiers": []
         },
         "schedule": {
           "description": "The current time will be compared against this schedule to validate this attribute.",
@@ -3173,7 +3638,8 @@
           "x-allowed-operators": [
             "=",
             "!="
-          ]
+          ],
+          "x-modifiers": []
         },
         "sender-permission": {
           "$ref": "#/$defs/GitHubRepositoryPermission",
@@ -3186,6 +3652,14 @@
             "<=",
             "<",
             ">"
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "sender": {
@@ -3201,6 +3675,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         },
         "updates": {
@@ -3219,6 +3701,14 @@
             "<",
             ">",
             "*="
+          ],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            },
+            {
+              "type": "length"
+            }
           ]
         }
       },
