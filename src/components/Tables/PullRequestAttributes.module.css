@@ -10,6 +10,11 @@
   white-space: nowrap;
 }
 
+.documentationLink {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
 .anchor {
   margin-left: 0.4rem;
   color: var(--theme-text-muted);
