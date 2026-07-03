@@ -7,11 +7,13 @@ interface Props {
   title: string;
   path: string;
   icon?: string;
+  /** Render a product icon in the neutral text color instead of its brand color. */
+  neutral?: boolean;
 }
 
-const { title, path, icon } = Astro.props;
+const { title, path, icon, neutral } = Astro.props;
 const productIconName = parseProductIcon(icon);
-const productKey = productIconName ?? (path === '/workflow' ? 'workflow' : null);
+const productKey = neutral ? null : (productIconName ?? (path === '/workflow' ? 'workflow' : null));
 ---
 
 <a href={path} class="container" data-product={productKey}>
