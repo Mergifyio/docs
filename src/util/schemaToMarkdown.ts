@@ -1,6 +1,6 @@
 import jsonpointer from 'jsonpointer';
 
-import { getAttributeSource } from './attributeMetadata';
+import { getAttributeDocumentationUrl, getAttributeSource } from './attributeMetadata';
 import configSchema from './sanitizedConfigSchema';
 
 type Schema = typeof configSchema;
@@ -111,10 +111,14 @@ function generatePullRequestAttributesTable(source?: string): string {
 
   const rows: string[][] = [];
   for (const [key, value] of entries) {
+    const documentationUrl = getAttributeDocumentationUrl(value);
+    const description = value.description ? escapeCell(value.description) : '';
     rows.push([
       `\`${key}\``,
       escapeCell(getValueTypeText(configSchema, value)),
-      value.description ? escapeCell(value.description) : '',
+      documentationUrl
+        ? `${description} [GitHub documentation](${escapeCell(documentationUrl)})`
+        : description,
     ]);
   }
 
