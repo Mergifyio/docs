@@ -1,4 +1,4 @@
-import { getAttributeSource } from '../../util/attributeMetadata';
+import { getAttributeDocumentationUrl, getAttributeSource } from '../../util/attributeMetadata';
 import configSchema from '../../util/sanitizedConfigSchema';
 import { getValueType } from './ConfigOptions';
 import { defToIdPrefix } from './OptionsTable';
@@ -121,6 +121,12 @@ export default function PullRequestAttributes({ staticAttributes, source }: Prop
             const meta = value as ConditionMeta;
             const id = `${ID_PREFIX}-${key}`;
             const href = `#${encodeURIComponent(id)}`;
+            // The search-highlight path injects <em> markers into attribute
+            // values, which would corrupt the URL — only link from the
+            // canonical schema render.
+            const documentationUrl = staticAttributes
+              ? undefined
+              : getAttributeDocumentationUrl(value);
 
             return (
               <tr key={key} id={id} className={styles.row}>
@@ -135,10 +141,21 @@ export default function PullRequestAttributes({ staticAttributes, source }: Prop
                   <td>{renderOperators(meta['x-allowed-operators'] ?? [])}</td>
                 )}
                 {hasConditionMetadata && <td>{renderModifiers(meta['x-modifiers'])}</td>}
-                <td
-                  dangerouslySetInnerHTML={{ __html: renderMarkdown(value.description) }}
-                  style={{ width: '100%' }}
-                />
+                <td style={{ width: '100%' }}>
+                  <div dangerouslySetInnerHTML={{ __html: renderMarkdown(value.description) }} />
+                  {documentationUrl && (
+                    <p className={styles.documentationLink}>
+                      <a
+                        href={documentationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`GitHub documentation for ${key}`}
+                      >
+                        GitHub documentation
+                      </a>
+                    </p>
+                  )}
+                </td>
               </tr>
             );
           })}
