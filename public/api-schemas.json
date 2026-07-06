@@ -8313,10 +8313,11 @@
             "type": "string",
             "enum": [
               "in_place",
-              "draft_pr"
+              "draft_pr",
+              "trusted"
             ],
             "title": "Check Type",
-            "description": "The type of queue check (in_place or draft_pr)"
+            "description": "The type of queue check: `in_place` (checks run on the pull request itself), `draft_pr` (checks run on a Mergify draft pull request), or `trusted` (no fresh queue check ran; the pull request was merged trusting its own green CI because the base commits it was missing did not affect its scopes)."
           },
           "pull_request_number": {
             "type": "integer",
@@ -14763,10 +14764,11 @@
             "type": "string",
             "enum": [
               "in_place",
-              "draft_pr"
+              "draft_pr",
+              "trusted"
             ],
             "title": "Check Type",
-            "description": "The type of queue check (in_place or draft_pr)"
+            "description": "The type of queue check: `in_place` (checks run on the pull request itself), `draft_pr` (checks run on a Mergify draft pull request), or `trusted` (no fresh queue check ran; the pull request was merged trusting its own green CI because the base commits it was missing did not affect its scopes)."
           },
           "queue_pull_request_number": {
             "type": "integer",
