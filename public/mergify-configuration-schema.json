@@ -2106,6 +2106,7 @@
             "~="
           ],
           "x-mergify-attribute-metadata": {
+            "documentation_url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-pull-request-reviews-before-merging",
             "source": "github"
           },
           "x-modifiers": [
@@ -2123,6 +2124,7 @@
           "type": "boolean",
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
+            "documentation_url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#required-reviewers",
             "source": "github"
           },
           "x-modifiers": [
@@ -2137,6 +2139,7 @@
           "type": "boolean",
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
+            "documentation_url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners",
             "source": "github"
           },
           "x-modifiers": [
@@ -2151,6 +2154,7 @@
           "type": "boolean",
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
+            "documentation_url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-pull-request-reviews-before-merging",
             "source": "github"
           },
           "x-modifiers": [
@@ -2165,6 +2169,7 @@
           "type": "boolean",
           "x-allowed-operators": [],
           "x-mergify-attribute-metadata": {
+            "documentation_url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-pull-request-reviews-before-merging",
             "source": "github"
           },
           "x-modifiers": [
