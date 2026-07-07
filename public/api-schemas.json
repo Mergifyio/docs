@@ -8032,6 +8032,83 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/merge-queue/pull/{pr_number}/dequeue": {
+      "post": {
+        "tags": [
+          "merge_queue"
+        ],
+        "summary": "Dequeue a pull request from the merge queue",
+        "description": "Manually remove the given pull request (and its queued stack successors) from the merge queue",
+        "operationId": "dequeue_merge_queue_pull_request_repos__owner___repository__merge_queue_pull__pr_number__dequeue_post",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pr_number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "maximum": 9223372036854775807,
+              "minimum": 0,
+              "description": "The pull request number",
+              "title": "Pr Number"
+            },
+            "description": "The pull request number"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The pull request is not found in any merge queue."
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/merge-queue/pause": {
       "put": {
         "tags": [
