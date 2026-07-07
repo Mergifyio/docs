@@ -6469,6 +6469,760 @@
         }
       }
     },
+    "/ci/{owner}/runners/stats/{stat}": {
+      "get": {
+        "tags": [
+          "ci_insights"
+        ],
+        "summary": "Get a single runner stat as a time series",
+        "description": "Return one of the runner stats bucketed over the requested time range, with a summary value over the full window.",
+        "operationId": "ci-runner-stats",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "stat",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "success_rate",
+                "active_runners",
+                "active_jobs",
+                "queued_jobs",
+                "utilization_rate",
+                "avg_duration",
+                "avg_queue_time",
+                "jobs_per_hour",
+                "avg_jobs_per_hour",
+                "min_duration",
+                "median_duration",
+                "p95_duration",
+                "p99_duration",
+                "max_duration",
+                "min_queue_time",
+                "median_queue_time",
+                "p95_queue_time",
+                "p99_queue_time",
+                "max_queue_time"
+              ],
+              "type": "string",
+              "title": "Stat"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "runner_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The runner name to filter on",
+              "title": "Runner Name"
+            },
+            "description": "The runner name to filter on"
+          },
+          {
+            "name": "runner_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The runner name to exclude",
+              "title": "Runner Name Exclude"
+            },
+            "description": "The runner name to exclude"
+          },
+          {
+            "name": "runner_group_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The runner group name to filter on",
+              "title": "Runner Group Name"
+            },
+            "description": "The runner group name to filter on"
+          },
+          {
+            "name": "runner_group_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The runner group name to exclude",
+              "title": "Runner Group Name Exclude"
+            },
+            "description": "The runner group name to exclude"
+          },
+          {
+            "name": "runner_labels",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The runner labels to filter on (all must match)",
+              "title": "Runner Labels"
+            },
+            "description": "The runner labels to filter on (all must match)"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "title": "Start"
+            },
+            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "title": "End"
+            },
+            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/RunnerDurationStatsResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RunnerRateStatsResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RunnerCountStatsResponse"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "stat",
+                    "mapping": {
+                      "avg_duration": "#/components/schemas/RunnerDurationStatsResponse",
+                      "avg_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
+                      "min_duration": "#/components/schemas/RunnerDurationStatsResponse",
+                      "median_duration": "#/components/schemas/RunnerDurationStatsResponse",
+                      "p95_duration": "#/components/schemas/RunnerDurationStatsResponse",
+                      "p99_duration": "#/components/schemas/RunnerDurationStatsResponse",
+                      "max_duration": "#/components/schemas/RunnerDurationStatsResponse",
+                      "min_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
+                      "median_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
+                      "p95_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
+                      "p99_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
+                      "max_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
+                      "success_rate": "#/components/schemas/RunnerRateStatsResponse",
+                      "jobs_per_hour": "#/components/schemas/RunnerRateStatsResponse",
+                      "avg_jobs_per_hour": "#/components/schemas/RunnerRateStatsResponse",
+                      "utilization_rate": "#/components/schemas/RunnerRateStatsResponse",
+                      "active_runners": "#/components/schemas/RunnerCountStatsResponse",
+                      "active_jobs": "#/components/schemas/RunnerCountStatsResponse",
+                      "queued_jobs": "#/components/schemas/RunnerCountStatsResponse"
+                    }
+                  },
+                  "title": "Response Ci-Runner-Stats"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/ci/{owner}/queue/stats/{stat}": {
+      "get": {
+        "tags": [
+          "ci_insights"
+        ],
+        "summary": "Get a single CI queue stat as a time series",
+        "description": "Return one of the CI queue stats bucketed over the requested time range, with a summary value over the full window.",
+        "operationId": "ci-queue-stats",
+        "security": [
+          {
+            "GitHubTokenBearerAuth": []
+          },
+          {
+            "ApplicationAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "stat",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "total_jobs",
+                "avg_wait_time",
+                "min_wait_time",
+                "median_wait_time",
+                "p95_wait_time",
+                "p99_wait_time",
+                "max_wait_time"
+              ],
+              "type": "string",
+              "title": "Stat"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "labels",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The labels to filter on (all must match)",
+              "title": "Labels"
+            },
+            "description": "The labels to filter on (all must match)"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "title": "Start"
+            },
+            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "title": "End"
+            },
+            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueueStatsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/ci/{owner}/repositories/{repository}/tests/stats/{stat}": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Get a single test stat as a time series",
+        "description": "Return one test stat with a window summary `value` and a per-day `value_over_time` series of failed executions.",
+        "operationId": "ci-tests-stats",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "stat",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "total_tests",
+                "healthy_tests",
+                "broken_tests",
+                "flaky_tests",
+                "failed_executions"
+              ],
+              "type": "string",
+              "title": "Stat"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "test_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The test name to filter on",
+              "title": "Test Name"
+            },
+            "description": "The test name to filter on"
+          },
+          {
+            "name": "test_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The test name to exclude",
+              "title": "Test Name Exclude"
+            },
+            "description": "The test name to exclude"
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to filter on",
+              "title": "Job Name"
+            },
+            "description": "The job name to filter on"
+          },
+          {
+            "name": "job_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to exclude",
+              "title": "Job Name Exclude"
+            },
+            "description": "The job name to exclude"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to filter on",
+              "title": "Pipeline Name"
+            },
+            "description": "The pipeline name to filter on"
+          },
+          {
+            "name": "pipeline_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to exclude",
+              "title": "Pipeline Name Exclude"
+            },
+            "description": "The pipeline name to exclude"
+          },
+          {
+            "name": "health_confidence",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health confidence to filter on",
+              "title": "Health Confidence"
+            },
+            "description": "The health confidence to filter on"
+          },
+          {
+            "name": "health_confidence_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health confidence to exclude",
+              "title": "Health Confidence Exclude"
+            },
+            "description": "The health confidence to exclude"
+          },
+          {
+            "name": "failed_executions_impact",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The failed executions impact to filter on",
+              "title": "Failed Executions Impact"
+            },
+            "description": "The failed executions impact to filter on"
+          },
+          {
+            "name": "failed_executions_impact_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The failed executions impact to exclude",
+              "title": "Failed Executions Impact Exclude"
+            },
+            "description": "The failed executions impact to exclude"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestStatResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/scheduled_freeze": {
       "get": {
         "tags": [
@@ -14401,6 +15155,39 @@
         ],
         "title": "GetTestFailuresResponse"
       },
+      "GetTestStatResponse": {
+        "properties": {
+          "stat": {
+            "type": "string",
+            "enum": [
+              "total_tests",
+              "healthy_tests",
+              "broken_tests",
+              "flaky_tests",
+              "failed_executions"
+            ],
+            "title": "Stat"
+          },
+          "value": {
+            "type": "integer",
+            "title": "Value"
+          },
+          "value_over_time": {
+            "items": {
+              "$ref": "#/components/schemas/TestStatBucket"
+            },
+            "type": "array",
+            "title": "Value Over Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stat",
+          "value",
+          "value_over_time"
+        ],
+        "title": "GetTestStatResponse"
+      },
       "GitHubAccount": {
         "properties": {
           "login": {
@@ -16304,6 +17091,48 @@
         ],
         "title": "QueueSizeResponse"
       },
+      "QueueStatsResponse": {
+        "properties": {
+          "stat": {
+            "type": "string",
+            "enum": [
+              "total_jobs",
+              "avg_wait_time",
+              "min_wait_time",
+              "median_wait_time",
+              "p95_wait_time",
+              "p99_wait_time",
+              "max_wait_time"
+            ],
+            "title": "Stat"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "value_over_time": {
+            "items": {
+              "$ref": "#/components/schemas/_QueueStatsBucket"
+            },
+            "type": "array",
+            "title": "Value Over Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stat",
+          "value",
+          "value_over_time"
+        ],
+        "title": "QueueStatsResponse"
+      },
       "QueueTimeGroupResponse": {
         "properties": {
           "base_ref": {
@@ -16465,6 +17294,130 @@
           "deprecations"
         ],
         "title": "RepositoryConfigurationSimulatorResponse"
+      },
+      "RunnerCountStatsResponse": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "value_over_time": {
+            "items": {
+              "$ref": "#/components/schemas/_RunnerStatsBucket_int_"
+            },
+            "type": "array",
+            "title": "Value Over Time"
+          },
+          "stat": {
+            "type": "string",
+            "enum": [
+              "active_runners",
+              "active_jobs",
+              "queued_jobs"
+            ],
+            "title": "Stat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "value_over_time",
+          "stat"
+        ],
+        "title": "RunnerCountStatsResponse"
+      },
+      "RunnerDurationStatsResponse": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "value_over_time": {
+            "items": {
+              "$ref": "#/components/schemas/_RunnerStatsBucket_int_"
+            },
+            "type": "array",
+            "title": "Value Over Time"
+          },
+          "stat": {
+            "type": "string",
+            "enum": [
+              "avg_duration",
+              "avg_queue_time",
+              "min_duration",
+              "median_duration",
+              "p95_duration",
+              "p99_duration",
+              "max_duration",
+              "min_queue_time",
+              "median_queue_time",
+              "p95_queue_time",
+              "p99_queue_time",
+              "max_queue_time"
+            ],
+            "title": "Stat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "value_over_time",
+          "stat"
+        ],
+        "title": "RunnerDurationStatsResponse"
+      },
+      "RunnerRateStatsResponse": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "value_over_time": {
+            "items": {
+              "$ref": "#/components/schemas/_RunnerStatsBucket_float_"
+            },
+            "type": "array",
+            "title": "Value Over Time"
+          },
+          "stat": {
+            "type": "string",
+            "enum": [
+              "success_rate",
+              "jobs_per_hour",
+              "avg_jobs_per_hour",
+              "utilization_rate"
+            ],
+            "title": "Stat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "value_over_time",
+          "stat"
+        ],
+        "title": "RunnerRateStatsResponse"
       },
       "RunningChecksGroupResponse": {
         "properties": {
@@ -17197,6 +18150,31 @@
         ],
         "title": "TestSearchResultMetrics"
       },
+      "TestStatBucket": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "value": {
+            "type": "integer",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "value"
+        ],
+        "title": "TestStatBucket"
+      },
       "TimeJSON": {
         "properties": {
           "hour": {
@@ -17399,6 +18377,102 @@
         },
         "type": "object",
         "title": "UpdateScheduledFreezePayload"
+      },
+      "_QueueStatsBucket": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "value"
+        ],
+        "title": "_QueueStatsBucket"
+      },
+      "_RunnerStatsBucket_float_": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "value"
+        ],
+        "title": "_RunnerStatsBucket[float]"
+      },
+      "_RunnerStatsBucket_int_": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "value"
+        ],
+        "title": "_RunnerStatsBucket[int]"
       },
       "_TestStatsBucket_float_": {
         "properties": {
@@ -17849,6 +18923,10 @@
     {
       "name": "badges",
       "description": "Operations with badges."
+    },
+    {
+      "name": "ci_insights",
+      "description": "Operations with ci insights."
     },
     {
       "name": "eventlogs",
