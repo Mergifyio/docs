@@ -1984,7 +1984,7 @@
           "title": "Priority"
         },
         "allow_checks_interruption": {
-          "default": true,
+          "default": false,
           "description": "Allow interrupting the ongoing checks when the pull request entering the queue has a higher priority than the queued one(s). If set to false, a pull request with higher priority will be inserted just after the pull requests that have checks running.",
           "title": "Allow Checks Interruption",
           "type": "boolean"
