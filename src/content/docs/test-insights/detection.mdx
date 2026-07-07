@@ -35,6 +35,17 @@ Confidence indicates how much data is available to assess a test's health.
 
 Confidence increases as more CI runs are collected for a given test.
 
+## Rerunning unhealthy tests
+
+Mergify can rerun unhealthy tests automatically so they reach high confidence
+sooner, instead of waiting for them to run again on their own. Reruns stay
+within a budget you control, which caps the extra CI time they add.
+
+This is opt-in per repository and requires a test framework plugin. Once a
+plugin is installed, set a rerun budget on the
+[Detection page](https://dashboard.mergify.com/test-insights/detection) in the
+dashboard to enable it.
+
 ## Prioritizing with impact
 
 The impact metric reflects how many failed executions a test causes. A
