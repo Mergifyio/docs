@@ -352,6 +352,10 @@ carrying both `frontend` and `backend` consumes one `frontend` slot and one `bac
 starts only when both scopes, and the global ceiling, have room. This keeps every scope's limit
 honored even when changes span scopes.
 
+The extreme case is a pull request [flagged with
+`all_scopes`](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope): it consumes one
+slot in every capped scope and acts as a barrier, so nothing runs in parallel with it.
+
 #### Source-agnostic
 
 `capacities` only sets the limit; it does not decide which pull requests belong to a scope.
