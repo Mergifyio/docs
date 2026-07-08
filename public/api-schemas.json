@@ -11882,6 +11882,19 @@
             "format": "uuid",
             "title": "Session Id"
           },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id",
+            "description": "The batch this event concerns. Correlate the queue events for a batch (checks_start / checks_end / leave / bisection) on this id. Null on events persisted before this field was added."
+          },
           "train_car_id": {
             "anyOf": [
               {
@@ -11892,7 +11905,9 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id"
+            "title": "Train Car Id",
+            "description": "Deprecated: use `batch_id` instead (same value).",
+            "deprecated": true
           }
         },
         "type": "object",
@@ -11908,6 +11923,7 @@
           "remaining_pr_numbers",
           "max_failure_resolution_reached",
           "session_id",
+          "batch_id",
           "train_car_id"
         ],
         "title": "EventQueueBatchBisectionEndMetadata"
@@ -12037,6 +12053,19 @@
             "format": "uuid",
             "title": "Session Id"
           },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id",
+            "description": "The batch this event concerns. Correlate the queue events for a batch (checks_start / checks_end / leave / bisection) on this id. Null on events persisted before this field was added."
+          },
           "train_car_id": {
             "anyOf": [
               {
@@ -12047,7 +12076,9 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id"
+            "title": "Train Car Id",
+            "description": "Deprecated: use `batch_id` instead (same value).",
+            "deprecated": true
           }
         },
         "type": "object",
@@ -12061,6 +12092,7 @@
           "bisection_depth",
           "is_top_level",
           "session_id",
+          "batch_id",
           "train_car_id"
         ],
         "title": "EventQueueBatchBisectionStartMetadata"
@@ -12471,6 +12503,19 @@
           "speculative_check_pull_request": {
             "$ref": "#/components/schemas/Signals_SpeculativeCheckPullRequest"
           },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id",
+            "description": "The batch this event concerns. Correlate the queue events for a batch (checks_start / checks_end / leave / bisection) on this id. Null on events persisted before this field was added."
+          },
           "train_car_id": {
             "anyOf": [
               {
@@ -12481,7 +12526,9 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id"
+            "title": "Train Car Id",
+            "description": "Deprecated: use `batch_id` instead (same value).",
+            "deprecated": true
           },
           "scopes": {
             "anyOf": [
@@ -12534,6 +12581,7 @@
           "retry_attempt",
           "max_retries",
           "speculative_check_pull_request",
+          "batch_id",
           "train_car_id",
           "scopes",
           "parent_batch_ids",
@@ -12792,6 +12840,19 @@
           "speculative_check_pull_request": {
             "$ref": "#/components/schemas/Signals_SpeculativeCheckPullRequest"
           },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id",
+            "description": "The batch this event concerns. Correlate the queue events for a batch (checks_start / checks_end / leave / bisection) on this id. Null on events persisted before this field was added."
+          },
           "train_car_id": {
             "anyOf": [
               {
@@ -12802,7 +12863,9 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id"
+            "title": "Train Car Id",
+            "description": "Deprecated: use `batch_id` instead (same value).",
+            "deprecated": true
           },
           "scopes": {
             "anyOf": [
@@ -12863,6 +12926,7 @@
           "queued_at",
           "start_reason",
           "speculative_check_pull_request",
+          "batch_id",
           "train_car_id",
           "scopes",
           "parent_batch_ids",
