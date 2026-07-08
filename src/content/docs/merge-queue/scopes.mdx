@@ -157,6 +157,61 @@ With the configuration above you must push scopes yourself—typically from a CI
 pull request and calls `gha-mergify-ci` with the `scopes-upload` action. This is the recommended
 approach when build systems such as Bazel, Nx, or Turborepo already know which projects are affected.
 
+## Declaring a pull request impacts every scope
+
+Some pull requests invalidate everything: a build-system configuration change or a shared
+toolchain bump. Enumerating every scope by hand is brittle, and the list goes stale as soon as
+your set of scopes changes.
+
+Instead, set the `all_scopes` flag when you upload scopes. With the
+[Mergify CLI](/cli/usage), pass `--all` to `scopes-send`:
+
+```bash
+mergify ci scopes-send -s build-system --all
+```
+
+When you upload a scopes JSON file with `--scopes-json`, the CLI also honors an
+`"all_scopes": true` field in the file itself, so your detection tooling can set the flag without
+touching the command line.
+
+You can send the flag through the [REST API](/api/pull-requests) as well:
+
+```bash
+curl -X PUT \
+     -H "Accept: application/json" \
+     -H "Authorization: Bearer <my-application-api-key>" \
+     -H "Content-Type: application/json" \
+     -d '{"scopes": ["build-system"], "all_scopes": true}' \
+     https://api.mergify.com/v1/repos/<owner>/<repository>/pulls/<number>/scopes
+```
+
+The flag complements the `scopes` list rather than replacing it: keep reporting the concrete
+scopes your tooling detected, and set `all_scopes: true` on top when the change affects every
+target.
+
+### Barrier behavior in the queue
+
+A pull request flagged with `all_scopes` conflicts with every scope, so the merge queue treats it
+as a barrier:
+
+- It is never batched with other pull requests and never runs its checks in parallel with other
+  batches.
+
+- Batches already running when it enters the queue complete first.
+
+- Every pull request queued behind it waits for it to merge, including pull requests whose scopes
+  first appear after the barrier entered the queue.
+
+- With [per-scope capacities](/merge-queue/queue-modes#limiting-concurrency-per-scope), the
+  barrier consumes one slot in every capped scope.
+
+The queue serializes at the barrier and resumes normal scope-aware batching once the flagged pull
+request merges. Because a barrier defeats batching and parallelism, reserve `all_scopes` for
+changes that genuinely require testing against everything.
+
+The flag is visible in the [merge queue status API](/api/merge-queue) and on the draft pull request
+description created by the queue.
+
 ## Best practices
 
 - Keep scope names stable and small in number so batches stay meaningful.
