@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.6.25.1",
+    "version": "2026.7.8.1",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
@@ -54,7 +54,7 @@
       "mergify"
     ],
     "about": "Mergify command-line interface",
-    "longAbout": "Mergify command-line interface.\n\nDrive Mergify from your terminal. Validate and simulate your configuration, manage and inspect the merge queue, schedule merge freezes, look at the tests tracked by CI Insights, and create and maintain stacked pull requests.\n\nMost commands talk to the Mergify API and need a token. Set `MERGIFY_TOKEN` (or `GITHUB_TOKEN`) to apply it to every command, or pass `--token` to an individual command — there is no global `--token` on `mergify` itself. Run `mergify <command> --help` for detailed help and options on any command.",
+    "longAbout": "Mergify command-line interface.\n\nDrive Mergify from your terminal. Validate and simulate your configuration, manage and inspect the merge queue, schedule merge freezes, look at the tests tracked by CI Insights, and create and maintain stacked pull requests.\n\nMost commands talk to the Mergify API and need a token. Set `MERGIFY_TOKEN` (or `GITHUB_TOKEN`) to apply it to every command, or pass `--token` to an individual command — there is no global `--token` on `mergify` itself. Run `mergify <command> --help` (or the git-style `mergify help <command>`) for detailed help and options on any command.",
     "usage": "mergify [OPTIONS] <COMMAND>",
     "aliases": [],
     "subcommandRequired": true,
@@ -301,8 +301,8 @@
                 "valueNames": [
                   "PULL_REQUEST"
                 ],
-                "help": "Pull request number. Falls back to ``GITHUB_EVENT_PATH`` (reads ``.pull_request.number``). When neither is available the command prints a skip message and exits 0",
-                "longHelp": "Pull request number. Falls back to ``GITHUB_EVENT_PATH`` (reads ``.pull_request.number``). When neither is available the command prints a skip message and exits 0",
+                "help": "Pull request number. When omitted, it's detected from the CI environment: under GitHub Actions from the event payload (``.pull_request.number`` in ``GITHUB_EVENT_PATH``), under Buildkite from ``BUILDKITE_PULL_REQUEST``. When none can be detected the command prints a skip message and exits 0",
+                "longHelp": "Pull request number. When omitted, it's detected from the CI environment: under GitHub Actions from the event payload (``.pull_request.number`` in ``GITHUB_EVENT_PATH``), under Buildkite from ``BUILDKITE_PULL_REQUEST``. When none can be detected the command prints a skip message and exits 0",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -400,6 +400,22 @@
                 "numArgs": "1",
                 "env": null,
                 "valueHint": "anyPath"
+              },
+              {
+                "id": "all",
+                "kind": "flag",
+                "short": null,
+                "long": "all",
+                "valueNames": [],
+                "help": "Declare that the pull request impacts every scope. The merge queue then treats it as a barrier: it is never batched or run in parallel with other pull requests. The concrete scopes are still sent alongside the flag",
+                "longHelp": "Declare that the pull request impacts every scope. The merge queue then treats it as a barrier: it is never batched or run in parallel with other pull requests. The concrete scopes are still sent alongside the flag",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
               }
             ],
             "commands": []
@@ -2601,7 +2617,7 @@
               "reorder"
             ],
             "about": "Reorder the stack's commits",
-            "longAbout": "Reorder the stack's commits.\n\nRebase the stack into the commit order you list. Commits you don't mention keep their relative order. Each accepts a SHA prefix or a Change-Id prefix. Use `--dry-run` to preview.",
+            "longAbout": "Reorder the stack's commits.\n\nRebase the stack into the order you list. List every commit in the stack — all of them must appear, in the new order. Each accepts a SHA prefix or a Change-Id prefix. Use `--dry-run` to preview.",
             "usage": "mergify stack reorder [OPTIONS] <COMMITS>...",
             "aliases": [],
             "subcommandRequired": false,
@@ -2615,8 +2631,8 @@
                 "valueNames": [
                   "COMMITS"
                 ],
-                "help": "Commits in the order you want them rebased into",
-                "longHelp": "Commits in the order you want them rebased into",
+                "help": "Every commit in the stack, in the order you want them rebased into. All stack commits must be listed",
+                "longHelp": "Every commit in the stack, in the order you want them rebased into. All stack commits must be listed",
                 "required": true,
                 "global": false,
                 "default": null,
@@ -3501,8 +3517,8 @@
                 "valueNames": [
                   "COMMIT"
                 ],
-                "help": "Commit whose pull request to open. Accepts a SHA prefix or a Change-Id prefix; defaults to HEAD",
-                "longHelp": "Commit whose pull request to open. Accepts a SHA prefix or a Change-Id prefix; defaults to HEAD",
+                "help": "Commit whose pull request to open. Accepts a SHA prefix or a Change-Id prefix. When omitted: on a terminal, pick interactively from the stack (type to fuzzy-filter, HEAD preselected); otherwise defaults to HEAD",
+                "longHelp": "Commit whose pull request to open. Accepts a SHA prefix or a Change-Id prefix. When omitted: on a terminal, pick interactively from the stack (type to fuzzy-filter, HEAD preselected); otherwise defaults to HEAD",
                 "required": false,
                 "global": false,
                 "default": null,
