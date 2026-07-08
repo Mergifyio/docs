@@ -16002,6 +16002,18 @@
             "type": "array",
             "title": "Pull Requests"
           },
+          "all_scopes": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "All Scopes",
+            "description": "Whether the batch impacts every scope (a merge-queue barrier that cannot run in parallel with any other batch). `false` for an ordinary scoped batch."
+          },
           "checks_timeout_at": {
             "anyOf": [
               {
@@ -16099,6 +16111,18 @@
             },
             "type": "array",
             "title": "Scopes"
+          },
+          "all_scopes": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "All Scopes",
+            "description": "Whether the pull request impacts every scope (a merge-queue barrier that cannot run in parallel with any other scope). `false` for an ordinary scoped pull request."
           },
           "github_labels": {
             "anyOf": [
@@ -17777,6 +17801,11 @@
             "type": "array",
             "uniqueItems": true,
             "title": "Scopes"
+          },
+          "all_scopes": {
+            "type": "boolean",
+            "title": "All Scopes",
+            "default": false
           }
         },
         "type": "object",
