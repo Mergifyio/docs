@@ -1,0 +1,11 @@
+---
+title: "commit_message_template is deprecated — use commit_message_format"
+date: 2026-07-08
+tags:
+  - Deprecations
+description: "The commit_message_template setting is deprecated in favor of the declarative commit_message_format and will be removed on September 30, 2026."
+---
+
+The Jinja2-based `commit_message_template` setting (on both the `merge` action and `queue_rules`) is now deprecated in favor of the declarative [`commit_message_format`](https://docs.mergify.com/workflow/actions/merge#customizing-the-commit-message). Mergify shows a deprecation notice whenever the setting is used, and it will be removed on **September 30, 2026**.
+
+For the common merge-commit shapes, the equivalent `commit_message_format` settings are documented in the [migration guide](https://docs.mergify.com/workflow/actions/merge#migrating-from-commit_message_template).
