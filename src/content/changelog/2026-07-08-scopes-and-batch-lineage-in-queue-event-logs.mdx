@@ -1,0 +1,15 @@
+---
+title: "Scopes and batch lineage in queue event logs"
+date: 2026-07-08
+tags:
+  - Merge Queue
+description: "Merge queue check events now carry the batch's scopes and parent batch ids (plus a batch_id on leave), so you can reconstruct check history from the event logs alone."
+---
+
+The `action.queue.checks_start`, `action.queue.checks_end`, and `action.queue.leave` events now include the batch's `scopes` and its `parent_batch_ids`.
+
+`scopes` tell you which parallel lane a batch ran in: batches with disjoint scopes check concurrently. `parent_batch_ids` let you chain a batch back to the ones it inherited check results from. `action.queue.leave` also gains a `batch_id`, the batch the pull request was in when it left, so you can correlate a leave with its checks.
+
+Together these let you rebuild what the queue was checking at a point in time from the event logs alone.
+
+We also renamed `train_car_id` to `batch_id` on the check and bisection events. `train_car_id` still ships as a deprecated alias with the same value, so existing integrations keep working.
