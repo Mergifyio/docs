@@ -11832,6 +11832,38 @@
             "type": "array",
             "title": "Culprit Pr Numbers"
           },
+          "confirmed_culprit_pr_numbers": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer",
+                  "maximum": 9.223372036854776e+18,
+                  "minimum": 0.0
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed Culprit Pr Numbers"
+          },
+          "dropped_unverified_pr_numbers": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer",
+                  "maximum": 9.223372036854776e+18,
+                  "minimum": 0.0
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dropped Unverified Pr Numbers"
+          },
           "remaining_pr_numbers": {
             "items": {
               "type": "integer",
@@ -11871,6 +11903,8 @@
           "original_batch_pr_numbers",
           "culprit_found",
           "culprit_pr_numbers",
+          "confirmed_culprit_pr_numbers",
+          "dropped_unverified_pr_numbers",
           "remaining_pr_numbers",
           "max_failure_resolution_reached",
           "session_id",
@@ -12331,6 +12365,7 @@
                   "SPECULATIVE_CHECK_NUMBER_REDUCED",
                   "CHECKS_TIMEOUT",
                   "CHECKS_FAILED",
+                  "DROPPED_BY_BISECTION_ELIMINATION",
                   "QUEUE_RULE_MISSING",
                   "BASE_BRANCH_MISSING",
                   "BASE_BRANCH_CHANGED",
@@ -16776,6 +16811,12 @@
             "type": "integer",
             "title": "Checks Timeout",
             "description": "The checks for the queued pull request have timed out",
+            "default": 0
+          },
+          "DROPPED_BY_BISECTION_ELIMINATION": {
+            "type": "integer",
+            "title": "Dropped By Bisection Elimination",
+            "description": "The pull request was dropped untested when batch bisection isolated the failure to other pull requests",
             "default": 0
           },
           "CONFLICT_WITH_BASE_BRANCH": {

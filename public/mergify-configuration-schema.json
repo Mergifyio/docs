@@ -2536,6 +2536,7 @@
                 "SPECULATIVE_CHECK_NUMBER_REDUCED",
                 "CHECKS_TIMEOUT",
                 "CHECKS_FAILED",
+                "DROPPED_BY_BISECTION_ELIMINATION",
                 "QUEUE_RULE_MISSING",
                 "BASE_BRANCH_MISSING",
                 "BASE_BRANCH_CHANGED",
