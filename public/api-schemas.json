@@ -12483,6 +12483,37 @@
             ],
             "title": "Train Car Id"
           },
+          "scopes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scopes",
+            "description": "The scopes of the batch checking this pull request. Batches with disjoint scopes run their checks concurrently, so the scope tells which parallel lane the batch occupies. Empty when the queue is not scoped. Null on events persisted before this field was added."
+          },
+          "parent_batch_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Batch Ids",
+            "description": "The batch ids this batch descends from. A batch inherits its parents' check results, so this links a batch back to the ones checked before it. Empty on a first check with no predecessor. Null on events persisted before this field was added."
+          },
           "session_id": {
             "type": "string",
             "format": "uuid",
@@ -12504,6 +12535,8 @@
           "max_retries",
           "speculative_check_pull_request",
           "train_car_id",
+          "scopes",
+          "parent_batch_ids",
           "session_id"
         ],
         "title": "EventQueueChecksEndMetadata"
@@ -12771,6 +12804,37 @@
             ],
             "title": "Train Car Id"
           },
+          "scopes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scopes",
+            "description": "The scopes of the batch checking this pull request. Batches with disjoint scopes run their checks concurrently, so the scope tells which parallel lane the batch occupies. Empty when the queue is not scoped. Null on events persisted before this field was added."
+          },
+          "parent_batch_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Batch Ids",
+            "description": "The batch ids this batch descends from. A batch inherits its parents' check results, so this links a batch back to the ones checked before it. Empty on a first check with no predecessor. Null on events persisted before this field was added."
+          },
           "previous_batch_id": {
             "anyOf": [
               {
@@ -12800,6 +12864,8 @@
           "start_reason",
           "speculative_check_pull_request",
           "train_car_id",
+          "scopes",
+          "parent_batch_ids",
           "previous_batch_id",
           "session_id"
         ],
@@ -13103,6 +13169,34 @@
               }
             ],
             "title": "Dequeue Code"
+          },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id",
+            "description": "The batch the pull request was in when it left the queue. Use it to correlate this leave with the batch's checks_start / checks_end events. Null when the pull request left before being embarked in a batch, or on events persisted before this field was added."
+          },
+          "scopes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scopes",
+            "description": "The scopes of the batch the pull request was in when it left. Empty when the queue is not scoped. Null when the pull request left before being embarked in a batch, or on events persisted before this field was added."
           }
         },
         "type": "object",
@@ -13121,7 +13215,9 @@
           "unsuccessful_checks",
           "pull_request_head_sha",
           "session_id",
-          "dequeue_code"
+          "dequeue_code",
+          "batch_id",
+          "scopes"
         ],
         "title": "EventQueueLeaveMetadata"
       },
@@ -16067,6 +16163,20 @@
             "title": "Intermediate Results Skipped",
             "description": "True when this batch merged (or is set to merge) without its own CI passing, because a later downstream batch that includes its changes succeeded (skip_intermediate_results).",
             "default": false
+          },
+          "queue_pull_request_number": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9.223372036854776e+18,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Pull Request Number",
+            "description": "The number of the pull request the batch's checks run on: the batch pull request, or the user's own pull request for in-place checks. None while the batch has no active check pull request (still preparing, or its creation failed)."
           },
           "sub_batches": {
             "anyOf": [
