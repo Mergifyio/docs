@@ -1,0 +1,1 @@
+address review: document the CLI flag (mergify ci scopes-send --all) alongside the REST API
