@@ -1,0 +1,11 @@
+---
+title: "Mark a pull request as impacting all CI scopes"
+date: 2026-07-08
+tags:
+  - Merge Queue
+description: "Report a pull request as impacting every CI scope so it serializes the merge queue, instead of enumerating every target."
+---
+
+When a pull request changes something that affects your whole build — CI or build-system configuration, for example — you can now mark it as impacting **all scopes** instead of listing every target. Mergify treats such a pull request as a merge-queue barrier: it runs on its own, and everything queued after it waits for it, so a sweeping change can't slip through a parallel lane.
+
+Report it from CI with the scopes API (an explicit `all_scopes` flag alongside the usual scope list), and see it highlighted in the merge-queue view.

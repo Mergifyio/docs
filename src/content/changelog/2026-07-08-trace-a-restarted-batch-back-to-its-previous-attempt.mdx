@@ -1,0 +1,9 @@
+---
+title: "Trace a restarted batch back to its previous attempt"
+date: 2026-07-08
+tags:
+  - Merge Queue
+description: "The merge queue activity log now links a restarted batch to the previous batch it retried."
+---
+
+When a batch restarts because its previous attempt was aborted, the merge queue activity log now shows a link to that earlier batch. Clicking it opens the previous batch — including its checks and why it stopped — even after it has left the queue, so you can trace a restart end to end instead of hitting a dead end.
