@@ -121,20 +121,17 @@ The textual priorities have the following numerical values:
 
 ## Managing Check Interruptions Based on Priority
 
-The `allow_checks_interruption` option plays a critical role in managing the
-sequence of pull requests within the merge queue. When set to `true`, which is
-the default setting, this option allows the interruption of ongoing checks if a
-pull request with higher priority enters the queue.
+The `allow_checks_interruption` option controls what happens to running checks
+when a higher-priority pull request enters the queue. By default (`false`),
+Mergify does not interrupt ongoing checks: the higher-priority pull request is
+inserted just after the pull requests whose checks are running, preserving the
+CI time already spent.
 
-In practice, this means that if a high priority pull request is added to the
-queue, Mergify can stop the checks on the current pull request in order to
-prioritize the high priority one.
+Set it to `true` to let Mergify interrupt those checks and test the
+higher-priority pull request first, at the cost of the CI time already spent
+on the interrupted pull requests.
 
-Conversely, if `allow_checks_interruption` is set to `false`, Mergify will not
-interrupt the checks. Instead, a pull request with a higher priority will be
-inserted just after the pull requests that currently have checks running. This
-ensures the continuity of the testing process while still respecting the
-priority order in the queue.
+For example:
 
 ```yaml
 queue_rules:
@@ -148,7 +145,7 @@ priority_rules:
     conditions:
       - label = urgent
     priority: high
-    allow_checks_interruption: false
+    allow_checks_interruption: true
 
   - name: normal
     conditions:
@@ -156,11 +153,8 @@ priority_rules:
     priority: low
 ```
 
-In this configuration, `allow_checks_interruption` is set to `false` for the
-`urgent` priority. This means if a pull request with the `urgent` label (which
-has a higher priority) enters the queue, it will not interrupt the checks
-running on a pull request with the `normal` label. Instead, it will wait for
-the `normal` pull request's checks to complete before starting its own checks.
+Here, a pull request labeled `urgent` entering the queue interrupts the checks
+running on a `normal` pull request and gets tested first.
 
 ## Advanced Priority Rule Usage
 
