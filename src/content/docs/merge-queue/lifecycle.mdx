@@ -216,6 +216,26 @@ of 45 minutes") under the
 reason. For batches, see [Handling Batch Failure or
 Timeout](/merge-queue/batches#handling-batch-failure-or-timeout).
 
+## Automatic CI Retries
+
+Flaky CI can remove a pull request that would otherwise merge cleanly. The
+`max_checks_retries` option in your [`queue_rules`](/merge-queue/rules) tells
+Mergify how many times to retry failed CI checks before removing the pull
+request from the queue. On each retry, Mergify recreates the draft pull request
+to trigger a fresh CI run.
+
+```yaml
+queue_rules:
+  - name: default
+    max_checks_retries: 3
+```
+
+`max_checks_retries` defaults to `0`, which disables retries and keeps the
+normal failure handling described below. When you set it greater than `0`,
+Mergify always creates a draft pull request and disables in-place checks, since
+each retry needs a fresh draft to run against. The queue status report shows the
+current attempt number, for example "attempt 2/3".
+
 ## Handling PRs that Fail Validation Checks
 
 Even with all the automated checks and balances in place, it's possible for a
@@ -335,3 +355,30 @@ them:
 Monitoring your pull requests' status helps you understand their position in
 the queue and estimate when they might be merged, making the entire process
 more transparent and manageable.
+
+## The Mergify Merge Queue Check Run
+
+Every pull request in a repository with the merge queue enabled shows a single
+"Mergify Merge Queue" check run. This check consolidates the pull request's
+queue status, whether it is queued, waiting for conditions, or has been
+dequeued, into one consistent check. You can read it from the "checks" tab
+alongside the other Mergify statuses.
+
+## Status Comments
+
+Mergify posts status comments on each pull request in the queue to report its
+progress. The `status_comments` option in your `merge_queue` settings controls
+how much Mergify posts:
+
+- **`all`** (the default): comments for every queue event, including entering
+  the queue, CI progress, and final outcomes.
+
+- **`outcomes`**: comments only for final outcomes, such as a merge or a dequeue
+  with its failure reason.
+
+- **`none`**: no status comments.
+
+```yaml
+merge_queue:
+  status_comments: outcomes
+```
