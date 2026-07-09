@@ -77,18 +77,38 @@ To check coverage:
 grep -ri "<feature name | config key | action name>" src/content/docs/
 ```
 
-Remember the schema-driven components: a new config key may already appear in an
-`OptionsTable` (because it renders from the live schema) while having no prose
-explanation. "Appears in a generated table" is not the same as "documented" —
-look for the explanatory context, not just the key.
+Two kinds of "already generated" coverage behave very differently — get this
+right or you will file false gaps:
+
+- **Config keys / CLI options** render only where an author placed an
+  `<OptionsTable>` / `<ActionOptionsTable>` / `<CliCommand>` component. Even
+  then, "appears in a generated table" is not "documented" — a config key needs
+  explanatory prose (what it does, when to use it, defaults, gotchas). Treat
+  prose-less config keys as gaps.
+- **API endpoints are auto-documented.** The `/api` reference
+  (`src/pages/api/[tag].astro`) renders **every path** in
+  `public/api-schemas.json`, grouped by tag. So an endpoint that exists in that
+  spec is already published in the API reference — it is NOT a gap, even with no
+  hand-written prose. Before flagging an API/stats endpoint as undocumented,
+  check whether its path is in `public/api-schemas.json`:
+
+  ```bash
+  python3 -c "import json; print([p for p in json.load(open('public/api-schemas.json'))['paths'] if 'stats' in p])"
+  ```
+
+  A separate prose *guide* may still be nice-to-have, but the reference exists.
 
 ## Schemas
 
-The committed schemas show the current full surface area; diffing intent against
-them helps spot keys/commands with no prose:
+The committed schemas show the current full surface area:
 
-- `public/mergify-configuration-schema.json` — all config keys/models
-- `public/cli-schema.json` — all CLI commands/flags
-- `public/api-schemas.json` — API endpoints
+- `public/mergify-configuration-schema.json` — all config keys/models. A key here
+  with no prose (regardless of whether an OptionsTable renders it) is a gap.
+- `public/cli-schema.json` — all CLI commands/flags (rendered via `CliCommand`).
+- `public/api-schemas.json` — all API endpoints, **auto-rendered** in `/api`
+  (see above). Presence here = documented in the reference, not a gap.
 
-A key present in the schema but absent from any prose page is a coverage gap.
+When a changelog asserts a behavior change (e.g. a changed default), confirm it
+against `mergify-configuration-schema.json` before editing docs — the two can
+disagree (the schema is synced separately and may lag). If they conflict, flag it
+rather than guessing.
