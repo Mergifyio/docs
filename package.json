@@ -75,7 +75,7 @@
     "@astrojs/check": "^0.9.9",
     "@astrojs/react": "^6.0.0",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/vue": "^7.0.0",
+    "@astrojs/vue": "^7.0.1",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/poppins": "^5.2.7",
