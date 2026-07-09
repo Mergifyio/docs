@@ -12565,6 +12565,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Session Id"
+          },
+          "all_scopes": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "All Scopes",
+            "description": "Whether the train car checking this pull request impacts every scope (a merge-queue barrier). Null on events persisted before this field existed."
           }
         },
         "type": "object",
@@ -12915,6 +12927,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Session Id"
+          },
+          "all_scopes": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "All Scopes",
+            "description": "Whether the train car checking this pull request impacts every scope (a merge-queue barrier). Null on events persisted before this field existed."
           }
         },
         "type": "object",
@@ -13261,6 +13285,18 @@
             ],
             "title": "Scopes",
             "description": "The scopes of the batch the pull request was in when it left. Empty when the queue is not scoped. Null when the pull request left before being embarked in a batch, or on events persisted before this field was added."
+          },
+          "all_scopes": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "All Scopes",
+            "description": "Whether the train car the pull request was in impacted every scope (a merge-queue barrier). Null when the pull request left before being embarked in a car, or on events persisted before this field was added."
           }
         },
         "type": "object",
@@ -13281,7 +13317,8 @@
           "session_id",
           "dequeue_code",
           "batch_id",
-          "scopes"
+          "scopes",
+          "all_scopes"
         ],
         "title": "EventQueueLeaveMetadata"
       },
