@@ -1,0 +1,1 @@
+address Copilot review: use full engine/mergify_engine/rules/config/ paths in the module table and fix the missing slash in the merge_protections behavior path
