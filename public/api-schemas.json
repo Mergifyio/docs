@@ -1259,6 +1259,26 @@
             "description": "Get events for PRs to the given base ref"
           },
           {
+            "name": "batch_pull",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "exclusiveMaximum": 2147483647
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter to a batch (draft) pull request's own lifecycle events by its number (surfaced in the dashboard as \"Batch PR\"). The draft PR is the Mergify-opened pull request that speculatively checks a batch; this returns that batch's `action.queue.checks_start` / `action.queue.checks_end` events (which snapshot the draft PR number) plus the batch's bisection events. When `in_place` is true the number is the user's own PR rather than a Mergify draft. The number rotates on checks-retry \u2014 each event snapshots the number at that attempt.",
+              "title": "Batch Pull"
+            },
+            "description": "Filter to a batch (draft) pull request's own lifecycle events by its number (surfaced in the dashboard as \"Batch PR\"). The draft PR is the Mergify-opened pull request that speculatively checks a batch; this returns that batch's `action.queue.checks_start` / `action.queue.checks_end` events (which snapshot the draft PR number) plus the batch's bisection events. When `in_place` is true the number is the user's own PR rather than a Mergify draft. The number rotates on checks-retry \u2014 each event snapshots the number at that attempt."
+          },
+          {
             "name": "event_type",
             "in": "query",
             "required": false,
@@ -1705,6 +1725,26 @@
               "title": "Base Ref"
             },
             "description": "Get events for PRs to the given base ref"
+          },
+          {
+            "name": "batch_pull",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "exclusiveMaximum": 2147483647
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter to a batch (draft) pull request's own lifecycle events by its number (surfaced in the dashboard as \"Batch PR\"). The draft PR is the Mergify-opened pull request that speculatively checks a batch; this returns that batch's `action.queue.checks_start` / `action.queue.checks_end` events (which snapshot the draft PR number) plus the batch's bisection events. When `in_place` is true the number is the user's own PR rather than a Mergify draft. The number rotates on checks-retry \u2014 each event snapshots the number at that attempt.",
+              "title": "Batch Pull"
+            },
+            "description": "Filter to a batch (draft) pull request's own lifecycle events by its number (surfaced in the dashboard as \"Batch PR\"). The draft PR is the Mergify-opened pull request that speculatively checks a batch; this returns that batch's `action.queue.checks_start` / `action.queue.checks_end` events (which snapshot the draft PR number) plus the batch's bisection events. When `in_place` is true the number is the user's own PR rather than a Mergify draft. The number rotates on checks-retry \u2014 each event snapshots the number at that attempt."
           },
           {
             "name": "event_type",
