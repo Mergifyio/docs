@@ -8032,6 +8032,90 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/merge-queue/pull/{pr_number}/dequeue-impact": {
+      "get": {
+        "tags": [
+          "merge_queue"
+        ],
+        "summary": "Preview the impact of dequeuing a pull request",
+        "description": "Return how many batches would be interrupted, how many other pull requests would be rechecked, and how many stacked pull requests would also be dequeued if the given pull request is manually dequeued",
+        "operationId": "get_merge_queue_dequeue_impact_repos__owner___repository__merge_queue_pull__pr_number__dequeue_impact_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "pr_number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "maximum": 9223372036854775807,
+              "minimum": 0,
+              "description": "The pull request number",
+              "title": "Pr Number"
+            },
+            "description": "The pull request number"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeQueueDequeueImpact"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The pull request is not found in any merge queue."
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/merge-queue/pull/{pr_number}/dequeue": {
       "post": {
         "tags": [
@@ -13433,6 +13517,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Session Id"
+          },
+          "merge_commit_sha": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Merge Commit Sha",
+            "description": "The commit this queue merge landed on the base branch (its new tip): a merge/squash commit, or the fast-forwarded head SHA for fast-forward merges. Null on events persisted before this field was added."
           }
         },
         "type": "object",
@@ -13442,7 +13538,8 @@
           "queue_name",
           "queued_at",
           "priority_rule_name",
-          "session_id"
+          "session_id",
+          "merge_commit_sha"
         ],
         "title": "EventQueueMergedMetadata"
       },
@@ -15853,6 +15950,32 @@
           "branches"
         ],
         "title": "MergeQueueBranches"
+      },
+      "MergeQueueDequeueImpact": {
+        "properties": {
+          "interrupted_batches": {
+            "type": "integer",
+            "title": "Interrupted Batches",
+            "description": "Number of in-progress batches whose checks would be interrupted and restarted if this pull request is dequeued"
+          },
+          "rechecked_pull_requests": {
+            "type": "integer",
+            "title": "Rechecked Pull Requests",
+            "description": "Number of other pull requests from the interrupted batches that would be re-embarked and rechecked"
+          },
+          "cascaded_pull_requests": {
+            "type": "integer",
+            "title": "Cascaded Pull Requests",
+            "description": "Number of queued pull requests stacked on top of this one that would also be dequeued (excludes the dequeued pull request itself)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "interrupted_batches",
+          "rechecked_pull_requests",
+          "cascaded_pull_requests"
+        ],
+        "title": "MergeQueueDequeueImpact"
       },
       "MergeQueueMergeabilityCheck": {
         "properties": {
