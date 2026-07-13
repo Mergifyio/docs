@@ -1172,10 +1172,10 @@
     "/repos/{owner}/{repository}/logs": {
       "get": {
         "tags": [
-          "eventlogs"
+          "activity_log"
         ],
-        "summary": "Get the events log",
-        "description": "Get the events logs of the requested repository. Supports filtering by `event_type`, derived `outcome` (`success` / `failure` / `pending` / `neutral`), `trigger` (include only these trigger strings \u2014 Datadog `Only`), and `not_trigger` (exclude). `trigger` and `not_trigger` are mutually exclusive.",
+        "summary": "Get the activity log",
+        "description": "Get the activity log of the requested repository. Supports filtering by `event_type`, derived `outcome` (`success` / `failure` / `pending` / `neutral`), `trigger` (include only these trigger strings \u2014 Datadog `Only`), and `not_trigger` (exclude). `trigger` and `not_trigger` are mutually exclusive.",
         "operationId": "get_repository_events_repos__owner___repository__logs_get",
         "security": [
           {
@@ -1640,7 +1640,7 @@
     "/repos/{owner}/{repository}/logs/aggregate": {
       "get": {
         "tags": [
-          "eventlogs"
+          "activity_log"
         ],
         "summary": "Get aggregated event counts",
         "description": "Aggregations (total / histogram / event-type / outcome / trigger facet counts) over the same filter set as `/logs` \u2014 `event_type`, `outcome`, `trigger` (include) and `not_trigger` (exclude) all included. The response stays consistent with what the row endpoint returns: `total` matches what the table will show; unchecked values produce no row in their facet list (the sidebar hides their count rather than display `0`). `by_outcome` is derived from `event.type` (most types map directly; a few refine the label from event metadata); `by_trigger` returns the top 200 triggers by count in the window.",
@@ -2044,7 +2044,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EventLogsAggregateResponse"
+                  "$ref": "#/components/schemas/ActivityLogAggregateResponse"
                 }
               }
             }
@@ -8639,6 +8639,65 @@
   },
   "components": {
     "schemas": {
+      "ActivityLogAggregateResponse": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "interval_size_seconds": {
+            "type": "integer",
+            "title": "Interval Size Seconds"
+          },
+          "histogram": {
+            "items": {
+              "$ref": "#/components/schemas/HistogramBucket"
+            },
+            "type": "array",
+            "title": "Histogram"
+          },
+          "by_event_type": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Event Type"
+          },
+          "by_outcome": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Outcome"
+          },
+          "by_trigger": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Trigger"
+          },
+          "by_pull_request": {
+            "items": {
+              "$ref": "#/components/schemas/FacetCount"
+            },
+            "type": "array",
+            "title": "By Pull Request"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "interval_size_seconds",
+          "histogram",
+          "by_event_type",
+          "by_outcome",
+          "by_trigger",
+          "by_pull_request"
+        ],
+        "title": "ActivityLogAggregateResponse",
+        "description": "Aggregations over the same event set `/logs` paginates through.\n\n- `total` \u2014 count of events matching the filters (over the full set,\n  not just the current page).\n- `interval_size_seconds` \u2014 bucket width auto-picked from the time\n  range by `TimeRange.get_activity_log_interval_size()`. Dense\n  ladder tuned for per-event texture (15s \u2192 30s \u2192 2min \u2192 10min \u2192\n  20min \u2192 1h \u2192 4h \u2192 8h \u2192 1d), distinct from the smoother\n  `get_interval_size()` ladder used by queue-stats charts.\n- `histogram` \u2014 uniform list of `{start, end, count}` buckets\n  tiling the time range. Zero-filled server-side so the client\n  receives a complete grid (no missing buckets to fill in JS).\n- `by_event_type` \u2014 counts per event type, ordered by `count` desc.\n- `by_outcome` \u2014 counts per derived outcome label\n  (`success` / `failure` / `pending` / `neutral`), ordered by\n  `count` desc.\n- `by_trigger` \u2014 counts per trigger string, ordered by `count` desc.\n  Top 200 triggers by count in the window (single `GROUP BY` over\n  the filter set, capped); the dashboard uses it as the source of\n  truth for the Datadog-style trigger exclusion facet.\n- `by_pull_request` \u2014 counts per pull-request number in the window,\n  ordered by `count` desc, top 200. Window-derived facet (mirrors\n  `by_trigger`): self-excludes both `pull_request` and\n  `not_pull_request` filters so the sidebar always shows the full\n  window distribution. Events with `pull_request=null` are excluded.\n  PR number is returned as a string for uniform JSON serialisation.\n\n`base_ref` is an input-only filter: no filter UI and its cardinality\nmakes it unsuitable as a sidebar facet."
+      },
       "Actor": {
         "properties": {
           "type": {
@@ -11590,65 +11649,6 @@
           "removed"
         ],
         "title": "EventLabelMetadata"
-      },
-      "EventLogsAggregateResponse": {
-        "properties": {
-          "total": {
-            "type": "integer",
-            "title": "Total"
-          },
-          "interval_size_seconds": {
-            "type": "integer",
-            "title": "Interval Size Seconds"
-          },
-          "histogram": {
-            "items": {
-              "$ref": "#/components/schemas/HistogramBucket"
-            },
-            "type": "array",
-            "title": "Histogram"
-          },
-          "by_event_type": {
-            "items": {
-              "$ref": "#/components/schemas/FacetCount"
-            },
-            "type": "array",
-            "title": "By Event Type"
-          },
-          "by_outcome": {
-            "items": {
-              "$ref": "#/components/schemas/FacetCount"
-            },
-            "type": "array",
-            "title": "By Outcome"
-          },
-          "by_trigger": {
-            "items": {
-              "$ref": "#/components/schemas/FacetCount"
-            },
-            "type": "array",
-            "title": "By Trigger"
-          },
-          "by_pull_request": {
-            "items": {
-              "$ref": "#/components/schemas/FacetCount"
-            },
-            "type": "array",
-            "title": "By Pull Request"
-          }
-        },
-        "type": "object",
-        "required": [
-          "total",
-          "interval_size_seconds",
-          "histogram",
-          "by_event_type",
-          "by_outcome",
-          "by_trigger",
-          "by_pull_request"
-        ],
-        "title": "EventLogsAggregateResponse",
-        "description": "Aggregations over the same event set `/logs` paginates through.\n\n- `total` \u2014 count of events matching the filters (over the full set,\n  not just the current page).\n- `interval_size_seconds` \u2014 bucket width auto-picked from the time\n  range by `TimeRange.get_activity_log_interval_size()`. Dense\n  ladder tuned for per-event texture (15s \u2192 30s \u2192 2min \u2192 10min \u2192\n  20min \u2192 1h \u2192 4h \u2192 8h \u2192 1d), distinct from the smoother\n  `get_interval_size()` ladder used by queue-stats charts.\n- `histogram` \u2014 uniform list of `{start, end, count}` buckets\n  tiling the time range. Zero-filled server-side so the client\n  receives a complete grid (no missing buckets to fill in JS).\n- `by_event_type` \u2014 counts per event type, ordered by `count` desc.\n- `by_outcome` \u2014 counts per derived outcome label\n  (`success` / `failure` / `pending` / `neutral`), ordered by\n  `count` desc.\n- `by_trigger` \u2014 counts per trigger string, ordered by `count` desc.\n  Top 200 triggers by count in the window (single `GROUP BY` over\n  the filter set, capped); the dashboard uses it as the source of\n  truth for the Datadog-style trigger exclusion facet.\n- `by_pull_request` \u2014 counts per pull-request number in the window,\n  ordered by `count` desc, top 200. Window-derived facet (mirrors\n  `by_trigger`): self-excludes both `pull_request` and\n  `not_pull_request` filters so the sidebar always shows the full\n  window distribution. Events with `pull_request=null` are excluded.\n  PR number is returned as a string for uniform JSON serialisation.\n\n`base_ref` is an input-only filter: no filter UI and its cardinality\nmakes it unsuitable as a sidebar facet."
       },
       "EventMerge": {
         "properties": {
@@ -19438,6 +19438,10 @@
   },
   "tags": [
     {
+      "name": "activity_log",
+      "description": "Operations with the activity log."
+    },
+    {
       "name": "applications",
       "description": "Operations with applications."
     },
@@ -19448,10 +19452,6 @@
     {
       "name": "ci_insights",
       "description": "Operations with ci insights."
-    },
-    {
-      "name": "eventlogs",
-      "description": "Operations with event logs."
     },
     {
       "name": "merge_queue",
