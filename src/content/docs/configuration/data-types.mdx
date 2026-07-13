@@ -4,6 +4,7 @@ description: The different data types you can find in Mergify configuration file
 ---
 
 import OptionsTable from '../../../components/Tables/OptionsTable';
+import QueueDequeueReasons from '../../../components/Tables/QueueDequeueReasons';
 import TemplateVariablesTable from '../../../components/Tables/TemplateVariablesTable';
 
 When using templates or conditions, data are made of different types. You will
@@ -419,141 +420,13 @@ Either `none`, `read`, `triage`, `write`, `maintain` or `admin`.
 
 ## Queue Dequeue Reason
 
-This describes the reason why a pull request has been removed from the queue.
+This describes the reason why a pull request's merge queue checks ended — either
+because the pull request left the queue, or because its checks were interrupted
+while it stayed in the queue.
 
-<table>
-  <thead>
-    <th>Reason</th>
-    <th>Description</th>
-  </thead>
+The following reasons can be reported:
 
-  <tbody>
-     <tr>
-      <td><code>none</code></td>
-      <td>Pull request was not and is not in any queue.</td>
-    </tr>
-
-    <tr>
-      <td><code>pr-merged</code></td>
-      <td>Pull request has been merged.</td>
-    </tr>
-
-    <tr>
-      <td><code>pr-dequeued</code></td>
-
-      <td>
-        Pull request has been removed from the queue by an
-        <a href="/commands/dequeue">dequeue command</a> or
-        by an <a href="/workflow">automation rule</a>
-      </td>
-    </tr>
-
-    <tr>
-      <td><code>checks-timeout</code></td>
-
-      <td>
-        The configured <a href="/configuration/file-format/#queue-rules">
-        <code>checks\_timeout</code></a> has been reached.
-      </td>
-    </tr>
-
-    <tr>
-      <td><code>checks-failed</code></td>
-      <td>The checks have failed.</td>
-    </tr>
-
-    <tr>
-      <td><code>queue-rule-missing</code></td>
-      <td>The queue rule has been removed from the configuration.</td>
-    </tr>
-
-    <tr>
-      <td><code>base-branch-missing</code></td>
-      <td>The pull request base branch is missing.</td>
-    </tr>
-
-    <tr>
-      <td><code>base-branch-changed</code></td>
-      <td>The pull request base branch has changed.</td>
-    </tr>
-
-    <tr>
-      <td><code>pr-unexpectedly-failed-to-merge</code></td>
-      <td>An unexpected error happened while merging the pull request.</td>
-    </tr>
-
-    <tr>
-      <td><code>batch-max-failure-resolution-attempts</code></td>
-      <td>The maximum number of resolution attempts set in <a href="/configuration/file-format/#queue-rules">
-      <code>batch\_max\_failure\_resolution\_attempts</code></a> has been reached.</td>
-    </tr>
-
-    <tr>
-      <td><code>conflict-with-base-branch</code></td>
-      <td>The pull request conflicts with its base branch.</td>
-    </tr>
-
-    <tr>
-      <td><code>conflict-with-pull-ahead</code></td>
-      <td>The pull request conflicts with a pull request ahead of it.</td>
-    </tr>
-
-    <tr>
-      <td><code>branch-update-failed</code></td>
-      <td>Updating the head branch of the pull request failed.</td>
-    </tr>
-
-    <tr>
-      <td><code>pr-ahead-dequeued</code></td>
-      <td>A pull request which is ahead has been removed from the queue.</td>
-    </tr>
-
-    <tr>
-        <td><code>pr-ahead-failed-to-merge</code></td>
-        <td>The pull request which is ahead could not be merged.</td>
-    </tr>
-
-    <tr>
-        <td><code>pr-with-higher-priority-queued</code></td>
-        <td>A higher priority pull request has been queued in the meantime.</td>
-    </tr>
-
-    <tr>
-        <td><code>pr-queued-twice</code></td>
-        <td>The pull request got queued twice.</td>
-    </tr>
-
-    <tr>
-        <td><code>pr-frozen-no-cascading</code></td>
-        <td>The pull request was frozen by a freeze with cascading effect disabled.</td>
-    </tr>
-
-    <tr>
-        <td><code>pr-checks-stopped-because-merge-queue-pause</code></td>
-        <td>The checks have been interrupted because the merge queue is paused on this repository.</td>
-    </tr>
-
-    <tr>
-        <td><code>draft-pull-request-changed</code></td>
-        <td>The draft pull request has been unexpectedly changed.</td>
-    </tr>
-
-    <tr>
-        <td><code>pull-request-updated</code></td>
-        <td>The pull request has been manually updated.</td>
-    </tr>
-
-    <tr>
-        <td><code>merge-queue-reset</code></td>
-        <td>The merge queue was reset.</td>
-    </tr>
-
-    <tr>
-        <td><code>incompatibility-with-branch-protections</code></td>
-        <td>The pull request cannot be checked because of an incompatibility with branch protections.</td>
-    </tr>
-  </tbody>
-</table>
+<QueueDequeueReasons />
 
 ## Report Modes
 
