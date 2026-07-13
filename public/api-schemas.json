@@ -12029,7 +12029,7 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id",
+            "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           }
@@ -12200,7 +12200,7 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id",
+            "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           }
@@ -12650,7 +12650,7 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id",
+            "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           },
@@ -12999,7 +12999,7 @@
                 "type": "null"
               }
             ],
-            "title": "Train Car Id",
+            "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           },
