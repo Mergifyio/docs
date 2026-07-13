@@ -287,6 +287,22 @@ Used by the [`comment`](/workflow/actions/comment),
 [`review`](/workflow/actions/review) and [`close`](/workflow/actions/close)
 message fields.
 
+The `{{ assignees }}` and `{{ approvers }}` variables render as ready-to-use
+`@`-mentions for the pull request's assignees and the people who approved it.
+For example, the template:
+
+```text
+Thanks {{ approvers }} for the review!
+```
+
+renders to:
+
+```text
+Thanks @alice, @bob for the review!
+```
+
+when the pull request was approved by `alice` and `bob`.
+
 <TemplateVariablesTable def="CommentActionModel" field="message" />
 
 ### Title template
