@@ -43,9 +43,12 @@ Create a todo for each step.
 
 4. **Map against the docs.** For each capability, search `src/content/docs/`:
    - `grep -ri "<feature name / config key / action>" src/content/docs/`
-   - Check whether the schema-driven references already cover new config/CLI
-     options (`OptionsTable`, `CliCommand` pull from the live schema, so a new
-     key may already render in a table while its prose context is missing).
+   - Config/CLI options: `OptionsTable` / `CliCommand` render from the live
+     schema, so a key may show in a table while its prose context is missing —
+     that still counts as a gap (prose needed).
+   - **API endpoints are the exception**: the `/api` reference auto-renders every
+     path in `public/api-schemas.json`, so an endpoint present there is already
+     documented — do NOT flag it as undocumented. See `references/signal-sources.md`.
 
 5. **Classify each capability:**
    - **Undocumented** — no meaningful coverage anywhere.
