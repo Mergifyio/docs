@@ -453,7 +453,8 @@ it on a merge queue draft pull request and it prints the queue metadata as JSON:
   ],
   "previous_failed_batches": [
     {
-      "draft_pr_number": 980,
+      "batch_pr_number": 980,
+      "batch_pr_head_sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
       "checked_pull_requests": [123, 124, 125, 126]
     }
   ]
@@ -462,6 +463,9 @@ it on a merge queue draft pull request and it prints the queue metadata as JSON:
 
 Here the current split is testing pull requests #123 and #124, and it descends
 from draft pull request #980, which checked #123 through #126 and failed.
+Each entry also carries `batch_pr_head_sha`, the head commit of that failed
+batch's pull request: your CI ran on that commit, so its check runs are the
+record of which jobs passed there.
 
 `previous_failed_batches` is a list: when a batch is split several times, each
 ancestor adds an entry, oldest first. The batch your split came from directly is
@@ -519,11 +523,11 @@ jobs:
           fallback() { echo "$1, running the full test suite."; exit 0; }
 
           # The batch this split came from is the last entry of the list.
-          draft_pr=$(jq -r '.previous_failed_batches[-1].draft_pr_number // empty' <<< "$QUEUE_METADATA")
-          [ -n "$draft_pr" ] || fallback "No previous failed batch"
+          batch_pr=$(jq -r '.previous_failed_batches[-1].batch_pr_number // empty' <<< "$QUEUE_METADATA")
+          [ -n "$batch_pr" ] || fallback "No previous failed batch"
 
-          # Resolve the latest CI run of that batch's draft pull request.
-          sha=$(gh pr view "$draft_pr" --json headRefOid -q .headRefOid)
+          # Resolve the latest CI run of that batch's pull request.
+          sha=$(gh pr view "$batch_pr" --json headRefOid -q .headRefOid)
           run_id=$(gh run list --commit "$sha" --workflow CI --json databaseId -q '.[0].databaseId // empty')
           [ -n "$run_id" ] || fallback "No CI run for the previous failed batch"
 
@@ -569,6 +573,142 @@ jobs:
   the smaller split. That holds when your tests are independent. If a test's
   result depends on changes from another pull request in the batch, keep running
   your full suite so Mergify always isolates the right culprit.
+:::
+
+## Re-running Only the Previously Failed Jobs
+
+The same idea works one level up, at the CI job. When Mergify
+[splits a failed batch](#handling-batch-failure-or-timeout), a whole CI job that
+passed on the parent batch passes on the smaller split too, so it does not need
+to run again. Instead of re-running every job on each split, you can run only the
+jobs that failed on the parent.
+
+A test is filtered inside one process you control, so the previous recipe passes
+a list of test names to your runner. A job is a whole CI unit you cannot filter
+from the outside, so the mirror is self-skipping: each job checks at startup
+whether it already passed on the parent batch and exits early if it did.
+
+:::note
+  GitHub's native "Re-run failed jobs" does not apply here. Mergify creates a
+  new draft with a new commit for each split, so every split is a fresh workflow
+  run, not a re-run of the parent's run.
+:::
+
+### How a Job Decides to Skip
+
+This recipe reads the same `mergify ci queue-info` output as the previous one
+(see [Reading the Metadata](#reading-the-metadata)). It uses two things about the
+parent batch, the last entry of `previous_failed_batches`:
+
+- `batch_pr_head_sha`: the head commit of the parent batch's pull request. Your
+  CI ran on that commit, so its check runs are the source of truth for which jobs
+  passed there.
+
+- The job's own check run on that commit: a job skips itself only when its check
+  run concluded `success`. Anything else, a failure, a job that never ran, or a
+  missing SHA, runs the full job.
+
+### GitHub Actions Example: Self-skipping Jobs
+
+This job reads the parent batch's head SHA from the metadata, looks up its own
+check run on that commit, and skips its real steps when it already passed. It
+falls back to running in full whenever any piece is missing, so it is safe to
+use as your only workflow.
+
+```yaml
+name: CI
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # actions/checkout
+      checks: read # read the parent batch's check runs
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the Mergify CLI
+        uses: Mergifyio/setup-cli@v2
+
+      - name: Read the merge queue metadata
+        id: queue-info
+        # queue-info only works on a merge queue draft pull request.
+        if: startsWith(github.event.pull_request.title, 'merge queue:')
+        run: mergify ci queue-info
+
+      - name: Skip this job if it already passed on the parent batch
+        id: already-passed
+        if: steps.queue-info.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUEUE_METADATA: ${{ steps.queue-info.outputs.queue_metadata }}
+          REPO: ${{ github.repository }}
+          # The check-run name GitHub gives this job, matched verbatim below.
+          # It is the job's `name:` (or its id when unset). See the note on
+          # matrix jobs.
+          JOB: build
+        run: |
+          # Anything we can't resolve falls back to a full run.
+          fallback() { echo "$1, running the full job."; exit 0; }
+
+          # The batch this split came from is the last entry of the list.
+          sha=$(jq -r '.previous_failed_batches[-1].batch_pr_head_sha // empty' <<< "$QUEUE_METADATA") \
+            || fallback "Could not read the queue metadata"
+          [ -n "$sha" ] || fallback "No parent batch to compare against"
+
+          # The parent draft failed overall, but some of its jobs passed. List
+          # every conclusion this job's own check run reached on that commit
+          # (filter=all, not just the latest), scoped to this workflow's
+          # provider. A failed lookup (missing checks:read, rate limit, deleted
+          # commit) falls back too.
+          checks=$(gh api "repos/$REPO/commits/$sha/check-runs?filter=all" --paginate \
+            -q '.check_runs[] | select(.name == env.JOB and .app.slug == "github-actions") | .conclusion') \
+            || fallback "Could not read the parent batch check runs"
+
+          # Skip only when this job ran there and every run of it concluded
+          # success, so any failed attempt still forces a full run.
+          if [ -n "$checks" ] && ! grep -qvx success <<< "$checks"; then
+            echo "Already passed on the parent batch ($sha), skipping this job."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build
+        if: steps.already-passed.outputs.skip != 'true'
+        run: make build
+```
+
+:::note
+  The optimization is silent when it does not engage: a `JOB` name that does not
+  match the check run, or a missing `checks: read` permission, just runs the full
+  job, with no error. `JOB` must match the check-run name GitHub assigns exactly.
+  Where the job has no custom `name:` and no matrix, `${{ github.job }}` is that
+  name. The one positive sign it engaged is the `Already passed on the parent
+  batch` line in the job log.
+:::
+
+:::note
+  Skipping happens inside the job, so the runner still starts before it exits
+  early. This saves the job's work, the build or test run, not the few seconds of
+  scheduling a runner. Where even starting a job is expensive, gate it with a
+  lightweight planning job in `needs:` instead.
+:::
+
+:::caution
+  This example targets a single job through a fixed `JOB` value, so it does not
+  cover matrix jobs. Each matrix leg gets its own check-run name, the job name
+  plus the matrix values in parentheses, e.g. `build (ubuntu-latest, 3.12)`. A
+  static `JOB` matches at most one leg, so every other leg silently runs in full.
+  To skip matrix legs, build `JOB` from the `matrix` context so each leg matches
+  its own check run, e.g. `JOB: build (${{ matrix.os }}, ${{ matrix.python }})`.
+:::
+
+:::caution
+  This optimization assumes a job that passed on the parent batch stays green on
+  the smaller split. That holds when your jobs are independent. If a job's result
+  depends on changes from another pull request in the batch, keep running it every
+  time so Mergify always isolates the right culprit.
 :::
 
 ## In-place checks (no batch PRs)
