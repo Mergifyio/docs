@@ -15880,6 +15880,10 @@
             "type": "number",
             "title": "Idle Freeze"
           },
+          "ci_runtime": {
+            "type": "number",
+            "title": "Ci Runtime"
+          },
           "sum_idle_capacity": {
             "type": "number",
             "title": "Sum Idle Capacity"
@@ -15891,6 +15895,10 @@
           "sum_idle_freeze": {
             "type": "number",
             "title": "Sum Idle Freeze"
+          },
+          "sum_ci_runtime": {
+            "type": "number",
+            "title": "Sum Ci Runtime"
           },
           "count_idle": {
             "type": "integer",
@@ -15904,9 +15912,11 @@
           "idle_capacity",
           "idle_schedule",
           "idle_freeze",
+          "ci_runtime",
           "sum_idle_capacity",
           "sum_idle_schedule",
           "sum_idle_freeze",
+          "sum_ci_runtime",
           "count_idle"
         ],
         "title": "IdleTimeInInterval"
