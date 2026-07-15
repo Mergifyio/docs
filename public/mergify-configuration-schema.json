@@ -2561,7 +2561,8 @@
                 "INTERMEDIATE_RESULTS_SKIPPED",
                 "CHECKS_RETRIED",
                 "SCHEDULE_BLOCKED_AHEAD_YIELDED",
-                "BASE_REF_ALIGNMENT_TIMEOUT"
+                "BASE_REF_ALIGNMENT_TIMEOUT",
+                "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED"
               ],
               "type": "string"
             },
@@ -2594,6 +2595,7 @@
             "DRAFT_PULL_REQUEST_CREATION_BRANCH_NOT_INDEXED": "Mergify could not create the merge queue draft pull request because GitHub had not yet indexed the new branch.",
             "DRAFT_PULL_REQUEST_CREATION_FAILED": "Mergify could not create the merge queue draft pull request.",
             "DROPPED_BY_BISECTION_ELIMINATION": "Batch bisection isolated the failure to other pull requests and dropped this one without testing it individually.",
+            "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED": "The pull request is a GitHub stacked pull request, which GitHub does not support merging through its API.",
             "INCOMPATIBILITY_WITH_BRANCH_PROTECTIONS": "The pull request cannot be checked because of an incompatibility between the queue and the repository's branch protections.",
             "INTERMEDIATE_RESULTS_SKIPPED": "The pull request's intermediate speculative results were skipped. It stays in the queue.",
             "MERGE_QUEUE_RESET": "The merge queue was reset.",

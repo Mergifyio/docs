@@ -12546,7 +12546,8 @@
                   "INTERMEDIATE_RESULTS_SKIPPED",
                   "CHECKS_RETRIED",
                   "SCHEDULE_BLOCKED_AHEAD_YIELDED",
-                  "BASE_REF_ALIGNMENT_TIMEOUT"
+                  "BASE_REF_ALIGNMENT_TIMEOUT",
+                  "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED"
                 ]
               },
               {
@@ -13417,7 +13418,8 @@
                   "INTERMEDIATE_RESULTS_SKIPPED",
                   "CHECKS_RETRIED",
                   "SCHEDULE_BLOCKED_AHEAD_YIELDED",
-                  "BASE_REF_ALIGNMENT_TIMEOUT"
+                  "BASE_REF_ALIGNMENT_TIMEOUT",
+                  "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED"
                 ]
               },
               {
@@ -17409,6 +17411,12 @@
             "type": "integer",
             "title": "Base Ref Alignment Timeout",
             "description": "The stacked pull request's base branch could not be retargeted onto the queue base branch and was dequeued",
+            "default": 0
+          },
+          "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED": {
+            "type": "integer",
+            "title": "Github Stacked Pull Request Merge Unsupported",
+            "description": "The pull request is a GitHub-native stacked pull request, which GitHub does not allow merging through the API, and was dequeued",
             "default": 0
           }
         },
