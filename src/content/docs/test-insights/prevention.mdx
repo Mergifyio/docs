@@ -3,9 +3,14 @@ title: Prevention
 description: Catch flaky and broken tests on pull requests before they reach your codebase.
 ---
 
+import { Image } from "astro:assets"
+import PreventionScreenshot from "../../images/test-insights/prevention.png"
+
 Prevention monitors tests introduced or modified in pull requests. By
 rerunning tests on PRs, it detects flaky behavior before code merges, keeping
 your codebase reliable.
+
+<Image src={PreventionScreenshot} alt="Prevention dashboard: caught-flaky metrics and new-tests list" />
 
 ## How it works
 
