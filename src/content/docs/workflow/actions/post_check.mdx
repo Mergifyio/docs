@@ -3,12 +3,14 @@ title: Post Check (Deprecated)
 description: Create a check-run on a pull request. Deprecated in favor of Merge Protections.
 ---
 
+import { Image } from 'astro:assets';
 import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
 import Button from '../../../../components/Button.astro';
+import PostCheckScreenshot from '../../../images/workflow/actions/post_check/post-check-actions.png';
 
 :::danger
-  The `post_check` action is **deprecated** and will be removed on September
-  30, 2026. Use [Merge Protections](/merge-protections) instead.
+  The `post_check` action is **deprecated** and will be removed in a future
+  release. Use [Merge Protections](/merge-protections) instead.
 
   Mergify will automatically migrate your configuration by removing
   `post_check` rules and opening a migration pull request that converts them
@@ -68,6 +70,11 @@ merge_protections:
 The `post_check` action allows Mergify to create a check-run on a pull request.
 This can be useful in situations where you want to add a custom check to the
 status of a pull request based on Mergify's evaluation.
+
+<Image
+  src={PostCheckScreenshot}
+  alt="A post_check check-run in a GitHub pull request's checks list, flagging a title that breaks Conventional Commit"
+/>
 
 ### Parameters
 
