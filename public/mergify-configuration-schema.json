@@ -493,6 +493,33 @@
       "title": "BackportActionModel",
       "type": "object"
     },
+    "BarrierFileFilters": {
+      "additionalProperties": false,
+      "properties": {
+        "include": {
+          "description": "Glob patterns of files that impact every scope. At least one pattern is required. Examples: ('.github/workflows/**', 'Makefile')",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Include",
+          "type": "array"
+        },
+        "exclude": {
+          "description": "Glob patterns of files to exclude from this scope. Evaluated after `include` and takes precedence. Examples: ('**/tests/**', '*.md')",
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclude",
+          "type": "array"
+        }
+      },
+      "required": [
+        "include"
+      ],
+      "title": "BarrierFileFilters",
+      "type": "object"
+    },
     "BatchSizeBounds": {
       "anyOf": [
         {
@@ -4788,6 +4815,18 @@
           "default": null,
           "description": "Where scopes come from. `files` derives scopes from the pull request's changed files using file-pattern rules; `manual` uses scopes sent via API or `mergify scopes-send`; `None` disables scoping.",
           "title": "Source"
+        },
+        "barrier_files": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BarrierFileFilters"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "File filters marking files that impact every scope. Only valid with a `files` source; a `manual` source reports the barrier flag via the API instead. A pull request changing a matching file becomes a merge-queue barrier: it runs alone and serializes the queue at that point. At least one `include` pattern is required. Examples: ('.github/workflows/**', 'Makefile')"
         },
         "merge_queue_scope": {
           "default": "merge-queue",
