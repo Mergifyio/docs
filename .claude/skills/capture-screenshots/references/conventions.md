@@ -26,6 +26,17 @@ Default to **1440 × 900** unless the content needs more width. Astro + Sharp
 optimize and downscale on the site, so capture at the full standard size rather
 than a cramped window — never upscale a small capture.
 
+Capture at **2× (retina)**. The existing docs screenshots are all 2× — a 1×
+capture renders visibly softer next to them. How you get 2× depends on the path:
+
+- **Internal Playwright tool** (`Mergifyio/skills`) — sets
+  `deviceScaleFactor: 2` explicitly alongside `viewport 1440×900` and writes
+  `page.screenshot()` bytes straight to disk, so 2× is captured natively.
+- **Interactive claude-in-chrome capture** — there is no `deviceScaleFactor`
+  knob. Capture on a **2×/retina display at 100% browser zoom**; anything else
+  yields a soft 1× shot. Check the PNG's pixel dimensions against its CSS region
+  before wiring it in.
+
 ## Theme
 
 Capture in **light theme by default** (the docs render on a light surface and the
@@ -74,18 +85,23 @@ debugging and read it back with `read_console_messages`.
 
 ## Common dashboard URLs
 
-`app.mergify.com` (confirm against the live app; paths evolve):
+`dashboard.mergify.com` (confirm against the live app; paths evolve). To target a
+specific org/repo you can optionally append `?login=<org>&repository=<repo>`
+(e.g. `?login=Mergifyio&repository=monorepo`); it is not required — many docs
+links omit it and the dashboard resolves org/repo from the active session:
 
 | Area | Path |
 | --- | --- |
-| Org dashboard | `/github/<org>` |
-| Merge queues | `/github/<org>/queues` |
-| CI Insights | `/github/<org>/ci-insights` |
-| Test Insights | `/github/<org>/tests` |
-| Settings | `/github/<org>/settings` |
+| Home | `/home` |
+| Merge queues | `/merge-queue` |
+| CI Insights | `/ci-insights` |
+| Test Insights → Prevention | `/test-insights/prevention` |
+| Test Insights → Detection | `/test-insights/detection` |
+| Test Insights → Mitigation | `/test-insights/mitigation` |
 
-If a path 404s, navigate from the dashboard UI and read the resulting URL with
-`read_page` rather than guessing.
+`app.mergify.com` is retired and no longer resolves — always use
+`dashboard.mergify.com`. If a path 404s, navigate from the dashboard UI and read
+the resulting URL with `read_page` rather than guessing.
 
 ## Stable framing tips
 

@@ -4,8 +4,8 @@ description: >-
   Capture consistent Mergify dashboard screenshots for the docs site using
   Chrome browser automation, save them to the correct images/ directory, and
   emit the ready-to-paste astro:assets import and <Image> tag with alt text. Use
-  when adding or refreshing a dashboard/app screenshot in docs, when a docs page
-  needs a UI image, or when asked to screenshot app.mergify.com for
+  when adding or refreshing a dashboard screenshot in docs, when a docs page
+  needs a UI image, or when asked to screenshot dashboard.mergify.com for
   documentation. Drives the claude-in-chrome MCP tools against the user's
   existing logged-in Chrome session.
 ---
@@ -13,14 +13,29 @@ description: >-
 # Capture Dashboard Screenshots
 
 Produce clean, consistent screenshots of the Mergify dashboard
-(`app.mergify.com`) and wire them into a docs page.
+(`dashboard.mergify.com`) and wire them into a docs page.
 
-## Prerequisite
+## Two ways to capture
 
-The user must already be **logged into app.mergify.com in Chrome**. This skill
-reuses the existing browser session through the claude-in-chrome MCP tools; it
-never handles credentials. If navigation lands on a login page, stop and ask the
-user to log in (`! open https://app.mergify.com`), then continue.
+**Prefer the internal Playwright tool for batch or unattended captures.** The
+capture tool in the **`Mergifyio/skills`** repo runs headless Chromium at
+`deviceScaleFactor: 2` and writes PNG bytes straight to disk. It owns the
+session/auth handling, which is intentionally kept out of this public repo.
+
+**Use the interactive Chrome path below when you are working alongside the user**
+— exploring the dashboard, framing a one-off shot, or capturing a state that is
+easier to reach by clicking than by URL. It drives the claude-in-chrome MCP
+against the user's own logged-in session.
+
+Either way, the docs-side conventions are the same: framing, directory/naming,
+and the `<Image>` wiring snippet — see `references/conventions.md`.
+
+## Prerequisite (interactive path)
+
+The user must already be **logged into dashboard.mergify.com in Chrome**. This
+skill reuses the existing browser session through the claude-in-chrome MCP tools;
+it never handles credentials. If navigation lands on a login page, stop and ask
+the user to log in (`! open https://dashboard.mergify.com`), then continue.
 
 ## Load the browser tools first
 
