@@ -34,7 +34,7 @@ The metrics answer a few recurring questions:
 
 ## What Mergify tracks
 
-Mergify groups these metrics into three areas.
+Mergify groups these metrics into two areas.
 
 ### Queue: is work waiting for a runner?
 
@@ -51,22 +51,30 @@ how each runner compares to its peers. Each runner carries a health status, so a
 underperforming or unstable one is easy to single out. You can also follow each
 runner's trends over time and see how heavily it is being used.
 
-### Settings: what does Mergify monitor?
+## No runner setup required
 
-You decide which runner groups and labels Mergify watches. Because metrics are
-aggregated by runner group, this is also how you scope monitoring to the runners that
-matter.
+Once CI Insights is enabled, Mergify tracks your runners automatically. It works out
+what to monitor from the jobs it already sees:
+
+- **A runner shows up once it's reused.** Mergify holds off the first time a runner
+  appears: a runner that only ever handles a single job is treated as ephemeral and
+  left out. As soon as a runner picks up a second job, Mergify recognizes it as a
+  persistent machine and starts tracking it. This keeps your dashboards free of the
+  ephemeral runner identities that large fleets churn through.
+
+- **Queues follow the same rule.** A queue is the demand from every job that requests
+  the same labels. A job's wait counts toward its queue only once the runner that
+  picked it up has been reused, so ephemeral runners don't create one-off queues.
 
 ## Key concepts
 
 - **Runner groups and labels.** Runners are organized into groups, and labels (the
   `runs-on` values a job requests) identify which kind of runner handled the work.
-  Mergify uses the group to scope what it monitors and to compare each runner against
-  its peers.
+  Mergify uses the group to compare each runner against its peers.
 
-- **Long-lived runners only.** This page tracks persistent runners. Ephemeral runners
-  that exist for a single job aren't tracked here; use the [Jobs](/ci-insights/jobs)
-  page for those.
+- **Persistent runners only.** This page tracks runners that get reused, not the
+  ephemeral ones that run a single job. For those, use the [Jobs](/ci-insights/jobs)
+  page.
 
 - **Wait time vs. run time.** Wait time is how long a job sits before a runner picks
   it up; run time is how long it executes once started.
