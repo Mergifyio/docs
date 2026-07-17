@@ -6591,22 +6591,15 @@
                 "success_rate",
                 "active_runners",
                 "active_jobs",
-                "queued_jobs",
                 "utilization_rate",
                 "avg_duration",
-                "avg_queue_time",
                 "jobs_per_hour",
                 "avg_jobs_per_hour",
                 "min_duration",
                 "median_duration",
                 "p95_duration",
                 "p99_duration",
-                "max_duration",
-                "min_queue_time",
-                "median_queue_time",
-                "p95_queue_time",
-                "p99_queue_time",
-                "max_queue_time"
+                "max_duration"
               ],
               "type": "string",
               "title": "Stat"
@@ -6806,24 +6799,17 @@
                     "propertyName": "stat",
                     "mapping": {
                       "avg_duration": "#/components/schemas/RunnerDurationStatsResponse",
-                      "avg_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
                       "min_duration": "#/components/schemas/RunnerDurationStatsResponse",
                       "median_duration": "#/components/schemas/RunnerDurationStatsResponse",
                       "p95_duration": "#/components/schemas/RunnerDurationStatsResponse",
                       "p99_duration": "#/components/schemas/RunnerDurationStatsResponse",
                       "max_duration": "#/components/schemas/RunnerDurationStatsResponse",
-                      "min_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
-                      "median_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
-                      "p95_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
-                      "p99_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
-                      "max_queue_time": "#/components/schemas/RunnerDurationStatsResponse",
                       "success_rate": "#/components/schemas/RunnerRateStatsResponse",
                       "jobs_per_hour": "#/components/schemas/RunnerRateStatsResponse",
                       "avg_jobs_per_hour": "#/components/schemas/RunnerRateStatsResponse",
                       "utilization_rate": "#/components/schemas/RunnerRateStatsResponse",
                       "active_runners": "#/components/schemas/RunnerCountStatsResponse",
-                      "active_jobs": "#/components/schemas/RunnerCountStatsResponse",
-                      "queued_jobs": "#/components/schemas/RunnerCountStatsResponse"
+                      "active_jobs": "#/components/schemas/RunnerCountStatsResponse"
                     }
                   },
                   "title": "Response Ci-Runner-Stats"
@@ -17973,8 +17959,7 @@
             "type": "string",
             "enum": [
               "active_runners",
-              "active_jobs",
-              "queued_jobs"
+              "active_jobs"
             ],
             "title": "Stat"
           }
@@ -18011,17 +17996,11 @@
             "type": "string",
             "enum": [
               "avg_duration",
-              "avg_queue_time",
               "min_duration",
               "median_duration",
               "p95_duration",
               "p99_duration",
-              "max_duration",
-              "min_queue_time",
-              "median_queue_time",
-              "p95_queue_time",
-              "p99_queue_time",
-              "max_queue_time"
+              "max_duration"
             ],
             "title": "Stat"
           }
