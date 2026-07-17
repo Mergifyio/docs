@@ -1,0 +1,9 @@
+---
+title: "Declare merge queue barrier files in your configuration"
+date: 2026-07-17
+tags:
+  - Merge Queue
+description: "You can now mark files that impact every scope directly in your Mergify configuration, so any pull request touching them runs alone in the merge queue."
+---
+
+When you split your merge queue into parallel scopes with file patterns, some files — CI workflows, build files, shared tooling — affect everything. Add a `barrier_files` list to your `scopes` configuration and any pull request changing a matching file automatically becomes a merge-queue barrier: it runs on its own and serializes the queue at that point, instead of merging in parallel with other scopes. Previously this could only be triggered through the scopes API.
