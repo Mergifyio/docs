@@ -1,0 +1,14 @@
+---
+title: "Merge queue stats metrics and dashboard in Datadog"
+date: 2026-07-17
+tags:
+  - Integrations
+  - Merge Queue
+description: "The Datadog integration now ships 19 new mergify.queue.* metrics covering merge queue throughput, queue health, and performance, plus an out-of-the-box dashboard."
+---
+
+Version 2.0.0 of the Mergify integration for Datadog goes much deeper on merge queue monitoring. It adds 19 `mergify.queue.*` metrics covering throughput (pull requests entered and merged, queue and batch size), queue health (exit reasons, check outcomes, CI retries, bisections), and performance (time in queue, CI runtime, idle waits), all tagged by `repository`, `branch`, `queue`, and `priority_rule`. The integration also bundles an out-of-the-box **Mergify - Merge Queue Stats** dashboard, ready to use as soon as metrics flow in.
+
+The legacy metrics (`mergify.merge_queue_length`, `mergify.time_to_merge.*`, `mergify.queue_checks_outcome`) are deprecated in favor of the new `mergify.queue.*` metrics.
+
+Enable the integration from your Mergify dashboard — see the [Datadog integration docs](https://docs.mergify.com/integrations/datadog/).
