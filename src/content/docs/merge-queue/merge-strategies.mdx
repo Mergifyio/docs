@@ -156,7 +156,7 @@ rebase update occurs, the commit SHAs on the PR will change — what fast-forwar
 preserves are the SHAs of the PR branch at merge time.
 
 :::caution
-  When using `update_bot_account` with fast-forward inplace mode, fork pull
+  When using `bot_account` with fast-forward inplace mode, fork pull
   requests will no longer be supported after **July 1, 2026**. See the
   [update method deprecation note](#combining-merge-and-update-methods) for
   details and migration options.
@@ -313,7 +313,7 @@ fall behind the base branch. Combining `merge_method` with `update_method`
 gives you additional control over your history shape.
 
 :::note
-  `update_method: rebase` combined with `update_bot_account` will no longer
+  `update_method: rebase` combined with `bot_account` will no longer
   support fork pull requests after **July 1, 2026**. If your repository
   receives fork PRs, use `update_method: merge` instead.
 :::

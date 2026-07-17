@@ -353,8 +353,12 @@ A GitHub login Mergify impersonates to perform an action. You can also use the
 [`merge`](/workflow/actions/merge), [`rebase`](/workflow/actions/rebase),
 [`request_reviews`](/workflow/actions/request_reviews),
 [`review`](/workflow/actions/review), [`squash`](/workflow/actions/squash) and
-[`update`](/workflow/actions/update) actions, and the merge queue
-`draft_bot_account`, `merge_bot_account` and `update_bot_account`.
+[`update`](/workflow/actions/update) actions, and the merge queue `bot_account`
+field.
+
+In the merge queue, `bot_account` is the single account Mergify uses for every
+queue operation, including creating draft pull requests, updating branches, and
+merging.
 
 <TemplateVariablesTable def="CommentActionModel" field="bot_account" />
 
