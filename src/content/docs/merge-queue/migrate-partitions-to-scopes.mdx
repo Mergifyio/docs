@@ -58,6 +58,8 @@ from Mergify conditions to glob patterns.
 
 **Before — partition_rules:**
 
+{/* validate-config-examples: skip — deprecated partition_rules syntax, shown for migration */}
+
 ```yaml
 partition_rules:
   - name: backend
@@ -264,6 +266,9 @@ See the dedicated guides for [Nx](/merge-queue/scopes/nx),
 ### Before: partition_rules with full CI on every partition
 
 **.mergify.yml:**
+
+{/* validate-config-examples: skip — deprecated partition_rules syntax, shown for migration */}
+
 ```yaml
 partition_rules:
   - name: backend
