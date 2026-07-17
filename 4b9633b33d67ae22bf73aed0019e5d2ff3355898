@@ -1,0 +1,1 @@
+address Copilot review: pin actions/setup-node@v6.4.0 in the config-examples job to match sibling jobs; fix nested code fence in SKILL.md (use 4-backtick outer fence so the inner yaml block renders)
