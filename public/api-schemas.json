@@ -16728,6 +16728,18 @@
             ],
             "title": "Is Frozen",
             "description": "Whether an ongoing scheduled freeze holds this pull request's merge, independent of its CI status \u2014 it can be running CI and `is_frozen` at once. `false` when no freeze affects it."
+          },
+          "dequeue_requested": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dequeue Requested",
+            "description": "Whether a manual removal from the queue is pending for this pull request: it was removed via the 'Remove from queue' action / `@mergifyio dequeue` command (or is a stacked pull request that cascade removes with one), and is awaiting completion. The pull request remains listed until it is actually removed. `false` when no manual removal is pending; automatic dequeues (merge, CI failure, push) do not set it."
           }
         },
         "type": "object",
