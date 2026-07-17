@@ -3,9 +3,14 @@ title: Detection
 description: Identify and prioritize unhealthy tests across your repositories.
 ---
 
+import { Image } from "astro:assets"
+import DetectionScreenshot from "../../images/test-insights/detection.png"
+
 Even with prevention in place, tests can degrade over time. Detection surfaces
 all unhealthy tests (flaky and broken) across your repositories, so you can
 see the full picture and prioritize what to fix.
+
+<Image src={DetectionScreenshot} alt="Detection dashboard: tests health donut and CI impact chart" />
 
 ## How tests are classified
 

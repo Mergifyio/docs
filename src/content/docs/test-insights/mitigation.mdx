@@ -3,10 +3,15 @@ title: Mitigation
 description: Quarantine problematic tests to unblock CI without losing visibility.
 ---
 
+import { Image } from "astro:assets"
+import MitigationScreenshot from "../../images/test-insights/mitigation.png"
+
 When a flaky or broken test blocks CI, teams face a tough choice: fix it
 immediately, delete it, or ignore it. Quarantine offers a better option. The
 test keeps running, but its failures no longer block merges. You maintain full
 visibility without disruption.
+
+<Image src={MitigationScreenshot} alt="Mitigation dashboard: quarantine metrics and quarantined-tests list" />
 
 ## How quarantine works
 
