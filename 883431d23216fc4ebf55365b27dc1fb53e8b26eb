@@ -1,0 +1,1 @@
+scope change (Julien): unify all three per-op queue bot accounts (draft/merge/update_bot_account) into a single bot_account, not just the draft-only rename. Rewrote data-types Bot account section + updated update_bot_account refs in merge-strategies/batches; added deprecated-alias + precedence note.
