@@ -1,13 +1,14 @@
 # Scenario Recipes
 
-A library of repeatable states to stage in `Mergifyio/sandbox`, capture, and tear
-down. Each recipe names the config, the PRs/actions, the wait condition, and the
-capture view. Drive them with `references/sandbox.md`; capture with the
+A library of repeatable states to stage in the `mergify-sandbox` scenario repo,
+capture, and tear down. Each recipe names the config, the PRs/actions, the wait
+condition, and the capture view. Drive them via the sandbox-org skill (see
+`references/sandbox.md` for the step → command mapping); capture with the
 `capture-screenshots` skill; always run the standard cleanup afterward.
 
 Dashboard URLs follow the pattern
-`https://app.mergify.com/github/Mergifyio/sandbox/<view>` — confirm the exact
-path from the app (see `capture-screenshots`' conventions).
+`https://app.mergify.com/github/mergify-sandbox/dashboard-scenarios/<view>` —
+confirm the exact path from the app (see `capture-screenshots`' conventions).
 
 ## Table of contents
 
@@ -40,7 +41,7 @@ Cleanup is always the standard teardown (`references/sandbox.md`).
     - name: default
       merge_conditions: []
   ```
-- **Stage** — open 3 PRs, comment `@mergifyio queue` on each.
+- **Stage** — open 3 PRs, queue each one with `sandbox.sh queue`.
 - **Wait** — the queue view lists all 3 PRs.
 - **Capture** — `…/queues`, frame the queue list.
 
@@ -83,8 +84,8 @@ Cleanup is always the standard teardown (`references/sandbox.md`).
 - **Goal** — the dashboard showing an active queue freeze.
 - **Serves** — `merge-protections/freeze.mdx`.
 - **Config** — baseline queue config is enough; the freeze is created via CLI.
-- **Stage** — create a freeze on the sandbox with `mergify freeze create` (or the
-  `mergify:mergify-merge-protections` skill), optionally with one PR queued behind it.
+- **Stage** — create a freeze on the sandbox with `sandbox.sh freeze`, optionally
+  with one PR queued behind it.
 - **Wait** — the freeze shows as active.
 - **Capture** — the freeze view.
 
