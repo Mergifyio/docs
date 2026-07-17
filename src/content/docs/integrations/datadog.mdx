@@ -1,6 +1,6 @@
 ---
 title: Using Datadog with Mergify
-description: Learn how you can monitor Mergify using Datadog.
+description: Send your merge queue metrics to Datadog to build dashboards, alerts, and reports alongside the rest of your observability data.
 ---
 
 import { Image } from "astro:assets"
@@ -8,57 +8,187 @@ import datadogDashboardScreenshot from "../../images/integrations/datadog/dashbo
 import datadogLogo from "../../images/integrations/datadog/logo.svg"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 import IntegrationPageScreenshot from "../../images/integrations/datadog/integration.png"
-import DDIntegrationPageScreenshot from "../../images/integrations/datadog/datadog-integration.png"
-import DDIntegrationDetailsPageScreenshot from "../../images/integrations/datadog/datadog-integration-details.png"
 
 <IntegrationLogo src={datadogLogo} alt="Datadog logo"/>
 
-Mergify now seamlessly integrates with Datadog, enabling you to monitor your
-automation workflows and gain actionable insights from your development
-process. This integration empowers teams with metrics from Mergify, all
-visualized in your Datadog dashboard.
+The Datadog integration pushes your merge queue metrics into your own Datadog
+account. Everything on the
+[merge queue statistics page](/merge-queue/monitoring) is available as a Datadog
+metric, so you can graph queue health next to your own service metrics and
+alert on it.
 
-You can refer to [Datadog documentation if
-needed](https://docs.datadoghq.com/integrations/mergify_oauth/).
+The integration is official and ships as a [Mergify
+tile](https://docs.datadoghq.com/integrations/mergify_oauth/) in Datadog's
+integration catalog. Mergify writes the metrics to Datadog for you. There is no
+agent to install and nothing to run in your CI.
 
-## Getting Started
+## Prerequisites
 
-Before diving into the features, you'll need to set up the integration.
+- A Datadog account, and permission to authorize integrations in it.
 
-1. Connect to Mergify dashboard and go to [`Integrations →
-   Datadog`](https://dashboard.mergify.com/integrations/datadog).
-   <Image src={IntegrationPageScreenshot} alt="Mergify Integration page"/>
+- On the Mergify side, a plan that includes the Datadog integration, plus the
+  GitHub organization `Owner` role or the
+  [**Integrations Admin** delegated role](/security#delegated-roles).
 
-2. Follow the instructions to connect your Datadog account to Mergify.
-   <Image src={DDIntegrationPageScreenshot} alt="Mergify Datadog Integration page"/>
+## Setting up the integration
 
-3. Edit the list of repositories and branches that you want to monitor.
-   <Image src={DDIntegrationDetailsPageScreenshot} alt="Mergify Datadog Integration page details"/>
+1. In the Mergify dashboard, go to
+   [`Integrations → Datadog`](https://dashboard.mergify.com/integrations/datadog).
+   Installing the Mergify tile from Datadog's integration catalog and clicking
+   **Connect Accounts** lands in the same place.
+   <Image src={IntegrationPageScreenshot} alt="The Datadog integration in the Mergify dashboard's integrations list"/>
 
-## Features and Benefits
+2. Connect your Datadog account. Pick the
+   [Datadog site](https://docs.datadoghq.com/getting_started/site/) your
+   organization uses (US1, US3, US5, EU1, US1-FED, or AP1), then authorize
+   Mergify. Mergify creates an API key scoped to the integration and starts
+   pushing metrics to that site.
 
-### Real-Time Monitoring
+3. Choose what to monitor. For each repository, select the merge queue
+   **base branches** you want metrics for: the branches your queued pull
+   requests target, such as `main` or a release branch.
 
-<Image src={datadogDashboardScreenshot} alt="Datadog dashboard with Mergify's metrics"/>
+:::note
+  Metrics only cover the repositories and base branches you select here. When
+  you add a new release branch, add it to this list too, or its queue activity
+  will be missing from Datadog.
+:::
 
-Monitor your Mergify activity in real-time. Track the number of pull requests
-queued, and any issues or bugs that arise during the check process.
+## Metrics
 
-### Customizable Dashboards
+Every metric is published every 5 minutes, and each point covers the 5-minute
+window it represents.
 
-Craft your dashboard views in Datadog to highlight the most crucial Mergify
-metrics for your team. Whether you're looking at PR merge times or tracking
-down an automation error, you can mold the dashboard to fit your needs.
+### Tags
 
-### Alerts and Notifications
+Every metric carries these tags:
 
-Set up custom alerts based on specific Mergify events or thresholds. Get
-notified instantly when something needs your attention, ensuring rapid response
-times and maintaining smooth development flows.
+| Tag | Description |
+| --- | --- |
+| `repository` | Full repository name, such as `octo/hello-world` |
+| `branch` | The base branch the queued pull requests target |
+| `queue` | Name of the [queue rule](/merge-queue/rules) |
+| `priority_rule` | Name of the matching [priority rule](/merge-queue/priority), when set |
 
-### Continuous Improvement
+:::caution
+  Datadog lowercases tag values on ingestion, and collapses each run of
+  characters outside `a-z 0-9 _ - : . /` into a single underscore. Query
+  `outcome:success`, not `outcome:SUCCESS`, and expect a queue named
+  `automated updates` to arrive as `automated_updates`.
+:::
 
-By integrating Mergify with Datadog, you're not just monitoring; you're
-continuously improving. The insights gathered can guide process enhancements,
-identify bottlenecks, and ensure that your development lifecycle is as
-efficient as it can be.
+### Reference
+
+Metrics submitted as **count** are event tallies that Datadog sums exactly over
+any time range. Metrics submitted as **gauge** are peak values within the window.
+
+| Metric | Type | Description |
+| --- | --- | --- |
+| `mergify.queue.entered` | count | Pull requests that entered the queue |
+| `mergify.queue.merged` | count | Pull requests merged out of the queue |
+| `mergify.queue.exit_reason` | count | Pull requests that left the queue, tagged with `exit_reason` |
+| `mergify.queue.size.max` | gauge | Largest the queue got |
+| `mergify.queue.running_checks.max` | gauge | Most checks running at once |
+| `mergify.queue.check_outcome` | count | Finished queue checks, tagged with `outcome` |
+| `mergify.queue.checks_retries.recovered` | count | Failed checks that passed on retry |
+| `mergify.queue.checks_retries.not_recovered` | count | Failed checks that failed again on retry |
+| `mergify.queue.bisection.started` | count | [Batch](/merge-queue/batches) bisections started |
+| `mergify.queue.total_queue_time.sum` | count | Total time queued, in seconds |
+| `mergify.queue.total_queue_time.count` | count | Queue sessions the sum covers |
+| `mergify.queue.ci_runtime.sum` | count | Total CI runtime, in seconds |
+| `mergify.queue.ci_runtime.count` | count | CI runs the sum covers |
+| `mergify.queue.batch_size.sum` | count | Total pull requests across batches |
+| `mergify.queue.batch_size.count` | count | Batches the sum covers |
+| `mergify.queue.breakdown.ci_runtime.sum` | count | Queued time spent running CI, in seconds |
+| `mergify.queue.idle.capacity.sum` | count | Queued time spent waiting for capacity, in seconds |
+| `mergify.queue.idle.schedule.sum` | count | Queued time spent waiting for a schedule, in seconds |
+| `mergify.queue.idle.freeze.sum` | count | Queued time waiting on a [freeze](/merge-protections/freeze), in seconds |
+| `mergify.queue.idle.count` | count | Queue sessions the breakdown sums cover |
+
+Both `outcome` and `exit_reason` are `success` when the pull request merged or
+its checks passed. Otherwise they name the reason the pull request left the
+queue or its checks were aborted, such as `checks_failed` or `pr_dequeued`. The
+[integration's README](https://github.com/DataDog/integrations-extras/blob/master/mergify_oauth/README.md)
+lists every value.
+
+## Querying the metrics
+
+### Averages
+
+The duration and size metrics ship as a `.sum` and a `.count` rather than a
+pre-computed average, so Datadog can recompute the real average over whatever
+time range you graph. Divide a family's own sum by its own count:
+
+```text
+sum:mergify.queue.total_queue_time.sum{$repository} / sum:mergify.queue.total_queue_time.count{$repository}
+```
+
+The same shape gives you average CI runtime (`mergify.queue.ci_runtime.*`) and
+average batch size (`mergify.queue.batch_size.*`).
+
+:::caution
+  Divide each family by its own `.count`. The `idle.*` and `breakdown.*` sums
+  share the `mergify.queue.idle.count` denominator; `total_queue_time`,
+  `ci_runtime`, and `batch_size` each have their own. Averaging a pre-averaged
+  value, or mixing denominators, gives a number that changes with the graph's
+  rollup interval.
+:::
+
+### Check retry recovery rate
+
+The share of failed checks that passed when retried:
+
+```text
+sum:mergify.queue.checks_retries.recovered{$repository} / (sum:mergify.queue.checks_retries.recovered{$repository} + sum:mergify.queue.checks_retries.not_recovered{$repository})
+```
+
+### Where queued time goes
+
+Total queued time splits into CI runtime plus three kinds of waiting:
+
+```text
+mergify.queue.breakdown.ci_runtime.sum   # running CI
+mergify.queue.idle.capacity.sum          # waiting for a free check slot
+mergify.queue.idle.schedule.sum          # waiting for a schedule to open
+mergify.queue.idle.freeze.sum            # waiting for a freeze to lift
+```
+
+Graphed together as a stacked area, they show what your queue is actually
+waiting on. Divide any of them by `mergify.queue.idle.count` for a
+per-pull-request average.
+
+Because the three `idle.*` metrics are pure waiting time, `sum:mergify.queue.idle.*.sum`
+gives you total wasted time without counting CI.
+
+## Dashboards and alerts
+
+<Image src={datadogDashboardScreenshot} alt="The Mergify - Merge Queue Stats dashboard in Datadog"/>
+
+The [Mergify tile](https://docs.datadoghq.com/integrations/mergify_oauth/) ships
+a **Mergify - Merge Queue Stats** dashboard that mirrors the merge queue
+statistics page. In Datadog, open the
+[Mergify integration page](https://app.datadoghq.com/integrations?search=mergify&integrationId=mergify-oauth)
+and find it under the **Monitoring Resources** tab. Clone it to adapt it to
+your own repositories, or build your own from the metrics above.
+
+Since the metrics are ordinary Datadog metrics, you can alert on them with
+monitors. Useful ones to start with:
+
+- `mergify.queue.size.max` staying above a threshold, which usually means CI
+  capacity is the bottleneck.
+
+- Average queued time trending up week over week.
+
+- Check retry recovery rate dropping, which points at genuinely broken tests
+  rather than flaky ones.
+
+- `mergify.queue.exit_reason` counting anything other than `success`, which
+  means pull requests are leaving the queue without merging.
+
+## Learn more
+
+- [Monitoring your merge queue](/merge-queue/monitoring): what each metric means
+  and how to read it.
+
+- The [Mergify tile](https://docs.datadoghq.com/integrations/mergify_oauth/) on
+  Datadog: setup from the Datadog side and the bundled dashboard.
