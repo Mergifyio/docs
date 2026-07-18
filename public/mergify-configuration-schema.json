@@ -606,7 +606,8 @@
             },
             {
               "description": "Why the pull request left the merge queue; empty outside queue contexts.",
-              "name": "queue_dequeue_reason"
+              "name": "queue_dequeue_reason",
+              "type": "queue-dequeue-reason"
             }
           ]
         }
@@ -800,7 +801,8 @@
                 },
                 {
                   "description": "Why the pull request left the merge queue; empty outside queue contexts.",
-                  "name": "queue_dequeue_reason"
+                  "name": "queue_dequeue_reason",
+                  "type": "queue-dequeue-reason"
                 }
               ]
             },
@@ -4754,7 +4756,8 @@
                 },
                 {
                   "description": "Why the pull request left the merge queue; empty outside queue contexts.",
-                  "name": "queue_dequeue_reason"
+                  "name": "queue_dequeue_reason",
+                  "type": "queue-dequeue-reason"
                 }
               ]
             },

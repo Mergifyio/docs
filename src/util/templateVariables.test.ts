@@ -50,6 +50,29 @@ describe('extractTemplateVariables', () => {
     ]);
   });
 
+  it('carries the optional type token through for enumerated-value variables', () => {
+    const definition = {
+      type: 'string',
+      format: 'simple-template',
+      'x-mergify-template-variables': [
+        { name: 'author', description: 'PR author login' },
+        {
+          name: 'queue_dequeue_reason',
+          description: 'Why the PR left the queue',
+          type: 'queue-dequeue-reason',
+        },
+      ],
+    };
+    expect(extractTemplateVariables(definition)).toEqual([
+      { name: 'author', description: 'PR author login' },
+      {
+        name: 'queue_dequeue_reason',
+        description: 'Why the PR left the queue',
+        type: 'queue-dequeue-reason',
+      },
+    ]);
+  });
+
   it('returns [] when no template variables are present', () => {
     expect(extractTemplateVariables({ type: 'string' })).toEqual([]);
     expect(extractTemplateVariables(null)).toEqual([]);

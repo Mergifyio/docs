@@ -8,6 +8,16 @@ interface TemplateVariablesTableProps extends Def {
   field: string;
 }
 
+// A template variable whose value is drawn from an enumerated data type carries a
+// `type` token in the schema (`x-mergify-template-variables[].type`). Map that token
+// to the data type section listing the accepted values, mirroring how option value
+// types link to their data type (see ConfigOptions `valueTypeFormatLinks`). Keying
+// off the schema-published token means a new typed variable needs only its engine
+// annotation plus one entry here — no per-variable-name special-casing.
+const variableTypeLinks: Record<string, string> = {
+  'queue-dequeue-reason': '/configuration/data-types#queue-dequeue-reason',
+};
+
 export default function TemplateVariablesTable({ def, field }: TemplateVariablesTableProps) {
   const schema = configSchema as unknown as ConfigSchema;
   const definition = schema.$defs[def]?.properties?.[field];
@@ -31,14 +41,23 @@ export default function TemplateVariablesTable({ def, field }: TemplateVariables
           </tr>
         </thead>
         <tbody>
-          {variables.map((variable) => (
-            <tr key={variable.name}>
-              <td>
-                <code>{`{{ ${variable.name} }}`}</code>
-              </td>
-              <td dangerouslySetInnerHTML={{ __html: renderMarkdown(variable.description) }} />
-            </tr>
-          ))}
+          {variables.map((variable) => {
+            const typeLink = variable.type ? variableTypeLinks[variable.type] : undefined;
+            return (
+              <tr key={variable.name}>
+                <td>
+                  {typeLink !== undefined ? (
+                    <a style={{ textDecoration: 'underline' }} href={typeLink}>
+                      <code>{`{{ ${variable.name} }}`}</code>
+                    </a>
+                  ) : (
+                    <code>{`{{ ${variable.name} }}`}</code>
+                  )}
+                </td>
+                <td dangerouslySetInnerHTML={{ __html: renderMarkdown(variable.description) }} />
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

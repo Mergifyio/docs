@@ -1,6 +1,11 @@
 export interface TemplateVariable {
   name: string;
   description: string;
+  // Some variables resolve to a value drawn from an enumerated data type rather than
+  // a free-form string. The schema tags those with a stable token (e.g.
+  // `queue-dequeue-reason`) that renderers map to the matching data type section.
+  // Absent for free-form string variables.
+  type?: string;
 }
 
 // Field definitions publish their allowlist under this custom JSON-schema key.
