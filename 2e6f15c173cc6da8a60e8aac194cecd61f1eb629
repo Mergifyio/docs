@@ -1,0 +1,1 @@
+address Copilot review: split the interactive Chrome path from the internal Playwright tool instead of implying one supersedes the other, and scope the 2x guidance per path (deviceScaleFactor for Playwright, retina display at 100% zoom for interactive)
