@@ -105,6 +105,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -177,6 +178,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -257,6 +259,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -320,6 +323,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -392,6 +396,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -457,6 +462,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -634,6 +640,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -736,6 +743,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -808,6 +816,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -880,6 +889,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -947,6 +957,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -1041,6 +1052,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -1122,6 +1134,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -1207,6 +1220,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -1703,6 +1717,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -2159,6 +2174,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -2272,6 +2288,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -2453,6 +2470,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -2634,6 +2652,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -2815,6 +2834,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -2996,6 +3016,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -3177,6 +3198,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -3358,6 +3380,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -3539,6 +3562,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -3720,6 +3744,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -3871,6 +3896,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -4043,6 +4069,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -4215,6 +4242,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -4324,6 +4352,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -4505,6 +4534,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -4686,6 +4716,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -4867,6 +4898,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -4989,6 +5021,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -5075,6 +5108,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -5149,6 +5183,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -5602,6 +5637,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -5700,6 +5736,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -5838,6 +5875,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -5933,6 +5971,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -6016,6 +6055,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -6190,6 +6230,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -6361,6 +6402,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -6452,6 +6494,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -6531,6 +6574,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7024,6 +7068,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7343,6 +7388,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7412,6 +7458,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7505,6 +7552,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7600,6 +7648,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7693,6 +7742,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7774,6 +7824,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -7845,6 +7896,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -8081,6 +8133,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -8165,6 +8218,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -8249,6 +8303,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -8313,6 +8368,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -8392,6 +8448,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -8454,6 +8511,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -8525,6 +8583,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
+              "maxLength": 100,
               "pattern": "^[\\w\\-\\.]+$",
               "description": "The name of the repository",
               "title": "Repository"
@@ -12597,7 +12656,8 @@
                   "CHECKS_RETRIED",
                   "SCHEDULE_BLOCKED_AHEAD_YIELDED",
                   "BASE_REF_ALIGNMENT_TIMEOUT",
-                  "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED"
+                  "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
+                  "BATCH_SCOPES_CHANGED"
                 ]
               },
               {
@@ -13469,7 +13529,8 @@
                   "CHECKS_RETRIED",
                   "SCHEDULE_BLOCKED_AHEAD_YIELDED",
                   "BASE_REF_ALIGNMENT_TIMEOUT",
-                  "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED"
+                  "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
+                  "BATCH_SCOPES_CHANGED"
                 ]
               },
               {
@@ -15831,6 +15892,9 @@
             },
             "type": "array",
             "title": "Stats"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/IdleTimeSummary"
           }
         },
         "type": "object",
@@ -15838,7 +15902,8 @@
           "base_ref",
           "queue_name",
           "priority_rule_name",
-          "stats"
+          "stats",
+          "summary"
         ],
         "title": "IdleTimeGroupResponse"
       },
@@ -15870,6 +15935,38 @@
             "type": "number",
             "title": "Ci Runtime"
           },
+          "p95_idle_capacity": {
+            "type": "number",
+            "title": "P95 Idle Capacity"
+          },
+          "p95_idle_schedule": {
+            "type": "number",
+            "title": "P95 Idle Schedule"
+          },
+          "p95_idle_freeze": {
+            "type": "number",
+            "title": "P95 Idle Freeze"
+          },
+          "p95_ci_runtime": {
+            "type": "number",
+            "title": "P95 Ci Runtime"
+          },
+          "max_idle_capacity": {
+            "type": "number",
+            "title": "Max Idle Capacity"
+          },
+          "max_idle_schedule": {
+            "type": "number",
+            "title": "Max Idle Schedule"
+          },
+          "max_idle_freeze": {
+            "type": "number",
+            "title": "Max Idle Freeze"
+          },
+          "max_ci_runtime": {
+            "type": "number",
+            "title": "Max Ci Runtime"
+          },
           "sum_idle_capacity": {
             "type": "number",
             "title": "Sum Idle Capacity"
@@ -15899,6 +15996,14 @@
           "idle_schedule",
           "idle_freeze",
           "ci_runtime",
+          "p95_idle_capacity",
+          "p95_idle_schedule",
+          "p95_idle_freeze",
+          "p95_ci_runtime",
+          "max_idle_capacity",
+          "max_idle_schedule",
+          "max_idle_freeze",
+          "max_ci_runtime",
           "sum_idle_capacity",
           "sum_idle_schedule",
           "sum_idle_freeze",
@@ -15906,6 +16011,74 @@
           "count_idle"
         ],
         "title": "IdleTimeInInterval"
+      },
+      "IdleTimeSummary": {
+        "properties": {
+          "avg_idle_capacity": {
+            "type": "number",
+            "title": "Avg Idle Capacity"
+          },
+          "avg_idle_schedule": {
+            "type": "number",
+            "title": "Avg Idle Schedule"
+          },
+          "avg_idle_freeze": {
+            "type": "number",
+            "title": "Avg Idle Freeze"
+          },
+          "avg_ci_runtime": {
+            "type": "number",
+            "title": "Avg Ci Runtime"
+          },
+          "p95_idle_capacity": {
+            "type": "number",
+            "title": "P95 Idle Capacity"
+          },
+          "p95_idle_schedule": {
+            "type": "number",
+            "title": "P95 Idle Schedule"
+          },
+          "p95_idle_freeze": {
+            "type": "number",
+            "title": "P95 Idle Freeze"
+          },
+          "p95_ci_runtime": {
+            "type": "number",
+            "title": "P95 Ci Runtime"
+          },
+          "max_idle_capacity": {
+            "type": "number",
+            "title": "Max Idle Capacity"
+          },
+          "max_idle_schedule": {
+            "type": "number",
+            "title": "Max Idle Schedule"
+          },
+          "max_idle_freeze": {
+            "type": "number",
+            "title": "Max Idle Freeze"
+          },
+          "max_ci_runtime": {
+            "type": "number",
+            "title": "Max Ci Runtime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "avg_idle_capacity",
+          "avg_idle_schedule",
+          "avg_idle_freeze",
+          "avg_ci_runtime",
+          "p95_idle_capacity",
+          "p95_idle_schedule",
+          "p95_idle_freeze",
+          "p95_ci_runtime",
+          "max_idle_capacity",
+          "max_idle_schedule",
+          "max_idle_freeze",
+          "max_ci_runtime"
+        ],
+        "title": "IdleTimeSummary"
       },
       "ListTestExecutionsResponse": {
         "properties": {
@@ -17287,6 +17460,12 @@
             "description": "The maximum batch failure resolution attempts has been reached",
             "default": 0
           },
+          "BATCH_SCOPES_CHANGED": {
+            "type": "integer",
+            "title": "Batch Scopes Changed",
+            "description": "The batch has been recomposed because a pull request's scopes changed",
+            "default": 0
+          },
           "BRANCH_UPDATE_FAILED": {
             "type": "integer",
             "title": "Branch Update Failed",
@@ -17446,7 +17625,7 @@
           "PR_MANUALLY_DEQUEUED": {
             "type": "integer",
             "title": "Pr Manually Dequeued",
-            "description": "The pull request has been manually dequeued by a dequeue command",
+            "description": "The pull request has been manually removed from the queue",
             "default": 0
           },
           "STACK_PREDECESSOR_DEQUEUED": {

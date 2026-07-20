@@ -2589,7 +2589,8 @@
                 "CHECKS_RETRIED",
                 "SCHEDULE_BLOCKED_AHEAD_YIELDED",
                 "BASE_REF_ALIGNMENT_TIMEOUT",
-                "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED"
+                "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
+                "BATCH_SCOPES_CHANGED"
               ],
               "type": "string"
             },
@@ -2611,6 +2612,7 @@
             "BATCH_AHEAD_FAILED": "A batch ahead in the queue failed, so this pull request's speculative checks are restarted. It stays in the queue.",
             "BATCH_MAX_FAILURE_RESOLUTION_ATTEMPTS": "The maximum number of `batch_max_failure_resolution_attempts` was reached while isolating a batch failure.",
             "BATCH_PULL_REQUEST_CLOSED": "The merge queue batch pull request was closed.",
+            "BATCH_SCOPES_CHANGED": "A pull request's scopes changed after it was embarked, so its batch was recomposed. It stays in the queue.",
             "BRANCH_UPDATE_FAILED": "Updating the pull request's head branch failed.",
             "CHECKS_FAILED": "The queue conditions cannot be satisfied because required checks failed.",
             "CHECKS_RETRIED": "The pull request's failed checks are being retried. It stays in the queue.",
@@ -2631,7 +2633,7 @@
             "PR_CHECKS_STOPPED_BECAUSE_MERGE_QUEUE_PAUSE": "The pull request's checks were interrupted because the merge queue is paused on the repository. It stays in the queue.",
             "PR_DEQUEUED": "The pull request was removed from the queue, for example because its queue conditions no longer match.",
             "PR_DEQUEUED_FROM_PARTITION": "The pull request stopped matching a partition's rules and was removed from that partition.",
-            "PR_MANUALLY_DEQUEUED": "The pull request was removed from the queue by a `dequeue` command.",
+            "PR_MANUALLY_DEQUEUED": "The pull request was manually removed from the queue.",
             "PR_MANUALLY_MERGED": "The pull request was merged manually, outside of the merge queue.",
             "PR_MERGED": "The pull request was merged by the merge queue.",
             "PR_MERGED_INTERMEDIATE_RESULTS_SKIPPED": "The pull request was merged based on the successful result of a later pull request in the same speculative batch, skipping its own intermediate checks.",
