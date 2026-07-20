@@ -18,7 +18,7 @@ describe('getDataTypeHref', () => {
     expect(getDataTypeHref('Queue dequeue reason')).toBe(
       '/configuration/data-types#queue-dequeue-reason'
     );
-    expect(getDataTypeHref('Report Modes')).toBe('/configuration/data-types#report-modes');
+    expect(getDataTypeHref('Report Mode')).toBe('/configuration/data-types#report-mode');
   });
 });
 
@@ -26,7 +26,7 @@ describe('collectDataTypeTitles', () => {
   it('finds flagged nodes wherever they appear in a schema', () => {
     const schema = {
       $defs: {
-        ReportMode: { 'x-has-data-type': true, title: 'Report Modes' },
+        ReportMode: { 'x-has-data-type': true, title: 'Report Mode' },
       },
       properties: {
         reason: {
@@ -38,7 +38,7 @@ describe('collectDataTypeTitles', () => {
     };
     expect(collectDataTypeTitles(schema).sort()).toEqual([
       'Queue dequeue reason',
-      'Report Modes',
+      'Report Mode',
       undefined,
     ]);
   });
@@ -55,7 +55,7 @@ describe('data-types page anchors', () => {
       // derived from titles the engine marks with x-has-data-type
       'queue-dequeue-reason',
       'priority',
-      'report-modes',
+      'report-mode',
       'schedule',
       // anchors hardcoded in ConfigOptions.tsx link maps
       'commit',
