@@ -86,6 +86,21 @@ Delegated roles are managed from **Settings → Roles** on the Mergify
 dashboard. Only GitHub `Owner`s and users holding the **Delegation Admin**
 role can grant or revoke them.
 
+:::note
+  **Onboarding exception: the first trial.** Starting your organization's
+  **first** trial is a self-service action. Any organization member can
+  start it, even without the GitHub `Owner` role, and Mergify automatically
+  grants them the **Billing Admin** role so they can manage the subscription
+  they create from it.
+
+  This is a one-time onboarding bootstrap. It cannot escalate privileges on
+  an established organization: it applies only while the organization has
+  never had a subscription, and once one exists (active or canceled),
+  starting another trial is rejected, so the automatic grant can no longer
+  be triggered. Billing Admin grants billing access only; it grants no
+  repository, queue, or configuration access.
+:::
+
 Each user can hold any combination of the following roles:
 
 <table>
