@@ -43,7 +43,7 @@
     "canvaskit-wasm": "^0.41.1",
     "eslint": "^10.6.0",
     "eslint-mdx": "^3.8.1",
-    "eslint-plugin-astro": "^2.1.1",
+    "eslint-plugin-astro": "^3.0.0",
     "eslint-plugin-mdx": "^3.8.1",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^17.7.0",
