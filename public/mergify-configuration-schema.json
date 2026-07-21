@@ -469,11 +469,7 @@
           ],
           "description": "Reporting modes for the action's result. Check will create a check on the pull request, and comment will post a comment on the pull request.",
           "items": {
-            "enum": [
-              "check",
-              "comment"
-            ],
-            "type": "string"
+            "$ref": "#/$defs/ReportMode"
           },
           "minItems": 1,
           "title": "Report Mode",
@@ -1192,11 +1188,7 @@
           ],
           "description": "Reporting modes for the action's result. Check will create a check on the pull request, and comment will post a comment on the pull request.",
           "items": {
-            "enum": [
-              "check",
-              "comment"
-            ],
-            "type": "string"
+            "$ref": "#/$defs/ReportMode"
           },
           "minItems": 1,
           "title": "Report Mode",
@@ -2008,7 +2000,8 @@
           ],
           "default": "medium",
           "description": "The priority of the pull request.",
-          "title": "Priority"
+          "title": "Priority",
+          "x-has-data-type": true
         },
         "allow_checks_interruption": {
           "default": false,
@@ -2647,6 +2640,7 @@
             "STACK_PREDECESSOR_DEQUEUED": "A predecessor pull request in the same stack was dequeued, so this one was removed as well.",
             "UNPROCESSABLE_PULL_REQUEST": "Mergify cannot process the pull request, for example because it has too many check runs, comments, or files."
           },
+          "x-has-data-type": true,
           "x-modifiers": [
             {
               "type": "negate"
@@ -3714,6 +3708,7 @@
             "=",
             "!="
           ],
+          "x-has-data-type": true,
           "x-modifiers": []
         },
         "sender-permission": {
@@ -4588,6 +4583,15 @@
       },
       "title": "RebaseActionModel",
       "type": "object"
+    },
+    "ReportMode": {
+      "enum": [
+        "check",
+        "comment"
+      ],
+      "title": "Report Mode",
+      "type": "string",
+      "x-has-data-type": true
     },
     "RequestReviewsActionModel": {
       "additionalProperties": false,
