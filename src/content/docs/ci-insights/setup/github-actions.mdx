@@ -4,6 +4,8 @@ description: Enable Mergify CI Insights and configure flaky test detection using
 ---
 
 import { Image } from "astro:assets"
+import TokenScreenshot from "../../../images/ci-insights/token.png"
+import GitHubSecretsScreenshot from "../../../images/ci-insights/gh-secrets.png"
 import JobsScreenshot from "../../../images/ci-insights/jobs.png"
 
 This page explains how to enable CI Insights for a repository using GitHub
@@ -21,6 +23,10 @@ Actions and how to configure repeated test executions for flaky test detection.
    and set it as `MERGIFY_TOKEN` in your GitHub Actions secrets.
 
    This key will be used to upload test reports.
+
+   <Image src={TokenScreenshot} alt="CI Insights token in Mergify organization settings" />
+
+   <Image src={GitHubSecretsScreenshot} alt="Adding the MERGIFY_TOKEN secret in GitHub Actions" />
 
    :::tip
      If you use [Dependabot](/integrations/dependabot), you must also add
