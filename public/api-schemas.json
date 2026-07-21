@@ -12263,6 +12263,18 @@
             "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
+          },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
           }
         },
         "type": "object",
@@ -12279,7 +12291,8 @@
           "max_failure_resolution_reached",
           "session_id",
           "batch_id",
-          "train_car_id"
+          "train_car_id",
+          "batch_name"
         ],
         "title": "EventQueueBatchBisectionEndMetadata"
       },
@@ -12434,6 +12447,18 @@
             "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
+          },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
           }
         },
         "type": "object",
@@ -12448,7 +12473,8 @@
           "is_top_level",
           "session_id",
           "batch_id",
-          "train_car_id"
+          "train_car_id",
+          "batch_name"
         ],
         "title": "EventQueueBatchBisectionStartMetadata"
       },
@@ -12887,6 +12913,18 @@
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
+          },
           "scopes": {
             "anyOf": [
               {
@@ -12952,6 +12990,7 @@
           "speculative_check_pull_request",
           "batch_id",
           "train_car_id",
+          "batch_name",
           "scopes",
           "parent_batch_ids",
           "session_id"
@@ -13236,6 +13275,18 @@
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
+          },
           "scopes": {
             "anyOf": [
               {
@@ -13280,6 +13331,18 @@
             "title": "Previous Batch Id",
             "description": "The ID of the batch checked just before this one for the same pull request, when this check is a restart. Null on the first check."
           },
+          "previous_batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Batch Name",
+            "description": "The display name of `previous_batch_id`'s batch, read back from that batch's own checks_end event. Null on the first check, and when the predecessor was checked before `batch_name` was recorded on events."
+          },
           "session_id": {
             "type": "string",
             "format": "uuid",
@@ -13309,9 +13372,11 @@
           "speculative_check_pull_request",
           "batch_id",
           "train_car_id",
+          "batch_name",
           "scopes",
           "parent_batch_ids",
           "previous_batch_id",
+          "previous_batch_name",
           "session_id"
         ],
         "title": "EventQueueChecksStartMetadata"
