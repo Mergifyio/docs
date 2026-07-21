@@ -5825,6 +5825,128 @@
         }
       }
     },
+    "/ci/{owner}/repositories/{repository}/tests/{test_id}/health-transitions": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Get a test's health transitions over time",
+        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window \u2014 the edges of the per-bucket classification, not the full series. Health is derived per time bucket (binning adapts to the window), so a transition is timestamped to a bucket boundary, not an individual run.",
+        "operationId": "ci-test-health-transitions",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the test",
+              "title": "Test Id"
+            },
+            "description": "ID of the test"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "title": "Start"
+            },
+            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "title": "End"
+            },
+            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestHealthTransitionsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/ci/{owner}/repositories/{repository}/tests/{test_id}/failures": {
       "get": {
         "tags": [
@@ -15758,6 +15880,37 @@
         ],
         "title": "GetTestFailuresResponse"
       },
+      "GetTestHealthTransitionsResponse": {
+        "properties": {
+          "transitions": {
+            "items": {
+              "$ref": "#/components/schemas/HealthTransition"
+            },
+            "type": "array",
+            "title": "Transitions",
+            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the earliest classification observed in the window. Health is classified per time bucket (binning adapts to the window: 1h, 4h, 1d, 2d), so timestamps land on bucket boundaries, not individual runs."
+          },
+          "first_activity_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Activity At",
+            "description": "Start of the earliest bucket with any executions in the window, or null when the test had no activity. A consumer can treat a `first_activity_at` well after the window start as the test's genuine origin, and one at the window edge as history that predates the retained window."
+          }
+        },
+        "type": "object",
+        "required": [
+          "transitions",
+          "first_activity_at"
+        ],
+        "title": "GetTestHealthTransitionsResponse"
+      },
       "GetTestStatResponse": {
         "properties": {
           "stat": {
@@ -15838,6 +15991,32 @@
           "type"
         ],
         "title": "GitHubAccount"
+      },
+      "HealthTransition": {
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At",
+            "description": "Bucket boundary at which the test's health changed to `health_status`."
+          },
+          "health_status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "flaky",
+              "broken"
+            ],
+            "title": "Health Status",
+            "description": "Health the test held from `at` until the next transition."
+          }
+        },
+        "type": "object",
+        "required": [
+          "at",
+          "health_status"
+        ],
+        "title": "HealthTransition"
       },
       "HistogramBucket": {
         "properties": {
