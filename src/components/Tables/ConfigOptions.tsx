@@ -1,6 +1,7 @@
 import jsonpointer from 'jsonpointer';
 import React, { ReactElement } from 'react';
-import configSchema from '../../util/sanitizedConfigSchema';
+import { getDataTypeHref, isDataType } from '~/util/dataType';
+import configSchema from '~/util/sanitizedConfigSchema';
 import { renderMarkdown } from './utils';
 
 const valueTypeLinks: { [key: string]: string } = {
@@ -112,9 +113,68 @@ function getTitle(schema: object, ref: OptionDefinitionRef): string {
   return item?.title || item?.name || '';
 }
 
+// A node flagged `x-has-data-type: true` is a documented data type: link to its
+// data-types section instead of expanding the node's shape — an enum such as
+// `queue-dequeue-reason` would otherwise dump its forty codes into the type
+// cell. The node's `title` drives both the label and the anchor (slugified
+// title == section heading anchor; the build gate enforces it). pydantic
+// publishes the flag inline for inlined types but as a *sibling of `$ref`*
+// for types hoisted into `$defs`, so check each node along the `$ref` chain,
+// starting with the raw node, and stop quietly on a dangling `$ref` rather
+// than crashing the build.
+function getDataTypeLink(schema: object, definition: unknown): ReactElement | null {
+  let node = definition;
+  let marked = isDataType(node);
+  for (let hops = 0; !marked && hops < 10; hops++) {
+    if (node === null || typeof node !== 'object') {
+      break;
+    }
+    const ref = (node as { $ref?: unknown }).$ref;
+    if (typeof ref !== 'string') {
+      break;
+    }
+    node = getItemFromSchema(schema, ref);
+    marked = isDataType(node);
+  }
+  if (!marked) {
+    return null;
+  }
+
+  // A `$ref`-sibling flag carries no title of its own — it lives on the
+  // `$defs` target — so follow one more hop for the title if needed.
+  let titled = node as { title?: string; $ref?: unknown };
+  if (titled.title === undefined && typeof titled.$ref === 'string') {
+    titled = getItemFromSchema(schema, titled.$ref) ?? titled;
+  }
+  const title = titled?.title;
+  if (!title) {
+    // Invalid marker (no title to derive from) — the anchor check reports
+    // it; render the node's shape as before instead of a broken link.
+    return null;
+  }
+
+  // Plain text, not renderMarkdown: markdown rendering emits a block-level
+  // <p> that would break inline composition ("list of <link>", "X or Y").
+  return (
+    <a style={{ textDecoration: 'underline' }} href={getDataTypeHref(title)}>
+      {title}
+    </a>
+  );
+}
+
 export function getValueType(schema: object, definition: any): React.ReactElement | null {
+  const dataTypeLink = getDataTypeLink(schema, definition);
+  if (dataTypeLink !== null) {
+    return dataTypeLink;
+  }
+
   let valueType: ReactElement | null = null;
   if (definition.type === 'array') {
+    const itemsDataTypeLink = getDataTypeLink(schema, definition.items);
+    if (itemsDataTypeLink !== null) {
+      return <>list of {itemsDataTypeLink}</>;
+    }
+
     let typeLink: string | undefined;
     let typeDescription: string | React.ReactElement | null;
 
@@ -168,10 +228,10 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
           }
 
           return (
-            <>
+            <React.Fragment key={index}>
               {getValueType(schema, item)}
               {separator}
-            </>
+            </React.Fragment>
           );
         })}
       </>
