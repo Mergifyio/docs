@@ -12332,10 +12332,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12462,7 +12458,6 @@
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "priority_rule_name",
           "original_batch_pr_numbers",
           "culprit_found",
@@ -12558,10 +12553,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12646,7 +12637,6 @@
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "priority_rule_name",
           "original_batch_pr_numbers",
           "batch_size_before_split",
@@ -12740,10 +12730,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12763,7 +12749,6 @@
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "priority_rule_name",
           "size"
         ],
@@ -12849,10 +12834,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "running_checks": {
             "type": "integer",
             "title": "Running Checks"
@@ -12861,7 +12842,6 @@
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "running_checks"
         ],
         "title": "EventQueueChecksChangeMetadata"
@@ -13019,10 +12999,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -13163,7 +13139,6 @@
           "abort_reason",
           "abort_status",
           "branch",
-          "partition_name",
           "priority_rule_name",
           "queue_name",
           "queued_at",
@@ -13259,17 +13234,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "partition_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -13303,7 +13267,6 @@
         "type": "object",
         "required": [
           "branch",
-          "partition_name",
           "priority_rule_name",
           "queue_name",
           "queued_at",
@@ -13391,17 +13354,6 @@
           "branch": {
             "type": "string",
             "title": "Branch"
-          },
-          "partition_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Partition Name"
           },
           "priority_rule_name": {
             "anyOf": [
@@ -13546,7 +13498,6 @@
         "type": "object",
         "required": [
           "branch",
-          "partition_name",
           "priority_rule_name",
           "queue_name",
           "queued_at",
@@ -13652,17 +13603,6 @@
             "format": "date-time",
             "title": "Queued At"
           },
-          "partition_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -13685,7 +13625,6 @@
           "queue_name",
           "branch",
           "queued_at",
-          "partition_name",
           "priority_rule_name",
           "session_id"
         ],
@@ -13782,10 +13721,6 @@
           "branch": {
             "type": "string",
             "title": "Branch"
-          },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
           },
           "queued_at": {
             "type": "string",
@@ -13955,7 +13890,6 @@
           "merged",
           "queue_name",
           "branch",
-          "partition_name",
           "queued_at",
           "seconds_waiting_for_schedule",
           "seconds_waiting_for_freeze",
@@ -14052,13 +13986,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "partition_names": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Partition Names"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -14100,7 +14027,6 @@
         "type": "object",
         "required": [
           "branch",
-          "partition_names",
           "queue_name",
           "queued_at",
           "priority_rule_name",
