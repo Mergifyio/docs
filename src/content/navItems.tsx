@@ -261,7 +261,7 @@ const navItems: NavItem[] = [
             icon: 'octicon:git-pull-request-draft-16',
           },
           {
-            title: 'GitHub Actions',
+            title: 'GitHub Actions (Deprecated)',
             path: '/workflow/actions/github_actions',
             icon: 'simple-icons:githubactions',
           },
