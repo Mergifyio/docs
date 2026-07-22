@@ -16256,6 +16256,29 @@
             ],
             "title": "Health Status",
             "description": "Health the test held from `at` until the next transition."
+          },
+          "exception_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exception Type",
+            "description": "Exception raised by the first failing run of the episode this transition opens. Always null for a recovery, and when no failing run is retained."
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GetTestDetailsResponsePull"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Pull request whose merge commit introduced the first failing run of the episode this transition opens. Null for a recovery \u2014 a test can stop failing without a PR fixing it, so no 'fixed by' is attributed \u2014 and whenever the failing commit cannot be traced back to a merged pull request."
           }
         },
         "type": "object",
