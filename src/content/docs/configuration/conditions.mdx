@@ -265,7 +265,9 @@ check name: `check-success`, `check-success-or-neutral`, `check-failure`,
 `check-stale`.
 
 The bare form keeps its original meaning and continues to match a check from
-any app, so existing configurations do not need to change.
+any app, so existing configurations do not need to change. Prefer the qualified
+`@<github-app-slug>/<name>` form when you want a gate to match only the check
+published by a specific app.
 
 ### Example: Two Apps Reporting `pep8`
 

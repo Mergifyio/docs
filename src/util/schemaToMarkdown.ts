@@ -1,6 +1,7 @@
 import jsonpointer from 'jsonpointer';
 
 import { getAttributeDocumentationUrl, getAttributeSource } from './attributeMetadata';
+import { getDataTypeHref, isDataType } from './dataType';
 import configSchema from './sanitizedConfigSchema';
 
 type Schema = typeof configSchema;
@@ -15,12 +16,55 @@ function getTitle(schema: Schema, ref: string): string {
   return item?.title || item?.name || '';
 }
 
+// Markdown twin of ConfigOptions.getDataTypeLink: a node flagged
+// `x-has-data-type: true` links to its data-types section instead of expanding
+// its shape, with the node's `title` driving both label and anchor. The flag
+// may sit inline or beside a `$ref`, so check each node along the chain.
+function getDataTypeLinkText(schema: Schema, definition: unknown): string | undefined {
+  let node = definition;
+  let marked = isDataType(node);
+  for (let hops = 0; !marked && hops < 10; hops++) {
+    if (node === null || typeof node !== 'object') {
+      break;
+    }
+    const ref = (node as { $ref?: unknown }).$ref;
+    if (typeof ref !== 'string') {
+      break;
+    }
+    node = getItemFromSchema(schema, ref);
+    marked = isDataType(node);
+  }
+  if (!marked) {
+    return undefined;
+  }
+
+  let titled = node as { title?: string; $ref?: unknown };
+  if (titled.title === undefined && typeof titled.$ref === 'string') {
+    titled = getItemFromSchema(schema, titled.$ref) ?? titled;
+  }
+  const title = titled?.title;
+  if (!title) {
+    return undefined;
+  }
+
+  return `[${title}](${getDataTypeHref(title)})`;
+}
+
 /**
  * Plain-text equivalent of ConfigOptions.getValueType — returns a markdown
- * string instead of a React element.
+ * string instead of a React element. Exported for tests.
  */
-function getValueTypeText(schema: Schema, definition: any): string {
+export function getValueTypeText(schema: Schema, definition: any): string {
+  const dataTypeLink = getDataTypeLinkText(schema, definition);
+  if (dataTypeLink !== undefined) {
+    return dataTypeLink;
+  }
+
   if (definition.type === 'array') {
+    const itemsDataTypeLink = getDataTypeLinkText(schema, definition.items);
+    if (itemsDataTypeLink !== undefined) {
+      return `list of ${itemsDataTypeLink}`;
+    }
     if (definition.items?.$ref) {
       return `list of ${getTitle(schema, definition.items.$ref)}`;
     }

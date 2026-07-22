@@ -2,11 +2,11 @@
 name: screenshot-scenarios
 description: >-
   Produce meaningful Mergify dashboard screenshots for the docs by staging a real
-  product state in the Mergifyio/sandbox repo, capturing it, then cleaning up. Use
+  product state in the mergify-sandbox org, capturing it, then cleaning up. Use
   when a docs page needs a screenshot that shows an actual state (a queue with PRs,
   a batch, a freeze, priority ordering), when auditing which pages are missing or
   have stale screenshots, or when asked to build a scenario and screenshot it. Sets
-  up state via gh + the mergify CLI, captures via the capture-screenshots skill,
+  up state via the sandbox-org skill, captures via the capture-screenshots skill,
   and tears the scenario down. Defers CI/Test Insights shots (they need real CI
   data). Composes with capture-screenshots, document-a-feature, docs-gap-analysis.
 ---
@@ -17,16 +17,22 @@ A dashboard screenshot is only useful if the UI shows something worth seeing. An
 empty queue view teaches nothing. This skill **stages a real state** in a sandbox
 repo, captures it with `capture-screenshots`, and tears it back down.
 
-`capture-screenshots` is the mechanical primitive (navigate → capture → save →
-emit `<Image>`). This skill is the layer above it: *what state to produce, how to
-produce it, and where the shot belongs*.
+Two skills do the heavy lifting; this one is the layer above them — *what state
+to produce, and where the shot belongs*:
+
+- **sandbox-org** (mergify-internal plugin) drives the sandbox: it creates the
+  repo, pushes config, opens PRs, queues, freezes, waits for the queue to settle,
+  and cleans up. See `references/sandbox.md` for how this skill uses it.
+- **capture-screenshots** is the mechanical capture (navigate → capture → save →
+  emit `<Image>`).
 
 ## Prerequisites
 
 - Logged into `app.mergify.com` in Chrome (for capture — see `capture-screenshots`).
-- `gh` authenticated with write access to `Mergifyio/sandbox`.
-- The `mergify` CLI available.
-- Mergify enabled on the sandbox. See `references/sandbox.md` for first-run setup.
+- The **sandbox-org** skill available (mergify-internal plugin) — it provides the
+  `sandbox.sh` commands used throughout — and `gh` + the `mergify` CLI it uses,
+  authenticated as an admin of the `mergify-sandbox` org.
+- The scenario repo created and Mergify-enabled. See `references/sandbox.md`.
 
 ## Two entry points
 
@@ -41,17 +47,15 @@ Create a todo per step.
 
 1. **Pick the recipe.** Read `references/scenario-recipes.md`. If a recipe fits,
    use it. If not, build a custom one following [Building a scenario](#building-a-custom-scenario).
-2. **Stage the state** in the sandbox. Follow the recipe using the driver in
-   `references/sandbox.md` (push config, open PRs, queue/freeze, then **poll**
-   until the target state is reached). The `mergify:mergify-merge-queue`,
-   `mergify:mergify-config`, and `mergify:mergify-merge-protections` plugin skills
-   help with the mechanics when installed; the sandbox driver's raw CLI works
-   without them.
+2. **Stage the state** with the **sandbox-org** skill's staging verbs
+   (`push-config` → `open-pr` → `queue` → optionally `freeze`, then `wait-queued`
+   to poll until the target state settles). `references/sandbox.md` maps each
+   recipe step to the exact `sandbox.sh` command.
 3. **Capture.** Invoke the **capture-screenshots** skill with the recipe's
    dashboard URL and framing. It saves to the right `images/` dir and emits the
    `<Image>` snippet.
-4. **Clean up** (always). Run the light teardown in `references/sandbox.md`:
-   close the PRs, delete the branches, lift any freeze, revert the config. Leave
+4. **Clean up** (always). `sandbox.sh cleanup <repo>` closes the scenario PRs and
+   deletes their branches; `sandbox.sh unfreeze <repo>` lifts any freeze. Leave
    the sandbox at baseline.
 5. **Wire it in.** Drop the snippet into the page, or hand off to
    `document-a-feature` if this is part of a new feature page.
@@ -88,13 +92,13 @@ and captures it → `capture-screenshots` does the mechanical capture →
 
 ## Guardrails
 
-- **Sandbox only.** Only ever mutate `Mergifyio/sandbox`. Confirm the repo before
-  any write. Never open PRs, push config, or create freezes anywhere else, and
-  never screenshot another customer's data.
+- **Sandbox only.** All staging goes through the sandbox-org skill, which refuses
+  any repo outside the `mergify-sandbox` org — so a scenario can never mutate a
+  real repo. Never screenshot another customer's data.
 - **Always clean up**, even on failure — leave the sandbox at baseline so the next
   run starts clean.
-- **Poll, don't guess** — wait for the state to settle before capturing; a
-  half-formed queue makes a misleading shot.
+- **Poll, don't guess** — `wait-queued` before capturing; a half-formed queue
+  makes a misleading shot.
 - **Defer CI / Test Insights** shots for now: they need real CI runs and test
   results, which this sandbox flow does not stage. Focus on merge-queue,
   merge-protections, freeze, and priority states.

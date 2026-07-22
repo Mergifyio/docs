@@ -4678,6 +4678,188 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/skip_intermediate_results": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get the number of batches saved by skip intermediate results",
+        "description": "Number of batches merged without running their own speculative CI because a later batch containing their changes passed (skip_intermediate_results) \u2014 i.e. the speculative CI runs avoided \u2014 by intervals of time",
+        "operationId": "get_skip_intermediate_results_repos__owner___repository__stats_skip_intermediate_results_get",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Base reference(s) of the pull requests",
+              "title": "Base Ref"
+            },
+            "description": "Base reference(s) of the pull requests"
+          },
+          {
+            "name": "queue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the merge queue(s) for the pull requests",
+              "title": "Queue Name"
+            },
+            "description": "Name of the merge queue(s) for the pull requests"
+          },
+          {
+            "name": "priority_rule_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the priority rule(s) of the pull requests",
+              "title": "Priority Rule Name"
+            },
+            "description": "Name of the priority rule(s) of the pull requests"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date, default 1 day before end_at",
+              "title": "Start At"
+            },
+            "description": "Get the stats until this date, default 1 day before end_at"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date, default now",
+              "title": "End At"
+            },
+            "description": "Get the stats from this date, default now"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkipIntermediateResultsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/stats/queues_pr_exit_reasons": {
       "get": {
         "tags": [
@@ -5806,6 +5988,128 @@
                     }
                   },
                   "title": "Response Ci-Test-Stats"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/ci/{owner}/repositories/{repository}/tests/{test_id}/health-transitions": {
+      "get": {
+        "tags": [
+          "test_insights"
+        ],
+        "summary": "Get a test's health transitions over time",
+        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window \u2014 the edges of the per-bucket classification, not the full series. Health is derived per time bucket (binning adapts to the window), so a transition is timestamped to a bucket boundary, not an individual run.",
+        "operationId": "ci-test-health-transitions",
+        "security": [
+          {
+            "ApplicationAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid5",
+              "description": "ID of the test",
+              "title": "Test Id"
+            },
+            "description": "ID of the test"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "title": "Start"
+            },
+            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "title": "End"
+            },
+            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestHealthTransitionsResponse"
                 }
               }
             }
@@ -12028,10 +12332,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12141,12 +12441,23 @@
             "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
+          },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
           }
         },
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "priority_rule_name",
           "original_batch_pr_numbers",
           "culprit_found",
@@ -12157,7 +12468,8 @@
           "max_failure_resolution_reached",
           "session_id",
           "batch_id",
-          "train_car_id"
+          "train_car_id",
+          "batch_name"
         ],
         "title": "EventQueueBatchBisectionEndMetadata"
       },
@@ -12241,10 +12553,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12312,12 +12620,23 @@
             "title": "Deprecated alias of batch_id",
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
+          },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
           }
         },
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "priority_rule_name",
           "original_batch_pr_numbers",
           "batch_size_before_split",
@@ -12326,7 +12645,8 @@
           "is_top_level",
           "session_id",
           "batch_id",
-          "train_car_id"
+          "train_car_id",
+          "batch_name"
         ],
         "title": "EventQueueBatchBisectionStartMetadata"
       },
@@ -12410,10 +12730,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12433,7 +12749,6 @@
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "priority_rule_name",
           "size"
         ],
@@ -12519,10 +12834,6 @@
             "type": "string",
             "title": "Queue Name"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "running_checks": {
             "type": "integer",
             "title": "Running Checks"
@@ -12531,7 +12842,6 @@
         "type": "object",
         "required": [
           "queue_name",
-          "partition_name",
           "running_checks"
         ],
         "title": "EventQueueChecksChangeMetadata"
@@ -12689,10 +12999,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12765,6 +13071,18 @@
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
+          },
           "scopes": {
             "anyOf": [
               {
@@ -12821,7 +13139,6 @@
           "abort_reason",
           "abort_status",
           "branch",
-          "partition_name",
           "priority_rule_name",
           "queue_name",
           "queued_at",
@@ -12830,6 +13147,7 @@
           "speculative_check_pull_request",
           "batch_id",
           "train_car_id",
+          "batch_name",
           "scopes",
           "parent_batch_ids",
           "session_id"
@@ -12916,17 +13234,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "partition_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -12960,7 +13267,6 @@
         "type": "object",
         "required": [
           "branch",
-          "partition_name",
           "priority_rule_name",
           "queue_name",
           "queued_at",
@@ -13049,17 +13355,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "partition_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -13114,6 +13409,18 @@
             "description": "Deprecated: use `batch_id` instead (same value).",
             "deprecated": true
           },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
+          },
           "scopes": {
             "anyOf": [
               {
@@ -13158,6 +13465,18 @@
             "title": "Previous Batch Id",
             "description": "The ID of the batch checked just before this one for the same pull request, when this check is a restart. Null on the first check."
           },
+          "previous_batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Batch Name",
+            "description": "The display name of `previous_batch_id`'s batch, read back from that batch's own checks_end event. Null on the first check, and when the predecessor was checked before `batch_name` was recorded on events."
+          },
           "session_id": {
             "type": "string",
             "format": "uuid",
@@ -13179,7 +13498,6 @@
         "type": "object",
         "required": [
           "branch",
-          "partition_name",
           "priority_rule_name",
           "queue_name",
           "queued_at",
@@ -13187,9 +13505,11 @@
           "speculative_check_pull_request",
           "batch_id",
           "train_car_id",
+          "batch_name",
           "scopes",
           "parent_batch_ids",
           "previous_batch_id",
+          "previous_batch_name",
           "session_id"
         ],
         "title": "EventQueueChecksStartMetadata"
@@ -13283,17 +13603,6 @@
             "format": "date-time",
             "title": "Queued At"
           },
-          "partition_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Partition Name"
-          },
           "priority_rule_name": {
             "anyOf": [
               {
@@ -13316,7 +13625,6 @@
           "queue_name",
           "branch",
           "queued_at",
-          "partition_name",
           "priority_rule_name",
           "session_id"
         ],
@@ -13413,10 +13721,6 @@
           "branch": {
             "type": "string",
             "title": "Branch"
-          },
-          "partition_name": {
-            "type": "string",
-            "title": "Partition Name"
           },
           "queued_at": {
             "type": "string",
@@ -13586,7 +13890,6 @@
           "merged",
           "queue_name",
           "branch",
-          "partition_name",
           "queued_at",
           "seconds_waiting_for_schedule",
           "seconds_waiting_for_freeze",
@@ -13683,13 +13986,6 @@
             "type": "string",
             "title": "Branch"
           },
-          "partition_names": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Partition Names"
-          },
           "queue_name": {
             "type": "string",
             "title": "Queue Name"
@@ -13731,7 +14027,6 @@
         "type": "object",
         "required": [
           "branch",
-          "partition_names",
           "queue_name",
           "queued_at",
           "priority_rule_name",
@@ -15758,6 +16053,37 @@
         ],
         "title": "GetTestFailuresResponse"
       },
+      "GetTestHealthTransitionsResponse": {
+        "properties": {
+          "transitions": {
+            "items": {
+              "$ref": "#/components/schemas/HealthTransition"
+            },
+            "type": "array",
+            "title": "Transitions",
+            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the earliest classification observed in the window. Health is classified per time bucket (binning adapts to the window: 1h, 4h, 1d, 2d), so timestamps land on bucket boundaries, not individual runs."
+          },
+          "first_activity_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Activity At",
+            "description": "Start of the earliest bucket with any executions in the window, or null when the test had no activity. A consumer can treat a `first_activity_at` well after the window start as the test's genuine origin, and one at the window edge as history that predates the retained window."
+          }
+        },
+        "type": "object",
+        "required": [
+          "transitions",
+          "first_activity_at"
+        ],
+        "title": "GetTestHealthTransitionsResponse"
+      },
       "GetTestStatResponse": {
         "properties": {
           "stat": {
@@ -15838,6 +16164,55 @@
           "type"
         ],
         "title": "GitHubAccount"
+      },
+      "HealthTransition": {
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At",
+            "description": "Bucket boundary at which the test's health changed to `health_status`."
+          },
+          "health_status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "flaky",
+              "broken"
+            ],
+            "title": "Health Status",
+            "description": "Health the test held from `at` until the next transition."
+          },
+          "exception_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exception Type",
+            "description": "Exception raised by the first failing run of the episode this transition opens. Always null for a recovery, and when no failing run is retained."
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GetTestDetailsResponsePull"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Pull request whose merge commit introduced the first failing run of the episode this transition opens. Null for a recovery \u2014 a test can stop failing without a PR fixing it, so no 'fixed by' is attributed \u2014 and whenever the failing commit cannot be traced back to a merged pull request."
+          }
+        },
+        "type": "object",
+        "required": [
+          "at",
+          "health_status"
+        ],
+        "title": "HealthTransition"
       },
       "HistogramBucket": {
         "properties": {
@@ -18621,6 +18996,85 @@
           "deprecations"
         ],
         "title": "SimulatorResponse"
+      },
+      "SkipIntermediateResultsGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/SkipIntermediateResultsInInterval"
+            },
+            "type": "array",
+            "title": "Stats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "queue_name",
+          "priority_rule_name",
+          "stats"
+        ],
+        "title": "SkipIntermediateResultsGroupResponse"
+      },
+      "SkipIntermediateResultsInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "batches_saved": {
+            "type": "integer",
+            "title": "Batches Saved"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "batches_saved"
+        ],
+        "title": "SkipIntermediateResultsInInterval"
+      },
+      "SkipIntermediateResultsResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/SkipIntermediateResultsGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "SkipIntermediateResultsResponse"
       },
       "TestAddedToQuarantineResponse": {
         "properties": {

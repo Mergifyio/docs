@@ -3,6 +3,9 @@ title: Self-hosted runners
 description: Monitor the self-hosted CI runners behind your pipelines so you can spot capacity bottlenecks, degraded machines, and wasted spend.
 ---
 
+import { Image } from "astro:assets"
+import RunnersScreenshot from "../../images/ci-insights/runners.png"
+
 Self-hosted runners are the machines that execute your CI. Mergify doesn't provision
 or control them. It watches the jobs they run and turns that data into metrics about
 capacity, performance, cost, and reliability.
@@ -50,6 +53,8 @@ The fleet is your runners seen one at a time: throughput, speed, success rate, a
 how each runner compares to its peers. Each runner carries a health status, so an
 underperforming or unstable one is easy to single out. You can also follow each
 runner's trends over time and see how heavily it is being used.
+
+<Image src={RunnersScreenshot} alt="Self-hosted runners fleet view" />
 
 ## No runner setup required
 

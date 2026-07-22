@@ -1,10 +1,16 @@
 ---
-title: GitHub Actions
-description: Dispatch an existing GitHub workflow in the repository.
+title: GitHub Actions (Deprecated)
+description: Dispatch an existing GitHub workflow in the repository. Deprecated in favor of GitHub Actions events.
 ---
 
 import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
 import OptionsTable from '../../../../components/Tables/OptionsTable';
+
+:::danger
+  The `github_actions` action is **deprecated** and will be removed in a future
+  release. Start your workflows from [GitHub Actions events][gh-events]
+  instead.
+:::
 
 The `github_actions` action enables Mergify to seamlessly dispatch existing
 GitHub workflows within a repository when specified conditions are satisfied.
@@ -61,3 +67,5 @@ pull_request_rules:
               inputs:
                 author: "{{ author }}"
 ```
+
+[gh-events]: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows

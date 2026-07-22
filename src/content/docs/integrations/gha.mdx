@@ -1,6 +1,6 @@
 ---
 title: Integrating GitHub Actions with Mergify
-description: Run CI Insights, Monorepo CI, and Merge Queue Scopes on GitHub Actions, and trigger workflows from Mergify rules.
+description: Run CI Insights, Monorepo CI, and Merge Queue Scopes on GitHub Actions.
 ---
 import ghaLogo from "../../images/integrations/gha/logo.png"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
@@ -9,9 +9,9 @@ import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
 [GitHub Actions](https://github.com/features/actions) is the CI/CD platform
 provided by GitHub. Mergify has native integrations for GitHub Actions covering
-CI Insights, Monorepo CI, and Merge Queue Scopes, and can trigger workflows
-directly from a rule. Any GitHub Actions job status can also be referenced
-from your Mergify [conditions](/configuration/conditions) via `check-success`.
+CI Insights, Monorepo CI, and Merge Queue Scopes. Any GitHub Actions job status
+can also be referenced from your Mergify
+[conditions](/configuration/conditions) via `check-success`.
 
 ## Prerequisites
 
@@ -38,8 +38,8 @@ from your Mergify [conditions](/configuration/conditions) via `check-success`.
   [Nx](/merge-queue/scopes/nx), and
   [Turborepo](/merge-queue/scopes/turborepo) are available.
 
-- **[`github_actions` action](/workflow/actions/github_actions)**: trigger a
-  workflow directly from a Mergify rule.
+- **[`github_actions` action](/workflow/actions/github_actions)** (deprecated):
+  trigger a workflow directly from a Mergify rule.
 
 :::caution
   To match a GitHub Actions status check with `check-success`, use the job
