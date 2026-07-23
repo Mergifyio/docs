@@ -95,7 +95,7 @@ Scopes can be attached to pull requests automatically or manually:
   [file-pattern scopes](/merge-queue/scopes/file-patterns) for a step-by-step setup.
 
 - **Manual upload:** Use the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
-  GitHub Action, the [REST API](/api/pull-requests), or the `mergify scopes-send` CLI to push scopes
+  GitHub Action, the [REST API](/api/pull-requests), or the `mergify ci scopes-send` CLI to push scopes
   computed by your own tooling (Nx, Bazel, Turborepo, etc.). Examples are available in the build
   tool guides under [Scopes integrations](/merge-queue/scopes).
 
@@ -126,8 +126,8 @@ queue_rules:
 ### Top-level keys
 
 - `scopes.source`: selects how scopes are provided.
-  - `files`: map scope names to the file patterns that define them. Each entry accepts `includes`
-    and optional `excludes` lists.
+  - `files`: map scope names to the file patterns that define them. Each entry accepts `include`
+    and optional `exclude` lists.
 
   - `manual`: instructs Mergify to expect scopes from external systems via the API or GitHub
     Action.
@@ -140,6 +140,10 @@ queue_rules:
 - `scopes.capacities`: optional map of scope name to the number of speculative checks that scope may
   run at the same time, used to limit per-scope concurrency in parallel mode. See [Limiting
   concurrency per scope](/merge-queue/queue-modes#limiting-concurrency-per-scope).
+
+- `scopes.barrier_files`: optional file filters marking files that impact every scope. Only valid
+  with a `files` source. A pull request that changes a matching file becomes a merge queue barrier.
+  See [Declaring a pull request impacts every scope](#declaring-a-pull-request-impacts-every-scope).
 
 ### Manual source example
 
@@ -163,7 +167,62 @@ Some pull requests invalidate everything: a build-system configuration change or
 toolchain bump. Enumerating every scope by hand is brittle, and the list goes stale as soon as
 your set of scopes changes.
 
-Instead, set the `all_scopes` flag when you upload scopes. With the
+Instead, mark the change as a **barrier**, a pull request that impacts every scope. Mergify sets an
+`all_scopes` flag on it and [serializes the queue](#barrier-behavior-in-the-queue) around it. How
+you set the flag depends on where your scopes come from:
+
+- **File-pattern scopes:** declare `scopes.barrier_files` and Mergify sets the flag whenever a pull
+  request changes a matching file.
+
+- **Manual scopes:** set `all_scopes: true` when you upload scopes through the API or CLI.
+
+### Barrier files (file-pattern scopes)
+
+When your scopes come from [file patterns](/merge-queue/scopes/file-patterns), declare the files
+that impact every scope under `scopes.barrier_files`. Whenever a queued pull request changes a
+matching file, Mergify flags it with `all_scopes` and treats it as a barrier, with no CI job or
+manual upload required.
+
+```yaml
+scopes:
+  source:
+    files:
+      frontend:
+        include:
+          - apps/web/**/*
+      api:
+        include:
+          - services/api/**/*.py
+  barrier_files:
+    include:
+      - .github/workflows/**
+      - Makefile
+
+queue_rules:
+  - name: default
+    batch_size: 3
+```
+
+With this configuration, a pull request that changes `.github/workflows/**` or `Makefile` (files
+that affect the whole repository) becomes a barrier, whichever scopes it also belongs to.
+
+`barrier_files` accepts the same `include` and optional `exclude` patterns as a scope, with two
+constraints:
+
+- **At least one `include` pattern is required.** An empty or exclude-only filter would match every
+  pull request and silently serialize the entire queue, so Mergify rejects it. The same rule lives
+  in the JSON schema, so the dashboard and other config editors catch it too.
+
+- **`barrier_files` only works with a `files` source.** A `manual` source reports the barrier
+  through the API instead (see below), and a configuration with no source has no scopes to impact.
+  Mergify rejects `barrier_files` in either case.
+
+You can also manage these patterns from the dashboard: the **Barrier files** editor in the queue
+configuration **Scopes** section edits the same `barrier_files` filters for file-pattern scopes.
+
+### Marking a barrier on upload (manual scopes)
+
+When you upload scopes yourself, set the `all_scopes` flag on the pull request. With the
 [Mergify CLI](/cli/usage), pass `--all` to `scopes-send`:
 
 ```bash
