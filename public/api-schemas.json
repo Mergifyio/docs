@@ -17297,6 +17297,23 @@
             ],
             "title": "Dequeue Requested",
             "description": "Whether a manual removal from the queue is pending for this pull request: it was removed via the 'Remove from queue' action / `@mergifyio dequeue` command (or is a stacked pull request that cascade removes with one), and is awaiting completion. The pull request remains listed until it is actually removed. `false` when no manual removal is pending; automatic dequeues (merge, CI failure, push) do not set it."
+          },
+          "depends_on_pull_requests": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer",
+                  "maximum": 9.223372036854776e+18,
+                  "minimum": 0.0
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Depends On Pull Requests",
+            "description": "Pull request numbers this one is queued behind because it depends on them: the same-repo stack predecessors the merge queue holds it behind (it declared a `Depends-On:` on the stack). It merges after them. `null` when there is no such queued dependency."
           }
         },
         "type": "object",
