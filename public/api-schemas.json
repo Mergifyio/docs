@@ -12232,7 +12232,25 @@
       "EventPostCheckMetadata": {
         "properties": {
           "conclusion": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "success",
+                  "failure",
+                  "neutral",
+                  "cancelled",
+                  "skipped",
+                  "timed_out",
+                  "action_required",
+                  "stale",
+                  "startup_failure"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Conclusion"
           },
           "title": {
@@ -14642,6 +14660,11 @@
         "properties": {
           "review_type": {
             "type": "string",
+            "enum": [
+              "APPROVE",
+              "REQUEST_CHANGES",
+              "COMMENT"
+            ],
             "title": "Review Type"
           },
           "reviewer": {
