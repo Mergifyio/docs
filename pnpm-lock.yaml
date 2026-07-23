@@ -207,8 +207,8 @@ importers:
         specifier: ^0.44.0
         version: 0.44.0(astro@7.1.0(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
       astro-og-canvas:
-        specifier: ^0.12.0
-        version: 0.12.0(astro@7.1.0(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
+        specifier: ^0.13.0
+        version: 0.13.0(astro@7.1.0(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
       canvaskit-wasm:
         specifier: ^0.41.1
         version: 0.41.1
@@ -2189,8 +2189,8 @@ packages:
   astro-icon@1.1.5:
     resolution: {integrity: sha512-CJYS5nWOw9jz4RpGWmzNQY7D0y2ZZacH7atL2K9DeJXJVaz7/5WrxeyIxO8KASk1jCM96Q4LjRx/F3R+InjJrw==}
 
-  astro-og-canvas@0.12.0:
-    resolution: {integrity: sha512-XqbChMkPZvBV0jxu3i9hapgYK3gSjO1+MFBq060w+NT9k1XL+BYjdcQ80ZZs45r6+EASgIYmlqjEL7zfLD9T7A==}
+  astro-og-canvas@0.13.0:
+    resolution: {integrity: sha512-jcIDhE9OGIbd7LstZQ4CyzOpbbEKAlxJqEgdkVu6r26m7yJKlQjKysszfDxlox717cnCLPXKivyFjsufcq8sYA==}
     peerDependencies:
       astro: ^5.0.0 || ^6.0.0 || ^7.0.0
 
@@ -7546,7 +7546,7 @@ snapshots:
       - '@noble/hashes'
       - supports-color
 
-  astro-og-canvas@0.12.0(astro@7.1.0(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)):
+  astro-og-canvas@0.13.0(astro@7.1.0(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)):
     dependencies:
       astro: 7.1.0(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
       canvaskit-wasm: 0.41.1
