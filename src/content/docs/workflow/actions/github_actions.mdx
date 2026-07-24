@@ -8,8 +8,8 @@ import OptionsTable from '../../../../components/Tables/OptionsTable';
 
 :::danger
   The `github_actions` action is **deprecated** and will be removed in a future
-  release. Start your workflows from [GitHub Actions events][gh-events]
-  instead.
+  release. Start your workflows from GitHub Actions events instead. See the
+  [migration guide](/workflow/actions/migrate-github-actions).
 :::
 
 The `github_actions` action enables Mergify to seamlessly dispatch existing
@@ -67,5 +67,3 @@ pull_request_rules:
               inputs:
                 author: "{{ author }}"
 ```
-
-[gh-events]: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows
