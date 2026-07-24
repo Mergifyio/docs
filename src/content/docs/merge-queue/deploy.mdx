@@ -5,6 +5,8 @@ description: Deploy Mergify's merge queue with a hybrid approach or enforce excl
 
 import { Image } from "astro:assets";
 import bpDashboardScreenshot from "../../images/merge-queue/deploy/dashboard.png"
+import bpSettingsScreenshot from "../../images/merge-queue/deploy/bp-settings.png"
+import bpRuleScreenshot from "../../images/merge-queue/deploy/bp-rule.png"
 
 Once you've configured your merge queue, you can deploy it using one of two approaches:
 
@@ -76,3 +78,22 @@ GitHub rulesets and provides the most consistent, automated workflow.
 If you want Mergify to bypass the injection of the ruleset rules, see
 [GitHub Rulesets Compatibility](/merge-queue/github-rulesets) for details on
 bypass modes and known incompatibilities.
+
+### Enforcing Exclusive Mode with Classic Branch Protection
+
+Rulesets are the recommended way to enforce exclusive mode. If your repository
+still uses classic branch protection instead, you can achieve the same result
+by restricting who may push to your protected branch to Mergify only.
+
+1. In your repository, open **Settings > Branches** and click **Add branch
+   protection rule**.
+
+   <Image src={bpSettingsScreenshot} alt="GitHub branch protection settings"/>
+
+2. Enter your branch name, enable **Restrict who can push to matching
+   branches**, and add the **Mergify** app to the allowed list.
+
+   <Image src={bpRuleScreenshot} alt="Restrict push access to Mergify"/>
+
+With this rule in place, developers can no longer merge pull requests directly,
+so all merges flow through Mergify's queue.
