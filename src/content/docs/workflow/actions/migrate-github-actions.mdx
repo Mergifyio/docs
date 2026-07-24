@@ -1,0 +1,349 @@
+---
+title: Migrate from the github_actions Action to GitHub Actions Events
+description: Step-by-step guide to replace the deprecated github_actions action with native GitHub Actions event triggers.
+---
+
+The [`github_actions` action](/workflow/actions/github_actions) is deprecated
+and will be removed in a future release. This guide walks you through
+triggering the same workflows from [GitHub Actions
+events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)
+instead, taking Mergify out of the dispatch path entirely.
+
+## What Changes
+
+Today, Mergify evaluates your rule's conditions and calls GitHub's
+`workflow_dispatch` API to start your workflow. After the migration, your
+workflow subscribes to the GitHub event it cares about and decides for itself
+whether to run.
+
+| | `github_actions` action | GitHub Actions events |
+|---|---|---|
+| **Who decides to run** | Mergify, from `.mergify.yml` conditions | Your workflow, from `on:` filters and job `if:` |
+| **How it starts** | `workflow_dispatch` API call | The event GitHub already emits |
+| **Passing pull request data** | `inputs` rendered by Mergify | The `github.event` payload |
+| **Permissions needed** | Mergify write permission on Actions | None beyond the workflow's own |
+| **Limits** | 10 workflows per rule, 10 inputs each | None |
+
+## Migration Steps
+
+### 1. Turn the rule's conditions into an event trigger
+
+Find the rule that dispatches your workflow and read its conditions. Most map
+directly onto an `on:` filter, a job-level `if:`, or both:
+
+| Mergify condition | Event trigger | Job condition |
+|---|---|---|
+| `merged` | `pull_request` / `types: [closed]` | `github.event.pull_request.merged == true` |
+| `closed` and `-merged` | `pull_request` / `types: [closed]` | `github.event.pull_request.merged == false` |
+| `label=deploy` | `pull_request` | `contains(github.event.pull_request.labels.*.name, 'deploy')` |
+| `base=main` | `pull_request` / `branches: [main]` | None |
+| `author=octocat` | `pull_request` | `github.event.pull_request.user.login == 'octocat'` |
+| `-draft` | `pull_request` / add `ready_for_review` to `types:` | `github.event.pull_request.draft == false` |
+| `files~=^src/` | `pull_request` / `paths: ['src/**']` | None |
+
+Four of these need care.
+
+`paths:` takes glob patterns, not the regular expressions `files~=` accepts, so
+`^src/` becomes `src/**`.
+
+The `-draft` row needs an explicit `types:` because `ready_for_review` is not
+one of the defaults, which are `opened`, `synchronize` and `reopened`. Listing
+all four is what makes the workflow fire when someone clicks "Ready for
+review". Without it that click emits no run at all, and no job condition can
+compensate for a run that was never created.
+
+The `label=deploy` row reads the label off the pull request rather than off the
+event, using `contains(...labels.*.name...)`. The alternative,
+`github.event.label.name`, exists only on the `labeled` activity type and is
+null everywhere else. That matters as soon as you combine rows: a rule
+conditioned on both `merged` and `label=deploy` needs `types: [closed]` from
+the first row, where `github.event.label` does not exist. Reading the label off
+`github.event.pull_request` composes with every activity type.
+
+Rows are otherwise composable by intersecting the `types:` and ANDing the job
+conditions, as long as every expression you AND is valid for the activity types
+you kept.
+
+Conditions that Mergify computes itself, such as check results or review
+counts, have no equivalent trigger. [Step
+3](#3-re-express-the-conditions-that-have-no-event) covers those.
+
+### 2. Replace the workflow inputs with the event payload
+
+Every variable the `github_actions` action could render is already in the event
+payload:
+
+| Input variable | GitHub Actions expression |
+|---|---|
+| `{{ author }}` | `github.event.pull_request.user.login` |
+| `{{ number }}` | `github.event.pull_request.number` |
+| `{{ title }}` | `github.event.pull_request.title` |
+| `{{ base }}` | `github.event.pull_request.base.ref` |
+| `{{ head }}` | `github.event.pull_request.head.ref` |
+| `{{ repository_full_name }}` | `github.repository` |
+
+Read these expressions directly wherever the workflow used `inputs.<name>`.
+
+These expressions come from the `pull_request` object, which the `pull_request`,
+`pull_request_target` and `pull_request_review` payloads all carry. The events
+in [step 3](#3-re-express-the-conditions-that-have-no-event) do not:
+`workflow_run`, `check_suite` and `status` have no `pull_request` object, so
+`github.event.pull_request.number` resolves to an empty string there rather
+than failing. Under those triggers, look the pull request up through the API
+instead.
+
+Remove the `workflow_dispatch` trigger only once nothing else dispatches the
+workflow. Another Mergify rule, a `gh workflow run` command or the "Run
+workflow" button in the Actions tab all depend on it, and dispatching a
+workflow that no longer declares the trigger fails.
+
+### 3. Re-express the conditions that have no event
+
+Conditions that Mergify computes have no GitHub event that fires when they
+become true. Check results and review counts can be re-expressed by subscribing
+to the closest event and evaluating the state in the job. Conditions with no
+observable event at all, such as `conflict` or any queue-state attribute, are
+covered at the end of this step.
+
+For `check-success`, when the check comes from a workflow in the same
+repository, use `workflow_run`:
+
+```yaml
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: ./deploy.sh
+```
+
+Three details make this snippet longer than it looks like it should be.
+
+`workflows:` matches the other workflow's `name:`, not its filename and not the
+check name. This is the one place the mapping from `check-success` is not
+direct: `check-success` takes the name GitHub reports for the check, which for
+GitHub Actions is the **job** name. A rule reading `check-success=build`, where
+`build` is a job inside a workflow named `CI`, becomes `workflows: [CI]`.
+
+GitHub only starts a `workflow_run` workflow whose file is on the repository's
+default branch, and the run itself executes against the default branch:
+`GITHUB_REF` and `GITHUB_SHA` point there, not at the commit the CI run
+validated. The bare `actions/checkout` above therefore gets the default branch.
+To act on the validated commit, pin `ref: ${{ github.event.workflow_run.head_sha }}`,
+and read GitHub's [guidance on script
+injection](https://docs.github.com/en/actions/reference/security/secure-use#good-practices-for-mitigating-script-injection-attacks)
+first.
+
+The `if:` guards the branch and the head repository because `workflow_run` runs
+in the base repository's context with its secrets and a read/write token, and
+it fires for CI runs on pull requests from forks too. Without those guards, a
+green CI run on an unreviewed fork pull request would run `./deploy.sh` with
+your credentials.
+
+For checks reported by a third-party CI, use the
+[`check_suite`](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#check_suite)
+or
+[`status`](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#status)
+event instead. Both carry the same default-branch requirement as `workflow_run`:
+a workflow file on a feature branch never receives them, so it cannot be tested
+before it merges.
+
+For review conditions, let GitHub compute the answer rather than counting
+reviews yourself, since `reviewDecision` already accounts for dismissed and
+superseded reviews:
+
+```yaml
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read the review decision
+        id: review
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          decision=$(gh pr view "${{ github.event.pull_request.number }}" \
+            --json reviewDecision --jq .reviewDecision)
+          echo "decision=$decision" >> "$GITHUB_OUTPUT"
+      - if: steps.review.outputs.decision == 'APPROVED'
+        uses: actions/checkout@v5
+      - if: steps.review.outputs.decision == 'APPROVED'
+        run: ./deploy.sh
+```
+
+The job reads the decision into an output and skips the remaining steps instead
+of failing on anything other than an approval. A `run: ... || exit 1` gate would
+turn every `COMMENTED` review, every `CHANGES_REQUESTED` review and every
+approval before the last required one into a failed run, leaving a red check-run
+on the pull request until the final approval lands.
+
+The `permissions:` block is required: `gh pr view` reads `reviewDecision`
+through the GraphQL API, which a default token restricted to `contents: read`
+cannot query.
+
+`reviewDecision` reflects the approval count your branch protection or ruleset
+requires, and is empty when no rule requires a review at all, so this step only
+works on a branch that has one. For a threshold that differs from it, or for a
+branch with no review requirement, list the reviews through
+[the reviews
+API](https://docs.github.com/en/rest/pulls/reviews#list-reviews-for-a-pull-request)
+and count them yourself.
+
+`pull_request_review` carries the same fork restriction as `pull_request`, and
+there is no `pull_request_review_target` to swap in. On a pull request from a
+fork this job gets no repository secrets, so gate deployments that need them on
+the merge instead.
+
+Some conditions have no event and no reliable state to poll. `conflict` is one:
+GitHub computes mergeability asynchronously, so `github.event.pull_request.mergeable`
+is null on the first delivery and a job gated on it flaps. Queue-state
+attributes such as `queue-position` are another, since they describe Mergify's
+own state and are not visible to GitHub at all. A rule that depends on these is
+not a candidate for this migration. Move the workflow's trigger to something
+observable, or keep the rule until the workflow no longer needs that condition.
+
+### 4. Remove the rule from your Mergify configuration
+
+Before deleting anything, walk through [Behavior Differences to
+Check](#behavior-differences-to-check): a workflow started by an event does not
+always run in the same context as a dispatched one.
+
+Once the workflow triggers on its own, delete the `github_actions` action from
+`.mergify.yml`. If the rule existed only to dispatch, delete the whole rule.
+
+Mergify's write permission on Actions is part of the Mergify GitHub App and is
+not granted per action, so there is nothing to revoke once the rule is gone.
+
+## Complete Before & After Example
+
+A rule that transitions a Jira issue and posts to Slack once a pull request is
+merged into `main`.
+
+**Before:** a Mergify rule dispatching two workflows.
+
+```yaml
+pull_request_rules:
+  - name: Run post-merge automation
+    conditions:
+      - merged
+      - base=main
+    actions:
+      github_actions:
+        workflow:
+          dispatch:
+            - workflow: jira-transition.yaml
+              inputs:
+                pull_request: "{{ number }}"
+                author: "{{ author }}"
+            - workflow: slack-notify.yaml
+              inputs:
+                title: "{{ title }}"
+```
+
+**After:** each workflow triggering on the merge itself.
+
+```yaml
+# .github/workflows/jira-transition.yaml
+name: Jira transition
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  transition:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: ./scripts/jira-transition.sh
+        env:
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+```
+
+```yaml
+# .github/workflows/slack-notify.yaml
+name: Slack notification
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  notify:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: ./scripts/slack-notify.sh
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          TITLE: ${{ github.event.pull_request.title }}
+```
+
+The Mergify rule disappears: both workflows now react to the same merge Mergify
+was watching for.
+
+## Behavior Differences to Check
+
+Four differences catch people out. Check each against your own workflows before
+deleting the rule.
+
+**Secrets on pull requests from forks.** Mergify dispatched your workflow with
+the repository's own credentials, so secrets were always available. A workflow
+triggered by `pull_request` from a fork gets a read-only `GITHUB_TOKEN` and no
+secrets, so a step that posts to Slack or calls Jira will now fail. This holds
+for every activity type, `closed` included, and for `pull_request_review` as
+well. When your repository takes pull requests from forks, swap `pull_request`
+for
+[`pull_request_target`](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request_target)
+and keep the same `types:` and `branches:` filters: it carries the same payload
+and runs with the repository's secrets. Two caveats. It runs with full
+permissions and must never check out the pull request's code. And its workflow
+file is read from the base repository's **default** branch, not from the pull
+request's base branch, so adding it only to a release branch produces no runs
+at all.
+
+**Which version of the workflow file runs.** A `pull_request` run uses the
+workflow file from the pull request's merge commit, so a contributor's changes
+to the workflow take effect on their own pull request. Dispatches ran your
+repository's default branch instead, or the branch named by the rule's `ref`
+option. A rule that set `ref` was pinning both the workflow and the code it
+runs to a vetted branch, and no event trigger reproduces that: switch such a
+workflow to `on: push` against that branch, or check out the pinned ref
+explicitly rather than relying on the event's own.
+
+**How often it fires.** A Mergify rule matches while its conditions hold; an
+event fires each time it happens. A workflow on `types: [labeled]` runs again
+on every subsequent label. Add a
+[`concurrency`](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#concurrency)
+group when repeated runs would collide.
+
+**Where failures show up.** A failed dispatch surfaced in the Mergify check-run
+on the pull request. Once migrated, failures appear in the Actions tab and in
+the workflow's own check-run instead.
