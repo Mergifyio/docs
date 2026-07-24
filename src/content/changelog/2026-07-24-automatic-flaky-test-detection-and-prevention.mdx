@@ -1,0 +1,15 @@
+---
+title: "Automatic flaky test detection and prevention"
+date: 2026-07-24
+tags:
+  - Test Insights
+description: "Mergify's test framework plugins now automatically rerun your tests to catch new flaky tests before they merge and surface existing flaky or broken tests on your default branch — all within a CI budget you control."
+---
+
+Install a Mergify test framework plugin (pytest-mergify, rspec-mergify, @mergifyio/vitest, or @mergifyio/playwright) and Mergify starts rerunning your tests automatically to surface flakiness:
+
+- **Prevention** reruns newly added tests in your pull requests, catching a flaky new test before it can break your default branch.
+- **Detection** reruns tests on your default branch, reaching a confident flaky-or-broken verdict on existing tests sooner.
+Both run inside a CI budget you set (a percentage of your CI time), so you stay in control of how much extra CI the reruns use.
+
+Learn more: [Prevention](https://docs.mergify.com/test-insights/prevention/) · [Detection](https://docs.mergify.com/test-insights/detection/)

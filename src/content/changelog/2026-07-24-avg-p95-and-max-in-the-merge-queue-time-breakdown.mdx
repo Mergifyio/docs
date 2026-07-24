@@ -1,0 +1,11 @@
+---
+title: "Avg, P95, and Max in the Merge Queue Time Breakdown"
+date: 2026-07-24
+tags:
+  - Merge Queue
+description: "The Merge Queue Stats page's Time Breakdown now lets you switch each queued-time component between average, 95th percentile, and max."
+---
+
+The Time Breakdown widget on the Merge Queue Stats page has a new Avg / P95 / Max selector.
+
+Alongside the typical split of a pull request's time in queue — CI runtime, waiting for CI capacity, schedule windows, and freeze periods — you can now see the 95th percentile and the maximum of each. Slow outliers that an average smooths over become visible, so you can tell whether a queue is usually fast with rare spikes or consistently slow.

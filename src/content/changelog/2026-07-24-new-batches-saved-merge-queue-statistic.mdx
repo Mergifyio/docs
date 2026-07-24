@@ -1,0 +1,9 @@
+---
+title: "New \"Batches Saved\" merge queue statistic"
+date: 2026-07-24
+tags:
+  - Merge Queue
+description: "The merge queue Statistics page now shows how many CI runs skip_intermediate_results saved — the number of batches merged without running their own speculative CI."
+---
+
+The Merge Queue **Statistics** page now includes a **Batches Saved** chart in the Performance section. It counts the batches that merged without running their own speculative CI — because a later batch containing their changes had already passed — so you can see how many CI runs `skip_intermediate_results` is saving your team.

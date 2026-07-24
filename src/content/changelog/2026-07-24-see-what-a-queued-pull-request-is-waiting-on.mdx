@@ -1,0 +1,13 @@
+---
+title: "See what a queued pull request is waiting on"
+date: 2026-07-24
+tags:
+  - Merge Queue
+description: "The merge queue now shows which queued pull requests a pull request depends on, so its position in the queue is explained."
+---
+
+A pull request that declares a `Depends-On:` merges after the ones it depends on, so it can sit behind a lower-priority pull request in the queue with no visible reason.
+
+Queued pull requests held back by a dependency now carry a dependency icon in the merge queue list, and the pull request side panel gains a "Depends On" section listing each queued pull request it is waiting on, with a link to each one.
+
+The same information is available from the merge queue status API as `depends_on_pull_requests`.
