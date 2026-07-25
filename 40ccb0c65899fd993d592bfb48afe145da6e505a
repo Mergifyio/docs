@@ -1,1 +1,6 @@
-address Copilot review: reword the 'Understanding Your Invoice' intro so it no longer implies an invoice has three sections — a regular invoice has two, and cancellation produces a separate final invoice
+Revision history for #12203:
+
+rev 2 (content) 2026-07-25 21:43 UTC — address Copilot review: reword the 'Understanding Your Invoice' intro so it no longer implies an invoice has three sections — a regular invoice has two, and cancellation produces a separate final invoice
+rev 1 (initial) 2026-07-25 21:43 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12203,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"cefb6f3a3963c18823d6b62eff5e29766b078c1c","timestamp_iso":"2026-07-25T21:43:27Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"cefb6f3a3963c18823d6b62eff5e29766b078c1c","new_sha":"40ccb0c65899fd993d592bfb48afe145da6e505a","timestamp_iso":"2026-07-25T21:43:27Z","reason":"address Copilot review: reword the 'Understanding Your Invoice' intro so it no longer implies an invoice has three sections — a regular invoice has two, and cancellation produces a separate final invoice","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/cefb6f3a3963c18823d6b62eff5e29766b078c1c...40ccb0c65899fd993d592bfb48afe145da6e505a"}]} -->
