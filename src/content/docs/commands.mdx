@@ -7,19 +7,17 @@ import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 import { Image } from "astro:assets"
 import commandExample from "../images/commands/command-example.png"
 
-Mergify commands are powerful, user-friendly directives that you can invoke
-directly from your repository's comments. Designed to streamline the
-interaction with the Mergify bot, these commands empower users to execute
-specific actions on pull requests without leaving the GitHub interface. Whether
-you wish to rebase a branch, refresh checks, or perform any other
-Mergify-supported action, a simple command can save you time and clicks.
+Mergify commands are directives that you can invoke directly from your
+repository's comments. They let you run specific actions on pull requests
+without leaving the GitHub interface. Whether you wish to rebase a branch,
+refresh checks, or perform any other Mergify-supported action, a simple
+command can save you time and clicks.
 
 ## Getting Started with Commands
 
-Using Mergify commands is straightforward and intuitive. These commands are
-designed to be invoked directly within the comments section of your pull
-requests, ensuring seamless integration with your regular GitHub workflow.
-Here's a step-by-step guide to getting started:
+Commands are invoked directly within the comments section of your pull
+requests, as part of your regular GitHub workflow. Here's a step-by-step
+guide to getting started:
 
 1. **Navigate to Your Pull Request**: Head over to the pull request where you
    want to execute a Mergify action.
@@ -46,10 +44,9 @@ Here's a step-by-step guide to getting started:
 
 <Image src={commandExample} alt="Example command comment in GitHub"/>
 
-Remember, while Mergify commands are powerful and offer great convenience,
-always ensure you understand the impact of a command, especially in a
-collaborative environment. Misused commands can potentially disrupt the
-workflow of other contributors.
+Always make sure you understand the impact of a command, especially in a
+collaborative environment. Misused commands can disrupt the workflow of other
+contributors.
 
 ## Command List
 

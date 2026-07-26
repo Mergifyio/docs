@@ -7,7 +7,7 @@ import { Image } from "astro:assets"
 import dependsOnBody from "../../images/merge-protections/depends-on.png"
 import mergeAfterBody from "../../images/merge-protections/merge-after.png"
 
-These protections are automatically interpreted — no configuration required.
+These protections are automatically interpreted, no configuration required.
 
 ## Depends-On
 
@@ -15,7 +15,7 @@ Block merging until specified pull requests are merged.
 
 Declare dependencies in the PR body:
 
-```yaml
+```text
 Depends-On: #123
 Depends-On: https://github.com/org/repo/pull/123
 Depends-On: org/repo#123
@@ -37,7 +37,7 @@ Use cases:
 
 Delay merging until a future time using a header in the PR description:
 
-```yaml
+```text
 Merge-After: 2025-09-01T09:00:00Z
 ```
 
