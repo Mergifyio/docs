@@ -40,6 +40,9 @@ pnpm format:check      # Check formatting without modifying
 # Testing
 pnpm test              # Run Vitest unit tests
 ./scripts/detect-broken-links.sh  # Check for broken links
+
+# Safety
+pnpm check:internal-leaks  # Scan docs for leaked internal information
 ```
 
 ## Key Directories
@@ -147,6 +150,55 @@ Do NOT use regular `git push` - always use `mergify stack push`.
    option's own reference page (matching existing action pages) is acceptable;
    dated migration notices are not.
 
+8. **Never publish internal information** - Ticket IDs, customer names, private
+   repo paths, internal links, and credentials must never reach
+   `src/content/docs/`. See the section below; it applies to every change, with
+   no size threshold.
+
+## Never Publish Internal Information
+
+Docs are usually written *from* internal material: a support case, a private PR,
+an engine source file, a Linear ticket. That material travels with the draft.
+The reader never needs to know where a page came from, so anything describing
+the *provenance* of a doc is a leak, not context. A leaked identifier cannot be
+unpublished.
+
+**Never write any of these into `src/content/docs/`** - prose, code blocks,
+comments, frontmatter, alt text, or screenshots:
+
+- **Support ticket and thread IDs** - Plain refs (`T-1234`), thread IDs
+  (`th_01JQ...`), `app.plain.com` links, or the equivalent from any helpdesk.
+- **Customer, org, and account identifiers** - a customer's GitHub org or repo,
+  account and subscription IDs, Stripe customer or invoice IDs, email addresses,
+  real seat or contributor counts.
+- **Private repositories and internal code paths** - `Mergifyio/monorepo`,
+  `mergify_shadow_office/...`, `mergify_engine/...`, dashboard source paths,
+  internal module or function names, `file:line` references into private code.
+- **Internal URLs and tools** - Linear and Notion links, admin consoles,
+  internal dashboards, staging or internal Mergify hostnames, runbooks.
+- **Credentials** - real tokens, API keys, private keys, webhook secrets.
+  Placeholders (`ghp_*`, `<your-token>`) are fine.
+- **Internal-only framing** - employee names in an internal context, quotes from
+  a support conversation, "as discussed with the customer", unreleased work, or
+  an explanation that only makes sense if you read the ticket.
+
+The fix is almost never deletion. State the product behavior and drop the
+provenance: "customer acme-corp on ticket T-1234 was billed after cancelling"
+becomes "if you cancel mid-period, a final invoice may still arrive on the last
+day of the period."
+
+**Enforcement**, in order of what catches what:
+
+1. `pnpm check:internal-leaks` - deterministic scan for the mechanical patterns
+   (ticket IDs, internal paths, internal trackers and hosts). Run it before
+   committing any docs change. It also runs in CI. It cannot catch customer
+   names, copied examples, or internal framing, so a clean run is not a pass.
+2. The `proofread-leaks` subagent - judgment-level review of the diff. **Unlike
+   the other proofreaders, this one runs on every docs change**, including
+   sub-10-line edits, frontmatter-only edits, and code-block-only edits.
+3. If something internal did reach a commit, say so plainly instead of quietly
+   amending it. A value that was pushed may need scrubbing beyond the branch.
+
 ## Documentation Proofreading
 
 After editing MDX files in `src/content/docs/`, if the
@@ -160,7 +212,7 @@ pipeline before considering the work done.
    MDX files in `src/content/docs/` (use `git diff`
    for staged/unstaged changes).
 
-2. **Spawn 4 proofreading subagents in parallel**
+2. **Spawn 5 proofreading subagents in parallel**
    using the Agent tool, each with the diff and the
    list of changed files:
    - Style (`proofread-style`): AI patterns, banned
@@ -174,6 +226,9 @@ pipeline before considering the work done.
 
    - Consistency (`proofread-consistency`): terminology
      drift, capitalization, naming
+
+   - Leaks (`proofread-leaks`): ticket IDs, customer
+     names, private paths, internal links, secrets
 
 3. **Each subagent:**
    - Reads the skill with the Skill tool for its
@@ -214,6 +269,14 @@ When spawning each subagent, include:
   Note FOLLOW-UP items for unchanged content."
 
 ### When to Skip
+
+**`proofread-leaks` is never skipped.** None of the
+conditions below apply to it: a leaked ticket ID is
+usually a one-line change, and it hides in code blocks
+and frontmatter as readily as in prose. Run it, plus
+`pnpm check:internal-leaks`, on every docs change.
+
+The other four are skipped when:
 
 - Changes are fewer than 10 lines of docs content
 

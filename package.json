@@ -15,6 +15,7 @@
     "format:check": "biome format src integrations plugins scripts",
     "check": "astro check && eslint . && biome check .",
     "check:config-examples": "node scripts/validate-config-examples.mjs",
+    "check:internal-leaks": "node scripts/check-internal-leaks.mjs",
     "check:links": "linkinator dist/ --recurse --concurrency 25 --verbosity error --skip 'https?://'"
   },
   "devDependencies": {
