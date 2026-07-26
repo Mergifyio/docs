@@ -10,9 +10,8 @@ import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
 [Dependabot](https://github.com/features/security) helps you keep your
 dependencies up-to-date by automatically opening pull requests for outdated
-dependencies. When combined with Mergify, you can automate parts of the process
-even further, ensuring your projects stay current with minimal manual
-intervention.
+dependencies. When combined with Mergify, you can automate more of the
+process.
 
 ## Automating Dependabot Pull Request Merges
 
@@ -31,7 +30,7 @@ pull_request_rules:
 
 ## Filtering Dependabot PRs
 
-Dependabot provides specific labels for the type of dependency update, such as
+Mergify exposes condition attributes describing each Dependabot update:
 `dependabot-dependency-name`, `dependabot-dependency-type`, and
 `dependabot-update-type`. You can use these in your [merge
 protection](/merge-protections/custom-rules) conditions to filter which
@@ -50,9 +49,9 @@ merge_protections:
 ## Batching Dependency Updates
 
 For projects where there are frequent updates to a large number of small
-libraries, it's efficient to batch these updates together. Using Mergify's
-merge queue feature, you can automatically batch and test these updates
-together, reducing CI load and ensuring compatibility.
+libraries, you can batch these updates together. Using Mergify's merge queue
+feature, you can automatically batch and test these updates together, reducing
+CI load and ensuring compatibility.
 
 For example, you could set up a merge queue to batch those PRs 10 by 10:
 
@@ -70,7 +69,7 @@ queue_rules:
 
 By default, Dependabot will try to rebase its pull requests every time there's
 a new commit to the main branch. In high-velocity projects with a lot of
-update, this can lead to unnecessary CI runs. It's recommended to disable
+updates, this can lead to unnecessary CI runs. It's recommended to disable
 Dependabot's automatic rebase feature and instead rely on Mergify to queue and
 merge these updates efficiently.
 
@@ -92,8 +91,8 @@ updates:
 ## Configuring `MERGIFY_TOKEN` for Dependabot
 
 If you use Mergify features that require a `MERGIFY_TOKEN` in your GitHub
-Actions workflows — such as [CI Insights](/ci-insights/setup/github-actions) or
-[Scopes](/merge-queue/scopes) — you need to add the token to your **Dependabot
+Actions workflows, such as [CI Insights](/ci-insights/setup/github-actions) or
+[Scopes](/merge-queue/scopes), you need to add the token to your **Dependabot
 secrets** in addition to your regular GitHub Actions secrets.
 
 Dependabot workflows run in a restricted environment and **cannot access regular
@@ -111,10 +110,6 @@ To configure it:
 
 :::note
   This applies to any workflow that references `${{secrets.MERGIFY_TOKEN}}`
-  and runs on Dependabot pull requests — including scopes detection, CI Insights
+  and runs on Dependabot pull requests, including scopes detection, CI Insights
   test uploads, and any other Mergify CI integration.
 :::
-
-With Mergify and Dependabot working together, you can ensure your project's
-dependencies are always up-to-date with minimal effort, ensuring a smooth and
-efficient update process.

@@ -63,7 +63,7 @@ Tokens are read from, in priority order:
   The `GITHUB_TOKEN` fallback expects a **personal access token**
   (classic `ghp_*` or fine-grained `github_pat_*`). It is **not** the
   built-in `GITHUB_TOKEN` secret that GitHub Actions exposes to
-  workflows — that one is a short-lived installation token (`ghs_*`)
+  workflows. That one is a short-lived installation token (`ghs_*`)
   which the Mergify API does not accept. In CI, store a PAT or a
   Mergify application key in a dedicated secret (commonly
   `MERGIFY_TOKEN`).
@@ -83,7 +83,7 @@ resource "mergify_repository_products" "monorepo" {
 }
 ```
 
-The `products` attribute is **declarative** — applying the resource
+The `products` attribute is **declarative**: applying the resource
 sets the exact set of enabled products on the repository, removing any
 that are not listed.
 
