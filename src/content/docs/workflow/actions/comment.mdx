@@ -8,10 +8,8 @@ import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable
 The `comment` action allows Mergify to post a comment on your pull request when
 certain conditions are met.
 
-The comment action is a powerful tool that can provide automated responses to
-various events in your pull request workflow. By customizing the conditions and
-the message, you can create a more interactive and responsive experience for
-your contributors.
+The comment action can provide automated responses to events in your pull
+request workflow, based on the conditions and message you customize.
 
 ## Parameters
 
@@ -42,7 +40,7 @@ notified automatically by Mergify. You can do this using this rule:
 
 ```yaml
 pull_request_rules:
-  - name: comment when a pull request is merged
+  - name: comment when a pull request is in conflict
     conditions:
       - conflict
     actions:
