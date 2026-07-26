@@ -50,12 +50,12 @@ default GitHub merge behavior.
   branch={{ label: "main", node: "M" }}
 />
 
-- **History:** non-linear — the PR branch and base branch are visible as
+- **History:** non-linear; the PR branch and base branch are visible as
   separate lines in `git log --graph`
 
-- **Merge commits:** yes — each PR produces a merge commit on the base branch
+- **Merge commits:** yes; each PR produces a merge commit on the base branch
 
-- **SHAs preserved:** yes — original PR commits keep their SHAs
+- **SHAs preserved:** yes; original PR commits keep their SHAs
 
 - **Use case:** most teams; simplest setup with no constraints on parallelism
   or batching
@@ -88,9 +88,9 @@ Squashes all PR commits into a single commit on the base branch.
   branch={{ label: "main", node: "S" }}
 />
 
-- **History:** linear — one commit per PR on the base branch
+- **History:** linear; one commit per PR on the base branch
 - **Merge commits:** no
-- **SHAs preserved:** no — a new commit is created
+- **SHAs preserved:** no; a new commit is created
 - **Use case:** teams that want a clean `git log` where one commit = one PR
 
 ## Rebase
@@ -123,11 +123,11 @@ SHAs.
   branch={{ label: "main", node: "Dp" }}
 />
 
-- **History:** linear — no merge commits, individual commits are preserved
+- **History:** linear; no merge commits, individual commits are preserved
 
 - **Merge commits:** no
 
-- **SHAs preserved:** no — commits are recreated with new SHAs, so the PR
+- **SHAs preserved:** no; commits are recreated with new SHAs, so the PR
   branch ref won't match the base branch
 
 - **Use case:** teams that want linear history with individual commits visible,
@@ -152,12 +152,12 @@ The PR is rebased on top of the base branch, CI runs on the PR itself, and
 the base branch ref is fast-forwarded to the PR's head commit.
 
 In this mode, `update_method` must be set to `rebase` (the default). If a
-rebase update occurs, the commit SHAs on the PR will change — what fast-forward
+rebase update occurs, the commit SHAs on the PR will change; what fast-forward
 preserves are the SHAs of the PR branch at merge time.
 
 :::caution
-  When using `update_bot_account` with fast-forward inplace mode, fork pull
-  requests will no longer be supported after **July 1, 2026**. See the
+  When using `update_bot_account` with fast-forward inplace mode, support for
+  fork pull requests is deprecated. See the
   [update method deprecation note](#combining-merge-and-update-methods) for
   details and migration options.
 :::
@@ -177,11 +177,11 @@ preserves are the SHAs of the PR branch at merge time.
   branch={{ label: "main", node: "D" }}
 />
 
-- **History:** strictly linear — commits sit directly on the base branch
+- **History:** strictly linear; commits sit directly on the base branch
 
 - **Merge commits:** none
 
-- **SHAs preserved:** yes — the exact same commit SHAs from the PR appear on
+- **SHAs preserved:** yes; the exact same commit SHAs from the PR appear on
   the base branch
 
 ### Batch-PR Mode
@@ -196,16 +196,16 @@ commits** from folding each PR into the batch branch.
 - **History:** linear at the base-branch level, but individual merge commits
   from combining PRs may appear
 
-- **Merge commits:** possible — from combining PRs in the batch branch
+- **Merge commits:** possible (from combining PRs in the batch branch)
 
 - **SHAs preserved:** the final merged result is the exact SHA tested by CI
 
 ### Constraints
 
-- **`commit_message_format` has no effect** — fast-forward preserves
+- **`commit_message_format` has no effect**: fast-forward preserves
   the original commits, so custom commit messages are not applicable
 
-- **[Parallel mode](/merge-queue/queue-modes) is not supported** — fast-forward
+- **[Parallel mode](/merge-queue/queue-modes) is not supported**: fast-forward
   is not compatible with scope-based parallel queues
 
 - **Use case:** teams and OSS projects that care about commit identity and want
@@ -223,7 +223,7 @@ commits** from folding each PR into the batch branch.
 
 ### Examples
 
-Inplace mode — strictly linear history with preserved commit SHAs:
+Inplace mode, with strictly linear history and preserved commit SHAs:
 
 ```yaml
 merge_queue:
@@ -237,7 +237,7 @@ queue_rules:
       - check-success = ci
 ```
 
-Batch-PR mode — batching with fast-forward merge:
+Batch-PR mode, combining batching with fast-forward merge:
 
 ```yaml
 queue_rules:
@@ -261,10 +261,10 @@ queue_rules:
 
 When `merge_method` is set to `merge-batch`, Mergify merges the batch pull
 request it creates for batching directly into the base branch using a merge
-commit — instead of merging the original pull requests individually.
+commit, instead of merging the original pull requests individually.
 
 This is similar to `fast-forward` in that the batch PR itself is merged, but
-uses the GitHub Pull Request merge API rather than advancing the git ref
+uses the GitHub pull request merge API rather than advancing the git ref
 directly. The resulting merge commit message identifies which pull requests
 were included in the batch (e.g., "Merge queue: merged #42, #43, #44").
 
@@ -286,22 +286,22 @@ were included in the batch (e.g., "Merge queue: merged #42, #43, #44").
   branch={{ label: "main", node: "M" }}
 />
 
-- **History:** non-linear — a single merge commit per batch appears on the base
+- **History:** non-linear; a single merge commit per batch appears on the base
   branch
 
-- **Merge commits:** yes — one merge commit per batch, not per PR
+- **Merge commits:** yes; one merge commit per batch, not per PR
 
-- **SHAs preserved:** no — the batch merge commit is new, and the original PR
+- **SHAs preserved:** no; the batch merge commit is new, and the original PR
   commit SHAs are not preserved because the batch PR contains recreated commits
 
-- **Requires `batch_size > 1`** — this method is designed for batch merging and
+- **Requires `batch_size > 1`**: this method is designed for batch merging and
   cannot be used with single PRs
 
 - **Use case:** teams that use batch merging and want a single merge commit per
   batch on the base branch, triggering only one deployment per batch
 
 :::note
-  Unlike `fast-forward`, `merge-batch` uses the standard GitHub Pull Request
+  Unlike `fast-forward`, `merge-batch` uses the standard GitHub pull request
   merge API, so it works with branch protection settings that require pull
   request merges. No bypass configuration is needed.
 :::
@@ -313,8 +313,8 @@ fall behind the base branch. Combining `merge_method` with `update_method`
 gives you additional control over your history shape.
 
 :::note
-  `update_method: rebase` combined with `update_bot_account` will no longer
-  support fork pull requests after **July 1, 2026**. If your repository
+  Support for fork pull requests with `update_method: rebase` combined with
+  `update_bot_account` is deprecated. If your repository
   receives fork PRs, use `update_method: merge` instead.
 :::
 

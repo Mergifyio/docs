@@ -1,14 +1,14 @@
 ---
 title: Pausing the Merge Queue
-description: Understand the pause feature and how it can be utilized during CI incidents.
+description: Understand the pause feature and how to use it during CI incidents.
 ---
 
 import screenshotButtonPause from '../../images/merge-queue/pause/dashboard-button-pause-mq.png';
 import { Image } from "astro:assets";
 
-Mergify's Merge Queue offers a feature known as "pausing" that grants users
-increased control over the automation process during special circumstances.
-Let's explore what pausing involves, its impacts, and its typical use cases.
+Pausing Mergify's Merge Queue suspends its automation, typically during a CI
+incident. This page explains what pausing does, its impacts, and when to use
+it.
 
 ## What Does Pausing Do?
 
@@ -48,7 +48,7 @@ the queue.
 
 ### Using the CLI
 
-Pause the queue from the terminal with an optional reason:
+Pause the queue from the terminal with a reason (required):
 
 ```bash
 mergify queue pause --reason "deploying hotfix"
@@ -72,16 +72,15 @@ API](/api/usage).
 
 ### CI Incidents
 
-During a major incident with the Continuous Integration (CI) system, the pause
-feature can be invaluable. If there's a likelihood that checks will fail and
-consequently eject the pull request from the queue, it's beneficial to pause
-the merge queue.
+During a major incident with the CI system, if checks are likely to fail and
+eject pull requests from the queue, pause the merge queue until the incident
+is resolved.
 
 ### Non-CI Incidents
 
 If an incident is unrelated to the CI, like a production issue, but you wish to
 halt merging while allowing checks to run, then the [scheduled freeze
-feature](/merge-protections/#scheduling-freezes) is a more suitable choice.
+feature](/merge-protections/freeze) is a more suitable choice.
 
 ## Benefits of Using the Pause Feature
 
@@ -93,8 +92,3 @@ feature](/merge-protections/#scheduling-freezes) is a more suitable choice.
 
 3. **Reduce Noise**: Constantly failing checks during a CI incident can create
    unnecessary notifications. Pausing the queue mitigates this.
-
-The pause feature of the Mergify merge queue offers users an enhanced layer of
-control and adaptability during special situations. Familiarizing yourself with
-when and how to pause your merge queue can optimize your workflow and reduce
-disruptions.

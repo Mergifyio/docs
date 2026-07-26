@@ -1,6 +1,6 @@
 ---
 title: Monitoring your Merge Queue
-description: Monitor key metrics of your merge queue to optimize throughput and reduce latency, ensuring a streamlined development cycle.
+description: Monitor key metrics of your merge queue to improve throughput and reduce latency.
 ---
 
 import { Image } from "astro:assets"
@@ -47,7 +47,7 @@ View these metrics on the merge queue page of your
 <Image src={dashboardStatsScreenshot} alt="Statistics page on mergify's dashboard"/>
 
 Use the date picker to select the time range you want to review. Presets go up to
-"Past 3 Months", and data is retained for 90 days so every preset returns complete
+"Past 3 months", and data is retained for 90 days so every preset returns complete
 data.
 
 ## Monitoring the Queue with the CLI
@@ -61,12 +61,12 @@ mergify queue status
 
 This displays:
 
-- **Pause status** — whether the queue is paused, with reason and elapsed time
+- **Pause status**: whether the queue is paused, with reason and elapsed time
 
-- **Batches** — batches organized by scope with status indicators and their
+- **Batches**: batches organized by scope with status indicators and their
   pull requests
 
-- **Waiting PRs** — queued pull requests with priority, queue time, and
+- **Waiting PRs**: queued pull requests with priority, queue time, and
   estimated merge time
 
 To filter results to a specific branch:

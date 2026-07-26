@@ -1,18 +1,18 @@
 ---
 title: Queue Modes
-description: Choose how the merge queue schedules pull requests — serial, parallel, or isolated.
+description: "Choose how the merge queue schedules pull requests: serial, parallel, or isolated."
 ---
 
 The `merge_queue.mode` option controls how the merge queue schedules pull requests. There are three
 modes:
 
-- **`serial`** (default) — every pull request is tested on top of the previous one, in a single
+- **`serial`** (default): every pull request is tested on top of the previous one, in a single
   ordered pipeline.
 
-- **`parallel`** — pull requests that touch different [scopes](/merge-queue/scopes) are tested and
+- **`parallel`**: pull requests that touch different [scopes](/merge-queue/scopes) are tested and
   merged at the same time.
 
-- **`isolated`** — every batch runs as a fully independent unit, with no dependency on any other
+- **`isolated`**: every batch runs as a fully independent unit, with no dependency on any other
   batch.
 
 All three honor your [queue rules](/merge-queue/rules) and [batch sizing](/merge-queue/batches).
@@ -31,7 +31,7 @@ are already using it.
 
 ## Serial Mode
 
-Serial mode is the **default** — you don't need to configure anything to use it. Every pull request
+Serial mode is the **default**: you don't need to configure anything to use it. Every pull request
 is tested on top of the one before it, forming a single ordered pipeline. This guarantees
 correctness: each pull request is validated against the exact state it will merge into. The
 trade-off is that unrelated changes still wait for each other.
@@ -72,8 +72,8 @@ choice.
 
 ## Parallel Mode
 
-Parallel mode tests and merges pull requests that touch different areas of the codebase — different
-[scopes](/merge-queue/scopes) — at the same time. Pull requests that share a scope are still queued
+Parallel mode tests and merges pull requests that touch different areas of the codebase (different
+[scopes](/merge-queue/scopes)) at the same time. Pull requests that share a scope are still queued
 together so they are tested as a group, preventing semantic conflicts.
 
 :::tip
@@ -142,7 +142,7 @@ strict digraph {
 }
 ```
 
-Here PR #4 touches the `api` scope, just like PR #1 — so it must wait for PR #1 to merge first.
+Here PR #4 touches the `api` scope, just like PR #1, so it must wait for PR #1 to merge first.
 Meanwhile PR #3 (docs) proceeds independently.
 
 ### Set up parallel mode
@@ -220,7 +220,7 @@ requests:
 3. **Dependency tracking.** Batches that share at least one scope are linked as parent → child in a
    dependency graph. A child batch cannot merge until all its parents have merged.
 
-4. **Parallel execution.** Batches with no shared scopes — and therefore no dependency — are tested
+4. **Parallel execution.** Batches with no shared scopes (and therefore no dependency) are tested
    by CI at the same time, up to `max_parallel_checks`.
 
 5. **Merge.** As soon as a batch's CI passes and all its parent batches are merged, Mergify merges
@@ -228,7 +228,7 @@ requests:
 
 When a batch fails, Mergify splits it and retests the parts to isolate the problematic pull request
 (see [Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout)). Because
-batches are scoped, a failure in one scope queue does **not** block unrelated scope queues — only
+batches are scoped, a failure in one scope queue does **not** block unrelated scope queues: only
 batches that depend on the failed one (via a shared scope) are affected.
 
 ### Limiting concurrency per scope
@@ -378,7 +378,7 @@ do interact.
 
 | Scenario | What happens | Benefit |
 |----------|-------------|---------|
-| PRs touch **different** scopes | Tested and merged in parallel | Faster merge times — no waiting for unrelated work |
+| PRs touch **different** scopes | Tested and merged in parallel | Faster merge times, no waiting for unrelated work |
 | PRs touch **the same** scope | Ordered within that scope queue and tested together | Conflicts caught before merge |
 | A PR touches **multiple** scopes | Linked to all relevant scope queues | Correctness preserved across scopes |
 
@@ -420,7 +420,7 @@ strict digraph {
 ```
 
 Use isolated mode when your pull requests are genuinely independent and you want maximum throughput
-without maintaining a scope map — for example when each pull request targets its own service or
+without maintaining a scope map, for example when each pull request targets its own service or
 package and you don't need Mergify to serialize overlapping changes.
 
 :::caution
@@ -457,14 +457,17 @@ queue_rules:
 
 How Mergify fills a batch depends on whether you configure [scopes](/merge-queue/scopes):
 
-- **With scopes.** Mergify groups the most similar pull requests — those sharing the most scopes —
+- **With scopes.** Mergify groups the most similar pull requests (those sharing the most scopes)
   into the same batch, using the same [scope-aware batching](/merge-queue/scopes) as the other
   modes. This keeps related changes tested together and maximizes CI reuse.
 
-- **Without scopes.** Mergify fills batches by queue priority and arrival order, up to `batch_size`.
+- **Without scopes.** Mergify seeds each batch by queue priority and arrival order, then fills the
+  remaining slots with the pull requests that change similar directories, as described in
+  [How Pull Requests Are Grouped Into a
+  Batch](/merge-queue/batches#how-pull-requests-are-grouped-into-a-batch).
 
 Either way, the resulting batches are fully independent. They run concurrently up to
-`max_parallel_checks`, and Mergify merges each one as soon as its own CI passes — there is never a
+`max_parallel_checks`, and Mergify merges each one as soon as its own CI passes; there is never a
 parent batch to wait for. Batch failures are handled the same way as in the other modes (see
 [Handling Batch Failures](/merge-queue/batches#handling-batch-failure-or-timeout)).
 
@@ -478,7 +481,7 @@ aren't available depending on the mode:
   not require scopes.
 
 - **`fast-forward` merge is not supported.** Because batches merge independently, Mergify needs to
-  rebase them. Use `merge` or `rebase` as your `merge_method`.
+  rebase them. Use `merge`, `squash`, or `rebase` as your `merge_method`.
 
 - **`skip_intermediate_results` is not supported in isolated mode.** Isolated batches are fully
   independent, so a passing batch can't vouch for any other. It works in serial and parallel modes,
