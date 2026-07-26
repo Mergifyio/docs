@@ -3,9 +3,9 @@ title: 'Manual Installation (Legacy)'
 description: 'Legacy process for provisioning the Mergify GitHub App and engine without the installer.'
 ---
 
-> ⚙️ These steps mirror the older manual workflow. Adapt them into infrastructure-as-code if needed.
+> These steps mirror the older manual workflow. Adapt them into infrastructure-as-code if needed.
 
-> 🔼 Replace the `@@ENTERPRISE_VERSION@@` tag with the latest Enterprise release.
+> Replace the `@@ENTERPRISE_VERSION@@` tag with the latest Enterprise release.
 
 ## 1. Create the GitHub App
 
@@ -121,9 +121,9 @@ docker pull registry.mergify.com/enterprise:@@ENTERPRISE_VERSION@@
 
 ## 5. Start Mergify
 
-> 🔑 A subscription token is required. Contact Mergify if you do not have one.
+> A subscription token is required. Contact Mergify if you do not have one.
 >
-> 💽 Ensure Redis (with persistence/TLS if needed) and Postgres are ready.
+> Ensure Redis (with persistence/TLS if needed) and Postgres are ready.
 
 ```sh
 docker run \

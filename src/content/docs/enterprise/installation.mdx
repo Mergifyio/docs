@@ -17,9 +17,9 @@ import installSuccessScreen from "../../images/enterprise/install-success.png"
 
 The installation process is separated into two steps:
 
-1. First start the Mergify container without any configuration and the GitHub
-   App Installer started to create your Mergify GitHub App on GitHub. This will
-   generate a configuration file with the GitHub App credentials.
+1. First, start the Mergify container without any configuration and with the
+   GitHub App Installer enabled to create your Mergify GitHub App on GitHub.
+   This will generate a configuration file with the GitHub App credentials.
 
 2. Then restart the Mergify container with the downloaded configuration and the
    GitHub App Installer disabled.
@@ -28,16 +28,16 @@ You will run the installer mode first to generate a `mergify.env` file, then res
 normal mode with that configuration plus your subscription token.
 
 :::note
-Always pick the latest Enterprise image. Examples below use `@@ENTERPRISE_VERSION@@`; replace it with the newest
-tag from the releases page.
+  Always pick the latest Enterprise image. Examples below use `@@ENTERPRISE_VERSION@@`; replace it
+  with the newest tag from the releases page.
 :::
 
 ## Get the Docker Image
 
-First, ensure you have the mergify\_registry\_key.json file to get access to
-Mergify docker images.
+First, ensure you have the `mergify_registry_key.json` file to get access to
+Mergify Docker images.
 
-If you need help, ask your Mergify account representative or the Mergify
+If you need help, ask your Mergify account representative or Mergify
 customer support.
 
 Download the Docker image using `docker pull`:
@@ -61,11 +61,11 @@ docker run --rm -d \
 ```
 
 :::note\[Security Note]
-the installer can be safely exposed to the internet during this
-procedure. The installer is a static page that will post a form on the GitHub
-website. GitHub will then ask for confirmation about the creation of the
-resources. No data is stored on the server or the browser. The actual engine is
-not yet started.
+  The installer can be safely exposed to the internet during this
+  procedure. The installer is a static page that will post a form on the GitHub
+  website. GitHub will then ask for confirmation about the creation of the
+  resources. No data is stored on the server or the browser. The actual engine is
+  not yet started.
 :::
 
 ## Expose the Container
@@ -104,7 +104,7 @@ Click on **Install** on the following screen:
 
 <Image src={installAppScreen} alt="Mergify App Installation" />
 
-The GitHub App creation and installation is finished. 🥳
+The GitHub App creation and installation is finished.
 
 <Image src={installSuccessScreen} alt="Mergify App Installation Success" />
 
@@ -129,14 +129,14 @@ Make sure your Redis instance is ready and running at this stage.
 
 Redis server provides TLS termination. To connect to such an instance you need to:
 
-- Use `redis://` instead of `rediss://` in the `MERGIFYENGINE_REDIS_URL` environment variable.
+- Use `rediss://` instead of `redis://` in the `MERGIFYENGINE_REDIS_URL` environment variable.
 
 #### Optional: use Redis with self-signed TLS certificate
 
 Some Redis server providers set it up with self-signed certificates. In that case, to connect to
 such an instance you need to:
 
-- Use `redis://` instead of `rediss://` in the `MERGIFYENGINE_REDIS_URL` environment variable.
+- Use `rediss://` instead of `redis://` in the `MERGIFYENGINE_REDIS_URL` environment variable.
 
 - Set `MERGIFYENGINE_REDIS_SSL_VERIFY_MODE_CERT_NONE=1` in your environment variables. Mergify will
   connect to Redis using encryption but will not verify the server certificate.
@@ -168,8 +168,8 @@ each authentication mode.
 ## Start Mergify in Normal Mode
 
 :::note
-  🔑 You need a subscription token (`MERGIFYENGINE_SUBSCRIPTION_TOKEN`) to start using Mergify at this stage.
-  Contact support if you do not have one.
+  You need a subscription token (`MERGIFYENGINE_SUBSCRIPTION_TOKEN`) to start using Mergify at this
+  stage. Contact support if you do not have one.
 :::
 
 The example below includes the CI Insights and Test Insights environment variables. Omit them if you
@@ -211,10 +211,10 @@ GET / HTTP/1.1
 host: container:5000
 ```
 
-> ❤️‍🩹 The endpoint should respond with HTTP 307.
+> The endpoint should respond with HTTP 307.
 
 ## Testing the Installation
 
-1. Sign in to the dashboard at https://my-mergify.example.com/ and enable Workflow Automation for a repository.
+1. Sign in to the dashboard at `https://mergify.mycompany.com` and enable Workflow Automation for a repository.
 2. Commit an empty `.mergify.yml` to the default branch.
 3. Open a pull request; you should see a **Summary** check run.
