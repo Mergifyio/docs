@@ -50,7 +50,7 @@ re-running all failed jobs while preserving successful ones.
 - **Data-Driven Insights**: Track which jobs are frequently retried to identify
   systematic issues
 
-- **Time Savings**: Reduce manual retry actions and faster feedback loops
+- **Time Savings**: Fewer manual retry actions and faster feedback loops
 
 ## Configuration
 
@@ -89,7 +89,7 @@ failures. Each rule specifies:
 
 Conditions let you control which job failures should trigger a retry. Each
 condition matches against a specific attribute of the failed job. You can
-combine multiple conditions in a single rule — all conditions must match for
+combine multiple conditions in a single rule; all conditions must match for
 the rule to apply.
 
 The following condition attributes are available:
@@ -113,7 +113,7 @@ The following condition attributes are available:
 - **Log pattern**: Match against the content of the job logs and GitHub
   Actions check-run annotations using regular expressions. Each pattern is
   evaluated against individual log lines. You can specify multiple
-  patterns — a retry is triggered if any of the patterns match. For
+  patterns; a retry is triggered if any of the patterns match. For
   example, `timeout|connection refused` would match any log line
   containing either "timeout" or "connection refused". The rule builder
   includes a **Test your log patterns** panel to check your log-pattern

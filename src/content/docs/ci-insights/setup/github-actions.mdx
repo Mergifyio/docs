@@ -17,7 +17,7 @@ Actions and how to configure repeated test executions for flaky test detection.
    page](https://dashboard.mergify.com/integrations/github)
    ([docs](/integrations/github)).
 
-2. In order to upload your test results, you'll need to [configure your
+2. To upload your test results, you'll need to [configure your
    test](#test-framework-configuration). Before doing so, create an application
    key with `ci` scope as described in the [API Usage documentation](/api/usage)
    and set it as `MERGIFY_TOKEN` in your GitHub Actions secrets.
@@ -54,14 +54,14 @@ Before setting up flaky test detection, ensure you have:
 
 2. Created an application key with `ci` scope and set it as `MERGIFY_TOKEN` in GitHub Actions secrets
 
-3. Configured test integration (e.g., `pytest-mergify` or `mergify cli upload`)
+3. Configured test integration (e.g., `pytest-mergify` or JUnit report upload)
    for your test framework
 
 ### GitHub Actions Setup
 
 The recommended approach is to use a scheduled workflow that runs your test
 suite multiple times on the default branch. Here's an example configuration
-that runs tests twice daily with 5 parallel executions:
+that runs tests twice daily with 5 repeated executions:
 
 - Example with native integration (e.g. `pytest-mergify`)
 
@@ -100,7 +100,7 @@ jobs:
           exit $failed
 ```
 
-- Examples with `mergify cli upload` integration
+- Example with JUnit report upload via `gha-mergify-ci`
 
 ```yaml
 name: CI
@@ -152,7 +152,7 @@ jobs:
   the most impact
 
 - **Weekday Schedule**: The example runs Monday to Friday (`1-5`) to avoid
-  running when no changes are made on the code
+  running when no changes are made to the code
 
 - **Job name**: Ensure the job name is the same as the one running tests on your pull request,
   allowing CI Insights to identify them. It can be overridden with `MERGIFY_TEST_JOB_NAME` if needed.
