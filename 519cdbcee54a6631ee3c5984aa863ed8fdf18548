@@ -1,0 +1,1 @@
+review (jd): drop the credential rule from the deterministic scanner — secret detection is not this script's job. Rule, its test, and the AGENTS.md enforcement wording removed; credentials stay in the policy list and in proofread-leaks.
