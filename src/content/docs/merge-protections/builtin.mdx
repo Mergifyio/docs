@@ -33,6 +33,20 @@ Use cases:
 - Schema then implementation
 - Chained refactors
 
+### Seeing dependencies in the merge queue
+
+Because a pull request with a `Depends-On:` header merges after the ones it
+depends on, it can sit behind a lower-priority pull request for no visible
+reason. The [merge queue](/merge-queue) shows why: a queued pull request held
+back by a dependency carries a dependency icon in the list, and its side panel
+gains a **Depends On** section linking to each queued pull request it waits for.
+The merge queue status [API](/api/usage) reports the same list as
+`depends_on_pull_requests`.
+
+This display covers dependencies inside a [stack](/merge-queue/stacks) in the
+same repository. A dependency on a pull request in another repository still
+blocks the merge, but the queue does not show it.
+
 ## Merge-After
 
 Delay merging until a future time using a header in the PR description:
