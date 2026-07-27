@@ -1,0 +1,6 @@
+Revision history for #12205:
+
+rev 2 (content) 2026-07-26 08:22 UTC — address Copilot review: link the scopes key like its siblings in the top-level key list; use 'less than' instead of 'lesser than' in the operator table (labels and prose)
+rev 1 (initial) 2026-07-26 08:22 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12205,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"23a05f19c59b5939157b7dc40c9a55a81440a8ab","timestamp_iso":"2026-07-26T08:22:59Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"23a05f19c59b5939157b7dc40c9a55a81440a8ab","new_sha":"3b322713cde316d673abb86f53f943935b2b7c5a","timestamp_iso":"2026-07-26T08:22:59Z","reason":"address Copilot review: link the scopes key like its siblings in the top-level key list; use 'less than' instead of 'lesser than' in the operator table (labels and prose)","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/23a05f19c59b5939157b7dc40c9a55a81440a8ab...3b322713cde316d673abb86f53f943935b2b7c5a"}]} -->
