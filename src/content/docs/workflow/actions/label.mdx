@@ -8,8 +8,7 @@ import { Image } from "astro:assets"
 import prConflictScreenshot from "../../../images/workflow/actions/label/conflict-pr-list.png"
 
 The `label` action allows Mergify to automatically add or remove labels from a
-pull request based on the conditions specified in your rules, making your
-workflow more organized and efficient.
+pull request based on the conditions specified in your rules.
 
 :::caution
   **Avoid rule pairs that flip the same label.** If one rule adds a label and
@@ -56,8 +55,8 @@ rule anymore, the label will be removed.
 
 ### Warn on Conflicts
 
-When browsing the list of pull request, GitHub does not give any indication on
-which pull requests might be in conflict. Mergify allows to do this easily by
+When browsing the list of pull requests, GitHub does not give any indication on
+which pull requests might be in conflict. Mergify lets you do this by
 adding a label.
 
 ```yaml
@@ -79,7 +78,7 @@ Then, your pull request list will look like this on conflict:
 
 ### Toggle A Label Based on CI Status
 
-This rule toggle a label based on the failure status of a CI system.
+This rule toggles a label based on the failure status of a CI system.
 
 ```yaml
 pull_request_rules:
