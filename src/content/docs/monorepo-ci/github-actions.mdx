@@ -133,7 +133,7 @@ jobs:
   inspects the pull request diff and returns a JSON map of scopes set to `true`
   or `false`.
 
-- Each job checks the scope it cares about before running, dramatically reducing
+- Each job checks the scope it cares about before running, reducing
   redundant builds.
 
 - The final `ci-gate` job ensures that the aggregated status reflects the actual

@@ -22,9 +22,8 @@ them to **Test Insights** using your CI workflow.
 
 ## Generate a JUnit Report with Jest
 
-Jest has built-in support for JUnit XML reports. You can configure Jest to
-output JUnit reports by updating your Jest configuration or using command-line
-options.
+Jest can output JUnit XML reports through the `jest-junit` reporter. You can
+enable it in your Jest configuration or with command-line options.
 
 ### Using Jest Configuration
 
@@ -68,7 +67,7 @@ JEST_JUNIT_OUTPUT_DIR=. JEST_JUNIT_OUTPUT_NAME=junit.xml npx jest --reporters=de
 <CIInsightsSetupNote />
 
 After generating the JUnit report, add a step to upload the results to CI
-Insights using the mergifyio/gha-mergify-ci action.
+Insights using the `mergifyio/gha-mergify-ci` action.
 
 For example, in your workflow file:
 
