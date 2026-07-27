@@ -8,9 +8,8 @@ import { Image } from "astro:assets"
 import configCheckScreenshot from "../../images/configuration/config-check.png"
 import OptionsTable from '../../../components/Tables/OptionsTable';
 
-The Mergify configuration file is an essential component of using our platform
-effectively. This document will provide a comprehensive overview of the file,
-including its name, format, and the data structure schema.
+This page documents the Mergify configuration file: its name, its format, and
+the data structure schema.
 
 ## Configuration File Name
 
@@ -20,21 +19,19 @@ Mergify applies the following rule to find and use its configuration:
   `.mergify/config.yml` or `.github/mergify.yml` from the repository root
   directory.
 
-- It reads the file from the default repository branch configured on GitHub —
-  usually `main`.
+- It reads the file from the default repository branch configured on GitHub
+  (usually `main`).
 
-- It can extends the configuration by another configuration using the keyword
-  `extends` — see ["extending the configuration
-  file"](#extending-configuration-files).
+- It can extend the configuration with another configuration file using the
+  `extends` keyword; see [Extending Configuration
+  Files](/configuration/sharing#extending-configuration-files).
 
 ## File Format
 
-The configuration file uses the [YAML](https://yaml.org/) format, which is both
-human-readable and machine-parsable. YAML is easy to read and edit, making it a
-popular choice for configuration files.
+The configuration file uses the [YAML](https://yaml.org/) format.
 
-The file main type is a dictionary and each key of the dictionary configures a
-different aspect of Mergify:
+The file's main type is a dictionary and each key of the dictionary configures
+a different aspect of Mergify:
 
 {/* FIXME: add link to a better page than writing your first rule? */}
 
@@ -48,29 +45,31 @@ different aspect of Mergify:
 - [`queue_rules`](#queue-rules) configures the [Merge
   Queue](/merge-queue);
 
-- [`merge_queue`](#merge-queue) configures option for the [Merge
+- [`merge_queue`](#merge-queue) configures options for the [Merge
   Queue](/merge-queue);
 
 - [`priority_rules`](#priority-rules) configures the [priorities for the Merge
   Queue](/merge-queue/priority);
 
+- [`scopes`](/merge-queue/scopes) configures Merge Queue scopes;
+
 - [`commands_restrictions`](/commands/restrictions) configures who is able to
   run commands;
 
-- [`defaults`](#defaults) allows to configure default options for various
+- [`defaults`](#defaults) lets you configure default options for various
   actions;
 
-- [`shared`](#shared) allows to [define any YAML payload that can be used using
+- [`shared`](#shared) lets you [define any YAML payload that can be used using
   YAML anchors](/configuration/sharing#sharing-configuration-sections);
 
-- [`extends`](#extends) allows to [extend the
-  configuration](/configuration/sharing#extending-configuration-files) 
+- [`extends`](#extends) lets you [extend the
+  configuration](/configuration/sharing#extending-configuration-files)
   file by importing another configuration file.
 
 ### Pull Request Rules
 
-The top-level key `pull_request_rules` allows to automate your workflow by
-writing rules that execute actions. It must be a list of dictionary with the
+The top-level key `pull_request_rules` lets you automate your workflow by
+writing rules that execute actions. It must be a list of dictionaries with the
 following keys:
 
 <OptionsTable def="PullRequestRuleModel" />
@@ -91,33 +90,33 @@ pull_request_rules:
 
 ### Merge Protections
 
-The top-level key `merge_protections` allows to protect your merge by adding a
+The top-level key `merge_protections` lets you protect your merge by adding a
 list of rules that must match before allowing the pull request to be merged.
 
 <OptionsTable def="MergeProtectionRuleModel" />
 
-The top-level key `merge_protections_settings` allows to configure the
-behavior of Merge Protections
+The top-level key `merge_protections_settings` lets you configure the
+behavior of Merge Protections.
 
 <OptionsTable def="MergeProtections" />
 
 ### Merge Queue
 
-The top-level key `merge_queue` allows to configure certain aspect of the merge
+The top-level key `merge_queue` lets you configure certain aspects of the
 [merge queue](/merge-queue).
 
 <OptionsTable def="MergeQueue" />
 
 ### Queue Rules
 
-The top-level key `queue_rules` allows to define the rules that reign over your
+The top-level key `queue_rules` lets you define the rules that reign over your
 [merge queue](/merge-queue).
 
 <OptionsTable def="QueueRuleModel" />
 
 ### Priority Rules
 
-The top-level key `priority_rules` allows to define the rules that will determine
+The top-level key `priority_rules` lets you define the rules that will determine
 which [priority](/merge-queue/priority) a pull request has when entering your merge queue.
 
 <OptionsTable def="PriorityRuleModel" />
@@ -201,21 +200,17 @@ Configuration Files](/configuration/sharing#extending-configuration-files).
 
 ## JSON Schema Specification
 
-For those interested in a more detailed and machine-readable description of the
-Mergify configuration file format, a [JSON Schema](https://json-schema.org/)
-specification is available. This specification can help you understand the
-structure of the configuration file and can be used to generate client
-libraries, server stubs, or API documentation.
+A machine-readable description of the Mergify configuration file format is
+available as a [JSON Schema](https://json-schema.org/) specification. You can
+use it to validate configuration files or power editor completion.
 
 You can find <DownloadLink href="/mergify-configuration-schema.json">the JSON
 Schema specification for the Mergify configuration here</DownloadLink>.
 
 ## Validation and Troubleshooting
 
-When working with Mergify's configuration file, it's essential to validate and
-troubleshoot any issues that may arise. Ensuring that your configuration file
-is error-free and well-structured can help prevent unexpected behavior and
-maintain a smooth workflow.
+Mergify validates your configuration on every push. This section covers how to
+check your configuration file and track down problems.
 
 ### Validation
 
@@ -227,9 +222,7 @@ in the "Checks" tab of your pull request.
 <Image src={configCheckScreenshot} alt="Mergify configuration check" />
 
 If there are any issues with your configuration file, you will receive a
-detailed description of the problem and guidance on how to fix it. Be sure to
-address any errors or warnings to ensure optimal performance and avoid
-potential issues.
+detailed description of the problem and guidance on how to fix it.
 
 ### Validate Locally With Pre-Commit
 
@@ -265,10 +258,6 @@ file, consider the following troubleshooting steps:
 5. Consult Mergify's documentation: refer to Mergify's documentation for
    guidance on creating and managing your configuration file, as well as
    understanding the various features and options available to you.
-
-By following these troubleshooting steps, you can effectively identify and
-resolve any issues with your Mergify configuration file, ensuring a smooth and
-efficient automation process for your repository.
 
 ## Validating with the CLI
 
