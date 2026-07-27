@@ -9,13 +9,11 @@ import DocsetGrid from '../../../components/DocsetGrid/DocsetGrid.astro';
 Actions are the engine that powers Mergify. They define what Mergify should do
 when a set of conditions is met. This can range from merging a pull request,
 updating it with the latest changes, commenting on the pull request, assigning
-it to a user, adding labels, and so much more.
+it to a user, adding labels, and more.
 
-In essence, actions are the tasks that Mergify performs on your behalf to
-automate your pull request management workflow. By carefully crafting and
-combining actions, you can create a highly efficient and automated process
-that takes care of most of the routine tasks associated with pull request
-management.
+Actions are the tasks that Mergify performs on your behalf. By combining
+actions, you can automate most of the routine tasks associated with pull
+request management.
 
 <DocsetGrid>
   <Docset title="Assign" path="assign" icon="lucide:user-plus">
@@ -34,7 +32,7 @@ management.
     Post a comment on a pull request.
   </Docset>
   <Docset title="Delete Head Branch (Deprecated)" path="delete_head_branch" icon="lucide:scissors">
-    Deprecated — use GitHub's built-in "Automatically delete head branches" setting instead.
+    Deprecated. Use GitHub's built-in "Automatically delete head branches" setting instead.
   </Docset>
   <Docset title="Dismiss Reviews" path="dismiss_reviews" icon="lucide:message-square-x">
     Dismiss previous reviews on a pull request.
@@ -43,7 +41,7 @@ management.
     Convert a pull request to or from a draft.
   </Docset>
   <Docset title="GitHub Actions (Deprecated)" path="github_actions" icon="simple-icons:githubactions">
-    Deprecated — start your workflows from GitHub Actions events instead.
+    Deprecated. Start your workflows from GitHub Actions events instead.
   </Docset>
   <Docset title="Label" path="label" icon="lucide:badge-check">
     Add, remove, or toggle labels on a pull request.
@@ -52,7 +50,7 @@ management.
     Automate the merging of your pull requests.
   </Docset>
   <Docset title="Post Check (Deprecated)" path="post_check" icon="lucide:circle-check">
-    Deprecated — use Merge Protections instead.
+    Deprecated. Use Merge Protections instead.
   </Docset>
   <Docset title="Queue" path="queue" icon="mergify:merge-queue" neutral>
     Add the pull request to the merge queue.

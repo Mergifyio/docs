@@ -12,15 +12,13 @@ import OptionsTable from '../../../../components/Tables/OptionsTable';
   [migration guide](/workflow/actions/migrate-github-actions).
 :::
 
-The `github_actions` action enables Mergify to seamlessly dispatch existing
+The `github_actions` action enables Mergify to dispatch existing
 GitHub workflows within a repository when specified conditions are satisfied.
-By integrating this action, users can optimize their CI/CD pipeline, invoking
-specific GitHub Actions based on Mergify's conditions.
 
 :::note
   To use the `github_actions` action, ensure your workflow includes the
-  `workflow_dispatch` trigger. Additionally, Mergify requires write permissions
-  on Actions. Navigate to Mergify's UI to accept the permissions necessary for
+  `workflow_dispatch` trigger. Mergify also requires write permissions
+  on Actions. Go to Mergify's UI to accept the permissions necessary for
   this action.
 :::
 

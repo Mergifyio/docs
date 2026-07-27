@@ -8,21 +8,20 @@ import { Image } from "astro:assets"
 import branchProtectionConditionsScreenshot from "../../../images/workflow/actions/merge/branch-protections-injection.png"
 
 The `merge` action allows Mergify to automatically merge pull requests when
-certain conditions are met. This can significantly streamline your workflow by
-reducing the need for manual intervention.
+certain conditions are met. This reduces the need for manual intervention.
 
 Whatever your conditions are, Mergify might inject extra conditions for the
 merge action to take place:
 
 - Mergify always respects the [branch protection settings](#branch-protection-conditions)
 
-- Mergify always respect [pull request dependencies](#pull-request-dependencies)
+- Mergify always respects [pull request dependencies](#pull-request-dependencies)
 
-- Mergify always respect the [merge date](#merge-date)
+- Mergify always respects the [merge date](#merge-date)
 
-- Mergify allows merging pull request modifying its configuration file by
+- Mergify allows merging pull requests that modify its configuration file by
   default. But Mergify will always check whether these changes are
-  valid or not, to avoid merging broken configurations.
+  valid, to avoid merging broken configurations.
 
 ## Branch Protection Conditions
 
