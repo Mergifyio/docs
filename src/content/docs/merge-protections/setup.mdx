@@ -38,11 +38,11 @@ protection status appears as a GitHub Check Run or as a Deployment.
 Example configuration:
 ```yaml
 merge_protections_settings:
-    reporting_method: check-runs  # or deployments
-    # Post a comment with details about required rules
-    post_comment: true
-    # Automatically merge or queue PRs when all protections pass
-    auto_merge_conditions: true
+  reporting_method: check-runs  # or deployments
+  # Post a comment with details about required rules
+  post_comment: true
+  # Automatically merge or queue PRs when all protections pass
+  auto_merge_conditions: true
 ```
 
 Choose the method that best fits your integration and compliance needs.
@@ -60,7 +60,7 @@ reference and configuration examples.
 ## Make the Check Required
 
 Enabling inserts a check named `Mergify Merge Protections` on each pull
-request. Mark it as required, either as a checks or deployment:
+request. Mark it as required, either as a check or a deployment:
 
 - GitHub Branch Protection: Settings → Branches → Add/Edit rule → Require
   status checks / deployment to succeed → select `Mergify Merge Protections`
@@ -71,7 +71,7 @@ request. Mark it as required, either as a checks or deployment:
 <Image src={bpScreen} alt="GitHub Branch Protection" />
 
 Once required, the check blocks merges whenever any active protection fails and
-explains why in its output & a summary comment.
+explains why in its output and a summary comment.
 
 ## Updating Rules
 

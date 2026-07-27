@@ -12,8 +12,8 @@ before merging. Migrating to Mergify keeps that guarantee while adding
 fine‑grained policies, batching strategies, real CI efficiency insights, and
 queue observability (latency, throughput, bottlenecks) in one system.
 
-This guide shows a minimal, incremental migration—no rewrites, keep your branch
-protections and required checks exactly as they are.
+This guide shows a minimal, incremental migration: no rewrites, and you keep
+your branch protections and required checks exactly as they are.
 
 :::tip[Need help?]
 
@@ -59,8 +59,8 @@ Queue features:
 
 ## Minimal equivalent configuration
 
-If today you rely on a protected `main` with a GitHub Merge Queue, there is no
-needed configuration. Mergify automatically injects your ruleset or branch
+If today you rely on a protected `main` with a GitHub Merge Queue, no
+configuration is needed. Mergify automatically injects your ruleset or branch
 protections into the queue system. Simply type [`@mergify
 queue`](/commands/queue) to queue a pull request.
 
@@ -125,8 +125,8 @@ Rollback is trivial: toggle GitHub’s native queue back on; no destructive stat
 ## FAQ
 
 **Does Mergify require removing branch protections?** No. Keep them; Mergify
-works with them. Just avoid duplicate required contexts (same check listed in
-both branch protection and queue conditions is fine—no double run).
+works with them. Just avoid duplicate required contexts (the same check listed
+in both branch protection and queue conditions is fine; it doesn't run twice).
 
 **Do I lose the merge squash/rebase options?** No. Configure `merge_method` per
 rule; you can still vary merge strategies across PR subsets.
