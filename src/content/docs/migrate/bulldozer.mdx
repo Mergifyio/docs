@@ -43,7 +43,7 @@ Equivalent Mergify configuration:
 
 ```yaml title=.mergify.yml
 merge_protections_settings:
-  auto_merge: true
+  auto_merge_conditions: true
 
 merge_protections:
   - name: bulldozer-equivalent
@@ -60,8 +60,9 @@ queue_rules:
 ```
 
 Notes:
-- [`auto_merge`](/merge-protections/auto-merge) automatically queues PRs when
-  all [merge protection](/merge-protections) `success_conditions` pass
+- [`auto_merge_conditions`](/merge-protections/auto-merge) automatically
+  queues PRs when all [merge protection](/merge-protections)
+  `success_conditions` pass
 
 - Checks map to `check-success = <name>` (or `check-skipped`, `check-neutral`)
 
@@ -69,19 +70,20 @@ Notes:
 
 - Approvals map to review count or specific reviewers
 
-- The merge queue keeps PRs updated automatically — no manual rebases needed
+- The merge queue keeps PRs updated automatically, so no manual rebases are
+  needed
 
 ## Going Further with Merge Queue
 
 Once you have basic automerge working, you can take advantage of features
 Bulldozer doesn't offer:
 
-- [Priorities](/merge-queue/priority) — urgent PRs jump ahead in the queue
+- [Priorities](/merge-queue/priority): urgent PRs jump ahead in the queue
 
-- [Batches](/merge-queue/batches) — merge multiple PRs at once to reduce CI
+- [Batches](/merge-queue/batches): merge multiple PRs at once to reduce CI
   load
 
-- [Parallel checks](/merge-queue/performance#parallel-checks) — test multiple queue
+- [Parallel checks](/merge-queue/performance#parallel-checks): test multiple queue
   entries simultaneously
 
 ## Feature parity quick table

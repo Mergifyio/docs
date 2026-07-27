@@ -97,9 +97,8 @@ merge_protections_settings:
 
 ## Migrating from `autoqueue`
 
-`queue_rules[].autoqueue` is deprecated and will stop working on
-**2026-07-16**. The replacement is `auto_merge_conditions` in
-`merge_protections_settings`.
+`queue_rules[].autoqueue` is deprecated. The replacement is
+`auto_merge_conditions` in `merge_protections_settings`.
 
 Mergify opens an automatic migration pull request that rewrites the
 configuration. The translation depends on the shape of the original
