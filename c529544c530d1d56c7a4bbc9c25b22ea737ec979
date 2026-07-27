@@ -1,0 +1,6 @@
+Revision history for #12204:
+
+rev 2 (content) 2026-07-26 11:22 UTC — review (jd): drop the credential rule from the deterministic scanner — secret detection is not this script's job. Rule, its test, and the AGENTS.md enforcement wording removed; credentials stay in the policy list and in proofread-leaks.
+rev 1 (initial) 2026-07-26 11:22 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12204,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"16507cdb8e69c7fab77555ea896e2836584df731","timestamp_iso":"2026-07-26T11:22:29Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"16507cdb8e69c7fab77555ea896e2836584df731","new_sha":"519cdbcee54a6631ee3c5984aa863ed8fdf18548","timestamp_iso":"2026-07-26T11:22:29Z","reason":"review (jd): drop the credential rule from the deterministic scanner — secret detection is not this script's job. Rule, its test, and the AGENTS.md enforcement wording removed; credentials stay in the policy list and in proofread-leaks.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/16507cdb8e69c7fab77555ea896e2836584df731...519cdbcee54a6631ee3c5984aa863ed8fdf18548"}]} -->
