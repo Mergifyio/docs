@@ -92,7 +92,7 @@ between them with `gt up`, `gt down`, `gt top`, and `gt bottom`.
 | Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen |
 | Alternate base branch | `mergify stack new --base <branch>` | Multi-trunk support |
 | IDE integration | CLI only | VS Code extension |
-| MCP for AI agents | Bundled with CLI | `gt mcp` |
+| AI agent integration | [Skills](/stacks/agents) for Claude Code and skills.sh agents | `gt mcp` |
 | Merge Queue | [Native Mergify integration](/merge-queue) | Graphite merge queue |
 | Merge a stack | Bottom-up via Merge Queue | `gt merge` (stack-aware) |
 
@@ -113,7 +113,7 @@ splits the flow across several operations (`gt create`, `gt modify`,
 **Merge Queue depth.** Mergify's Merge Queue has
 [batching](/merge-queue/batches), [priority lanes](/merge-queue/priority),
 [speculative checks](/merge-queue/performance#parallel-checks), and
-[queue freeze](/merge-queue/pause). Graphite has a merge queue too; Mergify's
+[queue pause](/merge-queue/pause). Graphite has a merge queue too; Mergify's
 is more configurable and has been in production longer.
 
 **No one else needs Mergify.** Only the stack author installs the CLI.
@@ -170,7 +170,7 @@ Mergify has invested in a different direction:
   [Workflow Automation](/workflow).
 
 - **Merge Queue maturity**: batching, priority lanes, speculative checks,
-  queue freeze.
+  queue pause.
 
 - **CI and test intelligence**: [CI Insights](/ci-insights) for cost and
   timing analytics, flaky test detection, quarantine, and test reporting.
