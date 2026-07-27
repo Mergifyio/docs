@@ -3,9 +3,9 @@ title: Sharing Configuration
 description: Learn how to share and reuse configuration pieces in your configuration.
 ---
 
-In Mergify, you can leverage certain features like YAML anchors and aliases,
-the `shared` key, and the `extends` key to reduce redundancy, maintain
-consistency, and increase code reusability.
+In Mergify, you can use features like YAML anchors and aliases,
+the `shared` key, and the `extends` key to reduce redundancy and keep your
+configuration consistent.
 
 ## YAML Anchors and Aliases
 
@@ -22,7 +22,7 @@ queue_rules:
       - and: &CheckRuns
         - check-success = linters
         - check-success = unit
-        - check-success = functionnal
+        - check-success = functional
         - check-success = e2e
         - check-success = docker
   - name: default
@@ -60,7 +60,7 @@ reuse configuration rules across multiple repositories, helping maintain
 consistency and reduce duplication.
 
 To extend a configuration file, use the `extends` keyword at the top level of
-your configuration file file and specify the repository name from which you
+your configuration file and specify the repository name from which you
 want to include the configuration.
 
 ```yaml
@@ -92,12 +92,14 @@ pull_request_rules:
   - Values in the `shared` key will not be merged and shared between local and
     remote configurations.
 
-  - Values in the `defaults` and `commands_restrictions` key will be merged and remote default
-    values will apply to local configuration, unless a same default value already exist in the
-    local configuration.
+  - Values in the `defaults`, `commands_restrictions`, `merge_queue`, and
+    `merge_protections_settings` keys will be merged and remote default values
+    will apply to the local configuration, unless the same value already exists
+    in the local configuration.
 
   - Rules in the `pull_request_rules`, `queue_rules`, `priority_rules` or
     `merge_protections` section will be merged and remote default values will
-    apply to local configuration. A rule will not be overwritten, by the
-    extended configuration, if it has the same name in both the extended and
-    local configuration. :::
+    apply to the local configuration. A rule will not be overwritten by the
+    extended configuration if it has the same name in both the extended and
+    local configuration.
+:::
