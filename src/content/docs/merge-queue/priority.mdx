@@ -5,20 +5,19 @@ description: Learn how to order your pull requests in the queue by priority.
 
 import OptionsTable from '../../../components/Tables/OptionsTable';
 
-Priority rules are an optional but highly useful feature in Mergify's arsenal.
-They offer you a more refined control over how your pull requests are ordered
+Priority rules give you finer control over how your pull requests are ordered
 within a queue. By applying these rules, you can assign priorities to pull
 requests based on the conditions you define. This makes it possible to
-influence the position in which a pull request is added to the queue, thereby
-helping you handle urgent tasks more promptly.
+influence the position in which a pull request is added to the queue, so
+urgent tasks merge sooner.
 
 ## Understanding Priority Rules
 
 Priority rules in Mergify are a set of guidelines that determine the order of
-pull requests within a merge queue. They apply a priority — which could be a
-keyword such as `low`, `medium`, `high` or a numerical value — to a pull
-request based on conditions you've defined. When using numerical value, the
-value can be between 1 and 10,000.
+pull requests within a merge queue. They apply a priority (a keyword such as
+`low`, `medium`, or `high`, or a numerical value) to a pull request based on
+conditions you've defined. When using a numerical value, it can be between 1
+and 10,000.
 
 When a pull request is added to a queue, each priority rule is evaluated
 against its conditions. This assessment determines where the pull request will
@@ -27,7 +26,7 @@ one will be used.
 
 :::note
 
-  If no priority rules matches, Mergify assigns the `medium` priority to a
+  If no priority rule matches, Mergify assigns the `medium` priority to a
   pull request. This is not configurable.
 
 :::
@@ -58,10 +57,8 @@ In the above configuration:
 - The name under each rule is just an identifier and doesn't impact the
   functioning of the rule.
 
-The power of priority rules lies in their flexibility. You can set up as many
-rules as you need, tailored to your specific workflow. Whether it's to
-prioritize bug fixes or to push feature updates to the back, priority rules
-offer you the control you need over your merge queue.
+You can set up as many rules as you need, tailored to your specific workflow,
+whether that's prioritizing bug fixes or pushing feature updates to the back.
 
 ## How to Define Priority Rules
 
@@ -111,11 +108,11 @@ The textual priorities have the following numerical values:
 
 :::note
 
-    Priority is always the first criterion when selecting pull requests for batching.
-    Mergify picks PRs strictly in priority order and only after that may look ahead to 
-    find additional PRs with the same queue rule to complete the batch.
-    This ensures that higher-priority pull requests are never delayed, while still 
-    allowing the system to optimize CI usage and reduce merge time.
+  Priority is always the first criterion when selecting pull requests for
+  batching. Mergify picks PRs strictly in priority order and only after that
+  may look ahead to find additional PRs with the same queue rule to complete
+  the batch. This ensures that higher-priority pull requests are never delayed,
+  while still allowing the system to optimize CI usage and reduce merge time.
 
 :::
 
@@ -158,7 +155,7 @@ running on a `normal` pull request and gets tested first.
 
 ## Advanced Priority Rule Usage
 
-Beyond the basic use of priority rules, you can leverage advanced features to
+Beyond the basic use of priority rules, you can use advanced features to
 fine-tune how your pull requests are prioritized in the queue.
 
 ### Using Numerical Values
@@ -223,7 +220,7 @@ priority_rules:
 ```
 
 These are just a few ways to get the most out of Mergify's priority rules. By
-thinking about your team's needs and workflow, you can leverage these advanced
+thinking about your team's needs and workflow, you can use these advanced
 usage scenarios to create a priority system that best serves your project.
 
 ## Troubleshooting Priority Rules

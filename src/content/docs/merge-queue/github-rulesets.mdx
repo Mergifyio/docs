@@ -36,6 +36,10 @@ option on your queue rules:
 - **`merge`** -- rules are injected as merge conditions, checked after the
   queue has tested the pull request.
 
+- **`none`** -- rules are not injected at all. This mode requires a
+  `merge_bot_account` on the `queue` action, since Mergify must merge with
+  an account able to satisfy the protections itself.
+
 ### Bypass Actors and Injection
 
 If you are using GitHub rulesets (not classic branch protections), you can
