@@ -5,9 +5,7 @@ description: Learn how to implement queue rules and route your pull requests.
 
 import OptionsTable from '../../../components/Tables/OptionsTable';
 
-In larger projects with a high volume of pull requests, managing merges can
-become complex. This is where **Mergify's multiple queue rules** feature
-becomes a game-changer: it enables you to have finer control over the merge
+**Mergify's multiple queue rules** give you finer control over the merge
 process by categorizing pull requests based on any criteria you define.
 
 Queue rules let you organize your PR merge process into separate templates,
@@ -49,7 +47,7 @@ queue_rules:
 
 ## Configuration Options
 
-The top-level key `queue_rules` allows you to define the rules that reign over
+The top-level key `queue_rules` allows you to define the rules that govern
 your [merge queue](/merge-queue).
 
 Here are all the available fields you can configure for a queue rule:
@@ -94,13 +92,13 @@ This separation lets you schedule PRs early (e.g. based on labels) while still
 enforcing stricter checks before merge. This can be used to implement [two-step
 CI](/merge-queue/two-step).
 
-You can find more details about the [lifecycle of pull request in the
+You can find more details about the [lifecycle of a pull request in the
 documentation](/merge-queue/lifecycle#lifecycle-of-a-pull-request-in-the-merge-queue).
 
 ## Auto‑Queueing Pull Requests
 
 :::caution
-  `autoqueue` is deprecated and will stop working on 2026-07-16. Use
+  `autoqueue` is deprecated. Use
   [`auto_merge_conditions`](/merge-protections/auto-merge) in
   `merge_protections_settings` instead.
 

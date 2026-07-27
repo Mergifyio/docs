@@ -4,7 +4,7 @@ description: Step-by-step guide to replace the deprecated partition_rules with s
 ---
 
 `partition_rules` are deprecated and will be removed in a future release. This
-guide walks you through replacing them with **scopes** — a more powerful system
+guide walks you through replacing them with **scopes**, a more powerful system
 that integrates with your CI and unlocks smarter batching, parallel merge
 queues, and monorepo-aware workflows.
 
@@ -15,13 +15,13 @@ conditions evaluated by Mergify. Scopes improve on this in several ways:
 
 | | Partition Rules | Scopes |
 |---|---|---|
-| **CI awareness** | None — CI runs everything | Jobs can be skipped when their scope is not affected |
+| **CI awareness** | None: CI runs everything | Jobs can be skipped when their scope is not affected |
 | **Build tool support** | None | Native support for Nx, Bazel, Turborepo, and custom tooling |
-| **Batching** | Fixed lanes — PRs routed to one partition | Overlap-aware — PRs sharing scopes batch together |
-| **Parallel mode** | Not compatible | Fully supported — non-overlapping scopes merge simultaneously |
+| **Batching** | Fixed lanes: PRs routed to one partition | Overlap-aware: PRs sharing scopes batch together |
+| **Parallel mode** | Not compatible | Fully supported: non-overlapping scopes merge simultaneously |
 | **Merge queue scope** | Not available | Special `merge-queue` scope lets you gate expensive tests to queue-only runs |
 
-In short, scopes give you **faster CI, smarter batching, and less wasted
+In short, scopes give you **faster CI and smarter batching with less wasted
 compute**.
 
 ## Requirements
@@ -56,7 +56,7 @@ each build tool.
 Each partition condition becomes a scope with file patterns. The syntax changes
 from Mergify conditions to glob patterns.
 
-**Before — partition_rules:**
+**Before (partition_rules):**
 
 {/* validate-config-examples: skip — deprecated partition_rules syntax, shown for migration */}
 
@@ -89,7 +89,7 @@ pull_request_rules:
       queue:
 ```
 
-**After — scopes with file patterns:**
+**After (scopes with file patterns):**
 
 ```yaml
 scopes:
@@ -121,7 +121,7 @@ pull_request_rules:
 :::note
   The fallback partition has no equivalent in scopes. If a PR matches no scope,
   it is treated as having no scope and will be batched with other unscoped PRs.
-  This is usually the desired behavior — files outside any scope boundary don't
+  This is usually the desired behavior: files outside any scope boundary don't
   need special routing.
 :::
 
@@ -174,7 +174,7 @@ jobs:
 
 Delete the entire `partition_rules` section from `.mergify.yml`. If you
 referenced `partition-name` or `current-partition-name` in your
-`pull_request_rules` conditions, remove those conditions — they no longer apply.
+`pull_request_rules` conditions, remove those conditions. They no longer apply.
 
 ### 4. Enable parallel mode
 
@@ -205,7 +205,7 @@ queue_rules:
 ```
 
 In parallel mode, PRs touching different scopes are tested and merged
-simultaneously — just like partition lanes, but with smarter dependency tracking
+simultaneously, just like partition lanes, but with smarter dependency tracking
 when scopes overlap.
 
 See [Queue Modes](/merge-queue/queue-modes) for details.
@@ -352,5 +352,5 @@ pull_request_rules:
 ```
 
 The key improvements:
-- **Scopes enable smarter batching** — PRs touching the same scope are grouped together
-- **Non-overlapping scopes merge simultaneously** — just like partition lanes, but with smarter dependency tracking when scopes overlap
+- **Scopes enable smarter batching**: PRs touching the same scope are grouped together
+- **Non-overlapping scopes merge simultaneously**: just like partition lanes, but with smarter dependency tracking when scopes overlap

@@ -8,10 +8,8 @@ import Youtube from '../../../components/Youtube.astro'
 import batchesScreenshot from "../../images/merge-queue/batches/batches-dashboard.png"
 import requiredPRbypassScreenshot from "../../images/merge-queue/batches/mergify-required-pull-request-bypass.png"
 
-Mergify's batch merging feature is a powerful tool that enhances productivity
-and efficiency in your development workflow. Instead of merging pull requests
-one by one, which can be time-consuming, especially for larger projects, batch
-merging allows you to combine and merge multiple pull requests at once.
+Batch merging lets you combine and merge multiple pull requests at once,
+instead of merging them one by one.
 
 :::tip
   Learn the concepts behind batching and its trade-offs at the
@@ -30,14 +28,13 @@ to be processed as usual (see [Handling Batch
 Failures](#handling-batch-failure-or-timeout)).
 
 This feature is especially useful for large-scale projects with many pull
-requests to merge, as it can significantly reduce the time required to merge
-them all.
+requests to merge, as it can reduce the time required to merge them all.
 
 <Youtube video="2mVymDFMaMk" title="Using batch and two-step CI"/>
 
 ## Understanding Batch Merging
 
-Batch merging works by utilizing the `batch_size` option in your Mergify queue
+Batch merging works by using the `batch_size` option in your Mergify queue
 configuration. This option tells Mergify how many pull requests it should try
 to combine and validate at once. The `batch_size` can be adjusted according to
 the needs of your project, with a higher number indicating a larger batch size.
@@ -121,7 +118,7 @@ queue_rules:
     ...
 ```
 
-With the configuration above, Mergify waits up to 5 minutes for 5 PR to enter
+With the configuration above, Mergify waits up to 5 minutes for 5 PRs to enter
 the queue before creating a batch. This allows you to pick the right trade-off
 between latency and minimal CI usage.
 
@@ -293,8 +290,8 @@ However, there might be scenarios where you want to merge the temporary
 branches instead. One advantage of this is maintaining the same SHA1, which
 might be important for some workflows and for traceability.
 
-Also, if you are deploying after a merge, this can also make sure that you
-trigger only a single deployment once a batch of pull request is fully tested
+Also, if you are deploying after a merge, this can make sure that you
+trigger only a single deployment once a batch of pull requests is fully tested
 and passes the CI.
 
 There are two ways to merge the batch PR directly:
@@ -319,11 +316,11 @@ batch-PR modes.
 
 :::caution
   If GitHub branch protections are enabled, fast-forward requires some
-  additional configuration in branch protection settings, you also need to
+  additional configuration in branch protection settings: you also need to
   allow Mergify to "bypass the required pull requests" to merge.
 
   This is mandatory since Mergify pushes the temporary branch to the base
-  branch without going through a pull request in order to keep the same SHA1.
+  branch without going through a pull request to keep the same SHA1.
 
   <Image src={requiredPRbypassScreenshot} alt="Mergify bypass required pull requests" />
 :::
@@ -333,7 +330,7 @@ batch-PR modes.
 Set `merge_method: merge-batch` on your queue rule. This merge method requires
 `batch_size` to be greater than 1. Mergify creates the batch PR as usual, runs
 CI on it, and then merges the batch PR into the base branch using the GitHub
-Pull Request merge API with a merge commit. The merge commit message lists all
+pull request merge API with a merge commit. The merge commit message lists all
 the pull requests included in the batch.
 
 ```yaml
@@ -344,7 +341,7 @@ queue_rules:
 ```
 
 Unlike `fast-forward`, `merge-batch` uses the standard GitHub merge API, so it
-works with branch protection settings that require pull request merges — no
+works with branch protection settings that require pull request merges: no
 bypass configuration is needed.
 
 See [Merge Strategies: Merge Batch](/merge-queue/merge-strategies#merge-batch)
@@ -361,16 +358,14 @@ This is how it works:
 
 1. **Splitting the batch**: If a batch fails, all subsequent batches are deemed
    to fail as well, are canceled and put back into the queue. The system splits
-   the failed batch to isolate the problematic pull request. The size of these
-   new batches is determined by the `max_parallel_checks` parameter. By
-   default, the batch is split into two; however, if `max_parallel_checks` is
-   set to a value greater than 1, it dictates the number of batches the failed
-   batch should be divided into.
+   the failed batch to isolate the problematic pull request. The
+   `max_parallel_checks` parameter dictates the number of parts the failed
+   batch is divided into, with a minimum of two.
 
 2. **Testing the new batches**: After splitting, the first new batch is
    immediately retested, while others are queued. If `max_parallel_checks` is
-   greater than 1, the system will also test subsequent batch split at the same
-   time. This continues until the split is done.
+   greater than 1, the system will also test subsequent batch splits at the
+   same time. This continues until the split is done.
 
 3. **Handling the result**: If the first batch split succeeds, it is merged and
    the next split is scheduled for testing. If the batch fails, Mergify splits
@@ -754,9 +749,8 @@ and want to see all failures.
 
 ## Important Considerations
 
-While using batch merging and parallel checks together can significantly speed
-up your merge queue processing, it's crucial to consider the following points
-for an optimal setup:
+While using batch merging and parallel checks together can speed up your merge
+queue processing, consider the following points for an optimal setup:
 
 ### Branch Protection Settings
 

@@ -135,7 +135,7 @@ queue_rules:
   - `null`: disables scopes entirely.
 
 - `scopes.merge_queue_scope`: optional name automatically applied to temporary merge queue pull
-  requests (defaults to `merge-queue`). Set it to `null` to disable.
+  requests (defaults to `merge-queue`).
 
 - `scopes.capacities`: optional map of scope name to the number of speculative checks that scope may
   run at the same time, used to limit per-scope concurrency in parallel mode. See [Limiting
@@ -157,7 +157,7 @@ queue_rules:
     batch_size: 5
 ```
 
-With the configuration above you must push scopes yourself—typically from a CI job that analyses the
+With the configuration above you must push scopes yourself, typically from a CI job that analyses the
 pull request and calls `gha-mergify-ci` with the `scopes-upload` action. This is the recommended
 approach when build systems such as Bazel, Nx, or Turborepo already know which projects are affected.
 
@@ -275,7 +275,7 @@ description created by the queue.
 
 - Keep scope names stable and small in number so batches stay meaningful.
 
-- Prefer scopes that align with your CI topology—if a test suite covers a specific service or
+- Prefer scopes that align with your CI topology: if a test suite covers a specific service or
   package, create a scope with the same boundary.
 
 - Still configure sane `batch_max_wait_time` values: scopes help Mergify pick the right pull

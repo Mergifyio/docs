@@ -7,18 +7,10 @@ import { Image } from "astro:assets"
 import queueCheckScreenshot from "../../images/merge-queue/lifecycle/mergify-check.png"
 import queueStatusScreenshot from "../../images/merge-queue/setup/queue-status.png"
 
-The merge queue in Mergify is a powerful tool for maintaining the integrity of
-your codebase, ensuring that every Pull Request (PR) is up-to-date and passes
-all necessary checks before being merged. But once a PR is added to a merge
-queue, what exactly happens? Understanding the lifecycle of a PR in the merge
-queue is essential for managing your PRs effectively and ensuring a smooth,
-efficient workflow.
-
-In this guide, we will walk you through the journey of a PR once it enters the
-merge queue, from the moment it's added until it's either successfully merged
-or removed from the queue. We'll also explain how to monitor and manage your
-merge queue effectively, and share some best practices for handling common
-scenarios such as requeueing and dequeueing PRs.
+This page explains what happens to a pull request (PR) once it enters the
+merge queue, from the moment it's added until it's either merged or removed
+from the queue. It also covers how to monitor and manage your merge queue, and
+how to handle common scenarios such as requeueing and dequeueing PRs.
 
 ## Adding a Pull Request to the Merge Queue
 
@@ -30,8 +22,8 @@ automatically. Here's an overview of the process:
    [merge queue status comment checkbox](/commands/queue#queueing-with-a-checkbox).
 
 - **Automated addition:** A pull request can be automatically added to the
-   merge queue using [`auto_merge`](/merge-protections/auto-merge) in
-   `merge_protections_settings`.
+   merge queue using [`auto_merge_conditions`](/merge-protections/auto-merge)
+   in `merge_protections_settings`.
 
 Before a pull request can be added to the merge queue, it must meet certain
 conditions, specified under `queue_conditions` in your
@@ -163,7 +155,7 @@ A pull request can be removed from the merge queue in a couple of ways:
    request from being merged, such as when a critical issue is discovered.
 
 Please note, a pull request removed from the queue with the `dequeue` command
-will not rejoin the queue automatically — it will need to be manually re-added
+will not rejoin the queue automatically; it will need to be manually re-added
 to the queue by re-applying the `queue` command and by re-satisfying the
 `queue_conditions`.
 
@@ -340,7 +332,7 @@ queue, Mergify provides multiple tools and indicators. Here's how you can use
 them:
 
 1. **Check the Mergify dashboard:** The [Mergify
-   dashboard](https://dashboard.mergify.com) provides a comprehensive view of
+   dashboard](https://dashboard.mergify.com) provides a full view of
    your queue. You can see the number of pull requests in each queue and their
    position.
 
@@ -353,8 +345,7 @@ them:
 <Image src={queueCheckScreenshot} alt="Mergify check status" />
 
 Monitoring your pull requests' status helps you understand their position in
-the queue and estimate when they might be merged, making the entire process
-more transparent and manageable.
+the queue and estimate when they might be merged.
 
 ## The Mergify Merge Queue Check Run
 

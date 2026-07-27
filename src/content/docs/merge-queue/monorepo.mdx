@@ -5,16 +5,15 @@ description: Optimize merge queue batching for monorepos with scopes.
 
 In monorepo environments, not every pull request affects the entire codebase. Running the full
 validation matrix for each change quickly becomes wasteful, yet batching unrelated pull requests
-still makes the queue churn through work that doesn't matter. This page explains the pain points
-first and then shows how Mergify's monorepo capabilities keep batching efficient without
-sacrificing safety.
+still makes the queue churn through work that doesn't matter. This page shows how Mergify's
+monorepo capabilities keep batching efficient without sacrificing safety.
 
 :::tip
   Learn about merge queue strategies for monorepos at the
   [Merge Queue Academy](https://merge-queue.academy/use-cases/monorepos/).
 :::
 
-To solve this, Mergify introduces **scopes**—named regions of your repository that describe which
+To solve this, Mergify introduces **scopes**, named regions of your repository that describe which
 services, packages, or domains a change touches. The rest of this guide shows how scopes pair with
 monorepo-aware tooling to batch compatible pull requests, keep unrelated work apart, and drive only
 the CI jobs that matter. For the full schema and advanced strategies, see
@@ -67,7 +66,7 @@ request is created, Mergify automatically determines which scopes are affected a
 information to optimize batching. The [Scopes reference](/merge-queue/scopes) covers the schema plus
 all tooling-specific guides, including file-pattern detection and integrations with Bazel, Nx, and
 Turborepo. If you already run Nx, Bazel, Turborepo, or another orchestrator, point it at
-`gha-mergify-ci` to upload those scope names—**scopes are the feature Merge Queue consumes**, regardless
+`gha-mergify-ci` to upload those scope names: **scopes are the feature Merge Queue consumes**, regardless
 of how you compute them.
 
 ## Next steps
@@ -76,7 +75,7 @@ of how you compute them.
   Turborepo, custom uploaders).
 
 - [Queue Modes](/merge-queue/queue-modes): once scopes are configured, enable parallel mode to
-  test and merge pull requests that touch different scopes simultaneously — significantly reducing
-  merge times in monorepos.
+  test and merge pull requests that touch different scopes simultaneously, reducing merge times
+  in monorepos.
 
 - [Monorepo CI](/monorepo-ci): opinionated GitHub Actions workflows if you need turnkey automation.
