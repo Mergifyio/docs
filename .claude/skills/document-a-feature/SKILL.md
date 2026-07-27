@@ -47,6 +47,11 @@ Identify the source of truth for the feature:
 Establish: what the feature does, who uses it, the exact config/CLI/API surface,
 and any plan/tier gating.
 
+Every one of these sources is internal. Take the *behavior* from them and leave
+the *provenance* behind: no ticket or Linear IDs, no customer or org names, no
+monorepo paths, no internal links. Read the "Never Publish Internal Information"
+section of AGENTS.md before you write a line.
+
 ## Step 2 — Place the page
 
 Read `references/placement-guide.md` for the full section map and decision rules.
@@ -106,13 +111,15 @@ exact snippets.
 
 Run these before claiming the page is done:
 
-1. **Proofread pipeline** — if total changed/added docs lines ≥ 10, spawn the 4
-   proofread subagents in parallel per the repo CLAUDE.md (`proofread-style`,
-   `proofread-technical`, `proofread-structure`, `proofread-consistency`) on the
-   diff.
-2. **Config examples** — if the page contains any YAML/`.mergify.yml` snippets,
+1. **Leak check** — always, whatever the diff size: run
+   `pnpm check:internal-leaks` and the **proofread-leaks** subagent on the diff.
+2. **Proofread pipeline** — if total changed/added docs lines ≥ 10, spawn the
+   other 4 proofread subagents in parallel per the repo CLAUDE.md
+   (`proofread-style`, `proofread-technical`, `proofread-structure`,
+   `proofread-consistency`) on the diff.
+3. **Config examples** — if the page contains any YAML/`.mergify.yml` snippets,
    invoke the **validate-config-examples** skill.
-3. **Build check** — run `pnpm check` (astro check + eslint + biome). Fix any
+4. **Build check** — run `pnpm check` (astro check + eslint + biome). Fix any
    errors. For a final SSG sanity check, `pnpm build`.
 
 ## Hard rules

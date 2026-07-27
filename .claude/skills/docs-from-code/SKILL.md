@@ -84,6 +84,11 @@ Input: a feature — a PR number, or a code area / config key.
   docs repo, never add it to `.gitignore` (keep it in the scratch dir).
 - Document the user-facing contract, not implementation details. Code is the
   source of truth for *what is true*, not for *how to say it*.
+- **The clone is private. Nothing that identifies it may reach the docs** — no
+  `Mergifyio/monorepo` references, no `mergify_engine/...` paths, no internal
+  module or function names, no `file:line` citations. Cite the code in your
+  *report* to the user, never in the page. See `proofread-leaks` and the
+  "Never Publish Internal Information" section of AGENTS.md.
 - When code and a doc disagree, the code wins for facts (defaults, enums,
   behavior) — but if you cannot tell whether a difference is intentional, flag it
   rather than "fixing" it.
