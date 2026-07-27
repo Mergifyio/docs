@@ -3,10 +3,9 @@ title: Monorepo CI
 description: Run the right tests for the right pull requests by combining scopes with your CI system.
 ---
 
-Monorepos supercharge collaboration, but they also make continuous integration
-expensive. Every change potentially touches hundreds of packages or services,
-and running the full test matrix for all of them at every pull request update
-quickly becomes unsustainable.
+Monorepos make continuous integration expensive. Every change potentially
+touches hundreds of packages or services, and running the full test matrix for
+all of them at every pull request update quickly becomes unsustainable.
 
 Mergify Monorepo CI brings precision testing to your existing CI pipelines by
 tagging each pull request with **scopes**. Scopes are named slices of your
@@ -22,8 +21,10 @@ With scopes in place you can:
 - Run only the CI jobs that matter for those scopes.
 - Reuse those scopes later in the merge queue to build smarter batches.
 
-Today, GitHub Actions is the first CI platform with native support through our
-[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) action.
+Native support is available for GitHub Actions through our
+[`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) action and for
+Buildkite through the
+[`mergify-ci` plugin](https://github.com/Mergifyio/mergify-ci-buildkite-plugin).
 
 ## How it works
 
@@ -73,9 +74,9 @@ strict digraph {
 
 1. **Define scopes** in your `.mergify.yml` file by mapping the areas of your repository (via file
    patterns) to scope names that matter for your CI.
-   
-2. **Collect scopes in CI.** A helper (currently
-   [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)) inspects the
+
+2. **Collect scopes in CI.** A helper such as
+   [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) inspects the
    pull request diff and dispatches only the jobs whose scopes are touched.
 
 3. **Drive your jobs conditionally.** Use the reported scopes to decide which
@@ -109,6 +110,7 @@ Once those scopes exist, pick the workflow that matches your setup:
 
 - [Scope configuration reference](/merge-queue/scopes)
 - [GitHub Actions setup](/monorepo-ci/github-actions)
+- [Buildkite setup](/monorepo-ci/buildkite)
 - [Merge queue monorepo overview](/merge-queue/monorepo)
 
 Looking for a different CI provider? [Let us know](mailto:support@mergify.com); more platforms are on our roadmap.

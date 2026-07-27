@@ -73,14 +73,14 @@ Before setting up flaky test detection, ensure you have:
 
 2. Created an application key with `ci` scope and set it as `MERGIFY_TOKEN` in Jenkins credentials.
 
-3. Configured test integration (e.g., `pytest-mergify` or `mergify cli upload`)
-   for your test framework
+3. Configured test integration (e.g., `pytest-mergify` or JUnit report upload
+   with `mergify ci junit-process`) for your test framework
 
-### Jenkins job Setup
+### Jenkins Job Setup
 
 The recommended approach is to use a scheduled job that runs your test
 suite multiple times on the default branch. Here's an example configuration
-that runs tests twice daily with 5 parallel executions:
+that runs tests twice daily with 5 repeated executions:
 
 - Example with native integration (e.g. `pytest-mergify`)
 
@@ -117,7 +117,7 @@ pipeline {
 }
 ```
 
-- Examples with `mergify cli upload` integration
+- Example with JUnit report upload via `mergify ci junit-process`
 
 ```groovy
 pipeline {
@@ -142,7 +142,7 @@ pipeline {
             # npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
           done
           set -e
-          # Quote the glob so Mergify expands it rather than the shell —
+          # Quote the glob so Mergify expands it rather than the shell;
           # recommended when many reports match.
           mergify ci junit-process 'test-results-*.xml'
         '''
@@ -161,7 +161,7 @@ pipeline {
   the most impact
 
 - **Weekday Schedule**: The example runs Monday to Friday (`1-5`) to avoid
-  running when no changes are made on the code
+  running when no changes are made to the code
 
 - **Job name**: Ensure the job name is the same as the one running tests on your pull request,
   allowing CI Insights to identify them. It can be overridden with `MERGIFY_TEST_JOB_NAME` if needed.
