@@ -89,6 +89,9 @@ Create a todo for each step.
   target.
 - Don't flag internal/refactor PRs as doc gaps. Only user-facing capability
   changes count.
+- The report is internal, the docs are not. Linear IDs, monorepo paths, and
+  customer names belong in the report and must never survive into a page written
+  from it — see `proofread-leaks`.
 - Be honest about uncertainty: if you can't tell whether something is documented,
   say "needs review" rather than asserting a gap.
 - The output is a plan, not edits. To actually write a page, hand the item to
