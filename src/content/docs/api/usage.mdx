@@ -9,7 +9,7 @@ import applicationKeysToken from "../../images/api-intro/application_keys_token.
 import applicationKeysDelete from "../../images/api-intro/application_keys_delete.png"
 
 Mergify provides a RESTful API for integrating with your merge queues, CI
-insights, and workflow automation.
+Insights, and Workflow Automation.
 
 All API requests should be directed to: `https://api.mergify.com/v1`
 
@@ -77,18 +77,18 @@ As an alternative to application keys, you can authenticate to the Mergify
 API using a **GitHub Personal Access Token (PAT)** as a Bearer
 token. This is useful when integrating with tools that already have a
 GitHub token available, such as CI environments or
-the [Mergify CLI](/stacks).
+the [Mergify CLI](/cli/usage).
 
 You must have logged in to
 the [Mergify dashboard](https://dashboard.mergify.com) at least
 once using GitHub OAuth before using this method. The PAT is only used to
-verify your GitHub identity — all permissions are based on your Mergify
+verify your GitHub identity: all permissions are based on your Mergify
 account, not the PAT's scopes.
 
 **Accepted token formats:**
 
-- `ghp_*` — [classic personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
-- `github_pat_*` — [fine-grained personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
+- `ghp_*`: [classic personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
+- `github_pat_*`: [fine-grained personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
 
 Example:
 
@@ -100,7 +100,7 @@ curl -H "Accept: application/json" \
 
 :::note
   The PAT is used solely for identity verification. The token's GitHub
-  scopes do not affect what you can access in the Mergify API — permissions
+  scopes do not affect what you can access in the Mergify API; permissions
   are determined by your Mergify user account and its associated
   organizations.
 :::
@@ -132,8 +132,8 @@ for navigating between pages.
 
 **Query parameters:**
 
-- `per_page` — Number of items per page (1–100, default: 10)
-- `cursor` — Opaque cursor for the current page. Extract this from the `Link` header; do not construct it manually.
+- `per_page`: Number of items per page (1–100, default: 10)
+- `cursor`: Opaque cursor for the current page. Extract this from the `Link` header; do not construct it manually.
 
 **Link header example:**
 
@@ -145,10 +145,10 @@ Link: <https://api.mergify.com/v1/repos/Mergifyio/my-repo/logs?cursor=abc&per_pa
 
 The `Link` header may include the following relations:
 
-- `next` — The next page of results
-- `prev` — The previous page of results
-- `first` — The first page of results
-- `last` — The last page of results
+- `next`: The next page of results
+- `prev`: The previous page of results
+- `first`: The first page of results
+- `last`: The last page of results
 
 To iterate through all pages, follow the `rel="next"` link
 until it is no longer present in the response.
