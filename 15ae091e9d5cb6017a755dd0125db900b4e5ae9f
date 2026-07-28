@@ -1,0 +1,6 @@
+Revision history for #12230:
+
+rev 2 (content) 2026-07-27 14:30 UTC — address review: use the corpus term "automatic migration pull request" (rules.mdx, auto-merge.mdx) instead of introducing a third variant
+rev 1 (initial) 2026-07-27 14:30 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12230,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"214b594b6d311362a1caf34d8b5e330f6dd27f4b","timestamp_iso":"2026-07-27T14:30:06Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"214b594b6d311362a1caf34d8b5e330f6dd27f4b","new_sha":"6a5cbfd2f059accdc68112e7cadaf75bbad4859a","timestamp_iso":"2026-07-27T14:30:06Z","reason":"address review: use the corpus term \"automatic migration pull request\" (rules.mdx, auto-merge.mdx) instead of introducing a third variant","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/214b594b6d311362a1caf34d8b5e330f6dd27f4b...6a5cbfd2f059accdc68112e7cadaf75bbad4859a"}]} -->
