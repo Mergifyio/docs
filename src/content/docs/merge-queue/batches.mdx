@@ -437,14 +437,14 @@ previously failed.
 ### Reading the Metadata
 
 The [Mergify CLI](/cli/ci) exposes the metadata with `mergify ci queue-info`. Run
-it on a merge queue draft pull request and it prints the queue metadata as JSON:
+it on a merge queue batch build and it prints the queue metadata as JSON:
 
 ```json
 {
-  "checking_base_sha": "f4a9c1e9b2d34c5a6f7081923abcde4567890123",
+  "scopes": ["backend", "frontend"],
   "pull_requests": [
-    { "number": 123 },
-    { "number": 124 }
+    { "number": 123, "scopes": ["backend"] },
+    { "number": 124, "scopes": ["frontend"] }
   ],
   "previous_failed_batches": [
     {
@@ -452,27 +452,53 @@ it on a merge queue draft pull request and it prints the queue metadata as JSON:
       "batch_pr_head_sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
       "checked_pull_requests": [123, 124, 125, 126]
     }
-  ]
+  ],
+  "previous_check_retries": [
+    {
+      "batch_pr_number": 991,
+      "batch_pr_head_sha": "b2c3d4e5f60718293a4b5c6d7e8f901234567890",
+      "attempt": 1
+    }
+  ],
+  "checking_base_sha": "f4a9c1e9b2d34c5a6f7081923abcde4567890123"
 }
 ```
 
 Here the current split is testing pull requests #123 and #124, and it descends
-from draft pull request #980, which checked #123 through #126 and failed.
-Each entry also carries `batch_pr_head_sha`, the head commit of that failed
-batch's pull request: your CI ran on that commit, so its check runs are the
-record of which jobs passed there.
+from batch pull request #980, which checked #123 through #126 and failed. This
+same split has already run once itself, as batch pull request #991, and is being
+retried after its checks failed.
 
-`previous_failed_batches` is a list: when a batch is split several times, each
-ancestor adds an entry, oldest first. The batch your split came from directly is
-always the **last** entry.
+The fields are:
+
+- `scopes`: the [scopes](/merge-queue/scopes) this batch covers, the union of
+  the scopes of its pull requests. Empty when you do not use scopes.
+
+- `pull_requests`: the pull requests the batch is checking, each with its own
+  scopes.
+
+- `previous_failed_batches`: the failed batches this split descends from, oldest
+  first. When a batch is split several times, each ancestor adds an entry, so
+  the batch your split came from directly is always the **last** one.
+  `batch_pr_head_sha` is the commit that batch's CI ran on.
+
+- `previous_check_retries`: earlier runs of *this same* batch, re-run because
+  their checks failed under
+  [`max_checks_retries`](/merge-queue/lifecycle#automatic-ci-retries). Each
+  entry carries its 1-indexed `attempt` number.
+
+- `checking_base_sha`: the commit this batch's own pull requests sit on top of —
+  the base branch plus any pull requests queued ahead of it. Diffing from it
+  isolates the changes the batch itself introduces.
 
 When `$GITHUB_OUTPUT` is set, `mergify ci queue-info` also exposes the same JSON
-as a `queue_metadata` step output, so a later step can consume it without
-re-parsing the pull request body.
+as a `queue_metadata` step output, so a later step can consume it directly.
 
 :::note
-  `mergify ci queue-info` only works on a merge queue draft pull request. On any
-  other pull request it exits with an error.
+  `mergify ci queue-info` reads a Git note Mergify attaches to the batch's head
+  commit, so it works in any CI provider that checks out the merge queue branch,
+  and it needs no GitHub token. Outside a merge queue batch build it exits with
+  an error.
 :::
 
 ### GitHub Actions Example
@@ -503,8 +529,10 @@ jobs:
 
       - name: Read the merge queue metadata
         id: queue-info
-        # queue-info only works on a merge queue draft pull request.
+        # queue-info only works on a merge queue batch build, and the metadata
+        # is best-effort: never let missing metadata fail the job.
         if: startsWith(github.event.pull_request.title, 'merge queue:')
+        continue-on-error: true
         run: mergify ci queue-info
 
       - name: Download the previously failed tests
@@ -517,12 +545,12 @@ jobs:
           # Anything we can't optimize falls back to the full suite.
           fallback() { echo "$1, running the full test suite."; exit 0; }
 
-          # The batch this split came from is the last entry of the list.
-          batch_pr=$(jq -r '.previous_failed_batches[-1].batch_pr_number // empty' <<< "$QUEUE_METADATA")
-          [ -n "$batch_pr" ] || fallback "No previous failed batch"
+          # The batch this split came from is the last entry of the list, and it
+          # carries the commit its CI ran on.
+          sha=$(jq -r '.previous_failed_batches[-1].batch_pr_head_sha // empty' <<< "$QUEUE_METADATA")
+          [ -n "$sha" ] || fallback "No previous failed batch"
 
-          # Resolve the latest CI run of that batch's pull request.
-          sha=$(gh pr view "$batch_pr" --json headRefOid -q .headRefOid)
+          # Resolve the latest CI run of that batch.
           run_id=$(gh run list --commit "$sha" --workflow CI --json databaseId -q '.[0].databaseId // empty')
           [ -n "$run_id" ] || fallback "No CI run for the previous failed batch"
 
@@ -585,8 +613,8 @@ whether it already passed on the parent batch and exits early if it did.
 
 :::note
   GitHub's native "Re-run failed jobs" does not apply here. Mergify creates a
-  new draft with a new commit for each split, so every split is a fresh workflow
-  run, not a re-run of the parent's run.
+  new batch pull request with a new commit for each split, so every split is a
+  fresh workflow run, not a re-run of the parent's run.
 :::
 
 ### How a Job Decides to Skip
@@ -629,8 +657,10 @@ jobs:
 
       - name: Read the merge queue metadata
         id: queue-info
-        # queue-info only works on a merge queue draft pull request.
+        # queue-info only works on a merge queue batch build, and the metadata
+        # is best-effort: never let missing metadata fail the job.
         if: startsWith(github.event.pull_request.title, 'merge queue:')
+        continue-on-error: true
         run: mergify ci queue-info
 
       - name: Skip this job if it already passed on the parent batch
@@ -653,7 +683,7 @@ jobs:
             || fallback "Could not read the queue metadata"
           [ -n "$sha" ] || fallback "No parent batch to compare against"
 
-          # The parent draft failed overall, but some of its jobs passed. List
+          # The parent batch failed overall, but some of its jobs passed. List
           # every conclusion this job's own check run reached on that commit
           # (filter=all, not just the latest), scoped to this workflow's
           # provider. A failed lookup (missing checks:read, rate limit, deleted
