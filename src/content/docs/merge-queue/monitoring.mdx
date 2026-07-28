@@ -9,46 +9,87 @@ import dashboardStatsScreenshot from "../../images/merge-queue/monitoring/dashbo
 Monitoring your merge queue's key metrics helps you identify bottlenecks,
 optimize throughput, and maintain an efficient development cycle.
 
-## Key Metrics to Monitor
+## The Statistics Page
 
-### PRs Merged Per Day
-Track the number of pull requests merged each day. A consistent trend indicates
-a stable development environment. Sudden drops or spikes can indicate issues
-that need attention.
+Open **Merge Queue → Statistics** in your
+[dashboard](https://dashboard.mergify.com) to see how your queue is behaving:
 
-### CI Runtime
-Monitor how long your Continuous Integration tests take to run. A sudden
-increase in runtime can slow down your entire merge queue and delay other PRs.
-
-### Queue Checks Outcome
-Track the success rate of PRs in the queue. High success rates indicate a
-healthy development and review process. Frequent failures may signal a need for
-process refinement or CI improvements.
-
-### Queue Size
-Monitor the number of PRs waiting in the queue. If the queue grows
-significantly or continuously, it indicates a bottleneck or inefficiency in
-your process or CI.
-
-### Running Checks
-Monitor the number of checks currently running. If you're often at full
-capacity, consider increasing the number of parallel checks to improve
-throughput.
-
-### Queue Waiting Time
-Track how long PRs spend idle in the queue. Extended waiting times increase
-overall latency and can delay the delivery of features or fixes.
-
-## Viewing Your Metrics
-
-View these metrics on the merge queue page of your
-[dashboard](https://dashboard.mergify.com):
-
-<Image src={dashboardStatsScreenshot} alt="Statistics page on mergify's dashboard"/>
+<Image src={dashboardStatsScreenshot} alt="Statistics page on Mergify's dashboard"/>
 
 Use the date picker to select the time range you want to review. Presets go up to
-"Past 3 months", and data is retained for 90 days so every preset returns complete
-data.
+"Past 3 months". Queue data is retained for 90 days, so the oldest day or two of
+that longest preset can come back empty. A repository selector and filters narrow
+every widget on the page at once.
+
+A row of headline figures sits at the top: pull requests entered and merged, the
+merged rate, time spent waiting for CI, max queue size, throughput, queue time,
+CI runtime, and CI failure rate. Below it, the widgets are grouped into three
+sections.
+
+### Queue Health
+
+Exit reasons, interruptions, and failure trends.
+
+- **PR Exit Reasons**: how pull requests leave the queue. The distribution view
+  counts each pull request once by its final exit reason; the over-time view
+  shows how those reasons trend.
+
+- **Batch Outcomes**: the outcome of every CI run the queue triggered, including
+  batch results, [bisection](/merge-queue/batches#handling-batch-failure-or-timeout)
+  attempts, and queue resets. One pull request can produce several runs.
+
+- **Checks Retries**: how often checks are retried, and how often a retry ends in
+  a merge. A low recovery rate points at genuinely broken tests rather than
+  flaky ones.
+
+- **CI Failure Rate**: the share of queue CI runs that failed. A rising rate
+  usually means flaky tests, unstable CI, or problematic changes being queued.
+
+- **Batch Bisection Count**: how often Mergify had to split a failing batch to
+  find the culprit. A high count means batches are failing often.
+
+### Throughput
+
+Volume of pull requests processed and queue capacity.
+
+- **Entered PRs** and **Merged PRs**: how many pull requests joined and left the
+  queue over time. A consistent trend indicates a stable development
+  environment; sudden drops or spikes are worth investigating.
+
+- **Max Queue Size**: the largest the queue got. The reference line marks your
+  max checks capacity (max batch size ×
+  [`max_parallel_checks`](/merge-queue/performance#parallel-checks)), so a queue
+  above the line means pull requests are waiting for a free check slot.
+
+- **Average Batch Size**: the reference line shows the largest
+  [`batch_size`](/merge-queue/batches) configured across your queue rules. Sitting
+  at the maximum suggests the queue is saturated.
+
+- **Max Running Checks**: peak concurrent checks. If you are often at capacity,
+  raising `max_parallel_checks` improves throughput.
+
+### Performance
+
+Queue timing and CI execution speed.
+
+- **Time Breakdown**: how a pull request's time in queue splits across waiting
+  for CI capacity, [schedule](/configuration/data-types#schedule) windows,
+  [freeze](/merge-protections/freeze) periods, and CI runtime. Switch each
+  component between **Avg**, **P95**, and **Max** to see whether the queue is
+  usually fast with rare spikes or consistently slow. Only the average is
+  additive, so the total in the center is shown for **Avg** only. If capacity
+  wait dominates, raise `max_parallel_checks`.
+
+- **Average Queue Time**: the full time a pull request spent in the queue.
+
+- **Average CI Runtime**: how long your CI takes. An increase here slows the
+  whole queue down.
+
+- **Batches Saved**: batches that merged without running their own speculative
+  checks, because a later batch containing their changes had already passed. Each
+  one is a CI run the queue avoided. This requires
+  [`skip_intermediate_results`](/merge-queue/batches#skip-intermediate-results-anti-flake-protection)
+  on the queue.
 
 ## Monitoring the Queue with the CLI
 
