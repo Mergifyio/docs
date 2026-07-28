@@ -487,7 +487,8 @@ aren't available depending on the mode:
   independent, so a passing batch can't vouch for any other. It works in serial and parallel modes,
   where a passing batch vouches for the earlier changes it was tested on top of.
 
-- **`partition_rules` are not supported.** Partitions rely on serial ordering; use scopes instead.
+Independently of the mode, `partition_rules` are no longer part of the configuration: use scopes
+instead. See [Migrate from Partition Rules to Scopes](/merge-queue/migrate-partitions-to-scopes).
 
 ## Next Steps
 
