@@ -93,6 +93,7 @@ any time range. Metrics submitted as **gauge** are peak values within the window
 | `mergify.queue.checks_retries.recovered` | count | Failed checks that passed on retry |
 | `mergify.queue.checks_retries.not_recovered` | count | Failed checks that failed again on retry |
 | `mergify.queue.bisection.started` | count | [Batch](/merge-queue/batches) bisections started |
+| `mergify.queue.skip_intermediate_results.batches_saved` | count | Batches merged without their own checks |
 | `mergify.queue.total_queue_time.sum` | count | Total time queued, in seconds |
 | `mergify.queue.total_queue_time.count` | count | Queue sessions the sum covers |
 | `mergify.queue.ci_runtime.sum` | count | Total CI runtime, in seconds |
@@ -110,6 +111,12 @@ its checks passed. Otherwise they name the reason the pull request left the
 queue or its checks were aborted, such as `checks_failed` or `pr_dequeued`. The
 [integration's README](https://github.com/DataDog/integrations-extras/blob/master/mergify_oauth/README.md)
 lists every value.
+
+`skip_intermediate_results.batches_saved` counts the batches that merged because
+a later batch containing their changes had already passed, so each one is a CI
+run the queue avoided. It only moves when
+[`skip_intermediate_results`](/merge-queue/batches#skip-intermediate-results-anti-flake-protection)
+is enabled on the queue.
 
 ## Querying the metrics
 
