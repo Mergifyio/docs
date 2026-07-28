@@ -1,12 +1,16 @@
 ---
 title: Migrate from Partition Rules to Scopes
-description: Step-by-step guide to replace the deprecated partition_rules with scopes and scope-aware CI.
+description: Step-by-step guide to replace partition_rules, which Mergify no longer supports, with scopes and scope-aware CI.
 ---
 
-`partition_rules` are deprecated and will be removed in a future release. This
-guide walks you through replacing them with **scopes**, a more powerful system
-that integrates with your CI and unlocks smarter batching, parallel merge
-queues, and monorepo-aware workflows.
+`partition_rules` are no longer part of the Mergify configuration. A file that
+still declares them is not rejected, but Mergify ignores the section: the queue
+stops splitting into partition lanes, and Mergify opens an automatic migration
+pull request that strips it out.
+
+This guide walks you through replacing partitions with **scopes**, a system that
+integrates with your CI and unlocks smarter batching, parallel merge queues, and
+monorepo-aware workflows.
 
 ## Why Migrate?
 
@@ -175,6 +179,9 @@ jobs:
 Delete the entire `partition_rules` section from `.mergify.yml`. If you
 referenced `partition-name` or `current-partition-name` in your
 `pull_request_rules` conditions, remove those conditions. They no longer apply.
+
+If Mergify has already opened an automatic migration pull request for your
+repository, merging it does this step for you.
 
 ### 4. Enable parallel mode
 
