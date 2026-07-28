@@ -18110,6 +18110,17 @@
             ],
             "title": "Description"
           },
+          "documentation_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Documentation Url"
+          },
           "schedule": {
             "anyOf": [
               {
@@ -18140,6 +18151,7 @@
           "match",
           "label",
           "description",
+          "documentation_url",
           "schedule",
           "subconditions",
           "evaluations"
