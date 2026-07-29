@@ -1,0 +1,1 @@
+address review: link the mergify queue show CLI reference instead of describing its flags; reword why Max Running Checks cannot break down by priority rule
