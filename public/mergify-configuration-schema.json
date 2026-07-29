@@ -3227,7 +3227,7 @@
           ]
         },
         "files": {
-          "description": "The files that are modified, deleted or added by the pull request.",
+          "description": "The files that are modified, deleted or added by the pull request. A renamed file counts at both of its paths, so it appears twice; `#files` reports GitHub's own changed-file count, which counts it once.",
           "items": {
             "type": "string"
           },
@@ -3253,7 +3253,7 @@
           ]
         },
         "added-files": {
-          "description": "The files that are added by the pull request.",
+          "description": "The files that are added by the pull request, including the destination of a renamed file.",
           "items": {
             "type": "string"
           },
@@ -3279,7 +3279,7 @@
           ]
         },
         "modified-files": {
-          "description": "The files that are modified by the pull request.",
+          "description": "The files that are modified in place by the pull request. A renamed file is not modified: it is removed at its previous path and added at its new one.",
           "items": {
             "type": "string"
           },
@@ -3305,7 +3305,7 @@
           ]
         },
         "removed-files": {
-          "description": "The files that are removed by the pull request.",
+          "description": "The files that are removed by the pull request, including the previous path of a renamed file.",
           "items": {
             "type": "string"
           },
@@ -3546,7 +3546,7 @@
           ]
         },
         "scope": {
-          "description": "The list of scopes associated with the pull request for merge queue batching.",
+          "description": "The list of scopes associated with the pull request for merge queue batching. With a `files` source, a renamed file counts at both of its paths, so moving a file out of a scope reports that scope as well as the destination's.",
           "items": {
             "type": "string"
           },
@@ -4850,7 +4850,7 @@
             }
           ],
           "default": null,
-          "description": "File filters marking files that impact every scope. Only valid with a `files` source; a `manual` source reports the barrier flag via the API instead. A pull request changing a matching file becomes a merge-queue barrier: it runs alone and serializes the queue at that point. At least one `include` pattern is required. Examples: ('.github/workflows/**', 'Makefile')"
+          "description": "File filters marking files that impact every scope. Only valid with a `files` source; a `manual` source reports the barrier flag via the API instead. A pull request changing a matching file becomes a merge-queue barrier: it runs alone and serializes the queue at that point. A renamed file counts at both of its paths, so moving a file out of a matching pattern is a barrier too. At least one `include` pattern is required. Examples: ('.github/workflows/**', 'Makefile')"
         },
         "merge_queue_scope": {
           "default": "merge-queue",
