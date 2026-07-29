@@ -1,0 +1,9 @@
+---
+title: "Label pull requests while the merge queue checks them"
+date: 2026-07-29
+tags:
+  - Merge Queue
+description: "A new `checking_label` option labels a pull request for the whole time the merge queue is checking it."
+---
+
+Set `checking_label` under `merge_queue` to label a pull request while the merge queue is actually checking it. Where `queued_label` marks every pull request sitting in the queue, `checking_label` narrows that down to the ones the queue is working on right now: it goes on from the moment a pull request enters a batch and comes off when it leaves the queue, and it stays on while a pull request waits in a bisection, before its own CI has started. No label is added unless you set the option.
