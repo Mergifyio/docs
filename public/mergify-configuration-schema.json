@@ -2553,18 +2553,10 @@
         "queue-dequeue-reason": {
           "anyOf": [
             {
-              "const": "NONE",
-              "type": "string"
-            },
-            {
               "enum": [
+                "NONE",
                 "PR_MERGED",
-                "PR_MERGED_INTERMEDIATE_RESULTS_SKIPPED"
-              ],
-              "type": "string"
-            },
-            {
-              "enum": [
+                "PR_MERGED_INTERMEDIATE_RESULTS_SKIPPED",
                 "PR_DEQUEUED",
                 "PR_DEQUEUED_FROM_PARTITION",
                 "PR_AHEAD_DEQUEUED",
@@ -2616,49 +2608,129 @@
             "!=",
             "~="
           ],
-          "x-enum-descriptions": {
-            "BASE_BRANCH_CHANGED": "The pull request's base branch changed.",
-            "BASE_BRANCH_MISSING": "The pull request's base branch no longer exists.",
-            "BASE_REF_ALIGNMENT_TIMEOUT": "The pull request could not be retargeted onto the queue base branch, for example a stacked pull request GitHub never retargeted.",
-            "BATCH_AHEAD_FAILED": "A batch ahead in the queue failed, so this pull request's speculative checks are restarted. It stays in the queue.",
-            "BATCH_MAX_FAILURE_RESOLUTION_ATTEMPTS": "The maximum number of `batch_max_failure_resolution_attempts` was reached while isolating a batch failure.",
-            "BATCH_PULL_REQUEST_CLOSED": "The merge queue batch pull request was closed.",
-            "BATCH_SCOPES_CHANGED": "A pull request's scopes changed after it was embarked, so its batch was recomposed. It stays in the queue.",
-            "BRANCH_UPDATE_FAILED": "Updating the pull request's head branch failed.",
-            "CHECKS_FAILED": "The queue conditions cannot be satisfied because required checks failed.",
-            "CHECKS_RETRIED": "The pull request's failed checks are being retried. It stays in the queue.",
-            "CHECKS_TIMEOUT": "The configured `checks_timeout` was reached before the queue conditions were satisfied.",
-            "CONFIGURATION_CHANGED": "The Mergify configuration changed while the pull request was queued.",
-            "CONFLICT_WITH_BASE_BRANCH": "The pull request conflicts with its base branch.",
-            "CONFLICT_WITH_PULL_AHEAD": "The pull request conflicts with a pull request ahead of it in the queue.",
-            "DRAFT_PULL_REQUEST_CHANGED": "The merge queue draft pull request received commits that Mergify did not create.",
-            "DRAFT_PULL_REQUEST_CREATION_BRANCH_NOT_INDEXED": "Mergify could not create the merge queue draft pull request because GitHub had not yet indexed the new branch.",
-            "DRAFT_PULL_REQUEST_CREATION_FAILED": "Mergify could not create the merge queue draft pull request.",
-            "DROPPED_BY_BISECTION_ELIMINATION": "Batch bisection isolated the failure to other pull requests and dropped this one without testing it individually.",
-            "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED": "The pull request is a GitHub stacked pull request, which GitHub does not support merging through its API.",
-            "INCOMPATIBILITY_WITH_BRANCH_PROTECTIONS": "The pull request cannot be checked because of an incompatibility between the queue and the repository's branch protections.",
-            "INTERMEDIATE_RESULTS_SKIPPED": "The pull request's intermediate speculative results were skipped. It stays in the queue.",
-            "MERGE_QUEUE_RESET": "The merge queue was reset.",
-            "NONE": "The pull request is not, and never was, in a merge queue.",
-            "PR_AHEAD_DEQUEUED": "A pull request ahead in the queue was removed, so this pull request's speculative checks are restarted. It stays in the queue.",
-            "PR_CHECKS_STOPPED_BECAUSE_MERGE_QUEUE_PAUSE": "The pull request's checks were interrupted because the merge queue is paused on the repository. It stays in the queue.",
-            "PR_DEQUEUED": "The pull request was removed from the queue, for example because its queue conditions no longer match.",
-            "PR_DEQUEUED_FROM_PARTITION": "The pull request stopped matching a partition's rules and was removed from that partition.",
-            "PR_MANUALLY_DEQUEUED": "The pull request was manually removed from the queue.",
-            "PR_MANUALLY_MERGED": "The pull request was merged manually, outside of the merge queue.",
-            "PR_MERGED": "The pull request was merged by the merge queue.",
-            "PR_MERGED_INTERMEDIATE_RESULTS_SKIPPED": "The pull request was merged based on the successful result of a later pull request in the same speculative batch, skipping its own intermediate checks.",
-            "PR_UNEXPECTEDLY_FAILED_TO_MERGE": "An unexpected error happened while merging the pull request.",
-            "PR_WITH_HIGHER_PRIORITY_QUEUED": "A higher-priority pull request was queued ahead of this one. It stays in the queue.",
-            "PULL_REQUEST_UPDATED": "The pull request was manually updated.",
-            "QUEUE_RULE_MISSING": "The queue rule referenced by the pull request no longer exists in the configuration.",
-            "SCHEDULED_FREEZE_STATUS_CHANGED": "A scheduled queue freeze changed the freeze status of the batch's pull requests, so the batch was split. It stays in the queue.",
-            "SCHEDULE_BLOCKED_AHEAD_YIELDED": "A pull request ahead that was waiting for its merge schedule yielded its position so ready pull requests behind it can merge first. It stays in the queue.",
-            "SPECULATIVE_CHECK_NUMBER_REDUCED": "The number of speculative checks was reduced. The pull request stays in the queue.",
-            "STACK_PREDECESSOR_DEQUEUED": "A predecessor pull request in the same stack was dequeued, so this one was removed as well.",
-            "UNPROCESSABLE_PULL_REQUEST": "Mergify cannot process the pull request, for example because it has too many check runs, comments, or files."
-          },
           "x-has-data-type": true,
+          "x-mergify-enum": [
+            {
+              "description": "The pull request is not, and never was, in a merge queue."
+            },
+            {
+              "description": "The pull request was merged by the merge queue."
+            },
+            {
+              "description": "The pull request was merged based on the successful result of a later pull request in the same speculative batch, skipping its own intermediate checks."
+            },
+            {
+              "description": "The pull request was removed from the queue, for example because its queue conditions no longer match."
+            },
+            {
+              "description": "The pull request stopped matching a partition's rules and was removed from that partition."
+            },
+            {
+              "description": "A pull request ahead in the queue was removed, so this pull request's speculative checks are restarted. It stays in the queue."
+            },
+            {
+              "description": "A batch ahead in the queue failed, so this pull request's speculative checks are restarted. It stays in the queue."
+            },
+            {
+              "description": "A higher-priority pull request was queued ahead of this one. It stays in the queue."
+            },
+            {
+              "description": "A scheduled queue freeze changed the freeze status of the batch's pull requests, so the batch was split. It stays in the queue."
+            },
+            {
+              "description": "The number of speculative checks was reduced. The pull request stays in the queue."
+            },
+            {
+              "description": "The configured `checks_timeout` was reached before the queue conditions were satisfied."
+            },
+            {
+              "description": "The queue conditions cannot be satisfied because required checks failed."
+            },
+            {
+              "description": "Batch bisection isolated the failure to other pull requests and dropped this one without testing it individually."
+            },
+            {
+              "description": "The queue rule referenced by the pull request no longer exists in the configuration."
+            },
+            {
+              "description": "The pull request's base branch no longer exists."
+            },
+            {
+              "description": "The pull request's base branch changed."
+            },
+            {
+              "description": "An unexpected error happened while merging the pull request."
+            },
+            {
+              "description": "The maximum number of `batch_max_failure_resolution_attempts` was reached while isolating a batch failure."
+            },
+            {
+              "description": "The pull request's checks were interrupted because the merge queue is paused on the repository. It stays in the queue."
+            },
+            {
+              "description": "The pull request conflicts with its base branch."
+            },
+            {
+              "description": "The pull request conflicts with a pull request ahead of it in the queue."
+            },
+            {
+              "description": "Updating the pull request's head branch failed."
+            },
+            {
+              "description": "The merge queue draft pull request received commits that Mergify did not create."
+            },
+            {
+              "description": "The merge queue batch pull request was closed."
+            },
+            {
+              "description": "The pull request was manually updated."
+            },
+            {
+              "description": "The merge queue was reset."
+            },
+            {
+              "description": "The pull request cannot be checked because of an incompatibility between the queue and the repository's branch protections."
+            },
+            {
+              "description": "The pull request was merged manually, outside of the merge queue."
+            },
+            {
+              "description": "Mergify could not create the merge queue draft pull request."
+            },
+            {
+              "description": "Mergify could not create the merge queue draft pull request because GitHub had not yet indexed the new branch."
+            },
+            {
+              "description": "The Mergify configuration changed while the pull request was queued."
+            },
+            {
+              "description": "Mergify cannot process the pull request, for example because it has too many check runs, comments, or files."
+            },
+            {
+              "description": "The pull request was manually removed from the queue."
+            },
+            {
+              "description": "A predecessor pull request in the same stack was dequeued, so this one was removed as well."
+            },
+            {
+              "description": "The pull request's intermediate speculative results were skipped. It stays in the queue."
+            },
+            {
+              "description": "The pull request's failed checks are being retried. It stays in the queue."
+            },
+            {
+              "description": "A pull request ahead that was waiting for its merge schedule yielded its position so ready pull requests behind it can merge first. It stays in the queue."
+            },
+            {
+              "description": "The pull request could not be retargeted onto the queue base branch, for example a stacked pull request GitHub never retargeted."
+            },
+            {
+              "description": "The pull request is a GitHub stacked pull request, which GitHub does not support merging through its API."
+            },
+            {
+              "description": "A pull request's scopes changed after it was embarked, so its batch was recomposed. It stays in the queue."
+            }
+          ],
           "x-modifiers": [
             {
               "type": "negate"

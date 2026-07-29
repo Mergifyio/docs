@@ -379,6 +379,11 @@ Note that this system is completely automatic and there is no need to
 intervene. The number of maximum splits can be controlled by
 [`batch_max_failure_resolution_attempts`](/configuration/file-format#queue-rules).
 
+While this runs, the batches involved report a
+[batch status](/configuration/data-types#batch-status) such as `bisecting`,
+`waiting_for_previous_batches`, or `waiting_for_requeue`, so you can follow the
+resolution from [the dashboard or the CLI](/merge-queue/monitoring).
+
 :::tip
   Each split carries metadata about the batches it came from. You can use it to
   [re-run only the tests that failed in the parent

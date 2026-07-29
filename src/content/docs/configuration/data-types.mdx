@@ -3,6 +3,7 @@ title: Configuration Data Types
 description: The different data types you can find in Mergify configuration file
 ---
 
+import BatchStatusCodes from '../../../components/Tables/BatchStatusCodes';
 import OptionsTable from '../../../components/Tables/OptionsTable';
 import QueueDequeueReasons from '../../../components/Tables/QueueDequeueReasons';
 import TemplateVariablesTable from '../../../components/Tables/TemplateVariablesTable';
@@ -493,6 +494,20 @@ while it stayed in the queue.
 The following reasons can be reported:
 
 <QueueDequeueReasons />
+
+## Batch Status
+
+This describes what a [batch](/merge-queue/batches) is currently doing in the
+merge queue. It is reported as the `status.code` field of each batch returned by
+the [merge queue status API](/api/merge-queue), and the dashboard shows it on
+each batch.
+
+A status describes the batch as a whole, not an individual pull request: a batch
+that is running its checks reports `running` for every pull request it carries.
+
+The following statuses can be reported:
+
+<BatchStatusCodes />
 
 ## Report Mode
 

@@ -1329,53 +1329,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "action.assign",
-                      "action.backport",
-                      "action.close",
-                      "action.comment",
-                      "action.copy",
-                      "action.delete_head_branch",
-                      "action.dequeue",
-                      "action.dismiss_reviews",
-                      "action.edit",
-                      "action.github_actions",
-                      "action.label",
-                      "action.merge",
-                      "action.post_check",
-                      "action.queue.batch_bisection_end",
-                      "action.queue.batch_bisection_start",
-                      "action.queue.change",
-                      "action.queue.checks.change",
-                      "action.queue.checks_end",
-                      "action.queue.checks_not_started",
-                      "action.queue.checks_start",
-                      "action.queue.conflict_deferred",
-                      "action.queue.enter",
-                      "action.queue.leave",
-                      "action.queue.merged",
-                      "action.rebase",
-                      "action.refresh",
-                      "action.request_reviews",
-                      "action.review",
-                      "action.squash",
-                      "action.update",
-                      "ci_insights.auto_quarantine.disabled",
-                      "ci_insights.auto_quarantine.enabled",
-                      "ci_insights.auto_quarantine.modified",
-                      "ci_insights.job_retried",
-                      "command.dequeue",
-                      "command.queue",
-                      "queue.pause.create",
-                      "queue.pause.delete",
-                      "queue.pause.update",
-                      "scheduled_freeze.create",
-                      "scheduled_freeze.delete",
-                      "scheduled_freeze.update",
-                      "test.dequarantined",
-                      "test.quarantined"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventType"
                   }
                 },
                 {
@@ -1396,53 +1350,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "action.assign",
-                      "action.backport",
-                      "action.close",
-                      "action.comment",
-                      "action.copy",
-                      "action.delete_head_branch",
-                      "action.dequeue",
-                      "action.dismiss_reviews",
-                      "action.edit",
-                      "action.github_actions",
-                      "action.label",
-                      "action.merge",
-                      "action.post_check",
-                      "action.queue.batch_bisection_end",
-                      "action.queue.batch_bisection_start",
-                      "action.queue.change",
-                      "action.queue.checks.change",
-                      "action.queue.checks_end",
-                      "action.queue.checks_not_started",
-                      "action.queue.checks_start",
-                      "action.queue.conflict_deferred",
-                      "action.queue.enter",
-                      "action.queue.leave",
-                      "action.queue.merged",
-                      "action.rebase",
-                      "action.refresh",
-                      "action.request_reviews",
-                      "action.review",
-                      "action.squash",
-                      "action.update",
-                      "ci_insights.auto_quarantine.disabled",
-                      "ci_insights.auto_quarantine.enabled",
-                      "ci_insights.auto_quarantine.modified",
-                      "ci_insights.job_retried",
-                      "command.dequeue",
-                      "command.queue",
-                      "queue.pause.create",
-                      "queue.pause.delete",
-                      "queue.pause.update",
-                      "scheduled_freeze.create",
-                      "scheduled_freeze.delete",
-                      "scheduled_freeze.update",
-                      "test.dequarantined",
-                      "test.quarantined"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventType"
                   }
                 },
                 {
@@ -1463,13 +1371,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "success",
-                      "failure",
-                      "pending",
-                      "neutral"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventOutcome"
                   }
                 },
                 {
@@ -1490,13 +1392,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "success",
-                      "failure",
-                      "pending",
-                      "neutral"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventOutcome"
                   }
                 },
                 {
@@ -1828,53 +1724,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "action.assign",
-                      "action.backport",
-                      "action.close",
-                      "action.comment",
-                      "action.copy",
-                      "action.delete_head_branch",
-                      "action.dequeue",
-                      "action.dismiss_reviews",
-                      "action.edit",
-                      "action.github_actions",
-                      "action.label",
-                      "action.merge",
-                      "action.post_check",
-                      "action.queue.batch_bisection_end",
-                      "action.queue.batch_bisection_start",
-                      "action.queue.change",
-                      "action.queue.checks.change",
-                      "action.queue.checks_end",
-                      "action.queue.checks_not_started",
-                      "action.queue.checks_start",
-                      "action.queue.conflict_deferred",
-                      "action.queue.enter",
-                      "action.queue.leave",
-                      "action.queue.merged",
-                      "action.rebase",
-                      "action.refresh",
-                      "action.request_reviews",
-                      "action.review",
-                      "action.squash",
-                      "action.update",
-                      "ci_insights.auto_quarantine.disabled",
-                      "ci_insights.auto_quarantine.enabled",
-                      "ci_insights.auto_quarantine.modified",
-                      "ci_insights.job_retried",
-                      "command.dequeue",
-                      "command.queue",
-                      "queue.pause.create",
-                      "queue.pause.delete",
-                      "queue.pause.update",
-                      "scheduled_freeze.create",
-                      "scheduled_freeze.delete",
-                      "scheduled_freeze.update",
-                      "test.dequarantined",
-                      "test.quarantined"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventType"
                   }
                 },
                 {
@@ -1895,53 +1745,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "action.assign",
-                      "action.backport",
-                      "action.close",
-                      "action.comment",
-                      "action.copy",
-                      "action.delete_head_branch",
-                      "action.dequeue",
-                      "action.dismiss_reviews",
-                      "action.edit",
-                      "action.github_actions",
-                      "action.label",
-                      "action.merge",
-                      "action.post_check",
-                      "action.queue.batch_bisection_end",
-                      "action.queue.batch_bisection_start",
-                      "action.queue.change",
-                      "action.queue.checks.change",
-                      "action.queue.checks_end",
-                      "action.queue.checks_not_started",
-                      "action.queue.checks_start",
-                      "action.queue.conflict_deferred",
-                      "action.queue.enter",
-                      "action.queue.leave",
-                      "action.queue.merged",
-                      "action.rebase",
-                      "action.refresh",
-                      "action.request_reviews",
-                      "action.review",
-                      "action.squash",
-                      "action.update",
-                      "ci_insights.auto_quarantine.disabled",
-                      "ci_insights.auto_quarantine.enabled",
-                      "ci_insights.auto_quarantine.modified",
-                      "ci_insights.job_retried",
-                      "command.dequeue",
-                      "command.queue",
-                      "queue.pause.create",
-                      "queue.pause.delete",
-                      "queue.pause.update",
-                      "scheduled_freeze.create",
-                      "scheduled_freeze.delete",
-                      "scheduled_freeze.update",
-                      "test.dequarantined",
-                      "test.quarantined"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventType"
                   }
                 },
                 {
@@ -1962,13 +1766,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "success",
-                      "failure",
-                      "pending",
-                      "neutral"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventOutcome"
                   }
                 },
                 {
@@ -1989,13 +1787,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "success",
-                      "failure",
-                      "pending",
-                      "neutral"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/EventOutcome"
                   }
                 },
                 {
@@ -5567,12 +5359,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "healthy",
-                      "flaky",
-                      "broken"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/HealthStatus"
                   }
                 },
                 {
@@ -5593,12 +5380,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "healthy",
-                      "flaky",
-                      "broken"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/HealthStatus"
                   }
                 },
                 {
@@ -5619,12 +5401,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "low",
-                      "medium",
-                      "high"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/HealthConfidence"
                   }
                 },
                 {
@@ -5645,12 +5422,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "low",
-                      "medium",
-                      "high"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/HealthConfidence"
                   }
                 },
                 {
@@ -6587,11 +6359,7 @@
             "schema": {
               "anyOf": [
                 {
-                  "enum": [
-                    "manual",
-                    "auto"
-                  ],
-                  "type": "string"
+                  "$ref": "#/components/schemas/QuarantineSource"
                 },
                 {
                   "type": "null"
@@ -7536,12 +7304,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "low",
-                      "medium",
-                      "high"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/HealthConfidence"
                   }
                 },
                 {
@@ -7562,12 +7325,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "enum": [
-                      "low",
-                      "medium",
-                      "high"
-                    ],
-                    "type": "string"
+                    "$ref": "#/components/schemas/HealthConfidence"
                   }
                 },
                 {
@@ -9497,7 +9255,58 @@
               "waiting_for_checks_slot",
               "frozen"
             ],
-            "title": "Code"
+            "title": "Batch Status",
+            "x-has-data-type": true,
+            "x-mergify-enum": [
+              {
+                "description": "The batch is set up and its CI checks are running.",
+                "title": "CI Running"
+              },
+              {
+                "description": "The batch failed, so Mergify is splitting it into smaller sub-batches and testing those to identify the pull request responsible and merge the others.",
+                "title": "Bisecting Batch"
+              },
+              {
+                "description": "Mergify is setting the batch up so it can be tested.",
+                "title": "Preparing"
+              },
+              {
+                "description": "The batch failed, either because Mergify could not prepare it for testing or because its checks did not pass. It is removed from the queue and its pull requests have to be fixed.",
+                "title": "Failed"
+              },
+              {
+                "description": "The batch was merged.",
+                "title": "Merged"
+              },
+              {
+                "description": "The batch's checks passed. It merges once the batches ahead of it have merged.",
+                "title": "Waiting to Merge"
+              },
+              {
+                "description": "A batch ahead in the queue failed, so this batch is held while Mergify identifies the cause. It has either not started its own checks yet, or already ran and failed and is parked until the cause is known.",
+                "title": "Waiting on Previous Batch"
+              },
+              {
+                "description": "A batch ahead in the queue failed, so this batch is requeued and retested against the updated queue.",
+                "title": "Requeuing"
+              },
+              {
+                "description": "The batch's merge conditions are met, but a schedule condition is not. It continues once the schedule allows it.",
+                "title": "Waiting for Schedule"
+              },
+              {
+                "description": "Mergify is waiting for more pull requests to fill the batch, or for the maximum wait time to elapse, before starting it.",
+                "title": "Filling Batch"
+              },
+              {
+                "description": "The batch is ready to be tested, but every slot for running checks in parallel is taken. It starts as soon as one frees up.",
+                "title": "Waiting for CI Slot"
+              },
+              {
+                "description": "The batch's checks passed, but merges are frozen. It merges once the freeze is lifted.",
+                "title": "Frozen"
+              }
+            ]
           },
           "batch_filled_slots": {
             "anyOf": [
@@ -9785,20 +9594,7 @@
             "description": "The timestamp when the checks have ended for this pull request"
           },
           "state": {
-            "type": "string",
-            "enum": [
-              "failure",
-              "error",
-              "cancelled",
-              "action_required",
-              "timed_out",
-              "pending",
-              "neutral",
-              "skipped",
-              "stale",
-              "success"
-            ],
-            "title": "State",
+            "$ref": "#/components/schemas/QueueCheckState",
             "description": "The global state of the checks"
           }
         },
@@ -10450,14 +10246,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -10548,14 +10337,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -10622,14 +10404,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -10723,14 +10498,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -10824,14 +10592,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -10929,14 +10690,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11092,14 +10846,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11179,14 +10926,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11311,14 +11051,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11385,14 +11118,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11472,14 +11198,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11569,14 +11288,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11656,14 +11368,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
@@ -11730,14 +11435,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11820,14 +11518,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -11907,14 +11598,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12012,14 +11696,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12110,14 +11787,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12159,6 +11829,15 @@
         "properties": {},
         "type": "object",
         "title": "EventNoMetadata"
+      },
+      "EventOutcome": {
+        "type": "string",
+        "enum": [
+          "success",
+          "failure",
+          "pending",
+          "neutral"
+        ]
       },
       "EventPostCheck": {
         "properties": {
@@ -12202,14 +11881,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12317,14 +11989,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12538,14 +12203,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12715,14 +12373,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12819,14 +12470,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -12911,14 +12555,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -13219,14 +12856,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -13340,14 +12970,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -13579,14 +13202,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -13711,14 +13327,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -13827,14 +13436,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14103,14 +13705,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14232,14 +13827,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14328,14 +13916,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14419,14 +14000,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14515,14 +14089,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
@@ -14589,14 +14156,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
@@ -14663,14 +14223,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14761,14 +14314,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14877,14 +14423,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -14978,14 +14517,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -15084,14 +14616,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -15189,14 +14714,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
@@ -15263,14 +14781,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -15312,24 +14823,13 @@
             "title": "Test Name"
           },
           "source": {
-            "type": "string",
-            "enum": [
-              "manual",
-              "auto"
-            ],
-            "title": "Source"
+            "$ref": "#/components/schemas/QuarantineSource"
           },
           "original_quarantine": {
             "$ref": "#/components/schemas/TestQuarantineSnapshot"
           },
           "health_status_at_event": {
-            "type": "string",
-            "enum": [
-              "healthy",
-              "flaky",
-              "broken"
-            ],
-            "title": "Health Status At Event"
+            "$ref": "#/components/schemas/HealthStatus"
           },
           "dequarantined_at": {
             "type": "string",
@@ -15406,14 +14906,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "type": {
             "type": "string",
@@ -15455,12 +14948,7 @@
             "title": "Test Name"
           },
           "source": {
-            "type": "string",
-            "enum": [
-              "manual",
-              "auto"
-            ],
-            "title": "Source"
+            "$ref": "#/components/schemas/QuarantineSource"
           },
           "reason": {
             "type": "string",
@@ -15483,13 +14971,7 @@
             "title": "Quarantined At"
           },
           "health_status_at_event": {
-            "type": "string",
-            "enum": [
-              "healthy",
-              "flaky",
-              "broken"
-            ],
-            "title": "Health Status At Event"
+            "$ref": "#/components/schemas/HealthStatus"
           },
           "quarantined_by": {
             "anyOf": [
@@ -15519,6 +15001,55 @@
           "quarantined_by_staff"
         ],
         "title": "EventTestQuarantinedMetadata"
+      },
+      "EventType": {
+        "type": "string",
+        "enum": [
+          "action.assign",
+          "action.backport",
+          "action.close",
+          "action.comment",
+          "action.copy",
+          "action.delete_head_branch",
+          "action.dequeue",
+          "action.dismiss_reviews",
+          "action.edit",
+          "action.github_actions",
+          "action.label",
+          "action.merge",
+          "action.post_check",
+          "action.queue.batch_bisection_end",
+          "action.queue.batch_bisection_start",
+          "action.queue.change",
+          "action.queue.checks.change",
+          "action.queue.checks_end",
+          "action.queue.checks_not_started",
+          "action.queue.checks_start",
+          "action.queue.conflict_deferred",
+          "action.queue.enter",
+          "action.queue.leave",
+          "action.queue.merged",
+          "action.rebase",
+          "action.refresh",
+          "action.request_reviews",
+          "action.review",
+          "action.squash",
+          "action.update",
+          "ci_insights.auto_quarantine.disabled",
+          "ci_insights.auto_quarantine.enabled",
+          "ci_insights.auto_quarantine.modified",
+          "ci_insights.job_retried",
+          "command.dequeue",
+          "command.queue",
+          "queue.pause.create",
+          "queue.pause.delete",
+          "queue.pause.update",
+          "scheduled_freeze.create",
+          "scheduled_freeze.delete",
+          "scheduled_freeze.update",
+          "test.dequarantined",
+          "test.quarantined"
+        ]
       },
       "EventUpdate": {
         "properties": {
@@ -15562,14 +15093,7 @@
             "title": "Base Ref"
           },
           "outcome": {
-            "type": "string",
-            "enum": [
-              "success",
-              "failure",
-              "pending",
-              "neutral"
-            ],
-            "title": "Outcome"
+            "$ref": "#/components/schemas/EventOutcome"
           },
           "metadata": {
             "$ref": "#/components/schemas/EventNoMetadata"
@@ -16329,6 +15853,22 @@
         ],
         "title": "GitHubAccount"
       },
+      "HealthConfidence": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "HealthStatus": {
+        "type": "string",
+        "enum": [
+          "healthy",
+          "flaky",
+          "broken"
+        ]
+      },
       "HealthTransition": {
         "properties": {
           "at": {
@@ -16338,13 +15878,7 @@
             "description": "Bucket boundary at which the test's health changed to `health_status`."
           },
           "health_status": {
-            "type": "string",
-            "enum": [
-              "healthy",
-              "flaky",
-              "broken"
-            ],
-            "title": "Health Status",
+            "$ref": "#/components/schemas/HealthStatus",
             "description": "Health the test held from `at` until the next transition."
           },
           "exception_type": {
@@ -17777,6 +17311,13 @@
         ],
         "title": "PullRequestQueued"
       },
+      "QuarantineSource": {
+        "type": "string",
+        "enum": [
+          "manual",
+          "auto"
+        ]
+      },
       "QuarantinedTest": {
         "properties": {
           "id": {
@@ -17820,12 +17361,7 @@
             "description": "UTC timestamp when the test was added to quarantine."
           },
           "source": {
-            "type": "string",
-            "enum": [
-              "manual",
-              "auto"
-            ],
-            "title": "Source",
+            "$ref": "#/components/schemas/QuarantineSource",
             "description": "How the test got quarantined: `manual` (user action) or `auto` (auto-quarantined).",
             "default": "manual"
           },
@@ -17957,20 +17493,7 @@
             "description": "External integrator's direct URL (e.g. Jenkins build URL)"
           },
           "state": {
-            "type": "string",
-            "enum": [
-              "failure",
-              "error",
-              "cancelled",
-              "action_required",
-              "timed_out",
-              "pending",
-              "neutral",
-              "skipped",
-              "stale",
-              "success"
-            ],
-            "title": "State",
+            "$ref": "#/components/schemas/QueueCheckState",
             "description": "Check state"
           },
           "avatar_url": {
@@ -17995,6 +17518,21 @@
           "avatar_url"
         ],
         "title": "QueueCheck"
+      },
+      "QueueCheckState": {
+        "type": "string",
+        "enum": [
+          "failure",
+          "error",
+          "cancelled",
+          "action_required",
+          "timed_out",
+          "pending",
+          "neutral",
+          "skipped",
+          "stale",
+          "success"
+        ]
       },
       "QueueChecksOutcome": {
         "properties": {
@@ -19491,12 +19029,7 @@
       "TestQuarantineSnapshot": {
         "properties": {
           "source": {
-            "type": "string",
-            "enum": [
-              "manual",
-              "auto"
-            ],
-            "title": "Source"
+            "$ref": "#/components/schemas/QuarantineSource"
           },
           "reason": {
             "type": "string",
@@ -19569,23 +19102,11 @@
       "TestSearchResultMetrics": {
         "properties": {
           "health_status": {
-            "type": "string",
-            "enum": [
-              "healthy",
-              "flaky",
-              "broken"
-            ],
-            "title": "Health Status",
+            "$ref": "#/components/schemas/HealthStatus",
             "description": "Current health classification of the test: healthy, flaky, or broken."
           },
           "health_confidence": {
-            "type": "string",
-            "enum": [
-              "low",
-              "medium",
-              "high"
-            ],
-            "title": "Health Confidence",
+            "$ref": "#/components/schemas/HealthConfidence",
             "description": "Confidence in the health classification, derived from how many times the test has been rerun."
           },
           "failed_executions_impact": {
@@ -20021,20 +19542,7 @@
             "title": "Details Url"
           },
           "state": {
-            "type": "string",
-            "enum": [
-              "failure",
-              "error",
-              "cancelled",
-              "action_required",
-              "timed_out",
-              "pending",
-              "neutral",
-              "skipped",
-              "stale",
-              "success"
-            ],
-            "title": "State"
+            "$ref": "#/components/schemas/QueueCheckState"
           },
           "avatar_url": {
             "anyOf": [
@@ -20337,20 +19845,7 @@
             "description": "The queue rule conditions evaluation report"
           },
           "state": {
-            "type": "string",
-            "enum": [
-              "failure",
-              "error",
-              "cancelled",
-              "action_required",
-              "timed_out",
-              "pending",
-              "neutral",
-              "skipped",
-              "stale",
-              "success"
-            ],
-            "title": "State",
+            "$ref": "#/components/schemas/QueueCheckState",
             "description": "The global state of the checks"
           }
         },
