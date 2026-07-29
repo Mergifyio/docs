@@ -108,7 +108,10 @@ scopes:
           - services/users/**/*.go
       frontend:
         include:
-          - apps/web/**/*.{js,jsx,ts,tsx}
+          - apps/web/**/*.js
+          - apps/web/**/*.jsx
+          - apps/web/**/*.ts
+          - apps/web/**/*.tsx
       shared-config:
         include:
           - config/**/*
@@ -138,6 +141,21 @@ the merge queue batch. This ensures:
 - Each PR's scopes reflect only its own changes
 - Batching decisions remain consistent even as the queue changes
 - Tests run for the correct scopes regardless of what else is in the batch
+
+### Renamed Files Count at Both Paths
+
+A rename touches two paths: the file disappears from where it was and appears where it
+went. Mergify matches your patterns against **both**, so moving a file out of a scope
+reports that scope just as deleting the file would.
+
+With the multi-language scopes above, `git mv services/api/settings.py config/settings.py`
+reports **both** `python-api` (the path the file left) and `shared-config` (the path it
+arrived at). That matters when a scope guards something: a pull request that moves a file
+out of `services/api/` is a change to `services/api/`, so the `python-api` scope's CI jobs
+and batching rules apply to it.
+
+The same rule applies to `barrier_files`: renaming a file out of a barrier pattern makes
+the pull request a barrier, because the barrier file is gone from its declared location.
 
 ### Path Filtering vs Scopes
 

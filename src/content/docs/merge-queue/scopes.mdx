@@ -217,6 +217,9 @@ constraints:
   through the API instead (see below), and a configuration with no source has no scopes to impact.
   Mergify rejects `barrier_files` in either case.
 
+A renamed file is matched at both of its paths, so moving a file *out of* a barrier pattern makes
+the pull request a barrier too: the barrier file is gone from the location you declared.
+
 You can also manage these patterns from the dashboard: the **Barrier files** editor in the queue
 configuration **Scopes** section edits the same `barrier_files` filters for file-pattern scopes.
 
