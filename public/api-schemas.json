@@ -9490,6 +9490,7 @@
               "waiting_for_requeue",
               "waiting_schedule",
               "waiting_for_batch",
+              "waiting_for_checks_slot",
               "frozen"
             ],
             "title": "Code"
