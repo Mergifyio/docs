@@ -6,8 +6,8 @@ description: Monitor key metrics of your merge queue to improve throughput and r
 import { Image } from "astro:assets"
 import dashboardStatsScreenshot from "../../images/merge-queue/monitoring/dashboard.png"
 
-Monitoring your merge queue's key metrics helps you identify bottlenecks,
-optimize throughput, and maintain an efficient development cycle.
+The Mergify dashboard reports how your merge queue has performed over time, and
+the Mergify CLI reports what it is doing right now.
 
 ## The Statistics Page
 
@@ -17,14 +17,28 @@ Open **Merge Queue → Statistics** in your
 <Image src={dashboardStatsScreenshot} alt="Statistics page on Mergify's dashboard"/>
 
 Use the date picker to select the time range you want to review. Presets go up to
-"Past 3 months". Queue data is retained for 90 days, so the oldest day or two of
-that longest preset can come back empty. A repository selector and filters narrow
-every widget on the page at once.
+"Past 3 months". Queue data is retained for 90 days: the calendar will not let you
+pick a day older than that, and the oldest day or two of the longest preset can
+come back empty.
+
+Three controls apply to every widget on the page at once:
+
+- The **repository selector** chooses which repository the page reports on.
+
+- **Filters** restrict the data to a set of branches,
+  [queue rules](/merge-queue/rules), or
+  [priority rules](/merge-queue/priority).
+
+- **Breakdown** keeps all the data but splits each chart into one series per
+  branch, queue rule, or priority rule, so you can compare them side by side.
+  Clicking a series narrows the page down to it. **Max Running Checks** is the
+  one widget that cannot be broken down by priority rule, because a single check
+  can match several.
 
 A row of headline figures sits at the top: pull requests entered and merged, the
-merged rate, time spent waiting for CI, max queue size, throughput, queue time,
-CI runtime, and CI failure rate. Below it, the widgets are grouped into three
-sections.
+merged rate, the share of queue time spent waiting for CI capacity, max queue
+size, throughput, queue time, CI runtime, and CI failure rate. Below it, the
+widgets are grouped into three sections.
 
 ### Queue Health
 
@@ -53,8 +67,7 @@ Exit reasons, interruptions, and failure trends.
 Volume of pull requests processed and queue capacity.
 
 - **Entered PRs** and **Merged PRs**: how many pull requests joined and left the
-  queue over time. A consistent trend indicates a stable development
-  environment; sudden drops or spikes are worth investigating.
+  queue over time. Sudden drops or spikes are worth investigating.
 
 - **Max Queue Size**: the largest the queue got. The reference line marks your
   max checks capacity (max batch size ×
@@ -65,8 +78,10 @@ Volume of pull requests processed and queue capacity.
   [`batch_size`](/merge-queue/batches) configured across your queue rules. Sitting
   at the maximum suggests the queue is saturated.
 
-- **Max Running Checks**: peak concurrent checks. If you are often at capacity,
-  raising `max_parallel_checks` improves throughput.
+- **Max Running Checks**: peak concurrent checks. The reference line is your
+  effective `max_parallel_checks` (the configured value, or the default when it
+  is unset). If you are often at that line, raising `max_parallel_checks`
+  improves throughput.
 
 ### Performance
 
@@ -131,8 +146,8 @@ mergify queue show <pr_number>
 ```
 
 This displays the PR's position, priority, queue rule, CI checks summary, and
-blocking conditions. Use `--verbose` (`-v`) for the full checks table and
-conditions tree:
+blocking conditions. `--json` works here too. The global `--verbose` (`-v`) flag
+expands the output into the full checks table and conditions tree:
 
 ```bash
 mergify queue show 123 --verbose
