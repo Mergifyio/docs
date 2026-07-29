@@ -1816,6 +1816,19 @@
           "description": "The label to add on pull requests when they are added to the merge queue.",
           "title": "Queued Label"
         },
+        "checking_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The label to add on pull requests while the merge queue is checking them, from the moment they enter a batch until they leave the queue. It stays on a pull request parked in a bisection, whose own CI has not started yet.",
+          "title": "Checking Label"
+        },
         "dequeued_label": {
           "anyOf": [
             {
