@@ -72,7 +72,13 @@ export function getValueTypeText(schema: Schema, definition: any): string {
   }
 
   if (definition.$ref !== undefined) {
-    return getTitle(schema, definition.$ref);
+    const title = getTitle(schema, definition.$ref);
+    if (title) {
+      return title;
+    }
+    // Untitled `$defs` entry: expand the target rather than emit an empty cell.
+    const target = getItemFromSchema(schema, definition.$ref);
+    return target ? getValueTypeText(schema, target) : '';
   }
 
   if (definition.anyOf || definition.oneOf || definition.allOf) {
@@ -90,6 +96,10 @@ export function getValueTypeText(schema: Schema, definition: any): string {
 
   if (definition.format) {
     return definition.format;
+  }
+
+  if (definition.type === 'object' && definition.properties) {
+    return `\`{${Object.keys(definition.properties).join(', ')}}\``;
   }
 
   return definition.type || '';
