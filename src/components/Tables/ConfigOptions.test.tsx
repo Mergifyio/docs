@@ -84,6 +84,59 @@ describe('getValueType with x-has-data-type', () => {
   });
 });
 
+// An untitled $defs entry — pydantic publishes one for a model that overrides
+// its JSON schema with a union wrapper (batch_size) — has no label to render,
+// so both renderers expand the target instead of emitting an empty type.
+const untitledUnionSchema = {
+  $defs: {
+    BatchSizeBounds: {
+      anyOf: [
+        { type: 'integer', minimum: 1, maximum: 128 },
+        {
+          type: 'object',
+          title: 'BatchSizeBounds',
+          properties: { min: { type: 'integer' }, max: { type: 'integer' } },
+          required: ['min', 'max'],
+        },
+      ],
+    },
+  },
+};
+
+describe('getValueType with an untitled $ref target', () => {
+  it('expands the union instead of rendering an empty type', () => {
+    const html = render(untitledUnionSchema, { $ref: '#/$defs/BatchSizeBounds' });
+    expect(html).toContain('integer');
+    expect(html).toContain('or');
+    expect(html).toContain('{min, max}');
+  });
+
+  it('names the keys of an inline object shape', () => {
+    const html = render(
+      {},
+      { type: 'object', properties: { min: { type: 'integer' }, max: { type: 'integer' } } }
+    );
+    expect(html).toContain('{min, max}');
+  });
+
+  it('still renders the title of a titled $ref target', () => {
+    const schema = { $defs: { Commit: { title: 'Commit', type: 'object' } } };
+    expect(render(schema, { $ref: '#/$defs/Commit' })).toContain('Commit');
+  });
+});
+
+describe('getValueTypeText with an untitled $ref target', () => {
+  it('expands the union instead of emitting an empty cell', () => {
+    expect(
+      getValueTypeText(untitledUnionSchema as never, { $ref: '#/$defs/BatchSizeBounds' })
+    ).toBe('integer or `{min, max}`');
+  });
+
+  it('does not crash on a dangling $ref', () => {
+    expect(getValueTypeText({ $defs: {} } as never, { $ref: '#/$defs/Gone' })).toBe('');
+  });
+});
+
 describe('getValueTypeText with x-has-data-type', () => {
   it('emits a markdown link instead of the enum dump', () => {
     expect(getValueTypeText({} as never, inlineMarked)).toBe(`[Queue dequeue reason](${HREF})`);

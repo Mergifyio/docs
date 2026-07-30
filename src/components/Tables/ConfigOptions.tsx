@@ -198,6 +198,15 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
       valueType = <>list of {typeDescription}</>;
     }
   } else if (definition.$ref !== undefined) {
+    if (!getTitle(schema, definition.$ref)) {
+      // An untitled `$defs` entry carries a shape and no label — pydantic
+      // publishes one whenever a model overrides its JSON schema with a union
+      // wrapper. Expand the target so the union renders like an inline one,
+      // instead of showing an empty type.
+      const target = getItemFromSchema(schema, definition.$ref);
+      return target ? getValueType(schema, target) : null;
+    }
+
     const typeLink = getTypeLink(definition.$ref);
     const typeDescription = (
       <div
@@ -290,6 +299,12 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
     // A map field (e.g. github_actions inputs): show "map of <value type>" so the
     // templated value type still links to its data-types section.
     valueType = <>map of {getValueType(schema, definition.additionalProperties)}</>;
+  } else if (definition.type === 'object' && definition.properties) {
+    // An inline object shape has no name to show: list its keys, which is what
+    // a reader needs to write the value.
+    valueType = (
+      <HighlightCode>{`{${Object.keys(definition.properties).join(', ')}}`}</HighlightCode>
+    );
   } else {
     valueType = <HighlightCode>{definition.type}</HighlightCode>;
   }
