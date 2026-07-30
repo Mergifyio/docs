@@ -12,6 +12,23 @@ see the full picture and prioritize what to fix.
 
 <Image src={DetectionScreenshot} alt="Detection dashboard: tests health donut and CI impact chart" />
 
+## Which runs Detection reports on
+
+Detection reports on tests that ran on your repository's default branch.
+Results uploaded from pull request branches are stored, but they do not
+contribute to the metrics shown here.
+
+A repository whose CI has only ever run on pull requests shows an empty
+Detection page, even though uploads are working. Merge to the default branch
+and the tests appear after that run completes.
+
+The same scope applies outside the dashboard: the
+[`mergify tests show`](/cli/tests) command and the
+[test search API](/api/test-insights) return default-branch results.
+
+[Prevention](/test-insights/prevention) covers the pull request side of Test
+Insights: it reports on tests running on pull request branches.
+
 ## How tests are classified
 
 Mergify classifies tests based on their results across multiple CI runs,
