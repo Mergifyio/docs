@@ -24,7 +24,6 @@ Top-level sections under `src/content/docs/`:
 | `commands/` | GitHub comment commands (queue, dequeue, rebase, squash, backport, copy, update, refresh) |
 | `ci-insights/` | CI analytics setup (GitHub Actions, Buildkite, Jenkins) |
 | `test-insights/` | Test framework integrations (pytest, Jest, Go, Rust, RSpec, Cypress, …) |
-| `monorepo-ci/` | Monorepo CI guides |
 | `stacks/` | Stacked PRs: concepts, setup, workflow, adoption |
 | `integrations/` | Third-party integrations (GitHub, Datadog, Slack, Dependabot, Terraform, …) |
 | `api/`, `cli/` | API and CLI usage + reference |
