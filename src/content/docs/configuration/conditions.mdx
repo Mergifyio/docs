@@ -90,6 +90,25 @@ into Mergify attributes and a read-only set loaded from GitHub.
 
 <PullRequestAttributesTable />
 
+#### Renamed Files
+
+A rename touches two paths. Mergify treats it the way `git` does with rename detection
+turned off: the file is **removed** at its previous path and **added** at its new one.
+
+For `git mv critical/guard.txt ignored/guard.txt`:
+
+- `files` contains both `critical/guard.txt` and `ignored/guard.txt`
+- `removed-files` contains `critical/guard.txt`
+- `added-files` contains `ignored/guard.txt`
+- `modified-files` contains neither, even when the move also changed the file's content
+- `scope` reports the scopes owning both paths
+
+So `removed-files ~= ^critical/` matches a pull request that moves a file out of
+`critical/`, and a `-files ~= ^critical/` gate is not satisfied by one.
+
+`#files` is GitHub's own changed-file count, which counts a renamed file **once**. It
+therefore does not equal the length of `files` on a pull request containing a rename.
+
 ### GitHub Rulesets and Branch Protection Attributes
 
 Mergify loads these attributes from the GitHub rulesets and branch protection
