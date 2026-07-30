@@ -56,8 +56,8 @@ up: declare the patterns above and the queue batches by scope.
 ## Conditioning CI Jobs on Scopes (Optional)
 
 The same scopes can also drive your CI, letting you skip jobs whose scope a pull request doesn't
-touch. This is optional and independent of merge queue batching. To wire it up, follow the
-[Monorepo CI GitHub Actions guide](/monorepo-ci/github-actions). It walks through:
+touch. This is optional and independent of merge queue batching. To wire it up, follow the Monorepo
+CI section of the [GitHub Actions integration](/integrations/gha#monorepo-ci). It walks through:
 
 - Adding the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
   workflow step that reads your file-pattern scopes and exposes them as outputs.
@@ -66,8 +66,10 @@ touch. This is optional and independent of merge queue batching. To wire it up, 
 
 - Waiting on the right set of jobs so required checks always report, even when work is skipped.
 
-That guide already includes complete workflow samples, so you do not need to duplicate the config
-here. Just reuse the same scopes you declared above.
+That section already includes complete workflow samples, so you do not need to duplicate the config
+here. Just reuse the same scopes you declared above. The
+[Buildkite integration](/integrations/buildkite#monorepo-ci) walks through the first two steps for
+Buildkite pipelines, using a dynamic pipeline instead of job conditions.
 
 ## The Merge Queue Scope
 
