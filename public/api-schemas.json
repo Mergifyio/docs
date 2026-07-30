@@ -1350,6 +1350,7 @@
                       "action.queue.checks_end",
                       "action.queue.checks_not_started",
                       "action.queue.checks_start",
+                      "action.queue.conflict_deferred",
                       "action.queue.enter",
                       "action.queue.leave",
                       "action.queue.merged",
@@ -1416,6 +1417,7 @@
                       "action.queue.checks_end",
                       "action.queue.checks_not_started",
                       "action.queue.checks_start",
+                      "action.queue.conflict_deferred",
                       "action.queue.enter",
                       "action.queue.leave",
                       "action.queue.merged",
@@ -1847,6 +1849,7 @@
                       "action.queue.checks_end",
                       "action.queue.checks_not_started",
                       "action.queue.checks_start",
+                      "action.queue.conflict_deferred",
                       "action.queue.enter",
                       "action.queue.leave",
                       "action.queue.merged",
@@ -1913,6 +1916,7 @@
                       "action.queue.checks_end",
                       "action.queue.checks_not_started",
                       "action.queue.checks_start",
+                      "action.queue.conflict_deferred",
                       "action.queue.enter",
                       "action.queue.leave",
                       "action.queue.merged",
@@ -13533,6 +13537,138 @@
         ],
         "title": "EventQueueChecksStartMetadata"
       },
+      "EventQueueConflictDeferred": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failure",
+              "pending",
+              "neutral"
+            ],
+            "title": "Outcome"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.queue.conflict_deferred",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventQueueConflictDeferredMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "outcome",
+          "type",
+          "metadata"
+        ],
+        "title": "EventQueueConflictDeferred"
+      },
+      "EventQueueConflictDeferredMetadata": {
+        "properties": {
+          "branch": {
+            "type": "string",
+            "title": "Branch"
+          },
+          "priority_rule_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority Rule Name"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "queued_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Queued At"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "blocking_pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "maximum": 9.223372036854776e+18,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Blocking Pull Request Numbers",
+            "description": "The pull requests ahead in the queue that were in flight when the merge failed. The conflicting hunk belongs to at least one of them; the queue never learns which, so `reason` claims a conflict with the set rather than with a named pull request."
+          }
+        },
+        "type": "object",
+        "required": [
+          "branch",
+          "priority_rule_name",
+          "queue_name",
+          "queued_at",
+          "reason",
+          "session_id",
+          "blocking_pull_request_numbers"
+        ],
+        "title": "EventQueueConflictDeferredMetadata"
+      },
       "EventQueueEnter": {
         "properties": {
           "id": {
@@ -15525,6 +15661,9 @@
                   "$ref": "#/components/schemas/EventQueueChecksNotStarted"
                 },
                 {
+                  "$ref": "#/components/schemas/EventQueueConflictDeferred"
+                },
+                {
                   "$ref": "#/components/schemas/EventQueueBatchBisectionStart"
                 },
                 {
@@ -15626,6 +15765,7 @@
                   "action.queue.checks_end": "#/components/schemas/EventQueueChecksEnd",
                   "action.queue.checks_not_started": "#/components/schemas/EventQueueChecksNotStarted",
                   "action.queue.checks_start": "#/components/schemas/EventQueueChecksStart",
+                  "action.queue.conflict_deferred": "#/components/schemas/EventQueueConflictDeferred",
                   "action.queue.enter": "#/components/schemas/EventQueueEnter",
                   "action.queue.leave": "#/components/schemas/EventQueueLeave",
                   "action.queue.merged": "#/components/schemas/EventQueueMerged",
