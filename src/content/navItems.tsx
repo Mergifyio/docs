@@ -287,24 +287,6 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    title: 'Monorepo CI',
-    path: '/monorepo-ci',
-    icon: 'lucide:network',
-    children: [
-      { title: 'Overview', path: '/monorepo-ci', icon: 'lucide:network' },
-      {
-        title: 'GitHub Actions',
-        path: '/monorepo-ci/github-actions',
-        icon: 'simple-icons:githubactions',
-      },
-      {
-        title: 'Buildkite',
-        path: '/monorepo-ci/buildkite',
-        icon: 'simple-icons:buildkite',
-      },
-    ],
-  },
-  {
     title: 'Rule Engine',
     icon: 'lucide:book',
     children: [

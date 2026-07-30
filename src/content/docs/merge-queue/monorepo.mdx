@@ -47,15 +47,16 @@ With scopes, Mergify can:
    build system (Nx, Bazel, Turborepo) or want to gate expensive tests on the scopes a pull request
    touches.
 
-Need scope-aware CI without the merge queue? Explore [Monorepo CI](/monorepo-ci) for workflows that
-target GitHub Actions today.
+Need scope-aware CI without the merge queue? The [GitHub
+Actions](/integrations/gha#monorepo-ci) and [Buildkite](/integrations/buildkite#monorepo-ci)
+integrations show how to skip unaffected CI jobs with the same scopes.
 
 ### No monorepo tooling yet?
 
 Just declare file-pattern scopes in `.mergify.yml`. Mergify evaluates them and the merge queue
 batches by scope with no workflow to add, so you get scope-aware batching without introducing Nx,
-Bazel, or Turborepo first. When you also want scope-aware CI, the
-[Monorepo CI](/monorepo-ci) GitHub Actions guide ships a ready-made
+Bazel, or Turborepo first. When you also want scope-aware CI, the [GitHub Actions
+integration](/integrations/gha#monorepo-ci) ships a ready-made
 [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) workflow. As your repository grows
 you can swap in more advanced tooling, and your scopes stay the same.
 
@@ -78,4 +79,6 @@ of how you compute them.
   test and merge pull requests that touch different scopes simultaneously, reducing merge times
   in monorepos.
 
-- [Monorepo CI](/monorepo-ci): opinionated GitHub Actions workflows if you need turnkey automation.
+- [GitHub Actions](/integrations/gha#monorepo-ci) and
+  [Buildkite](/integrations/buildkite#monorepo-ci) integrations: reuse the same scopes to skip
+  unaffected CI jobs on pull requests.
