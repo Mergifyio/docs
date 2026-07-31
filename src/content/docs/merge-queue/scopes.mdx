@@ -128,7 +128,7 @@ queue_rules:
 
 - `scopes.source`: selects how scopes are provided.
   - `files`: map scope names to the file patterns that define them. Each entry accepts `include`
-    and optional `exclude` lists.
+    and optional `exclude` lists of [glob patterns](/configuration/data-types#globs).
 
   - `manual`: instructs Mergify to expect scopes from external systems via the API or GitHub
     Action.
