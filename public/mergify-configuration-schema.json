@@ -102,8 +102,8 @@
             }
           ],
           "configuration_deprecated_attribute": {
-            "deprecated_summary_ghes_mode": "The `github_actions` action is deprecated and will be removed on 2027-03-31. Trigger your workflow from GitHub Actions directly instead: https://docs.mergify.com/workflow/actions/github_actions",
-            "deprecated_summary_saas_mode": "The `github_actions` action is deprecated and will be removed on 2027-03-31. Trigger your workflow from GitHub Actions directly instead: https://docs.mergify.com/workflow/actions/github_actions"
+            "deprecated_summary_ghes_mode": "The `github_actions` action will be removed on 2027-03-31: https://docs.mergify.com/workflow/actions/migrate-github-actions/",
+            "deprecated_summary_saas_mode": "The `github_actions` action will be removed on 2027-03-31: https://docs.mergify.com/workflow/actions/migrate-github-actions/"
           },
           "default": null,
           "deprecated": true
