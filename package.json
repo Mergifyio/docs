@@ -113,7 +113,7 @@
     "remark-lint-ordered-list-marker-value": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "remark-smartypants": "^3.0.2",
+    "remark-smartypants": "^3.0.3",
     "sharp": "^0.35.3",
     "uuid": "^14.0.1"
   },
