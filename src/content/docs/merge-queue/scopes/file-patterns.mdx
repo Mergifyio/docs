@@ -46,6 +46,25 @@ Mergify will intelligently batch PRs with overlapping scopes together. For examp
 they share a common scope.
 :::
 
+## Pattern Syntax
+
+`include` and `exclude` accept the same [glob patterns](/configuration/data-types#globs) as the `*=`
+operator in conditions. That includes
+[brace alternation](/configuration/data-types#brace-alternation), which collapses a list of
+extensions into one pattern. The `frontend` scope above can also be written as:
+
+```yaml
+scopes:
+  source:
+    files:
+      frontend:
+        include:
+          - web/**/*.{js,jsx,ts,tsx}
+```
+
+Mergify validates every pattern when it loads your configuration. An unbalanced `{` is a
+configuration error, not a scope that silently matches nothing.
+
 ## How Mergify Evaluates File-Pattern Scopes
 
 Mergify evaluates file-pattern scopes itself. For each pull request, it matches the changed files
