@@ -35,7 +35,10 @@ pull_request_rules:
 
 ## Globs
 
-You can use globs expressions with matching operators in your [conditions](/configuration/conditions).
+Glob patterns are used by the `*=` operator in your
+[conditions](/configuration/conditions), by
+[file-pattern scopes](/merge-queue/scopes/file-patterns), and by
+[`barrier_files`](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope).
 
 {/* eslint-disable */}
 | Pattern            | Description |
@@ -46,6 +49,7 @@ You can use globs expressions with matching operators in your [conditions](/conf
 | `?` | Matches one non-separator character. |
 | `[seq]` | Matches one character in `seq`, where `seq` is a sequence of characters. Range expressions are supported; e.g., `[a-z]` matches any lowercase ASCII letter. Multiple ranges can be combined, e.g. `[a-zA-Z0-9_]` matches any ASCII letter, digit, or underscore. |
 | `[!seq]` | Matches one character **not** in `seq`, where `seq` follows the same rules as above. |
+| `{a,b}` | Matches either `a` or `b`. See [brace alternation](#brace-alternation). |
 {/* eslint-enable */}
 
 :::note
@@ -60,6 +64,48 @@ The `**` wildcard enables recursive globbing. A few examples:
 | `**/*.py` | Any path with a final segment ending in `.py`. |
 | `assets/**` | Any path starting with `assets/`. |
 | `assets/**/*` | Any path starting with `assets/`, excluding `assets/` itself. |
+
+### Brace alternation
+
+A brace group matches any one of its comma-separated branches. Mergify expands
+the group into one pattern per branch, so `**/*.{js,ts}` is equivalent to
+listing `**/*.js` and `**/*.ts` separately:
+
+```yaml
+pull_request_rules:
+  - name: label frontend changes
+    conditions:
+      - files *= web/**/*.{js,jsx,ts,tsx}
+    actions:
+      label:
+        add:
+          - frontend
+```
+
+A pattern can contain several groups, and groups can nest. `{a,b{c,d}}` matches
+`a`, `bc` and `bd`, and `{src,tests}/**/*.{py,pyi}` covers the four
+combinations of directory and extension.
+
+:::caution
+  An empty branch is dropped rather than matching nothing, so `foo{,.txt}`
+  matches `foo.txt` but **not** `foo`. List the two patterns separately when you
+  need both.
+:::
+
+An unbalanced `{` or `}` is a configuration error, not a literal brace. Mergify
+rejects the configuration instead of leaving you with a pattern that silently
+matches nothing. To match a brace as a character, escape it as `\{` or `\}`, or
+bracket it as `[{]` or `[}]`; a literal comma inside a group is `\,`.
+
+A pattern may expand to at most 128 alternatives and nest at most 32 levels
+deep. Beyond either limit, Mergify rejects the configuration.
+
+:::note
+  YAML reads `{` at the start of a value as the beginning of a mapping, so quote
+  a pattern that starts with a brace: `'{src,tests}/**'`. Backslash escapes need
+  single quotes or no quotes at all, since a double-quoted YAML string treats
+  `\{` as an invalid escape.
+:::
 
 ## Regular Expressions
 
