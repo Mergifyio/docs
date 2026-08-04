@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import apiSchema from '../../public/api-schemas.json';
+import configSchema from '../../public/mergify-configuration-schema.json';
 import { readEnumChoices, resolveRef } from './enumChoices';
 
 // This reader spans an engine-side migration, so each shape it has to survive
@@ -169,5 +171,38 @@ describe('resolveRef', () => {
 
   it('returns non-ref nodes untouched', () => {
     expect(resolveRef({}, { enum: ['x'] })).toEqual({ enum: ['x'] });
+  });
+});
+
+// The cases above are synthetic. These bind the reader to the two schemas the
+// site actually renders, so a sync that changes shape — or reverts one — fails
+// here instead of silently publishing a table of blank cells.
+function at(root: unknown, ...path: string[]): unknown {
+  let current = root;
+  for (const key of path) {
+    current = (current as Record<string, unknown> | undefined)?.[key];
+  }
+  return current;
+}
+
+describe('the real synced schemas', () => {
+  it('documents every batch status code in the API schema', () => {
+    const code = at(apiSchema, 'components', 'schemas', 'BatchStatus', 'properties', 'code');
+    const choices = readEnumChoices(apiSchema, code);
+    expect(choices.length).toBeGreaterThan(0);
+    expect(choices.filter((c) => c.description.trim() === '')).toEqual([]);
+  });
+
+  it('documents every dequeue reason in the configuration schema', () => {
+    const reason = at(
+      configSchema,
+      '$defs',
+      'PullRequestAttributes',
+      'properties',
+      'queue-dequeue-reason'
+    );
+    const choices = readEnumChoices(configSchema, reason);
+    expect(choices.length).toBeGreaterThan(0);
+    expect(choices.filter((c) => c.description.trim() === '')).toEqual([]);
   });
 });

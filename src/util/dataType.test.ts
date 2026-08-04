@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import apiSchema from '../../public/api-schemas.json';
 import configSchema from '../../public/mergify-configuration-schema.json';
 import { collectDataTypeTitles, getDataTypeHref, isDataType } from './dataType';
 import { dataTypesHeadingAnchors, missingDataTypeAnchors } from './dataTypeAnchors';
@@ -69,6 +70,8 @@ describe('data-types page anchors', () => {
       'priority',
       'report-mode',
       'schedule',
+      // marked in the OpenAPI spec rather than the configuration schema
+      'batch-status',
       // anchors hardcoded in ConfigOptions.tsx link maps
       'commit',
       'commit-author',
@@ -94,5 +97,13 @@ describe('data-types page anchors', () => {
   // see PR CI; this test surfaces the failure earlier for docs-side edits.
   it('covers every documented data type flagged in the config schema', () => {
     expect(missingDataTypeAnchors(configSchema)).toEqual([]);
+  });
+
+  // The same convention, for types the engine marks in the OpenAPI spec
+  // instead — a data type the API reports but you never write in
+  // `.mergify.yml`. Both schemas arrive by the same bot sync, so both are
+  // gated in integrations/validate-data-type-anchors.ts.
+  it('covers every documented data type flagged in the API schema', () => {
+    expect(missingDataTypeAnchors(apiSchema)).toEqual([]);
   });
 });
