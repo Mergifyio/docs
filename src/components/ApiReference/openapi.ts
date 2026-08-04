@@ -250,7 +250,20 @@ function escapeHtml(text: string): string {
 export function getTypeLabel(schema: SchemaObject | undefined, root: OpenAPISpec): string {
   if (!schema) return 'any';
 
-  if (schema.$ref) return getRefName(schema) ?? 'object';
+  if (schema.$ref) {
+    // A referenced enum still has to show its values here. Parameters are
+    // rendered from this label alone (Endpoint.astro) with no schema tree
+    // underneath and no `enum` in their constraints, so falling back to the
+    // component name would leave a query parameter documented as
+    // `EventType[]` with its accepted values published nowhere on the site.
+    // Object references keep their name — expanding those is what the schema
+    // tree is for.
+    const resolved = resolveRef(schema, root);
+    if (Array.isArray(resolved?.enum)) {
+      return resolved.enum.map((v) => JSON.stringify(v)).join(' | ');
+    }
+    return getRefName(schema) ?? 'object';
+  }
 
   if (schema.anyOf) {
     const nonNull = schema.anyOf.filter((s) => s.type !== 'null');
