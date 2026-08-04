@@ -4,9 +4,20 @@ import { collectDataTypeTitles, getDataTypeHref, isDataType } from './dataType';
 import { dataTypesHeadingAnchors, missingDataTypeAnchors } from './dataTypeAnchors';
 
 describe('isDataType', () => {
-  it('recognizes flagged nodes only', () => {
+  it('recognizes the namespaced marker', () => {
+    expect(isDataType({ 'x-mergify-has-data-type': true })).toBe(true);
+    expect(isDataType({ 'x-mergify-has-data-type': 'queue-dequeue-reason' })).toBe(false);
+  });
+
+  // The engine is renaming the key, and syncs land as direct pushes to main,
+  // so a schema carrying either spelling has to keep working until no synced
+  // schema publishes the old one.
+  it('still recognizes the legacy marker', () => {
     expect(isDataType({ 'x-has-data-type': true })).toBe(true);
     expect(isDataType({ 'x-has-data-type': 'queue-dequeue-reason' })).toBe(false);
+  });
+
+  it('rejects everything else', () => {
     expect(isDataType({ type: 'string' })).toBe(false);
     expect(isDataType(null)).toBe(false);
     expect(isDataType('string')).toBe(false);
@@ -23,17 +34,17 @@ describe('getDataTypeHref', () => {
 });
 
 describe('collectDataTypeTitles', () => {
-  it('finds flagged nodes wherever they appear in a schema', () => {
+  it('finds flagged nodes wherever they appear, in either spelling', () => {
     const schema = {
       $defs: {
-        ReportMode: { 'x-has-data-type': true, title: 'Report Mode' },
+        ReportMode: { 'x-mergify-has-data-type': true, title: 'Report Mode' },
       },
       properties: {
         reason: {
           anyOf: [{ 'x-has-data-type': true, title: 'Queue dequeue reason' }, { type: 'null' }],
         },
         report_mode: { type: 'array', items: { $ref: '#/$defs/ReportMode' } },
-        untitled: { 'x-has-data-type': true },
+        untitled: { 'x-mergify-has-data-type': true },
       },
     };
     expect(collectDataTypeTitles(schema).sort()).toEqual([
