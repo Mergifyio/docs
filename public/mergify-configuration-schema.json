@@ -1415,7 +1415,7 @@
       "description": "GitHub Actions workflow dispatch",
       "properties": {
         "workflow": {
-          "description": "The name of the .yaml GitHub Workflow file with its extension.",
+          "description": "The GitHub Workflow file name with its extension (e.g. `ci.yml`), or the numeric workflow id.",
           "title": "Workflow",
           "type": "string"
         },
