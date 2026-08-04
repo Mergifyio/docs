@@ -29,9 +29,9 @@ than a cramped window — never upscale a small capture.
 Capture at **2× (retina)**. The existing docs screenshots are all 2× — a 1×
 capture renders visibly softer next to them. How you get 2× depends on the path:
 
-- **Internal Playwright tool** (`Mergifyio/skills`) — sets
-  `deviceScaleFactor: 2` explicitly alongside `viewport 1440×900` and writes
-  `page.screenshot()` bytes straight to disk, so 2× is captured natively.
+- **Internal Playwright tool** — sets `deviceScaleFactor: 2` explicitly
+  alongside `viewport 1440×900` and writes `page.screenshot()` bytes straight to
+  disk, so 2× is captured natively.
 - **Interactive claude-in-chrome capture** — there is no `deviceScaleFactor`
   knob. Capture on a **2×/retina display at 100% browser zoom**; anything else
   yields a soft 1× shot. Check the PNG's pixel dimensions against its CSS region
@@ -49,7 +49,7 @@ side by side with matching framing.
 Save to:
 
 ```
-src/content/docs/images/<section>/<page>/<kebab-name>.png
+src/content/images/<section>/<page>/<kebab-name>.png
 ```
 
 - `<section>` mirrors the docs section (`merge-queue`, `integrations`,
@@ -59,7 +59,7 @@ src/content/docs/images/<section>/<page>/<kebab-name>.png
 - `<kebab-name>` describes the content: `queue-view-batched-prs.png`, not
   `screenshot-1.png`.
 
-Match the existing layout under `src/content/docs/images/` — look before you
+Match the existing layout under `src/content/images/` — look before you
 create a new subfolder.
 
 ## Overlay dismissal
@@ -113,3 +113,9 @@ the resulting URL with `read_page` rather than guessing.
   keeps the reader focused and survives unrelated UI changes.
 - Avoid capturing personal account names or other customers' data — use the
   user's own org or a demo org.
+- **Crop out the sidebar unless the navigation is the point.** It carries the
+  org name, the signed-in user's name and their avatar, and it is also the part
+  of the dashboard that changes most often — a shot framed around it goes stale
+  every time a nav item is renamed or added, even when the feature it documents
+  has not changed at all. The content pane starts at x=280 in the standard
+  1440-wide viewport.

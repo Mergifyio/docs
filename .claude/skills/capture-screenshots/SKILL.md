@@ -17,10 +17,10 @@ Produce clean, consistent screenshots of the Mergify dashboard
 
 ## Two ways to capture
 
-**Prefer the internal Playwright tool for batch or unattended captures.** The
-capture tool in the **`Mergifyio/skills`** repo runs headless Chromium at
-`deviceScaleFactor: 2` and writes PNG bytes straight to disk. It owns the
-session/auth handling, which is intentionally kept out of this public repo.
+**Prefer the internal Playwright tool for batch or unattended captures.** It
+runs headless Chromium at `deviceScaleFactor: 2` and writes PNG bytes straight
+to disk. It also owns the session/auth handling, which — like the tool itself —
+is intentionally kept out of this public repo.
 
 **Use the interactive Chrome path below when you are working alongside the user**
 — exploring the dashboard, framing a one-off shot, or capturing a state that is
@@ -29,6 +29,14 @@ against the user's own logged-in session.
 
 Either way, the docs-side conventions are the same: framing, directory/naming,
 and the `<Image>` wiring snippet — see `references/conventions.md`.
+
+**Prefer a capture that carries no account identity at all.** This repo is
+public, so every shot is published. A capture taken from a live logged-in
+account puts that org name, user name, avatar and repository names into the
+docs — it has happened before. A dashboard dev build can be rendered from
+seeded mock data with no session at all; ask for that path when the shot only
+needs to show the UI. When a shot must come from a real session, crop to the
+content pane so the sidebar's org/user header stays out of frame.
 
 ## Prerequisite (interactive path)
 
@@ -69,7 +77,7 @@ ToolSearch select:mcp__claude-in-chrome__tabs_context_mcp,mcp__claude-in-chrome_
 5. **Capture** — take the screenshot with the `computer` tool. Frame the relevant
    region; capture the specific panel rather than the whole chrome when possible.
 6. **Save** — write the image to
-   `src/content/docs/images/<section>/<page>/<kebab-name>.png` following the
+   `src/content/images/<section>/<page>/<kebab-name>.png` following the
    naming convention.
 7. **Emit the snippet** — output the ready-to-paste import + `<Image>` tag with
    drafted alt text (see below). Hand it back so it can be dropped into the MDX
