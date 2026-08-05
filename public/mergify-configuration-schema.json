@@ -2019,7 +2019,8 @@
           "default": "medium",
           "description": "The priority of the pull request.",
           "title": "Priority",
-          "x-has-data-type": true
+          "x-has-data-type": true,
+          "x-mergify-has-data-type": true
         },
         "allow_checks_interruption": {
           "default": false,
@@ -2659,6 +2660,7 @@
             "UNPROCESSABLE_PULL_REQUEST": "Mergify cannot process the pull request, for example because it has too many check runs, comments, or files."
           },
           "x-has-data-type": true,
+          "x-mergify-has-data-type": true,
           "x-modifiers": [
             {
               "type": "negate"
@@ -3727,6 +3729,7 @@
             "!="
           ],
           "x-has-data-type": true,
+          "x-mergify-has-data-type": true,
           "x-modifiers": []
         },
         "sender-permission": {
@@ -4611,7 +4614,8 @@
       ],
       "title": "Report Mode",
       "type": "string",
-      "x-has-data-type": true
+      "x-has-data-type": true,
+      "x-mergify-has-data-type": true
     },
     "RequestReviewsActionModel": {
       "additionalProperties": false,
