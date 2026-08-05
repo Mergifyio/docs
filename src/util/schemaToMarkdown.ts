@@ -17,7 +17,7 @@ function getTitle(schema: Schema, ref: string): string {
 }
 
 // Markdown twin of ConfigOptions.getDataTypeLink: a node flagged
-// `x-has-data-type: true` links to its data-types section instead of expanding
+// `x-mergify-has-data-type: true` links to its data-types section instead of expanding
 // its shape, with the node's `title` driving both label and anchor. The flag
 // may sit inline or beside a `$ref`, so check each node along the chain.
 function getDataTypeLinkText(schema: Schema, definition: unknown): string | undefined {
