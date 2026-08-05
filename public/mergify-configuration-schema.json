@@ -2436,6 +2436,17 @@
             }
           ]
         },
+        "from-fork": {
+          "description": "Whether the pull request comes from a fork, i.e. its head branch and its base branch live in different repositories. Also `true` when the head repository has been deleted, since a deleted repository is never the one holding the base branch.",
+          "title": "From fork",
+          "type": "boolean",
+          "x-allowed-operators": [],
+          "x-modifiers": [
+            {
+              "type": "negate"
+            }
+          ]
+        },
         "title": {
           "description": "The title of the pull request.",
           "title": "Title",
@@ -3825,6 +3836,7 @@
         "base",
         "head",
         "head-repo-full-name",
+        "from-fork",
         "title",
         "body",
         "body-raw",
