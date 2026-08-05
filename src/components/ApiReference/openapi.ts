@@ -98,8 +98,20 @@ export function resolveRef(schema: SchemaObject, root: OpenAPISpec): SchemaObjec
   if (!schema?.$ref) return schema;
   const segments = schema.$ref.replace('#/', '').split('/');
   let result: Record<string, unknown> = root as unknown as Record<string, unknown>;
-  for (const seg of segments) result = result[decodeURIComponent(seg)] as Record<string, unknown>;
-  return result as unknown as SchemaObject;
+  for (const seg of segments) {
+    if (!result || typeof result !== 'object') return schema;
+    // A component name containing a stray `%` makes `decodeURIComponent`
+    // raise, and this runs while rendering every parameter — an unresolvable
+    // ref has to degrade to the node we were given, not fail the build.
+    let key: string;
+    try {
+      key = decodeURIComponent(seg);
+    } catch {
+      key = seg;
+    }
+    result = result[key] as Record<string, unknown>;
+  }
+  return (result ?? schema) as unknown as SchemaObject;
 }
 
 export function getRefName(schema: SchemaObject): string | null {
@@ -250,7 +262,20 @@ function escapeHtml(text: string): string {
 export function getTypeLabel(schema: SchemaObject | undefined, root: OpenAPISpec): string {
   if (!schema) return 'any';
 
-  if (schema.$ref) return getRefName(schema) ?? 'object';
+  if (schema.$ref) {
+    // A referenced enum still has to show its values here. Parameters are
+    // rendered from this label alone (Endpoint.astro) with no schema tree
+    // underneath and no `enum` in their constraints, so falling back to the
+    // component name would leave a query parameter documented as
+    // `EventType[]` with its accepted values published nowhere on the site.
+    // Object references keep their name — expanding those is what the schema
+    // tree is for.
+    const resolved = resolveRef(schema, root);
+    if (Array.isArray(resolved?.enum)) {
+      return resolved.enum.map((v) => JSON.stringify(v)).join(' | ');
+    }
+    return getRefName(schema) ?? 'object';
+  }
 
   if (schema.anyOf) {
     const nonNull = schema.anyOf.filter((s) => s.type !== 'null');
@@ -273,7 +298,11 @@ export function getTypeLabel(schema: SchemaObject | undefined, root: OpenAPISpec
   }
 
   if (schema.type === 'array' && schema.items) {
-    return `${getTypeLabel(schema.items, root)}[]`;
+    // Parenthesise a union before suffixing `[]`, or an array of an enum
+    // reads as though only its last member were the array:
+    // `"a" | "b"[]` rather than `("a" | "b")[]`.
+    const item = getTypeLabel(schema.items, root);
+    return `${item.includes(' | ') ? `(${item})` : item}[]`;
   }
 
   if (schema.enum) {
