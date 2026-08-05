@@ -1,0 +1,6 @@
+Revision history for #12303:
+
+rev 2 (content) 2026-08-04 20:28 UTC — split: skill-doc changes moved out into their own commit/PR on top, per review — this PR is now the screenshot and nothing else
+rev 1 (initial) 2026-08-04 20:28 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12303,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"100fde717a57fcdb4fd8ab6d8471f1377cd62857","timestamp_iso":"2026-08-04T20:28:04Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"100fde717a57fcdb4fd8ab6d8471f1377cd62857","new_sha":"aa434ee0181ba82b2ef9dce5e960e746585cb2d2","timestamp_iso":"2026-08-04T20:28:04Z","reason":"split: skill-doc changes moved out into their own commit/PR on top, per review — this PR is now the screenshot and nothing else","replay_sha":"2201d9427346ed25774b1d123974f2c91622318b","compare_url":"https://github.com/Mergifyio/docs/compare/100fde717a57fcdb4fd8ab6d8471f1377cd62857...2201d9427346ed25774b1d123974f2c91622318b"}]} -->
