@@ -9497,7 +9497,59 @@
               "waiting_for_checks_slot",
               "frozen"
             ],
-            "title": "Code"
+            "title": "Batch Status",
+            "x-has-data-type": true,
+            "x-mergify-enum": [
+              {
+                "description": "The batch is set up and its CI checks are running.",
+                "title": "CI Running"
+              },
+              {
+                "description": "The batch failed, so Mergify is splitting it into smaller sub-batches and testing those to identify the pull request responsible and merge the others.",
+                "title": "Bisecting Batch"
+              },
+              {
+                "description": "Mergify is setting the batch up so it can be tested.",
+                "title": "Preparing"
+              },
+              {
+                "description": "The batch failed, either because Mergify could not prepare it for testing or because its checks did not pass. It is removed from the queue and its pull requests have to be fixed.",
+                "title": "Failed"
+              },
+              {
+                "description": "The batch was merged.",
+                "title": "Merged"
+              },
+              {
+                "description": "The batch's checks passed. It merges once the batches ahead of it have merged.",
+                "title": "Waiting to Merge"
+              },
+              {
+                "description": "A batch ahead in the queue failed, so this batch is held while Mergify identifies the cause. It has either not started its own checks yet, or already ran and failed and is parked until the cause is known.",
+                "title": "Waiting on Previous Batch"
+              },
+              {
+                "description": "A batch ahead in the queue failed, so this batch is requeued and retested against the updated queue.",
+                "title": "Requeuing"
+              },
+              {
+                "description": "The batch's merge conditions are met, but a schedule condition is not. It continues once the schedule allows it.",
+                "title": "Waiting for Schedule"
+              },
+              {
+                "description": "Mergify is waiting for more pull requests to fill the batch, or for the maximum wait time to elapse, before starting it.",
+                "title": "Filling Batch"
+              },
+              {
+                "description": "The batch is ready to be tested, but every slot for running checks in parallel is taken. It starts as soon as one frees up.",
+                "title": "Waiting for CI Slot"
+              },
+              {
+                "description": "The batch's checks passed, but merges are frozen. It merges once the freeze is lifted.",
+                "title": "Frozen"
+              }
+            ],
+            "x-mergify-has-data-type": true
           },
           "batch_filled_slots": {
             "anyOf": [
