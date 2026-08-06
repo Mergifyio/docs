@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import apiSchema from '../../../public/api-schemas.json';
-import { getTypeLabel, resolveRef } from './openapi';
+import { getTypeLabel, renderSchemaHtml, resolveRef } from './openapi';
 
 type Spec = Parameters<typeof getTypeLabel>[1];
 type Node = Parameters<typeof getTypeLabel>[0];
@@ -46,5 +46,67 @@ describe('resolveRef', () => {
   it('returns the node it was given for a dangling ref', () => {
     const node = { $ref: '#/components/schemas/Nope' } as RefNode;
     expect(resolveRef(node, { components: { schemas: {} } } as unknown as Spec)).toEqual(node);
+  });
+});
+
+// The engine marks a schema node as a documented data type; on the config side
+// `ConfigOptions` turns that into a link. The API reference publishes the same
+// marker, so it has to resolve too — otherwise the docs build enforces an
+// anchor for a link nothing renders.
+describe('documented data type links', () => {
+  it('links a marked enum to its data-types section, keeping the values', () => {
+    const html = renderSchemaHtml(
+      {
+        type: 'object',
+        properties: {
+          code: {
+            type: 'string',
+            enum: ['running', 'frozen'],
+            title: 'Batch Status',
+            'x-mergify-has-data-type': true,
+          },
+        },
+      } as never,
+      { components: { schemas: {} } } as never
+    );
+    expect(html).toContain('/configuration/data-types#batch-status');
+    expect(html).toContain('Batch Status');
+    expect(html).toContain('<code>running</code>');
+  });
+
+  it('leaves an unmarked enum alone', () => {
+    const html = renderSchemaHtml(
+      {
+        type: 'object',
+        properties: { code: { type: 'string', enum: ['a', 'b'], title: 'Code' } },
+      } as never,
+      { components: { schemas: {} } } as never
+    );
+    expect(html).toContain('<code>a</code>');
+    expect(html).not.toContain('/configuration/data-types');
+  });
+
+  it('finds the marker on a $ref sibling as well as on the target', () => {
+    const root = {
+      components: {
+        schemas: { BatchStatusCode: { type: 'string', enum: ['running'], title: 'Batch Status' } },
+      },
+    };
+    const html = renderSchemaHtml(
+      {
+        type: 'object',
+        properties: {
+          code: { $ref: '#/components/schemas/BatchStatusCode', 'x-mergify-has-data-type': true },
+        },
+      } as never,
+      root as never
+    );
+    expect(html).toContain('/configuration/data-types#batch-status');
+  });
+
+  it("renders the real spec's batch status link", () => {
+    const spec = apiSchema as never as { components: { schemas: Record<string, unknown> } };
+    const html = renderSchemaHtml(spec.components.schemas.BatchStatus as never, apiSchema as never);
+    expect(html).toContain('/configuration/data-types#batch-status');
   });
 });
