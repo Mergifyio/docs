@@ -1,3 +1,4 @@
+import { getDataTypeHref, isDataType } from '~/util/dataType';
 import { slugify } from '~/util/slugify';
 
 export interface OpenAPISpec {
@@ -112,6 +113,29 @@ export function resolveRef(schema: SchemaObject, root: OpenAPISpec): SchemaObjec
     result = result[key] as Record<string, unknown>;
   }
   return (result ?? schema) as unknown as SchemaObject;
+}
+
+/**
+ * A "see <data type>" link for a node the engine flags as a documented data
+ * type, or '' for anything else.
+ *
+ * The values themselves stay rendered beside it: an API consumer needs to know
+ * what the field accepts, and the marker only says the meaning of those values
+ * is written up elsewhere. That is also why the type label is left alone —
+ * swapping the accepted values for a title there is exactly the regression that
+ * hoisting shared enums into components already caused once.
+ *
+ * The flag can sit on the referring node or on the `$ref` target, since
+ * pydantic publishes it inline for an inlined type and as a `$ref` sibling for
+ * a hoisted one, so both are checked. The title is what the anchor derives
+ * from, and the docs build fails when a marked title has no matching heading —
+ * so a link built here cannot point at a section that does not exist.
+ */
+function dataTypeLinkHtml(node: SchemaObject, resolved: SchemaObject): string {
+  if (!isDataType(node) && !isDataType(resolved)) return '';
+  const title = resolved.title ?? node.title;
+  if (!title) return '';
+  return ` <span class="schema-enum-doc">see <a href="${getDataTypeHref(title)}">${escapeHtml(title)}</a></span>`;
 }
 
 export function getRefName(schema: SchemaObject): string | null {
@@ -470,7 +494,7 @@ export function renderSchemaHtml(
         if (description)
           html += `<p class="schema-property-description">${escapeHtml(description)}</p>`;
         if (resolved.enum) {
-          html += `<div class="schema-enum">Enum: ${resolved.enum.map((v: unknown) => `<code>${escapeHtml(String(v))}</code>`).join(' ')}</div>`;
+          html += `<div class="schema-enum">Enum: ${resolved.enum.map((v: unknown) => `<code>${escapeHtml(String(v))}</code>`).join(' ')}${dataTypeLinkHtml(propSchema, resolved)}</div>`;
         }
         html += renderConstraintsHtml(resolved);
         html += '</div>';
