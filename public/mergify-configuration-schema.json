@@ -2039,7 +2039,6 @@
           "default": "medium",
           "description": "The priority of the pull request.",
           "title": "Priority",
-          "x-has-data-type": true,
           "x-mergify-has-data-type": true
         },
         "allow_checks_interruption": {
@@ -2640,7 +2639,6 @@
             "!=",
             "~="
           ],
-          "x-has-data-type": true,
           "x-mergify-enum": [
             {
               "description": "The pull request is not, and never was, in a merge queue."
@@ -3831,7 +3829,6 @@
             "=",
             "!="
           ],
-          "x-has-data-type": true,
           "x-mergify-has-data-type": true,
           "x-modifiers": []
         },
@@ -4718,7 +4715,6 @@
       ],
       "title": "Report Mode",
       "type": "string",
-      "x-has-data-type": true,
       "x-mergify-has-data-type": true
     },
     "RequestReviewsActionModel": {
