@@ -4236,7 +4236,7 @@
           ],
           "default": null,
           "deprecated": true,
-          "description": "If set to `fast-forward`, Mergify will merge the draft pull request instead of merging the original pull request that has been checked. This only works when `merge_method` is set to `merge`.",
+          "description": "Deprecated spelling of `merge_method: fast-forward`. If set to `fast-forward`, Mergify moves the base branch onto the draft pull request instead of merging the original pull request that has been checked, whatever `merge_method` is set to. Use `merge_method: fast-forward` instead.",
           "title": "Queue Branch Merge Method"
         },
         "queue_branch_prefix": {
@@ -4247,7 +4247,7 @@
         },
         "allow_queue_branch_edit": {
           "default": false,
-          "description": "When creating a branch for a queue, if the commits of this branch are edited by an entity external to Mergify, Mergify dequeues all pull requests embarked in the branch and report the issue as a failure. If set to `true`, Mergify will allow such modifications and trust the content of the branch. Make sure only Mergify and your external application are allowed to edit these branches.",
+          "description": "When creating a branch for a queue, if the commits of this branch are edited by an entity external to Mergify, Mergify dequeues all pull requests embarked in the branch and report the issue as a failure. If set to `true`, Mergify will allow such modifications and trust the content of the branch. Make sure only Mergify and your external application are allowed to edit these branches.\n\nThis option requires `merge_method` to be `merge-batch` or `fast-forward`. Those two merge the batch branch itself, so a commit pushed to it is part of what lands on the base branch; `merge`, `squash` and `rebase` merge each pull request at its own head, which never includes the edit.\n\nEnabling it therefore means the merged content is the batch branch, including commits that were never reviewed as part of any pull request. That is the contract of this option: it exists for batch-level work (a conflict resolution, a migration reorder, a lockfile regeneration) that belongs to no single pull request.\n\nNote also that under these two merge methods Mergify does not merge the pull requests one by one: GitHub marks each embarked pull request as merged only when its head commit is reachable from the new base branch tip, so a pull request whose head no longer matches what was embarked is not shown as merged even though its content landed.",
           "title": "Allow Queue Branch Edit",
           "type": "boolean"
         },
@@ -4504,7 +4504,7 @@
           ],
           "default": null,
           "deprecated": true,
-          "description": "If set to `fast-forward`, Mergify will merge the draft pull request instead of merging the original pull request that has been checked. This only works when `merge_method` is set to `merge`.",
+          "description": "Deprecated spelling of `merge_method: fast-forward`. If set to `fast-forward`, Mergify moves the base branch onto the draft pull request instead of merging the original pull request that has been checked, whatever `merge_method` is set to. Use `merge_method: fast-forward` instead.",
           "title": "Queue Branch Merge Method"
         },
         "queue_branch_prefix": {
@@ -4515,7 +4515,7 @@
         },
         "allow_queue_branch_edit": {
           "default": false,
-          "description": "When creating a branch for a queue, if the commits of this branch are edited by an entity external to Mergify, Mergify dequeues all pull requests embarked in the branch and report the issue as a failure. If set to `true`, Mergify will allow such modifications and trust the content of the branch. Make sure only Mergify and your external application are allowed to edit these branches.",
+          "description": "When creating a branch for a queue, if the commits of this branch are edited by an entity external to Mergify, Mergify dequeues all pull requests embarked in the branch and report the issue as a failure. If set to `true`, Mergify will allow such modifications and trust the content of the branch. Make sure only Mergify and your external application are allowed to edit these branches.\n\nThis option requires `merge_method` to be `merge-batch` or `fast-forward`. Those two merge the batch branch itself, so a commit pushed to it is part of what lands on the base branch; `merge`, `squash` and `rebase` merge each pull request at its own head, which never includes the edit.\n\nEnabling it therefore means the merged content is the batch branch, including commits that were never reviewed as part of any pull request. That is the contract of this option: it exists for batch-level work (a conflict resolution, a migration reorder, a lockfile regeneration) that belongs to no single pull request.\n\nNote also that under these two merge methods Mergify does not merge the pull requests one by one: GitHub marks each embarked pull request as merged only when its head commit is reachable from the new base branch tip, so a pull request whose head no longer matches what was embarked is not shown as merged even though its content landed.",
           "title": "Allow Queue Branch Edit",
           "type": "boolean"
         },
