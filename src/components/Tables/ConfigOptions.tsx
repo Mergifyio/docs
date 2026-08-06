@@ -113,7 +113,7 @@ function getTitle(schema: object, ref: OptionDefinitionRef): string {
   return item?.title || item?.name || '';
 }
 
-// A node flagged `x-has-data-type: true` is a documented data type: link to its
+// A node flagged `x-mergify-has-data-type: true` is a documented data type: link to its
 // data-types section instead of expanding the node's shape — an enum such as
 // `queue-dequeue-reason` would otherwise dump its forty codes into the type
 // cell. The node's `title` drives both the label and the anchor (slugified

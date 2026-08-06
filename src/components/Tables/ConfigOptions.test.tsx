@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { getValueTypeText } from '~/util/schemaToMarkdown';
 import { getValueType } from './ConfigOptions';
 
-// The x-has-data-type contract, render side: a node flagged as a documented data
+// The x-mergify-has-data-type contract, render side: a node flagged as a documented data
 // type becomes a link to its data-types section instead of an expansion of
 // its shape, for both the HTML tables (getValueType) and the markdown/LLM
 // export (getValueTypeText). The node's `title` drives the label and the
@@ -15,7 +15,7 @@ const HREF = '/configuration/data-types#queue-dequeue-reason';
 
 const inlineMarked = {
   title: 'Queue dequeue reason',
-  'x-has-data-type': true,
+  'x-mergify-has-data-type': true,
   anyOf: [{ enum: ['PR_MERGED', 'PR_DEQUEUED'], type: 'string' }, { type: 'null' }],
 };
 
@@ -24,7 +24,7 @@ function render(schema: object, definition: object): string {
   return element === null ? '' : renderToStaticMarkup(element);
 }
 
-describe('getValueType with x-has-data-type', () => {
+describe('getValueType with x-mergify-has-data-type', () => {
   it('links an inline-flagged node instead of expanding its enum', () => {
     const html = render({}, inlineMarked);
     expect(html).toContain(`href="${HREF}"`);
@@ -34,7 +34,7 @@ describe('getValueType with x-has-data-type', () => {
 
   it('links a flag published as a $ref sibling, taking the title from the target', () => {
     const schema = { $defs: { QueueCode: { title: 'Queue dequeue reason', type: 'string' } } };
-    const html = render(schema, { $ref: '#/$defs/QueueCode', 'x-has-data-type': true });
+    const html = render(schema, { $ref: '#/$defs/QueueCode', 'x-mergify-has-data-type': true });
     expect(html).toContain(`href="${HREF}"`);
     expect(html).toContain('Queue dequeue reason');
   });
@@ -42,7 +42,11 @@ describe('getValueType with x-has-data-type', () => {
   it('links a flag on a $defs entry reached through a plain $ref', () => {
     const schema = {
       $defs: {
-        QueueCode: { 'x-has-data-type': true, title: 'Queue dequeue reason', type: 'string' },
+        QueueCode: {
+          'x-mergify-has-data-type': true,
+          title: 'Queue dequeue reason',
+          type: 'string',
+        },
       },
     };
     const html = render(schema, { $ref: '#/$defs/QueueCode' });
@@ -53,7 +57,7 @@ describe('getValueType with x-has-data-type', () => {
     const schema = {
       $defs: {
         ReportMode: {
-          'x-has-data-type': true,
+          'x-mergify-has-data-type': true,
           title: 'Report Modes',
           enum: ['check', 'comment'],
           type: 'string',
@@ -68,7 +72,7 @@ describe('getValueType with x-has-data-type', () => {
   });
 
   it('falls back to the previous rendering when a flagged node has no title', () => {
-    const html = render({}, { 'x-has-data-type': true, enum: ['check', 'comment'] });
+    const html = render({}, { 'x-mergify-has-data-type': true, enum: ['check', 'comment'] });
     expect(html).not.toContain('href');
     expect(html).toContain('check');
   });
@@ -137,7 +141,7 @@ describe('getValueTypeText with an untitled $ref target', () => {
   });
 });
 
-describe('getValueTypeText with x-has-data-type', () => {
+describe('getValueTypeText with x-mergify-has-data-type', () => {
   it('emits a markdown link instead of the enum dump', () => {
     expect(getValueTypeText({} as never, inlineMarked)).toBe(`[Queue dequeue reason](${HREF})`);
   });
@@ -146,7 +150,7 @@ describe('getValueTypeText with x-has-data-type', () => {
     const schema = {
       $defs: {
         ReportMode: {
-          'x-has-data-type': true,
+          'x-mergify-has-data-type': true,
           title: 'Report Modes',
           enum: ['check', 'comment'],
           type: 'string',
