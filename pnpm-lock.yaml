@@ -246,8 +246,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       linkinator:
-        specifier: ^8.0.2
-        version: 8.0.2
+        specifier: ^8.0.3
+        version: 8.0.3
       mdast-util-from-markdown:
         specifier: ^2.0.3
         version: 2.0.3
@@ -2419,9 +2419,9 @@ packages:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
     engines: {node: '>=18'}
 
-  chalk@5.6.2:
-    resolution: {integrity: sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+  chalk@6.0.0:
+    resolution: {integrity: sha512-2uNTXIuTTxk7ciZgAU1BQcgnchcG0xXnrs6jzkQfj9SsRa9M2s5zE8WT96hS6KmG4MzWHSrvH43DF1m4XRkrFg==}
+    engines: {node: '>=22'}
 
   character-entities-html4@2.1.0:
     resolution: {integrity: sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==}
@@ -3632,8 +3632,8 @@ packages:
     resolution: {integrity: sha512-wM1+Z03eypVAVUCE7QdSqpVIvelbOakn1M0bPDoA4SGWPx3sNDVUiMo3L6To6WWGClB7VyXnhQ4Sn7gxiJbE6A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  linkinator@8.0.2:
-    resolution: {integrity: sha512-WZcGP5nW2GZ6uWskA2QZLu4KKZm0YYuocUzXh6nRuxHeObh5KqHi8rxA3rK5NAmJRHGC5uDAybgdeSstF1PLNg==}
+  linkinator@8.0.3:
+    resolution: {integrity: sha512-1WG/oEMICKXtXZEH92UQJr3R7PBJqAl/xAZQwc71Pej30QCcNyb69PpzizM+5sgpLw3jKF52ob6LFJv5/k/+rA==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -3690,8 +3690,8 @@ packages:
     peerDependencies:
       marked: '>=13 <19'
 
-  marked@18.0.7:
-    resolution: {integrity: sha512-iDVQ5ldaiKXn6b2JroX5kgRfmwgqolW7NpaEzTl1k/2Zh1njIEN9yniyLV/mOvWwtsE8OGgkjsCYvijuPk1dtA==}
+  marked@18.0.9:
+    resolution: {integrity: sha512-/Sa4qiiHZxf0/FQdBBowr9q4r10krCwMvpK48FUBdXdUXScDxiQGR9zCPrFgRVR5LU3iySOiIjy09ZQvADir1w==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -5048,8 +5048,8 @@ packages:
     resolution: {integrity: sha512-xXnp4kTyor2Zq+J1FfPI6Eq3ew5h6Vl0F/8d9XU5zZQf1tX9s2Su1/3PiMmUANFULpmksxkClamIZcaUqryHsQ==}
     engines: {node: '>=20.18.1'}
 
-  undici@8.9.0:
-    resolution: {integrity: sha512-aWZpUj7XoGonMClx4gdDRfgBjqeA+F473aDmROQQbM9n6PRfK/u1q/a0X4wMTgcHfT8H6fpbt98PFuDUwFg2YA==}
+  undici@8.10.0:
+    resolution: {integrity: sha512-HvltHd7avK13QIw/oLe4qoOLyoVSoafqJ2jYOrtMRBkbYT31eiBQ8O0ehRKZiEZCMEyLFQNIADpgCWC5fALvYQ==}
     engines: {node: '>=22.19.0'}
 
   unified-engine@11.2.2:
@@ -7969,7 +7969,7 @@ snapshots:
 
   chai@6.2.2: {}
 
-  chalk@5.6.2: {}
+  chalk@6.0.0: {}
 
   character-entities-html4@2.1.0: {}
 
@@ -9393,18 +9393,18 @@ snapshots:
 
   lines-and-columns@2.0.4: {}
 
-  linkinator@8.0.2:
+  linkinator@8.0.3:
     dependencies:
-      chalk: 5.6.2
+      chalk: 6.0.0
       escape-html: 1.0.3
       glob: 13.0.6
       htmlparser2: 12.0.0
-      marked: 18.0.7
-      marked-gfm-heading-id: 4.1.4(marked@18.0.7)
+      marked: 18.0.9
+      marked-gfm-heading-id: 4.1.4(marked@18.0.9)
       meow: 14.1.0
       mime: 4.1.0
       srcset: 5.0.3
-      undici: 8.9.0
+      undici: 8.10.0
 
   load-plugin@6.0.3:
     dependencies:
@@ -9457,12 +9457,12 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
-  marked-gfm-heading-id@4.1.4(marked@18.0.7):
+  marked-gfm-heading-id@4.1.4(marked@18.0.9):
     dependencies:
       github-slugger: 2.0.0
-      marked: 18.0.7
+      marked: 18.0.9
 
-  marked@18.0.7: {}
+  marked@18.0.9: {}
 
   math-intrinsics@1.1.0: {}
 
@@ -11637,7 +11637,7 @@ snapshots:
 
   undici@7.25.0: {}
 
-  undici@8.9.0: {}
+  undici@8.10.0: {}
 
   unified-engine@11.2.2:
     dependencies:
