@@ -1,4 +1,4 @@
-// Node-only helpers for the x-has-data-type title↔anchor convention (they read
+// Node-only helpers for the x-mergify-has-data-type title↔anchor convention (they read
 // the data-types page from disk). Kept separate from dataType.ts so
 // components can import the marker readers without dragging node:fs into a
 // client bundle.
@@ -52,7 +52,7 @@ export function missingDataTypeAnchors(schema: unknown): string[] {
   const problems = new Set<string>();
   for (const title of collectDataTypeTitles(schema)) {
     if (title === undefined) {
-      problems.add('(x-has-data-type node without a title)');
+      problems.add('(x-mergify-has-data-type node without a title)');
     } else if (!anchors.has(slugify(title))) {
       problems.add(`"${title}" → #${slugify(title)}`);
     }

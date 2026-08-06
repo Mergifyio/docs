@@ -108,7 +108,7 @@ function ownValues(node: SchemaNode): string[] {
  * Pydantic publishes an annotation inline for an inlined type but as a
  * *sibling of `$ref`* for a type hoisted into `$defs`, so both the raw node
  * and the resolved target have to be consulted — the same walk
- * `ConfigOptions.getDataTypeLink` performs for `x-has-data-type`. Nearest wins:
+ * `ConfigOptions.getDataTypeLink` performs for `x-mergify-has-data-type`. Nearest wins:
  * a sibling on the referring node overrides the shared component.
  */
 function collectMetadata(root: unknown, node: unknown): SchemaNode {
