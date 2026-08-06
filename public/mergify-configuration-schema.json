@@ -2671,7 +2671,7 @@
               "description": "The number of speculative checks was reduced. The pull request stays in the queue."
             },
             {
-              "description": "The configured `checks_timeout` was reached before the queue conditions were satisfied."
+              "description": "The `checks_timeout` was reached before the queue conditions were satisfied. Unless the queue configures it, that timeout is derived from the queue's recent CI runtime."
             },
             {
               "description": "The queue conditions cannot be satisfied because required checks failed."
