@@ -162,6 +162,38 @@ to the queue by re-applying the `queue` command and by re-satisfying the
 These methods provide granular control over your merge queue, ensuring that
 only the appropriate pull requests get processed and merged.
 
+## Conflicts with a Pull Request Ahead
+
+When Mergify builds a [batch](/merge-queue/batches), it merges the queued pull
+requests together on a temporary branch. That composition can hit a conflict
+between a pull request and another one ahead of it in the queue.
+
+Mergify does not remove the pull request in that case. As long as the pull
+request it conflicts with is still in the queue, the conflicting one is *held*:
+it keeps its place, its check run reports that its checks are deferred, and the
+status comment names the pull requests it is waiting on.
+
+What happens next depends on the pull request ahead:
+
+- **It leaves the queue without merging.** The conflict never reaches the base
+  branch, so Mergify puts the held pull request back into a batch and its checks
+  resume.
+
+- **It merges.** Its changes are now part of the base branch, so the conflict is
+  confirmed: the held pull request becomes conflicting with the base branch and
+  is removed from the queue. Update or rebase it, then queue it again.
+
+Two other conflicts remove the pull request from the queue immediately, without
+holding it: a conflict with the base branch itself, and a conflict with a pull
+request that has already left the queue.
+
+:::note
+  A deferred pull request is still queued, so it holds its position: it keeps
+  the [`queued_label`](#queue-labels) and is not given the `dequeued_label`. The
+  `checking_label`, if you set one, comes off until the pull request is put back
+  into a batch. It is waiting for its turn, so there is nothing to requeue.
+:::
+
 ## Checks Timeout
 
 When a pull request reaches the front of the queue, Mergify validates it by
@@ -354,6 +386,38 @@ Every pull request in a repository with the merge queue enabled shows a single
 queue status, whether it is queued, waiting for conditions, or has been
 dequeued, into one consistent check. You can read it from the "checks" tab
 alongside the other Mergify statuses.
+
+## Queue Labels
+
+Mergify can label a pull request according to where it stands in the queue.
+Three options under `merge_queue` control this, and each takes the name of the
+label to apply:
+
+- **`queued_label`** (`queued` by default): applied while the pull request sits
+  in the queue, from the moment it is queued until it leaves.
+
+- **`checking_label`** (no label by default): applied while the queue is
+  actually checking the pull request, that is, while it is embarked in a batch.
+  It stays on a pull request parked in a
+  [bisection](/merge-queue/batches#handling-batch-failure-or-timeout), whose own
+  CI has not started yet. It comes off if the pull request goes back to waiting
+  in the queue, and again when it leaves the queue.
+
+- **`dequeued_label`** (`dequeued` by default): applied once the pull request has
+  been removed from the queue.
+
+Set an option to the label you want, or leave it unset for no label:
+
+```yaml
+merge_queue:
+  queued_label: queued
+  checking_label: checking
+  dequeued_label: dequeued
+```
+
+Where `queued_label` marks everything in the queue, `checking_label` narrows that
+down to the pull requests the queue is working on right now, so you can tell at a
+glance which ones are consuming CI capacity.
 
 ## Status Comments
 
