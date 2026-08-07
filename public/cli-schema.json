@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.7.29.1",
+    "version": "2026.8.7.1",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
@@ -1795,6 +1795,164 @@
         ]
       },
       {
+        "name": "events",
+        "path": [
+          "mergify",
+          "events"
+        ],
+        "about": "Browse the events Mergify recorded for the repository",
+        "longAbout": "Browse the events Mergify recorded for the repository.\n\nList the activity log as a timeline — queue enters and leaves, merges, commands, CI Insights, every event type — for the whole repository or one pull request (`--pr`). The output always states the time window it covers: the last 24 hours by default, up to the 90 days the log retains (`--since 90d`).",
+        "usage": "mergify events [OPTIONS]",
+        "aliases": [],
+        "subcommandRequired": false,
+        "source": "native",
+        "args": [
+          {
+            "id": "token",
+            "kind": "option",
+            "short": "t",
+            "long": "token",
+            "valueNames": [
+              "TOKEN"
+            ],
+            "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "required": false,
+            "global": false,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "api_url",
+            "kind": "option",
+            "short": "u",
+            "long": "api-url",
+            "valueNames": [
+              "API_URL"
+            ],
+            "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "required": false,
+            "global": false,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "repository",
+            "kind": "option",
+            "short": "r",
+            "long": "repository",
+            "valueNames": [
+              "REPOSITORY"
+            ],
+            "help": "Repository full name (owner/repo). Falls back to ``GITHUB_REPOSITORY`` env var",
+            "longHelp": "Repository full name (owner/repo). Falls back to ``GITHUB_REPOSITORY`` env var",
+            "required": false,
+            "global": false,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "pr",
+            "kind": "option",
+            "short": null,
+            "long": "pr",
+            "valueNames": [
+              "PR_NUMBER"
+            ],
+            "help": "Only events for this pull request; omit to cover the whole repository",
+            "longHelp": "Only events for this pull request; omit to cover the whole repository",
+            "required": false,
+            "global": false,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "since",
+            "kind": "option",
+            "short": null,
+            "long": "since",
+            "valueNames": [
+              "DURATION"
+            ],
+            "help": "How far back to look: an integer with a unit — s, m, h, d or w (e.g. 30m, 12h, 7d). Defaults to 24h; the log retains 90 days (--since 90d is the widest useful window). The window always ends now and is stated in the output",
+            "longHelp": "How far back to look: an integer with a unit — s, m, h, d or w (e.g. 30m, 12h, 7d). Defaults to 24h; the log retains 90 days (--since 90d is the widest useful window). The window always ends now and is stated in the output",
+            "required": false,
+            "global": false,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "type",
+            "kind": "option",
+            "short": null,
+            "long": "type",
+            "valueNames": [
+              "EVENT_TYPE"
+            ],
+            "help": "Only events of this type (e.g. action.queue.leave). Repeat the flag to match several types; values pass to the API verbatim, so types newer than this CLI work too",
+            "longHelp": "Only events of this type (e.g. action.queue.leave). Repeat the flag to match several types; values pass to the API verbatim, so types newer than this CLI work too",
+            "required": false,
+            "global": false,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "limit",
+            "kind": "option",
+            "short": null,
+            "long": "limit",
+            "valueNames": [
+              "N"
+            ],
+            "help": "Stop after the newest N events instead of fetching the whole window. The output says so when it takes effect",
+            "longHelp": "Stop after the newest N events instead of fetching the whole window. The output says so when it takes effect",
+            "required": false,
+            "global": false,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          },
+          {
+            "id": "json",
+            "kind": "flag",
+            "short": null,
+            "long": "json",
+            "valueNames": [],
+            "help": "Emit a single JSON document (the raw events, newest first, with the queried window echoed) instead of the timeline",
+            "longHelp": "Emit a single JSON document (the raw events, newest first, with the queried window echoed) instead of the timeline",
+            "required": false,
+            "global": false,
+            "default": "false",
+            "possibleValues": [],
+            "numArgs": "0",
+            "env": null,
+            "valueHint": null
+          }
+        ],
+        "commands": []
+      },
+      {
         "name": "freeze",
         "path": [
           "mergify",
@@ -3364,6 +3522,24 @@
                 "required": false,
                 "global": false,
                 "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "github_native",
+                "kind": "option",
+                "short": null,
+                "long": "github-native",
+                "valueNames": [
+                  "GITHUB_NATIVE"
+                ],
+                "help": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack. Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
+                "longHelp": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack. Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
+                "required": false,
+                "global": false,
+                "default": null,
                 "possibleValues": [],
                 "numArgs": "0",
                 "env": null,
