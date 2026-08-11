@@ -1,0 +1,15 @@
+---
+title: "New from-fork condition attribute"
+date: 2026-08-11
+tags:
+  - Rules
+description: "Conditions can now match on whether a pull request comes from a fork."
+---
+
+`from-fork` is true when a pull request's head branch and base branch live in different repositories. Use it anywhere conditions are accepted, for example to skip a rule on external contributions:
+
+```yaml
+- -from-fork
+```
+
+It is also true when the head repository has been deleted.

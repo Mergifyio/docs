@@ -1,0 +1,13 @@
+---
+title: "Author-run commands now require a fork pull request"
+date: 2026-08-11
+tags:
+  - Rules
+description: "The default restrictions for update, rebase, squash and refresh now let the pull request author run them only on pull requests coming from a fork."
+---
+
+By default, `update`, `rebase`, `squash` and `refresh` can be run by anyone with write access, or by the pull request author. The author part now only applies to pull requests coming from a fork.
+
+GitHub lets a user with read-only access open a pull request between two branches of a repository they cannot write to. The old default let that user have Mergify rewrite the head branch for them. On a fork the head branch is outside your repository, so the author case that this rule exists for is unchanged.
+
+If you set `commands_restrictions` for these commands yourself, nothing changes.
