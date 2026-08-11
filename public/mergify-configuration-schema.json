@@ -2624,7 +2624,8 @@
                 "SCHEDULE_BLOCKED_AHEAD_YIELDED",
                 "BASE_REF_ALIGNMENT_TIMEOUT",
                 "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
-                "BATCH_SCOPES_CHANGED"
+                "BATCH_SCOPES_CHANGED",
+                "BATCH_AHEAD_BRANCH_EDITED"
               ],
               "type": "string"
             },
@@ -2759,6 +2760,9 @@
             },
             {
               "description": "A pull request's scopes changed after it was embarked, so its batch was recomposed. It stays in the queue."
+            },
+            {
+              "description": "A commit was pushed to the branch of a batch ahead in the queue, which `allow_queue_branch_edit` permits, so this pull request's speculative checks are restarted on top of it. It stays in the queue."
             }
           ],
           "x-mergify-has-data-type": true,

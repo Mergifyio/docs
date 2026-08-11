@@ -12627,7 +12627,8 @@
                   "SCHEDULE_BLOCKED_AHEAD_YIELDED",
                   "BASE_REF_ALIGNMENT_TIMEOUT",
                   "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
-                  "BATCH_SCOPES_CHANGED"
+                  "BATCH_SCOPES_CHANGED",
+                  "BATCH_AHEAD_BRANCH_EDITED"
                 ]
               },
               {
@@ -13591,7 +13592,8 @@
                   "SCHEDULE_BLOCKED_AHEAD_YIELDED",
                   "BASE_REF_ALIGNMENT_TIMEOUT",
                   "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
-                  "BATCH_SCOPES_CHANGED"
+                  "BATCH_SCOPES_CHANGED",
+                  "BATCH_AHEAD_BRANCH_EDITED"
                 ]
               },
               {
@@ -17630,6 +17632,12 @@
             "type": "integer",
             "title": "Batch Ahead Failed",
             "description": "A pull request ahead in the queue failed to get merged",
+            "default": 0
+          },
+          "BATCH_AHEAD_BRANCH_EDITED": {
+            "type": "integer",
+            "title": "Batch Ahead Branch Edited",
+            "description": "The branch of a batch ahead in the queue was edited, so this batch has been recomposed on top of it",
             "default": 0
           },
           "PR_CHECKS_STOPPED_BECAUSE_MERGE_QUEUE_PAUSE": {
