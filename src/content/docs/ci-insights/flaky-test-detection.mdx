@@ -115,19 +115,27 @@ See CI-specific setup guides:
           path="/ci-insights/setup/jenkins#setting-up-flaky-test-detection" icon="simple-icons:jenkins">
     Configure scheduled looping runs and upload reports.
   </Docset>
+  <Docset title="Buildkite"
+          path="/ci-insights/setup/buildkite#setting-up-flaky-test-detection" icon="simple-icons:buildkite">
+    Configure scheduled looping runs and upload reports.
+  </Docset>
 </DocsetGrid>
 
 ## Interpreting Flaky Test Results
 
-Once your flaky test detection is running, CI Insights will analyze the results
-and identify patterns:
+Once your flaky test detection is running, Mergify analyzes every uploaded
+report and flags the tests whose results disagree on a single commit.
 
-### In the CI Insights Dashboard
+### Where the Results Appear
 
-1. **Tests View**: Navigate to the Tests section in CI Insights to see tests flagged as flaky
-2. **Consistency Metrics**: View the success/failure ratio for each test across multiple runs
-3. **Timeline Analysis**: See when flakiness was first detected and how it trends over time
-4. **Impact Assessment**: Understand which tests are causing the most CI instability
+Test-level results live in [Test Insights](/test-insights), not in CI Insights:
+its [Detection](/test-insights/detection) page lists the flaky and broken tests
+found across your repositories and ranks them by
+[impact](/test-insights/detection#prioritizing-with-impact), the number of
+failed executions each one causes.
+
+Flakiness at the job level stays in CI Insights, on the
+[Jobs](/ci-insights/jobs) page.
 
 ### What to Look For
 

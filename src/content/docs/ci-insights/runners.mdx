@@ -47,6 +47,10 @@ times with steady demand point to a capacity problem, so add runners; a spike in
 queued jobs points to a demand surge instead. The aim is to keep runners ahead of
 demand, before queue time starts delaying pull requests.
 
+Queues are the one part of this page you have to configure: they are grouped by
+the labels you record, and a job that requests only unrecorded labels is not
+counted. See [Recording the labels you care about](#recording-the-labels-you-care-about).
+
 ### Fleet: how is each runner performing?
 
 The fleet is your runners seen one at a time: throughput, speed, success rate, and
@@ -70,6 +74,19 @@ what to monitor from the jobs it already sees:
 - **Queues follow the same rule.** A queue is the demand from every job that requests
   the same labels. A job's wait counts toward its queue only once the runner that
   picked it up has been reused, so ephemeral runners don't create one-off queues.
+
+## Recording the labels you care about
+
+Runners need no configuration, but the labels do. Under **Self-hosted runners →
+Settings**, the **Runner Labels** field lists the labels Mergify records; it
+suggests the ones it has seen in your CI events, and you add or remove them
+from there.
+
+Queue metrics are grouped by these labels, and a job that requests none of the
+recorded labels is not counted as demand at all. Until you record at least one
+label, a fleet whose jobs all specify `runs-on` labels produces no queue data.
+The Fleet view is unaffected: runners are tracked either way, and recording
+labels only adds the per-label breakdown.
 
 ## Key concepts
 

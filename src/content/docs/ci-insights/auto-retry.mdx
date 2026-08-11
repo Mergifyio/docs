@@ -29,12 +29,15 @@ configured retry rules
 4. **Workflow Retry**: Once complete, the workflow is retried,
    re-running either all failed jobs or the entire workflow
 
-5. **Success Preservation**: Previously successful jobs are not re-executed
+5. **Success Preservation**: In the default `job` mode, previously successful
+   jobs are not re-executed
 
 :::note
-Due to GitHub API limitations, Auto-Retry works at the workflow
-level. When a job matches a retry rule, the entire workflow is retried,
-re-running all failed jobs while preserving successful ones.
+  Due to GitHub API limitations, Auto-Retry works at the workflow level: a
+  matching job triggers a retry of the workflow run it belongs to, never of
+  that job alone. Each rule picks how much of it re-runs (see
+  [Retry Rules](#retry-rules)): in `job` mode only the failed jobs run again;
+  in `pipeline` mode the whole run does, successful jobs included.
 :::
 
 ## Benefits
@@ -80,17 +83,18 @@ failures. Each rule specifies:
 
 - **Conditions**: When the job failure should trigger a workflow retry
 
-- **Number of retries**: Maximum number of retries and timing constraints
+- **Number of retries**: How many times a matching job may be retried, from 1
+  to 10
 
-- **Retry mode**: The mode of retry, either retrying all failed jobs (`job`)
-    or the entire workflow (`pipeline`)
+- **Retry mode**: Whether to retry all failed jobs (`job`, the default) or the
+  entire workflow (`pipeline`)
 
 ### Conditions
 
 Conditions let you control which job failures should trigger a retry. Each
-condition matches against a specific attribute of the failed job. You can
-combine multiple conditions in a single rule; all conditions must match for
-the rule to apply.
+condition matches against a specific attribute of the failed job. Every rule
+needs at least one condition, and when you combine several in a single rule,
+all of them must match for the rule to apply.
 
 The following condition attributes are available:
 
