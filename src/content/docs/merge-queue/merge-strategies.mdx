@@ -306,6 +306,45 @@ were included in the batch (e.g., "Merge queue: merged #42, #43, #44").
   request merges. No bypass configuration is needed.
 :::
 
+## Editing the Batch Branch
+
+By default, if anything other than Mergify pushes a commit to the branch of a
+[batch PR](/merge-queue/batches), Mergify dequeues the pull requests embarked in
+it and reports the failure. Setting `allow_queue_branch_edit: true` on a queue
+rule tells Mergify to trust the branch instead and keep going.
+
+That option requires `merge_method: merge-batch` or `merge_method: fast-forward`.
+Those are the only two methods that merge the batch branch itself, so they are
+the only ones that can land a commit pushed to it. With `merge`, `squash` or
+`rebase`, each pull request is merged at its own head, the batch branch is never
+an input to the merge, and such a commit is dropped without a trace. Mergify
+rejects the configuration rather than letting the option look like it is doing
+something. Set `merge_method` explicitly: leaving it unset is rejected as well,
+because the repository default it resolves to is never `merge-batch` or
+`fast-forward`.
+
+```yaml
+queue_rules:
+  - name: default
+    merge_method: merge-batch
+    batch_size: 5
+    allow_queue_branch_edit: true
+```
+
+:::caution
+  Under these two merge methods, what lands on the base branch is the batch
+  branch as a whole. Enabling this option therefore means merging commits that
+  were never reviewed as part of any pull request. That is what the option is
+  for: batch-level work such as a conflict resolution or a lockfile regeneration
+  that belongs to no single pull request. Make sure only Mergify and your own
+  tooling can push to these branches.
+:::
+
+Mergify also does not mark the embarked pull requests as merged one by one here.
+GitHub considers a pull request merged only once its head commit is reachable
+from the new base branch tip, so a pull request whose head no longer matches what
+was embarked is not shown as merged even though its content landed.
+
 ## Combining Merge and Update Methods
 
 The `update_method` option controls how Mergify updates PR branches when they

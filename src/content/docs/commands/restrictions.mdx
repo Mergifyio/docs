@@ -52,6 +52,51 @@ commands_restrictions:
 
 ## Default Restrictions
 
+Every command already has a default restriction, so you only need to configure
+one when you want something other than the default.
+
+Most commands require `sender-permission >= write`: only someone who can write to
+the repository can run them.
+
+`update`, `rebase`, `squash` and `refresh` are the commands a contributor is
+expected to run on their own pull request. They also accept the pull request's
+own author, but only when the pull request [comes from a
+fork](/configuration/conditions#attributes-list):
+
+```yaml
+conditions:
+  - or:
+      - sender-permission >= write
+      - and:
+          - sender = {{author}}
+          - from-fork
+```
+
+The fork condition matters because `update`, `rebase` and `squash` rewrite the
+pull request's head branch. On a pull request opened from a fork, that branch
+lives outside your repository, so rewriting it touches nothing you protect. On
+one opened from a branch of your own repository, the head branch is one of
+yours. Pushing such a branch takes write permission, but opening a pull request
+from one that already exists takes only read permission. Without the fork
+condition, someone with only read permission could open a pull request from one
+of your branches and have Mergify rewrite it on their behalf.
+
+`refresh` rewrites nothing: it only reevaluates the pull request against your
+configuration. It carries the same default anyway, so the four commands a
+contributor reaches for on their own pull request all behave alike.
+
+If you want the author of a same-repository pull request to be able to run these
+commands too, set the restriction yourself:
+
+```yaml
+commands_restrictions:
+  rebase:
+    conditions:
+      - or:
+          - sender-permission >= write
+          - sender = {{author}}
+```
+
 <OptionsTable def="CommandsRestrictionsRulesModel" />
 
 ### Command Restriction Format
