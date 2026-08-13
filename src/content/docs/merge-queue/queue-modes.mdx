@@ -278,6 +278,7 @@ top of it**:
 - It starts only when the global ceiling has room **and** each of its capped scopes has room.
 
 - A scope that isn't listed in `capacities` is unlimited; it draws on the global ceiling alone.
+  [`default_capacity`](#capping-scopes-you-did-not-list) changes that.
 
 Because every check always takes a global slot, the total running at once **never exceeds
 `max_parallel_checks`**, whatever you put in `capacities`. Capacities can only ever hold a scope
@@ -344,6 +345,40 @@ Two things always hold: no capped scope runs more than its limit, and no more th
 slot goes to `docs` or to a capped scope still below its limit, follows queue order, so the split
 can differ from one cycle to the next. As soon as a running check finishes, its freed global slot
 (and its freed scope slot, if any) go to the next waiting batch that fits both.
+
+#### Capping scopes you did not list
+
+`scopes.default_capacity` sets the limit for every scope you didn't list in `capacities`. Naming each
+scope works when you have a handful of them, but not when they come from a build system: an
+[Nx](/merge-queue/scopes/nx) or [Bazel](/merge-queue/scopes/bazel) graph names hundreds of projects,
+and the set changes with every pull request that adds one.
+
+```yaml
+merge_queue:
+  mode: parallel
+  max_parallel_checks: 10
+
+scopes:
+  source:
+    manual:
+  capacities:
+    e2e: 1
+  default_capacity: 3
+```
+
+Here `e2e` is held to one speculative check at a time, and every other scope a queued pull request
+carries gets three. An explicit `capacities` entry always wins for its own scope, so you only name
+the scopes that need something other than the default.
+
+The default applies to the scopes Mergify sees on the pull requests currently queued, which is what
+lets it cover names you never wrote down. Pull requests carrying no scope at all are unaffected: they
+draw on the global ceiling alone, as they do without any capacity configured. And
+`max_parallel_checks` still caps the total: like `capacities`, a default capacity only ever holds
+scopes below the global ceiling, it never raises the number of checks running at once.
+
+Like `capacities`, this option needs `parallel` or `isolated` mode. Setting it on a `serial` queue is
+rejected rather than ignored: serial mode tests everything in one cumulative pipeline, so there are
+no independent per-scope lanes for a sub-limit to bind on.
 
 #### Pull requests in several scopes
 
