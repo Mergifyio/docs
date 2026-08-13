@@ -37,13 +37,19 @@ Upon successful creation, the dashboard will provide you with an API key.
 
 ### Application Key Scopes
 
-Application keys have different scopes that determine what they can access:
+Application keys have two scopes, picked when you create the key:
 
-- `admin`: Full access to all API endpoints, including administrative functions.
-- `ci`: Limited to CI-related operations, such as uploading test results and accessing CI Insights data.
+- `admin`: the whole API, except uploading results and setting [Merge Queue
+  Scopes](/merge-queue/scopes), which need a `ci` key.
 
-When creating an application key, select the appropriate scope based on
-your needs. For CI Insights, use a key with the `ci` scope.
+- `ci`: uploading CI and test results, setting Merge Queue Scopes, reading Test
+  Insights data, and [quarantining](/test-insights/quarantine) or
+  unquarantining tests.
+
+A key belongs to a GitHub account, not to a repository or to the person who
+created it. It works on every repository of that account and carries no GitHub
+repository role, so the [Features
+Permissions](/security#features-permissions) table does not restrict it.
 
 ### Using the API Key
 
@@ -61,15 +67,17 @@ Response:
 
 ```json
 {
-    "id": 123,
+    "id": "e155518c-ca1b-443c-9be9-fe90fdab7345",
     "name": "my application",
-    "github_account": {
-        "id": 123,
-        "login": "Mergify",
-        "type": "Organization"
+    "scope": "ci",
+    "account_scope": {
+        "id": 123456,
+        "login": "Mergifyio"
     }
 }
 ```
+
+The `scope` field tells you which of the two scopes above the key holds.
 
 ### Using a GitHub Personal Access Token
 
@@ -95,7 +103,7 @@ Example:
 ```bash
 curl -H "Accept: application/json" \
      -H "Authorization: Bearer <github-personal-access-token>" \
-     https://api.mergify.com/v1/application
+     https://api.mergify.com/v1/repos/<owner>/<repository>/queues
 ```
 
 :::note
