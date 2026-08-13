@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import apiSchema from '../../../public/api-schemas.json';
-import { getTypeLabel, renderSchemaHtml, resolveRef } from './openapi';
+import { getAuthLabels, getTypeLabel, renderSchemaHtml, resolveRef } from './openapi';
 
 type Spec = Parameters<typeof getTypeLabel>[1];
 type Node = Parameters<typeof getTypeLabel>[0];
@@ -32,6 +32,26 @@ describe('getTypeLabel', () => {
     const label = getTypeLabel(parameterNamed('outcome'), apiSchema as unknown as Spec);
     expect(label).toContain('("success"');
     expect(label).toContain('")[]');
+  });
+});
+
+// A scheme the map does not know degrades to its raw scheme name as the
+// badge, so a new one the engine publishes has to be added by hand — nothing
+// here checks that, deliberately: asserting the map covers the shipped schema
+// would turn the schema-sync bot's PR red for a cosmetic label.
+describe('getAuthLabels', () => {
+  it('labels the per-scope application key schemes', () => {
+    expect(
+      getAuthLabels([
+        { AdminApplicationKey: [] },
+        { CIApplicationKey: [] },
+        { ApplicationAuth: [] },
+      ])
+    ).toEqual(['Admin Application Key', 'CI Application Key', 'Application Key']);
+  });
+
+  it('falls back to the raw name for an unmapped scheme', () => {
+    expect(getAuthLabels([{ SomeFutureAuth: [] }])).toEqual(['SomeFutureAuth']);
   });
 });
 
