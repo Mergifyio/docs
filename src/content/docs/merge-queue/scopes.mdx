@@ -139,8 +139,13 @@ queue_rules:
   requests (defaults to `merge-queue`).
 
 - `scopes.capacities`: optional map of scope name to the number of speculative checks that scope may
-  run at the same time, used to limit per-scope concurrency in parallel mode. See [Limiting
+  run at the same time, used to limit per-scope concurrency in parallel or isolated mode. See [Limiting
   concurrency per scope](/merge-queue/queue-modes#limiting-concurrency-per-scope).
+
+- `scopes.default_capacity`: optional capacity applied to every scope that has no `capacities` entry
+  of its own, so scope sets that change from one pull request to the next stay bounded without you
+  listing each one. See [Capping scopes you did not
+  list](/merge-queue/queue-modes#capping-scopes-you-did-not-list).
 
 - `scopes.barrier_files`: optional file filters marking files that impact every scope. Only valid
   with a `files` source. A pull request that changes a matching file becomes a merge queue barrier.
