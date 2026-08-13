@@ -7,10 +7,10 @@ Mergify automatically detects [GitHub branch
 protections](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
 and
 [rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
-configured on your repository and injects them as conditions. This page
-explains how that injection works, which ruleset rule types are supported,
-which ones are incompatible with the merge queue, and how to resolve
-conflicts.
+configured on your repository and injects the supported ones as conditions.
+This page explains how that injection works, which ruleset rule types are
+supported, which ones are incompatible with the merge queue, and how to
+resolve conflicts.
 
 ## How Condition Injection Works
 
@@ -107,7 +107,6 @@ Mergify handles each GitHub ruleset rule type as follows.
 |---|---|---|
 | `required_status_checks` | Injected as conditions | See [below](#require-branches-to-be-up-to-date) |
 | `pull_request` | Injected as conditions | Required reviewers injected as [`github-require-review-from-specific-teams`](#required-reviewers). Limited code owner support. |
-| `required_deployments` | Used by [Merge Protections](/merge-protections) | -- |
 | `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
 | `creation` | Checked when creating batch PRs | May block batch PR creation if Mergify is not a bypass actor |
 | `update` | Checked when updating batch PRs | May block batch PR updates if Mergify is not a bypass actor |
@@ -253,6 +252,8 @@ incompatibility error.
 The following ruleset rule types are not processed by Mergify. They are
 neither injected as conditions nor validated for compatibility. If these
 rules are active on your branches, Mergify will not enforce them:
+
+- `required_deployments`
 
 - `required_linear_history`
 
