@@ -40,21 +40,12 @@ option on your queue rules:
   `merge_bot_account` on the `queue` action, since Mergify must merge with
   an account able to satisfy the protections itself.
 
-### Bypass Actors and Injection
+### Bypass Actors
 
-If you are using GitHub rulesets (not classic branch protections), you can
-add Mergify as a **bypass actor** on the ruleset. The bypass mode determines
-whether injection still happens:
-
-- **`always` bypass mode** -- Mergify can bypass the rules, but it still
-  injects them as conditions in your queue.
-
-- **`pull_requests_only` bypass mode** -- Mergify can bypass the rules only
-  in the pull request context, not for direct pushes. This means Mergify
-  can bypass when merging PRs but not when performing fast-forward pushes.
-
-- **`exempt` bypass mode** -- Mergify skips injection entirely for that
-  ruleset. Use this when you want Mergify to ignore specific ruleset rules.
+If you are using GitHub rulesets (not classic branch protections), add
+Mergify as a **bypass actor** on the ruleset and set its bypass mode to
+`exempt`. See [Configuring Mergify as a Bypass
+Actor](#configuring-mergify-as-a-bypass-actor) for the steps.
 
 ### Required Reviewers
 
@@ -128,6 +119,17 @@ unlisted rule through GitHub directly.
 
 ## Known Incompatibilities
 
+### GitHub-Native Stacked Pull Requests
+
+Merging [GitHub-native stacked pull requests](/merge-queue/stacks) requires
+the `exempt` bypass mode. With any other bypass mode, the merge queue refuses
+the pull request.
+
+**Resolution:**
+
+- Set Mergify's bypass mode to **Exempt** on every ruleset that applies to
+  the base branch.
+
 ### GitHub Native Merge Queue Rule
 
 If the `merge_queue` ruleset rule (GitHub's built-in merge queue) is enabled
@@ -141,17 +143,15 @@ queue.
   use Mergify's merge queue.
 
 - **Alternative:** add Mergify as a bypass actor on that ruleset with the
-  `always` bypass mode. This lets Mergify merge directly while GitHub's queue
+  `exempt` bypass mode. This lets Mergify merge directly while GitHub's queue
   is still active for other actors.
 
 ### Branch Name Pattern
 
 If a `branch_name_pattern` ruleset rule matches Mergify's queue branches and
-Mergify is **not** a bypass actor with `always` or `exempt` bypass mode,
-GitHub blocks Mergify from creating or renaming queue branches. As a result,
-Mergify cannot queue or merge pull requests targeting that branch. The
-`pull_requests_only` bypass mode does not help here, because queue branch
-creation and rename are direct ref updates, not pull request actions.
+Mergify is **not** a bypass actor with the `exempt` bypass mode, GitHub
+blocks Mergify from creating or renaming queue branches. As a result,
+Mergify cannot queue or merge pull requests targeting that branch.
 
 Mergify uses two branch prefixes for queue branches:
 
@@ -168,8 +168,8 @@ error.
 
 **Resolution:**
 
-- **Preferred:** add Mergify as a bypass actor on the ruleset with `always`
-  or `exempt` bypass mode.
+- **Preferred:** add Mergify as a bypass actor on the ruleset with the
+  `exempt` bypass mode.
 
 - **Alternative:** narrow the ruleset pattern so it excludes both
   `mergify/merge-queue/*` and `tmp-mergify/merge-queue/*`. If you customized
@@ -206,8 +206,8 @@ tested. This setting blocks the merge.
 - **Preferred:** disable the *Require branches to be up to date before
   merging* setting.
 
-- **Alternative:** add Mergify as a bypass actor on the ruleset with `always`
-  bypass mode.
+- **Alternative:** add Mergify as a bypass actor on the ruleset with the
+  `exempt` bypass mode.
 
 - **Alternative:** use the [`fast-forward` merge
   method](/merge-queue/merge-strategies#fast-forward), which merges the queue
@@ -231,7 +231,7 @@ are enforced.
 **Resolution:**
 
 - Add Mergify as a bypass actor on the ruleset that enforces review
-  requirements, with `always` bypass mode.
+  requirements, with the `exempt` bypass mode.
 
 ### In-Place Checks and Review Requirements
 
@@ -245,7 +245,7 @@ incompatibility error.
 **Resolution:**
 
 - Add Mergify as a bypass actor on the ruleset that enforces review
-  requirements on queue branches, with `always` bypass mode.
+  requirements on queue branches, with the `exempt` bypass mode.
 
 ## Ignored Rule Types
 
@@ -278,29 +278,11 @@ directly on your target branch.
 To add Mergify as a bypass actor on a GitHub ruleset:
 
 1. Go to your repository **Settings > Rules > Rulesets**.
-
 2. Select the ruleset you want to modify (or create a new one).
-
 3. Under **Bypass list**, click **Add bypass**.
-
 4. Search for the **Mergify** app and select it.
-
-5. Choose the bypass mode:
-
-   - **Always** -- Mergify can bypass the rules but still injects them as
-     merge conditions (recommended for most cases).
-
-   - **Pull requests only** -- Mergify can bypass the rules in the pull
-     request context only, not for direct pushes (e.g., fast-forward).
-
-   - **Exempt** -- Mergify bypasses the rules **and** skips injecting them
-     as conditions. Use this when you want Mergify to fully ignore specific
-     rules.
-
+5. Choose **Exempt** as the bypass mode.
 6. Save the ruleset.
 
-:::tip
-  If you only want to exempt Mergify from specific rules (e.g.,
-  `merge_queue`) but still enforce others (e.g., `required_status_checks`),
-  create separate rulesets for each group and set different bypass modes.
-:::
+Bypass actors are configured per ruleset, so repeat this on every ruleset
+that applies to the branches you queue.
