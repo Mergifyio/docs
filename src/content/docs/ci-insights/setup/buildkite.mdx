@@ -37,20 +37,15 @@ and how to configure repeated test executions for flaky test detection.
    - **Token**: paste your Mergify application key and select
      **Send the token as X-Buildkite-Token**.
 
-   - **Events**: enable the following events:
+   - **Events**: enable the two events Mergify records:
 
      | Event | Description |
      |-------|-------------|
-     | `ping` | Webhook notification settings have changed |
-     | `build.scheduled` | A build has been scheduled |
-     | `build.running` | A build has started running |
-     | `build.failing` | A build has started failing |
      | `build.finished` | A build has finished |
-     | `build.skipped` | A build has been skipped |
-     | `job.scheduled` | A job has been scheduled |
-     | `job.started` | A command step job has started running on an agent |
      | `job.finished` | A job has finished |
-     | `job.activated` | A block step job has been unblocked |
+
+     Any other Buildkite event reaching this webhook is accepted and
+     discarded, so enabling more only adds traffic.
 
    <Image src={BuildkiteWebhookNotification} alt="Buildkite Webhook Notification configuration" />
 
