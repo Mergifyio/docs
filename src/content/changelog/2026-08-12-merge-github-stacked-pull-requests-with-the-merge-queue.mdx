@@ -1,0 +1,11 @@
+---
+title: "Merge GitHub stacked pull requests with the merge queue"
+date: 2026-08-12
+tags:
+  - Merge Queue
+description: "Queue any member of a GitHub-native stacked pull request and Mergify merges it, in order, through GitHub's merge API."
+---
+
+Queue any member of a GitHub-native stacked pull request: Mergify evaluates your queue rules and CI on it and merges it through GitHub's asynchronous Merge API, landing the stack in order.
+
+Mergify's bypass mode must be set to `Exempt` on any repository ruleset protecting the target branch — that is the only bypass mode GitHub's Merge API honors.
