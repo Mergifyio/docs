@@ -593,8 +593,14 @@ export function generateExample(
 // Auth helpers
 // ---------------------------------------------------------------------------
 
+// Keyed by the security scheme names the engine publishes. `ApplicationAuth` is
+// the pre-scope name, kept because `public/api-schemas.json` is synced from the
+// engine by a bot on its own schedule: until that sync lands, the shipped schema
+// still names it. Drop it once no schema in the repo mentions it.
 const AUTH_LABELS: Record<string, string> = {
   ApplicationAuth: 'Application Key',
+  AdminApplicationKey: 'Admin Application Key',
+  CIApplicationKey: 'CI Application Key',
   GitHubTokenBearerAuth: 'GitHub Token',
 };
 
