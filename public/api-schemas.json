@@ -12658,7 +12658,8 @@
                   "BASE_REF_ALIGNMENT_TIMEOUT",
                   "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
                   "BATCH_SCOPES_CHANGED",
-                  "BATCH_AHEAD_BRANCH_EDITED"
+                  "BATCH_AHEAD_BRANCH_EDITED",
+                  "CHECKS_INTERRUPTED"
                 ]
               },
               {
@@ -13623,7 +13624,8 @@
                   "BASE_REF_ALIGNMENT_TIMEOUT",
                   "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
                   "BATCH_SCOPES_CHANGED",
-                  "BATCH_AHEAD_BRANCH_EDITED"
+                  "BATCH_AHEAD_BRANCH_EDITED",
+                  "CHECKS_INTERRUPTED"
                 ]
               },
               {
@@ -17602,6 +17604,12 @@
             "type": "integer",
             "title": "Checks Failed",
             "description": "The checks for the queued pull request have failed",
+            "default": 0
+          },
+          "CHECKS_INTERRUPTED": {
+            "type": "integer",
+            "title": "Checks Interrupted",
+            "description": "The checks for the queued pull request were cancelled before producing a result",
             "default": 0
           },
           "CHECKS_TIMEOUT": {

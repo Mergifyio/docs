@@ -2625,7 +2625,8 @@
                 "BASE_REF_ALIGNMENT_TIMEOUT",
                 "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
                 "BATCH_SCOPES_CHANGED",
-                "BATCH_AHEAD_BRANCH_EDITED"
+                "BATCH_AHEAD_BRANCH_EDITED",
+                "CHECKS_INTERRUPTED"
               ],
               "type": "string"
             },
@@ -2763,6 +2764,9 @@
             },
             {
               "description": "A commit was pushed to the branch of a batch ahead in the queue, which `allow_queue_branch_edit` permits, so this pull request's speculative checks are restarted on top of it. It stays in the queue."
+            },
+            {
+              "description": "A required check was cancelled before producing a result, so the queue conditions cannot be satisfied. The check says nothing about the pull request; requeueing runs it again."
             }
           ],
           "x-mergify-has-data-type": true,
