@@ -1,17 +1,71 @@
 ---
 title: Stacked Pull Requests
-description: "How the merge queue handles stacks created by mergify stack push: auto-propagation, stack-aware batching, and cascade dequeue."
+description: "How the Merge Queue lands GitHub-native stacked pull requests and Mergify Stacks: bottom-up landing, auto-propagation, stack-aware batching, and cascade dequeue."
 ---
 
 import GitGraph from '~/components/GitGraph.astro';
 
-The Merge Queue understands [Stacks](/stacks) natively. When you queue a stacked
-pull request, the queue treats the whole chain as a unit: it propagates the
-queue command up the stack, keeps stacked PRs together when batching, and
-cascades failures so the rest of the stack stops cleanly when something
-breaks.
+The Merge Queue lands stacked pull requests: chains where each pull request
+builds on the one below it. It handles both kinds of stack.
 
-## How a Stack Is Detected
+- **[GitHub-native stacked pull
+  requests](#github-native-stacked-pull-requests)**, created with
+  [gh-stack](/stacks/compare/gh-stack). Every member can be queued, and
+  members land one at a time from the bottom up.
+
+- **[Mergify Stacks](#mergify-stacks)**, created with `mergify stack push`.
+  The queue treats the whole chain as a unit: it propagates the queue command
+  up the stack, keeps stacked PRs together when batching, and cascades
+  failures so the rest of the stack stops cleanly when something breaks.
+
+## GitHub-Native Stacked Pull Requests
+
+GitHub has its own stacking model, built with
+[gh-stack](/stacks/compare/gh-stack), its stacking extension for the `gh`
+CLI. Each member is a separate branch targeting the branch below it.
+
+GitHub has no auto-merge for stacked pull requests, so without a queue each
+member is merged by hand as the one below it lands.
+
+### Queueing Members
+
+Every member of a GitHub-native stack can be queued. Comment
+[`@mergifyio queue`](/commands/queue) on each pull request you want to land.
+Mergify enqueues them all, keeps same-stack members together in the queue,
+and enforces their order on admission, so a member is never validated ahead
+of the members below it.
+
+:::note
+  Queue propagation is a Mergify Stacks feature. Queueing the top member of a
+  GitHub-native stack does not enqueue its predecessors, so comment on each
+  member you want to land.
+:::
+
+### How the Stack Lands
+
+Members land one at a time, from the bottom up. When the lowest open member
+merges, GitHub restacks the rest of the chain onto the base branch and the
+next member becomes the one to land. Merged members stay in the stack on
+GitHub, so the stack never shrinks.
+
+Because members land one at a time, a stack can be partly landed while the
+rest is still in flight. If a member fails, the members that already merged
+below it stay merged.
+
+### Requirements
+
+Mergify must be a bypass actor with the `exempt` bypass mode on every GitHub
+ruleset that applies to the base branch. With any other bypass mode, the
+Merge Queue refuses the pull request. See [GitHub Rulesets
+Compatibility](/merge-queue/github-rulesets#bypass-actors) for how to set it.
+
+## Mergify Stacks
+
+[Mergify Stacks](/stacks) are created with `mergify stack push`, which maps
+each commit on a single branch to its own pull request. The queue treats such
+a stack as one unit.
+
+### How a Stack Is Detected
 
 The queue recognizes a stack only when **both** signals hold at every step:
 
@@ -37,7 +91,7 @@ them independently.
   ]}
 />
 
-## Queueing a Whole Stack at Once
+### Queueing a Whole Stack at Once
 
 Run [`@mergifyio queue`](/commands/queue) on the **top** PR of a stack and the
 queue command propagates synthetically to every predecessor. The whole stack
@@ -56,7 +110,7 @@ until PR1 and PR2 are queued ahead of it.
   the queue as soon as `queue_conditions` are met.
 :::
 
-## Stack-Aware Base
+### Stack-Aware Base
 
 Every stacked PR is queued against the **stack root** (e.g. `main`), not its
 immediate parent branch. Without this, PR2 would be queued against PR1's head
@@ -88,7 +142,7 @@ strict digraph {
 You don't configure this. It's automatic for any PR detected as part of a
 stack.
 
-## Stack-Aware Batching
+### Stack-Aware Batching
 
 The queue treats a stack as an ordered chain when assembling
 [batches](/merge-queue/batches). Two guarantees hold:
@@ -138,7 +192,7 @@ across consecutive batches bottom-first: the first batch validates the deepest
 PRs that fit, and once they merge they drop out of the predecessor set, so the
 next batch picks up where the previous one stopped.
 
-## Cascade Dequeue
+### Cascade Dequeue
 
 If any PR in a queued stack fails validation or is dequeued, every successor
 still in the queue is dequeued automatically with the reason
@@ -172,7 +226,7 @@ After fixing the broken PR, re-queue the stack from the top with
   merged successfully (lower in the stack) are untouched.
 :::
 
-## Limits
+### Limits
 
 - **Maximum stack depth: 20.** Stacks deeper than 20 PRs aren't recognized as
   a stack by the queue and fall back to per-PR queueing.
@@ -191,3 +245,6 @@ After fixing the broken PR, re-queue the stack from the top with
 - [Batches](/merge-queue/batches): batch-size and CI-cost trade-offs.
 
 - [Scopes](/merge-queue/scopes): how stacks interact with monorepo scopes.
+
+- [GitHub Rulesets Compatibility](/merge-queue/github-rulesets): the
+  `exempt` bypass mode GitHub-native stacks require.
