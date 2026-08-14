@@ -5795,7 +5795,7 @@
           "test_insights"
         ],
         "summary": "Get a test's health transitions over time",
-        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window \u2014 the edges of the per-bucket classification, not the full series. Health is derived per time bucket (binning adapts to the window), so a transition is timestamped to a bucket boundary, not an individual run.",
+        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window: the edges of the series, not the full series. Each point is the verdict the test's health badge would have shown at that moment. It is computed from every run up to that point, over the same history the health badge reads. A window ending now therefore ends on the badge shown today; a window ending in the past ends on the badge as it read back then. Points are sampled per time bucket (binning adapts to the window), so a transition is timestamped to a bucket boundary rather than to an individual run.",
         "operationId": "ci-test-health-transitions",
         "security": [
           {
@@ -15925,7 +15925,7 @@
               }
             ],
             "title": "Exception Type",
-            "description": "Exception raised by the first failing run of the episode this transition opens. Always null for a recovery, and when no failing run is retained."
+            "description": "Exception raised by the first failing run of the episode this transition opens. Always null for a recovery, when no failing run is retained, and on a first point that reports a test already unhealthy when the window opened: that episode began before the window, so its opening run is not among the runs the window covers."
           },
           "pull_request": {
             "anyOf": [
@@ -15936,7 +15936,7 @@
                 "type": "null"
               }
             ],
-            "description": "Pull request whose merge commit introduced the first failing run of the episode this transition opens. Null for a recovery \u2014 a test can stop failing without a PR fixing it, so no 'fixed by' is attributed \u2014 and whenever the failing commit cannot be traced back to a merged pull request."
+            "description": "Pull request whose merge commit introduced the first failing run of the episode this transition opens. Null in three cases: on a recovery, because a test can stop failing without a PR fixing it and no 'fixed by' is attributed; when the failing commit cannot be traced back to a merged pull request; and on a first point whose episode began before the window."
           }
         },
         "type": "object",
