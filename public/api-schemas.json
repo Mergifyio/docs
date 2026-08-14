@@ -12897,6 +12897,18 @@
           },
           "metadata": {
             "$ref": "#/components/schemas/EventQueueChecksNotStartedMetadata"
+          },
+          "attempt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attempt",
+            "description": "1-based number of this draft-creation failure within the pull request's current queue stay (`metadata.session_id`): 1 on the first failure, incrementing on each automatic retry. Authoritative \u2014 it reflects every stored failure of the stay, independent of the requested time window or page, so a repeatedly-stuck pull request reads its true count. Null/absent on events that predate this field or when the count could not be derived."
           }
         },
         "type": "object",
