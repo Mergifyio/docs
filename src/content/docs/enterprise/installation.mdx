@@ -4,6 +4,7 @@ description: 'Step-by-step process for deploying the on-premise image and wiring
 ---
 
 import { Image } from "astro:assets"
+import DownloadLink from "../../../components/DownloadLink.astro"
 import installerScreen from "../../images/enterprise/installer.png"
 import createGitHubAppScreen from "../../images/enterprise/create-github-app.png"
 import installerEnvScreen from "../../images/enterprise/installer-env.png"
@@ -107,6 +108,34 @@ Click on **Install** on the following screen:
 The GitHub App creation and installation is finished.
 
 <Image src={installSuccessScreen} alt="Mergify App Installation Success" />
+
+## Set the GitHub App Logo
+
+The App you just created has no logo, so its check runs show GitHub's default
+placeholder image on every pull request. Uploading a logo is a manual step: the
+manifest the installer submits refuses any image field, and GitHub offers no API
+to change an App registration once it exists. You only have to do it once, and it
+applies to everything the App posts from then on.
+
+Download <DownloadLink href="/mergify-github-app-logo.png">the Mergify
+logo</DownloadLink>, or use your own image. GitHub accepts a PNG, JPG, or GIF
+under 1 MB, and recommends 200 by 200 pixels.
+
+Then:
+
+1. Open your organization's **Settings → Developer settings → GitHub Apps** and
+   click **Edit** next to the App. The direct URL is
+   `https://<your-github-host>/organizations/<your-org>/settings/apps/<your-app-name>`,
+   where `<your-github-host>` is `github.com` or your GitHub Enterprise Server
+   host.
+
+2. Under **Display information**, drag the image onto the logo area or click
+   **Upload a logo**.
+
+3. Adjust the crop if you need to, then click **Set new avatar**.
+
+A **Badge background color** field appears under the logo once one is uploaded.
+It fills the background of the App's badge; `#000000` matches the Mergify logo.
 
 ## Stop the Installer
 
