@@ -16,7 +16,7 @@
     "check": "astro check && eslint . && biome check .",
     "check:config-examples": "node scripts/validate-config-examples.mjs",
     "check:internal-leaks": "node scripts/check-internal-leaks.mjs",
-    "check:links": "linkinator dist/ --recurse --concurrency 25 --verbosity error --skip 'https?://'"
+    "check:links": "linkinator / enterprise/ --server-root dist --config linkinator.config.mjs"
   },
   "devDependencies": {
     "@actions/core": "^3.0.1",

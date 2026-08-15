@@ -1,9 +1,0 @@
-{
-  "skip": [
-    "^https?://(?:www\\.)?linkedin\\.com",
-    "^https?://(?:www\\.)?twitter\\.com",
-    "^https?://(?:www\\.)?x\\.com",
-    "^https://docs\\.mergify\\.com",
-    "^/api"
-  ]
-}
