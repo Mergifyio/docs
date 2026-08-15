@@ -84,11 +84,24 @@ queue_rules:
 
 ### Require Approval of the Most Recent Push
 
-When your branch protection enables GitHub's *Require approval of the most
-recent push* option (`require_last_push_approval`), Mergify injects a matching
-condition into your Merge Protections. A pull request is not merged until its
-latest push has been approved by someone other than the author, so Mergify
-stays aligned with GitHub's own enforcement.
+When your branch protection or ruleset enables GitHub's *Require approval of the
+most recent reviewable push* option (`require_last_push_approval`) and requires
+at least one approving review, Mergify injects a matching
+[merge condition](/configuration/conditions). A pull request is not merged
+until its latest push has been approved by someone other than the person who
+pushed it, so Mergify stays aligned with GitHub's own enforcement.
+
+:::caution
+  Mergify does not inject the condition when the same rule sets the required
+  approval count (`required_approving_review_count`) to `0`. GitHub keeps
+  blocking merges from anyone who cannot bypass the rule, but where Mergify
+  bypasses it, as the [bypass actor](#bypass-actors) setup this page
+  recommends, a pull request merges with an unapproved latest push.
+
+  Requiring at least one approving review on the rule is what makes Mergify
+  inject the condition. That also makes an approval mandatory on the pull
+  requests the rule targets.
+:::
 
 ## Ruleset Rule Compatibility
 
@@ -97,7 +110,7 @@ Mergify handles each GitHub ruleset rule type as follows.
 | Ruleset rule type | Mergify behavior | Notes |
 |---|---|---|
 | `required_status_checks` | Injected as conditions | See [below](#require-branches-to-be-up-to-date) |
-| `pull_request` | Injected as conditions | Required reviewers injected as [`github-require-review-from-specific-teams`](#required-reviewers). Limited code owner support. |
+| `pull_request` | Injected as conditions | Required reviewers injected as [`github-require-review-from-specific-teams`](#required-reviewers). `require_last_push_approval` not always injected, see [above](#require-approval-of-the-most-recent-push). Limited code owner support. |
 | `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
 | `creation` | Checked when creating batch PRs | May block batch PR creation if Mergify is not a bypass actor |
 | `update` | Checked when updating batch PRs | May block batch PR updates if Mergify is not a bypass actor |
