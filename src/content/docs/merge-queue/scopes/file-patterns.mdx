@@ -41,9 +41,11 @@ In this example:
 - Documentation changes get the `docs` scope
 
 :::tip
-Mergify will intelligently batch PRs with overlapping scopes together. For example, if PR1 affects
-`python-api` and PR2 affects both `python-api` and `frontend`, they'll be batched together since
-they share a common scope.
+  When filling a batch, Mergify picks the queued pull request whose scopes overlap the batch's
+  scopes the most, so changes to the same area of the repository tend to travel together. In
+  [parallel mode](/merge-queue/queue-modes) the grouping is stricter: pull requests are grouped by
+  their exact set of scopes, so a pull request scoped to `python-api` alone and one scoped to both
+  `python-api` and `frontend` go into different batches.
 :::
 
 ## Pattern Syntax
@@ -145,12 +147,15 @@ queue_rules:
 ```
 
 With this configuration:
-- PRs affecting only `frontend` will batch together
 
-- PRs affecting `python-api` will batch together
+- PRs affecting only `frontend` batch together
+- PRs affecting `python-api` batch together
+- PRs affecting `shared-config` batch with each other
 
-- PRs affecting `shared-config` will batch with everything (since config affects all
-  services)
+A scope name carries no special meaning, so `shared-config` does not batch with every other
+scope just because it happens to hold shared files. To make a change to shared files affect
+every scope, list those files under
+[`barrier_files`](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope) instead.
 
 ## Important Behaviors
 
