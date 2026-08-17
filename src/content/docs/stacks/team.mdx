@@ -44,13 +44,17 @@ As more developers see the benefits in review, adoption spreads naturally.
 ## Working on Someone Else's Stack
 
 If a teammate has pushed a stack and you want to pick it up locally (to help,
-pair, or continue the work), use `checkout` with their branch name:
+pair, or continue the work), use `checkout` with the stack name (the name of
+the local branch they pushed the stack from) and their GitHub login:
 
 ```bash
-mergify stack checkout feat/their-feature
+mergify stack checkout feat/their-feature --author their-login
 ```
 
-This reconstructs the stack locally by fetching the remote branches and
+Without `--author`, `checkout` looks for a stack of that name authored by you,
+which is also how you pick up one of your own stacks from another machine.
+
+`checkout` reconstructs the stack locally by fetching the remote branches and
 rebuilding the commit chain. You can then make changes and push updates with
 `mergify stack push` as usual.
 

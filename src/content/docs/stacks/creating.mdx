@@ -19,9 +19,11 @@ Use the `stack new` command to create a branch that tracks your main branch:
 mergify stack new feat/my-feature
 ```
 
-This is equivalent to `git checkout -b feat/my-feature --track origin/main`. You
-can also create branches however you normally do. Stacks doesn't require its own
-branch creation command.
+When your base branch is `origin/main`, this is equivalent to
+`git checkout -b feat/my-feature --track origin/main`. Without `--base`, the
+base branch comes from the current branch's tracking information, falling back
+to `origin`'s default branch. You can also create branches however you normally
+do. Stacks doesn't require its own branch creation command.
 
 To branch from something other than `main` (a release branch, for example):
 
@@ -73,6 +75,10 @@ What happens behind the scenes:
 2. **Creates a remote branch** for each commit
 3. **Opens a PR** for each commit, chained in dependency order
 4. **Posts a stack comment** on every PR showing the full stack
+
+The rebase in step 1 is skipped once a PR in the stack is approved, since
+rebasing would dismiss the approval. Pass `--force-rebase` to rebase anyway, or
+`--skip-rebase` (`-R`) to never rebase.
 
 The full flow, from setup to push:
 
