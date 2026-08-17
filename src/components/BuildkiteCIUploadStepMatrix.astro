@@ -10,12 +10,13 @@ const { reportPath } = Astro.props;
 ---
 
 <p>
-	If you use a build matrix in your pipeline, set the <code>job_name</code> property so <strong>CI Insights</strong> can properly distinguish reports for each matrix variation.
+	If you use a build matrix in your pipeline, each variation reports its own step label as its job
+	name, so the variations are already distinct. Set the <code>job_name</code> plugin property when the
+	label is not the name you want <strong>CI Insights</strong> to file the reports under:
 </p>
-<p>For example:</p>
 <Code
 	code={`steps:
-  - label: "Tests ({{matrix}})"
+  - label: "Flaky detection ({{matrix}})"
     matrix:
       - "3.10"
       - "3.11"
@@ -29,9 +30,9 @@ const { reportPath } = Astro.props;
           token: "\${MERGIFY_TOKEN}"`}
 	lang="yaml"
 />
-<Aside type="tip">
+<Aside type="note">
 	<p>
-		Setting <code>job_name</code> helps <strong>CI Insights</strong> group and display reports correctly
-		for each matrix variation.
+		The job name is part of a test's identity, so a scheduled pipeline has to report the same name as
+		the step running those tests on your pull requests.
 	</p>
 </Aside>
