@@ -55,15 +55,12 @@ mvn test
 
 ### Using Gradle
 
-Configure the test task in your `build.gradle`:
+Gradle's `test` task writes JUnit XML reports without any extra configuration.
+Point the task at TestNG in your `build.gradle`:
 
 ```groovy
 test {
     useTestNG()
-    reports {
-        junitXml.enabled = true
-        junitXml.destination = file("$buildDir/test-results/test")
-    }
 }
 ```
 
@@ -72,6 +69,8 @@ Run tests with:
 ```bash
 ./gradlew test
 ```
+
+The JUnit XML reports will be generated in `build/test-results/test/`.
 
 ### Using TestNG Directly
 

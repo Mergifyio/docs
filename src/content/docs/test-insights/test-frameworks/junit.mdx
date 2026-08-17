@@ -47,15 +47,12 @@ The JUnit XML reports will be generated in `target/surefire-reports/`.
 
 ### Using Gradle
 
-Configure the test task in your `build.gradle`:
+Gradle's `test` task writes JUnit XML reports without any extra configuration.
+If your tests run on JUnit 5, enable the platform in your `build.gradle`:
 
 ```groovy
 test {
     useJUnitPlatform()
-    reports {
-        junitXml.enabled = true
-        junitXml.destination = file("$buildDir/test-results/test")
-    }
 }
 ```
 
