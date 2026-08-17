@@ -11,6 +11,8 @@
 /api-intro/ /api/usage 301
 /api-usage /api/usage 301
 /api-usage/ /api/usage 301
+/api/eventlogs /api/activity-log/ 301
+/api/eventlogs/ /api/activity-log/ 301
 /examples /integrations 301
 /examples/ /integrations 301
 /examples/_ /integrations/:splat 301
