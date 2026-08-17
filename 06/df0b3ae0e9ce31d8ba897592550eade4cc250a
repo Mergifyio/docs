@@ -1,0 +1,1 @@
+explain in the test why the payload mixes file_path and filePath (review comment on scripts/claude-hooks.test.mjs)
