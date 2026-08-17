@@ -11977,6 +11977,208 @@
         ],
         "title": "EventPostCheckMetadata"
       },
+      "EventProductDisabled": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/EventOutcome"
+          },
+          "type": {
+            "type": "string",
+            "const": "product.disabled",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventProductDisabledMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "outcome",
+          "type",
+          "metadata"
+        ],
+        "title": "EventProductDisabled"
+      },
+      "EventProductDisabledMetadata": {
+        "properties": {
+          "product": {
+            "type": "string",
+            "enum": [
+              "ci_insights",
+              "merge_protections",
+              "workflow_automation",
+              "merge_queue"
+            ],
+            "title": "Product"
+          },
+          "disabled_by": {
+            "$ref": "#/components/schemas/Actor"
+          },
+          "disabled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Disabled At"
+          },
+          "disabled_by_staff": {
+            "type": "boolean",
+            "title": "Disabled By Staff"
+          }
+        },
+        "type": "object",
+        "required": [
+          "product",
+          "disabled_by",
+          "disabled_at",
+          "disabled_by_staff"
+        ],
+        "title": "EventProductDisabledMetadata"
+      },
+      "EventProductEnabled": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/EventOutcome"
+          },
+          "type": {
+            "type": "string",
+            "const": "product.enabled",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventProductEnabledMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "outcome",
+          "type",
+          "metadata"
+        ],
+        "title": "EventProductEnabled"
+      },
+      "EventProductEnabledMetadata": {
+        "properties": {
+          "product": {
+            "type": "string",
+            "enum": [
+              "ci_insights",
+              "merge_protections",
+              "workflow_automation",
+              "merge_queue"
+            ],
+            "title": "Product"
+          },
+          "enabled_by": {
+            "$ref": "#/components/schemas/Actor"
+          },
+          "enabled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Enabled At"
+          },
+          "enabled_by_staff": {
+            "type": "boolean",
+            "title": "Enabled By Staff"
+          }
+        },
+        "type": "object",
+        "required": [
+          "product",
+          "enabled_by",
+          "enabled_at",
+          "enabled_by_staff"
+        ],
+        "title": "EventProductEnabledMetadata"
+      },
       "EventQueueBatchBisectionEnd": {
         "properties": {
           "id": {
@@ -15087,6 +15289,8 @@
           "ci_insights.job_retried",
           "command.dequeue",
           "command.queue",
+          "product.disabled",
+          "product.enabled",
           "queue.pause.create",
           "queue.pause.delete",
           "queue.pause.update",
@@ -15306,6 +15510,12 @@
                   "$ref": "#/components/schemas/EventCommandDequeue"
                 },
                 {
+                  "$ref": "#/components/schemas/EventProductEnabled"
+                },
+                {
+                  "$ref": "#/components/schemas/EventProductDisabled"
+                },
+                {
                   "$ref": "#/components/schemas/EventTestQuarantined"
                 },
                 {
@@ -15351,6 +15561,8 @@
                   "ci_insights.job_retried": "#/components/schemas/EventCiInsightsJobRetried",
                   "command.dequeue": "#/components/schemas/EventCommandDequeue",
                   "command.queue": "#/components/schemas/EventCommandQueue",
+                  "product.disabled": "#/components/schemas/EventProductDisabled",
+                  "product.enabled": "#/components/schemas/EventProductEnabled",
                   "queue.pause.create": "#/components/schemas/EventQueuePauseCreate",
                   "queue.pause.delete": "#/components/schemas/EventQueuePauseDelete",
                   "queue.pause.update": "#/components/schemas/EventQueuePauseUpdate",
