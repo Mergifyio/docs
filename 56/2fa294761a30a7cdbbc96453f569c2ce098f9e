@@ -1,0 +1,6 @@
+Revision history for #12416:
+
+rev 2 (rebase) 2026-08-17 19:00 UTC
+rev 1 (initial) 2026-08-17 19:00 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12416,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"0979d4349904e15d554b21a0dcdb19cec22486f7","timestamp_iso":"2026-08-17T19:00:52Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"0979d4349904e15d554b21a0dcdb19cec22486f7","new_sha":"562fa294761a30a7cdbbc96453f569c2ce098f9e","timestamp_iso":"2026-08-17T19:00:52Z","reason":"","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/0979d4349904e15d554b21a0dcdb19cec22486f7...562fa294761a30a7cdbbc96453f569c2ce098f9e"}]} -->
