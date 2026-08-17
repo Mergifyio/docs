@@ -119,6 +119,10 @@ pipeline {
 
 - Example with JUnit report upload via `mergify ci junit-process`
 
+  This example calls the Mergify CLI, so the agent needs it on its `PATH`. Install
+  it as part of the pipeline or bake it into your agent image; see the
+  [CLI installation guide](/cli/usage).
+
 ```groovy
 pipeline {
   agent any
