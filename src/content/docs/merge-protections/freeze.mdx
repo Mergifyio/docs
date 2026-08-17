@@ -22,22 +22,30 @@ Use freezes to coordinate:
 In the dashboard under Merge Protections → Freezes:
 1. Click `Schedule a Freeze`
 
-2. Define start / end (UTC)
+2. Define start / end, and the timezone they are expressed in
 
 3. Add matching conditions: by default the freeze applies to every pull
    request, but you can limit its scope with this field
 
-4. Add exclusion conditions: pull requests matching these conditions are
-   allowed through the freeze, so specific pull requests (like hotfixes) can
-   still merge while everything else is blocked
+4. Add exclude conditions: a pull request that matches all of them is allowed
+   through the freeze, so specific pull requests (like hotfixes) can still
+   merge while everything else is blocked
 
 5. Save; active freezes appear in the list
 
 <Image src={newScheduleFreezeScreen} alt="New Scheduled Freeze" />
 
-During a freeze, the protection check fails with a clear message unless the
-pull request matches the freeze's exclusion conditions (see [Allowing
-Exceptions](#allowing-exceptions) below).
+While a freeze is active, the `Mergify Merge Protections` check stays pending
+on every matching pull request, and its summary names the freeze holding it
+back: waiting for that freeze to end, or, when the freeze has no end date,
+waiting for someone to remove it. Pull requests matching the freeze's exclude
+conditions are left alone (see [Allowing Exceptions](#allowing-exceptions)
+below), as are pull requests that cannot be merged anyway: drafts, closed ones,
+and conflicting ones.
+
+When the [merge queue](/merge-queue) is enabled, the freeze is reported in that
+check but does not change its conclusion. The queue holds the merge back until
+the freeze ends.
 
 ## Manual Instant Freeze
 
@@ -46,10 +54,12 @@ unfreeze manually.
 
 ## Allowing Exceptions
 
-To let specific pull requests through a freeze, use exclusion conditions. Any
-pull request matching an exclusion condition is not blocked by the freeze.
+To let specific pull requests through a freeze, use exclude conditions. They
+are combined with a logical AND: a pull request escapes the freeze only when it
+matches all of them. Exclude conditions `label=hotfix` and `label=urgent` let
+through pull requests carrying both labels, not those carrying only one.
 
-Set exclusion conditions when you create or edit a freeze, either in the
+Set exclude conditions when you create or edit a freeze, either in the
 dashboard or from the CLI with the `-e` flag (see [Creating a
 Freeze](#creating-a-freeze) below). For example, exclude pull requests labeled
 `hotfix` so urgent fixes can still merge during the freeze.
@@ -95,7 +105,7 @@ mergify freeze create \
 ```
 
 You can restrict which pull requests are affected with matching conditions
-(`-c`) and let specific ones through with exclusion conditions (`-e`):
+(`-c`) and let specific ones through with exclude conditions (`-e`):
 
 ```bash
 mergify freeze create \

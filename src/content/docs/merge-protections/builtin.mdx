@@ -59,3 +59,12 @@ Supports the standard [timestamp format](/configuration/data-types#timestamp).
 Useful for coordinated releases or off-peak deploy windows.
 
 <Image src={mergeAfterBody} alt="Using Merge-After in the pull request body on GitHub" />
+
+## Configuration Changed
+
+When a pull request targeting your default branch modifies your [Mergify
+configuration file](/configuration/file-format), Mergify validates the new
+configuration and reports the result as a `Configuration changed` check. This
+protection requires that check to succeed, so a pull request whose
+configuration Mergify cannot validate does not merge. A pull request that
+leaves the configuration file alone is not affected.
