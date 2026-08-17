@@ -100,8 +100,8 @@ PR.
 
 For a stack `PR1 → PR2 → PR3`, commenting `@mergifyio queue` on PR3 enqueues
 PR1, PR2, and PR3 in the right order. While PR3 waits for its predecessors to
-join the queue, its checks display the condition
-`stack-predecessor-queued` as pending. That's the queue holding PR3 back
+join the queue, its Summary check lists one pending `depends-on=` condition
+per predecessor, each tagged `[stack]`. That's the queue holding PR3 back
 until PR1 and PR2 are queued ahead of it.
 
 :::tip
