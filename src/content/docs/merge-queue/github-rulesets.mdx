@@ -37,15 +37,28 @@ option on your queue rules:
   queue has tested the pull request.
 
 - **`none`** -- rules are not injected at all. This mode requires a
-  `merge_bot_account` on the `queue` action, since Mergify must merge with
+  `merge_bot_account` on the queue rule, since Mergify must merge with
   an account able to satisfy the protections itself.
 
 ### Bypass Actors
 
 If you are using GitHub rulesets (not classic branch protections), add
-Mergify as a **bypass actor** on the ruleset and set its bypass mode to
-`exempt`. See [Configuring Mergify as a Bypass
-Actor](#configuring-mergify-as-a-bypass-actor) for the steps.
+Mergify as a **bypass actor** on the ruleset. The bypass mode you give it
+decides what the merge queue may do:
+
+- **`exempt`** covers everything, and is the only mode that works for
+  [GitHub-native stacked pull
+  requests](#github-native-stacked-pull-requests).
+
+- **`always`** covers everything except GitHub-native stacked pull requests.
+
+- **`pull_requests_only`** covers only what Mergify does through a pull
+  request. The merge queue also creates, renames, pushes to, and deletes its
+  own queue branches, and those are raw ref operations, so this mode still
+  blocks the queue.
+
+Choose `exempt` unless you have a reason not to. See [Configuring Mergify as
+a Bypass Actor](#configuring-mergify-as-a-bypass-actor) for the steps.
 
 ### Required Reviewers
 
@@ -103,6 +116,8 @@ Mergify handles each GitHub ruleset rule type as follows.
 | `update` | Checked when updating batch PRs | May block batch PR updates if Mergify is not a bypass actor |
 | `branch_name_pattern` | Checked on queue branch creation/rename | See [below](#branch-name-pattern) |
 | `required_review_thread_resolution` | Injected as conditions | -- |
+| `required_signatures` | Checked on queue branch push | See [below](#required-signatures-and-branch-deletion) |
+| `deletion` | Checked when queue branches are cleaned up | See [below](#required-signatures-and-branch-deletion) |
 | All other rule types | Ignored | See [below](#ignored-rule-types) |
 
 Mergify supports only the ruleset rule types named above. Every other rule
@@ -150,9 +165,12 @@ queue.
 ### Branch Name Pattern
 
 If a `branch_name_pattern` ruleset rule matches Mergify's queue branches and
-Mergify is **not** a bypass actor with the `exempt` bypass mode, GitHub
-blocks Mergify from creating or renaming queue branches. As a result,
+Mergify is **not** a bypass actor with the `exempt` or `always` bypass mode,
+GitHub blocks Mergify from creating or renaming queue branches. As a result,
 Mergify cannot queue or merge pull requests targeting that branch.
+
+Creating and renaming a branch are raw ref operations, which is why
+`pull_requests_only` does not unblock them.
 
 Mergify uses two branch prefixes for queue branches:
 
@@ -183,6 +201,28 @@ error.
   Cleanup](/merge-queue/lifecycle#queue-branch-cleanup) for how branches are
   matched and an important caveat about naming your own branches.
 :::
+
+### Required Signatures and Branch Deletion
+
+Mergify builds each queue branch locally and pushes it, then deletes it once
+the batch is done. Both are raw ref operations, so a ruleset covering the
+queue branch prefixes can stop the queue:
+
+- A `required_signatures` rule rejects the push, because the commits Mergify
+  composes locally are unsigned. Every queue attempt then fails on branch
+  creation.
+
+- A `deletion` rule stops Mergify from removing the final queue branch before
+  recreating it, which leaves the queue stuck on that batch.
+
+**Resolution:**
+
+- **Preferred:** add Mergify as a bypass actor on the ruleset with the
+  `exempt` or `always` bypass mode. `pull_requests_only` is not enough for
+  either operation.
+
+- **Alternative:** narrow the ruleset so it does not cover the queue branch
+  prefixes.
 
 ### Require Branches to Be Up to Date
 
@@ -258,11 +298,7 @@ rules are active on your branches, Mergify will not enforce them:
 
 - `required_linear_history`
 
-- `required_signatures`
-
 - `non_fast_forward`
-
-- `deletion`
 
 - Pattern and file rules (`commit_message_pattern`, `file_path_restriction`,
   `max_file_path_length`, `file_extension_restriction`)
