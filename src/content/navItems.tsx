@@ -335,7 +335,7 @@ const navItems: NavItem[] = [
           { title: 'Merge Queue', path: '/api/merge-queue' },
           { title: 'Statistics', path: '/api/statistics' },
           { title: 'Simulator', path: '/api/simulator' },
-          { title: 'Event Logs', path: '/api/eventlogs' },
+          { title: 'Activity Log', path: '/api/activity-log' },
           { title: 'Badges', path: '/api/badges' },
           { title: 'Scheduled Freeze', path: '/api/scheduled-freeze' },
           { title: 'CI Insights', path: '/api/ci-insights' },
