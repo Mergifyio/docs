@@ -128,6 +128,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run Minitest Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   env:
     JUNIT_OUTPUT_DIR: .
@@ -140,6 +141,8 @@ Using `minitest-reporters` approach:
 
 ```yaml
 - name: Run Minitest Tests and Generate JUnit Report
+  id: tests
+  continue-on-error: true
   run: bundle exec rake test
 ```
 
@@ -169,7 +172,7 @@ After pushing these changes:
 
 You can then review your test results, including any failures or flaky tests,
 directly in the [Test Insights
-dashboard](https://dashboard.mergify.com/test-insights/jobs).
+dashboard](https://dashboard.mergify.com/test-insights/detection).
 
 ## Troubleshooting Tips
 

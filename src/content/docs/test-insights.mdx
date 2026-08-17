@@ -36,18 +36,19 @@ known flakiness.
 
 ## Key concepts
 
-- **Flaky test**: A test that produces different results on the same commit.
-  For example, passing on one run and failing on the next with identical code.
+- **Flaky test**: A test that both passes and fails on the same commit. For
+  example, passing on one run and failing on the next with identical code. A
+  test whose results differ without ever failing stays healthy.
 
-- **Broken test**: A test that fails consistently, with recent runs weighted
-  more heavily.
+- **Broken test**: A test that fails, with no passing run close in time to
+  contradict those failures.
 
 - **Health status**: A test's reliability classification: healthy, flaky, or
   broken. Based on results from multiple CI runs.
 
-- **Confidence**: How much data is available to assess a test's health. Low
-  confidence means the status could still change significantly as more runs
-  are collected.
+- **Confidence**: How much data is available to assess a test's health,
+  reported as low, medium, or high. Low confidence means the status could
+  still change as more runs are collected.
 
 - **Quarantine**: Isolating a test so its failures are ignored for merge
   decisions. The test still runs and results are still collected, preserving
@@ -65,6 +66,7 @@ Test Insights is powered by the same CI integration as
 framework:
 
 - [GitHub Actions setup](/ci-insights/setup/github-actions)
+- [Buildkite setup](/ci-insights/setup/buildkite)
 - [Jenkins setup](/ci-insights/setup/jenkins)
 - [Test framework configuration](#test-framework-configuration)
 
