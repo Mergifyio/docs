@@ -10,7 +10,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "# Prevent editing on main branch\n[ \"$(git branch --show-current)\" != \"main\" ] || { echo '{\"block\": true, \"message\": \"Cannot edit files on main branch. Create a feature branch first with: git checkout -b your-branch-name\"}' >&2; exit 2; }",
+            "command": "# Prevent editing on main branch\n[ \"$(git branch --show-current)\" != \"main\" ] || { echo 'Cannot edit files on the main branch. Create a feature branch first: git checkout -b your-branch-name --track origin/main' >&2; exit 2; }",
             "timeout": 5
           }
         ]
@@ -34,7 +34,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "# Auto-format with Biome for supported files\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ \\.(js|jsx|ts|tsx|json|css)$ ]]; then\n  npx biome format --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\" 2>&1\n  if [ $? -eq 0 ]; then\n    echo '{\"feedback\": \"Formatted with Biome.\", \"suppressOutput\": true}'\n  else\n    echo '{\"feedback\": \"Format check found issues.\"}' >&2\n  fi\nfi",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-edit-biome-format.mjs\"",
             "timeout": 30
           }
         ]
@@ -44,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "# Type-check TypeScript files\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ \\.(ts|tsx)$ ]]; then\n  echo '{\"feedback\": \"Checking TypeScript types...\"}' >&2\n  output=$(npx tsc --noEmit 2>&1)\n  exit_code=$?\n  if [ $exit_code -eq 0 ]; then\n    echo '{\"feedback\": \"No TypeScript errors.\", \"suppressOutput\": true}'\n  else\n    errors=$(echo \"$output\" | grep -E \"error TS\" | head -10)\n    if [ -n \"$errors\" ]; then\n      echo \"{\\\"feedback\\\": \\\"TypeScript errors found - please review.\\\"}\" >&2\n      echo \"$errors\" >&2\n    fi\n  fi\n  exit 0\nfi",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-edit-typecheck.mjs\"",
             "timeout": 60
           }
         ]
@@ -54,8 +54,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "# Validate MDX frontmatter\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ \\.mdx$ ]]; then\n  if ! head -1 \"$CLAUDE_TOOL_INPUT_FILE_PATH\" | grep -q '^---$'; then\n    echo '{\"feedback\": \"Warning: MDX file should start with frontmatter (---)\"}' >&2\n  fi\nfi",
-            "timeout": 5
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-edit-mdx-frontmatter.mjs\"",
+            "timeout": 10
           }
         ]
       }
