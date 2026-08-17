@@ -86,6 +86,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run MSTest Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   run: dotnet test --logger "junit;LogFilePath=junit.xml"
 ```
