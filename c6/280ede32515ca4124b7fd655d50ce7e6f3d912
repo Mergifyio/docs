@@ -1,0 +1,1 @@
+Reworded the job-level caution: it claimed a step's env is not visible to the action, which is a claim about composite-action internals I could not verify. Replaced with the pitfall that is actually true — a step's env applies to that step alone, so a name set on the test step never reaches the upload step.
