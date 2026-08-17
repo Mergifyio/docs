@@ -43,29 +43,37 @@ lines, including code fences and frontmatter.
    (`th_01JQZK4M8XN2VR7TDY0P3WGA6H`), `app.plain.com`
    links, or any equivalent from another helpdesk.
 
-2. **Customer, org, and account identifiers.** GitHub
+2. **Tracker ticket references.** A bare issue key
+   (`MRGFY-1234`, `HD-18`), linked or not, including
+   the lowercase form a branch name carries. Look
+   hardest inside example values — a key in a
+   `--reason` string or a commit message reads as a
+   plausible sample, which is how one reached the
+   published site.
+
+3. **Customer, org, and account identifiers.** GitHub
    org or repo names belonging to a customer, account
    IDs, subscription IDs, Stripe customer or invoice
    IDs, seat counts of a real account, email
    addresses.
 
-3. **Private repositories and internal code paths.**
+4. **Private repositories and internal code paths.**
    `Mergifyio/monorepo`, `mergify_shadow_office/...`,
    `mergify_engine/...`, dashboard source paths,
    internal module, class, or function names, and
    file:line references into private code.
 
-4. **Internal URLs and tools.** Linear and Notion
+5. **Internal URLs and tools.** Linear and Notion
    links, internal dashboards and admin consoles,
    staging or internal Mergify hostnames, cloud
    consoles, internal runbooks.
 
-5. **Credentials.** Real tokens, API keys, private
+6. **Credentials.** Real tokens, API keys, private
    keys, or webhook secrets. Placeholders like
    `ghp_*` or `<your-token>` are fine; anything that
    could be a live secret is not.
 
-6. **Internal-only framing.** Employee names in an
+7. **Internal-only framing.** Employee names in an
    internal context, quotes from a support
    conversation, "as discussed with the customer",
    references to unreleased work, or an explanation
