@@ -1,0 +1,1 @@
+code review: use the <owner>/<repository> placeholders the rest of the page already uses instead of a hardcoded repo, and rewrite the presence rule so it no longer reads as if next and prev were mutually exclusive.
