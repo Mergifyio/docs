@@ -10,3 +10,6 @@ dist
 /static/og-images
 
 .env
+
+# Scratch project roots for scripts/claude-hooks.test.mjs, removed when it ends
+.claude-hook-test-*

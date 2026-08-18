@@ -1,2 +1,3 @@
 hooks/*
 !hooks/docs-proofread-gate.md
+!hooks/*.mjs
