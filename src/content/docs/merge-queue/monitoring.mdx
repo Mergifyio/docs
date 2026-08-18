@@ -57,8 +57,16 @@ Exit reasons, interruptions, and failure trends.
   a merge. A low recovery rate points at genuinely broken tests rather than
   flaky ones.
 
-- **CI Failure Rate**: the share of queue CI runs that failed. A rising rate
-  usually means flaky tests, unstable CI, or problematic changes being queued.
+- **CI Failure Rate**: the share of queue exits caused by a proven CI failure
+  (checks that failed, and checks that ran out of the queue's [checks
+  timeout](/merge-queue/lifecycle#checks-timeout)). Every other exit, a merge
+  included, counts in the total but not as a failure. Exits that prove nothing
+  about your CI are deliberately left out of the numerator: a [check interrupted
+  before producing a result](/merge-queue/lifecycle#interrupted-checks), and a
+  pull request dropped untested by
+  [bisection](/merge-queue/batches#handling-batch-failure-or-timeout).
+  A rising rate usually means flaky tests, unstable CI, or problematic changes
+  being queued.
 
 - **Batch Bisection Count**: how often Mergify had to split a failing batch to
   find the culprit. A high count means batches are failing often.
