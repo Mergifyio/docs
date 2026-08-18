@@ -1,1 +1,6 @@
-address review: drop the hard skill count from /cli/agents (it rots when a skill is added or removed), keep the skills.sh bold label on one line, and state that junit-process does not fall back to GITHUB_TOKEN rather than that it only reads MERGIFY_TOKEN
+Revision history for #12407:
+
+rev 2 (content) 2026-08-18 14:21 UTC — address review: drop the hard skill count from /cli/agents (it rots when a skill is added or removed), keep the skills.sh bold label on one line, and state that junit-process does not fall back to GITHUB_TOKEN rather than that it only reads MERGIFY_TOKEN
+rev 1 (initial) 2026-08-18 14:21 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12407,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"58efff7933b8324a7490731f703dd75c44c6d104","timestamp_iso":"2026-08-18T14:21:23Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"58efff7933b8324a7490731f703dd75c44c6d104","new_sha":"82711e10f70ac0c9a802a45cffd5b893ddca83cc","timestamp_iso":"2026-08-18T14:21:23Z","reason":"address review: drop the hard skill count from /cli/agents (it rots when a skill is added or removed), keep the skills.sh bold label on one line, and state that junit-process does not fall back to GITHUB_TOKEN rather than that it only reads MERGIFY_TOKEN","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/58efff7933b8324a7490731f703dd75c44c6d104...82711e10f70ac0c9a802a45cffd5b893ddca83cc"}]} -->
