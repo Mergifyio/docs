@@ -16,6 +16,7 @@ import remarkSmartypants from 'remark-smartypants';
 import { asideAutoImport, astroAsides } from './integrations/astro-asides';
 import { astroYoutubeEmbeds, youtubeAutoImport } from './integrations/astro-youtube-embed';
 import { PagefindIndex } from './integrations/pagefind-index';
+import { validateApiNavPaths } from './integrations/validate-api-nav-paths';
 import { validateDataTypeAnchors } from './integrations/validate-data-type-anchors';
 import { autolinkConfig } from './plugins/rehype-autolink-config';
 import { rehypeOptimizeStatic } from './plugins/rehype-optimize-static';
@@ -54,6 +55,7 @@ export default defineConfig({
     }),
     PagefindIndex(),
     validateDataTypeAnchors(),
+    validateApiNavPaths(),
     icon({
       include: {
         lucide: ['*'],
