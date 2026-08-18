@@ -78,16 +78,19 @@ queue, allowing Mergify to retry validation.
 
 ## Queueing with a Checkbox
 
-If you'd rather not type a command, Mergify can post a merge queue status
-comment with a checkbox you can tick to queue your pull request:
+If you'd rather not type a command, Mergify can post a checkbox you can tick to
+queue your pull request:
 
-<Image src={queueControlCheckbox} alt="Merge queue status comment with a checkbox to queue the pull request" />
+<Image src={queueControlCheckbox} alt="Comment with a checkbox to queue the pull request" />
 
-- **Queue this pull request** appears when the pull request is ready to be
-  queued. Tick it to add the pull request to the merge queue.
+- **Queue this pull request** comes in a comment of its own, posted when the
+  pull request is ready to be queued and isn't queued yet. Tick it to add the
+  pull request to the merge queue.
 
-- **Requeue this pull request** appears after a pull request leaves the queue
-  following a failed attempt. Tick it to put the pull request back in the queue.
+- **Requeue this pull request** comes in the [merge queue status
+  comment](/merge-queue/lifecycle#status-comments), after the pull request has
+  left the queue without being merged. Tick it to put the pull request back in
+  the queue.
 
 Ticking a checkbox does exactly what the `@mergifyio queue` command does. The
 action is attributed to the person who ticked it, and the same
