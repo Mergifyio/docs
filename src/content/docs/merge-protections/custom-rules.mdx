@@ -5,15 +5,17 @@ description: Define fine-grained success conditions evaluated by the Mergify Mer
 
 ## Rule Structure
 
-Each rule consists of:
+Rules live under the `merge_protections` key in your configuration file. Each
+rule needs `name`, `if`, and `success_conditions`; `description` is optional:
 
 ```yaml
-name: <human readable name>
-description: <purpose / context>
-if:                       # list (YAML array) of conditions activating the rule
-  - <condition>
-success_conditions:       # list of conditions that must all pass for success
-  - <condition>
+merge_protections:
+  - name: <human readable name>
+    description: <purpose / context>
+    if:                     # list (YAML array) of conditions activating the rule
+      - <condition>
+    success_conditions:     # list of conditions that must all pass for success
+      - <condition>
 ```
 
 Evaluation:
@@ -41,6 +43,8 @@ Common condition patterns:
 | Require check success | `check-success = ci/build` |
 
 ## Examples
+
+Each example below is one item of the `merge_protections` list.
 
 ### Conventional Commits
 ```yaml
