@@ -105,6 +105,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run NUnit Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   run: dotnet test --logger "junit;LogFilePath=junit.xml"
 ```

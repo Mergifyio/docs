@@ -94,6 +94,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run TestNG Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   run: mvn test
 ```
@@ -104,6 +105,7 @@ For Gradle projects:
 
 ```yaml
 - name: Run TestNG Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   run: ./gradlew test
 ```
