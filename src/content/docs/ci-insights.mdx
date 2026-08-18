@@ -14,7 +14,7 @@ GitHub and covers basic configuration steps.
 > First time here? Follow these 3 steps to see data fast:
 > 1. Install the Mergify GitHub App on a repo with existing CI.
 > 2. Ensure your tests produce a supported format (JUnit XML, pytest, Jest, etc.); pick a framework below if needed.
-> 3. Re-run a workflow (or push a trivial commit) then refresh this page to view jobs & tests.
+> 3. Re-run a workflow (or push a trivial commit), then open CI Insights in the dashboard to view your jobs and tests.
 
 ## Understanding CI Insights
 
@@ -46,12 +46,14 @@ GitHub and covers basic configuration steps.
 
 ### Flaky Detection
 
-CI Insights automatically detects flaky behavior in both jobs and tests using the same criteria:
+CI Insights flags a **flaky job** when the same job runs more than once on the
+same commit (SHA1) and the runs end with different conclusions: one fails while
+another succeeds, even though the code did not change. Cancelled runs are
+ignored, since a cancellation says nothing about the code.
 
-A **flaky job** or **flaky test** is one that has 2 different conclusions on
-the same SHA1. For example, if a job or test runs twice on the same commit and
-once fails while the other succeeds, it's considered flaky because the outcome
-is not consistent with the same code.
+Tests use the same rule, with one addition: a **flaky test** has to have failed
+on some runs of a commit and passed on others. A test that is skipped in one
+run and passes in another stays healthy.
 
 To set up systematic flaky test detection in your CI pipeline, see our
 dedicated [Flaky Test Detection guide](/ci-insights/flaky-test-detection).

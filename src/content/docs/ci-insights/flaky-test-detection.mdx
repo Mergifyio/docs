@@ -13,10 +13,11 @@ and reduce false positives in your CI pipeline.
 
 ## Understanding Flaky Tests
 
-A **flaky test** is one that has different conclusions on the same SHA1. For
-example, if a test runs twice on the same commit and once fails while the other
-succeeds, it's considered flaky because the outcome is not consistent with the
-same code.
+A **flaky test** is one that fails on some runs of a commit (SHA1) and passes
+on others. If a test runs twice on the same commit and once fails while the
+other succeeds, it's considered flaky because the outcome is not consistent
+with the same code. A test whose results differ without ever failing, such as
+one that is skipped in one run and passes in another, stays healthy.
 
 Below is a simplified visualization of flakiness: two executions of the same
 tests on the exact same commit (same SHA1) produce different results. This
@@ -96,11 +97,18 @@ Flaky tests are problematic because they:
 
 ## How Flaky Detection Works
 
-Flaky test detection works by running your test suite multiple times on the
-same commit. When tests produce different results (pass/fail) across these runs
-on identical code, they are flagged as flaky. This approach helps identify
-tests that are unreliable and may cause false positives or negatives in your CI
-pipeline.
+Mergify compares each uploaded test result against the results it already holds
+for the same test, on the same commit, in the same pipeline and job. When two
+results disagree, Mergify records the disagreement and reports the test as
+flaky once one of the two is a failure. Any repeat execution counts: a retried
+job, a re-run workflow, or a job that runs the suite several times in a row.
+
+Detection does not depend on the scheduled runs that the setup guides below
+describe. Running your suite several times on the same commit produces the
+evidence deliberately, on a schedule you choose, instead of waiting for a rerun
+to expose the problem. Keeping the job name identical to the one used on your
+pull requests matters for the same reason: results are only compared within a
+single pipeline and job.
 
 ## Setting Up Flaky Test Detection
 
@@ -130,9 +138,9 @@ report and flags the tests whose results disagree on a single commit.
 
 Test-level results live in [Test Insights](/test-insights), not in CI Insights:
 its [Detection](/test-insights/detection) page lists the flaky and broken tests
-found across your repositories and ranks them by
-[impact](/test-insights/detection#prioritizing-with-impact), the number of
-failed executions each one causes.
+found across your repositories and reports each one's
+[impact](/test-insights/detection#prioritizing-with-impact): the share of its
+executions that failed, as low, medium, or high.
 
 Flakiness at the job level stays in CI Insights, on the
 [Jobs](/ci-insights/jobs) page.
