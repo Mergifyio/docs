@@ -1,0 +1,6 @@
+Revision history for #12412:
+
+rev 2 (content) 2026-08-17 12:55 UTC — explain in the test why the payload mixes file_path and filePath (review comment on scripts/claude-hooks.test.mjs)
+rev 1 (initial) 2026-08-17 12:55 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12412,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"cd576d901beffe127168a8dba76f8e013244b855","timestamp_iso":"2026-08-17T12:55:20Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"cd576d901beffe127168a8dba76f8e013244b855","new_sha":"06df0b3ae0e9ce31d8ba897592550eade4cc250a","timestamp_iso":"2026-08-17T12:55:20Z","reason":"explain in the test why the payload mixes file_path and filePath (review comment on scripts/claude-hooks.test.mjs)","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/cd576d901beffe127168a8dba76f8e013244b855...06df0b3ae0e9ce31d8ba897592550eade4cc250a"}]} -->
