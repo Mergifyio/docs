@@ -1,0 +1,6 @@
+Revision history for #12394:
+
+rev 2 (content) 2026-08-17 09:06 UTC — code review: use the <owner>/<repository> placeholders the rest of the page already uses instead of a hardcoded repo, and rewrite the presence rule so it no longer reads as if next and prev were mutually exclusive.
+rev 1 (initial) 2026-08-17 09:06 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12394,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"1813b44c561655c94af152e204e0050023c434d9","timestamp_iso":"2026-08-17T09:06:35Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"1813b44c561655c94af152e204e0050023c434d9","new_sha":"d088b0b23fe6f06478d877a977442d309ba2c0e6","timestamp_iso":"2026-08-17T09:06:35Z","reason":"code review: use the <owner>/<repository> placeholders the rest of the page already uses instead of a hardcoded repo, and rewrite the presence rule so it no longer reads as if next and prev were mutually exclusive.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/1813b44c561655c94af152e204e0050023c434d9...d088b0b23fe6f06478d877a977442d309ba2c0e6"}]} -->
