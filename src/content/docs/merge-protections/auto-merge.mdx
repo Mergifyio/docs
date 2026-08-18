@@ -69,8 +69,9 @@ nested `and`, `or`, and `not` operators.
 - `true`: unconditional auto-merge.
 - A list of conditions: conditional auto-merge.
 
-The schema rejects `false`, `null`, and `{}` (an empty mapping). To disable
-auto-merge, omit the field entirely.
+The schema rejects `false` and any mapping, empty (`{}`) or not. An explicit
+`null` is accepted and means the same as omitting the field: auto-merge stays
+off.
 
 ## Examples
 
@@ -122,6 +123,9 @@ When a configuration mixes autoqueued and manual queues, the migration pull
 request includes a YAML comment listing the queues that remain manual-only.
 Those queues stay reachable via the [`/queue` command](/commands/queue).
 
+Apply the migration in one step: a configuration that sets
+`auto_merge_conditions` while a queue rule still has `autoqueue` is rejected.
+
 ### Example
 
 Before:
@@ -161,6 +165,13 @@ merge_protections_settings:
 
 ## Constraints
 
-`auto_merge_conditions` only takes effect when at least one [merge protection
-rule](/merge-protections/custom-rules) is configured. Without protection
-rules there are no `success_conditions` to evaluate.
+`auto_merge_conditions` and `queue_rules[].autoqueue` cannot be used together.
+A configuration that sets both is rejected, so remove `autoqueue` from your
+queue rules in the same change.
+
+Without the merge queue, `auto_merge_conditions` only takes effect when at
+least one [merge protection rule](/merge-protections/custom-rules) applies to
+the pull request: with no rule whose `if` conditions match, there are no
+`success_conditions` to evaluate and nothing is merged. With the merge queue
+enabled, a matching pull request is queued whether or not merge protection
+rules exist, and the queue's own conditions gate the merge.
