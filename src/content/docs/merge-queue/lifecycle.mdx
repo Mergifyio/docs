@@ -293,6 +293,26 @@ By carefully addressing each failed check and ensuring all the issues are
 fixed, you can maintain the integrity of your codebase while ensuring that
 every pull request is ready to be merged when it's time.
 
+### Interrupted Checks
+
+An interrupted check is the exception to the steps above. When a check blocking
+the merge conditions was cancelled before reaching any conclusion (a reclaimed
+runner, a cancelled workflow run), Mergify removes the pull request under the
+[`checks-interrupted`](/configuration/data-types#queue-dequeue-reason) dequeue
+reason rather than `checks-failed`, and names the checks that never reached a verdict.
+Nothing about the pull request needs fixing: requeue it with `@mergifyio queue`,
+without updating it, and the check runs again. [Automatic CI
+retries](#automatic-ci-retries) come first, so a queue with `max_checks_retries`
+set only reports the interruption once its retries are spent.
+
+A check that reported a failure of its own is a failure rather than an
+interruption, and so is a check that timed out on its own (a `timed_out`
+conclusion, matched by
+[`check-timed-out`](/configuration/conditions#attributes-list)): it used up its
+own time rather than being stopped from outside. When a check fails and another
+is interrupted at the same time, the failure wins, and the pull request is
+removed under `checks-failed`.
+
 ## Requeuing a Pull Request in the Merge Queue
 
 At times, you might find it necessary to requeue a pull request. This could
