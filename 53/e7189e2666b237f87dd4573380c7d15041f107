@@ -1,0 +1,1 @@
+address review: drop the hard skill count from /cli/agents (it rots when a skill is added or removed), keep the skills.sh bold label on one line, and state that junit-process does not fall back to GITHUB_TOKEN rather than that it only reads MERGIFY_TOKEN
