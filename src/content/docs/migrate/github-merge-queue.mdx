@@ -38,9 +38,10 @@ Choose Mergify if you need any of:
 
 - Parallel speculative checks (reduce head‑of‑line blocking)
 
-- Batching by size / count with automatic fallback
+- Batching by size, with automatic splitting when a batch fails
 
-- Queue metrics: wait time, success ratio, batch efficiency, test amplification
+- [Queue metrics](/merge-queue/monitoring): queue time, CI runtime, batch outcomes, and where a
+  pull request's time in the queue goes
 
 - Integrated workflow actions (label, rebase, backport, deployment gating)
   without extra bots
@@ -53,7 +54,7 @@ Queue features:
 | GitHub Merge Queue | Mergify |
 | ------------------- | ------- |
 | Single queue per protected branch | One or more `queue_rules` with conditions |
-| Merge Group (= test head + base) | Batch / virtual merge reference |
+| Merge Group (= test head + base) | [Batch](/merge-queue/batches), checked in place or on a draft pull request |
 | Required status checks | `queue_conditions` using `check-success = <name>` |
 | Strict update before merge | `update_method` (merge/rebase) + automatic refresh |
 
@@ -61,7 +62,7 @@ Queue features:
 
 If today you rely on a protected `main` with a GitHub Merge Queue, no
 configuration is needed. Mergify automatically injects your ruleset or branch
-protections into the queue system. Simply type [`@mergify
+protections into the queue system. Type [`@mergifyio
 queue`](/commands/queue) to queue a pull request.
 
 This reproduces the same invariant: every PR merged only after re‑validation on
@@ -97,22 +98,29 @@ Apply a `hotfix` label; those PRs jump ahead while fairness is preserved.
 
 ## Observability & reporting
 
-Mergify exposes:
+The [Statistics page](/merge-queue/monitoring) reports on the queue:
 
-- Queue length & wait time trends
-- Batch efficiency (merged PRs per CI cycle)
-- Flaky / slow check impact (integrates with CI Insights)
-- Per‑PR timeline: enqueue → validation start → merge
+- **Max Queue Size** and **Average Queue Time**, for how deep the queue gets and how long a pull
+  request waits in it
+
+- **Time Breakdown**, splitting that wait across CI capacity, schedule windows, freeze periods, and
+  CI runtime
+
+- **Batch Outcomes** and **Batch Bisection Count**, for how often batches fail and have to be split
+
+- **Batches Saved**, for batches that merged without running their own speculative checks
+
+- **Average CI Runtime**, for how long the checks the queue triggers take
 
 Use this data to tune batch size, break down monolithic checks, or add
-two‑step CI (fast + full) to shorten average cycle time.
+[two‑step CI](/merge-queue/two-step) (fast + full) to shorten average cycle time.
 
 ## Incremental migration strategy
 
 1. If needed, add the `.mergify.yml` configuration file with a `queue_rules`
    block (leave GitHub Merge Queue enabled)
 
-2. Queue a low‑risk PR using `@mergify queue`
+2. Queue a low‑risk PR using `@mergifyio queue`
 
 3. Compare timing & merge behavior
 
@@ -125,8 +133,9 @@ Rollback is trivial: toggle GitHub’s native queue back on; no destructive stat
 ## FAQ
 
 **Does Mergify require removing branch protections?** No. Keep them; Mergify
-works with them. Just avoid duplicate required contexts (the same check listed
-in both branch protection and queue conditions is fine; it doesn't run twice).
+injects their conditions into the queue itself, so you do not have to restate
+them. Listing the same check in both a branch protection and `queue_conditions`
+is harmless: it does not make the check run twice.
 
 **Do I lose the merge squash/rebase options?** No. Configure `merge_method` per
 rule; you can still vary merge strategies across PR subsets.

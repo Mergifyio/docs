@@ -26,39 +26,54 @@ The dashboard keeps the canonical links to the Chrome Web Store and Firefox Add-
 always grab the signed builds.
 
 1. Sign in to the [Mergify dashboard](https://dashboard.mergify.com).
-2. Open `Settings → Browser Extensions` in the left navigation.
-3. Pick **Add to Chrome** or **Add to Firefox**.
+
+2. Open **Settings → Integrations** and pick the **Browser** category.
+
+3. On the **Chrome Extension** or **Firefox Add-On** card, click **Install**. The button reads
+   **Installed** when the browser you are using already has it.
+
+**Merge Queue → Deployment → Browser Extension** carries the same two links, labeled **Add to
+Chrome** and **Add to Firefox**, next to a summary of what the panel adds to a pull request.
 
 <Image
   src={extensionListScreen}
-  alt="Browser Extensions settings view in the Mergify dashboard"
+  alt="The Browser category of the Mergify Integrations page, with the Chrome Extension and Firefox Add-On cards"
 />
 
 ## Install on Chrome or Firefox
 
 ### Chrome
 
-1. Click **Add to Chrome** from the dashboard page.
+1. Click **Install** on the Chrome Extension card, or **Add to Chrome** on the Deployment page.
 2. Confirm the permissions in the Chrome Web Store dialog.
 
 ### Firefox
 
-1. Click **Add to Firefox** from the dashboard page.
+1. Click **Install** on the Firefox Add-On card, or **Add to Firefox** on the Deployment page.
 2. Approve the requested permissions in the Firefox Add-ons prompt.
 
 ## Merge Queue Controls
 
-After installation, reload any pull request on GitHub. A Mergify toolbar appears near the GitHub
-merge box and displays queue-specific controls:
+After installation, reload any pull request on GitHub. A Mergify panel appears above the GitHub
+merge box, with a button for each command you would otherwise leave as a comment:
 
-- **Queue** places the pull request into the selected merge queue with one click.
+- **Queue** and **Requeue** both run [`queue`](/commands/queue) to put the pull request into the
+  merge queue.
 
-- **Dequeue** (available when the pull request is already in the queue) removes it without typing
-  slash commands.
+- **Dequeue** runs [`dequeue`](/commands/dequeue) to take it back out.
+
+- **Refresh** runs [`refresh`](/commands/refresh) to re-evaluate the pull request against your
+  configuration.
+
+- **Rebase branch** and **Update branch** run [`rebase`](/commands/rebase) and
+  [`update`](/commands/update) to bring the pull request up to date with its base branch.
+
+Two links next to the buttons open the pull request's Mergify event history and the merge queue it
+sits in.
 
 <Image
   src={extensionPrScreen}
-  alt="Mergify browser extension toolbar injected into a GitHub pull request"
+  alt="Mergify browser extension panel injected into a GitHub pull request"
 />
 
 ## Timestamps in Your Timezone

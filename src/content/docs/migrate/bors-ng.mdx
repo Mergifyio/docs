@@ -23,17 +23,17 @@ setup.
 
 - Keep your branch protection and checks
 - Define one queue rule in `.mergify.yml`
-- Replace `bors r+` approvals with `@mergify queue` command
+- Replace `bors r+` approvals with the `@mergifyio queue` command
 
 ## Concepts mapping
 
-- `bors r+` approval → `@mergify queue` command
+- `bors r+` approval → [`@mergifyio queue`](/commands/queue) command
 - batch size → Mergify batches with configurable size
 - priority → Mergify queue priorities
 
 ## Minimal equivalent configuration
 
-Queue and rule that enqueue on approval and pass checks:
+A queue that only accepts approved pull requests whose checks pass:
 
 ```yaml title=.mergify.yml
 queue_rules:
@@ -44,6 +44,11 @@ queue_rules:
       - check-success = ci
       - "#approved-reviews-by>=1"
 ```
+
+`queue_conditions` gates entry to the queue rather than triggering it: a pull
+request that matches them is queued once somebody runs `@mergifyio queue`, which
+is what `bors r+` maps to. To have Mergify queue pull requests on its own rather
+than on that command, set up [Auto-Merge](/merge-protections/auto-merge).
 
 :::tip
 Use `batch_size > 1` to emulate Bors batches.
