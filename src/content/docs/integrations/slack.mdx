@@ -30,11 +30,12 @@ Once connected, you can configure different types of notifications based on your
 
 Get real-time updates about your Merge Queue activities directly in Slack channels.
 
-Merge Queue notifications include:
+Merge Queue notifications cover:
 - Pull requests entering the queue
-- Pull requests being merged
-- Queue failures and retries
-- Pull requests being removed from the queue
+- The queue starting and finishing checks for a pull request
+- Pull requests leaving the queue, and pull requests merged out of it
+- Queue [pauses](/merge-queue/pause) being created, updated, or deleted
+- [Scheduled freezes](/merge-protections/freeze) being created, updated, or deleted
 
 To set up Merge Queue notifications:
 
@@ -57,13 +58,20 @@ Those notifications are useful for:
 completions, allowing your team to stay informed about build statuses, test
 failures, and deployment activities.
 
-CI Insights notifications include:
-- **Repository and Branch**: Which repository and branch the job ran on
-- **Job Information**: Job name, pipeline name, and duration
-- **Status**: Success, failure, cancellation with appropriate emoji
-- **Commit Details**: Commit SHA and message
-- **Links**: Direct links to the job logs and commit in GitHub
-- **Flaky Detection**: Indication if a job was flagged as flaky
+A CI Insights notification is posted when a job finishes, and contains:
+- **Job and pipeline**: the job name, linked to the job in your CI, and the
+  pipeline it belongs to
+
+- **Repository and branch**: the repository, linked to GitHub, and the branch
+  the job ran on
+
+- **Conclusion**: how the job ended, with a matching emoji, when it finished,
+  and how long it took
+
+- **Pull request**: the pull request the job ran on, when there is one
+
+- **A link to CI Insights**: a button opening that job's executions in the
+  Mergify dashboard
 
 To configure CI Insights Slack notifications:
 
@@ -75,34 +83,42 @@ To configure CI Insights Slack notifications:
 
 ### Notification Criteria
 
-You can filter notifications based on:
+You can filter notifications on:
 
-- **Repository**: Specific repositories to monitor
-- **Job Name**: Specific jobs within your CI pipeline
-- **Pipeline Name**: Specific workflows or pipelines
-- **Branch Name**: Target specific branches (main, release branches, etc.)
-- **Job Conclusion**: Success, failure, cancelled, or any combination
+- **Repository**: the repositories to watch
+- **Branch**: the branches the job ran on
+- **Pipeline**: the pipelines or workflows the job belongs to
+- **Job**: the job names
+- **Job conclusion**: `action_required`, `cancelled`, `failure`, `neutral`, `skipped`, `success`, or `timed_out`
+
+Each filter is a list of exact values picked from what CI Insights has already
+recorded, and leaving one empty means "all". Wildcards and patterns are not
+supported: a job matches only when its branch, pipeline, job name, and
+conclusion are among the values you selected, so a release branch has to be
+listed by name rather than as `release/*`.
 
 ### Example Configurations
 
 #### Critical Failures Only
-Monitor failures on main branch for production-related jobs:
+Monitor failures on the main branch for production-related jobs:
 - Repository: `your-org/your-repo`
 - Branch: `main`
-- Job Conclusion: `failure`
-- Job Name: `deploy`, `security-scan`, `integration-tests`
+- Job conclusion: `failure`
+- Job: `deploy`, `security-scan`, `integration-tests`
 
 #### Release Monitoring
-Monitor all activities on release branches:
-- Repository: `your-org/your-repo`  
-- Branch: `release/*`
-- Job Conclusion: `failure`, `success`
+Monitor successes and failures on the release branches you are shipping from,
+each one listed by name:
+- Repository: `your-org/your-repo`
+- Branch: `release/2026.1`, `release/2026.2`
+- Job conclusion: `failure`, `success`
 
 #### Test Failure Alerts
-Alert on any test failures across all branches:
+Alert on failures of your test jobs across all branches, leaving the branch
+filter empty:
 - Repository: `your-org/your-repo`
-- Job Conclusion: `failure`
-- Job Name: `*test*`
+- Job conclusion: `failure`
+- Job: `unit-tests`, `integration-tests`
 
 ### Best Practices
 
@@ -115,8 +131,9 @@ Alert on any test failures across all branches:
 3. **Focus on Critical Paths**: Prioritize notifications for jobs that affect
    production deployments or security
 
-4. **Monitor Flaky Tests**: Set up specific notifications for flaky test
-   detection to improve test reliability
+4. **Monitor Flaky Tests**: CI Insights notifications cannot filter on flaky
+   tests. Use the Test Insights notifications below, which fire when a test is
+   quarantined or dequarantined
 
 5. **Team-Specific Filters**: Configure different notification rules for
    different teams based on their responsibilities
