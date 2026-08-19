@@ -52,6 +52,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run Go Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   run: go test -v ./... 2>&1 | go-junit-report > junit.xml
 ```
@@ -82,7 +83,7 @@ After pushing these changes:
 
 You can then review your test results, including any failures or flaky tests,
 directly in the [Test Insights
-dashboard](https://dashboard.mergify.com/test-insights/jobs).
+dashboard](https://dashboard.mergify.com/test-insights/detection).
 
 ## Troubleshooting Tips
 
