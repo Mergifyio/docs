@@ -71,11 +71,14 @@ Boolean attributes are used on their own or negated with `-`:
 ### Matching the Pull Request Author
 
 Use `{{ author }}` as a value to match an attribute against the pull request's
-author. It's resolved as a native, built-in value and is accepted everywhere a
-value can appear, so existing configurations keep working unchanged.
+author. Mergify resolves it to the author's login rather than rendering it as a
+template. It is accepted wherever a text value is expected (logins, branches,
+labels, check names), but not by numeric, timestamp or Boolean attributes,
+which reject it as an invalid value.
 
 ```yaml
-# True if the event sender is the pull request author
+# True if the command sender is the pull request author
+# (`sender` is only available in `commands_restrictions`)
 - sender = {{ author }}
 # True if a commit is authored by the pull request author
 - commits[*].author = {{ author }}
@@ -111,11 +114,16 @@ therefore does not equal the length of `files` on a pull request containing a re
 
 ### GitHub Rulesets and Branch Protection Attributes
 
-Mergify loads these attributes from the GitHub rulesets and branch protection
-rules active on the pull request's base branch. They are read-only: Mergify
-populates their values from GitHub, so you cannot set them in your
-configuration. Use them in conditions to gate on the same review and protection
-requirements that GitHub enforces.
+Mergify derives these attributes from the GitHub rulesets and branch protection
+rules active on the pull request's base branch. It evaluates them itself: when a
+ruleset requires code owner review or last-push approval, Mergify [injects the
+matching condition](/merge-queue/github-rulesets) into the rules it evaluates
+and shows it in the check summary.
+
+Apart from `github-review-decision`, they cannot be written in your own
+conditions: a configuration using one is rejected with an error saying the
+attribute is evaluated internally by Mergify. They are documented here because
+you will see them in the conditions Mergify reports.
 
 <PullRequestAttributesTable source="github" />
 
@@ -387,7 +395,7 @@ requests without triggering actions.
 
 1. Navigate to your [Mergify dashboard](https://dashboard.mergify.com).
 2. Select the repository you want to test.
-3. Click on the "Config Editor" tab.
+3. Open "Config Editor" from the sidebar.
 
 <Image src={configEditorScreenshot} alt="Mergify Configuration Editor" />
 
