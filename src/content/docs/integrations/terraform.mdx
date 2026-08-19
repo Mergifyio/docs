@@ -76,9 +76,9 @@ Tokens are read from, in priority order:
 Manage which Mergify products are enabled on a single GitHub repository.
 
 ```hcl
-resource "mergify_repository_products" "monorepo" {
-  owner      = "Mergifyio"
-  repository = "monorepo"
+resource "mergify_repository_products" "hello_world" {
+  owner      = "octo"
+  repository = "hello-world"
   products   = ["merge_queue", "merge_protections", "ci_insights", "workflow_automation"]
 }
 ```
@@ -94,7 +94,7 @@ repository of an organization is discovered by Mergify.
 
 ```hcl
 resource "mergify_organization_default_products" "defaults" {
-  organization = "Mergifyio"
+  organization = "octo"
   products     = ["merge_queue", "merge_protections"]
 }
 ```
