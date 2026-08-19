@@ -52,6 +52,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run Go Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   run: go test -v ./... 2>&1 | go-junit-report > junit.xml
 ```

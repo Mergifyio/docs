@@ -80,6 +80,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run JUnit Tests and Generate Report
+  id: tests
   continue-on-error: true
   run: mvn test
 ```
@@ -92,6 +93,7 @@ For Gradle projects:
 
 ```yaml
 - name: Run JUnit Tests and Generate Report
+  id: tests
   run: ./gradlew test
 ```
 
