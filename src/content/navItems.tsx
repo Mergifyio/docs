@@ -349,6 +349,7 @@ const navItems: NavItem[] = [
     icon: 'lucide:terminal',
     children: [
       { title: 'Usage', path: '/cli/usage', icon: 'lucide:terminal' },
+      { title: 'Agent Skills', path: '/cli/agents', icon: 'lucide:bot' },
       {
         title: 'Reference',
         path: '/cli/',

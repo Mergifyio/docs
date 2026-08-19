@@ -1,0 +1,138 @@
+---
+title: Agent Skills
+description: Install the Mergify Agent Skills in Claude Code, Codex, or any skills.sh agent, so your coding agent can drive the Mergify CLI for you.
+---
+
+Mergify ships Agent Skills that teach an AI coding agent how to use the
+Mergify CLI: how to read the merge queue, how to find out why a pull request
+was dequeued, what belongs in a `.mergify.yml`, how to push a stack. They live
+in the [`Mergifyio/mergify-cli`](https://github.com/Mergifyio/mergify-cli)
+repository under `skills/`, are Apache-2.0, and ship as one bundle.
+
+:::caution
+  The skills drive the `mergify` command. They are instructions for using the
+  CLI, not a standalone API client, so an agent that cannot run a shell cannot
+  use them. Install and authenticate the CLI first (see the
+  [CLI installation guide](/cli/usage)), or every skill fails on its first
+  command.
+:::
+
+## What the bundle contains
+
+- **`mergify-merge-queue`** queues and dequeues pull requests, reads queue
+  status, works out why a pull request left the queue and which check failed,
+  and pauses or resumes merging. See [Merge Queue](/merge-queue).
+
+- **`mergify-events`** reads the [Activity Log](/api/activity-log) for one pull
+  request or for a whole repository, and reconstructs a pull request's queue
+  lifecycle.
+
+- **`mergify-config`** validates a `.mergify.yml` against the schema, and
+  simulates what your rules would do on a real pull request. See
+  [Configuration File](/configuration/file-format).
+
+- **`mergify-merge-protections`** sets up pull request dependencies, delayed
+  merges, and [scheduled freezes](/merge-protections/freeze).
+
+- **`mergify-ci`** uploads JUnit test results, detects git refs, and sets
+  [Merge Queue Scopes](/merge-queue/scopes). See [CI Insights](/ci-insights).
+
+- **`mergify-stack`** turns a branch of commits into
+  [a stack of pull requests](/stacks) and keeps them rebased.
+
+## Before you install
+
+Every skill shells out to `mergify`, so two things have to be true before any
+of them is useful:
+
+1. The CLI is installed and on the agent's `PATH`. On macOS,
+   `brew install mergifyio/tap/mergify-cli`. For Linux, Windows, and CI
+   runners, see the [CLI installation guide](/cli/usage).
+
+2. A token is available to it. See [Authentication](#authentication) below.
+
+These skills only work in a terminal agent that can run the binary, such as
+Claude Code, Codex, or Cursor. A browser-only chat cannot run it, so the skills
+do nothing there.
+
+## Install
+
+### Claude Code
+
+```text
+/plugin install mergify@claude-plugins-official
+```
+
+The `claude-plugins-official` marketplace ships with Claude Code, so there is
+nothing to add first. You can also run `/plugin` on its own, open **Discover**,
+and search for `mergify`.
+
+### Codex and other skills.sh agents
+
+[skills.sh](https://skills.sh) installs the same bundle into Codex, Cursor,
+Cline, Copilot, and dozens of other agents:
+
+```bash
+npx skills add Mergifyio/mergify-cli
+```
+
+It detects the agent it is running under and writes the skills where that agent
+looks for them. To pick the target yourself, or to install once for every
+project instead of only the current one:
+
+```bash
+npx skills add Mergifyio/mergify-cli --agent codex --global
+```
+
+Check the result with `npx skills list`.
+
+## Authentication
+
+The CLI resolves a token in this order: the `--token` option on the command,
+then `MERGIFY_TOKEN`, then `GITHUB_TOKEN`. Stacks commands fall back once more
+to `gh auth token`. Set an environment variable rather than passing `--token`,
+so the agent does not have to put a secret on a command line:
+
+```bash
+export MERGIFY_TOKEN=your_token_here
+```
+
+Which token to use depends on what you want the agent to do.
+
+**A GitHub token** covers everything except CI result uploads. Stacks needs one
+specifically, because it creates and updates pull requests through the GitHub
+API, and the Mergify API accepts a GitHub personal access token too. If you
+already have the [GitHub CLI](https://cli.github.com/) installed and
+authenticated, Stacks commands pick up its token on their own and you can skip
+this.
+
+**A Mergify application key** covers the commands that call the Mergify API:
+queue status, Activity Log, freezes, and CI Insights uploads. Create one from
+your [dashboard](https://dashboard.mergify.com). It will not work for Stacks.
+
+Application keys come with either the `admin` scope or the `ci` scope, and
+neither is read-only. `admin` covers the API except result uploads and Merge
+Queue Scopes, which need a `ci` key, so one key does not cover every command
+either. A key also belongs to a GitHub account rather than to a single
+repository, so it reaches every repository that account can see. Read
+[Application Key Scopes](/api/usage#application-key-scopes) before you hand one
+to an agent.
+
+## Try it
+
+With the CLI installed and the skills in place, ask for what you want in plain
+language:
+
+- "Why did pull request #1234 leave the merge queue?"
+- "Validate this .mergify.yml, then show me what it would do on #1234."
+- "Freeze the queue until Monday morning."
+- "Turn these four commits into a stack and push it."
+
+The agent picks the skill that matches and runs the CLI itself.
+
+:::tip
+  Want to hand your agent a single URL instead? Point it at
+  [docs.mergify.com/stacks/agents](/stacks/agents), a page written for the
+  agent to read, which walks it through installing the CLI and setting up
+  Stacks on its own.
+:::
