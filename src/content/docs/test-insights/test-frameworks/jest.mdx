@@ -73,6 +73,7 @@ For example, in your workflow file:
 
 ```yaml
 - name: Run Jest Tests and Generate JUnit Report
+  id: tests
   continue-on-error: true
   env:
     JEST_JUNIT_OUTPUT_DIR: .
