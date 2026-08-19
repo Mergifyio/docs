@@ -83,19 +83,10 @@ installed as the `mergify_cli_version` output:
 The CLI needs an authentication token to interact with your repositories.
 Depending on the command, this can be a GitHub token or a Mergify API token.
 
-If you have the [GitHub CLI](https://cli.github.com/) (`gh`) installed and
-authenticated, the Mergify CLI automatically uses its token for commands that
-require GitHub access. No extra configuration needed.
-
-Otherwise, create a [personal access
-token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-and either set it as an environment variable:
-
-```bash
-export GITHUB_TOKEN=your_token_here
-```
-
-Or pass it directly to any command:
+Most commands that need one resolve it in the same order: the `--token`
+option, then the `MERGIFY_TOKEN` environment variable, then `GITHUB_TOKEN`.
+Stacks commands fall back once more to `gh auth token`. There is no global
+`--token` on `mergify` itself, so pass it to the subcommand:
 
 ```bash
 mergify <command> --token your_token_here
@@ -103,3 +94,37 @@ mergify <command> --token your_token_here
 
 Each command lists the authentication and other options it accepts under its
 **Global options** in the [CLI reference](/cli).
+
+### GitHub token
+
+Stacks commands act on pull requests through the GitHub API and need a GitHub
+token specifically. If you have the [GitHub CLI](https://cli.github.com/)
+(`gh`) installed and authenticated, the Mergify CLI uses its token
+automatically. No extra configuration needed.
+
+Otherwise, create a [personal access
+token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+and set it as an environment variable:
+
+```bash
+export GITHUB_TOKEN=your_token_here
+```
+
+### Mergify token
+
+Commands that call the Mergify API, such as `mergify queue`, `mergify events`,
+`mergify freeze`, and `mergify ci`, accept a Mergify application key. Create
+one from your [dashboard](https://dashboard.mergify.com) and set it as
+`MERGIFY_TOKEN`:
+
+```bash
+export MERGIFY_TOKEN=your_token_here
+```
+
+An application key carries either the `admin` scope or the `ci` scope, and
+belongs to a GitHub account rather than to a single repository. See
+[Application Key Scopes](/api/usage#application-key-scopes) for what each one
+covers. The Mergify API also accepts a GitHub personal access token, so one
+GitHub token can serve every command except `mergify ci junit-process`: it
+needs a `ci` application key, and it is the one command that never falls back
+to `GITHUB_TOKEN`.

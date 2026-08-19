@@ -17,9 +17,9 @@ Quick install:
 
 ## 2. Install skills for your AI coding agent
 
-Mergify ships skills that teach AI coding agents how to work with Stacks, so
-they run `mergify stack push` instead of `git push`, amend commits instead of
-creating fixups, and follow stack conventions automatically.
+Mergify ships [Agent Skills](/cli/agents) that teach AI coding agents how to
+work with Stacks, so they run `mergify stack push` instead of `git push`, amend
+commits instead of creating fixups, and follow stack conventions automatically.
 
 **Claude Code:**
 
@@ -27,29 +27,20 @@ creating fixups, and follow stack conventions automatically.
 /plugin install mergify@claude-plugins-official
 ```
 
-The `claude-plugins-official` marketplace ships with Claude Code, so there's
-nothing to add first. Or run `/plugin` on its own, open **Discover**, and
-search for `mergify`.
-
-**Any agent supporting [skills.sh](https://skills.sh)** (Cursor, Cline, and
-others):
+**Codex, Cursor, and any other [skills.sh](https://skills.sh) agent:**
 
 ```bash
 npx skills add Mergifyio/mergify-cli
 ```
 
+Either command installs the whole bundle, which also covers the merge queue,
+CI Insights, config validation, and scheduled freezes. See
+[Agent Skills](/cli/agents) for what each skill does and which token it needs.
+
 :::tip
   Prefer to hand a single URL to your agent? Point it at
   [docs.mergify.com/stacks/agents](/stacks/agents). That page walks the agent
   through installing the CLI and the Stacks skill itself.
-:::
-
-:::tip
-  The `mergify` plugin also ships skills for other Mergify features:
-  [Merge Queue](/merge-queue), [CI Insights](/ci-insights),
-  [config validation](/configuration/file-format), and
-  [scheduled freezes](/merge-protections/freeze). Installing it enables all of
-  them.
 :::
 
 ## 3. Configure GitHub
