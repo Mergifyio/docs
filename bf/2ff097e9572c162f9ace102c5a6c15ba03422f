@@ -1,0 +1,1 @@
+Copilot review: the CLI snippet kept the silent-success failure mode — bazel query piped into jq loses its exit code and still writes an empty scopes.json. Captured the status and guarded the empty diff, matching the other two snippets.
