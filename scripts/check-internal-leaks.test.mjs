@@ -10,6 +10,32 @@ describe('scanText', () => {
     expect(rulesOf('https://app.plain.com/workspace/x')).toEqual(['support-ticket']);
   });
 
+  it('catches bare tracker ticket references', () => {
+    expect(rulesOf('Tracked in MRGFY-1234.')).toEqual(['ticket-ref']);
+    // The form that reached the public site: inside a CLI example, where it
+    // reads as a plausible value rather than as a leak.
+    expect(rulesOf('mergify tests quarantines add --reason "flaky, see MRGFY-1234"')).toEqual([
+      'ticket-ref',
+    ]);
+    // The branch-name spelling of the same key.
+    expect(rulesOf('git checkout devs/jd/mrgfy-8721-fix-the-thing')).toEqual(['ticket-ref']);
+    expect(rulesOf('helpdesk HD-18')).toEqual(['ticket-ref']);
+    // A tracker URL leaks twice over; both rules report it.
+    expect(rulesOf('https://linear.app/mergify/issue/MRGFY-1234')).toEqual([
+      'ticket-ref',
+      'internal-tracker',
+    ]);
+  });
+
+  it('leaves example values that look like ticket keys alone', () => {
+    expect(rulesOf('encrypted with AES-256 and served as UTF-8')).toEqual([]);
+    expect(rulesOf('meets WCAG-2 contrast, over HTTP-2, dated 2026-07')).toEqual([]);
+    // Another tracker's keys are the reader's own, not ours.
+    expect(rulesOf('a Jira key such as PROJ-42 or ABC-7')).toEqual([]);
+    // Lowercase two-letter keys are indistinguishable from slug fragments.
+    expect(rulesOf('![diagram](./queue-hd-2.png)')).toEqual([]);
+  });
+
   it('catches private repositories and internal source paths', () => {
     expect(rulesOf('mergify_shadow_office/models/billing.py')).toEqual(['internal-source-path']);
     expect(rulesOf('cloned from Mergifyio/monorepo')).toEqual(['internal-source-path']);
@@ -17,7 +43,7 @@ describe('scanText', () => {
   });
 
   it('catches internal trackers and hostnames', () => {
-    expect(rulesOf('https://linear.app/mergifyio/issue/MRGFY-1')).toEqual(['internal-tracker']);
+    expect(rulesOf('https://linear.app/mergifyio/issue/1')).toEqual(['internal-tracker']);
     expect(rulesOf('https://www.notion.so/mergify/runbook')).toEqual(['internal-tracker']);
     expect(rulesOf('https://admin.mergify.com/orgs')).toEqual(['internal-host']);
   });
@@ -51,6 +77,17 @@ describe('scanText', () => {
     ]);
     // ...and only the next non-blank line.
     expect(rulesOf('{/* internal-leaks: allow support-ticket */}\nfine\nT-1234\n')).toEqual([
+      'support-ticket',
+    ]);
+    // A line that trips two rules needs both named, so the directive takes a
+    // comma-separated list.
+    expect(
+      rulesOf(
+        '{/* internal-leaks: allow ticket-ref, internal-tracker — public */}\nMRGFY-1 at linear.app/x\n'
+      )
+    ).toEqual([]);
+    // The reason is prose: its words are not read as further rule ids.
+    expect(rulesOf('# internal-leaks: allow internal-tracker support-ticket\nT-1234\n')).toEqual([
       'support-ticket',
     ]);
   });
