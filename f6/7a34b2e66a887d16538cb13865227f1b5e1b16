@@ -1,0 +1,1 @@
+review: quote the jq filters and pipe with printf instead of echo, per the ScopesDetection thread
