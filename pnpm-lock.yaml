@@ -231,8 +231,8 @@ importers:
         specifier: ^7.37.5
         version: 7.37.5(eslint@10.8.1)
       globals:
-        specifier: ^17.10.0
-        version: 17.10.0
+        specifier: ^17.11.0
+        version: 17.11.0
       hast-util-from-html:
         specifier: ^2.0.3
         version: 2.0.3
@@ -3067,8 +3067,8 @@ packages:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
     engines: {node: '>=18'}
 
-  globals@17.10.0:
-    resolution: {integrity: sha512-V0kztuWST2k8A/VbxAY8+L+7+Rgo3fyA24IHRLrZp7HOzJjV0gHSaZUjK9lpP/IrBSNite2tZ1prhRkinRu1CA==}
+  globals@17.11.0:
+    resolution: {integrity: sha512-Z2I8hM+PbJDXQDq3Icgpzv+mPdwr68iZUU9d5WW4FuXfDUQfkZaZuvjMv42/5crNyw154+9+VWXbYrUgDXbxNw==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -8342,7 +8342,7 @@ snapshots:
       astro-eslint-parser: 3.0.0(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)
       eslint: 10.8.1
       espree: 11.2.0
-      globals: 17.10.0
+      globals: 17.11.0
       postcss: 8.5.26
       postcss-selector-parser: 7.1.5
     optionalDependencies:
@@ -8676,7 +8676,7 @@ snapshots:
 
   globals@15.15.0: {}
 
-  globals@17.10.0: {}
+  globals@17.11.0: {}
 
   globalthis@1.0.4:
     dependencies:
