@@ -1,1 +1,6 @@
-Copilot review: the CLI snippet kept the silent-success failure mode — bazel query piped into jq loses its exit code and still writes an empty scopes.json. Captured the status and guarded the empty diff, matching the other two snippets.
+Revision history for #12468:
+
+rev 2 (content) 2026-08-20 13:00 UTC — Copilot review: the CLI snippet kept the silent-success failure mode — bazel query piped into jq loses its exit code and still writes an empty scopes.json. Captured the status and guarded the empty diff, matching the other two snippets.
+rev 1 (initial) 2026-08-20 13:00 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12468,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"1de5176612bbbbd450e0384d1cd5e5f6e20fcaac","timestamp_iso":"2026-08-20T13:00:57Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"1de5176612bbbbd450e0384d1cd5e5f6e20fcaac","new_sha":"bf2ff097e9572c162f9ace102c5a6c15ba03422f","timestamp_iso":"2026-08-20T13:00:57Z","reason":"Copilot review: the CLI snippet kept the silent-success failure mode — bazel query piped into jq loses its exit code and still writes an empty scopes.json. Captured the status and guarded the empty diff, matching the other two snippets.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/1de5176612bbbbd450e0384d1cd5e5f6e20fcaac...bf2ff097e9572c162f9ace102c5a6c15ba03422f"}]} -->
