@@ -32,17 +32,21 @@ agent to install and nothing to run in your CI.
 
 ## Setting up the integration
 
-1. In the Mergify dashboard, go to
-   [`Integrations → Datadog`](https://dashboard.mergify.com/integrations/datadog).
-   Installing the Mergify tile from Datadog's integration catalog and clicking
-   **Connect Accounts** lands in the same place.
+1. Install the [Mergify tile](https://docs.datadoghq.com/integrations/mergify_oauth/)
+   from Datadog's integration catalog and click **Connect Accounts**. The
+   connection starts on the Datadog side, so the **Connect Your Datadog
+   Account** button on the Mergify dashboard's
+   [`Integrations → Datadog`](https://dashboard.mergify.com/integrations/datadog)
+   page opens Datadog's catalog rather than connecting from Mergify.
+
    <Image src={IntegrationPageScreenshot} alt="The Datadog integration in the Mergify dashboard's integrations list"/>
 
-2. Connect your Datadog account. Pick the
+2. Authorize Mergify from the
    [Datadog site](https://docs.datadoghq.com/getting_started/site/) your
-   organization uses (US1, US3, US5, EU1, US1-FED, or AP1), then authorize
-   Mergify. Mergify creates an API key scoped to the integration and starts
-   pushing metrics to that site.
+   organization uses. Mergify supports US1, US3, US5, EU1, US1-FED, and AP1, and
+   connects to whichever one you start from. Datadog then asks which GitHub
+   organization to connect. Mergify creates an API key scoped to the integration
+   and starts pushing metrics to that site.
 
 3. Choose what to monitor. For each repository, select the merge queue
    **base branches** you want metrics for: the branches your queued pull
@@ -53,6 +57,80 @@ agent to install and nothing to run in your CI.
   you add a new release branch, add it to this list too, or its queue activity
   will be missing from Datadog.
 :::
+
+## Changing your Datadog site
+
+To switch the Datadog site your metrics go to, connect Mergify again from the
+site you want to move to, whether you are changing region or consolidating on
+a different Datadog organization. You do not need to know which site you are
+on today: reconnecting replaces the previous connection, whatever it was.
+
+1. Sign in to Datadog on the site you are moving to.
+
+2. In that account, install the [Mergify
+   tile](https://docs.datadoghq.com/integrations/mergify_oauth/) and click
+   **Connect Accounts**, exactly as you did when you [first
+   connected](#setting-up-the-integration). There is no other way in: Mergify
+   has no control that starts the change, and no API or CLI equivalent.
+
+3. Choose the same GitHub organization as before, and authorize Mergify. The
+   site you end up on is the one you started from, so there is nothing else to
+   pick.
+
+The Datadog permissions in [Prerequisites](#prerequisites) apply again here, but
+to the Datadog organization you are moving to; the Mergify role requirement is
+unchanged.
+
+Metrics start arriving on the new site at the next publication, and the old site
+stops receiving new points at the same moment. If you start the authorization
+and do not finish it, nothing changes: the previous connection stays in place
+until the new one completes.
+
+### What moves with you, and what does not
+
+Your monitored repositories and their base branches are preserved. They belong
+to your GitHub organization rather than to the Datadog connection, so you do not
+have to select them again.
+
+What stays behind on the old site:
+
+- **The metrics already sent there.** Mergify publishes new points from the
+  moment you reconnect; it does not copy history to the new site.
+
+- **Anything you built on those metrics.** Dashboards cloned from the Mergify
+  tile and any monitors you created live in the old Datadog organization.
+  Recreate them on the new site.
+
+- **The API key Mergify created.** Reconnecting creates a new key on the new
+  site and does not revoke the old one, so delete it yourself in the old Datadog
+  organization once the switch is done.
+
+:::note
+  If Datadog refuses the new key because a Mergify one already exists in that
+  account, delete that key in Datadog and reconnect: Mergify creates the key it
+  needs on the next authorization.
+
+  [Contact support](/support) if no points appear on the new site after a few
+  publication cycles.
+:::
+
+## Removing the integration
+
+To stop sending metrics without disconnecting anything, remove every repository
+from the integration page in the Mergify dashboard. Metrics only cover the
+repositories you select, so an empty list stops them. The connection and the API
+key stay in place, ready if you add a repository back.
+
+To disconnect entirely, delete the API key Mergify created in your Datadog
+organization. Mergify checks that key every minute and drops the connection as
+soon as it stops working, so nothing is left behind on either side. This is the
+only route that removes both halves, and it is done from Datadog: the Mergify
+dashboard has no disconnect control, because deleting the connection there would
+leave the API key live in your Datadog account.
+
+Removing the key needs permission to manage API keys in Datadog. If that is
+someone else in your organization, ask them to delete it; clearing the
+repository list stops the metrics in the meantime.
 
 ## Metrics
 
@@ -173,9 +251,9 @@ gives you total wasted time without counting CI.
 
 The [Mergify tile](https://docs.datadoghq.com/integrations/mergify_oauth/) ships
 a **Mergify - Merge Queue Stats** dashboard that mirrors the merge queue
-statistics page. In Datadog, open the
-[Mergify integration page](https://app.datadoghq.com/integrations?search=mergify&integrationId=mergify-oauth)
-and find it under the **Monitoring Resources** tab. Clone it to adapt it to
+statistics page. In Datadog, search for `mergify` in your
+account's integration catalog, open the Mergify tile, and find the
+dashboard under the **Monitoring Resources** tab. Clone it to adapt it to
 your own repositories, or build your own from the metrics above.
 
 Since the metrics are ordinary Datadog metrics, you can alert on them with
