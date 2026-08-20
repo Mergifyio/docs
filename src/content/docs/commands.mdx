@@ -27,6 +27,11 @@ guide to getting started:
    `@Mergifyio` to ensure they're correctly identified and executed by the bot.
    For instance, to rebase your pull request, you'd type `@Mergifyio rebase`.
 
+   Mergify only reads a command that starts the comment, with a single space
+   between `@Mergifyio` and the command name. `Please @Mergifyio rebase` runs
+   nothing, and neither does a command written after a line of text. Arguments
+   go on that same line; anything on the lines below is left alone.
+
 3. **Submit the Comment**: Click on the "Comment" button to post your command.
    Mergify will immediately detect the command and begin processing your
    request. Mergify will acknowledge the comment with a 👍 reaction and you'll
