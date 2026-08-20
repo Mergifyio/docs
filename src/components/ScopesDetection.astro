@@ -28,7 +28,7 @@ HEAD=$(echo "$REFS" | awk '/^Head:/ {print $2}')
 
 ${command}
 
-mergify ci scopes-send --file scopes.json`;
+mergify ci scopes-send --scopes-json scopes.json`;
 ---
 
 <p>
