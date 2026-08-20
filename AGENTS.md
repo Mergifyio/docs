@@ -168,6 +168,10 @@ comments, frontmatter, alt text, or screenshots:
 
 - **Support ticket and thread IDs** - Plain refs (`T-1234`), thread IDs
   (`th_01JQ...`), `app.plain.com` links, or the equivalent from any helpdesk.
+- **Tracker ticket references** - a bare issue key (`MRGFY-1234`, `HD-18`), with
+  or without a link, including the lowercase form a branch name carries. A key
+  dropped into an example value - `--reason "flaky, see MRGFY-1234"` - is the
+  one that survives review, because it reads as a plausible sample.
 - **Customer, org, and account identifiers** - a customer's GitHub org or repo,
   account and subscription IDs, Stripe customer or invoice IDs, email addresses,
   real seat or contributor counts.

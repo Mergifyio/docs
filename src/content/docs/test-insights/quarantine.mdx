@@ -35,7 +35,7 @@ which is handy for scripting or for letting an AI coding agent quarantine a flak
 ```bash
 # Quarantine a test.
 mergify tests quarantines add -r owner/repo \
-  --reason "flaky — tracked in MRGFY-1234" \
+  --reason "flaky under load, fix in progress" \
   "tests/auth/test_login.py::test_login_timeout"
 
 # Remove it from quarantine.
