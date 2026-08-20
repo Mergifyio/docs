@@ -1,1 +1,6 @@
-review: quote the jq filters and pipe with printf instead of echo, per the ScopesDetection thread
+Revision history for #12455:
+
+rev 2 (content) 2026-08-20 12:03 UTC — review: quote the jq filters and pipe with printf instead of echo, per the ScopesDetection thread
+rev 1 (initial) 2026-08-20 12:03 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12455,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"ccec4b4c1968646f2bbabc018e0c188e05de6477","timestamp_iso":"2026-08-20T12:03:01Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"ccec4b4c1968646f2bbabc018e0c188e05de6477","new_sha":"f67a34b2e66a887d16538cb13865227f1b5e1b16","timestamp_iso":"2026-08-20T12:03:01Z","reason":"review: quote the jq filters and pipe with printf instead of echo, per the ScopesDetection thread","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/ccec4b4c1968646f2bbabc018e0c188e05de6477...f67a34b2e66a887d16538cb13865227f1b5e1b16"}]} -->
