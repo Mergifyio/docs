@@ -118,6 +118,7 @@ These optional Git config settings let you customize Stacks behavior:
 |---------|---------|-------------|
 | `mergify-cli.stack-branch-prefix` | `stack/{username}` | Prefix for remote branch names |
 | `mergify-cli.stack-create-as-draft` | `false` | Create PRs as drafts by default |
+| `mergify-cli.stack-github-native` | `false` | Also register the stack with GitHub's stacking API |
 | `mergify-cli.stack-keep-pr-title-body` | `false` | Don't overwrite PR title/body on updates |
 | `mergify-cli.stack-revision-history` | `true` | Keep a revision-history comment on each PR |
 
@@ -126,6 +127,16 @@ Example:
 ```bash
 git config mergify-cli.stack-create-as-draft true
 ```
+
+`mergify stack push` has a flag for each of these (`--branch-prefix`,
+`--draft`, `--github-native`, `--keep-pull-request-title-and-body` and
+`--no-revision-history`) to override the setting for a single push.
+
+:::note
+  `mergify-cli.stack-github-native` is experimental. On top of the usual push,
+  it registers the stack with GitHub's own stacking API, so GitHub shows the
+  pull requests as a stack of its own.
+:::
 
 ## Next Steps
 
