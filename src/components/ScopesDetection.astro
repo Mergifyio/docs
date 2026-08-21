@@ -5,6 +5,14 @@
  * batch-aware note are identical across build tools — only the command that
  * turns the BASE..HEAD diff into scopes.json differs, passed as `command`.
  *
+ * `--scopes-json` is the flag that reads the `{"scopes": [...]}` object every
+ * `command` writes; `--scopes-file` next to it takes one scope per line instead.
+ * The `--format json` refs are parsed with jq rather than scraped out of the
+ * default `Base: <ref>` text, which is a human format with no stability promise.
+ * `printf '%s'` rather than `echo`, whose handling of backslashes in the JSON
+ * varies by shell; the format string stays `%s` with no `\n` because this
+ * template literal would turn that escape into a real newline inside the quotes.
+ *
  * Pass `command` with String.raw so the bash keeps its literal backslashes
  * (line continuations, `\n` in awk/jq) instead of the JS template literal eating
  * them.
@@ -22,9 +30,9 @@ export interface Props {
 
 const { command } = Astro.props as Props;
 
-const code = `REFS=$(mergify ci git-refs)
-BASE=$(echo "$REFS" | awk '/^Base:/ {print $2}')
-HEAD=$(echo "$REFS" | awk '/^Head:/ {print $2}')
+const code = `REFS=$(mergify ci git-refs --format json)
+BASE=$(printf '%s' "$REFS" | jq -r '.base')
+HEAD=$(printf '%s' "$REFS" | jq -r '.head')
 
 ${command}
 
