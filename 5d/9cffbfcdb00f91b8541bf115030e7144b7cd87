@@ -1,1 +1,6 @@
-fix lint: remark-lint-list-item-spacing wants a blank line between multi-line list items
+Revision history for #12476:
+
+rev 2 (content) 2026-08-21 09:13 UTC — fix lint: remark-lint-list-item-spacing wants a blank line between multi-line list items
+rev 1 (initial) 2026-08-21 09:13 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12476,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"b7cef70da9e286ff9af5aae6702775329068739d","timestamp_iso":"2026-08-21T09:13:53Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"b7cef70da9e286ff9af5aae6702775329068739d","new_sha":"5d9cffbfcdb00f91b8541bf115030e7144b7cd87","timestamp_iso":"2026-08-21T09:13:53Z","reason":"fix lint: remark-lint-list-item-spacing wants a blank line between multi-line list items","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/b7cef70da9e286ff9af5aae6702775329068739d...5d9cffbfcdb00f91b8541bf115030e7144b7cd87"}]} -->
