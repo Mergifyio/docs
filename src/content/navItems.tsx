@@ -336,7 +336,6 @@ const navItems: NavItem[] = [
           { title: 'Statistics', path: '/api/statistics' },
           { title: 'Simulator', path: '/api/simulator' },
           { title: 'Activity Log', path: '/api/activity-log' },
-          { title: 'Badges', path: '/api/badges' },
           { title: 'Scheduled Freeze', path: '/api/scheduled-freeze' },
           { title: 'CI Insights', path: '/api/ci-insights' },
           { title: 'Test Insights', path: '/api/test-insights' },

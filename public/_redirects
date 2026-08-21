@@ -13,6 +13,12 @@
 /api-usage/ /api/usage 301
 /api/eventlogs /api/activity-log/ 301
 /api/eventlogs/ /api/activity-log/ 301
+
+# The badge API is retired, so /api/badges has no successor page. Send it to
+# the reference index rather than 404ing a URL the sidebar linked site-wide.
+/api/badges /api/ 301
+/api/badges/ /api/ 301
+
 /examples /integrations 301
 /examples/ /integrations 301
 /examples/_ /integrations/:splat 301

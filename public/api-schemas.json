@@ -715,213 +715,6 @@
         }
       }
     },
-    "/badges/{owner}/{repository}.png": {
-      "get": {
-        "tags": [
-          "badges"
-        ],
-        "summary": "Get PNG badge",
-        "description": "Get badge in PNG image format",
-        "operationId": "badge_png_badges__owner___repository__png_get",
-        "deprecated": true,
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          },
-          {
-            "name": "repository",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository"
-            },
-            "description": "The name of the repository"
-          },
-          {
-            "name": "style",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "The style of the button, more details on https://shields.io/.",
-              "default": "flat",
-              "title": "Style"
-            },
-            "description": "The style of the button, more details on https://shields.io/."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "An PNG image.",
-            "content": {
-              "image/png": {}
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          }
-        }
-      }
-    },
-    "/badges/{owner}/{repository}.svg": {
-      "get": {
-        "tags": [
-          "badges"
-        ],
-        "summary": "Get SVG badge",
-        "description": "Get badge in SVG image format",
-        "operationId": "badge_svg_badges__owner___repository__svg_get",
-        "deprecated": true,
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          },
-          {
-            "name": "repository",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository"
-            },
-            "description": "The name of the repository"
-          },
-          {
-            "name": "style",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "The style of the button, more details on https://shields.io/.",
-              "default": "flat",
-              "title": "Style"
-            },
-            "description": "The style of the button, more details on https://shields.io/."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "An SVG image.",
-            "content": {
-              "image/png": {}
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          }
-        }
-      }
-    },
-    "/badges/{owner}/{repository}": {
-      "get": {
-        "tags": [
-          "badges"
-        ],
-        "summary": "Get shields.io badge config",
-        "description": "Get shields.io badge JSON configuration",
-        "operationId": "badge_badges__owner___repository__get",
-        "deprecated": true,
-        "parameters": [
-          {
-            "name": "owner",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 40,
-              "pattern": "^[a-zA-Z0-9\\-]+$",
-              "description": "The owner of the repository",
-              "title": "Owner"
-            },
-            "description": "The owner of the repository"
-          },
-          {
-            "name": "repository",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "pattern": "^[\\w\\-\\.]+$",
-              "description": "The name of the repository",
-              "title": "Repository"
-            },
-            "description": "The name of the repository"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The shields.io badge JSON configuration",
-            "content": {
-              "application/json": {}
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          }
-        }
-      }
-    },
     "/repos/{owner}/{repository}/pulls/{number}/simulator": {
       "post": {
         "tags": [
@@ -1525,10 +1318,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages",
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages",
               "title": "Cursor"
             },
-            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages"
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages"
           },
           {
             "name": "per_page",
@@ -1557,8 +1350,8 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988)",
-                "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=xyz&per_page=20>; rel=\"last\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"first\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. To return to the first page, call the endpoint again without a `cursor`.",
+                "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
                 }
@@ -5499,10 +5292,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages",
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages",
               "title": "Cursor"
             },
-            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages"
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages"
           },
           {
             "name": "per_page",
@@ -6206,10 +5999,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages",
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages",
               "title": "Cursor"
             },
-            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages"
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages"
           },
           {
             "name": "per_page",
@@ -6402,10 +6195,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages.",
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages.",
               "title": "Cursor"
             },
-            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get first/previous/next/last pages."
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages."
           },
           {
             "name": "per_page",
@@ -6440,8 +6233,8 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988)",
-                "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=xyz&per_page=20>; rel=\"last\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"first\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. To return to the first page, call the endpoint again without a `cursor`.",
+                "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
                 }
@@ -20158,10 +19951,6 @@
     {
       "name": "applications",
       "description": "Operations with applications."
-    },
-    {
-      "name": "badges",
-      "description": "Operations with badges."
     },
     {
       "name": "ci_insights",
