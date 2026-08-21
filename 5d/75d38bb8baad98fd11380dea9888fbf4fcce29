@@ -1,0 +1,1 @@
+document removing the integration: it is done from Datadog, because a Mergify-side button could not revoke the key it created
