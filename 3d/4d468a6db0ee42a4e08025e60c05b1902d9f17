@@ -1,0 +1,1 @@
+Rebased onto main after #12439 landed the id: tests half of this change; resolved the resulting conflicts in junit.mdx and minitest.mdx by keeping the two continue-on-error lines, which #12439 did not add. Commit message updated to match (it credited the wrong PR for the overlap) and to close the ask it settles.
