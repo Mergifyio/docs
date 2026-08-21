@@ -120,8 +120,10 @@ change.
 
 The `Depends-On: #NNN` marker isn't only for humans. The
 [Merge Queue](/merge-queue/stacks) also uses it to recognize a stack and queue
-it as a unit. Without both the branch chain and the `Depends-On:` marker, the
-queue treats each PR independently.
+it as a unit. Without the branch chain, the `Depends-On:` marker, and head
+branches in the repository the stack targets, the queue treats each PR
+independently. `mergify stack push` satisfies all three, which is why a stack
+is pushed to the repository itself rather than to a fork.
 
 ## Smart Updates
 
