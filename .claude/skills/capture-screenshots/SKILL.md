@@ -30,13 +30,25 @@ against the user's own logged-in session.
 Either way, the docs-side conventions are the same: framing, directory/naming,
 and the `<Image>` wiring snippet — see `references/conventions.md`.
 
-**Prefer a capture that carries no account identity at all.** This repo is
-public, so every shot is published. A capture taken from a live logged-in
-account puts that org name, user name, avatar and repository names into the
-docs — it has happened before. A dashboard dev build can be rendered from
-seeded mock data with no session at all; ask for that path when the shot only
-needs to show the UI. When a shot must come from a real session, crop to the
-content pane so the sidebar's org/user header stays out of frame.
+**Capture the `mergify-sandbox` org, never a private one.** This repo is public,
+so every shot is published, and a live logged-in dashboard renders whatever the
+session can see: the org name, the user name, private repository names, real test
+paths, real pull request titles. The rule is about the org on screen, not about
+the account you are signed in as — most people capturing a shot have private-repo
+access and cannot drop it, so what keeps a private name out of the frame is
+pointing the capture at the sandbox and keeping it there. It has happened —
+three Test Insights screenshots showing a private repository were served here
+for months, and nothing caught them, because every leak check we run
+reads text and none reads pixels. So the org is not a detail to fix in cropping:
+stage what you need in the sandbox first, then shoot it. The internal Playwright
+tool now refuses any other org outright; on the interactive path below, nothing
+stops you but this paragraph.
+
+Two things that follow. Always name the org in the URL — omitting `?login=`
+inherits the session's org, which is the actual way this goes wrong. And even in
+the sandbox, crop to the content pane so the sidebar's org/user header stays out
+of frame. A dashboard dev build rendered from seeded mock data with no session at
+all is better still when the shot only needs to show the UI.
 
 ## Prerequisite (interactive path)
 

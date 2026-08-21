@@ -85,10 +85,12 @@ debugging and read it back with `read_console_messages`.
 
 ## Common dashboard URLs
 
-`dashboard.mergify.com` (confirm against the live app; paths evolve). To target a
-specific org/repo you can optionally append `?login=<org>&repository=<repo>`
-(e.g. `?login=Mergifyio&repository=monorepo`); it is not required — many docs
-links omit it and the dashboard resolves org/repo from the active session:
+`dashboard.mergify.com` (confirm against the live app; paths evolve). **Always
+append `?login=mergify-sandbox&repository=<repo>`.** Omitting it is not the
+convenient default it looks like: with no org in the query the dashboard resolves
+one from the active session, so the shot silently takes whatever org the operator
+last used — which is how three screenshots of a private repository ended up
+published here. Name the sandbox org on every capture URL:
 
 | Area | Path |
 | --- | --- |
@@ -111,8 +113,8 @@ the resulting URL with `read_page` rather than guessing.
   the new image lines up with the one it replaces.
 - Prefer capturing a specific panel/region over the entire browser chrome; it
   keeps the reader focused and survives unrelated UI changes.
-- Avoid capturing personal account names or other customers' data — use the
-  user's own org or a demo org.
+- Never frame a personal account name or another org's data — capture in
+  `mergify-sandbox`, staging whatever the shot needs there first.
 - **Crop out the sidebar unless the navigation is the point.** It carries the
   org name, the signed-in user's name and their avatar, and it is also the part
   of the dashboard that changes most often — a shot framed around it goes stale
