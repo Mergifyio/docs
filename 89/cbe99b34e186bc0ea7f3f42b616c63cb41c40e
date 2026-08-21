@@ -1,0 +1,6 @@
+Revision history for #12467:
+
+rev 2 (rebase) 2026-08-20 11:57 UTC — fill in the paired monorepo PR number, which did not exist when this was first pushed
+rev 1 (initial) 2026-08-20 11:57 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12467,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"39eb2efca72a5c468ce360946e1bf616814adfe3","timestamp_iso":"2026-08-20T11:57:51Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"39eb2efca72a5c468ce360946e1bf616814adfe3","new_sha":"89cbe99b34e186bc0ea7f3f42b616c63cb41c40e","timestamp_iso":"2026-08-20T11:57:51Z","reason":"fill in the paired monorepo PR number, which did not exist when this was first pushed","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/39eb2efca72a5c468ce360946e1bf616814adfe3...89cbe99b34e186bc0ea7f3f42b616c63cb41c40e"}]} -->
