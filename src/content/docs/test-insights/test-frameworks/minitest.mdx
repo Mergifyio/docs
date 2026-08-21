@@ -12,6 +12,7 @@ import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.
 import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
+import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 This guide shows how to generate JUnit reports from your Minitest tests and upload
 them to **Test Insights** using your CI workflow.
@@ -142,6 +143,7 @@ Using `minitest-reporters` approach:
 ```yaml
 - name: Run Minitest Tests and Generate JUnit Report
   id: tests
+  continue-on-error: true
   run: bundle exec rake test
 ```
 
@@ -169,9 +171,7 @@ After pushing these changes:
 2. A JUnit report (junit.xml) is generated.
 3. The Mergify CI action uploads the report to Test Insights.
 
-You can then review your test results, including any failures or flaky tests,
-directly in the [Test Insights
-dashboard](https://dashboard.mergify.com/test-insights/jobs).
+<ReviewInTestInsights />
 
 ## Troubleshooting Tips
 
