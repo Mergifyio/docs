@@ -11,12 +11,10 @@ const { reportPath } = Astro.props;
 ---
 
 <p>
-	If you use a job matrix in your workflow (e.g., to test across multiple versions), ensure you set
-	the <code>job_name</code> input (or <code>MERGIFY_JOB_NAME</code> environment variable) so <strong
-		>CI Insights</strong
-	> can properly distinguish reports for each matrix job.
+	If you use a job matrix in your workflow (e.g., to test across multiple versions), every leg
+	reports the same job name, because GitHub Actions gives them all one <code>GITHUB_JOB</code>. Set
+	the <code>job_name</code> input so <strong>CI Insights</strong> can tell the reports apart:
 </p>
-<p>For example, with:</p>
 <Code
 	code={`jobs:
   example_matrix:
@@ -37,9 +35,9 @@ const { reportPath } = Astro.props;
     test_step_outcome: \${{ steps.tests.outcome }}`}
 	lang="yaml"
 />
-<Aside type="tip">
+<Aside type="note">
 	<p>
-		Setting <code>job_name</code> helps <strong>CI Insights</strong> group and display reports correctly
-		for each matrix variation.
+		The job name is part of a test's identity, so a scheduled workflow has to report the same name as
+		the job running those tests on your pull requests.
 	</p>
 </Aside>

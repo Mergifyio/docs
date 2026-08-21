@@ -139,9 +139,18 @@ every 12 hours on weekdays.
 - **Weekday Schedule**: Run Monday to Friday to avoid running when no changes
   are made to the code
 
-- **Job name**: Ensure the step label matches the one running tests on your
-  pull request, allowing CI Insights to identify them. It can be overridden
-  with the `job_name` plugin property if needed.
+- **Job name**: CI Insights records the job a test ran in as part of that
+  test's identity, so the scheduled step has to report the same job name as the
+  step running those tests on your pull requests. Otherwise the two sets of
+  results count as two different tests. By default that name is the step label.
+  Set `MERGIFY_TEST_JOB_NAME` in the step's `env` to report a different one:
+
+  ```yaml
+  steps:
+    - label: "Flaky test detection"
+      env:
+        MERGIFY_TEST_JOB_NAME: "Run tests"
+  ```
 
 ## Test Framework Configuration
 
