@@ -60,6 +60,49 @@ decides what the merge queue may do:
 Choose `exempt` unless you have a reason not to. See [Configuring Mergify as
 a Bypass Actor](#configuring-mergify-as-a-bypass-actor) for the steps.
 
+### Bypass Actors and Injection
+
+A bypass actor entry lets the merge queue work on your branches. Beyond merging
+pull requests, the queue runs raw ref operations on its own queue branches,
+which are prefixed with `mergify/merge-queue/` by default, so a ruleset that
+covers those branches blocks the queue until you either narrow the ruleset so
+it no longer matches them, or add Mergify as a bypass actor with the `exempt`
+or `always` bypass mode. See [Bypass Actors](#bypass-actors) for what each mode
+covers, and [Configuring Mergify as a Bypass
+Actor](#configuring-mergify-as-a-bypass-actor) for the steps.
+
+With the [`fast-forward` merge
+method](/merge-queue/merge-strategies#fast-forward), Mergify advances the
+target branch itself by a direct ref update, so a ruleset on that branch also
+needs the `exempt` or `always` bypass mode. Narrowing the ruleset is not an
+option there, since the branch the rules protect is the one being updated.
+
+Bypassing is not injection. A bypass mode decides what GitHub lets Mergify
+*do*; injection decides what Mergify *requires* before it merges, and the two
+are set in different places:
+
+- Injection reads every branch protection and ruleset that applies to the
+  target branch and turns the supported rules into merge conditions.
+
+- [`branch_protection_injection_mode`](/configuration/file-format/#queue-rules)
+  is the only way to control it, and [Controlling
+  Injection](#controlling-injection) covers its modes. It is set per queue rule
+  and covers everything Mergify detects on the branch, so there is no way to
+  turn injection off for one ruleset and leave it on for another.
+
+If a rule should not gate your queue, take it out of the ruleset or scope the
+ruleset so it no longer targets the branch.
+
+:::caution
+  Choosing `exempt` is not a way to keep a ruleset's rules out of your merge
+  conditions, even though it is what lets Mergify bypass that ruleset on
+  GitHub. `exempt` is also the only mode that works for
+  [GitHub-native stacked pull requests](#github-native-stacked-pull-requests),
+  so you may have to pick it for reasons that have nothing to do with injection.
+  Control injection with `branch_protection_injection_mode`, or change the
+  ruleset itself.
+:::
+
 ### Required Reviewers
 
 A `pull_request` ruleset rule can require approvals from specific teams or
