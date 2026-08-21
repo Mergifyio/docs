@@ -67,7 +67,7 @@ a stack as one unit.
 
 ### How a Stack Is Detected
 
-The queue recognizes a stack only when **both** signals hold at every step:
+The queue recognizes a stack only when **all** of these hold at every step:
 
 - The PRs are physically chained: each PR's base branch is the previous PR's
   head branch.
@@ -75,11 +75,20 @@ The queue recognizes a stack only when **both** signals hold at every step:
 - Each PR carries a `Depends-On: #N` marker in its body, declaring its
   dependency on the previous PR.
 
+- Every PR's head branch lives in the repository the stack targets, not in a
+  fork.
+
 This is exactly what [`mergify stack push`](/stacks/creating) produces. PRs
 chained only by branch refs (for example, GitFlow promotion chains like
 `dev` → `staging` → `prod`) are **not** treated as a stack. Without the
 `Depends-On:` marker, the queue keeps each PR's literal base ref and queues
 them independently.
+
+The last condition is why a stack cannot be opened from a fork. The first two
+signals compare branch *names*, which only mean something inside one
+repository: any fork can have a branch called `main`, so a fork PR's head
+branch tells the queue nothing about where this repository's branches point.
+A PR opened from a fork keeps its own base ref and is queued on its own.
 
 <GitGraph
   commits={["A", "B", "C"]}
