@@ -1,0 +1,75 @@
+name: Schema Sync Watchdog
+permissions: read-all
+
+# The Mergify JSON schemas are pushed here by an external workflow, as a pull
+# request from a bot fork. It normally merges itself within ten minutes, so
+# nobody watches it — which is how a spec change that needed a docs-side edit
+# (the retired `badges` tag, whose sidebar entry had to go with it) left the
+# sync red and unnoticed for three days, with every schema change piling onto
+# the same blocked branch.
+#
+# CI already catches the breakage; what was missing is anyone being told. A
+# failing scheduled run is that signal: it shows red in the Actions tab and
+# GitHub emails whoever last touched this file. Fixing the sync clears it.
+
+on:
+  schedule:
+    - cron: "23 */3 * * *"
+  workflow_dispatch:
+
+jobs:
+  stale-sync:
+    timeout-minutes: 5
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Report a schema sync that has not landed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SYNC_AUTHOR: mergify-ci-bot
+          # The bot pushes every sync onto this one branch, and files other
+          # kinds of pull request under the same account, so match the branch
+          # rather than the author alone.
+          SYNC_BRANCH: json-schema-types-sync
+          # Ten times the usual time to merge, so an ordinary sync never trips it.
+          MAX_AGE_MINUTES: "180"
+        run: |
+          set -euo pipefail
+
+          cutoff=$(date -u -d "${MAX_AGE_MINUTES} minutes ago" +%Y-%m-%dT%H:%M:%SZ)
+
+          stale=$(gh pr list \
+                    --author "${SYNC_AUTHOR}" \
+                    --head "${SYNC_BRANCH}" \
+                    --state open \
+                    --limit 20 \
+                    --json number,url,title,createdAt,statusCheckRollup \
+                  | jq -r --arg cutoff "${cutoff}" '
+                      map(select(.createdAt < $cutoff))
+                      | .[]
+                      | "  \(.url) — \(.title)\n    opened \(.createdAt), failing: \(
+                          [.statusCheckRollup[]? | select(.conclusion == "FAILURE") | .name]
+                          | if length == 0 then "no check, so it is waiting on something else" else join(", ") end
+                        )"
+                    ')
+
+          if [ -z "${stale}" ]; then
+            echo "No schema sync pull request older than ${MAX_AGE_MINUTES} minutes."
+            exit 0
+          fi
+
+          {
+            echo "## The Mergify schema sync has not landed"
+            echo
+            echo "Open for more than ${MAX_AGE_MINUTES} minutes:"
+            echo
+            echo '```'
+            echo "${stale}"
+            echo '```'
+            echo
+            echo "The docs site is serving a stale API and configuration reference until this merges."
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          echo "::error::The Mergify schema sync has not landed; the docs site is serving a stale reference."
+          echo "${stale}"
+          exit 1
