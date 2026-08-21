@@ -1,0 +1,1 @@
+review: verify the bazel-diff JAR before running it — pinned sha256 in all four recipes (guarded with || exit 1 so the CLI snippet, which has no set -e, aborts too), plus a Verifying the download section covering digest recomputation, SLSA provenance via gh attestation verify, and the macOS shasum substitution
