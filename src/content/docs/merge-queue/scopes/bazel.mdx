@@ -1,14 +1,18 @@
 ---
 title: Scopes with Bazel
-description: Configure merge queue scopes using Bazel's dependency graph for precise batching.
+description: Compute merge queue scopes from Bazel's dependency graph with bazel-diff so every impacted package is reported.
 ---
 
 import ScopesDetection from '~/components/ScopesDetection.astro';
 
-If you're using monorepo tools like Bazel that have built-in dependency graph analysis,
-you can use their affected project detection instead of file patterns.
-This approach is often more accurate because these tools understand your project's
-dependency relationships.
+Bazel knows the entire dependency graph of your monorepo, which makes it a good source of scopes, as
+long as the query asks which targets a pull request can break rather than which packages hold the
+files it touched.
+
+[bazel-diff](https://github.com/Tinder/bazel-diff) answers that question. It hashes every target in
+the graph at two revisions (over the target's own content, its rule attributes and its transitive
+dependencies), then reports the targets whose hash changed. That is the impacted set, and its
+packages are your scopes.
 
 ## Configuring Manual Scopes
 
@@ -24,9 +28,133 @@ queue_rules:
     batch_size: 5
 ```
 
-## Detecting Scopes with Bazel
+## Why the impacted set is not the changed set
 
-Use `bazel query` to determine affected projects and upload them to Mergify.
+[Scopes](/merge-queue/scopes) are a safety mechanism. Pull requests that share a scope are
+[batched](/merge-queue/batches) and tested together and never merged in parallel, while pull
+requests with no scope in common run side by side. The same list usually decides which CI jobs a
+pull request may skip. A scope list that comes up short is therefore not merely imprecise: it lets
+the queue parallelize pull requests that conflict, and it lets the jobs gated on those scopes skip
+work the change really did affect.
+
+Queries built on changed file paths produce exactly that kind of short list. `buildfiles()` returns
+the `BUILD` and `.bzl` files needed to *load* the packages the changed files live in, which walks
+the graph away from the dependents instead of towards them.
+
+Take a workspace where `//app/server` depends on `//lib/util`, which depends on `//lib/core`, and
+where every `BUILD` file loads a macro from `//tools`:
+
+| Change | `buildfiles(set(…))` returns | Impacted packages |
+| --- | --- | --- |
+| a source file in `lib/core` | `lib/core`, `tools` | `lib/core`, `lib/util`, `app/server` |
+| an attribute in `lib/util/BUILD` | `lib/util`, `tools` | `lib/util`, `app/server` |
+| the macro in `tools/defs.bzl` | `tools` | every package that loads it |
+
+Every row names `tools`, the package that *defines* the macro, and misses the packages that depend
+on the change. In a workspace with external dependencies the gap widens: `buildfiles()` also
+returns the `.bzl` files of every ruleset you load, so the scope list fills up with entries like
+`@rules_kotlin//kotlin` that mean nothing to your queue.
+
+Reverse-dependency queries such as `rdeps()` close part of the gap but open another: a pull request
+that only edits `BUILD` or `.bzl` files has no changed *target* to start from, so the query returns
+nothing at all.
+
+:::caution
+  If your pipeline derives scopes from changed file paths, it is under-reporting. Move it to
+  impacted targets before relying on scopes to keep conflicting pull requests apart.
+:::
+
+## Detecting Scopes with bazel-diff
+
+bazel-diff compares two revisions, so the job that computes scopes needs three things:
+
+- **A JVM.** bazel-diff ships as a single `bazel-diff_deploy.jar` on its
+  [releases page](https://github.com/Tinder/bazel-diff/releases).
+
+- **Full git history**, so the base commit exists locally. With `actions/checkout` that means
+  `fetch-depth: 0`.
+
+- **A working tree it can move.** Hashes are generated once per revision, so the job checks out the
+  base, then the head.
+
+The detection itself is three bazel-diff commands, run against the merge-queue-aware `$BASE` and
+`$HEAD` revisions each pipeline below resolves:
+
+```bash
+curl -fsSL -o /tmp/bazel-diff.jar \
+  "https://github.com/Tinder/bazel-diff/releases/download/v42.0.0/bazel-diff_deploy.jar"
+echo "0170b70fe2f24477ab056c11f5c3240d8b45a1dca5ab73ad252c096679c5500c  /tmp/bazel-diff.jar" \
+  | sha256sum -c - || exit 1
+
+git checkout --quiet --force "$BASE"
+java -jar /tmp/bazel-diff.jar generate-hashes \
+  --workspacePath "$(pwd)" --includeTargetType /tmp/base-hashes.json
+
+git checkout --quiet --force "$HEAD"
+java -jar /tmp/bazel-diff.jar generate-hashes \
+  --workspacePath "$(pwd)" --includeTargetType /tmp/head-hashes.json
+
+java -jar /tmp/bazel-diff.jar get-impacted-targets \
+  --workspacePath "$(pwd)" --targetType Rule \
+  --startingHashes /tmp/base-hashes.json --finalHashes /tmp/head-hashes.json \
+  | awk -F: '/^\/\// { print $1 }' | sort -u
+```
+
+A few details worth knowing:
+
+- `--targetType Rule` keeps rules and drops the source and generated files that share their
+  packages. `--includeTargetType` on `generate-hashes` is what records the type, so the two flags
+  go together.
+
+- The `awk` turns each impacted label into its package label, so `//lib/core:core` becomes
+  `//lib/core` and a target in the root package becomes `//`. It also drops labels from external
+  repositories, which are not yours to queue on.
+
+- `git checkout --force` is deliberate: `bazel` writes to `MODULE.bazel.lock`, and a plain checkout
+  refuses to move over the modified file. Run this on a CI checkout, not a working tree you care
+  about.
+
+- Both revisions are hashed in the same directory, so the Bazel server and its analysis cache stay
+  warm and the second `generate-hashes` costs a fraction of the first.
+
+:::note
+  On a Bzlmod-only workspace, `generate-hashes` logs `no such package 'external'` while it queries
+  the legacy `//external` package. Hashing continues and the result is unaffected; pass
+  `--excludeExternalTargets` to silence it.
+:::
+
+### Verifying the download
+
+The pipelines below download a JAR over the network and run it with the same privileges as the rest
+of the job, so the first command names exactly what runs: the URL points at a version instead of
+`latest`, and `sha256sum -c` checks the bytes behind it. Recompute the digest when you bump the
+version:
+
+```bash
+sha256sum bazel-diff_deploy.jar   # shasum -a 256 on macOS
+```
+
+The release also ships [SLSA](https://slsa.dev/) provenance beside the JAR, a stronger claim than
+a digest: it says the artifact came out of the project's own release workflow, not just that its
+bytes match something someone published. The [GitHub CLI](https://cli.github.com/) checks it and
+exits non-zero if the provenance does not hold:
+
+```bash
+curl -fsSL -o /tmp/bazel-diff.jar.intoto.jsonl \
+  "https://github.com/Tinder/bazel-diff/releases/download/v42.0.0/bazel-diff_deploy.jar.intoto.jsonl"
+
+gh attestation verify /tmp/bazel-diff.jar \
+  --bundle /tmp/bazel-diff.jar.intoto.jsonl \
+  --repo Tinder/bazel-diff --signer-repo bazel-contrib/.github
+```
+
+`--signer-repo` is needed because bazel-diff releases through the shared `bazel-contrib/.github`
+workflow, so the signing identity is that workflow rather than the bazel-diff repository itself.
+
+:::note
+  `sha256sum` comes from GNU coreutils and is not installed on macOS. On a macOS agent, use
+  `shasum -a 256 -c -` in place of `sha256sum -c -`.
+:::
 
 ### GitHub Actions
 
@@ -41,8 +169,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          # The queue-aware base commit must exist locally for `git diff`.
+          # The queue-aware base commit must exist locally to be checked out.
           fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
 
       - name: Get git refs
         id: refs
@@ -56,27 +189,23 @@ jobs:
           HEAD: ${{ steps.refs.outputs.head }}
           BASE: ${{ steps.refs.outputs.base }}
         run: |
-          changed=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" | tr '\n' ' ')
-          if [ -z "$changed" ]; then
-            echo "scopes=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+          curl -fsSL -o /tmp/bazel-diff.jar \
+            "https://github.com/Tinder/bazel-diff/releases/download/v42.0.0/bazel-diff_deploy.jar"
+          echo "0170b70fe2f24477ab056c11f5c3240d8b45a1dca5ab73ad252c096679c5500c  /tmp/bazel-diff.jar" \
+            | sha256sum -c - || exit 1
 
-          set +e
-          packages=$(bazel query --keep_going --noshow_progress --output=package \
-            "buildfiles(set($changed))" 2>query.err)
-          rc=$?
-          set -e
-          # --keep_going exits 3 when it skipped files outside any Bazel package
-          # (README.md, .github/**). Anything else is a real failure and must not
-          # be swallowed into an empty scope list.
-          if [ "$rc" -ne 0 ] && [ "$rc" -ne 3 ]; then
-            cat query.err >&2
-            exit "$rc"
-          fi
+          git checkout --quiet --force "$BASE"
+          java -jar /tmp/bazel-diff.jar generate-hashes \
+            --workspacePath "$(pwd)" --includeTargetType /tmp/base-hashes.json
 
-          scopes=$(printf '%s\n' "$packages" | sed '/^$/d' | sort -u | paste -sd, -)
-          echo "Detected scopes: ${scopes:-<none>}"
+          git checkout --quiet --force "$HEAD"
+          java -jar /tmp/bazel-diff.jar generate-hashes \
+            --workspacePath "$(pwd)" --includeTargetType /tmp/head-hashes.json
+
+          scopes=$(java -jar /tmp/bazel-diff.jar get-impacted-targets \
+            --workspacePath "$(pwd)" --targetType Rule \
+            --startingHashes /tmp/base-hashes.json --finalHashes /tmp/head-hashes.json \
+            | awk -F: '/^\/\// { print $1 }' | sort -u | paste -sd, -)
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
       - name: Scopes upload
@@ -92,8 +221,8 @@ jobs:
 Using the
 [`mergifyio/mergify-ci`](https://github.com/Mergifyio/mergify-ci-buildkite-plugin)
 Buildkite plugin, a first step resolves the merge-queue-aware base and head
-SHAs and exposes them as meta-data, while a second step computes the affected
-projects with `bazel query` and uploads them to Mergify:
+SHAs and exposes them as meta-data, while a second step computes the impacted
+packages with bazel-diff and uploads them to Mergify:
 
 ```yaml
 steps:
@@ -108,22 +237,24 @@ steps:
     command: |
       BASE=$(buildkite-agent meta-data get "mergify-ci.base")
       HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
-      CHANGED=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" | tr '\n' ' ')
-      SCOPES=""
-      if [ -n "$CHANGED" ]; then
-        set +e
-        PACKAGES=$(bazel query --keep_going --noshow_progress --output=package \
-          "buildfiles(set($CHANGED))" 2>query.err)
-        RC=$?
-        set -e
-        # --keep_going exits 3 when it skipped files outside any Bazel package.
-        # Anything else is a real failure, not an empty scope list.
-        if [ "$RC" -ne 0 ] && [ "$RC" -ne 3 ]; then
-          cat query.err >&2
-          exit "$RC"
-        fi
-        SCOPES=$(printf '%s\n' "$PACKAGES" | sed '/^$/d' | sort -u | paste -sd, -)
-      fi
+
+      curl -fsSL -o /tmp/bazel-diff.jar \
+        "https://github.com/Tinder/bazel-diff/releases/download/v42.0.0/bazel-diff_deploy.jar"
+      echo "0170b70fe2f24477ab056c11f5c3240d8b45a1dca5ab73ad252c096679c5500c  /tmp/bazel-diff.jar" \
+        | sha256sum -c - || exit 1
+
+      git checkout --quiet --force "$BASE"
+      java -jar /tmp/bazel-diff.jar generate-hashes \
+        --workspacePath "$(pwd)" --includeTargetType /tmp/base-hashes.json
+
+      git checkout --quiet --force "$HEAD"
+      java -jar /tmp/bazel-diff.jar generate-hashes \
+        --workspacePath "$(pwd)" --includeTargetType /tmp/head-hashes.json
+
+      SCOPES=$(java -jar /tmp/bazel-diff.jar get-impacted-targets \
+        --workspacePath "$(pwd)" --targetType Rule \
+        --startingHashes /tmp/base-hashes.json --finalHashes /tmp/head-hashes.json \
+        | awk -F: '/^\/\// { print $1 }' | sort -u | paste -sd, -)
       buildkite-agent meta-data set "mergify-ci.scopes" "$SCOPES"
     plugins:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
@@ -134,28 +265,61 @@ steps:
 ### Any CI (Mergify CLI)
 
 <ScopesDetection
-  command={String.raw`CHANGED=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" | tr '\n' ' ')
+  command={String.raw`curl -fsSL -o /tmp/bazel-diff.jar \
+  "https://github.com/Tinder/bazel-diff/releases/download/v42.0.0/bazel-diff_deploy.jar"
+echo "0170b70fe2f24477ab056c11f5c3240d8b45a1dca5ab73ad252c096679c5500c  /tmp/bazel-diff.jar" \
+  | sha256sum -c - || exit 1
 
-if [ -z "$CHANGED" ]; then
-  echo '{"scopes": []}' > scopes.json
-else
-  # Capture the exit code rather than piping straight into jq: a failed query
-  # piped into jq still writes a well-formed, empty scopes.json and returns 0.
-  if PACKAGES=$(bazel query --keep_going --noshow_progress --output=package \
-                  "buildfiles(set($CHANGED))" 2>query.err); then
-    RC=0
-  else
-    RC=$?
-  fi
+git checkout --quiet --force "$BASE"
+java -jar /tmp/bazel-diff.jar generate-hashes \
+  --workspacePath "$(pwd)" --includeTargetType /tmp/base-hashes.json
 
-  # --keep_going exits 3 when it skipped files outside any Bazel package
-  # (README.md, .github/**). Anything else is a real failure.
-  if [ "$RC" -ne 0 ] && [ "$RC" -ne 3 ]; then
-    cat query.err >&2
-    exit "$RC"
-  fi
+git checkout --quiet --force "$HEAD"
+java -jar /tmp/bazel-diff.jar generate-hashes \
+  --workspacePath "$(pwd)" --includeTargetType /tmp/head-hashes.json
 
-  printf '%s\n' "$PACKAGES" | sort -u \
-    | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json
-fi`}
+java -jar /tmp/bazel-diff.jar get-impacted-targets \
+  --workspacePath "$(pwd)" --targetType Rule \
+  --startingHashes /tmp/base-hashes.json --finalHashes /tmp/head-hashes.json \
+  | awk -F: '/^\/\// { print $1 }' | sort -u \
+  | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json`}
 />
+
+## Reducing the cost
+
+Two `generate-hashes` runs cost roughly two `bazel query` passes over the graph. On most
+repositories that is a small job, but there are ways to trim it:
+
+- **Cache the base hashes.** On `pull_request` events the base is usually the same commit across
+  many pull requests. Storing `base-hashes.json` under a cache key derived from the base SHA
+  removes one checkout and one hash from most runs.
+
+- **Scope the content hashing.** `generate-hashes --modified-filepaths` reads only the files listed
+  in a changed-file list instead of every source file. The list must be a superset of what actually
+  changed, or the targets behind a missing file are skipped, which is why the flag is still marked
+  experimental.
+
+- **Run bazel-diff as a service.** For very large repositories, `bazel-diff serve` keeps a
+  long-lived process that caches hashes per commit SHA and answers "what changed between these two
+  revisions" over HTTP. It is experimental, and documented in the
+  [bazel-diff README](https://github.com/Tinder/bazel-diff#query-service-experimental).
+
+## Changes the dependency graph cannot see
+
+Some changes invalidate everything while leaving no trace in the graph: a `.bazelrc` edit, a CI
+image bump, a change to a toolchain that lives outside the workspace. Two mechanisms cover them.
+
+On the Bazel side, list those files in a file passed to `generate-hashes --seed-filepaths`. Their
+content is mixed into every target hash, so editing one of them marks the whole graph impacted.
+
+On the Mergify side, mark the pull request as a
+[barrier](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope) instead of enumerating
+scopes. With `gha-mergify-ci`, set `all_scopes: true` on the `scopes-upload` action; with the CLI,
+pass `--all` to `mergify ci scopes-send`. The queue then serializes around that pull request.
+
+## When bazel-diff is more than you want
+
+bazel-diff costs a JVM and a second checkout. If that is more than the job is worth, prefer
+[file-pattern scopes](/merge-queue/scopes/file-patterns) over a dependency-graph query you cannot
+trust: patterns are coarse, but they need no CI job at all and they never quietly claim a change is
+smaller than it is.
