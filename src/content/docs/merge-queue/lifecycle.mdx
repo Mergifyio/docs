@@ -19,7 +19,9 @@ automatically. Here's an overview of the process:
 
 - **Manual addition:** A pull request can be manually added to the merge queue
    using the [`@mergifyio queue` command](/commands/queue) or by ticking the
-   [merge queue status comment checkbox](/commands/queue#queueing-with-a-checkbox).
+   [**Queue this pull request** checkbox](/commands/queue#queueing-with-a-checkbox),
+   which Mergify posts in a comment of its own once the pull request is ready to
+   be queued.
 
 - **Automated addition:** A pull request can be automatically added to the
    merge queue using [`auto_merge_conditions`](/merge-protections/auto-merge)
@@ -117,10 +119,14 @@ the queue.
    section, the order may be influenced by any defined [priority
    rules](/merge-queue/priority).
 
-2. **Waiting for its turn:** The pull request will wait in the queue until it
-   is its turn to be processed. The processing of pull requests in the queue is
-   sequential, which means that only one pull request is processed at a time by
-   default.
+2. **Waiting for its turn:** The pull request waits in the queue until it is its
+   turn to merge. Merges happen in queue order, one [batch](/merge-queue/batches)
+   at a time, but the testing that precedes them does not:
+   `merge_queue.max_parallel_checks` defaults to `5`, so Mergify tests up to five
+   batches at once with [parallel
+   checks](/merge-queue/performance#parallel-checks). At the default
+   `batch_size` of 1, that is five queued pull requests. Set
+   `max_parallel_checks` to `1` to test them strictly one after the other.
 
 3. **Validating the pull request:** When a pull request is next in line, it
    enters the validation phase. During this phase, the Mergify engine will
