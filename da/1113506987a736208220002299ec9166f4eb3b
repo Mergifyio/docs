@@ -1,0 +1,1 @@
+restack onto main: the base of this stack, #12457 (remove the leaked images), was closed rather than merged, so the Depends-On could never be satisfied. Dropped that commit and rewrote the framing so this stands on its own; the diff is unchanged.
