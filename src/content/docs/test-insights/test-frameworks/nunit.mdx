@@ -36,13 +36,27 @@ Run tests with JUnit output:
 dotnet test --logger "junit;LogFilePath=junit.xml"
 ```
 
+`LogFilePath` is resolved relative to the directory holding your test project's
+`.csproj`, not to the repository root. If your test project lives in a
+subdirectory, set the upload step's `report_path` to the report's path from the
+repository root, such as `tests/MyProject.Tests/junit.xml`.
+
 ### Using NUnit Console Runner
 
-If you're using the NUnit Console Runner directly:
+The NUnit Console Runner supports only two result formats, `nunit3` and
+`nunit2`; there is no built-in JUnit format. To get JUnit XML out of it, pass an
+XSLT that transforms the native `nunit3` output. NUnit publishes one as
+[`nunit3-junit.xslt`](https://github.com/nunit/nunit-transforms/tree/master/nunit3-junit):
 
 ```bash
-nunit3-console.exe your-test.dll --result=junit.xml;format=junit
+nunit3-console.exe your-test.dll "--result=junit.xml;transform=nunit3-junit.xslt"
 ```
+
+Quote the whole option: the semicolon separating the file name from the
+transform is a command separator in most shells.
+
+If you don't want to maintain an XSLT, run your tests through `dotnet test` with
+the JUnit logger instead, as shown above.
 
 ### Using NUnit Test Adapter
 
@@ -59,6 +73,9 @@ Then run:
 ```bash
 dotnet test --logger junit
 ```
+
+Without a `LogFilePath`, the logger writes into the `TestResults` directory next
+to your test project.
 
 ### Using Multiple Test Result Formats
 
