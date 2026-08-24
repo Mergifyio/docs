@@ -108,7 +108,7 @@ ruleset so it no longer targets the branch.
 A `pull_request` ruleset rule can require approvals from specific teams or
 users (the rule's **Required reviewers** setting). Mergify detects this and
 injects the
-[`github-require-review-from-specific-teams`](/configuration/conditions#attributes-list)
+[`github-require-review-from-specific-teams`](/configuration/conditions#github-rulesets-and-branch-protection-attributes)
 boolean condition, so a pull request is merged only once those approvals are
 in.
 
@@ -123,14 +123,9 @@ When the requirement is scoped to a subset of files (the ruleset's
 `file_patterns` field), it only applies to pull requests that touch a matching
 file. Other pull requests are unaffected.
 
-You can also reference the condition explicitly in your `.mergify.yml`:
-
-```yaml
-queue_rules:
-  - name: default
-    merge_conditions:
-      - github-require-review-from-specific-teams
-```
+Mergify injects this condition itself, and you cannot write it in your own
+conditions: a configuration that references it is rejected when it is
+validated.
 
 :::note
   The condition evaluates to `false` if a ruleset entry points to a team or
