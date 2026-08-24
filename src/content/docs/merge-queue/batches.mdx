@@ -49,7 +49,6 @@ ready to be merged.
 queue_rules:
   - name: default
     batch_size: 3
-    ...
 ```
 
 ```dot class="graph"
@@ -99,7 +98,6 @@ set the `batch_size` option according to your project's needs.
 queue_rules:
   - name: default
     batch_size: 3
-    ...
 ```
 
 In the above example, batches of up to 3 pull requests will be created and
@@ -115,7 +113,6 @@ queue_rules:
   - name: default
     batch_size: 5
     batch_max_wait_time: 5 min
-    ...
 ```
 
 With the configuration above, Mergify waits up to 5 minutes for 5 PRs to enter
