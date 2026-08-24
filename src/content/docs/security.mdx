@@ -181,13 +181,16 @@ function properly.
   <tbody>
     <tr>
       <td>Repository: Actions</td>
-      <td>Read-only</td>
-      <td>Used to read workflow details.</td>
+      <td>Read and write</td>
+      <td>
+        Used to read workflow runs and job logs, and to re-run workflow runs
+        and failed jobs for CI Insights Auto-Retry.
+      </td>
     </tr>
     <tr>
       <td>Repository: Administration</td>
       <td>Read-only</td>
-      <td>Used to access team details.</td>
+      <td>Used to read branch protection settings and repository rulesets.</td>
     </tr>
     <tr>
       <td>Repository: Checks</td>
