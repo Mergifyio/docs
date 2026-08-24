@@ -53,9 +53,9 @@ decides what the merge queue may do:
 - **`always`** covers everything except GitHub-native stacked pull requests.
 
 - **`pull_requests_only`** covers only what Mergify does through a pull
-  request. The merge queue also creates, renames, pushes to, and deletes its
-  own queue branches, and those are raw ref operations, so this mode still
-  blocks the queue.
+  request. The merge queue also creates, pushes to, and deletes its own queue
+  branches, and those are raw ref operations, so this mode still blocks the
+  queue.
 
 Choose `exempt` unless you have a reason not to. See [Configuring Mergify as
 a Bypass Actor](#configuring-mergify-as-a-bypass-actor) for the steps.
@@ -77,30 +77,28 @@ target branch itself by a direct ref update, so a ruleset on that branch also
 needs the `exempt` or `always` bypass mode. Narrowing the ruleset is not an
 option there, since the branch the rules protect is the one being updated.
 
-Bypassing is not injection. A bypass mode decides what GitHub lets Mergify
-*do*; injection decides what Mergify *requires* before it merges, and the two
-are set in different places:
+Bypassing and injection are different controls. A bypass mode decides what
+GitHub lets Mergify *do*; injection decides what Mergify *requires* before it
+merges, and the two are set in different places:
 
 - Injection reads every branch protection and ruleset that applies to the
   target branch and turns the supported rules into merge conditions.
 
 - [`branch_protection_injection_mode`](/configuration/file-format/#queue-rules)
-  is the only way to control it, and [Controlling
-  Injection](#controlling-injection) covers its modes. It is set per queue rule
-  and covers everything Mergify detects on the branch, so there is no way to
-  turn injection off for one ruleset and leave it on for another.
+  controls it, and [Controlling Injection](#controlling-injection) covers its
+  modes. It is set per queue rule and covers everything Mergify detects on the
+  branch, so it turns injection off for every rule there or for none of them.
 
-If a rule should not gate your queue, take it out of the ruleset or scope the
-ruleset so it no longer targets the branch.
+If a single rule should not gate your queue, take it out of the ruleset or
+scope the ruleset so it no longer targets the branch. That is the one control
+that acts on exactly one rule.
 
 :::caution
-  Choosing `exempt` is not a way to keep a ruleset's rules out of your merge
-  conditions, even though it is what lets Mergify bypass that ruleset on
-  GitHub. `exempt` is also the only mode that works for
-  [GitHub-native stacked pull requests](#github-native-stacked-pull-requests),
-  so you may have to pick it for reasons that have nothing to do with injection.
-  Control injection with `branch_protection_injection_mode`, or change the
-  ruleset itself.
+  Don't pick a bypass mode to shape your merge conditions. `exempt` is the mode
+  [GitHub-native stacked pull
+  requests](#github-native-stacked-pull-requests) require, so you may have to
+  pick it for reasons that have nothing to do with injection. Choosing a
+  narrower mode to keep a rule in your conditions blocks the queue instead.
 :::
 
 ### Required Reviewers
@@ -170,7 +168,7 @@ Mergify handles each GitHub ruleset rule type as follows.
 | `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
 | `creation` | Checked when creating batch PRs | May block batch PR creation if Mergify is not a bypass actor |
 | `update` | Checked when updating batch PRs | May block batch PR updates if Mergify is not a bypass actor |
-| `branch_name_pattern` | Checked on queue branch creation/rename | See [below](#branch-name-pattern) |
+| `branch_name_pattern` | Checked on queue branch creation | See [below](#branch-name-pattern) |
 | `required_review_thread_resolution` | Injected as conditions | -- |
 | `required_signatures` | Checked on queue branch push | See [below](#required-signatures-and-branch-deletion) |
 | `deletion` | Checked when queue branches are cleaned up | See [below](#required-signatures-and-branch-deletion) |
@@ -222,24 +220,17 @@ queue.
 
 If a `branch_name_pattern` ruleset rule matches Mergify's queue branches and
 Mergify is **not** a bypass actor with the `exempt` or `always` bypass mode,
-GitHub blocks Mergify from creating or renaming queue branches. As a result,
-Mergify cannot queue or merge pull requests targeting that branch.
+GitHub blocks Mergify from creating queue branches. As a result, Mergify
+cannot queue or merge pull requests targeting that branch.
 
-Creating and renaming a branch are raw ref operations, which is why
-`pull_requests_only` does not unblock them.
+Creating a branch is a raw ref operation, which is why `pull_requests_only`
+does not unblock it.
 
-Mergify uses two branch prefixes for queue branches:
-
-- `mergify/merge-queue/` -- the final queue branch (customizable via
-  `queue_branch_prefix` in
-  [`queue_rules`](/configuration/file-format/#queue-rules)).
-
-- `tmp-mergify/merge-queue/` -- the temporary branch Mergify creates during
-  setup before renaming it to the final name.
-
-A ruleset that only covers the final prefix still allows the temporary
-branch to be created but blocks the subsequent rename, producing the same
-error.
+Queue branches are prefixed with `mergify/merge-queue/`, customizable via
+`queue_branch_prefix` in
+[`queue_rules`](/configuration/file-format/#queue-rules). The error Mergify
+reports also names a `tmp-` variant of that prefix, so exclude both when you
+narrow a ruleset pattern.
 
 **Resolution:**
 
@@ -328,21 +319,22 @@ are enforced.
 **Resolution:**
 
 - Add Mergify as a bypass actor on the ruleset that enforces review
-  requirements, with the `exempt` bypass mode.
+  requirements, with the `exempt` or `always` bypass mode.
 
 ### In-Place Checks and Review Requirements
 
 When using [in-place checks](/merge-queue/batches#in-place-checks-no-batch-prs)
-(where Mergify tests a PR on its own branch),
-the `pull_request` ruleset rules with review requirements on the PR's head
-branch can block Mergify from checking the PR. If these rules are active and
-Mergify is not a bypass actor, in-place checks will fail with an
-incompatibility error.
+(where Mergify tests a PR on its own branch), a `pull_request` ruleset rule
+that enforces review requirements on the PR's **head** branch stops Mergify
+from checking the PR, and the queue reports an incompatibility error. Adding
+Mergify as a bypass actor does not resolve it, since the check looks at whether
+the rule is set rather than at who may bypass it. PRs opened from a fork are
+not affected.
 
 **Resolution:**
 
-- Add Mergify as a bypass actor on the ruleset that enforces review
-  requirements on queue branches, with the `exempt` bypass mode.
+- Drop the review requirement from the ruleset that targets the head branches
+  you queue, or stop using in-place checks on that queue.
 
 ## Ignored Rule Types
 
