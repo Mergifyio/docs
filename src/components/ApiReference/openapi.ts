@@ -198,7 +198,6 @@ export function preprocessSchema(schema: OpenAPISpec): OpenAPISpec {
 export const TAG_LABELS: Record<string, string> = {
   applications: 'Applications',
   queues: 'Queues',
-  badges: 'Badges',
   simulator: 'Simulator',
   activity_log: 'Activity Log',
   statistics: 'Statistics',
@@ -213,7 +212,6 @@ export const TAG_LABELS: Record<string, string> = {
 export const TAG_DESCRIPTIONS: Record<string, string> = {
   applications: 'Manage your Mergify application details.',
   queues: 'Configure and inspect merge queues for your repositories.',
-  badges: 'Generate status badges for your repositories.',
   simulator: 'Simulate Mergify behavior on pull requests and configurations.',
   activity_log: 'Retrieve and aggregate the timeline of Mergify events for a repository.',
   statistics: 'Access merge queue and CI performance statistics.',
