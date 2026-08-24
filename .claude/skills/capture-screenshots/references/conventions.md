@@ -85,19 +85,32 @@ debugging and read it back with `read_console_messages`.
 
 ## Common dashboard URLs
 
-`dashboard.mergify.com` (confirm against the live app; paths evolve). To target a
-specific org/repo you can optionally append `?login=<org>&repository=<repo>`
-(e.g. `?login=Mergifyio&repository=monorepo`); it is not required — many docs
-links omit it and the dashboard resolves org/repo from the active session:
+`dashboard.mergify.com` carries the org and the repository **in the path**:
+`/orgs/<org>` for org-wide pages, `/orgs/<org>/repos/<repo>` for the rest. Build
+every capture URL that way, with `mergify-sandbox` as the org:
 
 | Area | Path |
 | --- | --- |
-| Home | `/home` |
-| Merge queues | `/merge-queue` |
-| CI Insights | `/ci-insights` |
-| Test Insights → Prevention | `/test-insights/prevention` |
-| Test Insights → Detection | `/test-insights/detection` |
-| Test Insights → Mitigation | `/test-insights/mitigation` |
+| Home | `/orgs/mergify-sandbox/home` |
+| Repositories | `/orgs/mergify-sandbox/repositories` |
+| CI Insights | `/orgs/mergify-sandbox/ci-insights` |
+| Merge queues | `/orgs/mergify-sandbox/repos/<repo>/queues/status` |
+| Test Insights → Prevention | `/orgs/mergify-sandbox/repos/<repo>/test-insights/prevention` |
+| Test Insights → Detection | `/orgs/mergify-sandbox/repos/<repo>/test-insights/detection` |
+| Test Insights → Mitigation | `/orgs/mergify-sandbox/repos/<repo>/test-insights/mitigation` |
+
+Scope is per feature and it is not guessable from the name: Test Insights sits
+under `/repos/` because its data is keyed by repository, while CI Insights, one
+menu item away, is org-wide and has no `/repos/` segment. Read the path off the
+dashboard rather than assembling one by analogy.
+
+The org being in the path is also what makes a capture URL safe. The older
+`?login=<org>&repository=<repo>` query form still resolves — it redirects onto
+the paths above — but it is optional, and a URL with no org in it lets the
+dashboard fall back to whichever org the session last used. That is how three
+screenshots of a private repository came to be published here: not someone
+naming the wrong org, but nobody naming one. A `/orgs/…` path cannot be written
+without saying which org it is.
 
 `app.mergify.com` is retired and no longer resolves — always use
 `dashboard.mergify.com`. If a path 404s, navigate from the dashboard UI and read
@@ -111,8 +124,8 @@ the resulting URL with `read_page` rather than guessing.
   the new image lines up with the one it replaces.
 - Prefer capturing a specific panel/region over the entire browser chrome; it
   keeps the reader focused and survives unrelated UI changes.
-- Avoid capturing personal account names or other customers' data — use the
-  user's own org or a demo org.
+- Never frame a personal account name or another org's data — capture in
+  `mergify-sandbox`, staging whatever the shot needs there first.
 - **Crop out the sidebar unless the navigation is the point.** It carries the
   org name, the signed-in user's name and their avatar, and it is also the part
   of the dashboard that changes most often — a shot framed around it goes stale
