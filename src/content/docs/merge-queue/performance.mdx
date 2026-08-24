@@ -157,8 +157,8 @@ This keeps queue-time CI short without sacrificing final-merge confidence.
 [Batch merging](/merge-queue/batches) tests multiple PRs as a single unit.
 [Parallel checks](#parallel-checks) run several batches
 concurrently. Together, they maximize CI utilization: if any PR in a batch
-fails, [Mergify binary-searches for the culprit, removes it, and continues
-processing](/merge-queue/batches#handling-batch-failure-or-timeout).
+fails, [Mergify splits the batch to isolate the culprit, removes it, and
+continues processing](/merge-queue/batches#handling-batch-failure-or-timeout).
 
 ```yaml
 merge_queue:
@@ -167,7 +167,6 @@ merge_queue:
 queue_rules:
   - name: default
     batch_size: 3
-    ...
 ```
 
 With `batch_size: 3` and `max_parallel_checks: 2`, Mergify runs up to 2
