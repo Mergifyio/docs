@@ -14,6 +14,7 @@ import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.
 import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
+import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 <IntegrationLogo src={cypressLogo} alt="Cypress logo" />
 
@@ -90,9 +91,7 @@ After pushing these changes:
 2. Cypress generates JUnit files.
 3. The Mergify CI action uploads that file to Test Insights.
 
-You can then review your test results, including any failures or flaky tests,
-directly in the [Test Insights
-dashboard](https://dashboard.mergify.com/test-insights/detection).
+<ReviewInTestInsights />
 
 ## Troubleshooting Tips
 

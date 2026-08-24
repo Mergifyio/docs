@@ -88,7 +88,9 @@ The installer will:
 1. Create a GitHub App pointing its webhook to your HTTPS endpoint.
 2. Install that App on your organization.
 
-Enter your organization login and click **Create**:
+Fill in the GitHub server URL, without a trailing slash, and your organization login, then click
+**Create**. The server URL defaults to `https://github.com`; point it at your GitHub Enterprise
+Server host to have the generated `mergify.env` carry the matching `MERGIFYENGINE_GITHUB_URL`.
 
 <Image src={installerScreen} alt="Mergify Enterprise Installer" />
 
@@ -226,21 +228,19 @@ Check logs:
 docker logs mergify-engine
 ```
 
-You should see output similar to:
+The container applies any pending database schema migration, then starts the `web` and `worker`
+programs under supervisord, so the output is similar to:
 
 ```text
-14:37:06 system   | web.1 started (pid=10)
-14:37:06 system   | worker.1 started (pid=11)
+Starting Mergify Enterprise
+INFO spawned: 'web' with pid 10
+INFO spawned: 'worker' with pid 11
 ```
 
-Mergify is live. You can now log in at `https://mergify.mycompany.com` and start using it.
-
-```http
-GET / HTTP/1.1
-host: container:5000
-```
-
-> The endpoint should respond with HTTP 307.
+Mergify is live. You can now log in at `https://mergify.mycompany.com` and start using it. A
+`GET /` on the container answers HTTP 200 with the dashboard entry page; to check the engine's
+dependencies instead, use the
+[healthcheck endpoint](/enterprise/troubleshooting/#api-healthcheck).
 
 ## Testing the Installation
 

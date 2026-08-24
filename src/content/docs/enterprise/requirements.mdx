@@ -47,7 +47,6 @@ docker run --name some-redis-with-tls -d \
     -e REDIS_TLS_CERT_FILE=/opt/bitnami/redis/certs/redis.crt \
     -e REDIS_TLS_KEY_FILE=/opt/bitnami/redis/certs/redis.key \
     -e REDIS_TLS_CA_FILE=/opt/bitnami/redis/certs/redisCA.crt \
-    -n redis-server \
     bitnami/redis
 ```
 
@@ -81,7 +80,8 @@ Mergify Enterprise supports:
 
 Two outbound HTTPS calls must be allowed so Mergify can validate and report licensing:
 
-- `GET https://subscription.mergify.com/on-premise/subscription/<random-id>`
+- `GET https://subscription.mergify.com/on-premise/subscription/<github-account-id>`
 - `POST https://subscription.mergify.com/on-premise/report`
 
-These requests are performed by the workers; restrict egress for other components when possible.
+Both calls carry your subscription token and are made by the Mergify container itself, so no other
+component needs egress to that host.

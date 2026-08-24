@@ -68,5 +68,8 @@ docker pull registry.mergify.com/enterprise:<version-tag>
 # ... run docker run with your env vars ...
 ```
 
+Restore the database before starting the container: the container applies any pending schema
+migration on startup, so PostgreSQL must be reachable and holding the restored data by then.
+
 Keeping regular backups and practicing restores reduces downtime and data loss
 when an incident occurs.
