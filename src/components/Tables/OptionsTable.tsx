@@ -25,9 +25,11 @@ export function defToIdPrefix(def: string): string {
 function dumpDefault(value: unknown): string {
   return yaml
     .dump(value, {
-      noCompatMode: true,
       lineWidth: -1,
-      quotingType: '"',
+      // Not the default ('single'): these dumps are copy-pasted into configs, and
+      // double quotes keep Jinja templates like "{{ title }} '{{ name }}'" readable
+      // without escaping the inner single quotes.
+      quoteStyle: 'double',
       noRefs: true,
     })
     .replace(/\n$/, '');
