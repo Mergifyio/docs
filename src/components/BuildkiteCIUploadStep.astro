@@ -2,6 +2,8 @@
 import { Code as InlineCode } from 'astro:components';
 import { Code } from 'astro-expressive-code/components';
 
+import buildkitePluginVersion from '~/data/buildkite-plugin-version.json';
+
 const inlineThemes = { light: 'github-light', dark: 'github-dark' } as const;
 
 export interface Props {
@@ -15,7 +17,7 @@ const { reportPath } = Astro.props;
   - label: "Run tests"
     command: <your test command>
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#${buildkitePluginVersion.version}:
           action: junit-process
           report_path: ${reportPath}
           token: "\${MERGIFY_TOKEN}"`}
