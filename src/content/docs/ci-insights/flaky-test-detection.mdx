@@ -13,15 +13,22 @@ and reduce false positives in your CI pipeline.
 
 ## Understanding Flaky Tests
 
-A **flaky test** is one that fails on some runs of a commit (SHA1) and passes
-on others. If a test runs twice on the same commit and once fails while the
-other succeeds, it's considered flaky because the outcome is not consistent
-with the same code. A test whose results differ without ever failing, such as
-one that is skipped in one run and passes in another, stays healthy.
+A **flaky test** is one whose outcome doesn't follow from the code alone.
+Mergify looks for either of two signals: repeated runs of the same commit
+(SHA1) in the same pipeline and job disagree, or the test both passed and failed
+within the same hour on the same branch, pipeline, and job. A failure has to be
+part of the disagreement, so a test whose results differ without ever failing,
+such as one that is skipped in one run and passes in another, stays healthy. A
+test that only ever fails is reported as broken rather than flaky, since no run
+contradicts the failures.
 
-Below is a simplified visualization of flakiness: two executions of the same
-tests on the exact same commit (same SHA1) produce different results. This
-inconsistency is what flags the test as flaky.
+A signal on its own isn't enough. Failures that make up a very small share of a
+test's executions leave it healthy, and a test goes back to healthy once it has
+kept running, and passing, for a week after its last failure.
+
+Below is a simplified visualization of repeated runs on one commit: two
+executions of the same tests on the exact same commit (same SHA1) produce
+different results.
 
 ```dot class="graph"
 strict digraph flaky {
@@ -98,9 +105,10 @@ Flaky tests are problematic because they:
 ## How Flaky Detection Works
 
 Mergify compares each uploaded test result against the results it already holds
-for the same test, on the same commit, in the same pipeline and job. When two
-results disagree, Mergify records the disagreement and reports the test as
-flaky once one of the two is a failure. Any repeat execution counts: a retried
+for the same test, on the same commit, in the same pipeline and job, and records
+any disagreement. It also watches for a test that passed and failed within the
+same hour on the same branch, pipeline, and job, which catches disagreements
+whose two runs sat on different commits. Any repeat execution counts: a retried
 job, a re-run workflow, or a job that runs the suite several times in a row.
 
 Detection does not depend on the scheduled runs that the setup guides below

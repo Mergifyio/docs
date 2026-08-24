@@ -47,13 +47,15 @@ GitHub and covers basic configuration steps.
 ### Flaky Detection
 
 CI Insights flags a **flaky job** when the same job runs more than once on the
-same commit (SHA1) and the runs end with different conclusions: one fails while
-another succeeds, even though the code did not change. Cancelled runs are
-ignored, since a cancellation says nothing about the code.
+same commit (SHA1) and the runs end with different conclusions, even though the
+code did not change. Cancelled runs are ignored, since a cancellation says
+nothing about the code.
 
-Tests use the same rule, with one addition: a **flaky test** has to have failed
-on some runs of a commit and passed on others. A test that is skipped in one
-run and passes in another stays healthy.
+A **flaky test** comes from the same kind of disagreement, either between
+repeated runs of one commit or between a pass and a failure recorded within the
+same hour on the same branch, pipeline, and job. A failure has to be part of the
+disagreement, so a test that is skipped in one run and passes in another stays
+healthy.
 
 To set up systematic flaky test detection in your CI pipeline, see our
 dedicated [Flaky Test Detection guide](/ci-insights/flaky-test-detection).
