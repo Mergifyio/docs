@@ -80,8 +80,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup your environment
-        # Add your specific setup steps here (Python, Node.js, etc.)
+      # Add your specific setup steps here (Python, Node.js, etc.)
 
       - name: Run Tests
         env:
@@ -117,8 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup your environment
-        # Add your specific setup steps here (Python, Node.js, etc.)
+      # Add your specific setup steps here (Python, Node.js, etc.)
 
       # Modified: Run tests multiple times for flaky detection
       - name: Run tests

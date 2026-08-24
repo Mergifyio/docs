@@ -33,6 +33,10 @@ configured retry rules
    jobs are not re-executed
 
 :::note
+  Auto-Retry re-runs GitHub Actions workflow runs. Jobs reported from another CI
+  system, such as Buildkite or Jenkins, show up in CI Insights but are never
+  retried.
+
   Due to GitHub API limitations, Auto-Retry works at the workflow level: a
   matching job triggers a retry of the workflow run it belongs to, never of
   that job alone. Each rule picks how much of it re-runs (see
@@ -67,7 +71,7 @@ repository selector at the top of the Auto-Retry page.
 To set up Auto-Retry for a repository:
 
 1. Navigate to your Mergify dashboard
-2. Go to **CI Insights** → **Auto-Retry**
+2. Go to **CI Insights** → **Auto-retry**
 3. Pick a repository from the selector at the top of the page
 4. Configure your retry rules for that repository
 
@@ -88,6 +92,12 @@ failures. Each rule specifies:
 
 - **Retry mode**: Whether to retry all failed jobs (`job`, the default) or the
   entire workflow (`pipeline`)
+
+When several rules match the same failed job, the one allowing the most retries
+applies. Jobs that ran on a merge queue's
+[batch pull request](/merge-queue/batches) are not retried, because the queue
+closes or replaces that pull request once it has read its checks, leaving a
+re-run nowhere to report.
 
 ### Conditions
 
