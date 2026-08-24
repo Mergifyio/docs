@@ -1,0 +1,1 @@
+drop .kelso.lock from the commit: it is the fleet worker's own lock file, swept in by accident and unrelated to the change (review point from JulianMaurin)
