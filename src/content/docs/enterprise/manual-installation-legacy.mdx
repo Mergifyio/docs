@@ -29,7 +29,7 @@ description: 'Legacy process for provisioning the Mergify GitHub App and engine 
 
    - **Repository**:
 
-     - Actions (RO)
+     - Actions (RW)
      - Administration (RO)
      - Checks (RW)
      - Commit statuses (RO)
@@ -147,15 +147,18 @@ Verify logs:
 docker logs mergify-engine
 ```
 
-Expected output:
+The container starts the `web` and `worker` programs under supervisord, so the output is similar to:
 
 ```text
-14:37:06 system   | web.1 started (pid=10)
-14:37:06 system   | worker.1 started (pid=11)
+Starting Mergify Enterprise
+INFO spawned: 'web' with pid 10
+INFO spawned: 'worker' with pid 11
 ```
 
-The dashboard is available at `https://my-mergify.example.com` and `http://container:5000/` should
-return HTTP 307 for health checks.
+The dashboard is available at `https://my-mergify.example.com`, and `http://container:5000/` serves
+its entry page with HTTP 200. For a scripted health check, prefer the
+[healthcheck endpoint](/enterprise/troubleshooting/#api-healthcheck), which reports on Redis,
+PostgreSQL, object storage, and the GitHub server.
 
 ## Testing
 

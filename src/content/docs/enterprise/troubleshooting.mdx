@@ -25,12 +25,16 @@ docker exec -u root -it mergify-engine /bin/bash
 mergify-admin connectivity-check
 ```
 
-Expected output:
+The command checks Redis, PostgreSQL, the object storage backing [CI Insights](/ci-insights) and
+[Test Insights](/test-insights), and the GitHub server. Each check reports `ok`, `failure`, or
+`skipped`, followed by a reason when there is one:
 
 ```text
-Redis: connected
-Postgres: connected
-GitHub server: connected
+redis: ok
+postgres: ok
+object_storage: skipped
+> Object Storage is not configured
+github_server: ok
 ```
 
 ### API healthcheck
@@ -41,6 +45,9 @@ Add a shared token:
 MERGIFYENGINE_HEALTHCHECK_SHARED_TOKEN=<a-random-token>
 ```
 
+Without that variable the endpoint answers 404, and it answers 403 when the bearer token does not
+match.
+
 Query the endpoint:
 
 ```sh
@@ -48,22 +55,22 @@ curl https://mergify.example.com/healthcheck \
   -H "Authorization: bearer <a-random-token>"
 ```
 
-Response example:
+The endpoint runs the same checks as the command above and answers 502 as soon as one of them
+fails:
 
 ```json
 {
-  "redis": {
-    "status": "ok"
-  },
-  "postgres": {
-    "status": "ok"
-  }
+  "redis": { "status": "ok", "reason": null },
+  "postgres": { "status": "ok", "reason": null },
+  "object_storage": { "status": "skipped", "reason": "Object Storage is not configured" },
+  "github_server": { "status": "ok", "reason": null }
 }
 ```
 
 ## Checking GitHub Webhooks
 
-Verify they return HTTP 202. If you see 404/504, confirm the webhook URL ends with `/event`.
+Verify they return HTTP 202 (event queued) or HTTP 200 (event ignored, which is expected for event
+types Mergify does not act on). If you see 404/504, confirm the webhook URL ends with `/event`.
 Check
 `https://github.mycompany.com/organizations/<org>/settings/apps/<app-name>/advanced`
 to ensure events reach the engine.
@@ -79,7 +86,7 @@ cause silent failures.
 
 | Permission | Access |
 | --- | --- |
-| Actions | Read-only |
+| Actions | Read & Write |
 | Administration | Read-only |
 | Checks | Read & Write |
 | Commit statuses | Read-only |

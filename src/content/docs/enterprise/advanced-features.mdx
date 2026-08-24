@@ -17,7 +17,6 @@ DD_TRACE_ENABLED=1
 DD_DOGSTATSD_DISABLE=0
 DD_AGENT_HOST=<my-datadog-agent-host>
 DD_DOGSTATSD_PORT=8125
-GUNICORN_CMD_ARGS="--statsd-host=<my-datadog-agent-host>:8125"
 ```
 
 ### Enabling logging
@@ -109,26 +108,29 @@ Requirements:
 
 - An IAM identity with read/write/delete rights on those buckets
 
-Mergify reads the standard AWS environment variables, so no `MERGIFYENGINE_` prefix is required
-for the common settings below:
+Common settings:
 
 ```ini
 MERGIFYENGINE_CI_TRACES_BACKEND="s3"
 MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET="<mycompany>-mergify-ci-traces-incoming"
 MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
 # Custom S3 implementation endpoint
-AWS_ENDPOINT_URL_S3=https://my-s3-domain.example.com:1234/
+MERGIFYENGINE_AWS_ENDPOINT_URL_S3=https://my-s3-domain.example.com:1234/
 ```
 
 #### Option A: IAM role discovery (recommended)
 
-Mergify uses the standard
-[boto3 credential chain](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html)
-to resolve credentials. Attach an IAM role granting access to the two buckets to the workload
-running the engine, and there is nothing else to configure. AWS issues and rotates short-lived
-credentials automatically, so no key rotation is required.
+Leave `MERGIFYENGINE_AWS_ACCESS_KEY_ID` and `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY` unset and Mergify
+falls back to the standard
+[boto3 credential chain](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html),
+which also resolves the region and account on its own. Attach an IAM role granting access to the two
+buckets to the workload running the engine, and there is nothing else to configure. AWS issues and
+rotates short-lived credentials automatically, so no key rotation is required.
 
 The credential chain can resolve credentials from any of:
+
+- The standard `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, which the
+  chain reads first
 
 - IAM Roles for Service Accounts ([IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html))
   or [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html)
@@ -146,18 +148,17 @@ Create an IAM user, attach a policy granting access to the two buckets, generate
 and provide it to the engine:
 
 ```ini
-AWS_ACCESS_KEY_ID=<access-key-id>
-AWS_SECRET_ACCESS_KEY=<secret-access-key>
+MERGIFYENGINE_AWS_ACCESS_KEY_ID=<access-key-id>
+MERGIFYENGINE_AWS_SECRET_ACCESS_KEY=<secret-access-key>
 # Optional
-AWS_REGION=us-west-2
+MERGIFYENGINE_AWS_REGION_NAME=us-west-2
+MERGIFYENGINE_AWS_ACCOUNT_ID=<account-id>
 ```
 
-:::note
-  The `MERGIFYENGINE_AWS_*` variants (`MERGIFYENGINE_AWS_ACCESS_KEY_ID`,
-  `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY`, `MERGIFYENGINE_AWS_REGION_NAME`,
-  `MERGIFYENGINE_AWS_ENDPOINT_URL_S3`, `MERGIFYENGINE_AWS_ACCOUNT_ID`) are still accepted for
-  backwards compatibility but are deprecated. Prefer the unprefixed `AWS_*` names. The standard
-  names match what the AWS CLI and SDKs use; `AWS_ACCOUNT_ID` is no longer required for S3 access.
+:::caution
+  Set both `MERGIFYENGINE_AWS_ACCESS_KEY_ID` and `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY`, or neither.
+  Mergify refuses to start the storage client when only one of them is set, so that a half-configured
+  key cannot silently fall back to the ambient credentials of Option A.
 :::
 
 ## Slack Integration
@@ -173,7 +174,9 @@ configure the app:
 #### OAuth & Permissions
 
 - Add redirect URL: `https://mergify.mycompany.com/front/integrations/callback/slack`.
-- Add the scopes required for channel messaging and metadata (reuse your existing scope list).
+
+- Add these bot token scopes, which are the ones Mergify requests during the OAuth flow:
+  `incoming-webhook`, `channels:read`, `groups:read`, `im:read`, `mpim:read`, and `team:read`.
 
 #### Incoming Webhooks
 
