@@ -2,6 +2,7 @@
 import { Code } from 'astro-expressive-code/components';
 
 import Aside from '~/components/Aside.astro';
+import buildkitePluginVersion from '~/data/buildkite-plugin-version.json';
 
 export interface Props {
   reportPath: string;
@@ -23,7 +24,7 @@ const { reportPath } = Astro.props;
       - "3.12"
     command: <your test command>
     plugins:
-      - mergifyio/mergify-ci#v1:
+      - mergifyio/mergify-ci#${buildkitePluginVersion.version}:
           action: junit-process
           job_name: "Tests ({{matrix}})"
           report_path: ${reportPath}
