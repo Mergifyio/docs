@@ -158,15 +158,23 @@ on:
 jobs:
   detect-scopes:
     runs-on: ubuntu-24.04
+    outputs:
+      backend: ${{ fromJSON(steps.scopes.outputs.scopes).backend }}
+      frontend: ${{ fromJSON(steps.scopes.outputs.scopes).frontend }}
+      docs: ${{ fromJSON(steps.scopes.outputs.scopes).docs }}
     steps:
       - uses: actions/checkout@v5
 
       - name: Detect scopes
+        id: scopes
         uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           action: scopes
           token: ${{ secrets.MERGIFY_TOKEN }}
 ```
+
+Downstream jobs then declare `needs: detect-scopes` and gate on those outputs, for example
+`if: ${{ needs.detect-scopes.outputs.backend == 'true' }}`.
 
 :::tip
   Did you know? Scopes also work outside of the merge queue to optimize your
