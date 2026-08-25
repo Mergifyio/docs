@@ -37,9 +37,15 @@ Merge Protections let you:
 ## How They Work
 
 1. You enable Merge Protections in the dashboard.
-2. A single check `Mergify Merge Protections` appears on every PR.
+
+2. A single `Mergify Merge Protections` check appears on every PR, or a
+   deployment of the same name if you set
+   [`reporting_method: deployments`](/merge-protections/setup#reporting-method-check-runs-vs-deployments).
+
 3. Your protection rules determine whether that check passes.
-4. You mark the check as Required in GitHub Branch Protection / Rulesets.
+
+4. You mark it as required in GitHub Branch Protection or Rulesets.
+
 5. PRs cannot merge unless all active protection rules succeed.
 
 ## Next Steps

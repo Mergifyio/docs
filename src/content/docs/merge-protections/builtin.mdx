@@ -24,9 +24,15 @@ Depends-On: org/repo#123
 <Image src={dependsOnBody} alt="Using Depends-On in the pull request body on GitHub" />
 
 Rules:
+
 - All referenced PRs must be in repositories with Mergify enabled
+
 - They must belong to the same organization
-- Cycles are ignored (a PR depending on itself or circular chains)
+
+- A dependency that is still open blocks the protection until that pull
+  request merges. A circular chain (or a pull request that lists itself) never
+  resolves, so every pull request in the loop stays blocked indefinitely, and
+  none of them merge.
 
 Use cases:
 - Feature split across multiple repos
