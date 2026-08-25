@@ -33,6 +33,9 @@ queue_rules:
 ## Detecting Scopes with Bazel
 
 Use `bazel query` to determine affected projects and upload them to Mergify.
+Deleted files need a second pass: they have no target left for `bazel query` to
+resolve, so the examples below map each deleted path back to the nearest
+directory that still holds a `BUILD` file.
 
 ### GitHub Actions
 
@@ -68,36 +71,61 @@ jobs:
           # -z prints paths raw. Without it git escapes non-ASCII bytes, and
           # quotes and backslashes whatever core.quotePath says, so the escaped
           # form reaches bazel and resolves to nothing.
-          git diff --name-only -z --diff-filter=ACMR \
+          # --no-renames reports a rename as a delete plus an add, so the
+          # package a file moved out of is not missed either. R and C stay in
+          # the filter so that dropping --no-renames degrades to the old
+          # destination-only behaviour rather than to reporting nothing.
+          git diff --name-only -z --no-renames --diff-filter=ACMRT \
             --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
+          git diff --name-only -z --no-renames --diff-filter=D \
+            --end-of-options "$BASE" "$HEAD" -- > deleted.nul || exit 1
           changed=$(tr '\0' '\n' < changed.nul)
-          if [ -z "$changed" ]; then
-            echo "scopes=" >> "$GITHUB_OUTPUT"
-            exit 0
+          deleted=$(tr '\0' '\n' < deleted.nul)
+
+          packages=""
+          if [ -n "$changed" ]; then
+            # One quoted word per path: bazel query splits set() on whitespace
+            # and reads ( ) + as syntax, so an unquoted pkg/my report.txt
+            # becomes the two labels pkg/my and report.txt, neither resolves,
+            # and pkg drops out of the scope list.
+            quoted=$(printf '%s\n' "$changed" | sed 's/.*/"&"/' | tr '\n' ' ')
+
+            set +e
+            packages=$(bazel query --keep_going --noshow_progress --output=package \
+              "buildfiles(set($quoted))" 2>query.err)
+            rc=$?
+            set -e
+            # Always report what the query skipped: --keep_going exits 3 for
+            # any partial result. Usually that is files outside any Bazel
+            # package (README.md, .github/**), but a package whose BUILD file
+            # fails to load also exits 3 and drops out of the scope list.
+            # Anything else is a hard failure and must not become an empty
+            # scope list.
+            cat query.err >&2
+            if [ "$rc" -ne 0 ] && [ "$rc" -ne 3 ]; then
+              exit "$rc"
+            fi
           fi
 
-          # One quoted word per path: bazel query splits set() on whitespace
-          # and reads ( ) + as syntax, so an unquoted pkg/my report.txt becomes
-          # the two labels pkg/my and report.txt, neither resolves, and pkg
-          # drops out of the scope list.
-          quoted=$(printf '%s\n' "$changed" | sed 's/.*/"&"/' | tr '\n' ' ')
+          # A deleted path has no target left for bazel query to resolve, and
+          # dropping it leaves the package it came from untested. Its package
+          # is the nearest directory that still holds a BUILD file, which is
+          # the rule bazel itself uses. A package deleted whole climbs to its
+          # nearest surviving ancestor package, or contributes nothing when
+          # there is none.
+          gone=$(printf '%s\n' "$deleted" | while IFS= read -r path; do
+            [ -n "$path" ] || continue
+            dir=$(dirname -- "$path")
+            while [ "$dir" != "." ] && [ "$dir" != "/" ]; do
+              if [ -f "$dir/BUILD" ] || [ -f "$dir/BUILD.bazel" ]; then
+                printf '%s\n' "$dir"
+                break
+              fi
+              dir=$(dirname -- "$dir")
+            done
+          done)
 
-          set +e
-          packages=$(bazel query --keep_going --noshow_progress --output=package \
-            "buildfiles(set($quoted))" 2>query.err)
-          rc=$?
-          set -e
-          # Always report what the query skipped: --keep_going exits 3 for any
-          # partial result. Usually that is files outside any Bazel package
-          # (README.md, .github/**), but a package whose BUILD file fails to
-          # load also exits 3 and drops out of the scope list. Anything else is
-          # a hard failure and must not become an empty scope list.
-          cat query.err >&2
-          if [ "$rc" -ne 0 ] && [ "$rc" -ne 3 ]; then
-            exit "$rc"
-          fi
-
-          scopes=$(printf '%s\n' "$packages" | sed '/^$/d' | sort -u | paste -sd, -)
+          scopes=$(printf '%s\n%s\n' "$packages" "$gone" | sed '/^$/d' | sort -u | paste -sd, -)
           echo "Detected scopes: ${scopes:-<none>}"
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
@@ -139,10 +167,17 @@ steps:
       # -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes
       # and backslashes whatever core.quotePath says, so the escaped form
       # reaches bazel and resolves to nothing.
-      git diff --name-only -z --diff-filter=ACMR \
+      # --no-renames reports a rename as a delete plus an add, so the package
+      # a file moved out of is not missed either. R and C stay in the filter so
+      # that dropping --no-renames degrades to the old destination-only
+      # behaviour rather than to reporting nothing.
+      git diff --name-only -z --no-renames --diff-filter=ACMRT \
         --end-of-options "$$BASE" "$$HEAD" -- > changed.nul || exit 1
+      git diff --name-only -z --no-renames --diff-filter=D \
+        --end-of-options "$$BASE" "$$HEAD" -- > deleted.nul || exit 1
       CHANGED=$(tr '\0' '\n' < changed.nul)
-      SCOPES=""
+      DELETED=$(tr '\0' '\n' < deleted.nul)
+      PACKAGES=""
       if [ -n "$$CHANGED" ]; then
         # One quoted word per path: bazel query splits set() on whitespace and
         # reads ( ) + as syntax, so an unquoted pkg/my report.txt becomes the
@@ -163,8 +198,26 @@ steps:
         if [ "$$RC" -ne 0 ] && [ "$$RC" -ne 3 ]; then
           exit "$$RC"
         fi
-        SCOPES=$(printf '%s\n' "$$PACKAGES" | sed '/^$/d' | sort -u | paste -sd, -)
       fi
+
+      # A deleted path has no target left for bazel query to resolve, and
+      # dropping it leaves the package it came from untested. Its package is
+      # the nearest directory that still holds a BUILD file, which is the rule
+      # bazel itself uses. A package deleted whole climbs to its nearest
+      # surviving ancestor package, or contributes nothing when there is none.
+      GONE=$(printf '%s\n' "$$DELETED" | while IFS= read -r path; do
+        [ -n "$$path" ] || continue
+        dir=$(dirname -- "$$path")
+        while [ "$$dir" != "." ] && [ "$$dir" != "/" ]; do
+          if [ -f "$$dir/BUILD" ] || [ -f "$$dir/BUILD.bazel" ]; then
+            printf '%s\n' "$$dir"
+            break
+          fi
+          dir=$(dirname -- "$$dir")
+        done
+      done)
+
+      SCOPES=$(printf '%s\n%s\n' "$$PACKAGES" "$$GONE" | sed '/^$/d' | sort -u | paste -sd, -)
       buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
 
   - label: ":mag: Upload scopes"
@@ -184,13 +237,19 @@ steps:
 # -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes and
 # backslashes whatever core.quotePath says, so the escaped form reaches bazel
 # and resolves to nothing.
-git diff --name-only -z --diff-filter=ACMR \
+# --no-renames reports a rename as a delete plus an add, so the package a file
+# moved out of is not missed either. R and C stay in the filter so that
+# dropping --no-renames degrades to the old destination-only behaviour rather
+# than to reporting nothing.
+git diff --name-only -z --no-renames --diff-filter=ACMRT \
   --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
+git diff --name-only -z --no-renames --diff-filter=D \
+  --end-of-options "$BASE" "$HEAD" -- > deleted.nul || exit 1
 CHANGED=$(tr '\0' '\n' < changed.nul)
+DELETED=$(tr '\0' '\n' < deleted.nul)
 
-if [ -z "$CHANGED" ]; then
-  echo '{"scopes": []}' > scopes.json
-else
+PACKAGES=""
+if [ -n "$CHANGED" ]; then
   # One quoted word per path: bazel query splits set() on whitespace and reads
   # ( ) + as syntax, so an unquoted pkg/my report.txt becomes the two labels
   # pkg/my and report.txt, neither resolves, and pkg drops out of the scope
@@ -214,8 +273,25 @@ else
   if [ "$RC" -ne 0 ] && [ "$RC" -ne 3 ]; then
     exit "$RC"
   fi
+fi
 
-  printf '%s\n' "$PACKAGES" | sort -u \
-    | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json
-fi`}
+# A deleted path has no target left for bazel query to resolve, and dropping it
+# leaves the package it came from untested. Its package is the nearest
+# directory that still holds a BUILD file, which is the rule bazel itself uses.
+# A package deleted whole climbs to its nearest surviving ancestor package, or
+# contributes nothing when there is none.
+GONE=$(printf '%s\n' "$DELETED" | while IFS= read -r path; do
+  [ -n "$path" ] || continue
+  dir=$(dirname -- "$path")
+  while [ "$dir" != "." ] && [ "$dir" != "/" ]; do
+    if [ -f "$dir/BUILD" ] || [ -f "$dir/BUILD.bazel" ]; then
+      printf '%s\n' "$dir"
+      break
+    fi
+    dir=$(dirname -- "$dir")
+  done
+done)
+
+printf '%s\n%s\n' "$PACKAGES" "$GONE" | sed '/^$/d' | sort -u \
+  | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json`}
 />
