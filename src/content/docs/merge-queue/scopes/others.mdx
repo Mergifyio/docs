@@ -70,8 +70,10 @@ jobs:
 Using the
 [`mergifyio/mergify-ci`](https://github.com/Mergifyio/mergify-ci-buildkite-plugin)
 Buildkite plugin, a first step resolves the merge-queue-aware base and head
-SHAs and exposes them as meta-data, while a second step computes the affected
-projects with your monorepo tool and uploads them to Mergify:
+SHAs and exposes them as meta-data, a second computes the affected projects with
+your monorepo tool into the `mergify-ci.scopes` meta-data, and a third uploads them. The
+upload runs in its own step because the plugin replaces the step's command, so a
+step that both detects and uploads never runs its detection:
 
 ```yaml
 steps:
@@ -81,13 +83,17 @@ steps:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-git-refs
 
-  - label: ":mag: Detect and upload scopes"
+  - label: ":mag: Detect scopes"
+    key: detect-scopes
     depends_on: git-refs
     command: |
       BASE=$(buildkite-agent meta-data get "mergify-ci.base")
       HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
-      SCOPES=$(my_monorepo_command_to_get_impacted_projects "$BASE" "$HEAD" | paste -sd, -)
-      buildkite-agent meta-data set "mergify-ci.scopes" "$SCOPES"
+      SCOPES=$(my_monorepo_command_to_get_impacted_projects "$$BASE" "$$HEAD" | paste -sd, -)
+      buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
+
+  - label: ":mag: Upload scopes"
+    depends_on: detect-scopes
     plugins:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-upload

@@ -98,8 +98,10 @@ jobs:
 Using the
 [`mergifyio/mergify-ci`](https://github.com/Mergifyio/mergify-ci-buildkite-plugin)
 Buildkite plugin, a first step resolves the merge-queue-aware base and head
-SHAs and exposes them as meta-data, while a second step computes the affected
-projects with `bazel query` and uploads them to Mergify:
+SHAs and exposes them as meta-data, a second computes the affected projects with
+`bazel query` into the `mergify-ci.scopes` meta-data, and a third uploads them. The
+upload runs in its own step because the plugin replaces the step's command, so a
+step that both detects and uploads never runs its detection:
 
 ```yaml
 steps:
@@ -109,28 +111,32 @@ steps:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-git-refs
 
-  - label: ":mag: Detect and upload scopes"
+  - label: ":mag: Detect scopes"
+    key: detect-scopes
     depends_on: git-refs
     command: |
       BASE=$(buildkite-agent meta-data get "mergify-ci.base")
       HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
-      CHANGED=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" | tr '\n' ' ')
+      CHANGED=$(git diff --name-only --diff-filter=ACMR "$$BASE" "$$HEAD" | tr '\n' ' ')
       SCOPES=""
-      if [ -n "$CHANGED" ]; then
+      if [ -n "$$CHANGED" ]; then
         set +e
         PACKAGES=$(bazel query --keep_going --noshow_progress --output=package \
-          "buildfiles(set($CHANGED))" 2>query.err)
-        RC=$?
+          "buildfiles(set($$CHANGED))" 2>query.err)
+        RC=$$?
         set -e
         # --keep_going exits 3 when it skipped files outside any Bazel package.
         # Anything else is a real failure, not an empty scope list.
-        if [ "$RC" -ne 0 ] && [ "$RC" -ne 3 ]; then
+        if [ "$$RC" -ne 0 ] && [ "$$RC" -ne 3 ]; then
           cat query.err >&2
-          exit "$RC"
+          exit "$$RC"
         fi
-        SCOPES=$(printf '%s\n' "$PACKAGES" | sed '/^$/d' | sort -u | paste -sd, -)
+        SCOPES=$(printf '%s\n' "$$PACKAGES" | sed '/^$/d' | sort -u | paste -sd, -)
       fi
-      buildkite-agent meta-data set "mergify-ci.scopes" "$SCOPES"
+      buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
+
+  - label: ":mag: Upload scopes"
+    depends_on: detect-scopes
     plugins:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-upload
