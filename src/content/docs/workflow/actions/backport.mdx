@@ -28,7 +28,8 @@ this behaviour using the `ignore_conflicts` option.
 
 The `backport` action takes a list of branches to which the changes from the
 merged pull request will be backported. The branch names should be specified as
-strings.
+strings. Use `regexes` instead of `branches` to pick the destination branches by
+pattern rather than naming each one.
 
 <ActionOptionsTable def="BackportActionModel" />
 
@@ -76,17 +77,20 @@ pull_request_rules:
   - name: automatically merge backport if they pass tests
     conditions:
       - author = mergify[bot]
-      - base ~= ^mergify/bp/
-      - head ~= ^release-1.
+      - head ~= ^mergify/bp/
+      - base ~= ^release-1\.
       - check-success = continuous-integration
     actions:
       merge:
         method: merge
 ```
 
-In this configuration, a pull request is backported when it has the label `backport`. 
-Then, when the backport is created and passes the check named
-`continuous-integration`, it will be automatically merged.
+In this configuration, a pull request is backported when it has the label
+`backport`. Then, when the backport is created and passes the check named
+`continuous-integration`, it will be automatically merged. Mergify opens each
+backport from a head branch named
+`mergify/bp/<destination-branch>/pr-<original-number>`, which is what the `head`
+condition matches. The base of the backport is the destination branch itself.
 
 ### Including the cherry-picked commits
 

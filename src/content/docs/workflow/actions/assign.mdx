@@ -16,13 +16,18 @@ conditions.
 
 Each entry in `users`, `add_users` or `remove_users` is a
 [`User`](/configuration/data-types#user): a GitHub login, or the `{{ author }}`
-variable to assign the pull request to its author.
+variable to assign the pull request to its author. `users` is the older form of
+`add_users` and behaves the same way; prefer `add_users` in new rules.
 
 :::caution
-  Make sure the users you specify in the assign action have the necessary
-  access to the repository and the pull request. If the specified user does not
-  have the necessary permissions, the action will fail.
+  A login that GitHub refuses as an assignee, such as a user who is not a
+  collaborator on the repository, is dropped without an error. The action still
+  reports success and the pull request ends up without that assignee, so check
+  that the logins you list have access to the repository.
 :::
+
+Mergify skips any login ending in `[bot]` when adding assignees, so a rule that
+assigns `{{ author }}` does nothing on a pull request opened by a bot.
 
 ## Examples
 
