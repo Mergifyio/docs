@@ -74,6 +74,9 @@ jobs:
           # --end-of-options and the trailing -- pin the base and head values
           # as revisions: git reads them neither as options nor as paths that
           # happen to exist, so a hostile value fails as a bad revision.
+          # diff.relative is forced off: a repo that sets it reports paths
+          # relative to the working directory and drops everything outside
+          # it, so scopes come back short with no error.
           # -z prints paths raw. Without it git escapes non-ASCII bytes, and
           # quotes and backslashes whatever core.quotePath says, so the escaped
           # form reaches bazel and resolves to nothing.
@@ -81,9 +84,9 @@ jobs:
           # package a file moved out of is not missed either. R and C stay in
           # the filter so that dropping --no-renames degrades to the old
           # destination-only behaviour rather than to reporting nothing.
-          git diff --name-only -z --no-renames --diff-filter=ACMRT \
+          git -c diff.relative=false diff --name-only -z --no-renames --diff-filter=ACMRT \
             --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
-          git diff --name-only -z --no-renames --diff-filter=D \
+          git -c diff.relative=false diff --name-only -z --no-renames --diff-filter=D \
             --end-of-options "$BASE" "$HEAD" -- > deleted.nul || exit 1
           changed=$(tr '\0' '\n' < changed.nul)
           deleted=$(tr '\0' '\n' < deleted.nul)
@@ -172,6 +175,9 @@ steps:
       # --end-of-options and the trailing -- pin the base and head values as
       # revisions: git reads them neither as options nor as paths that happen
       # to exist, so a hostile value fails as a bad revision.
+      # diff.relative is forced off: a repo that sets it reports paths relative
+      # to the working directory and drops everything outside it, so scopes
+      # come back short with no error.
       # -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes
       # and backslashes whatever core.quotePath says, so the escaped form
       # reaches bazel and resolves to nothing.
@@ -179,9 +185,9 @@ steps:
       # a file moved out of is not missed either. R and C stay in the filter so
       # that dropping --no-renames degrades to the old destination-only
       # behaviour rather than to reporting nothing.
-      git diff --name-only -z --no-renames --diff-filter=ACMRT \
+      git -c diff.relative=false diff --name-only -z --no-renames --diff-filter=ACMRT \
         --end-of-options "$$BASE" "$$HEAD" -- > changed.nul || exit 1
-      git diff --name-only -z --no-renames --diff-filter=D \
+      git -c diff.relative=false diff --name-only -z --no-renames --diff-filter=D \
         --end-of-options "$$BASE" "$$HEAD" -- > deleted.nul || exit 1
       CHANGED=$(tr '\0' '\n' < changed.nul)
       DELETED=$(tr '\0' '\n' < deleted.nul)
@@ -242,6 +248,9 @@ steps:
   command={String.raw`# --end-of-options and the trailing -- pin the base and head values as
 # revisions: git reads them neither as options nor as paths that happen to
 # exist, so a hostile value fails as a bad revision.
+# diff.relative is forced off: a repo that sets it reports paths relative to
+# the working directory and drops everything outside it, so scopes come back
+# short with no error.
 # -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes and
 # backslashes whatever core.quotePath says, so the escaped form reaches bazel
 # and resolves to nothing.
@@ -249,9 +258,9 @@ steps:
 # moved out of is not missed either. R and C stay in the filter so that
 # dropping --no-renames degrades to the old destination-only behaviour rather
 # than to reporting nothing.
-git diff --name-only -z --no-renames --diff-filter=ACMRT \
+git -c diff.relative=false diff --name-only -z --no-renames --diff-filter=ACMRT \
   --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
-git diff --name-only -z --no-renames --diff-filter=D \
+git -c diff.relative=false diff --name-only -z --no-renames --diff-filter=D \
   --end-of-options "$BASE" "$HEAD" -- > deleted.nul || exit 1
 CHANGED=$(tr '\0' '\n' < changed.nul)
 DELETED=$(tr '\0' '\n' < deleted.nul)
