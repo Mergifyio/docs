@@ -240,9 +240,11 @@ After fixing the broken PR, re-queue the stack from the top with
 - **Maximum stack depth: 20.** Stacks deeper than 20 PRs aren't recognized as
   a stack by the queue and fall back to per-PR queueing.
 
-- **Drafts break the stack.** A draft predecessor blocks queue propagation:
-  the queue won't pull a stack through a PR still marked as draft. Mark the
-  PR ready for review first.
+- **A draft predecessor holds the stack.** Propagation still reaches it: the
+  draft PR gets its own queue command, then waits on the same `-draft`
+  condition as every queued PR. Nothing above it is validated until you mark it
+  ready for review, at which point it joins the queue. You don't have to
+  comment `@mergifyio queue` again.
 
 ## Related
 

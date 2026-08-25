@@ -103,10 +103,14 @@ This is useful for:
 - **End-to-end tests** that are expensive and should only run on final batches
 - **Deployment validation** that needs to happen before code reaches the main branch
 
+Gate the job on the scope, the same way you gate any other. `detect-scopes` below is the job from
+the [GitHub Actions integration](/integrations/gha#monorepo-ci), with `merge-queue` added to its
+`outputs`:
+
 ```yaml
 integration-tests:
-  if: ${{ needs.scopes.outputs.merge-queue == 'true' }}
-  needs: scopes
+  if: ${{ needs.detect-scopes.outputs.merge-queue == 'true' }}
+  needs: detect-scopes
   runs-on: ubuntu-22.04
   steps:
     - uses: actions/checkout@v5
