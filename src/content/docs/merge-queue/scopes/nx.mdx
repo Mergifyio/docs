@@ -54,7 +54,7 @@ jobs:
           HEAD: ${{ steps.refs.outputs.head }}
           BASE: ${{ steps.refs.outputs.base }}
         run: |
-          scopes=$( npx nx show projects --affected --base=$BASE --head=$HEAD | paste -sd, -)
+          scopes=$( npx nx show projects --affected --base="$BASE" --head="$HEAD" | paste -sd, -)
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
       - name: Scopes upload
