@@ -19,6 +19,20 @@ maintaining a clean repository and reducing clutter from unused branches.
 
 <ActionOptionsTable def="DeleteHeadBranchActionModel" />
 
+## Branches Mergify Refuses to Delete
+
+Mergify does nothing on a pull request coming from a fork, since the head branch
+is not yours to delete. Unless `force` is set, it also refuses to delete a
+branch that other pull requests still use, and GitHub refuses to delete a
+protected branch or the repository's default branch.
+
+The author of a pull request picks its head branch, so a rule whose
+[conditions](/configuration/conditions) describe only the state of a pull
+request deletes whichever branch that person named as the head. That leaves
+long-lived unprotected branches exposed, such as a staging or a release branch.
+A condition on the [author](/configuration/conditions#attributes-list) or on a
+`label`, or a pattern on `head`, keeps the rule off them.
+
 ## Examples
 
 Here is an example of how the `delete_head_branch` action can be used in your
