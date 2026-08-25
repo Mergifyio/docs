@@ -48,8 +48,9 @@ merge_protections:
     if:
       - base=main
     success_conditions:
-      - check-success=ci/test
-      - check-neutral=ci/lint
+      - or:
+          - check-success=ci/test
+          - check-neutral=ci/lint
 ```
 
 :::note
@@ -58,8 +59,10 @@ merge_protections:
 :::
 
 :::note
-  When both `success_conditions` and `neutral_conditions` are defined, they
-  are combined with an `or` operator in the migrated merge protection.
+  When both `success_conditions` and `neutral_conditions` are defined, the
+  migration wraps them in a single `or`, as above. When only one of the two is
+  defined, its conditions are copied across as-is. When neither is defined, the
+  `post_check` action is removed without a replacement merge protection.
 :::
 
 ---
@@ -86,8 +89,18 @@ and also these additional variables:
 
 - `{{ check_rule_name }}` the name of the rule that triggered this action;
 
-- `{{ check_succeed }}` is `true` if all the conditions match, `false`
+- `{{ check_status }}` the resulting check-run status: `success` when the
+  `success_conditions` match, `neutral` when the `neutral_conditions` match,
+  and `failure` otherwise. When neither option is set, the triggering rule's
+  own conditions decide between `success` and `failure`;
+
+- `{{ check_succeeded }}` is `true` if `check_status` is `success`, `false`
   otherwise;
 
-- `{{ check_conditions }}` the list of all conditions with a checkbox marked if
-  the condition matches.
+- `{{ check_conditions }}` the `success_conditions` with a checkbox marked
+  against each one that matches. It is empty when only `neutral_conditions` is
+  set, and falls back to the triggering rule's own conditions when neither
+  option is set.
+
+`{{ check_succeed }}` is also available as an alias of `{{ check_succeeded }}`,
+kept for backward compatibility.
