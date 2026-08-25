@@ -495,6 +495,25 @@ default](/commands/restrictions/#default-restrictions) and have their own
 mechanism that can be modified. See [Commands
 Restrictions](/commands/restrictions/) for changing the default.
 
+### Action Permissions
+
+Actions in [`pull_request_rules`](/workflow/rule-syntax) have no equivalent
+default restriction. They run whenever a pull request matches the rule's
+conditions, whoever opened it, and Mergify runs them with its own permissions or
+with those of the `bot_account` you configure. The conditions are what scopes a
+rule.
+
+This matters for actions writing to the pull request's head branch, such as
+[`update`](/workflow/actions/update), because its author picks that branch. On a
+same-repository pull request it is one of your branches, and opening a pull
+request from a branch that already exists takes only read permission, so a rule
+whose conditions describe only the state of a pull request acts on whichever
+branch that person named as the head. Conditions on the
+[author](/configuration/conditions#attributes-list) or on a `label`, or a
+pattern on `head`, keep the rule off the branches you care about. The same
+reasoning drives the default [restrictions](/commands/restrictions) on the
+`update`, `rebase` and `squash` commands.
+
 ## Managing IP Addresses Allowed for the GitHub App
 
 [GitHub allows you to configure the list of IP
