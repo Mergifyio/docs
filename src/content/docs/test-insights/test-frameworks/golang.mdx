@@ -12,6 +12,7 @@ import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astr
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
 import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
 import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
+import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 import ReviewInTestInsights from "./_review-in-test-insights.mdx"
@@ -67,6 +68,8 @@ For example, in your workflow file:
 
 <BuildkiteCIUploadStep reportPath="junit.xml" />
 <BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
+
+<BuildkiteTokenNote />
 
 <BuildkiteCIQuarantineSetup />
 

@@ -6,6 +6,7 @@ description: Report your test results from Playwright to Mergify
 import playwrightLogo from "../../../images/ci-insights/playwright/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
+import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
 
 <IntegrationLogo src={playwrightLogo} alt="Playwright logo" />
 
@@ -111,15 +112,16 @@ For example:
 
 ### Buildkite
 
-Set `MERGIFY_TOKEN` as an environment variable in your pipeline step:
+Set `MERGIFY_TOKEN` in the environment of the agents running your tests.
+The step itself then needs no Mergify-specific configuration:
 
 ```yaml
 steps:
   - label: "Run Tests 🧪"
     command: npx playwright test
-    env:
-      MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
+
+<BuildkiteTokenNote plugin={false} />
 
 The reporter automatically collects your test results and sends them to Test
 Insights.

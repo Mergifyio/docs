@@ -6,6 +6,7 @@ description: Report your test results from RSpec to Mergify
 import rspecLogo from "../../../images/ci-insights/rspec/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
+import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
 
 <IntegrationLogo src={rspecLogo} alt="RSpec logo" />
 
@@ -70,15 +71,16 @@ For example:
 
 ### Buildkite
 
-Set `MERGIFY_TOKEN` as an environment variable in your pipeline step:
+Set `MERGIFY_TOKEN` in the environment of the agents running your tests.
+The step itself then needs no Mergify-specific configuration:
 
 ```yaml
 steps:
   - label: "Run RSpec Tests 🧪"
     command: bundle exec rspec
-    env:
-      MERGIFY_TOKEN: "${MERGIFY_TOKEN}"
 ```
+
+<BuildkiteTokenNote plugin={false} />
 
 The gem automatically collects your test results and sends them to Test Insights.
 
