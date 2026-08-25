@@ -41,6 +41,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
+        with:
+          # The queue-aware base commit must exist locally: monorepo tools
+          # resolve the base..head range through git.
+          fetch-depth: 0
 
       - name: Get git refs
         id: refs

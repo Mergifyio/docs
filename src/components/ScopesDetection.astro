@@ -54,5 +54,7 @@ mergify ci scopes-send --scopes-json scopes.json`;
   In the context of merge queue pull requests, the <code>HEAD</code> and <code>BASE</code> git
   references are specifically calculated to detect changed projects in the current batch only, not in
   the batches this one depends on. This ensures that your monorepo tool identifies only the projects
-  affected by the PRs in the current batch, allowing for more granular and efficient testing.
+  affected by the PRs in the current batch, allowing for more granular and efficient testing. Both
+  commits have to exist in the clone your pipeline works from, so check out the full history rather
+  than a shallow copy.
 </Aside>
