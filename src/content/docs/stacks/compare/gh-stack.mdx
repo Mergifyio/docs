@@ -84,14 +84,14 @@ between them with `gh stack up` and `gh stack down`.
 | Draft PRs | `mergify stack push --draft` | `gh stack submit --draft` |
 | Merge Queue | [Native Mergify integration](/merge-queue) | GitHub's built-in merge queue |
 | Merge a stack | Bottom-up via Merge Queue | `gh stack merge` (not yet implemented) |
-| Stack visualization | Stack comment + browser-extension panel | Native GitHub UI stack map |
+| Stack visualization | Stack comment + browser-extension panel, or `--github-native` | Native GitHub UI stack map |
 | Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen or auto-numbered |
 | Navigate between PRs | N/A (single branch) | `gh stack up` / `down` / `top` / `bottom` |
 | Unstack | Not needed (standard Git branches) | `gh stack unstack` |
 | Atomic push | `--force-with-lease --atomic` (all-or-nothing) | `--force-with-lease --atomic` (all-or-nothing) |
 | Conflict memory | Git's native rerere | Built-in automatic rerere |
 | Pre-operation safety | Git reflog | Automatic branch snapshots before rebases |
-| Exit codes | Standard | Structured (8 specific codes) |
+| Exit codes | [Structured (8 specific codes)](/cli/usage#exit-codes) | Structured (8 specific codes) |
 
 ## Where Mergify Is Stronger
 
@@ -107,7 +107,10 @@ gh-stack, pushing and creating PRs are separate steps (`push` then `submit`).
 [priority lanes](/merge-queue/priority),
 [speculative checks](/merge-queue/performance#parallel-checks), and
 [queue pause](/merge-queue/pause). gh-stack relies on GitHub's built-in merge
-queue, which is more limited.
+queue, which is more limited. Mergify's Merge Queue also lands
+[GitHub-native stacks](/merge-queue/stacks#github-native-stacked-pull-requests),
+keeping their members together and in order, so you can use GitHub's stacking
+UI and Mergify's queue at the same time.
 
 **Collaboration support.** `mergify stack checkout` lets a teammate pick up
 your stack locally and push changes. `mergify stack sync` pulls remote changes
@@ -124,8 +127,11 @@ yet implemented.
 **Native GitHub UI.** gh-stack gets a stack map rendered directly in the PR
 interface. Mergify posts a stack comment on each PR and, with the
 [browser extension](/browser-extensions) installed, renders the
-stack and its revision history as an in-PR panel. Both work well, but neither
-is a built-in GitHub UI element.
+stack and its revision history as an in-PR panel. Neither of those is a
+built-in GitHub UI element.
+[`mergify stack push --github-native`](/stacks/setup#configuration) registers
+the stack with GitHub's own stacking API, so GitHub displays it as a stack, but
+that flag is experimental and is skipped where the API is not available.
 
 ## Other Considerations
 
