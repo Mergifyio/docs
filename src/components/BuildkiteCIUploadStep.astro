@@ -19,8 +19,7 @@ const { reportPath } = Astro.props;
     plugins:
       - mergifyio/mergify-ci#${buildkitePluginVersion.version}:
           action: junit-process
-          report_path: ${reportPath}
-          token: "\${MERGIFY_TOKEN}"`}
+          report_path: ${reportPath}`}
 	lang="yaml"
 />
 <p>Key Points:</p>

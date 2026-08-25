@@ -12,6 +12,7 @@ import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astr
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import BuildkiteCIUploadStep from "../../../../components/BuildkiteCIUploadStep.astro"
 import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploadStepMatrix.astro"
+import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
 import ReviewInTestInsights from "./_review-in-test-insights.mdx"
@@ -118,6 +119,8 @@ Alternative approach using cargo2junit:
 
 <BuildkiteCIUploadStep reportPath="junit.xml" />
 <BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
+
+<BuildkiteTokenNote />
 
 <BuildkiteCIQuarantineSetup />
 

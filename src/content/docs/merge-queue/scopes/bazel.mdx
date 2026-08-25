@@ -3,6 +3,7 @@ title: Scopes with Bazel
 description: Configure merge queue scopes using Bazel's dependency graph for precise batching.
 ---
 
+import BuildkiteTokenNote from '~/components/BuildkiteTokenNote.astro';
 import ScopesDetection from '~/components/ScopesDetection.astro';
 import Youtube from '~/components/Youtube.astro';
 
@@ -148,8 +149,14 @@ steps:
     plugins:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-upload
-          token: "${MERGIFY_TOKEN}"
 ```
+
+The plugin reads your [application key](/api/usage) from `MERGIFY_TOKEN` in
+the agent's environment. Without it the step still runs, but it logs a warning
+and sends nothing, and the build stays green, so a missing token looks like a
+pipeline that reports no scopes.
+
+<BuildkiteTokenNote />
 
 ### Any CI (Mergify CLI)
 
