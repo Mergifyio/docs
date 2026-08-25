@@ -90,7 +90,7 @@ between them with `gt up`, `gt down`, `gt top`, and `gt bottom`.
 | Open PR in browser | `mergify stack open` (interactive picker) | `gt pr` |
 | Collaboration | `mergify stack checkout` | Shared stacks + frozen branches |
 | Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen |
-| Alternate base branch | `mergify stack new --base <branch>` | Multi-trunk support |
+| Alternate base branch | `mergify stack new --base <remote>/<branch>` | Multi-trunk support |
 | IDE integration | CLI only | VS Code extension |
 | AI agent integration | [Skills](/stacks/agents) for Claude Code and skills.sh agents | `gt mcp` |
 | Merge Queue | [Native Mergify integration](/merge-queue) | Graphite merge queue |
@@ -166,7 +166,9 @@ includes:
 
 Mergify has invested in a different direction:
 
-- **Rules engine**: 40+ conditions, 20+ actions, cascading logic for
+- **Rules engine**: 70+
+  [pull request attributes](/configuration/conditions#attributes-list),
+  18 [actions](/workflow/actions), cascading logic for
   [Workflow Automation](/workflow).
 
 - **Merge Queue maturity**: batching, priority lanes, speculative checks,
