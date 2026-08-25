@@ -12,8 +12,13 @@ import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable
 :::
 
 The `delete_head_branch` action allows Mergify to automatically delete the head
-branch of a pull request once it has been merged. This can be useful for
-maintaining a clean repository and reducing clutter from unused branches.
+branch of a pull request once that pull request is closed, whether it was merged
+or not. This can be useful for maintaining a clean repository and reducing
+clutter from unused branches. Add a
+[`merged`](/configuration/conditions#attributes-list) condition to your rule if
+you only want merged pull requests to have their branch deleted.
+
+A head branch that lives on a fork is never deleted.
 
 ## Parameters
 

@@ -30,7 +30,9 @@ this behaviour using the `ignore_conflicts` option.
 ## Parameters
 
 The `copy` action takes a list of branches to which the changes from the pull
-request will be copied. The branch names should be specified as strings.
+request will be copied. The branch names should be specified as strings. Use
+`regexes` instead of `branches` to pick the destination branches by pattern
+rather than naming each one.
 
 <ActionOptionsTable def="CopyActionModel" />
 
