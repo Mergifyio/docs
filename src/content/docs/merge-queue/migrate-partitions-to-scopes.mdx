@@ -257,11 +257,14 @@ detect-scopes:
 
     - name: Detect affected projects
       id: affected
+      env:
+        HEAD: ${{ steps.refs.outputs.head }}
+        BASE: ${{ steps.refs.outputs.base }}
       run: |
         scopes=$( npx nx show projects \
           --affected \
-          --base=${{ steps.refs.outputs.base }} \
-          --head=${{ steps.refs.outputs.head }} | paste -sd, -)
+          --base="$BASE" \
+          --head="$HEAD" | paste -sd, -)
         echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
     - name: Upload scopes

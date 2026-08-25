@@ -54,7 +54,7 @@ jobs:
           HEAD: ${{ steps.refs.outputs.head }}
           BASE: ${{ steps.refs.outputs.base }}
         run: |
-          scopes=$( my_monorepo_command_to_get_impacted_projects $BASE $HEAD | paste -sd, -)
+          scopes=$( my_monorepo_command_to_get_impacted_projects "$BASE" "$HEAD" | paste -sd, -)
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
       - name: Scopes upload
