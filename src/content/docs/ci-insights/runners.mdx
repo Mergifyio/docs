@@ -68,8 +68,10 @@ what to monitor from the jobs it already sees:
 - **A runner shows up once it's reused.** Mergify holds off the first time a runner
   appears: a runner that only ever handles a single job is treated as ephemeral and
   left out. As soon as a runner picks up a second job, Mergify recognizes it as a
-  persistent machine and starts tracking it. This keeps your dashboards free of the
-  ephemeral runner identities that large fleets churn through.
+  persistent machine and starts tracking it. Only first attempts count: a job that
+  a runner picks up as a re-run does not push it over the line. This keeps your
+  dashboards free of the ephemeral runner identities that large fleets churn
+  through.
 
 - **Queues follow the same rule.** A queue is the demand from every job that requests
   the same labels. A job's wait counts toward its queue only once the runner that
