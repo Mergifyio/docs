@@ -40,8 +40,8 @@ enabled).
 ### Conditional auto-merge
 
 Pass a list of conditions to restrict auto-merge to pull requests that match.
-Only matching pull requests are auto-merged. Other pull requests still need
-to be merged manually or queued via the [`/queue` command](/commands/queue).
+Only matching pull requests are auto-merged. Other pull requests still need to
+be merged manually or queued via the [`@mergifyio queue` command](/commands/queue).
 
 ```yaml
 merge_protections_settings:
@@ -60,7 +60,7 @@ nested `and`, `or`, and `not` operators.
 | `true` | No | PR is auto-merged once the merge protections pass |
 | List of conditions | Yes | PR is auto-queued when conditions match. The merge queue then handles routing and merging |
 | List of conditions | No | PR is auto-merged once both the conditions and the merge protections pass |
-| omitted | — | No automatic action. Merge manually or use the [`/queue` command](/commands/queue) |
+| omitted | — | No automatic action. Merge manually or use the [`@mergifyio queue` command](/commands/queue) |
 
 ### Accepted and rejected values
 
@@ -121,7 +121,7 @@ configuration:
 
 When a configuration mixes autoqueued and manual queues, the migration pull
 request includes a YAML comment listing the queues that remain manual-only.
-Those queues stay reachable via the [`/queue` command](/commands/queue).
+Those queues stay reachable via the [`@mergifyio queue` command](/commands/queue).
 
 Apply the migration in one step: a configuration that sets
 `auto_merge_conditions` while a queue rule still has `autoqueue` is rejected.
