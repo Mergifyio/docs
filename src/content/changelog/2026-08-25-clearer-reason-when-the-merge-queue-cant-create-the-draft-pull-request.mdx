@@ -1,0 +1,11 @@
+---
+title: "Clearer reason when the merge queue can't create the draft pull request"
+date: 2026-08-25
+tags:
+  - Merge Queue
+description: "The dequeue reason now carries GitHub's own refusal message, including the repository rule that blocked the push."
+---
+
+When GitHub refuses the draft pull request the merge queue builds for a batch, the dequeue reason no longer stops at "The draft pull request cannot be created". It now quotes what GitHub said — including the repository rule that blocked the push and the link to its settings page.
+
+One case gets an explicit remedy: a ruleset requiring verified signatures. Mergify composes batch commits itself and has no signing key, so the fix is to add the Mergify app as a bypass actor on that rule.

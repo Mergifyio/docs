@@ -1,0 +1,13 @@
+---
+title: "Pagination drops the first and last links"
+date: 2026-08-25
+tags:
+  - API
+description: "Paginated API responses now advertise only next and prev, and omit the Link header entirely when a page has neither."
+---
+
+Paginated endpoints advertised four RFC 5988 relations in their `Link` header. `first` was only ever the endpoint called without a cursor, so it told you nothing you could not already do. `last` was worse: it walked backward from the end of the dataset, so its page boundaries never lined up with the ones a forward walk returns, and following it showed you items shifted against every other page.
+
+Both are gone. `next` and `prev` are the supported way to page through results.
+
+Two things follow. A response with neither a next nor a previous page now carries no `Link` header at all, so an absent header means there is nothing more to fetch. And the endpoints that only ever offered a way forward, such as pull requests and applications, now supply `prev` too.

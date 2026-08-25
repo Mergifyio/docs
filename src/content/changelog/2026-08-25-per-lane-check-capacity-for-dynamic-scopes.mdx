@@ -1,0 +1,11 @@
+---
+title: "Per-lane check capacity for dynamic scopes"
+date: 2026-08-25
+tags:
+  - Merge Queue
+description: "Set a single speculative-check budget that applies to every scope, so dynamic scope sets get per-lane capacity without listing scope names."
+---
+
+The merge queue's `scopes.capacities` option needs every scope spelled out by name, which does not work when your scopes come from a build tool and change with every pull request. The new `scopes.default_capacity` sets one budget that applies to any scope without an explicit `capacities` entry, so each lane runs its own speculative checks independently even when the scope set is dynamic.
+
+`merge_queue.max_parallel_checks` stays the global ceiling on how many speculative checks run in total, and an explicit `capacities` entry still wins for its own scope.

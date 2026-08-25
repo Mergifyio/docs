@@ -1,0 +1,11 @@
+---
+title: "Repository badge API removed"
+date: 2026-08-25
+tags:
+  - API
+description: "The deprecated /v1/badges/* endpoints are gone; a Mergify badge embedded in a README no longer renders."
+---
+
+The `/v1/badges/*` endpoints, which served a [shields.io](http://shields.io/) badge showing whether Mergify was enabled on a repository, have been removed. They were deprecated in March 2026 and now return 404.
+
+If you embed a Mergify badge in a README (`https://api.mergify.com/v1/badges/<owner>/<repo>.svg`), remove the image. There is no replacement endpoint.
