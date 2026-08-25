@@ -116,9 +116,10 @@ therefore does not equal the length of `files` on a pull request containing a re
 
 Mergify derives these attributes from the GitHub rulesets and branch protection
 rules active on the pull request's base branch. It evaluates them itself: when a
-ruleset requires code owner review or last-push approval, Mergify [injects the
-matching condition](/merge-queue/github-rulesets) into the rules it evaluates
-and shows it in the check summary.
+ruleset requires code owner review, last-push approval, or reviews from specific
+teams or users, Mergify [injects the matching
+condition](/merge-queue/github-rulesets) into the rules it evaluates and shows
+it in the check summary.
 
 Apart from `github-review-decision`, they cannot be written in your own
 conditions: a configuration using one is rejected with an error saying the
