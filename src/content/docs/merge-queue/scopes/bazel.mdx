@@ -34,11 +34,18 @@ queue_rules:
 ## Detecting Scopes with Bazel
 
 Use `bazel query` to determine affected projects and upload them to Mergify.
-Deleted files need a second pass: they have no target left for `bazel query` to
-resolve, so the examples below map each deleted path back to the nearest
-directory that still holds a `BUILD` file.
+`bazel query` cannot answer for every changed path, though: a deleted file has
+no target left, and a file no rule declares was never one. Either way the
+package drops out of its answer without the exit code turning fatal. So the
+examples below also map each path to the nearest directory that still holds a
+`BUILD` file, which is how bazel itself decides which package a path belongs
+to, and use the two answers together.
 
 ### GitHub Actions
+
+The workflow resolves the merge-queue-aware base and head SHAs, turns the diff
+between them into the list of Bazel packages those files belong to, and uploads
+that list as the pull request's scopes:
 
 ```yaml
 name: Detect Scopes
@@ -75,13 +82,14 @@ jobs:
           # --end-of-options and the trailing -- pin the base and head values
           # as revisions: git reads them neither as options nor as paths that
           # happen to exist, so a hostile value fails as a bad revision.
-          # -z prints paths raw. Without it git escapes non-ASCII bytes, and
-          # quotes and backslashes whatever core.quotePath says, so the escaped
-          # form reaches bazel and resolves to nothing.
+          # -z prints paths raw. Without it git wraps any path with unusual
+          # characters in double quotes, escaping the backslashes inside it
+          # and every non-ASCII byte unless core.quotePath is off, so the
+          # escaped form reaches bazel and resolves to nothing.
           # --no-renames reports a rename as a delete plus an add, so the
           # package a file moved out of is not missed either. R and C stay in
           # the filter so that dropping --no-renames degrades to the old
-          # destination-only behaviour rather than to reporting nothing.
+          # destination-only behavior rather than to reporting nothing.
           git diff --name-only -z --no-renames --diff-filter=ACMRT \
             --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
           git diff --name-only -z --no-renames --diff-filter=D \
@@ -105,22 +113,22 @@ jobs:
             # Always report what the query skipped: --keep_going exits 3 for
             # any partial result. Usually that is files outside any Bazel
             # package (README.md, .github/**), but a package whose BUILD file
-            # fails to load also exits 3 and drops out of the scope list.
-            # Anything else is a hard failure and must not become an empty
-            # scope list.
+            # fails to load exits 3 too, so the stderr is worth reading even
+            # though the walk below recovers the package. Anything else is a
+            # hard failure and must not become an empty scope list.
             cat query.err >&2
             if [ "$rc" -ne 0 ] && [ "$rc" -ne 3 ]; then
               exit "$rc"
             fi
           fi
 
-          # A deleted path has no target left for bazel query to resolve, and
-          # dropping it leaves the package it came from untested. Its package
-          # is the nearest directory that still holds a BUILD file, which is
-          # the rule bazel itself uses. A package deleted whole climbs to its
-          # nearest surviving ancestor package, or contributes nothing when
-          # there is none.
-          gone=$(printf '%s\n' "$deleted" | while IFS= read -r path; do
+          # Resolve every path to its package on disk as well, and take
+          # both answers together. bazel query cannot see a deleted path at
+          # all, it skips any file no rule declares, and it drops a package
+          # whose BUILD failed to load, each time with the tolerated exit 3.
+          # The nearest directory that still holds a BUILD file is the
+          # package, which is the rule bazel itself uses.
+          walked=$(printf '%s\n%s\n' "$changed" "$deleted" | while IFS= read -r path; do
             [ -n "$path" ] || continue
             dir=$(dirname -- "$path")
             while [ "$dir" != "." ] && [ "$dir" != "/" ]; do
@@ -132,7 +140,7 @@ jobs:
             done
           done)
 
-          scopes=$(printf '%s\n%s\n' "$packages" "$gone" | sed '/^$/d' | sort -u | paste -sd, -)
+          scopes=$(printf '%s\n%s\n' "$packages" "$walked" | sed '/^$/d' | sort -u | paste -sd, -)
           echo "Detected scopes: ${scopes:-<none>}"
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
@@ -150,7 +158,8 @@ Using the
 [`mergifyio/mergify-ci`](https://github.com/Mergifyio/mergify-ci-buildkite-plugin)
 Buildkite plugin, a first step resolves the merge-queue-aware base and head
 SHAs and exposes them as meta-data, a second computes the affected projects with
-`bazel query` into the `mergify-ci.scopes` meta-data, and a third uploads them. The
+`bazel query` and the BUILD-file walk into the `mergify-ci.scopes` meta-data, and
+a third uploads them. The
 upload runs in its own step because the plugin replaces the step's command, so a
 step that both detects and uploads never runs its detection:
 
@@ -176,13 +185,14 @@ steps:
       # --end-of-options and the trailing -- pin the base and head values as
       # revisions: git reads them neither as options nor as paths that happen
       # to exist, so a hostile value fails as a bad revision.
-      # -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes
-      # and backslashes whatever core.quotePath says, so the escaped form
+      # -z prints paths raw. Without it git wraps any path with unusual
+      # characters in double quotes, escaping the backslashes inside it and
+      # every non-ASCII byte unless core.quotePath is off, so the escaped form
       # reaches bazel and resolves to nothing.
       # --no-renames reports a rename as a delete plus an add, so the package
       # a file moved out of is not missed either. R and C stay in the filter so
       # that dropping --no-renames degrades to the old destination-only
-      # behaviour rather than to reporting nothing.
+      # behavior rather than to reporting nothing.
       git diff --name-only -z --no-renames --diff-filter=ACMRT \
         --end-of-options "$$BASE" "$$HEAD" -- > changed.nul || exit 1
       git diff --name-only -z --no-renames --diff-filter=D \
@@ -204,20 +214,22 @@ steps:
         # Always report what the query skipped: --keep_going exits 3 for any
         # partial result. Usually that is files outside any Bazel package
         # (README.md, .github/**), but a package whose BUILD file fails to load
-        # also exits 3 and drops out of the scope list. Anything else is a hard
-        # failure.
+        # exits 3 too, so the stderr is worth reading even though the walk below
+        # recovers the package. Anything else is a hard failure and must not
+        # become an empty scope list.
         cat query.err >&2
         if [ "$$RC" -ne 0 ] && [ "$$RC" -ne 3 ]; then
           exit "$$RC"
         fi
       fi
 
-      # A deleted path has no target left for bazel query to resolve, and
-      # dropping it leaves the package it came from untested. Its package is
-      # the nearest directory that still holds a BUILD file, which is the rule
-      # bazel itself uses. A package deleted whole climbs to its nearest
-      # surviving ancestor package, or contributes nothing when there is none.
-      GONE=$(printf '%s\n' "$$DELETED" | while IFS= read -r path; do
+      # Resolve every path to its package on disk as well, and take
+      # both answers together. bazel query cannot see a deleted path at
+      # all, it skips any file no rule declares, and it drops a package
+      # whose BUILD failed to load, each time with the tolerated exit 3.
+      # The nearest directory that still holds a BUILD file is the
+      # package, which is the rule bazel itself uses.
+      WALKED=$(printf '%s\n%s\n' "$$CHANGED" "$$DELETED" | while IFS= read -r path; do
         [ -n "$$path" ] || continue
         dir=$(dirname -- "$$path")
         while [ "$$dir" != "." ] && [ "$$dir" != "/" ]; do
@@ -229,7 +241,7 @@ steps:
         done
       done)
 
-      SCOPES=$(printf '%s\n%s\n' "$$PACKAGES" "$$GONE" | sed '/^$/d' | sort -u | paste -sd, -)
+      SCOPES=$(printf '%s\n%s\n' "$$PACKAGES" "$$WALKED" | sed '/^$/d' | sort -u | paste -sd, -)
       buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
 
   - label: ":mag: Upload scopes"
@@ -252,12 +264,13 @@ pipeline that reports no scopes.
   command={String.raw`# --end-of-options and the trailing -- pin the base and head values as
 # revisions: git reads them neither as options nor as paths that happen to
 # exist, so a hostile value fails as a bad revision.
-# -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes and
-# backslashes whatever core.quotePath says, so the escaped form reaches bazel
-# and resolves to nothing.
+# -z prints paths raw. Without it git wraps any path with unusual characters in
+# double quotes, escaping the backslashes inside it and every non-ASCII byte
+# unless core.quotePath is off, so the escaped form reaches bazel and resolves
+# to nothing.
 # --no-renames reports a rename as a delete plus an add, so the package a file
 # moved out of is not missed either. R and C stay in the filter so that
-# dropping --no-renames degrades to the old destination-only behaviour rather
+# dropping --no-renames degrades to the old destination-only behavior rather
 # than to reporting nothing.
 git diff --name-only -z --no-renames --diff-filter=ACMRT \
   --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
@@ -285,20 +298,23 @@ if [ -n "$CHANGED" ]; then
 
   # Always report what the query skipped: --keep_going exits 3 for any partial
   # result. Usually that is files outside any Bazel package (README.md,
-  # .github/**), but a package whose BUILD file fails to load also exits 3 and
-  # drops out of the scope list. Anything else is a hard failure.
+  # .github/**), but a package whose BUILD file fails to load exits 3 too, so
+  # the stderr is worth reading even though the walk below recovers the
+  # package. Anything else is a hard failure and must not become an empty
+  # scope list.
   cat query.err >&2
   if [ "$RC" -ne 0 ] && [ "$RC" -ne 3 ]; then
     exit "$RC"
   fi
 fi
 
-# A deleted path has no target left for bazel query to resolve, and dropping it
-# leaves the package it came from untested. Its package is the nearest
-# directory that still holds a BUILD file, which is the rule bazel itself uses.
-# A package deleted whole climbs to its nearest surviving ancestor package, or
-# contributes nothing when there is none.
-GONE=$(printf '%s\n' "$DELETED" | while IFS= read -r path; do
+# Resolve every path to its package on disk as well, and take
+# both answers together. bazel query cannot see a deleted path at
+# all, it skips any file no rule declares, and it drops a package
+# whose BUILD failed to load, each time with the tolerated exit 3.
+# The nearest directory that still holds a BUILD file is the
+# package, which is the rule bazel itself uses.
+WALKED=$(printf '%s\n%s\n' "$CHANGED" "$DELETED" | while IFS= read -r path; do
   [ -n "$path" ] || continue
   dir=$(dirname -- "$path")
   while [ "$dir" != "." ] && [ "$dir" != "/" ]; do
@@ -310,6 +326,6 @@ GONE=$(printf '%s\n' "$DELETED" | while IFS= read -r path; do
   done
 done)
 
-printf '%s\n%s\n' "$PACKAGES" "$GONE" | sed '/^$/d' | sort -u \
+printf '%s\n%s\n' "$PACKAGES" "$WALKED" | sed '/^$/d' | sort -u \
   | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json`}
 />
