@@ -86,8 +86,8 @@ steps:
     command: |
       BASE=$(buildkite-agent meta-data get "mergify-ci.base")
       HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
-      SCOPES=$(npx turbo run build --dry=json --filter="[$BASE...$HEAD]" | jq -r '.packages | join(",")')
-      buildkite-agent meta-data set "mergify-ci.scopes" "$SCOPES"
+      SCOPES=$(npx turbo run build --dry=json --filter="[$$BASE...$$HEAD]" | jq -r '.packages | join(",")')
+      buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
     plugins:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-upload
