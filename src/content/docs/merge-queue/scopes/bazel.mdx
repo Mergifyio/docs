@@ -65,16 +65,26 @@ jobs:
           # --end-of-options and the trailing -- pin the base and head values
           # as revisions: git reads them neither as options nor as paths that
           # happen to exist, so a hostile value fails as a bad revision.
-          changed=$(git diff --name-only --diff-filter=ACMR --end-of-options "$BASE" "$HEAD" --) || exit 1
-          changed=$(printf '%s' "$changed" | tr '\n' ' ')
+          # -z prints paths raw. Without it git escapes non-ASCII bytes, and
+          # quotes and backslashes whatever core.quotePath says, so the escaped
+          # form reaches bazel and resolves to nothing.
+          git diff --name-only -z --diff-filter=ACMR \
+            --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
+          changed=$(tr '\0' '\n' < changed.nul)
           if [ -z "$changed" ]; then
             echo "scopes=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
+          # One quoted word per path: bazel query splits set() on whitespace
+          # and reads ( ) + as syntax, so an unquoted pkg/my report.txt becomes
+          # the two labels pkg/my and report.txt, neither resolves, and pkg
+          # drops out of the scope list.
+          quoted=$(printf '%s\n' "$changed" | sed 's/.*/"&"/' | tr '\n' ' ')
+
           set +e
           packages=$(bazel query --keep_going --noshow_progress --output=package \
-            "buildfiles(set($changed))" 2>query.err)
+            "buildfiles(set($quoted))" 2>query.err)
           rc=$?
           set -e
           # Always report what the query skipped: --keep_going exits 3 for any
@@ -126,13 +136,22 @@ steps:
       # --end-of-options and the trailing -- pin the base and head values as
       # revisions: git reads them neither as options nor as paths that happen
       # to exist, so a hostile value fails as a bad revision.
-      CHANGED=$(git diff --name-only --diff-filter=ACMR --end-of-options "$$BASE" "$$HEAD" --) || exit 1
-      CHANGED=$(printf '%s' "$$CHANGED" | tr '\n' ' ')
+      # -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes
+      # and backslashes whatever core.quotePath says, so the escaped form
+      # reaches bazel and resolves to nothing.
+      git diff --name-only -z --diff-filter=ACMR \
+        --end-of-options "$$BASE" "$$HEAD" -- > changed.nul || exit 1
+      CHANGED=$(tr '\0' '\n' < changed.nul)
       SCOPES=""
       if [ -n "$$CHANGED" ]; then
+        # One quoted word per path: bazel query splits set() on whitespace and
+        # reads ( ) + as syntax, so an unquoted pkg/my report.txt becomes the
+        # two labels pkg/my and report.txt, neither resolves, and pkg drops out
+        # of the scope list.
+        QUOTED=$(printf '%s\n' "$$CHANGED" | sed 's/.*/"&"/' | tr '\n' ' ')
         set +e
         PACKAGES=$(bazel query --keep_going --noshow_progress --output=package \
-          "buildfiles(set($$CHANGED))" 2>query.err)
+          "buildfiles(set($$QUOTED))" 2>query.err)
         RC=$$?
         set -e
         # Always report what the query skipped: --keep_going exits 3 for any
@@ -162,16 +181,26 @@ steps:
   command={String.raw`# --end-of-options and the trailing -- pin the base and head values as
 # revisions: git reads them neither as options nor as paths that happen to
 # exist, so a hostile value fails as a bad revision.
-CHANGED=$(git diff --name-only --diff-filter=ACMR --end-of-options "$BASE" "$HEAD" --) || exit 1
-CHANGED=$(printf '%s' "$CHANGED" | tr '\n' ' ')
+# -z prints paths raw. Without it git escapes non-ASCII bytes, and quotes and
+# backslashes whatever core.quotePath says, so the escaped form reaches bazel
+# and resolves to nothing.
+git diff --name-only -z --diff-filter=ACMR \
+  --end-of-options "$BASE" "$HEAD" -- > changed.nul || exit 1
+CHANGED=$(tr '\0' '\n' < changed.nul)
 
 if [ -z "$CHANGED" ]; then
   echo '{"scopes": []}' > scopes.json
 else
+  # One quoted word per path: bazel query splits set() on whitespace and reads
+  # ( ) + as syntax, so an unquoted pkg/my report.txt becomes the two labels
+  # pkg/my and report.txt, neither resolves, and pkg drops out of the scope
+  # list.
+  QUOTED=$(printf '%s\n' "$CHANGED" | sed 's/.*/"&"/' | tr '\n' ' ')
+
   # Capture the exit code rather than piping straight into jq: a failed query
   # piped into jq still writes a well-formed, empty scopes.json and returns 0.
   if PACKAGES=$(bazel query --keep_going --noshow_progress --output=package \
-                  "buildfiles(set($CHANGED))" 2>query.err); then
+                  "buildfiles(set($QUOTED))" 2>query.err); then
     RC=0
   else
     RC=$?
