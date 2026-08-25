@@ -58,7 +58,11 @@ jobs:
           HEAD: ${{ steps.refs.outputs.head }}
           BASE: ${{ steps.refs.outputs.base }}
         run: |
-          scopes=$(npx turbo run build --dry=json --filter="[$BASE...$HEAD]" | jq -r '.packages | join(",")')
+          # A failed turbo piped into jq still exits 0 and writes an empty
+          # scope list, which the queue reads as "this pull request affects
+          # nothing", so capture the dry run first.
+          dry=$(npx turbo run build --dry=json --filter="[$BASE...$HEAD]") || exit 1
+          scopes=$(printf '%s' "$dry" | jq -r '.packages | join(",")')
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
       - name: Scopes upload
@@ -94,7 +98,11 @@ steps:
     command: |
       BASE=$(buildkite-agent meta-data get "mergify-ci.base")
       HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
-      SCOPES=$(npx turbo run build --dry=json --filter="[$$BASE...$$HEAD]" | jq -r '.packages | join(",")')
+      # A failed turbo piped into jq still exits 0 and writes an empty scope
+      # list, which the queue reads as "this pull request affects nothing",
+      # so capture the dry run first.
+      DRY=$(npx turbo run build --dry=json --filter="[$$BASE...$$HEAD]") || exit 1
+      SCOPES=$(printf '%s' "$$DRY" | jq -r '.packages | join(",")')
       buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
 
   - label: ":mag: Upload scopes"
@@ -108,6 +116,8 @@ steps:
 ### Any CI (Mergify CLI)
 
 <ScopesDetection
-  command={String.raw`npx turbo run build --dry=json --filter="[$BASE...$HEAD]" \
-  | jq '{scopes: .packages}' > scopes.json`}
+  command={String.raw`# A failed turbo piped into jq still exits 0 and writes a well-formed, empty
+# scopes.json, which the queue reads as "this pull request affects nothing".
+DRY=$(npx turbo run build --dry=json --filter="[$BASE...$HEAD]") || exit 1
+printf '%s' "$DRY" | jq '{scopes: .packages}' > scopes.json`}
 />
