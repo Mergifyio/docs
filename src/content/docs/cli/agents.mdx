@@ -99,12 +99,13 @@ export MERGIFY_TOKEN=your_token_here
 
 Which token to use depends on what you want the agent to do.
 
-**A GitHub token** covers everything except CI result uploads. Stacks needs one
-specifically, because it creates and updates pull requests through the GitHub
-API, and the Mergify API accepts a GitHub personal access token too. If you
-already have the [GitHub CLI](https://cli.github.com/) installed and
-authenticated, Stacks commands pick up its token on their own and you can skip
-this.
+**A GitHub token** covers everything except CI result uploads and setting
+[Merge Queue Scopes](/merge-queue/scopes), which need a `ci` application key.
+Stacks needs one specifically, because it creates and updates pull requests
+through the GitHub API, and the Mergify API accepts a GitHub personal access
+token too. If you already have the [GitHub CLI](https://cli.github.com/)
+installed and authenticated, Stacks commands pick up its token on their own and
+you can skip this.
 
 **A Mergify application key** covers the commands that call the Mergify API:
 queue status, Activity Log, freezes, and CI Insights uploads. Create one from

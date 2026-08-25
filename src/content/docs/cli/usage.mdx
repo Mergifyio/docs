@@ -6,8 +6,8 @@ description: Install the Mergify CLI and authenticate it to manage your merge qu
 import CliInstall from '~/components/CliInstall.astro';
 
 The Mergify CLI lets you interact with Mergify features directly from your
-terminal. This page covers installation and authentication; for the commands
-themselves, see the [CLI reference](/cli).
+terminal. This page covers installation, authentication, and the exit codes
+commands return; for the commands themselves, see the [CLI reference](/cli).
 
 ## Installation
 
@@ -92,8 +92,8 @@ Stacks commands fall back once more to `gh auth token`. There is no global
 mergify <command> --token your_token_here
 ```
 
-Each command lists the authentication and other options it accepts under its
-**Global options** in the [CLI reference](/cli).
+Each command's entry in the [CLI reference](/cli) lists the options it accepts,
+`--token` included.
 
 ### GitHub token
 
@@ -125,6 +125,23 @@ An application key carries either the `admin` scope or the `ci` scope, and
 belongs to a GitHub account rather than to a single repository. See
 [Application Key Scopes](/api/usage#application-key-scopes) for what each one
 covers. The Mergify API also accepts a GitHub personal access token, so one
-GitHub token can serve every command except `mergify ci junit-process`: it
-needs a `ci` application key, and it is the one command that never falls back
-to `GITHUB_TOKEN`.
+GitHub token serves most commands. Two exceptions need a `ci` application key.
+`mergify ci junit-process` (and the deprecated `mergify ci junit-upload`) never
+falls back to `GITHUB_TOKEN`. `mergify ci scopes-send` reads `GITHUB_TOKEN`, but
+posts to an endpoint that rejects anything other than a `ci` key.
+
+## Exit Codes
+
+The CLI reports failures with these exit codes, so a CI job can tell a conflict
+apart from an API failure without parsing the output:
+
+| Code | Name | Meaning |
+|------|------|---------|
+| `0` | `Success` | Command completed successfully. |
+| `1` | `GenericError` | Unclassified runtime failure (I/O error, bug, or captured panic). |
+| `3` | `StackNotFound` | Stack, branch, or commit not found. |
+| `4` | `Conflict` | Rebase or merge conflict. |
+| `5` | `GitHubApiError` | GitHub API request failed. |
+| `6` | `MergifyApiError` | Mergify API request failed. |
+| `7` | `InvalidState` | CLI invariant violated (e.g. command run outside a valid context). |
+| `8` | `ConfigurationError` | Configuration file missing, unparseable, or failing validation. |

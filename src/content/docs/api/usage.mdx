@@ -97,6 +97,11 @@ account, not the PAT's scopes.
 
 - `ghp_*`: [classic personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
 - `github_pat_*`: [fine-grained personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
+- `gho_*`: GitHub OAuth user tokens
+
+Tokens issued to a GitHub App rather than to a user (`ghu_*`, `ghs_*`) are not
+accepted. A job that only has an app installation token needs an application
+key instead.
 
 Example:
 
@@ -172,6 +177,8 @@ of a request.
 | Status Code | Meaning | Description |
 |-------------|---------|-------------|
 | `200` | OK | The request succeeded. |
+| `201` | Created | The resource was created. |
+| `204` | No Content | The request succeeded and the response has no body. |
 | `403` | Forbidden | Authentication is valid but you do not have permission to access this resource. |
 | `404` | Not Found | The requested resource does not exist. |
 | `409` | Conflict | The request conflicts with the current state of the resource. |
