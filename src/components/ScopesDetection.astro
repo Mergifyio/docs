@@ -16,6 +16,11 @@
  * Pass `command` with String.raw so the bash keeps its literal backslashes
  * (line continuations, `\n` in awk/jq) instead of the JS template literal eating
  * them.
+ *
+ * `set -eo pipefail` leads the script because every `command` ends up piping the
+ * build tool into jq or paste. Without pipefail a failed tool still leaves a
+ * well-formed, empty scopes.json and a zero exit status, so the batch would
+ * upload no scopes and merge untested rather than failing.
  */
 import { Code as InlineCode } from 'astro:components';
 import { Code } from 'astro-expressive-code/components';
@@ -30,7 +35,9 @@ export interface Props {
 
 const { command } = Astro.props as Props;
 
-const code = `REFS=$(mergify ci git-refs --format json)
+const code = `set -eo pipefail
+
+REFS=$(mergify ci git-refs --format json)
 BASE=$(printf '%s' "$REFS" | jq -r '.base')
 HEAD=$(printf '%s' "$REFS" | jq -r '.head')
 
