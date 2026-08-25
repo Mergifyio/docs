@@ -1,0 +1,1 @@
+Trunk comparison: adds the industry-standard note (trunk-io/bazel-action, Aspect AXL), states the package-vs-target granularity choice, gives the bazel-diff query service its own section, and answers the verbosity question on the page instead of in the PR
