@@ -9,6 +9,9 @@
  * `command` writes; `--scopes-file` next to it takes one scope per line instead.
  * The `--format json` refs are parsed with jq rather than scraped out of the
  * default `Base: <ref>` text, which is a human format with no stability promise.
+ * `jq -er` rather than `-r`: the JSON base is nullable, and git-refs leaves it
+ * null on any event that is neither a pull request nor a push. With `-r`, jq
+ * prints the string `null` and exits 0, passing it on as a git revision.
  * `printf '%s'` rather than `echo`, whose handling of backslashes in the JSON
  * varies by shell; the format string stays `%s` with no `\n` because this
  * template literal would turn that escape into a real newline inside the quotes.
@@ -31,8 +34,10 @@ export interface Props {
 const { command } = Astro.props as Props;
 
 const code = `REFS=$(mergify ci git-refs --format json)
-BASE=$(printf '%s' "$REFS" | jq -r '.base')
-HEAD=$(printf '%s' "$REFS" | jq -r '.head')
+# -e so a null ref fails here instead of flowing on as the literal string
+# "null": git-refs reports no base outside pull request and push events.
+BASE=$(printf '%s' "$REFS" | jq -er '.base') || exit 1
+HEAD=$(printf '%s' "$REFS" | jq -er '.head') || exit 1
 
 ${command}
 
