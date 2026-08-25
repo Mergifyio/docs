@@ -1,0 +1,1 @@
+Rebase onto #12523: carry its hostile-ref guard onto the git checkout calls that replaced git diff; document the Bzlmod install sileht suggested and why the pipelines keep the pinned JAR.
