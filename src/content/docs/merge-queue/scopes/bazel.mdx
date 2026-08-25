@@ -101,7 +101,7 @@ jobs:
 
             set +e
             packages=$(bazel query --keep_going --noshow_progress --output=package \
-              "buildfiles(set($quoted))" 2>query.err)
+              "set($quoted)" 2>query.err)
             rc=$?
             set -e
             # Always report what the query skipped: --keep_going exits 3 for
@@ -200,7 +200,7 @@ steps:
         QUOTED=$(printf '%s\n' "$$CHANGED" | sed 's/.*/"&"/' | tr '\n' ' ')
         set +e
         PACKAGES=$(bazel query --keep_going --noshow_progress --output=package \
-          "buildfiles(set($$QUOTED))" 2>query.err)
+          "set($$QUOTED)" 2>query.err)
         RC=$$?
         set -e
         # Always report what the query skipped: --keep_going exits 3 for any
@@ -276,7 +276,7 @@ if [ -n "$CHANGED" ]; then
   # Capture the exit code rather than piping straight into jq: a failed query
   # piped into jq still writes a well-formed, empty scopes.json and returns 0.
   if PACKAGES=$(bazel query --keep_going --noshow_progress --output=package \
-                  "buildfiles(set($QUOTED))" 2>query.err); then
+                  "set($QUOTED)" 2>query.err); then
     RC=0
   else
     RC=$?
