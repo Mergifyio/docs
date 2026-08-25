@@ -261,6 +261,12 @@ detect-scopes:
         HEAD: ${{ steps.refs.outputs.head }}
         BASE: ${{ steps.refs.outputs.base }}
       run: |
+        # scopes-git-refs reports an empty base on any event that is neither
+        # a pull request nor a push. Diffing against an empty revision, or
+        # letting the build tool fall back to its own default base, reports
+        # scopes for the wrong range.
+        [ -n "$BASE" ] || { echo "no base ref reported" >&2; exit 1; }
+
         # A failed nx piped into paste still exits 0 and writes an empty
         # scope list, which the queue reads as "this pull request affects
         # nothing", so capture the projects first.

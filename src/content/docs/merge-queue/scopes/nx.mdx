@@ -58,6 +58,12 @@ jobs:
           HEAD: ${{ steps.refs.outputs.head }}
           BASE: ${{ steps.refs.outputs.base }}
         run: |
+          # scopes-git-refs reports an empty base on any event that is neither
+          # a pull request nor a push. Diffing against an empty revision, or
+          # letting the build tool fall back to its own default base, reports
+          # scopes for the wrong range.
+          [ -n "$BASE" ] || { echo "no base ref reported" >&2; exit 1; }
+
           # A failed nx piped into paste still exits 0 and writes an empty
           # scope list, which the queue reads as "this pull request affects
           # nothing", so capture the projects first.
@@ -95,8 +101,10 @@ steps:
     key: detect-scopes
     depends_on: git-refs
     command: |
-      BASE=$(buildkite-agent meta-data get "mergify-ci.base")
-      HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
+      # The plugin only publishes the base meta-data when it resolved one, so
+      # a missing key means there is no base to diff against.
+      BASE=$(buildkite-agent meta-data get "mergify-ci.base") || exit 1
+      HEAD=$(buildkite-agent meta-data get "mergify-ci.head") || exit 1
       # A failed nx piped into paste still exits 0 and writes an empty scope
       # list, which the queue reads as "this pull request affects nothing",
       # so capture the projects first.
