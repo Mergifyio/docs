@@ -15,8 +15,10 @@ modes:
 - **`isolated`**: every batch runs as a fully independent unit, with no dependency on any other
   batch.
 
-All three honor your [queue rules](/merge-queue/rules) and [batch sizing](/merge-queue/batches).
-They differ only in **how batches depend on each other**.
+All three honor your [queue rules](/merge-queue/rules) and [batch sizing](/merge-queue/batches), and
+in all three a pull request whose scopes are untouched by the base branch can skip its CI run
+entirely through [Direct Merge](/merge-queue/direct-merge). They differ only in **how batches depend
+on each other**.
 
 ## Choosing a mode
 

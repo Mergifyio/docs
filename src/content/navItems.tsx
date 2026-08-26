@@ -58,6 +58,11 @@ const navItems: NavItem[] = [
           },
         ],
       },
+      {
+        title: 'Direct Merge',
+        path: '/merge-queue/direct-merge',
+        icon: 'lucide:zap',
+      },
       { title: 'Stacked PRs', path: '/merge-queue/stacks', icon: 'lucide:layers' },
       { title: 'Monorepo', path: '/merge-queue/monorepo', icon: 'lucide:boxes' },
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: 'lucide:arrow-right-left' },
