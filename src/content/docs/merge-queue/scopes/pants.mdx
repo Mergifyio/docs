@@ -1,0 +1,289 @@
+---
+title: Scopes with Pants
+description: Configure merge queue scopes from the Pants dependency graph, including the targets that depend on a change.
+---
+
+import BuildkiteTokenNote from '~/components/BuildkiteTokenNote.astro';
+import ScopesDetection from '~/components/ScopesDetection.astro';
+
+[Pants](https://www.pantsbuild.org/) builds a dependency graph of your repository by reading your
+BUILD files and inferring imports from your sources. Its `--changed` selectors turn a commit range
+into the list of targets that range affects, which is exactly what a scope list has to be.
+
+## Configuring Manual Scopes
+
+To use the manual scopes mechanism, configure Mergify to expect scopes from your CI system:
+
+```yaml
+scopes:
+  source:
+    manual:
+
+queue_rules:
+  - name: default
+    batch_size: 5
+```
+
+## Detecting Scopes with Pants
+
+Select the changed targets with `--changed-diffspec`, then ask for the targets that depend on them:
+
+```bash
+pants --changed-diffspec="$BASE..$HEAD" \
+      --changed-dependents=transitive \
+      --no-filedeps-transitive filedeps
+```
+
+### Why `--changed-dependents=transitive`
+
+`--changed-dependents` defaults to `none`, which reports only the targets that own the changed
+files. Nothing downstream of the change appears. For a repository where `app/server` depends on
+`lib/util`, which depends on `lib/core`, editing a source file in `lib/core` gives:
+
+| `--changed-dependents` | Scopes reported                       |
+| ---------------------- | ------------------------------------- |
+| `none` (the default)   | `lib/core`                            |
+| `direct`               | `lib/core`, `lib/util`                |
+| `transitive`           | `lib/core`, `lib/util`, `app/server`  |
+
+Only `transitive` describes what the change can break. Scopes are how the queue decides which pull
+requests to serialize, so an under-reported list makes the queue batch and parallelize changes that
+genuinely conflict, and makes scope-gated CI skip jobs that the change breaks. Both are wrong
+answers.
+
+`--no-filedeps-transitive` turns off the transitive mode of `filedeps` itself, which walks the other
+way: it would list the files of the affected targets' own *dependencies*, and `lib/core` does not
+become affected because something that imports it changed. Off is already the default, so pass it
+explicitly to keep a repository-level `[filedeps] transitive = true` in `pants.toml` from quietly
+reversing the direction.
+
+### From targets to scope names
+
+`filedeps` prints the source and BUILD files of the targets it was given, so taking the directory of
+each one and deduplicating gives one scope per BUILD file directory:
+
+```bash
+awk -F/ 'NF>1 { OFS="/"; NF--; print } NF==1 { print "//" }' | sort -u
+```
+
+A file at the build root has no directory component, and gets `//`, the address Pants itself uses
+for the root.
+
+Reporting the target addresses instead would be finer grained, but they do not survive the upload.
+A target [parametrized](https://www.pantsbuild.org/stable/docs/using-pants/key-concepts/targets-and-build-files)
+over two fields is addressed `lib/multi@interpreter_constraints=py39,resolve=alt`, and the comma in
+it splits into two meaningless scopes wherever the list is uploaded as comma-separated values.
+Directories also keep the list stable when a target is renamed or split.
+
+### GitHub Actions
+
+```yaml
+name: Detect Scopes
+on:
+  pull_request:
+
+jobs:
+  detect-scopes:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Both revisions must exist locally: Pants resolves the diffspec through git.
+          fetch-depth: 0
+
+      - name: Install Pants
+        uses: pantsbuild/actions/init-pants@v11
+        with:
+          gha-cache-key: scopes
+          # Scope detection only loads BUILD files, so it needs none of the
+          # named caches a build or a test run would.
+          named-caches-hash: disable
+
+      - name: Get git refs
+        id: refs
+        uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
+        with:
+          action: scopes-git-refs
+
+      - name: Get scopes
+        id: scopes
+        env:
+          HEAD: ${{ steps.refs.outputs.head }}
+          BASE: ${{ steps.refs.outputs.base }}
+        run: |
+          # scopes-git-refs reports an empty base on any event that is neither a
+          # pull request nor a push. Pants reads the resulting `..HEAD` as an
+          # empty range and reports no scopes at all, with a zero exit code.
+          [ -n "$BASE" ] || { echo "no base ref reported" >&2; exit 1; }
+
+          # Pants passes the diffspec to git with no option terminator, so pin
+          # both values to real commits first. This also fails loudly when the
+          # base is missing from the clone instead of reporting an empty range.
+          base=$(git rev-parse --verify --end-of-options "$BASE^{commit}") || exit 1
+          head=$(git rev-parse --verify --end-of-options "$HEAD^{commit}") || exit 1
+
+          # Keep this list in sync with build_file_prelude_globs: a change to a
+          # file that belongs to no target reports nothing, which the queue
+          # would read as "this pull request affects nothing".
+          changed=$(git diff --name-only --diff-filter=ACMRD --end-of-options "$base" "$head" --) || exit 1
+          all_scopes=false
+          if printf '%s\n' "$changed" | grep -qE '^(pants\.toml|pants\.ci\.toml|build-support/.*\.py)$'; then
+            all_scopes=true
+          fi
+
+          # --changed-dependents defaults to `none`, which reports only the
+          # targets owning the changed files and nothing downstream of them.
+          files=$(pants --changed-diffspec="$base..$head" \
+                        --changed-dependents=transitive \
+                        --no-filedeps-transitive filedeps) || exit 1
+          scopes=$(printf '%s\n' "$files" \
+            | awk -F/ 'NF>1 { OFS="/"; NF--; print } NF==1 { print "//" }' \
+            | sort -u | paste -sd, -)
+          echo "Detected scopes: $scopes"
+          echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
+          echo "all_scopes=$all_scopes" >> "$GITHUB_OUTPUT"
+
+      - name: Scopes upload
+        uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
+        with:
+          action: scopes-upload
+          token: ${{ secrets.MERGIFY_TOKEN }}
+          scopes: ${{ steps.scopes.outputs.scopes }}
+          all_scopes: ${{ steps.scopes.outputs.all_scopes }}
+```
+
+### Buildkite
+
+Using the
+[`mergifyio/mergify-ci`](https://github.com/Mergifyio/mergify-ci-buildkite-plugin)
+Buildkite plugin, a first step resolves the merge-queue-aware base and head
+SHAs and exposes them as meta-data, a second computes the affected targets with
+Pants into the `mergify-ci.scopes` meta-data, and a third uploads them. The
+upload runs in its own step because the plugin replaces the step's command, so a
+step that both detects and uploads never runs its detection:
+
+```yaml
+steps:
+  - label: ":mag: Get git refs"
+    key: git-refs
+    plugins:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
+          action: scopes-git-refs
+
+  - label: ":mag: Detect scopes"
+    key: detect-scopes
+    depends_on: git-refs
+    command: |
+      # The base meta-data is only published when a base was resolved, so a
+      # missing key means there is no base to diff against. Check the value too:
+      # Pants reads an empty base as an empty range and reports no scopes.
+      BASE=$(buildkite-agent meta-data get "mergify-ci.base") || exit 1
+      HEAD=$(buildkite-agent meta-data get "mergify-ci.head") || exit 1
+      [ -n "$$BASE" ] || { echo "no base ref reported" >&2; exit 1; }
+      # Pants passes the diffspec to git with no option terminator, so pin both
+      # values to real commits first.
+      BASE=$(git rev-parse --verify --end-of-options "$$BASE^{commit}") || exit 1
+      HEAD=$(git rev-parse --verify --end-of-options "$$HEAD^{commit}") || exit 1
+      # --changed-dependents defaults to `none`, which reports only the targets
+      # owning the changed files and nothing downstream of them.
+      FILES=$(pants --changed-diffspec="$$BASE..$$HEAD" \
+                    --changed-dependents=transitive \
+                    --no-filedeps-transitive filedeps) || exit 1
+      SCOPES=$(printf '%s\n' "$$FILES" \
+        | awk -F/ 'NF>1 { OFS="/"; NF--; print } NF==1 { print "//" }' \
+        | sort -u | paste -sd, -)
+      buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
+
+  - label: ":mag: Upload scopes"
+    depends_on: detect-scopes
+    plugins:
+      - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
+          action: scopes-upload
+```
+
+The plugin reads your [application key](/api/usage) from `MERGIFY_TOKEN` in
+the agent's environment. Without it the step still runs, but it logs a warning
+and sends nothing, and the build stays green, so a missing token looks like a
+pipeline that reports no scopes.
+
+<BuildkiteTokenNote />
+
+The plugin's `scopes-upload` action sends the scope list on its own. To also flag a pull request as
+[impacting every scope](#changes-pants-attributes-to-no-target), upload with the Mergify CLI as
+shown below instead.
+
+### Any CI (Mergify CLI)
+
+<ScopesDetection
+  command={String.raw`# Pants passes the diffspec to git with no option terminator, so pin both
+# values to real commits first. This also fails loudly when the base is
+# missing from the clone, which Pants would otherwise read as an empty range
+# and report no scopes for, with a zero exit code.
+BASE=$(git rev-parse --verify --end-of-options "$BASE^{commit}") || exit 1
+HEAD=$(git rev-parse --verify --end-of-options "$HEAD^{commit}") || exit 1
+
+# Keep this list in sync with build_file_prelude_globs: a change to a file
+# that belongs to no target reports nothing, which the queue would read as
+# "this pull request affects nothing".
+CHANGED=$(git diff --name-only --diff-filter=ACMRD --end-of-options "$BASE" "$HEAD" --) || exit 1
+ALL_SCOPES=false
+if printf '%s\n' "$CHANGED" | grep -qE '^(pants\.toml|pants\.ci\.toml|build-support/.*\.py)$'; then
+  ALL_SCOPES=true
+fi
+
+# --changed-dependents defaults to none, which reports only the targets owning
+# the changed files and nothing downstream of them.
+FILES=$(pants --changed-diffspec="$BASE..$HEAD" \
+              --changed-dependents=transitive \
+              --no-filedeps-transitive filedeps) || exit 1
+printf '%s\n' "$FILES" \
+  | awk -F/ 'NF>1 { OFS="/"; NF--; print } NF==1 { print "//" }' \
+  | sort -u \
+  | jq -R -s --argjson all "$ALL_SCOPES" \
+      '{scopes: split("\n") | map(select(length > 0)), all_scopes: $all}' > scopes.json`}
+/>
+
+## What Pants reports for each kind of change
+
+The list Pants returns depends on whether the changed file belongs to a target, which is not the
+same question as whether it changes the build:
+
+- **A source file.** The target that owns it, plus every target that depends on it. This is the
+  case the recipe is built for.
+
+- **A BUILD file.** The targets that file defines, plus their dependents. Editing metadata such as
+  a target's `tags` or `dependencies` reports the same scopes as editing its sources, so BUILD-only
+  pull requests are scoped correctly.
+
+- **A deleted source file.** The generated per-file target is gone, so Pants reports the target
+  generator in its place. The generator's BUILD file keeps the directory in the list, and the
+  dependents of the deleted file are still reported.
+
+- **A lockfile or a requirements file.** The requirement targets it defines, plus everything that
+  imports them. A lockfile at the build root therefore reports `//` and each directory that uses a
+  requirement from it.
+
+- **A file no target owns.** No scopes at all. `README.md` gives an empty list because it really
+  does affect nothing, but so do `pants.toml` and the files your `build_file_prelude_globs` points
+  at, which affect everything. The next section is about telling those apart.
+
+## Changes Pants attributes to no target
+
+Pants answers "which targets own these files, and what depends on them". Files outside the target
+graph belong to no target, so a change confined to them reports an empty list whatever
+`--changed-dependents` is set to.
+
+Two of them are worth handling, because both change how every target builds:
+
+- **`pants.toml`**, and any other config file you pass through `PANTS_CONFIG_FILES`.
+
+- **The BUILD file prelude**, the Python files named by `build_file_prelude_globs`. Every BUILD file
+  loads them, but Pants does not model that as a dependency: giving a prelude file a
+  `python_sources` target of its own changes nothing, since the change is then reported as that one
+  target with no dependents.
+
+Neither can be expressed as a scope list, so report them as a
+[barrier](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope) instead. The queue
+serializes around a pull request flagged with `all_scopes`, which is what a change to the build
+configuration needs. The GitHub Actions and Mergify CLI recipes above set the flag from a path
+match on the changed files, so keep that pattern in sync with your `build_file_prelude_globs`.

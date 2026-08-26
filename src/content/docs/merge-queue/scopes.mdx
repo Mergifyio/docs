@@ -101,7 +101,7 @@ Scopes can be attached to pull requests automatically or manually:
 
 - **Manual upload:** Use the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
   GitHub Action, the [REST API](/api/pull-requests), or the `mergify ci scopes-send` CLI to push scopes
-  computed by your own tooling (Nx, Bazel, Turborepo, etc.). Examples are available in the build
+  computed by your own tooling (Nx, Bazel, Pants, Turborepo, etc.). Examples are available in the build
   tool guides under [Scopes integrations](/merge-queue/scopes).
 
 ## Configuration schema
@@ -169,7 +169,8 @@ queue_rules:
 
 With the configuration above you must push scopes yourself, typically from a CI job that analyses the
 pull request and calls `gha-mergify-ci` with the `scopes-upload` action. This is the recommended
-approach when build systems such as Bazel, Nx, or Turborepo already know which projects are affected.
+approach when build systems such as Bazel, Nx, Pants, or Turborepo already know which projects are
+affected.
 
 ## Declaring a pull request impacts every scope
 
