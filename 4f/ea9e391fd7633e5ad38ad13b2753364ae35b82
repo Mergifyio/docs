@@ -1,0 +1,1 @@
+address review: scope collection has to come before Direct Merge in the at-a-glance list, since a pull request needs scopes attached before the check can run
