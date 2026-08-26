@@ -1,1 +1,6 @@
-address Copilot review: stop the monorepo blurb implying Direct Merge applies whenever the base is untouched, and drop the undefined 'recorded window' in favour of what the walk actually checks
+Revision history for #12552:
+
+rev 2 (content) 2026-08-26 07:23 UTC — address Copilot review: stop the monorepo blurb implying Direct Merge applies whenever the base is untouched, and drop the undefined 'recorded window' in favour of what the walk actually checks
+rev 1 (initial) 2026-08-26 07:23 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12552,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"da8f1e63c55cb85ecf0f29f0264e71d90e1e39ca","timestamp_iso":"2026-08-26T07:23:36Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"da8f1e63c55cb85ecf0f29f0264e71d90e1e39ca","new_sha":"4d1e1fafbebd1ef56b046817d7b1251e7514431c","timestamp_iso":"2026-08-26T07:23:36Z","reason":"address Copilot review: stop the monorepo blurb implying Direct Merge applies whenever the base is untouched, and drop the undefined 'recorded window' in favour of what the walk actually checks","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/da8f1e63c55cb85ecf0f29f0264e71d90e1e39ca...4d1e1fafbebd1ef56b046817d7b1251e7514431c"}]} -->
