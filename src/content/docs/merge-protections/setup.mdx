@@ -1,6 +1,6 @@
 ---
 title: Enabling & Configuring Merge Protections
-description: How to enable Merge Protections and make the required check effective.
+description: How to enable Merge Protections, pick a reporting method, and decide whether the check needs to be required in GitHub.
 ---
 
 import { Image } from "astro:assets"
@@ -60,7 +60,20 @@ reference and configuration examples.
 ## Make the Check Required
 
 Enabling inserts a check named `Mergify Merge Protections` on each pull
-request. Mark it as required, either as a check or a deployment:
+request, or a deployment of the same name if you set
+`reporting_method: deployments`.
+
+Mergify enforces your protections on every merge it performs itself, whether it
+comes from the [merge queue](/merge-queue),
+[Auto-Merge](/merge-protections/auto-merge), or the
+[`merge` action](/workflow/actions/merge): it won't merge a pull request until
+all of its active merge protections succeed. You don't have to require the
+check in GitHub for that to happen.
+
+Requiring it in GitHub is what blocks a merge that doesn't go through Mergify:
+someone clicking GitHub's merge button, or another tool calling GitHub's merge
+API. Unless every merge on the repository goes through Mergify, mark the result
+as required, as a check or as a deployment depending on your reporting method:
 
 - GitHub Branch Protection: Settings → Branches → Add/Edit rule → Require
   status checks / deployment to succeed → select `Mergify Merge Protections`
@@ -70,8 +83,8 @@ request. Mark it as required, either as a check or a deployment:
 
 <Image src={bpScreen} alt="GitHub Branch Protection" />
 
-Once required, the check blocks merges whenever any active protection fails and
-explains why in its output and a summary comment.
+When an active protection fails, the check explains why in its output, and in a
+summary comment unless you set `post_comment: false`.
 
 ## Updating Rules
 
