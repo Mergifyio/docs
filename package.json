@@ -115,7 +115,7 @@
     "remark-rehype": "^11.1.2",
     "remark-smartypants": "^3.0.3",
     "sharp": "^0.35.3",
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.2"
   },
   "remarkConfig": {
     "settings": {
