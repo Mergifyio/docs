@@ -43,7 +43,9 @@ Equivalent Mergify configuration:
 
 ```yaml title=.mergify.yml
 merge_protections_settings:
-  auto_merge_conditions: true
+  auto_merge_conditions:
+    - label = merge when ready
+    - head ~= ^feature/
 
 merge_protections:
   - name: bulldozer-equivalent
@@ -51,7 +53,6 @@ merge_protections:
       - base = main
       - head ~= ^feature/
     success_conditions:
-      - label = merge when ready
       - "check-success = ci/circleci: ete-tests"
 
 queue_rules:
@@ -60,11 +61,16 @@ queue_rules:
 ```
 
 Notes:
-- [`auto_merge_conditions`](/merge-protections/auto-merge) automatically
-  queues PRs when all [merge protection](/merge-protections)
-  `success_conditions` pass
+- [`auto_merge_conditions`](/merge-protections/auto-merge) is where Bulldozer's
+  `trigger` goes: a pull request that matches it is queued without anyone
+  commenting [`@mergifyio queue`](/commands/queue). Set the field to `true`
+  instead and every pull request is queued, including ones that match no
+  [merge protection](/merge-protections) rule. Those reach the queue gated by
+  your branch protections and the queue's own `queue_conditions` alone
 
-- Checks map to `check-success = <name>` (or `check-skipped`, `check-neutral`)
+- Bulldozer's `required_statuses` become `check-success = <name>` conditions
+  (or `check-skipped`, `check-neutral`) under `success_conditions`, where they
+  gate both entry to the queue and the merge
 
 - Required labels map to `label = <name>` conditions
 
@@ -95,7 +101,8 @@ Bulldozer doesn't offer:
 
 - Rebase/update before merge → automatic in merge queue
 
-- Require labels → `label =` in `success_conditions`
+- Require labels → `label =` in `auto_merge_conditions` to trigger the queue,
+  or in `success_conditions` to require the label as a merge protection
 
 - Restrict by authors/paths → `author =`, `files ~=`, etc. in
   `success_conditions` or `if`
