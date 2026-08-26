@@ -71,7 +71,7 @@
     "unist-util-remove": "^4.0.0",
     "unist-util-visit": "^5.1.0",
     "unist-util-walker": "^1.0.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
