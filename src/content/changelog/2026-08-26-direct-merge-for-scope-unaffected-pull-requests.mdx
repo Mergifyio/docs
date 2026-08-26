@@ -1,0 +1,13 @@
+---
+title: "Direct Merge for scope-unaffected pull requests"
+date: 2026-08-26
+tags:
+  - Merge Queue
+description: "A queued pull request that is behind the base branch only by merges touching other scopes is now merged immediately, with no draft pull request and no merge queue CI run."
+---
+
+When a pull request reaches the front of its lane on its own, Mergify now looks at which scopes the merge queue has landed on the base branch since that pull request last updated. If none of them overlap the pull request's own scopes, nothing it depends on has changed, so its existing green CI already covers the merge and Mergify merges it directly: no draft pull request, no second CI run, seconds instead of a full test cycle.
+
+This works in parallel mode as well as serial, and it needs scopes to be set. Mergify declines it and falls back to the usual draft whenever it cannot prove the base changes are unrelated, including a pull request with no scopes or an `all_scopes` barrier, an external merge or a direct push to the base branch, two-step CI, autosquash, and fast-forward or merge-batch queues.
+
+There is nothing to configure. Any repository already using scopes gets Direct Merge on the pull requests that qualify.
