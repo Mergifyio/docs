@@ -1,0 +1,1 @@
+rebase onto main: #12537 quoted the paths handed to bazel query; that pipeline is the one this change removes, so the guard has nothing left to protect — noted in the message
