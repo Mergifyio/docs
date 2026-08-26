@@ -23,6 +23,14 @@ by merging the base branch into the pull request branch.
   before being merged.
 :::
 
+## Update Requirements
+
+Whatever your conditions are, Mergify adds its own requirements before running
+the action. A pull request is updated only when it is open, has no conflict, is
+not in a merge queue
+([`queue-position = -1`](/configuration/conditions#attributes-list)), and is
+behind its base branch (`#commits-behind > 0`).
+
 ## Parameters
 
 <ActionOptionsTable def="UpdateActionModel" />
