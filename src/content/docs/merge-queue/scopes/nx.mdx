@@ -59,7 +59,11 @@ jobs:
           HEAD: ${{ steps.refs.outputs.head }}
           BASE: ${{ steps.refs.outputs.base }}
         run: |
-          scopes=$( npx nx show projects --affected --base="$BASE" --head="$HEAD" | paste -sd, -)
+          # A failed nx piped into paste still exits 0 and writes an empty
+          # scope list, which the queue reads as "this pull request affects
+          # nothing", so capture the projects first.
+          projects=$(npx nx show projects --affected --base="$BASE" --head="$HEAD") || exit 1
+          scopes=$(printf '%s\n' "$projects" | paste -sd, -)
           echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
       - name: Scopes upload
@@ -94,7 +98,11 @@ steps:
     command: |
       BASE=$(buildkite-agent meta-data get "mergify-ci.base")
       HEAD=$(buildkite-agent meta-data get "mergify-ci.head")
-      SCOPES=$(npx nx show projects --affected --base="$$BASE" --head="$$HEAD" | paste -sd, -)
+      # A failed nx piped into paste still exits 0 and writes an empty scope
+      # list, which the queue reads as "this pull request affects nothing",
+      # so capture the projects first.
+      PROJECTS=$(npx nx show projects --affected --base="$$BASE" --head="$$HEAD") || exit 1
+      SCOPES=$(printf '%s\n' "$$PROJECTS" | paste -sd, -)
       buildkite-agent meta-data set "mergify-ci.scopes" "$$SCOPES"
 
   - label: ":mag: Upload scopes"
@@ -114,6 +122,9 @@ pipeline that reports no scopes.
 ### Any CI (Mergify CLI)
 
 <ScopesDetection
-  command={String.raw`npx nx show projects --affected --base="$BASE" --head="$HEAD" \
+  command={String.raw`# A failed nx piped into jq still exits 0 and writes a well-formed, empty
+# scopes.json, which the queue reads as "this pull request affects nothing".
+PROJECTS=$(npx nx show projects --affected --base="$BASE" --head="$HEAD") || exit 1
+printf '%s\n' "$PROJECTS" \
   | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json`}
 />

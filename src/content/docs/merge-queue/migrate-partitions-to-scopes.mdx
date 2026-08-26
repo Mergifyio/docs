@@ -261,10 +261,14 @@ detect-scopes:
         HEAD: ${{ steps.refs.outputs.head }}
         BASE: ${{ steps.refs.outputs.base }}
       run: |
-        scopes=$( npx nx show projects \
+        # A failed nx piped into paste still exits 0 and writes an empty
+        # scope list, which the queue reads as "this pull request affects
+        # nothing", so capture the projects first.
+        projects=$(npx nx show projects \
           --affected \
           --base="$BASE" \
-          --head="$HEAD" | paste -sd, -)
+          --head="$HEAD") || exit 1
+        scopes=$(printf '%s\n' "$projects" | paste -sd, -)
         echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
 
     - name: Upload scopes
