@@ -46,6 +46,7 @@ const navItems: NavItem[] = [
           },
           { title: 'Nx', path: '/merge-queue/scopes/nx', icon: 'simple-icons:nx' },
           { title: 'Bazel', path: '/merge-queue/scopes/bazel', icon: 'simple-icons:bazel' },
+          { title: 'Pants', path: '/merge-queue/scopes/pants', icon: 'lucide:hard-hat' },
           {
             title: 'Turborepo',
             path: '/merge-queue/scopes/turborepo',
