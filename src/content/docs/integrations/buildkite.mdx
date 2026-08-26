@@ -4,6 +4,7 @@ description: Run CI Insights, Monorepo CI, and Merge Queue Scopes on Buildkite.
 ---
 
 import buildkiteLogo from "../../images/integrations/buildkite/logo.svg"
+import BuildkiteTokenNote from "../../../components/BuildkiteTokenNote.astro"
 import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
 <IntegrationLogo src={buildkiteLogo} alt="Buildkite logo"/>
@@ -125,12 +126,22 @@ steps:
     plugins:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes
-          token: "${MERGIFY_TOKEN}"
 
   - label: ":pipeline: Upload conditional steps"
     depends_on: detect-scopes
     command: .buildkite/dynamic-pipeline.sh | buildkite-agent pipeline upload
 ```
+
+The plugin reads your [application key](/api/usage) from `MERGIFY_TOKEN` in
+the agent's environment. Detection is local, so the meta-data this step writes,
+and the step skipping below that reads it, work without a token. What a missing
+token costs is the upload: the plugin logs a warning and sends nothing, so the
+merge queue never sees the scopes.
+
+The test steps the dynamic pipeline emits need the token too, and they can run
+on different agents from the one that detected the scopes.
+
+<BuildkiteTokenNote />
 
 ### Dynamic pipeline script
 
@@ -155,7 +166,6 @@ if echo "$SCOPES" | jq -e '.frontend == "true"' > /dev/null 2>&1; then
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "junit.xml"
-          token: "${MERGIFY_TOKEN}"
 YAML
 fi
 
@@ -167,7 +177,6 @@ if echo "$SCOPES" | jq -e '.api == "true"' > /dev/null 2>&1; then
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "reports/*.xml"
-          token: "${MERGIFY_TOKEN}"
 YAML
 fi
 

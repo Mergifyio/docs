@@ -3,6 +3,7 @@ title: Scopes with Nx
 description: Configure merge queue scopes using Nx's dependency graph to drive batching.
 ---
 
+import BuildkiteTokenNote from '~/components/BuildkiteTokenNote.astro';
 import ScopesDetection from '~/components/ScopesDetection.astro';
 
 If you're using tools like the Nx build system that have built-in dependency graph analysis,
@@ -97,8 +98,14 @@ steps:
     plugins:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: scopes-upload
-          token: "${MERGIFY_TOKEN}"
 ```
+
+The plugin reads your [application key](/api/usage) from `MERGIFY_TOKEN` in
+the agent's environment. Without it the step still runs, but it logs a warning
+and sends nothing, and the build stays green, so a missing token looks like a
+pipeline that reports no scopes.
+
+<BuildkiteTokenNote />
 
 ### Any CI (Mergify CLI)
 

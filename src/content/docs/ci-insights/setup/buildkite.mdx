@@ -4,6 +4,7 @@ description: Enable Mergify CI Insights and configure flaky test detection using
 ---
 
 import { Image } from "astro:assets"
+import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
 import BuildkiteWebhookNotification from "../../../images/ci-insights/buildkite-webhook-notification.png"
 import JobsScreenshot from "../../../images/ci-insights/jobs.png"
 
@@ -49,9 +50,11 @@ and how to configure repeated test executions for flaky test detection.
 
    <Image src={BuildkiteWebhookNotification} alt="Buildkite Webhook Notification configuration" />
 
-4. Set the application key as `MERGIFY_TOKEN` in your Buildkite pipeline
-   environment variables. This will be used by the Buildkite plugin to upload
-   test reports.
+4. Make the application key available as `MERGIFY_TOKEN` in the environment of
+   your Buildkite agents, through an agent `environment` hook or a secrets
+   plugin. The Buildkite plugin reads it from there to upload test reports.
+
+   <BuildkiteTokenNote />
 
 5. Click on `CI Insights` in the Mergify dashboard navigation.
    You should start seeing your Buildkite job runs appear:
@@ -71,15 +74,16 @@ steps:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "reports/*.xml"
-          token: "${MERGIFY_TOKEN}"
 ```
 
 The plugin runs in the `post-command` hook, so your test command executes first,
 then the plugin uploads the results. Even if your tests fail, the results are
-still uploaded.
+still uploaded. The step carries no token: the plugin picks up `MERGIFY_TOKEN`
+from the agent's environment, and fails the step if it is not there.
 
-For frameworks with native Mergify integration (e.g., `pytest-mergify`), you
-only need to set the `MERGIFY_TOKEN` environment variable. No plugin is required.
+For frameworks with native Mergify integration (e.g., `pytest-mergify`), no
+plugin is required: the reporter reads `MERGIFY_TOKEN` from the same agent
+environment.
 
 ## Setting Up Flaky Test Detection
 
@@ -93,8 +97,9 @@ Before setting up flaky test detection, ensure you have:
 
 1. Enabled [CI Insights](#enabling-ci-insights-for-buildkite) for your repository
 
-2. Created an application key with `ci` scope and set it as `MERGIFY_TOKEN`
-   in your Buildkite pipeline environment variables
+2. Created an application key with `ci` scope and set it as `MERGIFY_TOKEN` in
+   the environment of your Buildkite agents, [not in the pipeline
+   file](#enabling-ci-insights-for-buildkite)
 
 3. Configured test integration for your test framework
 
@@ -122,7 +127,6 @@ steps:
       - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
           action: junit-process
           report_path: "reports/*.xml"
-          token: "${MERGIFY_TOKEN}"
 ```
 
 Configure a schedule in your Buildkite pipeline settings to run this
