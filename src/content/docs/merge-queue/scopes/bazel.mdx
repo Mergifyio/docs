@@ -78,11 +78,13 @@ jobs:
             "buildfiles(set($changed))" 2>query.err)
           rc=$?
           set -e
-          # --keep_going exits 3 when it skipped files outside any Bazel package
-          # (README.md, .github/**). Anything else is a real failure and must not
-          # be swallowed into an empty scope list.
+          # Always report what the query skipped: --keep_going exits 3 for any
+          # partial result. Usually that is files outside any Bazel package
+          # (README.md, .github/**), but a package whose BUILD file fails to
+          # load also exits 3 and drops out of the scope list. Anything else is
+          # a hard failure and must not become an empty scope list.
+          cat query.err >&2
           if [ "$rc" -ne 0 ] && [ "$rc" -ne 3 ]; then
-            cat query.err >&2
             exit "$rc"
           fi
 
@@ -134,10 +136,13 @@ steps:
           "buildfiles(set($$CHANGED))" 2>query.err)
         RC=$$?
         set -e
-        # --keep_going exits 3 when it skipped files outside any Bazel package.
-        # Anything else is a real failure, not an empty scope list.
+        # Always report what the query skipped: --keep_going exits 3 for any
+        # partial result. Usually that is files outside any Bazel package
+        # (README.md, .github/**), but a package whose BUILD file fails to load
+        # also exits 3 and drops out of the scope list. Anything else is a hard
+        # failure.
+        cat query.err >&2
         if [ "$$RC" -ne 0 ] && [ "$$RC" -ne 3 ]; then
-          cat query.err >&2
           exit "$$RC"
         fi
         SCOPES=$(printf '%s\n' "$$PACKAGES" | sed '/^$/d' | sort -u | paste -sd, -)
@@ -179,10 +184,12 @@ else
     RC=$?
   fi
 
-  # --keep_going exits 3 when it skipped files outside any Bazel package
-  # (README.md, .github/**). Anything else is a real failure.
+  # Always report what the query skipped: --keep_going exits 3 for any partial
+  # result. Usually that is files outside any Bazel package (README.md,
+  # .github/**), but a package whose BUILD file fails to load also exits 3 and
+  # drops out of the scope list. Anything else is a hard failure.
+  cat query.err >&2
   if [ "$RC" -ne 0 ] && [ "$RC" -ne 3 ]; then
-    cat query.err >&2
     exit "$RC"
   fi
 
