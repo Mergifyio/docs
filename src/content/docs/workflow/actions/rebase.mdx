@@ -24,6 +24,16 @@ up-to-date with the latest changes from the base branch.
   [`update` action](/workflow/actions/update) instead.
 :::
 
+## Rebase Requirements
+
+Whatever your conditions are, Mergify adds its own requirements before running
+the action. A pull request is rebased only when it is open, has no conflict, is
+not in a merge queue
+([`queue-position = -1`](/configuration/conditions#attributes-list)), and is
+either behind its base branch (`#commits-behind > 0`) or does not have a linear
+history (`-linear-history`). With `autosquash` enabled, holding more than one
+commit (`#commits > 1`) is a third way to satisfy that either/or requirement.
+
 ## Parameters
 
 <ActionOptionsTable def="RebaseActionModel" />

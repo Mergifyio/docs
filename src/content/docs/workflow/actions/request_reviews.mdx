@@ -10,7 +10,10 @@ or teams. This is useful when you want to ensure specific team members review
 certain pull requests.
 
 :::note
-  GitHub does not allow requesting more than 15 users or teams for a review.
+  GitHub accepts at most 15 review requests on a pull request, counting the
+  requests already pending. When a rule would push a pull request past that
+  limit, Mergify requests as many reviewers as fit, users before teams, and
+  reports the action as neutral.
 :::
 
 ## Parameters
