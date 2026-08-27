@@ -20,7 +20,7 @@ jobs:
         if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         # yamllint disable-line rule:line-length
         # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
-        uses: Mergifyio/gha-slack-notification@main
+        uses: Mergifyio/gha-slack-notification@21be2b4956fd9e2488a9cf8987722fff24810c20 # main
         with:
           type: deploy-start
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOYMENT_WEBHOOK_URL_RELEASES }}
