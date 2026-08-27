@@ -19,6 +19,7 @@ priority_rules:
       - or:
           - author = mergify-ci-bot
           - author = dependabot[bot]
+          - author = renovate[bot]
 
 merge_protections:
   - name: 🤖 Continuous Integration
@@ -44,6 +45,7 @@ merge_protections:
       - or: &DefaultReviewCond
           - "#approved-reviews-by >= 2"
           - author = dependabot[bot]
+          - author = renovate[bot]
           # mergify-ci-bot needs no approval for the deterministic syncers, but
           # the docs agent writes prose under docs-agent/* and gets no free pass.
           - and:
@@ -91,6 +93,7 @@ queue_rules:
           - and:
               - author != mergify-ci-bot
               - author != dependabot[bot]
+              - author != renovate[bot]
           - head ~= ^docs-agent/
     merge_conditions:
       - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
@@ -102,6 +105,7 @@ queue_rules:
       - or:
           - author = mergify-ci-bot
           - author = dependabot[bot]
+          - author = renovate[bot]
       - "-head ~= ^docs-agent/"
     batch_size: 10
     batch_max_wait_time: 5min
@@ -110,6 +114,7 @@ pull_request_rules:
   - name: request review
     conditions:
       - -author=dependabot[bot]
+      - -author=renovate[bot]
       # Bots are not routed for review, except the docs agent, which now needs
       # two approvals like anyone else. Gated on -draft so the ten drafts a
       # Monday audit opens do not each ping the team before a human wants them.
