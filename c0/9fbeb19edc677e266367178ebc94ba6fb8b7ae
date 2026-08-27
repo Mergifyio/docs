@@ -1,1 +1,6 @@
-review: link the scope-case `fast-forward` mention to the merge strategies page, matching `merge-batch` above
+Revision history for #12575:
+
+rev 2 (content) 2026-08-27 07:46 UTC — review: link the scope-case `fast-forward` mention to the merge strategies page, matching `merge-batch` above
+rev 1 (initial) 2026-08-27 07:46 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12575,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"f3c704b8463ad469603dec1cb42777fc3747f540","timestamp_iso":"2026-08-27T07:46:31Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"f3c704b8463ad469603dec1cb42777fc3747f540","new_sha":"c09fbeb19edc677e266367178ebc94ba6fb8b7ae","timestamp_iso":"2026-08-27T07:46:31Z","reason":"review: link the scope-case `fast-forward` mention to the merge strategies page, matching `merge-batch` above","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/f3c704b8463ad469603dec1cb42777fc3747f540...c09fbeb19edc677e266367178ebc94ba6fb8b7ae"}]} -->
