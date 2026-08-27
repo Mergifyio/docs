@@ -1,0 +1,1 @@
+rebase onto #12538 (deleted-path scoping) — same resolution as the three before it: this branch replaces the git diff | bazel query pipeline that fix hardens, so the file is byte-identical to the reviewed 7574c15. Commit message now says why the deletion handling has nothing left to guard under bazel-diff.
