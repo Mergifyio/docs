@@ -8,6 +8,7 @@
       "!public/api-schemas.json",
       "!public/cli-schema.json",
       "!public/mergify-configuration-schema.json",
+      "!renovate.json",
       "!dist/*",
       "!**/*.svg"
     ]
