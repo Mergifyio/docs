@@ -20,7 +20,7 @@ Merge Protections let you:
 
 - Schedule when merges may occur (or enforce freezes)
 
-- Provide consistent, explainable feedback via a single required check
+- Provide consistent, explainable feedback via a single check
 
 <Image src={commentScreen} alt="Merge Protections comment" />
 
@@ -44,9 +44,13 @@ Merge Protections let you:
 
 3. Your protection rules determine whether that check passes.
 
-4. You mark it as required in GitHub Branch Protection or Rulesets.
+4. Mergify won't merge a PR until all of its active protection rules succeed,
+   whether the merge comes from the [merge queue](/merge-queue),
+   [Auto-Merge](/merge-protections/auto-merge), or the
+   [`merge` action](/workflow/actions/merge).
 
-5. PRs cannot merge unless all active protection rules succeed.
+5. To block merges made outside Mergify too, mark the check as required in
+   [GitHub Branch Protection or Rulesets](/merge-protections/setup#make-the-check-required).
 
 ## Next Steps
 
