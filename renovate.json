@@ -1,0 +1,34 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "prHourlyLimit": 10,
+  "rebaseWhen": "conflicted",
+  "minimumReleaseAge": "7 days",
+  "osvVulnerabilityAlerts": true,
+  "lockFileMaintenance": { "enabled": true },
+  "description": [
+    "Issues are disabled on this repository, so Renovate has nowhere to open its Dependency Dashboard. Turn dependencyDashboard back on if issues are ever enabled."
+  ],
+  "dependencyDashboard": false,
+  "packageRules": [
+    {
+      "description": "Astro requires react and react-dom to be the exact same version, so they must be bumped together in a single PR",
+      "groupName": "react",
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom",
+        "@astrojs/react"
+      ]
+    },
+    {
+      "description": "config:best-practices pulls in security:minimumReleaseAgeNpm, which sets npm to 3 days via a packageRule. packageRules beat top-level config, so the 7 day cooldown carried over from .github/dependabot.yml has to be re-asserted here or npm silently runs at 3 days. Same rule as the monorepo.",
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "7 days"
+    }
+  ]
+}
