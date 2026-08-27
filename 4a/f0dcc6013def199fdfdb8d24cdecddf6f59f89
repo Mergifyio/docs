@@ -1,0 +1,7 @@
+Revision history for #12538:
+
+rev 3 (content) 2026-08-26 14:27 UTC
+rev 2 (rebase) 2026-08-25 22:41 UTC
+rev 1 (initial) 2026-08-25 22:41 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12538,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"10e4dfae56090449094824967a6f5f6e7ac67808","timestamp_iso":"2026-08-25T22:41:26Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"10e4dfae56090449094824967a6f5f6e7ac67808","new_sha":"b4553ffd5b94ff895194791c826d4cc4add9f9e0","timestamp_iso":"2026-08-25T22:41:26Z","reason":"","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/10e4dfae56090449094824967a6f5f6e7ac67808...b4553ffd5b94ff895194791c826d4cc4add9f9e0"},{"number":3,"change_type":"content","old_sha":"b4553ffd5b94ff895194791c826d4cc4add9f9e0","new_sha":"d4864e8043a835f4776befd64fdc7fc15c96705b","timestamp_iso":"2026-08-26T14:27:26Z","reason":"","replay_sha":"efda617bd59e543d539e411f9d798d4d59c27027","compare_url":"https://github.com/Mergifyio/docs/compare/b4553ffd5b94ff895194791c826d4cc4add9f9e0...efda617bd59e543d539e411f9d798d4d59c27027"}]} -->
