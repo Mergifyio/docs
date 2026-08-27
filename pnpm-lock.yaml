@@ -267,16 +267,16 @@ importers:
         specifier: 13.0.2
         version: 13.0.2
       remark:
-        specifier: ^15.0.1
+        specifier: 15.0.1
         version: 15.0.1
       remark-directive:
-        specifier: ^4.0.0
+        specifier: 4.0.0
         version: 4.0.0
       remark-frontmatter:
-        specifier: ^5.0.0
+        specifier: 5.0.0
         version: 5.0.0
       remark-preset-lint-markdown-style-guide:
-        specifier: ^6.0.1
+        specifier: 6.0.1
         version: 6.0.1
       sass-embedded:
         specifier: 1.102.0
