@@ -83,6 +83,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -154,6 +157,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -237,6 +243,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -299,6 +308,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -374,6 +386,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -438,6 +453,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -618,6 +636,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -728,6 +749,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -823,6 +847,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -903,6 +930,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -989,6 +1019,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -1386,6 +1419,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -1741,6 +1777,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -1853,6 +1892,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -2037,6 +2079,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -2217,6 +2262,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -2401,6 +2449,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -2581,6 +2632,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -2765,6 +2819,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -2945,6 +3002,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -3129,6 +3189,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -3311,6 +3374,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -3461,6 +3527,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -3636,6 +3705,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -3809,6 +3881,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -3917,6 +3992,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -4101,6 +4179,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -4281,6 +4362,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -4465,6 +4549,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -4647,6 +4734,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -4750,7 +4840,7 @@
           "pull_requests"
         ],
         "summary": "Set the scopes for a pull request",
-        "description": "Set the scopes for a pull request",
+        "description": "Set the scopes for a pull request.\n\nThis addresses the scopes by pull request number alone, so the report cannot say\nwhich revision it was computed for, and the last one to arrive wins whatever\nhead that was. Prefer `PUT /repos/{owner}/{repository}/commits/{sha}/scopes`,\nwhich names the revision.",
         "operationId": "put_ci_scopes_repos__owner___repository__pulls__number__scopes_put",
         "security": [
           {
@@ -4833,7 +4923,7 @@
           "pull_requests"
         ],
         "summary": "Set the scopes for a pull request (deprecated, use PUT)",
-        "description": "Deprecated: use PUT on this endpoint instead.",
+        "description": "Deprecated: use PUT on `/repos/{owner}/{repository}/commits/{sha}/scopes` instead.",
         "operationId": "set_ci_scopes_repos__owner___repository__pulls__number__scopes_post",
         "deprecated": true,
         "security": [
@@ -4913,6 +5003,90 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/commits/{sha}/scopes": {
+      "put": {
+        "tags": [
+          "pull_requests"
+        ],
+        "summary": "Set the scopes for a commit",
+        "description": "Set the scopes a commit impacts.\n\nPrefer this over the pull request variant. Scopes computed for one revision do\nnot describe another, so naming the revision lets a report be matched against the\nhead a pull request actually has. A report for a revision a pull request has\nalready moved past can no longer overwrite what its current head reported; a\nreport *is* still applied to every **open** pull request whose head it currently\nis, which is the normal case.\n\nA report replaces the previous one for that revision in full: `all_scopes`\ndefaults to `false`, so omitting it clears a barrier previously reported for the\nsame commit. Send the complete result of your scope computation every time.\n\nSend the pull request's head SHA (`github.event.pull_request.head.sha`). That is\nnot always the revision your job checked out: on a `pull_request` event the\ndefault checkout is a merge commit, and a report keyed on that SHA matches no\npull request head.",
+        "operationId": "put_commit_scopes_repos__owner___repository__commits__sha__scopes_put",
+        "security": [
+          {
+            "CIApplicationKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "sha",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{40}$",
+              "description": "The commit SHA the scopes were computed from",
+              "title": "Sha"
+            },
+            "description": "The commit SHA the scopes were computed from"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScopesBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/ci/{owner}/repositories/{repository}/search/tests": {
       "get": {
         "tags": [
@@ -4927,6 +5101,9 @@
           },
           {
             "CIApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -5354,6 +5531,9 @@
             "CIApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -5439,6 +5619,9 @@
           },
           {
             "CIApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -5598,6 +5781,9 @@
             "CIApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -5723,6 +5909,9 @@
             "CIApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -5808,6 +5997,9 @@
           },
           {
             "CIApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -5907,6 +6099,9 @@
           },
           {
             "CIApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -6099,6 +6294,9 @@
             "CIApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -6270,6 +6468,9 @@
             "CIApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -6355,6 +6556,9 @@
             "CIApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -6438,6 +6642,9 @@
             "CIApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -6519,6 +6726,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -6788,6 +6998,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -6924,6 +7137,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -7252,6 +7468,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -7320,6 +7539,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -7402,6 +7624,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -7500,6 +7725,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -7592,6 +7820,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -7688,6 +7919,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -7758,6 +7992,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -7984,6 +8221,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -8067,6 +8307,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -8154,6 +8397,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -8230,6 +8476,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -8312,6 +8561,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -8373,6 +8625,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -8445,6 +8700,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -8522,6 +8780,9 @@
             "AdminApplicationKey": []
           },
           {
+            "MergifyTokenBearerAuth": []
+          },
+          {
             "GitHubTokenBearerAuth": []
           }
         ],
@@ -8576,6 +8837,9 @@
         "security": [
           {
             "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
           },
           {
             "GitHubTokenBearerAuth": []
@@ -19929,6 +20193,11 @@
       "GitHubTokenBearerAuth": {
         "type": "http",
         "description": "GitHub user access token (ghp_*, github_pat_*, or gho_*)",
+        "scheme": "bearer"
+      },
+      "MergifyTokenBearerAuth": {
+        "type": "http",
+        "description": "Mergify user token (mut_*). It reaches exactly what its owner's dashboard session reaches, and nothing on GitHub directly.",
         "scheme": "bearer"
       },
       "AdminApplicationKey": {
