@@ -16,9 +16,9 @@ modes:
   batch.
 
 All three honor your [queue rules](/merge-queue/rules) and [batch sizing](/merge-queue/batches), and
-in all three a pull request whose scopes are untouched by the base branch can skip its CI run
-entirely through [Direct Merge](/merge-queue/direct-merge). They differ only in **how batches depend
-on each other**.
+in all three [Direct Merge](/merge-queue/direct-merge) can skip a pull request's CI run entirely
+when the base branch has not moved underneath it, either not at all or only in scopes it does not
+touch. They differ only in **how batches depend on each other**.
 
 ## Choosing a mode
 
