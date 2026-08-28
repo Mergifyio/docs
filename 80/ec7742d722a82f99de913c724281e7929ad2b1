@@ -1,0 +1,1 @@
+Fix the 304 fallback copilot found on #12596, plus a next(request) bug it surfaced; add middleware tests
