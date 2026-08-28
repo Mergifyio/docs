@@ -101,3 +101,8 @@
 /monorepo-ci/buildkite /integrations/buildkite#monorepo-ci 301
 /monorepo-ci/buildkite/ /integrations/buildkite#monorepo-ci 301
 /monorepo-ci/buildkite.md /integrations/buildkite.md 301
+
+# `/developers` is the path people and crawlers guess for a developer portal.
+# Ours is the API reference.
+/developers /api 301
+/developers/ /api 301

@@ -7,3 +7,5 @@ Disallow: /support/premium/
 Disallow: /support/premium/*
 Disallow: /merge-queue/migrate-partitions-to-scopes
 Allow: /
+
+Sitemap: https://docs.mergify.com/sitemap-index.xml
