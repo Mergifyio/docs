@@ -20197,7 +20197,7 @@
       },
       "MergifyTokenBearerAuth": {
         "type": "http",
-        "description": "Mergify user token (mut_*). It reaches exactly what its owner's dashboard session reaches, and nothing on GitHub directly.",
+        "description": "Mergify user token (mut_*), obtained through the OAuth 2.0 device authorization grant. It reaches exactly what its owner's dashboard session reaches, and nothing on GitHub directly.",
         "scheme": "bearer"
       },
       "AdminApplicationKey": {
