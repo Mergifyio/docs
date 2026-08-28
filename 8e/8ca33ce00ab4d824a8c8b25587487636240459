@@ -1,1 +1,7 @@
-Reword the Markdown claim: /api and /cli have no .md twin
+Revision history for #12597:
+
+rev 3 (content) 2026-08-28 14:37 UTC — Reword the Markdown claim: /api and /cli have no .md twin
+rev 2 (rebase) 2026-08-28 13:33 UTC
+rev 1 (initial) 2026-08-28 13:33 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12597,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"e7b612f30985a7ff8b6bb46389dc9b11461aae1b","timestamp_iso":"2026-08-28T13:33:40Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"e7b612f30985a7ff8b6bb46389dc9b11461aae1b","new_sha":"f0b222bb3f092552f19534d2e878e1b738d7e817","timestamp_iso":"2026-08-28T13:33:40Z","reason":"","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/e7b612f30985a7ff8b6bb46389dc9b11461aae1b...f0b222bb3f092552f19534d2e878e1b738d7e817"},{"number":3,"change_type":"content","old_sha":"f0b222bb3f092552f19534d2e878e1b738d7e817","new_sha":"8e8ca33ce00ab4d824a8c8b25587487636240459","timestamp_iso":"2026-08-28T14:37:25Z","reason":"Reword the Markdown claim: /api and /cli have no .md twin","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/f0b222bb3f092552f19534d2e878e1b738d7e817...8e8ca33ce00ab4d824a8c8b25587487636240459"}]} -->
