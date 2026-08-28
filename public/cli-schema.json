@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.8.11.1",
+    "version": "2026.8.28.1",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
@@ -2999,41 +2999,23 @@
               "checkout"
             ],
             "about": "Check out a pull request stack from GitHub",
-            "longAbout": "Check out a pull request stack from GitHub.\n\nFetch a stack of pull requests by name and create a local branch that tracks its leaf, so you can continue working on a stack created elsewhere (a teammate's, or your own from another machine).",
-            "usage": "mergify stack checkout [OPTIONS] <NAME>",
+            "longAbout": "Check out a pull request stack from GitHub.\n\nIdentify the stack by its remote branch name, or by the URL of any pull request in it — the middle of the stack works as well as the tip. Creates a local branch tracking the stack's leaf, so you can continue working on a stack created elsewhere (a teammate's, or your own from another machine).",
+            "usage": "mergify stack checkout [OPTIONS] <TARGET>",
             "aliases": [],
             "subcommandRequired": false,
             "source": "native",
             "args": [
               {
-                "id": "name",
+                "id": "target",
                 "kind": "positional",
                 "short": null,
                 "long": null,
                 "valueNames": [
-                  "NAME"
+                  "TARGET"
                 ],
-                "help": "Name of the stack to check out",
-                "longHelp": "Name of the stack to check out",
+                "help": "Stack to check out: its remote branch name, or the URL of any pull request in it",
+                "longHelp": "Stack to check out: its remote branch name, or the URL of any pull request in it",
                 "required": true,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "author",
-                "kind": "option",
-                "short": null,
-                "long": "author",
-                "valueNames": [
-                  "AUTHOR"
-                ],
-                "help": "Author of the stack. Defaults to the token's user",
-                "longHelp": "Author of the stack. Defaults to the token's user",
-                "required": false,
                 "global": false,
                 "default": null,
                 "possibleValues": [],
@@ -3049,8 +3031,8 @@
                 "valueNames": [
                   "REPOSITORY"
                 ],
-                "help": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
-                "longHelp": "`owner/repo`. Falls back to the URL of `--trunk`'s remote",
+                "help": "`owner/repo`. Falls back to the URL of `--trunk`'s remote. Ignored when the target is a pull request URL, which carries its own",
+                "longHelp": "`owner/repo`. Falls back to the URL of `--trunk`'s remote. Ignored when the target is a pull request URL, which carries its own",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3067,26 +3049,8 @@
                 "valueNames": [
                   "BRANCH"
                 ],
-                "help": "Local branch name. Defaults to the normalised NAME",
-                "longHelp": "Local branch name. Defaults to the normalised NAME",
-                "required": false,
-                "global": false,
-                "default": null,
-                "possibleValues": [],
-                "numArgs": "1",
-                "env": null,
-                "valueHint": null
-              },
-              {
-                "id": "branch_prefix",
-                "kind": "option",
-                "short": null,
-                "long": "branch-prefix",
-                "valueNames": [
-                  "BRANCH_PREFIX"
-                ],
-                "help": "Override the stack branch prefix",
-                "longHelp": "Override the stack branch prefix",
+                "help": "Local branch name. Defaults to the stack branch minus your own stack branch prefix, or to its last segment when the stack isn't under that prefix",
+                "longHelp": "Local branch name. Defaults to the stack branch minus your own stack branch prefix, or to its last segment when the stack isn't under that prefix",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3535,8 +3499,8 @@
                 "valueNames": [
                   "GITHUB_NATIVE"
                 ],
-                "help": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack. Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
-                "longHelp": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack. Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
+                "help": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header). Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
+                "longHelp": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header). Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
                 "required": false,
                 "global": false,
                 "default": null,
