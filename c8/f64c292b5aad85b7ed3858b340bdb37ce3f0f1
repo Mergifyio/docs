@@ -1,0 +1,8 @@
+Revision history for #12598:
+
+rev 4 (rebase) 2026-08-28 15:09 UTC
+rev 3 (content) 2026-08-28 14:37 UTC — Escape < in the JSON-LD per review on #12598
+rev 2 (rebase) 2026-08-28 13:33 UTC
+rev 1 (initial) 2026-08-28 13:33 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12598,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"42194cf6eebdbfe4fad44f707d70f3fa0b84042c","timestamp_iso":"2026-08-28T13:33:40Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"42194cf6eebdbfe4fad44f707d70f3fa0b84042c","new_sha":"53252e6792e5ccedbca9e3305482f605bbeaf606","timestamp_iso":"2026-08-28T13:33:40Z","reason":"","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/42194cf6eebdbfe4fad44f707d70f3fa0b84042c...53252e6792e5ccedbca9e3305482f605bbeaf606"},{"number":3,"change_type":"content","old_sha":"53252e6792e5ccedbca9e3305482f605bbeaf606","new_sha":"685d63fb722de894e8a482adf2446ed0d28494f8","timestamp_iso":"2026-08-28T14:37:25Z","reason":"Escape < in the JSON-LD per review on #12598","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/53252e6792e5ccedbca9e3305482f605bbeaf606...685d63fb722de894e8a482adf2446ed0d28494f8"},{"number":4,"change_type":"rebase","old_sha":"685d63fb722de894e8a482adf2446ed0d28494f8","new_sha":"c8f64c292b5aad85b7ed3858b340bdb37ce3f0f1","timestamp_iso":"2026-08-28T15:09:03Z","reason":"","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/685d63fb722de894e8a482adf2446ed0d28494f8...c8f64c292b5aad85b7ed3858b340bdb37ce3f0f1"}]} -->
