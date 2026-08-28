@@ -9,6 +9,7 @@ import HeadSEO from '../components/HeadSEO.astro';
 import ImageZoom from '../components/ImageZoom.astro';
 import LeftSidebar from '../components/LeftSidebar/LeftSidebar.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
+import StructuredData from '../components/StructuredData.astro';
 import { getActivePageGroupIds } from '../util/activePageGroupIds';
 
 export interface Props {
@@ -28,6 +29,7 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 	<head>
 		<HeadCommon activePageGroupIds={activePageGroupIds} />
 		<HeadSEO content={content} canonicalURL={canonicalURL} />
+		<StructuredData content={content} canonicalURL={canonicalURL} />
 		<title set:html={formatTitle(content)} />
 		<ClientRouter />
 		<style lang="scss">
