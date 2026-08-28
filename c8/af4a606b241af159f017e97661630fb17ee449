@@ -1,0 +1,1 @@
+Serve the spec as a Buffer per review on #12595, so 'same bytes' is literal
