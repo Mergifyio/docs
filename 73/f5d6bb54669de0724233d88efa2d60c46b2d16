@@ -1,0 +1,1 @@
+Scope the middleware with _routes.json: a root _middleware makes every request a Worker invocation, assets included (~30 per page view), none of which can be negotiated. Excludes the bundle, search index, OpenGraph images and static files so only page requests reach the Function. Re-verified against wrangler pages dev.
