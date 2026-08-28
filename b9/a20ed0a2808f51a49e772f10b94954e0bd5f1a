@@ -1,0 +1,6 @@
+Revision history for #12593:
+
+rev 2 (content) 2026-08-28 14:37 UTC — Add the regression test copilot asked for on #12593
+rev 1 (initial) 2026-08-28 14:37 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12593,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"eb3dabd67ac7dab47bb2f3d9dd7d6413c65c4cce","timestamp_iso":"2026-08-28T14:37:25Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"eb3dabd67ac7dab47bb2f3d9dd7d6413c65c4cce","new_sha":"a98ca3211b1ccf9c63f7e09f8bd23e699354d63e","timestamp_iso":"2026-08-28T14:37:25Z","reason":"Add the regression test copilot asked for on #12593","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/eb3dabd67ac7dab47bb2f3d9dd7d6413c65c4cce...a98ca3211b1ccf9c63f7e09f8bd23e699354d63e"}]} -->
