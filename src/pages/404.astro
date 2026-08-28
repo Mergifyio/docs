@@ -114,6 +114,38 @@ import Header from '../components/Header/Header.astro';
 				line-height: 1;
 			}
 
+			/* Recovery links */
+			.recovery {
+				margin-top: 2.5rem;
+				padding-top: 1.5rem;
+				border-top: 1px solid var(--theme-divider);
+				text-align: left;
+				font-size: var(--theme-text-sm);
+				color: var(--theme-text-muted);
+			}
+
+			.recovery-intro {
+				margin: 0 0 0.5rem;
+				font-weight: 600;
+				color: var(--theme-text);
+			}
+
+			.recovery ul {
+				margin: 0 0 0.75rem;
+				padding-inline-start: 1.1rem;
+				line-height: 1.8;
+			}
+
+			.recovery-hint {
+				margin: 0;
+				line-height: 1.6;
+			}
+
+			.recovery code {
+				font-family: var(--font-mono);
+				font-size: 0.85em;
+			}
+
 			/* Home link */
 			.home-link {
 				display: inline-flex;
@@ -163,6 +195,24 @@ import Header from '../components/Header/Header.astro';
 					</svg>
 					Back to home
 				</a>
+
+				<!-- Recovery links. A person uses the search box above; an agent that
+				     followed a dead link needs somewhere machine-readable to go next,
+				     and a 404 is the one page where it has nothing else to work with. -->
+				<nav class="recovery" aria-label="Where to look next">
+					<p class="recovery-intro">Where to look next</p>
+					<ul>
+						<li><a href="/">Documentation index</a></li>
+						<li><a href="/llms.txt">llms.txt</a> — every page, with descriptions</li>
+						<li><a href="/sitemap-index.xml">Sitemap</a></li>
+						<li><a href="/api">API reference</a> · <a href="/openapi.json">OpenAPI</a></li>
+					</ul>
+					<p class="recovery-hint">
+						Most documentation pages also serve their Markdown source: append
+						<code>.md</code> to the URL, or send <code>Accept: text/markdown</code>.
+						The generated API and CLI references are HTML only.
+					</p>
+				</nav>
 			</div>
 		</main>
 		<Footer />
