@@ -1,0 +1,1 @@
+Add the CLI install path to the For agents section. The earlier suggestion to link PyPI was wrong (Julien: not published there any more); the real paths are the Homebrew tap, the install script and the Windows release zip.
