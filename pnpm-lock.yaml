@@ -165,8 +165,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.9.0(supports-color@9.4.0))
       '@iconify-json/lucide':
-        specifier: 1.2.124
-        version: 1.2.124
+        specifier: 1.2.125
+        version: 1.2.125
       '@types/hast':
         specifier: 3.0.5
         version: 3.0.5
@@ -1147,8 +1147,8 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@iconify-json/lucide@1.2.124':
-    resolution: {integrity: sha512-mO6JyBVNER7uXEkW2bXiN9Rrm6w91IXxwnNmIMbu2KZX0ZPcVZH1xDUTw94pryxESUIpBhinkOUIZIav+TA9ng==}
+  '@iconify-json/lucide@1.2.125':
+    resolution: {integrity: sha512-tOCk1QKMtKnCfPAgZRHgjRkQTP7wF5IO+iPKvvp8vxGZYPkSLhx4HTV3Ng0pIZ3wNWrS6kVpHkunJ1dc19L1og==}
 
   '@iconify-json/octicon@1.2.32':
     resolution: {integrity: sha512-gkb+HMhBxZzVvOQhs4NZg0AtMJ8uht6bc8fG757gDOpXjjAOcNe2KrJDd8ydGVmRZoNBIexJAovz8b+no4oTuA==}
@@ -6323,7 +6323,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@iconify-json/lucide@1.2.124':
+  '@iconify-json/lucide@1.2.125':
     dependencies:
       '@iconify/types': 2.0.0
 
