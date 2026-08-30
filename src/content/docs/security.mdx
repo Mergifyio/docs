@@ -23,8 +23,10 @@ A Data Processing Addendum (DPA) is available on request. Contact <a
 
 ## Data Handling
 
-:::tip
-  Mergify processes repository contents in memory and does not persist them.
+:::note
+  Mergify does not store your repository contents. For a git operation such as a
+  rebase or a merge, it clones the repository into a temporary working directory
+  and deletes that directory once the operation finishes.
 :::
 
 - **Encryption in transit:** TLS 1.2 or higher.
