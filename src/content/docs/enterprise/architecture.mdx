@@ -15,11 +15,11 @@ full control over data flows.
 - **Reverse proxy**: HTTPS endpoint exposed to GitHub for webhook delivery and to your engineers for
   dashboard access.
 
-- **Mergify Dashboard & API**: Handles OAuth callbacks, exposes the configuration UI, and queues
-  automation jobs on behalf of repositories.
+- **Mergify Dashboard & API**: Receives the GitHub webhook deliveries, handles OAuth callbacks,
+  exposes the configuration UI, and queues automation jobs on Redis.
 
-- **Mergify workers**: Consume pending jobs, persist their progress to Redis/PostgreSQL, and talk back
-  to GitHub plus the hosted Subscription API.
+- **Mergify workers**: Consume the jobs queued on Redis, persist their progress to Redis/PostgreSQL,
+  and talk back to GitHub plus the hosted Subscription API.
 
 - **PostgreSQL & Redis**: Store persistent metadata and fast-changing workflow/runtime states.
 
@@ -62,8 +62,7 @@ full control over data flows.
 
     GitHub -> ReverseProxy [label="GitHub events"];
     ReverseProxy -> Dashboard [label="Forwarded events"];
-    ReverseProxy -> Workers [label="Forwarded events"];
-    Dashboard -> Workers [label="Queue jobs"];
+    Dashboard -> Workers [label="Queue jobs via Redis"];
 
     Dashboard -> PostgreSQL;
     Dashboard -> Redis;
