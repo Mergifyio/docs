@@ -119,9 +119,11 @@ curl -H "Accept: application/json" \
 :::
 
 :::caution
-  A small number of endpoints only accept application keys (e.g.,
-  CI-specific endpoints). See the [API Reference](/api) for
-  details on each endpoint's supported authentication methods.
+  Three endpoints refuse a PAT and need an application key. `GET /application`
+  describes the key it was called with, so it accepts either scope. The `PUT`
+  and `POST` on `/repos/{owner}/{repository}/pulls/{number}/scopes` need a `ci`
+  key. Everything else takes a PAT or an `admin` key; each endpoint in the [API
+  Reference](/api) lists the keys it accepts.
 :::
 
 ### Revoking an Application Key
