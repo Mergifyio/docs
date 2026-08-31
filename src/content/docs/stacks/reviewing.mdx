@@ -78,8 +78,11 @@ old and new SHAs to understand what moved.
 ## Merging Stacked PRs
 
 Stacked PRs merge bottom-up. The first PR in the stack (targeting `main`)
-merges first. Once it lands, the next PR's base automatically updates to `main`,
-and you can review and merge that one. Each PR in turn, working up the chain.
+merges first. GitHub then retargets the next PR onto `main`, but only if the
+repository deletes head branches on merge, which is why [Setup](/stacks/setup)
+asks you to turn that on. The author brings the rest of the stack in line by
+running [`mergify stack sync`](/stacks/updating#after-a-pr-merges) and pushing
+again. You review and merge each PR in turn, working up the chain.
 
 :::tip
   Comment `@mergifyio queue` on the top PR and the Merge Queue enqueues the

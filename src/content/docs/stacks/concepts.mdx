@@ -92,11 +92,17 @@ For example, if user `alice` pushes a branch called `feat/auth` with 3 commits:
 Readable branch names make `git branch -a`, `gh pr list`, and GitHub's
 branch dropdown easier to scan.
 
-You can customize the branch prefix via Git config:
+You can customize the branch prefix via [Git config](/stacks/setup#configuration):
 
 ```bash
 git config mergify-cli.stack-branch-prefix "my-prefix"
 ```
+
+`--branch-prefix` overrides it for a single run. It is accepted by
+`mergify stack push` and by the commands that read the stack back
+(`mergify stack checkout`, `mergify stack list`, `mergify stack open` and
+`mergify stack sync`), so a prefix passed on the command line has to be
+repeated on each of them. Set the Git config if you would rather not.
 
 ## PR Chaining
 

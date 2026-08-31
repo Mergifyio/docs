@@ -69,9 +69,14 @@ mergify stack push
 
 What happens behind the scenes:
 
-1. **Rebases** your branch on the latest `main`
+1. **Rebases** your branch on the latest `main`, unless a PR in the stack is
+   already approved and the rebase would dismiss the review (see
+   [Updating Stacks](/stacks/updating))
+
 2. **Creates a remote branch** for each commit
+
 3. **Opens a PR** for each commit, chained in dependency order
+
 4. **Posts a stack comment** on every PR showing the full stack
 
 The full flow, from setup to push:
@@ -98,8 +103,9 @@ This shows each PR, its CI and review status, and a link to GitHub:
 <Image src={stackList} alt="Terminal output of mergify stack list" />
 
 :::tip
-  Use `mergify stack open` to quickly open a PR in your browser. It shows an
-  interactive picker if your stack has multiple PRs.
+  Use `mergify stack open` to quickly open a PR in your browser. Name a commit
+  to open its PR; run it without one from a terminal and you get an interactive
+  picker with `HEAD` preselected.
 :::
 
 ## Next Steps

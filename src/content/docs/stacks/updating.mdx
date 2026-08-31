@@ -18,6 +18,12 @@ Each editing command accepts a commit as either a short SHA or a
 [Change-Id](/stacks/concepts#change-id) prefix. Most of them also support
 `--dry-run` (`-n`) to print the plan without touching your branch.
 
+`mergify stack push` rebases your branch on its base branch before pushing, but
+only while no PR in the stack carries an approval. Once a reviewer has
+approved, it pushes without rebasing, because rebasing would dismiss that
+review. Pass `--force-rebase` to rebase anyway and accept the dismissals, or
+`--skip-rebase` (`-R`) to never rebase.
+
 ## Amend the Latest Commit
 
 Make your changes, then amend:
@@ -80,14 +86,14 @@ title and body update on the next push.
 List every commit in the order you want, by SHA or Change-Id prefix:
 
 ```bash
-mergify stack reorder d4e5f6a a1b2c3d g7h8i9b
+mergify stack reorder d4e5f6a a1b2c3d b7c8d9e
 ```
 
 To move a single commit without listing the whole stack, use `move` with
 `first`, `last`, `before`, or `after`:
 
 ```bash
-mergify stack move g7h8i9b first
+mergify stack move b7c8d9e first
 mergify stack move a1b2c3d after d4e5f6a
 ```
 
@@ -125,7 +131,7 @@ On push, the orphan remote branch is deleted and the remaining PRs re-chain.
 To fold a commit into its parent and **drop** its message, use `fixup`:
 
 ```bash
-mergify stack fixup g7h8i9b
+mergify stack fixup b7c8d9e
 ```
 
 To combine commits into a target while **keeping** the target's message, use
@@ -151,7 +157,7 @@ The history-rewriting commands (`reword`, `reorder`, `move`, `drop`, `fixup`,
 your branch:
 
 ```bash
-mergify stack reorder d4e5f6a a1b2c3d g7h8i9b --dry-run
+mergify stack reorder d4e5f6a a1b2c3d b7c8d9e --dry-run
 ```
 
 ## Record Why You Amended
