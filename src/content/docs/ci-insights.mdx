@@ -46,10 +46,10 @@ GitHub and covers basic configuration steps.
 
 ### Flaky Detection
 
-CI Insights flags a **flaky job** when the same job runs more than once on the
-same commit (SHA1) and the runs end with different conclusions, even though the
-code did not change. Cancelled runs are ignored, since a cancellation says
-nothing about the code.
+CI Insights flags a **flaky job** when the same job, in the same pipeline, runs
+more than once on the same commit (SHA1) and the runs end with different
+conclusions, even though the code did not change. Cancelled runs are ignored,
+since a cancellation says nothing about the code.
 
 A **flaky test** comes from the same kind of disagreement, either between
 repeated runs of one commit or between a pass and a failure recorded within the
