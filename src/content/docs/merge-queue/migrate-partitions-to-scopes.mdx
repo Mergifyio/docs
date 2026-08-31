@@ -185,11 +185,13 @@ Downstream jobs then declare `needs: detect-scopes` and gate on those outputs, f
 ### 3. Remove partition_rules from your config
 
 Delete the entire `partition_rules` section from `.mergify.yml`. If you
-referenced `partition-name` or `current-partition-name` in your
-`pull_request_rules` conditions, remove those conditions. They no longer apply.
+referenced `partition-name` or `current-partition-name` anywhere in your
+conditions, remove those conditions as well. Unlike the `partition_rules`
+section, which is ignored, neither is a condition attribute any more, so a
+single one left behind makes the whole configuration invalid.
 
 If Mergify has already opened an automatic migration pull request for your
-repository, merging it does this step for you.
+repository, merging it removes the `partition_rules` section for you.
 
 ### 4. Enable parallel mode
 
