@@ -747,6 +747,12 @@ temporary batch PRs, only when all of the following are true:
 
 - `merge_queue.max_parallel_checks = 1`
 
+- [`merge_queue.mode = serial`](/merge-queue/queue-modes#serial-mode)
+
+- `queue_rules[*].max_checks_retries = 0`, since a
+  [retry](/merge-queue/lifecycle#automatic-ci-retries) recreates the batch PR to
+  get a fresh CI run
+
 - No two-step CI is configured (no separate `merge_conditions` beyond
   `queue_conditions`)
 
