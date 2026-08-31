@@ -83,12 +83,15 @@ Scope-aware batching follows these steps:
    Mergify expands the selection to the best remaining options so the batch can
    still start.
 
-4. **Fallback safely:** When no scope overlap exists, the queue still batches the oldest pull
-   requests together to honor throughput, but these situations are the exception rather than the
-   rule.
+4. **Fall back to changed directories, then to queue time:** When scopes leave two candidates
+   tied, Mergify compares the directories each pull request changes, and only then falls
+   back to queue time. A batch is still built when nothing shares a scope.
 
 This strategy maximizes CI reuse: tests that run for one pull request are likely valid for the other
 changes in the batch because they touch the same areas of the codebase.
+
+[How Pull Requests Are Grouped Into a Batch](/merge-queue/batches#how-pull-requests-are-grouped-into-a-batch)
+covers the full order of precedence, including how priority and stacks come before scopes.
 
 ## Scope assignment lifecycle
 
@@ -247,9 +250,9 @@ When you upload a scopes JSON file with `--scopes-json`, the CLI also honors an
 `"all_scopes": true` field in the file itself, so your detection tooling can set the flag without
 touching the command line.
 
-You can send the flag through the [REST API](/api/pull-requests) as well. This
-endpoint needs an application key with the
-[`ci` scope](/api/usage#application-key-scopes); an `admin` key is rejected:
+You can send the flag through the [REST API](/api/pull-requests) as well. Address the upload by
+commit, so it names the revision the scopes were computed for. This endpoint needs an application
+key with the [`ci` scope](/api/usage#application-key-scopes); an `admin` key is rejected:
 
 ```bash
 curl -X PUT \
@@ -257,8 +260,14 @@ curl -X PUT \
      -H "Authorization: Bearer <my-ci-application-api-key>" \
      -H "Content-Type: application/json" \
      -d '{"scopes": ["build-system"], "all_scopes": true}' \
-     https://api.mergify.com/v1/repos/<owner>/<repository>/pulls/<number>/scopes
+     https://api.mergify.com/v1/repos/<owner>/<repository>/commits/<head-sha>/scopes
 ```
+
+Send the pull request's head SHA, which is not always the revision your job checked out: on a
+`pull_request` event the default checkout is a merge commit, and an upload keyed on that commit
+matches no pull request head. The pull-request-number variant of this endpoint still works, but it
+cannot record which revision it was computed for, so whichever upload arrives last takes effect,
+whatever head it came from.
 
 The flag complements the `scopes` list rather than replacing it: keep reporting the concrete
 scopes your tooling detected, and set `all_scopes: true` on top when the change affects every
