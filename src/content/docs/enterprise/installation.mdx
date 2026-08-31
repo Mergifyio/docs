@@ -29,8 +29,8 @@ You will run the installer mode first to generate a `mergify.env` file, then res
 normal mode with that configuration plus your subscription token.
 
 :::note
-  Always pick the latest Enterprise image. Examples below use `@@ENTERPRISE_VERSION@@`; replace it
-  with the newest tag from the releases page.
+  Always deploy the latest Enterprise image. The examples below use `@@ENTERPRISE_VERSION@@`, which
+  is the most recent release at the time this page was built.
 :::
 
 ## Get the Docker Image
@@ -65,8 +65,9 @@ docker run --rm -d \
   The installer can be safely exposed to the internet during this
   procedure. The installer is a static page that will post a form on the GitHub
   website. GitHub will then ask for confirmation about the creation of the
-  resources. No data is stored on the server or the browser. The actual engine is
-  not yet started.
+  resources. The container stores nothing. Your browser turns the GitHub App
+  credentials into a configuration file you download, and the page itself keeps
+  only the GitHub server URL you typed. The actual engine is not yet started.
 :::
 
 ## Expose the Container
@@ -91,8 +92,6 @@ The installer will:
 Fill in the GitHub server URL, without a trailing slash, and your organization login, then click
 **Create**. The server URL defaults to `https://github.com`; point it at your GitHub Enterprise
 Server host to have the generated `mergify.env` carry the matching `MERGIFYENGINE_GITHUB_URL`.
-
-<Image src={installerScreen} alt="Mergify Enterprise Installer" />
 
 Approve the creation on GitHub, choose an app name:
 
@@ -177,7 +176,10 @@ such an instance you need to:
 Provision a PostgreSQL instance, create a database/user for Mergify, and ensure the container can
 reach it over the network. Capture the DSN you will pass through
 `MERGIFYENGINE_DATABASE_URL` (for example `postgresql://postgres:password@postgres:5432/postgres`).
-If your provider enforces TLS, configure the connection options accordingly.
+If your provider enforces TLS, configure the connection options accordingly. The first start also
+creates a few extensions in that database, so check the
+[PostgreSQL requirements](/enterprise/requirements/#postgresql-requirements) before you lock down
+its privileges.
 
 ## Optional: Configure CI Insights and Test Insights Object Storage
 

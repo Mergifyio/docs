@@ -12,11 +12,17 @@ to create and install the GitHub App.
 
 ## PostgreSQL Requirements
 
-Mergify stores dashboard logins plus encrypted credentials in Postgres. Minimum sizing:
+PostgreSQL is where Mergify keeps its persistent state: dashboard logins, encrypted credentials,
+merge queue state, and [CI Insights](/ci-insights) and [Test Insights](/test-insights) data.
+Minimum sizing:
 
 - Version 15 or newer
 - 10 GB of disk
 - 2 GB of memory
+
+On startup, the container runs a schema migration that creates the `btree_gin`, `pg_trgm`, and
+`uuid-ossp` extensions if they are missing. Either install them in the database beforehand or grant
+the Mergify role the right to create extensions.
 
 High-availability clusters are recommended for production setups, but a single instance that meets
 these specs is sufficient for proofs of concept.
