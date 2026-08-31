@@ -1,0 +1,1 @@
+Drop availableLanguage from both contact points: it was a claim I could not source from anything published. Same fix applied on mergify.com#714 after review flagged it there.
