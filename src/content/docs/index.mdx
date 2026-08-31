@@ -72,9 +72,10 @@ import mergeQueueHero from './images/merge-queue-hero.jpg';
         <div class="home-problem-cta">Merge Queue →</div>
       </a>
       <a href="/ci-insights" class="home-problem-card" data-product="ci-insights">
-        <div class="home-problem-title">CI waste in monorepos</div>
+        <div class="home-problem-title">Slow, expensive CI</div>
         <div class="home-problem-desc">
-          Every PR runs the full test matrix even when only one service changed. CI bills spiral.
+          A single flaky job means rerunning the whole pipeline, and no one can see which jobs
+          cost the most time and money.
         </div>
         <div class="home-problem-cta">CI Insights →</div>
       </a>
@@ -95,13 +96,13 @@ import mergeQueueHero from './images/merge-queue-hero.jpg';
     <div class="home-products-grid">
     <DocsetGrid>
       <Docset title="Merge Queue" path="/merge-queue" icon="mergify:merge-queue">
-        Parallel testing, batching, and priority queues.
+        Parallel testing, batching, monorepo scopes, and priority queues.
       </Docset>
       <Docset title="CI Insights" path="/ci-insights" icon="mergify:ci-insights">
-        Scope-aware CI that runs only what matters.
+        Pipeline and job monitoring, flaky detection, and Auto-Retry.
       </Docset>
       <Docset title="Test Insights" path="/test-insights" icon="mergify:test-insights">
-        Flaky test detection, auto-retry, and quarantine.
+        Flaky test detection, quarantine, and test health tracking.
       </Docset>
       <Docset title="Merge Protections" path="/merge-protections" icon="mergify:merge-protections">
         Advanced guardrails before code lands.
