@@ -94,7 +94,9 @@ failures. Each rule specifies:
   entire workflow (`pipeline`)
 
 When several rules match the same failed job, the one allowing the most retries
-applies. Jobs that ran on a merge queue's
+applies. Because Mergify issues a single retry per workflow run, a run whose
+failed jobs match rules with different retry modes is retried in `pipeline`
+mode, the broader of the two. Jobs that ran on a merge queue's
 [batch pull request](/merge-queue/batches) are not retried, because the queue
 closes or replaces that pull request once it has read its checks, leaving a
 re-run nowhere to report.
@@ -115,7 +117,8 @@ The following condition attributes are available:
   contains the failed job.
 
 - **Branch**: Restrict the rule to specific branches. You can also enter custom
-  branch names that are not yet in the list.
+  branch names that are not yet in the list. Branch matching is case-sensitive,
+  unlike job name, pipeline name, and conclusion, which ignore case.
 
 - **Conclusion**: Match against the type of failure. Available values are
   `failure` (the job failed) and `timed_out` (the job exceeded its time limit).
