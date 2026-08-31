@@ -45,14 +45,16 @@ CI Insights, config validation, and scheduled freezes. See
 
 ## 3. Configure GitHub
 
-Stacks needs access to create PRs. Set the `GITHUB_TOKEN` environment
-variable, or install the [GitHub CLI](https://cli.github.com/) and run
-`gh auth login`.
+Stacks needs access to create PRs. Set the `MERGIFY_TOKEN` or `GITHUB_TOKEN`
+environment variable, or install the [GitHub CLI](https://cli.github.com/) and
+run `gh auth login`. The CLI tries them in that order. See
+[Authentication](/cli/usage#authentication) for where each token comes from.
 
 Enable "[Automatically delete head branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)"
 in your GitHub repository settings (Settings > General > Pull Requests). When
-a stacked PR merges, this cleans up its remote branch automatically so the
-next PR in the chain can rebase onto `main` cleanly.
+a stacked PR merges, this cleans up its remote branch automatically, which is
+also what lets GitHub retarget the next PR in the chain onto `main`. See
+[Merging Stacked PRs](/stacks/reviewing#merging-stacked-prs).
 
 <Image src={deleteHeadBranches} alt="GitHub setting: Automatically delete head branches" style={{ maxWidth: '66%' }} />
 
@@ -116,7 +118,7 @@ These optional Git config settings let you customize Stacks behavior:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `mergify-cli.stack-branch-prefix` | `stack/{username}` | Prefix for remote branch names |
+| `mergify-cli.stack-branch-prefix` | `stack/{username}` | Set the prefix for remote branch names |
 | `mergify-cli.stack-create-as-draft` | `false` | Create PRs as drafts by default |
 | `mergify-cli.stack-github-native` | `false` | Also register the stack with GitHub's stacking API |
 | `mergify-cli.stack-keep-pr-title-body` | `false` | Don't overwrite PR title/body on updates |
@@ -131,6 +133,10 @@ git config mergify-cli.stack-create-as-draft true
 `mergify stack push` has a flag for each of these (`--branch-prefix`,
 `--draft`, `--github-native`, `--keep-pull-request-title-and-body` and
 `--no-revision-history`) to override the setting for a single push.
+
+`--branch-prefix` is also accepted by `mergify stack checkout`,
+`mergify stack list`, `mergify stack open` and `mergify stack sync`, which have
+to look for the same branches. Setting the Git config once covers all five.
 
 :::note
   `mergify-cli.stack-github-native` is experimental. On top of the usual push,

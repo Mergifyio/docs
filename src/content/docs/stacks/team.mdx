@@ -44,11 +44,17 @@ As more developers see the benefits in review, adoption spreads naturally.
 ## Working on Someone Else's Stack
 
 If a teammate has pushed a stack and you want to pick it up locally (to help,
-pair, or continue the work), use `checkout` with their branch name:
+pair, or continue the work), use `checkout` with their stack name and their
+GitHub login:
 
 ```bash
-mergify stack checkout feat/their-feature
+mergify stack checkout feat/their-feature --author their-login
 ```
+
+`--author` matters here: it defaults to the user your own token belongs to, so
+without it the command looks for a stack of yours under that name. Pass
+`--branch` to control the local branch name, which otherwise comes from the
+stack name.
 
 This reconstructs the stack locally by fetching the remote branches and
 rebuilding the commit chain. You can then make changes and push updates with
@@ -84,4 +90,5 @@ for the full mechanics.
 Several tools offer stacked PRs, each with different trade-offs around workflow
 complexity, branch management, platform integration, and collaboration support.
 See the [detailed comparisons](/stacks/compare) for an honest look at how
-Mergify Stacks measures up against alternatives, starting with gh-stack.
+Mergify Stacks measures up against alternatives, from plain Git to gh-stack
+and Graphite.
