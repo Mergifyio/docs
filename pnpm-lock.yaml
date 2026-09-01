@@ -198,8 +198,8 @@ importers:
         specifier: 7.2.6
         version: 7.2.6(@astrojs/markdown-remark@7.2.4(supports-color@9.4.0))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.3.0)(sass-embedded@1.103.1)(sass@1.103.1)(yaml@2.9.0)
       astro-auto-import:
-        specifier: 0.5.2
-        version: 0.5.2(astro@7.2.6(@astrojs/markdown-remark@7.2.4(supports-color@9.4.0))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.3.0)(sass-embedded@1.103.1)(sass@1.103.1)(yaml@2.9.0))
+        specifier: 0.6.0
+        version: 0.6.0(astro@7.2.6(@astrojs/markdown-remark@7.2.4(supports-color@9.4.0))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.3.0)(sass-embedded@1.103.1)(sass@1.103.1)(yaml@2.9.0))
       astro-eslint-parser:
         specifier: 3.1.0
         version: 3.1.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(supports-color@9.4.0)
@@ -2048,11 +2048,10 @@ packages:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
 
-  astro-auto-import@0.5.2:
-    resolution: {integrity: sha512-C7sxtj0nK4F7AiafNoS8lY/JyqW6/JlnkXTdNIT6CKroV/p4m5j6dkpKEAXZf/7Z+SeDcmAlWI6G1nVMssRRPQ==}
-    engines: {node: '>=20.0.0'}
+  astro-auto-import@0.6.0:
+    resolution: {integrity: sha512-ru98hrmIZcLvNIcQWtGHKlYE2C+5+8dp86vGnDiGpdmqcFcG/Tn7uNVGhF1CUkvxNRtE+YZhmWTD94lnxY++rA==}
     peerDependencies:
-      astro: ^5.0.0 || ^6.0.0 || ^7.0.0
+      astro: ^7.2.4
 
   astro-eslint-parser@3.1.0:
     resolution: {integrity: sha512-lS5qlx401Q1ZUhQ44XQnM4uT2qI6hA0H+vstrd841xGVxunFOs0ut3DWJGYHK1l7mxRxQdDi1j53pfE7/AyGlA==}
@@ -7089,7 +7088,7 @@ snapshots:
 
   astring@1.9.0: {}
 
-  astro-auto-import@0.5.2(astro@7.2.6(@astrojs/markdown-remark@7.2.4(supports-color@9.4.0))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.3.0)(sass-embedded@1.103.1)(sass@1.103.1)(yaml@2.9.0)):
+  astro-auto-import@0.6.0(astro@7.2.6(@astrojs/markdown-remark@7.2.4(supports-color@9.4.0))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.3.0)(sass-embedded@1.103.1)(sass@1.103.1)(yaml@2.9.0)):
     dependencies:
       acorn: 8.18.0
       astro: 7.2.6(@astrojs/markdown-remark@7.2.4(supports-color@9.4.0))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.3.0)(sass-embedded@1.103.1)(sass@1.103.1)(yaml@2.9.0)
