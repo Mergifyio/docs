@@ -37,75 +37,23 @@ Once a pull request meets the specified queue conditions, it is added to the
 end of the merge queue. However, [priority rules](/merge-queue/priority) can be
 used to alter its position in the queue.
 
-```dot class="graph"
-strict digraph {
-    fontname="Inter, system-ui, sans-serif";
-    rankdir="TB";
-    bgcolor="#FAFBFC";
+```dot class="flow"
+digraph {
+  label="Pull request lifecycle";
+  node [width=1.8];
 
-    // Global node and edge styling
-    node [
-        style="filled,rounded",
-        shape=rect,
-        fontcolor="black",
-        fontname="Inter, system-ui, sans-serif",
-        fontsize=12,
-        margin=0.25,
-        penwidth=2,
-        width=2.8,
-        height=0.9
-    ];
+  Dequeued [class="external"];
+  Queueing [class="pending"];
+  Queued [class="queued"];
+  Validating [class="pending"];
+  Merged [class="merged"];
 
-    edge [
-        color="#7C3AED",
-        arrowhead=normal,
-        fontname="Inter, system-ui, sans-serif",
-        fontsize=9,
-        penwidth=2
-    ];
-
-    Dequeued [
-        label="⚪ Dequeued",
-        fillcolor="#F3F4F6",
-        color="#9CA3AF",
-        fontcolor="#4B5563"
-    ];
-
-    Queueing [
-        label="⏳ Queueing",
-        fillcolor="#FFF4ED",
-        color="#FF8A3D",
-        fontcolor="#C2410C"
-    ];
-
-    Queued [
-        label="📋 Queued",
-        fillcolor="#EDE9FE",
-        color="#8B5CF6",
-        fontcolor="#5B21B6"
-    ];
-
-    Validating [
-        label="🔍 Validating",
-        fillcolor="#DBEAFE",
-        color="#3B82F6",
-        fontcolor="#1E40AF"
-    ];
-
-    Merged [
-        label="✅ Merged",
-        fillcolor="#D1FAE5",
-        color="#10B981",
-        fontcolor="#065F46"
-    ];
-
-    // Transitions with detailed labels
-    Dequeued -> Queueing [label="  queue command\n  or auto_merge  "];
-    Queueing -> Queued [label="  matches\n  queue_conditions  "];
-    Queued -> Dequeued [label="  unmatches queue_conditions\n  or dequeue command  "];
-    Queued -> Validating [label="  reaches top\n  of the queue  "];
-    Validating -> Merged [label="  matches\n  merge_conditions  "];
-    Validating -> Dequeued [label="  unmatches queue_conditions\n  or dequeue command\n  or fails merge_conditions  "];
+  Dequeued -> Queueing [label="  queue command\l  or auto_merge\l"];
+  Queueing -> Queued [label="  matches\l  queue_conditions\l"];
+  Queued -> Validating [label="  reaches the top\l  of the queue\l"];
+  Validating -> Merged [label="  matches\l  merge_conditions\l", class="merged"];
+  Queued -> Dequeued [label="  unmatches queue_conditions\l  or dequeue command\l", class="failed"];
+  Validating -> Dequeued [label="  fails merge_conditions\l  or dequeue command\l", class="failed"];
 }
 ```
 

@@ -28,33 +28,25 @@ prioritizes the combination that shares the most scopes in common. Pull requests
 scope are tested together first, while unrelated changes stay in the queue until a compatible batch
 is available or Mergify needs them to fill the requested batch size.
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="LR";
-  label="Scope-aware Batch Selection";
-  nodesep=0.9;
-  ranksep=1.2;
-  splines=polyline;
-
-  edge [fontname="sans-serif", color="#374151", arrowhead=none, penwidth=1.2];
+```dot class="queue"
+digraph {
+  label="Scope-aware batch selection";
+  edge [arrowhead=none];
 
   subgraph cluster_preferred {
-  style="rounded";
-  color="#1CB893";
+    class="batch";
     label="Preferred batch";
-
-    PR1 [shape=box, style="rounded,filled", fillcolor="#347D39", fontcolor="white", color="#165B33", margin="0.35,0.22", fontname="sans-serif", label="PR #101\nScopes: frontend, api"];
-    PR2 [shape=box, style="rounded,filled", fillcolor="#347D39", fontcolor="white", color="#165B33", margin="0.35,0.22", fontname="sans-serif", label="PR #214\nScopes: frontend"];
-    PR3 [shape=box, style="rounded,filled", fillcolor="#347D39", fontcolor="white", color="#165B33", margin="0.35,0.22", fontname="sans-serif", label="PR #305\nScopes: api, docs"];
+    PR1 [label="PR #101\nScopes: frontend, api", class="queued"];
+    PR2 [label="PR #214\nScopes: frontend", class="queued"];
+    PR3 [label="PR #305\nScopes: api, docs", class="queued"];
   }
 
-  PR4 [shape=box, style="rounded,filled", fillcolor="#6B7280", fontcolor="white", color="#4B5563", margin="0.35,0.22", fontname="sans-serif", label="PR #412\nScope: tooling"];
+  PR4 [label="PR #412\nScope: tooling", class="muted"];
 
-  frontend [shape=oval, style="filled", fillcolor="#1CB893", fontcolor="#063C2C", color="#0B7A5C", margin="0.3,0.18", fontname="sans-serif", label="frontend"];
-  api [shape=oval, style="filled", fillcolor="#1CB893", fontcolor="#063C2C", color="#0B7A5C", margin="0.3,0.18", fontname="sans-serif", label="api"];
-  docs [shape=oval, style="filled", fillcolor="#1CB893", fontcolor="#063C2C", color="#0B7A5C", margin="0.3,0.18", fontname="sans-serif", label="docs"];
-  tooling [shape=oval, style="filled", fillcolor="#1CB893", fontcolor="#063C2C", color="#0B7A5C", margin="0.3,0.18", fontname="sans-serif", label="tooling"];
+  frontend [shape=oval, class="config"];
+  api [shape=oval, class="config"];
+  docs [shape=oval, class="config"];
+  tooling [shape=oval, class="config"];
 
   PR1 -> frontend;
   PR1 -> api;

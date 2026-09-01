@@ -38,21 +38,12 @@ is tested on top of the one before it, forming a single ordered pipeline. This g
 correctness: each pull request is validated against the exact state it will merge into. The
 trade-off is that unrelated changes still wait for each other.
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="LR";
-  label="Serial Mode — Single Queue";
-  nodesep=0.6;
-  ranksep=0.8;
-
-  node [shape=box, style="rounded,filled", fillcolor="#347D39", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
-  edge [color="#374151", arrowhead=normal, penwidth=1.2, fontname="sans-serif"];
-
-  PR1 [label="Batch 1\nPR #1 (api)"];
-  PR2 [label="Batch 2\nPR #2 (frontend)"];
-  PR3 [label="Batch 3\nPR #3 (docs)"];
-
+```dot class="queue"
+digraph {
+  label="Serial mode — a single queue";
+  PR1 [label="Batch 1\nPR #1 (api)", class="queued"];
+  PR2 [label="Batch 2\nPR #2 (frontend)", class="queued"];
+  PR3 [label="Batch 3\nPR #3 (docs)", class="queued"];
   PR1 -> PR2 -> PR3;
 }
 ```
@@ -93,53 +84,33 @@ together so they are tested as a group, preventing semantic conflicts.
 
 Batches that share no scope run at the same time:
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="TB";
-  label="Parallel Mode\nIndependent Scope Queues";
-  nodesep=0.8;
-  ranksep=0.6;
-
-  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+```dot class="flow"
+digraph {
+  label="Parallel mode — independent scope queues";
   edge [style=invis];
 
   subgraph cluster_running {
-    style="rounded,filled";
-    fillcolor="#1CB893";
-    color="#1CB893";
-    fontcolor="#000000";
+    class="batch";
     label="Tested simultaneously";
-
-    PR1 [label="Batch 1\nPR #1 (api)", fillcolor="#347D39"];
-    PR2 [label="Batch 2\nPR #2 (frontend)", fillcolor="#347D39"];
-    PR3 [label="Batch 3\nPR #3 (docs)", fillcolor="#347D39"];
+    PR1 [label="Batch 1\nPR #1 (api)", class="pending"];
+    PR2 [label="Batch 2\nPR #2 (frontend)", class="pending"];
+    PR3 [label="Batch 3\nPR #3 (docs)", class="pending"];
+    { rank=same; PR1; PR2; PR3; }
   }
-
-  { rank=same; PR1; PR2; PR3; }
 }
 ```
 
 When scopes **do** overlap, Mergify preserves ordering within that scope to guarantee the changes are
 tested together:
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="LR";
-  label="Parallel Mode — Overlapping Scopes Create Dependencies";
-  nodesep=0.6;
-  ranksep=1.0;
-
-  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
-  edge [color="#374151", arrowhead=normal, penwidth=1.2, fontname="sans-serif"];
-
-  PR1 [label="Batch 1\nPR #1 (api)", fillcolor="#347D39"];
-  PR4 [label="Batch 2\nPR #4 (api, frontend)", fillcolor="#347D39"];
-  PR3 [label="Batch 3\nPR #3 (docs)", fillcolor="#347D39"];
+```dot class="queue"
+digraph {
+  label="Parallel mode — overlapping scopes create dependencies";
+  PR1 [label="Batch 1\nPR #1 (api)", class="queued"];
+  PR4 [label="Batch 2\nPR #4 (api, frontend)", class="queued"];
+  PR3 [label="Batch 3\nPR #3 (docs)", class="queued"];
 
   PR1 -> PR4 [label="same scope: api"];
-
   { rank=same; PR1; PR3; }
 }
 ```
@@ -293,43 +264,28 @@ Take the configuration above (`max_parallel_checks: 5`, `frontend: 2`, `backend:
 uncapped) and suppose the queue is ready to test three `frontend` batches, three `backend` batches,
 and two `docs` batches. The slots might fill like this:
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="TB";
-  label="Per-scope capacities — ceiling 5, frontend: 2, backend: 2, docs uncapped";
-  nodesep=0.5;
-  ranksep=0.7;
-
-  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+```dot class="flow"
+digraph {
+  label="Per-scope capacity — ceiling 5, frontend 2, backend 2, docs uncapped";
   edge [style=invis];
 
   subgraph cluster_running {
-    style="rounded,filled";
-    fillcolor="#1CB893";
-    color="#1CB893";
-    fontcolor="#000000";
+    class="batch";
     label="Running now — 5 of 5 slots used";
-
-    F1 [label="frontend #1", fillcolor="#347D39"];
-    F2 [label="frontend #2", fillcolor="#347D39"];
-    B1 [label="backend #1", fillcolor="#347D39"];
-    B2 [label="backend #2", fillcolor="#347D39"];
-    D1 [label="docs #1", fillcolor="#347D39"];
-
+    F1 [label="frontend #1", class="pending"];
+    F2 [label="frontend #2", class="pending"];
+    B1 [label="backend #1", class="pending"];
+    B2 [label="backend #2", class="pending"];
+    D1 [label="docs #1", class="pending"];
     { rank=same; F1; F2; B1; B2; D1; }
   }
 
   subgraph cluster_waiting {
-    style="rounded";
-    color="#6B7280";
-    fontcolor="#6B7280";
+    class="muted";
     label="Waiting";
-
-    F3 [label="frontend #3\nfrontend full", fillcolor="#6B7280"];
-    B3 [label="backend #3\nbackend full", fillcolor="#6B7280"];
-    D2 [label="docs #2\nceiling full", fillcolor="#6B7280"];
-
+    F3 [label="frontend #3\nfrontend full", class="muted"];
+    B3 [label="backend #3\nbackend full", class="muted"];
+    D2 [label="docs #2\nceiling full", class="muted"];
     { rank=same; F3; B3; D2; }
   }
 }
@@ -429,30 +385,19 @@ Parallel mode keeps dependencies between batches that share a scope. **Isolated 
 entirely: every batch is a self-contained unit that is tested and merged on its own, with no parent
 batch and no child batch. A failure in one batch never blocks any other.
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="TB";
-  label="Isolated Mode\nEvery Batch Independent";
-  nodesep=0.8;
-  ranksep=0.6;
-
-  node [shape=box, style="rounded,filled", fontcolor="white", fontname="sans-serif", margin="0.3,0.18"];
+```dot class="flow"
+digraph {
+  label="Isolated mode — every batch independent";
   edge [style=invis];
 
   subgraph cluster_running {
-    style="rounded,filled";
-    fillcolor="#1CB893";
-    color="#1CB893";
-    fontcolor="#000000";
+    class="batch";
     label="Tested simultaneously";
-
-    PR1 [label="Batch 1\nPR #1", fillcolor="#347D39"];
-    PR2 [label="Batch 2\nPR #2", fillcolor="#347D39"];
-    PR3 [label="Batch 3\nPR #3", fillcolor="#347D39"];
+    PR1 [label="Batch 1\nPR #1", class="pending"];
+    PR2 [label="Batch 2\nPR #2", class="pending"];
+    PR3 [label="Batch 3\nPR #3", class="pending"];
+    { rank=same; PR1; PR2; PR3; }
   }
-
-  { rank=same; PR1; PR2; PR3; }
 }
 ```
 

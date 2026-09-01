@@ -3,12 +3,7 @@ import { load } from 'cheerio';
 import type * as mdast from 'mdast';
 import type * as unified from 'unified';
 import { CONTINUE, visit } from 'unist-util-visit';
-import {
-  type DiagramKind,
-  type DiagramRole,
-  finishDiagramSvg,
-  type ShapePaint,
-} from '../src/util/diagramSvg';
+import { finishDiagramSvg } from '../src/util/diagramSvg';
 
 /**
  * Render `dot` / `circo` / `neato` fences to inline SVG, and hand every colour
@@ -16,12 +11,17 @@ import {
  *
  * Graphviz supports a `class` attribute on graphs, nodes, edges and clusters
  * and copies it verbatim into the SVG (`class="node queued"`). So this plugin
- * never resolves a colour: it injects shape and spacing defaults, drops the
- * opaque canvas, tags each element with a *role*, and strips the inline paint
- * so the `.dg` rules in `index.css` resolve surface, border and label at paint
- * time from the role accents in `theme.css`. Dark mode then arrives through the
- * same `:root.theme-dark` block as every other surface on the site, with no
- * second render and no string matching.
+ * never resolves a colour and never names a role: the fence names them, and
+ * the plugin only injects shape and spacing defaults, drops the opaque canvas
+ * and strips the inline paint, so the `.dg` rules in `index.css` resolve
+ * surface, border and label at paint time from the role accents in
+ * `theme.css`. Dark mode then arrives through the same `:root.theme-dark`
+ * block as every other surface on the site, with no second render and no
+ * string matching.
+ *
+ * The one class the rendering side still adds is `plain`, in
+ * `finishDiagramSvg` — a shape fact (this element is a caption, not a box),
+ * not a colour.
  */
 
 const viz = await instance();
@@ -46,103 +46,41 @@ const METRICS_FONT = 'Helvetica';
  * default is below.
  */
 const BASE = `
-  graph [bgcolor="transparent", fontname="${METRICS_FONT}", fontsize=13,
-         labelloc="t", pad="0.12", nodesep=0.45, ranksep=0.55];
+  graph [bgcolor="transparent", style="rounded", fontname="${METRICS_FONT}",
+         fontsize=13, labelloc="t", pad="0.12", nodesep=0.45, ranksep=0.55];
   node  [fontname="${METRICS_FONT}", fontsize=13, shape=box,
          style="rounded,filled", penwidth=1.4, margin="0.24,0.15", height=0.42];
   edge  [fontname="${METRICS_FONT}", fontsize=10, penwidth=1.3, arrowsize=0.7];
 `;
 
 /**
- * Transitional: the colours the docs were drawn with, mapped onto roles.
- *
- * Four independent dialects grew here — queue-green, emoji-pastel,
- * nineties-pastel and near-white-blueprint — because there was no palette to be
- * consistent with. This table maps by the hue family each dialect used, so two
- * elements drawn in the same colour still read alike. It is lossy in the other
- * direction: where one dialect used two shades of a hue for two meanings, both
- * land on one role — PostgreSQL and Redis both become `datastore`, and
- * "tests passed" and "merged to main" both become `merged`. That is the price
- * of recolouring the whole corpus without editing a single fence, and it is
- * paid back one page at a time as each fence names its own roles.
- *
- * It is a migration shim with a known end: once every fence names its own role,
- * nothing reaches this table and it goes away. Keys are lowercase hex.
+ * Diagram kinds. A fence opts into one through its class — ```dot class="queue"
+ * — and it sets layout, never colour. A fence that names none gets BASE alone
+ * and lays itself out.
  */
-const LEGACY_ROLES: Record<string, DiagramRole> = {
-  // Queue dialect — batches, performance, stacks, queue-modes, scopes,
-  // direct-merge, gha, buildkite.
-  '#347d39': 'queued', // queue green: a pull request in the queue
-  '#1cb893': 'config', // Merge Queue teal, as a node: a scope or a config value
-  '#6b7280': 'muted', // skipped, waiting, not selected
-  '#9ca3af': 'muted', // cascaded out, dashed side-links
-  '#111827': 'external', // CI, ci-gate, main
-  '#0b1120': 'external',
-  '#2563eb': 'pending', // the detect-scopes step, mid-run
-  '#dc2626': 'failed',
-  '#374151': 'chrome', // the edge colour the old plugin string-matched
-  '#4b5563': 'chrome',
-  '#5b21b6': 'chrome', // stacks: edges and their labels
-
-  // Emoji-pastel dialect — lifecycle, two-step.
-  '#f3f4f6': 'external', // dequeued: out of the queue
-  '#fff4ed': 'pending', // queueing, validating, testing
-  '#ede9fe': 'queued',
-  '#f3e8ff': 'queued', // the queue command
-  '#dbeafe': 'config',
-  '#d1fae5': 'merged',
-  '#ddd6fe': 'merged', // merged to main
-  '#fee2e2': 'failed',
-  '#10b981': 'merged', // the "passed" edge
-  '#ef4444': 'failed', // the "failed" edge
-  '#7c3aed': 'chrome', // the default edge colour on both pages
-
-  // Nineties-pastel dialect — flaky-test-detection.
-  '#c9e7f8': 'config', // the commit under test
-  '#b7f5c1': 'merged', // tests passed
-  '#f8c9c9': 'failed', // tests failed
-  '#d8f0ff': 'external', // "consistent (not flaky)"
-  '#ffe9b3': 'pending', // "flagged as flaky"
-  '#999999': 'muted', // the dashed commit clusters
-
-  // Near-white-blueprint dialect — enterprise/architecture.
-  '#f6f8fb': 'external', // the default node fill
-  '#ffffff': 'external', // GitHub
-  '#24292e': 'external',
-  '#fff3d6': 'config', // the reverse proxy: the entry point
-  '#e6f0ff': 'mergify', // dashboard and workers
-  '#f0ecfe': 'mergify', // the subscription API
-  '#f4fbff': 'mergify', // the on-premise cluster
-  '#e4f5ed': 'datastore', // PostgreSQL
-  '#fce3e8': 'datastore', // Redis
-  '#fdfeff': 'batch', // the customer-infrastructure cluster
-  '#8892bf': 'chrome',
+const KINDS: Record<string, string> = {
+  queue: `rankdir="LR"; splines="polyline"; nodesep=0.32; ranksep=0.45;`,
+  flow: `rankdir="TB"; splines="spline"; nodesep=0.55; ranksep=0.6;`,
+  arch: `rankdir="TB"; splines="ortho"; nodesep=0.8; ranksep=1.0;
+         node [width=2.5, margin="0.34,0.24"];`,
 };
-
-/** A cluster reads its colour differently: teal is a container, not a value. */
-const LEGACY_CLUSTER_ROLES: Record<string, DiagramRole> = {
-  ...LEGACY_ROLES,
-  '#1cb893': 'batch',
-};
-
-/** Inject the base defaults immediately after the opening brace. */
-function injectDefaults(source: string): string {
-  const brace = source.indexOf('{');
-  if (brace === -1) return source;
-  return `${source.slice(0, brace + 1)}\n${BASE}\n${source.slice(brace + 1)}`;
-}
 
 /**
- * Name the role of an element the fence did not name, from the paint Graphviz
- * gave it. A cluster drawn with `style=rounded` and no fill carries its colour
- * on the stroke instead; nothing else falls back, because an unmapped fill must
- * not let a border speak for the shape it merely outlines.
+ * Inject the base defaults, plus any kind the fence opted into, immediately
+ * after the opening brace, so anything the fence writes afterwards overrides
+ * them. `Object.hasOwn` because the class comes from the fence: a fence
+ * classed `constructor` would otherwise inject `Object`'s own into the DOT.
  */
-function legacyRoleFor(kind: DiagramKind, { fill, stroke }: ShapePaint): DiagramRole | undefined {
-  if (kind === 'edge') return stroke ? LEGACY_ROLES[stroke.toLowerCase()] : undefined;
-  const table = kind === 'cluster' ? LEGACY_CLUSTER_ROLES : LEGACY_ROLES;
-  const color = !fill || fill === 'none' ? (kind === 'cluster' ? stroke : undefined) : fill;
-  return color ? table[color.toLowerCase()] : undefined;
+function injectDefaults(source: string, classes: string[]): string {
+  const brace = source.indexOf('{');
+  if (brace === -1) return source;
+
+  let defaults = BASE;
+  for (const kind of classes) {
+    if (Object.hasOwn(KINDS, kind)) defaults += `\n  ${KINDS[kind]}\n`;
+  }
+
+  return `${source.slice(0, brace + 1)}\n${defaults}\n${source.slice(brace + 1)}`;
 }
 
 export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
@@ -165,7 +103,7 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
           const attrs = attrString ? load(`<element ${attrString}></element>`)(`element`) : null;
           const classes = (attrs?.attr('class') ?? '').split(/\s+/).filter(Boolean);
 
-          const svgString = viz.renderString(injectDefaults(node.value), {
+          const svgString = viz.renderString(injectDefaults(node.value, classes), {
             format: 'svg',
             engine: lang,
           });
@@ -175,7 +113,7 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
           // from them, so a fence can add a kind without losing `dg`.
           const fenceAttrs = attrs?.attr();
           if (fenceAttrs) $(`svg`).attr(fenceAttrs);
-          finishDiagramSvg($, { classes, roleFor: legacyRoleFor });
+          finishDiagramSvg($, { classes });
 
           // Rewrite the fence in place: it stops being a code block and becomes
           // the rendered SVG. mdast has no in-place conversion, so the node
