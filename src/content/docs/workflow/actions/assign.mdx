@@ -20,14 +20,24 @@ variable to assign the pull request to its author. `users` is the older form of
 `add_users` and behaves the same way; prefer `add_users` in new rules.
 
 :::caution
-  A login that GitHub refuses as an assignee, such as a user who is not a
-  collaborator on the repository, is dropped without an error. The action still
-  reports success and the pull request ends up without that assignee, so check
-  that the logins you list have access to the repository.
+  GitHub silently ignores a login it will not accept as an assignee, such as a
+  user with no access to the repository, and still answers the request as a
+  success. Mergify has no failure to report, so the action succeeds and the pull
+  request ends up without that assignee. Check that the logins you list have
+  access to the repository.
 :::
 
+When GitHub rejects the assignment request outright rather than ignoring a
+login, Mergify reports the GitHub error on the rule's check run instead of a
+success.
+
 Mergify skips any login ending in `[bot]` when adding assignees, so a rule that
-assigns `{{ author }}` does nothing on a pull request opened by a bot.
+assigns `{{ author }}` does nothing on a pull request opened by a bot. A login
+that appears in both `add_users` and `remove_users` cancels out: Mergify neither
+adds nor removes it.
+
+GitHub allows at most 10 assignees on a pull request, so `users` and `add_users`
+accept up to 10 entries each. `remove_users` accepts up to 40.
 
 ## Examples
 
