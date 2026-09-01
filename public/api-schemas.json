@@ -12992,6 +12992,32 @@
             ],
             "title": "Max Retries"
           },
+          "retries_before_run": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retries Before Run",
+            "description": "How many checks retries preceded this run: 0 for a first attempt, 1 or more for a rerun after a failure (whose duration is a repeat attempt, not a nominal run). Distinct from `retry_attempt`, which concerns the retry abort event. Null on events persisted before this field existed."
+          },
+          "bisection_depth": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bisection Depth",
+            "description": "How many splits of a failing batch this batch descends from: 0 for a batch checked as it was embarked, 1 or more for a sub-batch created while bisecting a failing batch (its run checks a reduced batch). Null on events persisted before this field existed."
+          },
           "speculative_check_pull_request": {
             "$ref": "#/components/schemas/Signals_SpeculativeCheckPullRequest"
           },

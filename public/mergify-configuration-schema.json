@@ -4200,7 +4200,7 @@
             }
           ],
           "default": "auto",
-          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Defaults to `auto`, which lets Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered. Set to `null` to disable the checks timeout entirely.",
+          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Defaults to `auto`, which lets Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin). Runs identified as retry reruns or bisection runs are excluded from the calibration; runs whose provenance predates this tracking are kept for compatibility. `auto` applies no timeout until enough history has been gathered. Set to `null` to disable the checks timeout entirely.",
           "title": "Checks Timeout"
         },
         "max_checks_retries": {
@@ -4468,7 +4468,7 @@
             }
           ],
           "default": "auto",
-          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Defaults to `auto`, which lets Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin); `auto` applies no timeout until enough history has been gathered. Set to `null` to disable the checks timeout entirely.",
+          "description": "The amount of time the merge queue waits for pending checks to return before dequeueing pull requests. This cannot be less than 60 seconds. Defaults to `auto`, which lets Mergify compute the timeout from the recent CI runtime of this queue (the 95th-percentile runtime with a safety margin). Runs identified as retry reruns or bisection runs are excluded from the calibration; runs whose provenance predates this tracking are kept for compatibility. `auto` applies no timeout until enough history has been gathered. Set to `null` to disable the checks timeout entirely.",
           "title": "Checks Timeout"
         },
         "max_checks_retries": {
