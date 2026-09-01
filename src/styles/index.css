@@ -924,10 +924,12 @@ html {
   fill: var(--dg-container);
   stroke: var(--dg-border);
 }
+/* No letter-spacing: Graphviz sizes a cluster to fit the label it measured in
+   Helvetica, and anything that widens the painted text past that overflows the
+   container it labels. The weight is worth the ~4% Inter already costs. */
 .dg .cluster > text {
   fill: var(--dg-label);
   font-weight: 600;
-  letter-spacing: 0.02em;
 }
 
 .dg .edge > path,
@@ -961,6 +963,12 @@ html {
 .dg .plain > rect {
   fill: none;
   stroke: none;
+}
+
+/* An architecture diagram is the widest kind there is, and the one whose labels
+   suffer most from being scaled down. Give it the whole column. */
+.dg.arch {
+  width: 100%;
 }
 
 /* The hand-placed diagrams are drawn at a fixed size and read best at it: they

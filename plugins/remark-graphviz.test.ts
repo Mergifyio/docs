@@ -45,37 +45,40 @@ describe('remarkGraphvizPlugin', () => {
     expect(svg).not.toMatch(/\bstroke="/);
   });
 
-  it('maps the colours the docs were drawn with onto roles', async () => {
+  it('passes the role a fence names straight through to the SVG', async () => {
+    // The whole system rests on this: Graphviz copies `class` verbatim, so the
+    // plugin never has to resolve a colour and CSS can do it at paint time.
     const svg = await render(`digraph {
-      node [style=filled];
-      A [fillcolor="#347D39"];
-      B [fillcolor="#6B7280"];
-      C [fillcolor="#FFF4ED"];
-      subgraph cluster_b { style="rounded,filled"; fillcolor="#1CB893"; label="Batch"; A; }
-      A -> B [color="#9CA3AF"];
+      A [class="failed"];
+      subgraph cluster_b { class="batch"; label="Batch"; A; }
+      A -> B [class="muted"];
     }`);
-    expect(classesOf(svg, 'A')).toContain('queued');
-    expect(classesOf(svg, 'B')).toContain('muted');
-    expect(classesOf(svg, 'C')).toContain('pending');
-    // Teal is a container on a cluster and a value on a node.
-    expect(classesOf(svg, 'cluster_b')).toContain('batch');
-    expect(classesOf(svg, 'A->B')).toContain('muted');
+    expect(classesOf(svg, 'A')).toEqual(['node', 'failed']);
+    expect(classesOf(svg, 'cluster_b')).toEqual(['cluster', 'batch']);
+    expect(classesOf(svg, 'A->B')).toEqual(['edge', 'muted']);
   });
 
-  it('reads a cluster drawn with a stroke and no fill', async () => {
-    const svg = await render(`digraph {
-      subgraph cluster_w { style="rounded"; color="#6B7280"; label="Waiting"; A; }
-    }`);
-    expect(classesOf(svg, 'cluster_w')).toContain('muted');
+  it('never invents a role for an element that names none', async () => {
+    const svg = await render('digraph { A; A -> B; }');
+    expect(classesOf(svg, 'A')).toEqual(['node']);
+    expect(classesOf(svg, 'A->B')).toEqual(['edge']);
   });
 
-  it('lets an authored role win over the substitution table', async () => {
-    const svg = await render(`digraph {
-      node [style=filled];
-      A [fillcolor="#347D39", class="failed"];
-    }`);
-    expect(classesOf(svg, 'A')).toContain('failed');
-    expect(classesOf(svg, 'A')).not.toContain('queued');
+  it('applies the layout defaults of the kind a fence opts into', async () => {
+    const flow = await render('digraph { A -> B; }', 'class="flow"');
+    const queue = await render('digraph { A -> B; }', 'class="queue"');
+    // `flow` is top-to-bottom and `queue` is left-to-right, so the same two
+    // nodes come out stacked in one and side by side in the other.
+    const box = (svg: string) => /viewBox="[\d.]+ [\d.]+ ([\d.]+) ([\d.]+)"/.exec(svg)!;
+    expect(Number(box(flow)[1])).toBeLessThan(Number(box(flow)[2]));
+    expect(Number(box(queue)[1])).toBeGreaterThan(Number(box(queue)[2]));
+  });
+
+  it('does not reach Object.prototype for a kind a fence made up', async () => {
+    // The class comes from the fence, so an unguarded lookup would splice
+    // `function Object() { [native code] }` into the DOT and fail the render.
+    const svg = await render('digraph { A -> B; }', 'class="constructor"');
+    expect(svg).toMatch(/^<svg/);
   });
 
   it('marks a borderless node as plain, so it reads as a caption', async () => {
@@ -103,28 +106,6 @@ describe('remarkGraphvizPlugin', () => {
     expect(rounded).toMatch(/<g id="node1"[^>]*>\s*<title>A<\/title>\s*<path/);
     const square = await render('digraph { node [style=filled]; A [label="x"]; }');
     expect(square).toMatch(/<g id="node1"[^>]*>\s*<title>A<\/title>\s*<polygon/);
-  });
-
-  it('does not let a border speak for the shape it outlines', async () => {
-    // An unmapped fill must fall back to the element default, not to whatever
-    // role the node's darker border happens to match.
-    const svg = await render(`digraph {
-      node [style=filled];
-      A [fillcolor="#ABCDEF", color="#374151"];
-    }`);
-    expect(classesOf(svg, 'A')).toEqual(['node']);
-  });
-
-  it('does not guess a colour for an element whose author named a class', async () => {
-    // Even an unrecognised class means the author said something; appending a
-    // guessed role would contradict them with no warning.
-    const svg = await render(`digraph {
-      node [style=filled];
-      A [class="Queued", fillcolor="#DC2626"];
-      B [shape=plaintext, class="plain", fillcolor="#347D39"];
-    }`);
-    expect(classesOf(svg, 'A')).toEqual(['node', 'Queued']);
-    expect(classesOf(svg, 'B')).toEqual(['node', 'plain']);
   });
 
   it('strips the alpha Graphviz emits alongside a colour', async () => {
