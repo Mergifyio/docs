@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.8.28.1",
+    "version": "2026.8.31.1",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
