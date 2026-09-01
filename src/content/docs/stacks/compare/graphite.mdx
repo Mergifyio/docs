@@ -76,7 +76,7 @@ between them with `gt up`, `gt down`, `gt top`, and `gt bottom`.
 
 | Feature | Mergify Stacks | Graphite |
 |---|---|---|
-| Create a stack | `mergify stack new` + commits | `gt create [name]` per branch |
+| Create a stack | `mergify stack new <name>` + commits | `gt create [name]` per branch |
 | Push changes | `mergify stack push` (rebase + push + PRs) | `gt submit` (force-push + PRs) |
 | View the stack | `mergify stack list` | `gt log` |
 | Edit mid-stack | `mergify stack edit <commit>` (targeted pause) | `gt modify` (auto-restacks) |
@@ -90,7 +90,7 @@ between them with `gt up`, `gt down`, `gt top`, and `gt bottom`.
 | Open PR in browser | `mergify stack open` (interactive picker) | `gt pr` |
 | Collaboration | `mergify stack checkout` | Shared stacks + frozen branches |
 | Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen |
-| Alternate base branch | `mergify stack new --base <remote>/<branch>` | Multi-trunk support |
+| Alternate base branch | `mergify stack new <name> --base <remote>/<branch>` | Multi-trunk support |
 | IDE integration | CLI only | VS Code extension |
 | AI agent integration | [Skills](/stacks/agents) for Claude Code and skills.sh agents | `gt mcp` |
 | Merge Queue | [Native Mergify integration](/merge-queue) | Graphite merge queue |
@@ -238,7 +238,7 @@ gt submit
 **With Mergify Stacks:**
 
 ```bash
-mergify stack new
+mergify stack new feat/my-feature
 git commit -m "add model"
 git commit -m "add endpoint"
 mergify stack push
