@@ -20,6 +20,10 @@ const paths = new Set(routes.map(({ params }) => params.path));
  * @returns Path to the OpenGraph image if found. Otherwise, `undefined`.
  */
 export function getOgImageUrl(path: string): string | undefined {
-  const imagePath = path.replace(/^\//, '').replace(/\/$/, '') + '.png';
+  // The homepage's collection id is `index`, so stripping its slashes leaves an
+  // empty string and the lookup misses — which is why the homepage shipped with
+  // an empty `og:image` while every other page had one.
+  const slug = path.replace(/^\//, '').replace(/\/$/, '') || 'index';
+  const imagePath = slug + '.png';
   if (paths.has(imagePath)) return '/open-graph/' + imagePath;
 }
