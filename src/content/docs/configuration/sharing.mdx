@@ -75,6 +75,17 @@ extends: shared-config
   - A configuration cannot extend itself, and the source repository's own
     configuration cannot use `extends`: only one level of extension is
     supported.
+
+  - The source repository must be at least as visible as yours, since its
+    configuration is displayed wherever your repository is readable. A private
+    or internal repository can extend a public one, and a private repository
+    can extend an internal one, but never the other way around. See GitHub's
+    documentation on [repository
+    visibility](https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories#about-repository-visibility).
+
+  - Visibility is checked every time the configuration is loaded. Making your
+    repository more visible, or the source repository less visible, breaks your
+    configuration even though no configuration file changed.
 :::
 
 The configuration from the specified repository will be loaded and applied
