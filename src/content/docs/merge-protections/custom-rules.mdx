@@ -18,6 +18,9 @@ merge_protections:
       - <condition>
 ```
 
+Write them by hand, or build them in the [dashboard](/merge-protections/setup),
+which commits the same YAML to your configuration file through a pull request.
+
 Evaluation:
 - If all `if` conditions are true, the rule becomes **active**.
 - If **active**, all `success_conditions` must be true for the rule to **succeed**.

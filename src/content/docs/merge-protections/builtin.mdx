@@ -1,5 +1,5 @@
 ---
-title: Built‑in Merge Protections
+title: Built-in Merge Protections
 description: "Protections available out of the box: Depends-On, Merge-After, Configuration Changed."
 ---
 
@@ -25,9 +25,12 @@ Depends-On: org/repo#123
 
 Rules:
 
-- All referenced PRs must be in repositories with Mergify enabled
+- All referenced pull requests must be in repositories with Mergify enabled. A
+  reference Mergify cannot resolve (the repository has no Mergify, or the pull
+  request does not exist) fails the protection rather than waiting on it
 
-- They must belong to the same organization
+- They must belong to the same repository owner: the user or organization that
+  owns the repository declaring the dependency
 
 - A dependency that is still open blocks the protection until that pull
   request merges. A circular chain (or a pull request that lists itself) never
@@ -49,9 +52,11 @@ gains a **Depends On** section linking to each queued pull request it waits for.
 The merge queue status [API](/api/usage) reports the same list as
 `depends_on_pull_requests`.
 
-This display covers dependencies inside a [stack](/merge-queue/stacks) in the
-same repository. A dependency on a pull request in another repository still
-blocks the merge, but the queue does not show it.
+The queue shows this only for the pull requests ahead of it in a
+[stack](/merge-queue/stacks) in the same repository. Any other dependency still
+blocks the merge without appearing there, whether it points at a pull request
+in another repository or at one in the same repository that is not part of the
+same stack.
 
 ## Merge-After
 
