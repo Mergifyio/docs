@@ -5,13 +5,19 @@
 ## Design System
 
 See **[DESIGN.md](./DESIGN.md)** for the docs site's design system: tokens, typography utilities,
-dark-mode rules, and STRICT code rules.
+dark-mode rules, diagram roles, and STRICT code rules.
 
 When you write or modify any styling, read `DESIGN.md` first. The rules there override defaults —
 no hex literals, no Chakra references, no `--color-mergify-blue` references, and components should
 use semantic tokens by default so dark mode works automatically. Product-specific UI elements
 (callouts, brand-colored buttons, product pills) may use `var(--color-*)` primitives directly as a
 narrow documented exception — see `DESIGN.md` for the policy.
+
+**Diagrams never name a color.** A Graphviz fence, `<GitGraph>` and `<StackMapping>` all name a
+*role* — `queued`, `pending`, `merged`, `failed`, `config`, `mergify`, `datastore`, `external`,
+`batch`, `muted`, `chrome` — and the page resolves it at paint time, which is what makes them
+theme-aware. `pnpm check:diagram-tokens` fails CI on a color in a diagram. See the "Diagrams"
+section of `DESIGN.md` before adding or editing one.
 
 ## Quick Facts
 
@@ -43,6 +49,7 @@ pnpm test              # Run Vitest unit tests
 
 # Safety
 pnpm check:internal-leaks  # Scan docs for leaked internal information
+pnpm check:diagram-tokens  # Scan diagrams for hardcoded colors
 ```
 
 ## Key Directories
