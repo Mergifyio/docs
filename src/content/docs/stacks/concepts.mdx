@@ -100,9 +100,12 @@ git config mergify-cli.stack-branch-prefix "my-prefix"
 
 `--branch-prefix` overrides it for a single run. It is accepted by
 `mergify stack push` and by the commands that read the stack back
-(`mergify stack checkout`, `mergify stack list`, `mergify stack open` and
-`mergify stack sync`), so a prefix passed on the command line has to be
-repeated on each of them. Set the Git config if you would rather not.
+(`mergify stack list`, `mergify stack open` and `mergify stack sync`), so a
+prefix passed on the command line has to be repeated on each of them. Set the
+Git config if you would rather not.
+
+`mergify stack checkout` takes no prefix: it resolves the stack from the
+branch name or PR URL you give it, no matter who pushed it.
 
 ## PR Chaining
 
@@ -130,6 +133,14 @@ it as a unit. Without the branch chain, the `Depends-On:` marker, and head
 branches in the repository the stack targets, the queue treats each PR
 independently. `mergify stack push` satisfies all three, which is why a stack
 is pushed to the repository itself rather than to a fork.
+
+A stack registered with GitHub's own stacking API by
+[`--github-native`](/stacks/setup#configuration) is the exception. GitHub holds
+the ordering there, so the descriptions carry no `Depends-On:` marker and the
+queue recognizes the PRs as a
+[GitHub-native stack](/merge-queue/stacks#github-native-stacked-pull-requests)
+instead. Every member can be queued, and they land one at a time from the
+bottom up rather than the chain moving as a unit.
 
 ## Smart Updates
 

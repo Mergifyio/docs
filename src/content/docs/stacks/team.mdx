@@ -44,17 +44,21 @@ As more developers see the benefits in review, adoption spreads naturally.
 ## Working on Someone Else's Stack
 
 If a teammate has pushed a stack and you want to pick it up locally (to help,
-pair, or continue the work), use `checkout` with their stack name and their
-GitHub login:
+pair, or continue the work), point `checkout` at any PR in it:
 
 ```bash
-mergify stack checkout feat/their-feature --author their-login
+mergify stack checkout https://github.com/owner/repo/pull/142
 ```
 
-`--author` matters here: it defaults to the user your own token belongs to, so
-without it the command looks for a stack of yours under that name. Pass
-`--branch` to control the local branch name, which otherwise comes from the
-stack name.
+Any PR in the stack identifies the whole chain, so one from the middle works as
+well as the tip. The URL carries the repository, which means `--repository` is
+ignored when you check out this way. You can also name the stack's remote
+branch instead of passing a URL.
+
+The local branch is named after the stack's branch with your own
+[branch prefix](/stacks/setup#configuration) stripped off. The default prefix
+contains your username, so a teammate's stack isn't under it and the name falls
+back to the branch's last segment. Pass `--branch` to choose the name yourself.
 
 This reconstructs the stack locally by fetching the remote branches and
 rebuilding the commit chain. You can then make changes and push updates with
