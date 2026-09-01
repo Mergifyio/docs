@@ -19,38 +19,64 @@ Use freezes to coordinate:
 
 <Image src={scheduleFreezeScreen} alt="Scheduled Freezes" />
 
-In the dashboard under Merge Protections → Freezes:
+In the dashboard under `Merge Protections` → `Scheduled Freezes`:
 1. Click `Schedule a Freeze`
 
-2. Define start / end, and the timezone they are expressed in
+2. Fill in `Freeze Reason`, which is required and names the freeze wherever
+   Mergify reports it
 
-3. Add matching conditions: by default the freeze applies to every pull
+3. Under `Schedule`, set `From` and `To`, and the timezone they are expressed
+   in
+
+4. Add `Matching Conditions`: by default the freeze applies to every pull
    request, but you can limit its scope with this field
 
-4. Add exclude conditions: a pull request that matches all of them is allowed
+5. Add `Exclude Conditions`: a pull request that matches all of them is allowed
    through the freeze, so specific pull requests (like hotfixes) can still
    merge while everything else is blocked
 
-5. Save; active freezes appear in the list
+6. Save; active freezes appear in the list
 
 <Image src={newScheduleFreezeScreen} alt="New Scheduled Freeze" />
 
-While a freeze is active, the `Mergify Merge Protections` check stays pending
-on every matching pull request, and its summary names the freeze holding it
-back: waiting for that freeze to end, or, when the freeze has no end date,
-waiting for someone to remove it. Pull requests matching the freeze's exclude
-conditions are left alone (see [Allowing Exceptions](#allowing-exceptions)
-below), as are pull requests that cannot be merged anyway: drafts, closed ones,
-and conflicting ones.
+Without the merge queue, an active freeze leaves the `Mergify Merge
+Protections` check pending on every matching pull request, and its summary
+names the freeze holding it back: waiting for that freeze to end, or, when the
+freeze has no end date, waiting for someone to remove it. Pull requests
+matching the freeze's exclude conditions are left alone (see [Allowing
+Exceptions](#allowing-exceptions) below), as are pull requests that cannot be
+merged anyway: drafts, closed ones, and conflicting ones.
 
 When the [merge queue](/merge-queue) is enabled, the freeze is reported in that
-check but does not change its conclusion. The queue holds the merge back until
-the freeze ends.
+check but is not what decides its conclusion. The queue holds the merge back
+until the freeze ends.
 
 ## Manual Instant Freeze
 
 Use the `Freeze Merges Now` action for immediate blocking. You can later
 unfreeze manually.
+
+## Recurring Merge Windows
+
+A freeze covers a single window: it has one start and one end, and nothing
+repeats it. To block merges on a recurring basis, such as outside working hours
+or every weekend, write a [merge protection
+rule](/merge-protections/custom-rules) with a `schedule` condition instead:
+
+```yaml
+merge_protections:
+  - name: Merge during working hours
+    description: Only merge between 9am and 5pm, Monday to Friday
+    if:
+      - base = main
+    success_conditions:
+      - schedule = Mon-Fri 09:00-17:00[America/Chicago]
+```
+
+Outside the window the rule is pending, so the `Mergify Merge Protections`
+check holds the pull request back the same way an active freeze does; the rule
+passes again once the window reopens. See
+[schedule](/configuration/data-types#schedule) for the accepted formats.
 
 ## Allowing Exceptions
 

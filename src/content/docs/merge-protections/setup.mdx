@@ -14,9 +14,15 @@ import deployScreenshot from "../../images/merge-protections/deploy.png"
 1. Go to the [Mergify dashboard](https://dashboard.mergify.com)
 2. Click the `Merge Protections` section
 3. Select your repository
-4. Enable the feature and create rules
+4. Activate the product, then create rules under `Rules`
 
 <Image src={mainScreen} alt="Merge Protections rules for a repository" />
+
+The rules themselves live in your repository's [configuration
+file](/configuration/file-format), under the `merge_protections` key. The
+dashboard's rule builder is an editor for that file: it opens a pull request
+adding your rules to it. You can write them by hand instead. See [Custom
+Rules](/merge-protections/custom-rules) for the rule structure.
 
 ## Reporting Method: check-runs vs deployments
 
