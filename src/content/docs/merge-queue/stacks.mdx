@@ -84,6 +84,11 @@ chained only by branch refs (for example, GitFlow promotion chains like
 `Depends-On:` marker, the queue keeps each PR's literal base ref and queues
 them independently.
 
+A stack pushed with `--github-native` carries no `Depends-On:` marker either,
+because GitHub's stacking API holds the ordering instead. Those PRs are
+recognized as a [GitHub-native stack](#github-native-stacked-pull-requests) and
+land the way that section describes, one member at a time.
+
 The last condition is why a stack cannot be opened from a fork. The first two
 signals compare branch *names*, which only mean something inside one
 repository: any fork can have a branch called `main`, so a fork PR's head
