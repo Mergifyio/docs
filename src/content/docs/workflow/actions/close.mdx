@@ -13,6 +13,10 @@ want to ensure that certain types of pull requests are not merged.
 
 <ActionOptionsTable def="CloseActionModel" />
 
+Mergify posts `message` as a comment on the pull request after closing it, so
+the author reads the explanation on the pull request itself. Leave `message`
+out to get the default wording.
+
 ## Examples
 
 ### Automatically close pull requests touching a file
