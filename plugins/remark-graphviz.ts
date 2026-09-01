@@ -6,12 +6,12 @@ import { CONTINUE, visit } from 'unist-util-visit';
 import { finishDiagramSvg } from '../src/util/diagramSvg';
 
 /**
- * Render `dot` / `circo` / `neato` fences to inline SVG, and hand every colour
+ * Render `dot` / `circo` / `neato` fences to inline SVG, and hand every color
  * decision to CSS.
  *
  * Graphviz supports a `class` attribute on graphs, nodes, edges and clusters
  * and copies it verbatim into the SVG (`class="node queued"`). So this plugin
- * never resolves a colour and never names a role: the fence names them, and
+ * never resolves a color and never names a role: the fence names them, and
  * the plugin only injects shape and spacing defaults, drops the opaque canvas
  * and strips the inline paint, so the `.dg` rules in `index.css` resolve
  * surface, border and label at paint time from the role accents in
@@ -21,7 +21,7 @@ import { finishDiagramSvg } from '../src/util/diagramSvg';
  *
  * The one class the rendering side still adds is `plain`, in
  * `finishDiagramSvg` — a shape fact (this element is a caption, not a box),
- * not a colour.
+ * not a color.
  */
 
 const viz = await instance();
@@ -55,7 +55,7 @@ const BASE = `
 
 /**
  * Diagram kinds. A fence opts into one through its class — ```dot class="queue"
- * — and it sets layout, never colour. A fence that names none gets BASE alone
+ * — and it sets layout, never color. A fence that names none gets BASE alone
  * and lays itself out.
  */
 const KINDS: Record<string, string> = {

@@ -805,10 +805,10 @@ html {
 
 /* ── Diagrams ────────────────────────────────────────────────────────────────
    Graphviz copies a `class` attribute straight into the SVG, so the plugin
-   renders shape and layout and nothing else; every colour is resolved here, at
+   renders shape and layout and nothing else; every color is resolved here, at
    paint time, from the role tokens in theme.css. That is what makes dark mode
    free — the same `:root.theme-dark` block as every other surface, no second
-   render — and what lets a diagram be written without naming a colour.
+   render — and what lets a diagram be written without naming a color.
 
    Each role carries one accent. These lines turn it into the surface, the
    border and the label, by mixing it against the page background. A role that

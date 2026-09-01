@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * Scan the docs for diagrams that name a colour.
+ * Scan the docs for diagrams that name a color.
  *
  * A diagram names a *role* — `queued`, `merged`, `failed`, `external` — and the
  * page resolves it from the design tokens at paint time, so the diagram themes
  * itself and every page uses one palette. That worked until it didn't: before
- * this rule existed, 63 distinct colours had accumulated across 18 pages in four
+ * this rule existed, 63 distinct colors had accumulated across 18 pages in four
  * unrelated dialects, none of which the token system could reach and none of
  * which adapted to dark mode.
  *
- * Nothing about a hardcoded colour fails a build on its own — the diagram
+ * Nothing about a hardcoded color fails a build on its own — the diagram
  * renders, it just renders wrong on half the site — so this is the thing that
  * keeps it from happening again. See DESIGN.md "Diagrams" for the roles.
  *
@@ -47,16 +47,16 @@ const SCANNED_EXTENSIONS = ['.mdx', '.md'];
 export const RULES = [
   {
     id: 'graphviz-color-attr',
-    label: 'Graphviz colour attribute',
+    label: 'Graphviz color attribute',
     // `(?<![\w-])` so `fillcolor` is reported once, as itself, rather than also
     // matching the bare `color` inside it. `none` and `transparent` are not
-    // colours — they are the absence of one, which is shape work, not styling,
+    // colors — they are the absence of one, which is shape work, not styling,
     // and the way a diagram says "draw no canvas" or "draw no border".
     re: /(?<![\w-])(?:bg|fill|font|pen|label)?color\s*=\s*(?!"?(?:none|transparent)\b)/gi,
   },
   {
     id: 'diagram-hex',
-    label: 'hardcoded colour',
+    label: 'hardcoded color',
     re: /#[0-9a-f]{6}\b/gi,
   },
 ];
@@ -88,7 +88,7 @@ function allowedOnLine(lines, index) {
 /**
  * The 1-based line numbers that belong to a diagram: everything inside a
  * Graphviz fence, plus its attribute line. Everything else in a docs page is
- * prose and code samples, where a colour is ordinary content — a CSS example,
+ * prose and code samples, where a color is ordinary content — a CSS example,
  * a screenshot description, a config value.
  */
 function diagramLines(text) {
@@ -169,21 +169,21 @@ function main(argv) {
     return findings.length === 0 ? 0 : 1;
   }
 
-  console.log(`Scanned ${scanned} file(s) for diagrams that name a colour.`);
+  console.log(`Scanned ${scanned} file(s) for diagrams that name a color.`);
   if (findings.length === 0) {
-    console.log('Every diagram resolves its colours from tokens.');
+    console.log('Every diagram resolves its colors from tokens.');
     return 0;
   }
-  console.error(`\n${findings.length} diagram colour(s) written by hand:\n`);
+  console.error(`\n${findings.length} diagram color(s) written by hand:\n`);
   for (const f of findings) {
     console.error(`  ${f.file}:${f.line} — ${f.label} — ${f.match}`);
   }
   console.error(
-    '\nName a role instead, and let the page resolve the colour:\n' +
+    '\nName a role instead, and let the page resolve the color:\n' +
       '  PR1 [class="queued"];   not   PR1 [fillcolor="#347D39"];\n' +
       'The roles are queued, pending, merged, failed, config, mergify,\n' +
       'datastore, external, batch, muted and chrome; `plain` marks a caption\n' +
-      'rather than a box. See DESIGN.md "Diagrams". If a colour is genuinely\n' +
+      'rather than a box. See DESIGN.md "Diagrams". If a color is genuinely\n' +
       'the subject rather than the styling, allow it on the line above:\n' +
       '  // diagram-tokens: allow <rule-id>[, <rule-id>...] — why'
   );
