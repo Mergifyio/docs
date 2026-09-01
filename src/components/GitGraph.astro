@@ -1,38 +1,30 @@
 ---
 import { instance } from '@viz-js/viz';
 import { load } from 'cheerio';
+import { type DiagramRole, finishDiagramSvg } from '~/util/diagramSvg';
 
 /**
- * Shared color palette for all git graph diagrams.
+ * Commit graphs, in two modes.
+ *
+ * Neither mode names a colour. A call site names a *role* — the same vocabulary
+ * the `dot` fences use — and `.dg` in index.css resolves it at paint time, so
+ * this component and the fences share one palette and one dark mode. See
+ * DESIGN.md for the roles.
  */
-const COLORS: Record<string, string> = {
-  gray: '#6B7280',
-  green: '#347D39',
-  blue: '#2563EB',
-  amber: '#D97706',
-  red: '#DC2626',
-  ghost: '#9CA3AF',
-};
-
-/**
- * Neutral edge/connector color. Emitted verbatim into the Graphviz source, then
- * swapped for `currentColor` in the rendered SVG so it follows the theme.
- */
-const EDGE_COLOR = '#374151';
 
 // ── Types ──────────────────────────────────────────────
 
 interface PR {
   label: string;
   commits: number | [number, number];
-  color?: 'blue' | 'red';
+  role?: DiagramRole;
   annotation?: string;
 }
 
 interface GraphNode {
   id: string;
   label: string;
-  color?: 'gray' | 'green' | 'blue' | 'amber' | 'red';
+  role?: DiagramRole;
   ghost?: boolean;
 }
 
@@ -52,7 +44,7 @@ type Props =
   | {
       /** Linear mode: commit labels left to right. */
       commits: string[];
-      commitColor?: 'gray' | 'green';
+      commitRole?: DiagramRole;
       branch?: string;
       prs?: PR[];
       nodes?: never;
@@ -78,15 +70,15 @@ if ('commits' in props && props.commits) {
   svgHtml = '';
 }
 
-// ── Linear mode (stacks): pure SVG ────────────────────
+// ── Linear mode (stacks): hand-placed SVG ─────────────
 
 function renderLinear(p: {
   commits: string[];
-  commitColor?: string;
+  commitRole?: DiagramRole;
   branch?: string;
   prs?: PR[];
 }): string {
-  const { commits, commitColor = 'gray', branch = 'main', prs = [] } = p;
+  const { commits, commitRole = 'external', branch = 'main', prs = [] } = p;
 
   const R = 18;
   const SPACING = 80;
@@ -100,14 +92,13 @@ function renderLinear(p: {
   const PR_PAD_X = 16;
   const ANNO_GAP = 16;
 
-  const fill = COLORS[commitColor] || COLORS.gray;
   const cx = (i: number) => PAD_LEFT + i * SPACING;
 
   const prData = prs.map((pr) => {
     const [from, to] = Array.isArray(pr.commits) ? pr.commits : [pr.commits, pr.commits];
     const center = (cx(from) + cx(to)) / 2;
     const w = Math.max(pr.label.length * CHAR_W + PR_PAD_X, 54);
-    return { ...pr, from, to, center, w, fill: COLORS[pr.color || 'blue'] };
+    return { ...pr, from, to, center, w, role: pr.role ?? 'config' };
   });
 
   const hasAnno = prData.some((pr) => pr.annotation);
@@ -123,29 +114,29 @@ function renderLinear(p: {
 
   const cssMaxW = Math.min(560, Math.max(360, maxX + 20));
   push(
-    `<svg viewBox="0 0 ${maxX} ${maxY}" xmlns="http://www.w3.org/2000/svg" class="git-graph" style="max-width:${cssMaxW}px" role="img">`
+    `<svg viewBox="0 0 ${maxX} ${maxY}" xmlns="http://www.w3.org/2000/svg" class="dg dg-linear" style="max-width:${cssMaxW}px" role="img">`
   );
 
   // branch line
   push(
-    `<line x1="${cx(0) - 28}" y1="${COMMIT_Y}" x2="${cx(commits.length - 1)}" y2="${COMMIT_Y}" stroke="${fill}" stroke-width="2" stroke-dasharray="6 4"/>`
+    `<g class="edge ${commitRole}"><line x1="${cx(0) - 28}" y1="${COMMIT_Y}" x2="${cx(commits.length - 1)}" y2="${COMMIT_Y}" stroke-width="2" stroke-dasharray="6 4"/></g>`
   );
 
-  // branch label
+  // branch label — a caption, so `plain` keeps a box from appearing behind it
   push(
-    `<text x="${cx(0) - 34}" y="${COMMIT_Y + 4}" text-anchor="end" fill="currentColor" font-size="${FONT}" font-weight="500">${branch}</text>`
+    `<g class="node ${commitRole} plain"><text x="${cx(0) - 34}" y="${COMMIT_Y + 4}" text-anchor="end" font-size="${FONT}" font-weight="500">${branch}</text></g>`
   );
 
   // commits
   for (let i = 0; i < commits.length; i++) {
     if (i < commits.length - 1) {
       push(
-        `<line x1="${cx(i) + R}" y1="${COMMIT_Y}" x2="${cx(i + 1) - R}" y2="${COMMIT_Y}" stroke="${fill}" stroke-width="2"/>`
+        `<g class="edge ${commitRole}"><line x1="${cx(i) + R}" y1="${COMMIT_Y}" x2="${cx(i + 1) - R}" y2="${COMMIT_Y}" stroke-width="2"/></g>`
       );
     }
-    push(`<circle cx="${cx(i)}" cy="${COMMIT_Y}" r="${R}" fill="${fill}"/>`);
     push(
-      `<text x="${cx(i)}" y="${COMMIT_Y + 4}" text-anchor="middle" fill="white" font-size="${FONT}" font-weight="600">${commits[i]}</text>`
+      `<g class="node ${commitRole}"><circle cx="${cx(i)}" cy="${COMMIT_Y}" r="${R}"/>` +
+        `<text x="${cx(i)}" y="${COMMIT_Y + 4}" text-anchor="middle" font-size="${FONT}" font-weight="600">${commits[i]}</text></g>`
     );
   }
 
@@ -153,18 +144,16 @@ function renderLinear(p: {
   for (const pr of prData) {
     for (let i = pr.from; i <= pr.to; i++) {
       push(
-        `<line x1="${cx(i)}" y1="${COMMIT_Y + R}" x2="${pr.center}" y2="${PR_Y - PR_H / 2}" stroke="${pr.fill}" stroke-width="1.5" stroke-dasharray="4 3"/>`
+        `<g class="edge ${pr.role}"><line x1="${cx(i)}" y1="${COMMIT_Y + R}" x2="${pr.center}" y2="${PR_Y - PR_H / 2}" stroke-width="1.5" stroke-dasharray="4 3"/></g>`
       );
     }
     push(
-      `<rect x="${pr.center - pr.w / 2}" y="${PR_Y - PR_H / 2}" width="${pr.w}" height="${PR_H}" rx="${PR_R}" fill="${pr.fill}"/>`
-    );
-    push(
-      `<text x="${pr.center}" y="${PR_Y + 4}" text-anchor="middle" fill="white" font-size="${FONT}" font-weight="500">${pr.label}</text>`
+      `<g class="node ${pr.role}"><rect x="${pr.center - pr.w / 2}" y="${PR_Y - PR_H / 2}" width="${pr.w}" height="${PR_H}" rx="${PR_R}"/>` +
+        `<text x="${pr.center}" y="${PR_Y + 4}" text-anchor="middle" font-size="${FONT}" font-weight="500">${pr.label}</text></g>`
     );
     if (pr.annotation) {
       push(
-        `<text x="${pr.center}" y="${annoY}" text-anchor="middle" fill="${pr.fill}" font-size="9" font-style="italic">${pr.annotation}</text>`
+        `<g class="node ${pr.role} plain"><text x="${pr.center}" y="${annoY}" text-anchor="middle" font-size="9" font-style="italic">${pr.annotation}</text></g>`
       );
     }
   }
@@ -185,71 +174,45 @@ async function renderGraph(p: {
 
   const dot: string[] = [];
   dot.push('strict digraph {');
-  dot.push('  fontname="sans-serif";');
+  dot.push('  graph [bgcolor="transparent"];');
   dot.push('  rankdir="LR";');
   dot.push('  splines=line;');
   dot.push(
-    '  node [style=filled, shape=circle, fontname="sans-serif", fontcolor="white", width=0.5, height=0.5, fixedsize=true];'
+    '  node [style=filled, shape=circle, fontname="Helvetica", fontsize=13, width=0.5, height=0.5, fixedsize=true, penwidth=1.6];'
   );
-  dot.push(`  edge [color="${EDGE_COLOR}", fontname="sans-serif"];`);
+  dot.push('  edge [fontname="Helvetica", fontsize=10, penwidth=1.3, arrowsize=0.7];');
 
   // nodes
   for (const n of nodes) {
-    const c = COLORS[n.color || 'gray'];
-    const style = n.ghost ? 'style="filled,dashed"' : '';
-    dot.push(`  ${n.id} [label="${n.label}", fillcolor="${c}" ${style}];`);
+    const style = n.ghost ? ', style="filled,dashed"' : '';
+    dot.push(`  ${n.id} [label="${n.label}", class="${n.role ?? 'external'}"${style}];`);
   }
 
-  // branch label
+  // branch label — `plain` so it reads as a caption rather than a filled box
   if (branch) {
-    const targetNode = nodes.find((n) => n.id === branch.node);
-    const branchColor = targetNode ? COLORS[targetNode.color || 'gray'] : COLORS.gray;
+    const role = nodes.find((n) => n.id === branch.node)?.role ?? 'external';
     dot.push(
-      `  _branch [label="${branch.label}", shape=plaintext, fontcolor="${branchColor}", fontsize=10];`
+      `  _branch [label="${branch.label}", shape=plaintext, fontsize=10, class="${role} plain"];`
     );
-    dot.push(`  _branch -> ${branch.node} [style=dashed, color="${branchColor}", arrowhead=none];`);
+    dot.push(`  _branch -> ${branch.node} [style=dashed, arrowhead=none, class="${role}"];`);
     dot.push(`  { rank=same; ${branch.node}; _branch; }`);
   }
 
   // edges
   for (const e of edges) {
-    const attrs: string[] = [];
-    if (e.dashed) {
-      attrs.push(`style=dashed, color="${COLORS.ghost}"`);
-    }
-    if (e.label) {
-      const edgeColor = e.dashed ? COLORS.ghost : EDGE_COLOR;
-      attrs.push(`label="${e.label}", fontsize=9, fontcolor="${edgeColor}"`);
-    }
-    const attrStr = attrs.length ? ` [${attrs.join(', ')}]` : '';
-    dot.push(`  ${e.from} -> ${e.to}${attrStr};`);
+    const attrs = [`class="${e.dashed ? 'muted' : 'chrome'}"`];
+    if (e.dashed) attrs.push('style=dashed');
+    if (e.label) attrs.push(`label="${e.label}"`);
+    dot.push(`  ${e.from} -> ${e.to} [${attrs.join(', ')}];`);
   }
 
   dot.push('}');
 
-  const svgString = viz.renderString(dot.join('\n'), { format: 'svg', engine: 'dot' });
-  const $ = load(svgString);
+  const $ = load(viz.renderString(dot.join('\n'), { format: 'svg', engine: 'dot' }));
   $('svg').removeAttr('width').removeAttr('height');
-  $('svg').attr('class', 'git-graph');
-  // Strip Graphviz background
-  $('svg > g > polygon').first().attr('fill', 'none').attr('stroke', 'none');
-  // Route the neutral edge color through currentColor so it tracks the theme
-  // (the page sets `.git-graph { color: var(--theme-diagram-edge) }`).
-  return $.html('svg').replaceAll(EDGE_COLOR, 'currentColor');
+  finishDiagramSvg($, { classes: ['dg-commits'] });
+  return $.html('svg');
 }
 ---
 
 <Fragment set:html={svgHtml} />
-
-<style>
-  :global(.git-graph) {
-    display: block;
-    margin: 1.5em auto;
-    max-width: 560px;
-    width: 100%;
-    height: auto;
-    /* Drives `currentColor` for neutral edges, arrowheads, and the branch label. */
-    color: var(--theme-diagram-edge);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-</style>
