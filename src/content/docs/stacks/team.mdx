@@ -26,14 +26,24 @@ The difference shows up in practice:
 
 ## Gradual Rollout
 
-Stacks doesn't require a team-wide rollout. There's no repo-wide configuration,
-no CI changes, and no admin setup.
+Stacks doesn't require a team-wide rollout. There's no repo-wide configuration
+and no CI changes.
 
 A single developer can start using stacks today:
 
 1. [Install the CLI](/cli/usage) locally
-2. Run [`mergify stack setup`](/stacks/setup) in their clone
-3. Start pushing stacks
+
+2. Give it a [GitHub token](/cli/usage#authentication), or authenticate the
+   GitHub CLI
+
+3. Run [`mergify stack setup`](/stacks/setup) in their clone
+
+4. Start pushing stacks
+
+The one repository setting that matters is
+[Automatically delete head branches](/stacks/setup#3-configure-github), which
+lets GitHub retarget each PR onto `main` as the one below it merges.
+Someone with admin rights turns it on once.
 
 Their teammates review the resulting PRs normally. They just see smaller,
 well-organized PRs with stack comments explaining the chain. No one else needs

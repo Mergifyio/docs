@@ -45,10 +45,12 @@ CI Insights, config validation, and scheduled freezes. See
 
 ## 3. Configure GitHub
 
-Stacks needs access to create PRs. Set the `MERGIFY_TOKEN` or `GITHUB_TOKEN`
-environment variable, or install the [GitHub CLI](https://cli.github.com/) and
-run `gh auth login`. The CLI tries them in that order. See
-[Authentication](/cli/usage#authentication) for where each token comes from.
+Stacks creates and updates pull requests through the GitHub API, so it needs a
+GitHub token: a Mergify [application key](/api/usage) does not work here. Point
+`MERGIFY_TOKEN` or `GITHUB_TOKEN` at one, or install the
+[GitHub CLI](https://cli.github.com/) and run `gh auth login`. The CLI tries
+them in that order. See [Authentication](/cli/usage#authentication) for where
+each token comes from.
 
 Enable "[Automatically delete head branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)"
 in your GitHub repository settings (Settings > General > Pull Requests). When
@@ -78,7 +80,8 @@ This installs:
 
 ## Verify It Works
 
-Create a test commit to confirm the hook is active:
+`mergify stack hooks` reports whether the hooks are installed and up to date.
+To watch one work, create a test commit:
 
 ```bash
 echo "test" >> test.txt
@@ -141,7 +144,8 @@ branches. Setting the Git config once covers all four.
 :::note
   `mergify-cli.stack-github-native` is experimental. On top of the usual push,
   it registers the stack with GitHub's own stacking API, so GitHub shows the
-  pull requests as a stack of its own.
+  pull requests as a stack of its own. If that API isn't available, Stacks
+  skips the registration silently and the push goes through as usual.
 :::
 
 ## Next Steps
