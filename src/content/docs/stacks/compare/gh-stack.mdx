@@ -70,7 +70,7 @@ between them with `gh stack up` and `gh stack down`.
 
 | Feature | Mergify Stacks | gh-stack |
 |---|---|---|
-| Create a stack | `mergify stack new` + commits | `gh stack init` + `gh stack add` per branch |
+| Create a stack | `mergify stack new <name>` + commits | `gh stack init` + `gh stack add` per branch |
 | Push changes | `mergify stack push` | `gh stack push` |
 | Create PRs | Included in `mergify stack push` | Separate `gh stack submit` command |
 | View the stack | `mergify stack list` | `gh stack view` |
@@ -164,7 +164,7 @@ This installs the CLI and adds a `commit-msg` hook that generates
 
 | gh-stack | Mergify Stacks |
 |---|---|
-| `gh stack init` | `mergify stack new` |
+| `gh stack init` | `mergify stack new <name>` |
 | `gh stack add` (create a branch) | `git commit` (create a commit) |
 | `gh stack push` + `gh stack submit` | `mergify stack push` |
 | `gh stack up` / `down` | Not needed (single branch) |
@@ -188,7 +188,7 @@ gh stack submit
 **With Mergify Stacks:**
 
 ```bash
-mergify stack new
+mergify stack new feat/my-feature
 git commit -m "first change"
 git commit -m "second change"
 mergify stack push

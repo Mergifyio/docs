@@ -11,15 +11,21 @@ When the conditions you specify are met, Mergify will create a new pull request
 to merge the changes into the specified base branch.
 
 :::note
-  The `copy` action is equivalent to the
-  [`backport`](/workflow/actions/backport) action. The only difference is that
-  the `backport` action will only copy the original pull request once it is
-  merged.
+  The `copy` action takes the same options as the
+  [`backport`](/workflow/actions/backport) action and does the same work. They
+  differ in when they run: `backport` waits for the original pull request to be
+  merged, while `copy` runs on a pull request that is not in conflict with its
+  base branch, merged or not. The two also default to different titles and
+  bodies.
 :::
 
 Note that in case of a conflict during the copy, Mergify will create a pull
 request with the conflict; you will have to resolve it manually. You can change
 this behaviour using the `ignore_conflicts` option.
+
+Mergify opens each copy from a head branch named
+`mergify/copy/<destination-branch>/pr-<original-number>`, with the destination
+branch as its base.
 
 :::caution
   Please make sure the branches specified in the copy action exist and you have

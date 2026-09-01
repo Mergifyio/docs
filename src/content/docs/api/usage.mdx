@@ -119,10 +119,11 @@ curl -H "Accept: application/json" \
 :::
 
 :::caution
-  Three endpoints refuse a PAT and need an application key. `GET /application`
-  describes the key it was called with, so it accepts either scope. The `PUT`
-  and `POST` on `/repos/{owner}/{repository}/pulls/{number}/scopes` need a `ci`
-  key. Everything else takes a PAT or an `admin` key; each endpoint in the [API
+  Four endpoints refuse a PAT and need an application key. `GET /application`
+  describes the key it was called with, so it accepts either scope. The `PUT` on
+  `/repos/{owner}/{repository}/commits/{sha}/scopes` and the `PUT` and `POST`
+  on `/repos/{owner}/{repository}/pulls/{number}/scopes` need a `ci` key.
+  Everything else takes a PAT or an `admin` key; each endpoint in the [API
   Reference](/api) lists the keys it accepts.
 :::
 
