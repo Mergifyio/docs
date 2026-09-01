@@ -120,13 +120,15 @@ the queue.
    rules](/merge-queue/priority).
 
 2. **Waiting for its turn:** The pull request waits in the queue until it is its
-   turn to merge. Merges happen in queue order, one [batch](/merge-queue/batches)
-   at a time, but the testing that precedes them does not:
-   `merge_queue.max_parallel_checks` defaults to `5`, so Mergify tests up to five
-   batches at once with [parallel
+   turn to merge. In the default [serial mode](/merge-queue/queue-modes), merges
+   happen in queue order, one [batch](/merge-queue/batches) at a time, but the
+   testing that precedes them does not: `merge_queue.max_parallel_checks`
+   defaults to `5`, so Mergify tests up to five batches at once with [parallel
    checks](/merge-queue/performance#parallel-checks). At the default
    `batch_size` of 1, that is five queued pull requests. Set
-   `max_parallel_checks` to `1` to test them strictly one after the other.
+   `max_parallel_checks` to `1` to test them strictly one after the other. In
+   parallel and isolated modes, batches that do not depend on each other merge
+   as soon as their own checks pass, rather than in strict queue order.
 
 3. **Validating the pull request:** When a pull request is next in line, it
    enters the validation phase. During this phase, the Mergify engine will
@@ -372,10 +374,12 @@ deleted only when **both** of the following are true:
 
 With the default prefix, a matching branch looks like
 `mergify/merge-queue/a76b1f3d25`. With a custom `queue_branch_prefix` such as
-`mergify-`, it looks like `mergify-a76b1f3d25`. The temporary `tmp-` branch
-Mergify creates during setup (for example, `tmp-mergify/merge-queue/a76b1f3d25`)
-is matched the same way. A CI retry generates a fresh name of the same shape,
-with no extra suffix.
+`mergify-`, it looks like `mergify-a76b1f3d25`. A CI retry generates a fresh
+name of the same shape, with no extra suffix.
+
+Mergify no longer creates `tmp-` branches; a queue branch is pushed straight to
+its final name. The prefix is still matched so that branches left behind by
+older versions get cleaned up.
 
 :::caution
   Matching is by name only: Mergify does not track which branches it created.
@@ -397,8 +401,10 @@ them:
 <Image src={queueStatusScreenshot} alt="Mergify queue status" />
 
 2. **Check the Mergify checks tab on the PR:** On each pull request page, the
-   "checks" tab will show the status of the Mergify checks. If the pull request
-   is in the queue, you will see a "Mergify — Queued" status.
+   "checks" tab will show the status of the Mergify checks. A queued pull
+   request has a "Mergify Merge Queue" check run whose title shows its state:
+   "In merge queue" while it waits its turn, "Running merge queue checks" while
+   its batch is being tested.
 
 <Image src={queueCheckScreenshot} alt="Mergify check status" />
 
