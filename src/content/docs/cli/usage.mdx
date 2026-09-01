@@ -110,6 +110,13 @@ and set it as an environment variable:
 export GITHUB_TOKEN=your_token_here
 ```
 
+:::caution
+  Stacks commands read `MERGIFY_TOKEN` before `GITHUB_TOKEN`, and a Mergify
+  application key is not a GitHub token. If `MERGIFY_TOKEN` holds an
+  application key, pass `--token` to your Stacks commands, or keep that key
+  out of `MERGIFY_TOKEN`.
+:::
+
 ### Mergify token
 
 Commands that call the Mergify API, such as `mergify queue`, `mergify events`,
