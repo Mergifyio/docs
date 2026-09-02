@@ -1,1 +1,6 @@
-review (#12647): type roleFor and the legacy tables as DiagramRole; unit-test the shared SVG post-processor
+Revision history for #12647:
+
+rev 2 (content) 2026-09-02 00:57 UTC — review (#12647): type roleFor and the legacy tables as DiagramRole; unit-test the shared SVG post-processor
+rev 1 (initial) 2026-09-02 00:57 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12647,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"204561e65921703f49450604ca9c43473b13d104","timestamp_iso":"2026-09-02T00:57:18Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"204561e65921703f49450604ca9c43473b13d104","new_sha":"e2b246dc7610a9f15c6f0d31fe518c92b2f4ca83","timestamp_iso":"2026-09-02T00:57:18Z","reason":"review (#12647): type roleFor and the legacy tables as DiagramRole; unit-test the shared SVG post-processor","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/204561e65921703f49450604ca9c43473b13d104...e2b246dc7610a9f15c6f0d31fe518c92b2f4ca83"}]} -->
