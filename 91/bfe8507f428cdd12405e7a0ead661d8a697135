@@ -1,0 +1,1 @@
+review (#12648): add diagram-tokens to the mergify CheckRuns anchor; make the scanner actually reach diagramSvg.ts; drop the .astro contradiction; correct the plugin header
