@@ -1,1 +1,6 @@
-review (#12649): widen the code-span delimiters around the dot fence examples in DESIGN.md
+Revision history for #12649:
+
+rev 2 (content) 2026-09-02 00:57 UTC — review (#12649): widen the code-span delimiters around the dot fence examples in DESIGN.md
+rev 1 (initial) 2026-09-02 00:57 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12649,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"ff56a82e55df0e5cef4cd9b5a0eadd66ee8fb315","timestamp_iso":"2026-09-02T00:57:18Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"ff56a82e55df0e5cef4cd9b5a0eadd66ee8fb315","new_sha":"5c91b2f491e6eac18543b05e0553e6f8573f0cf4","timestamp_iso":"2026-09-02T00:57:18Z","reason":"review (#12649): widen the code-span delimiters around the dot fence examples in DESIGN.md","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/ff56a82e55df0e5cef4cd9b5a0eadd66ee8fb315...5c91b2f491e6eac18543b05e0553e6f8573f0cf4"}]} -->
