@@ -1,0 +1,1 @@
+review (#12646): retype the mdast node instead of asserting 'html' into Code['type']
