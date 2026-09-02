@@ -1,1 +1,6 @@
-review (#12646): retype the mdast node instead of asserting 'html' into Code['type']
+Revision history for #12646:
+
+rev 2 (content) 2026-09-02 00:57 UTC — review (#12646): retype the mdast node instead of asserting 'html' into Code['type']
+rev 1 (initial) 2026-09-02 00:57 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12646,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"65e605688f342caf98f12605f757701a87efa2f7","timestamp_iso":"2026-09-02T00:57:18Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"65e605688f342caf98f12605f757701a87efa2f7","new_sha":"3b720e0c61e506e1726fab89fea953568a81e9c4","timestamp_iso":"2026-09-02T00:57:18Z","reason":"review (#12646): retype the mdast node instead of asserting 'html' into Code['type']","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/65e605688f342caf98f12605f757701a87efa2f7...3b720e0c61e506e1726fab89fea953568a81e9c4"}]} -->
