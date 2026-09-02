@@ -35,3 +35,12 @@ The `squash` command is useful for:
   - `title+body` means to use the title and body from the pull request itself
     as the commit message. The pull request number will be added to end of the
     title.
+
+## Impersonation
+
+Squashing force-pushes the pull request's head branch, and Mergify does that as
+a GitHub user rather than as itself. Unless a
+[`bot_account`](/configuration/data-types#bot-account) is configured, that user
+is whoever posted the command, and that account must have signed in to the
+[Mergify dashboard](https://dashboard.mergify.com) at least once. If it has
+not, the command fails with `Mergify can't impersonate`.

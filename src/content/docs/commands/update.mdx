@@ -15,3 +15,20 @@ take care of it.
 ```text
 @Mergifyio update
 ```
+
+## Fork Pull Requests
+
+`update` merges the base branch into the pull request rather than rewriting its
+head branch, and it impersonates nobody unless you configure a
+[`bot_account`](/configuration/data-types#bot-account). Use it on pull requests
+opened from a fork, where [`rebase`](/commands/rebase) is deprecated.
+
+The merge commit still lands on the pull request's head branch, which on a fork
+belongs to the author's repository. When the base repository is public, the
+author has to have allowed maintainers to modify that branch; without it, the
+command reports that Mergify needs the author's permission to update the
+branch, and only the author can unblock it, by enabling the setting or updating
+the branch themselves. GitHub documents it under [allowing changes to a pull
+request branch created from a fork][gh-fork-edits].
+
+[gh-fork-edits]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork
