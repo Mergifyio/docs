@@ -1,6 +1,1 @@
-Revision history for #12648:
-
-rev 2 (content) 2026-09-02 00:57 UTC — review (#12648): add diagram-tokens to the mergify CheckRuns anchor; make the scanner actually reach diagramSvg.ts; drop the .astro contradiction; correct the plugin header
-rev 1 (initial) 2026-09-02 00:57 UTC
-
-<!-- mergify-revision-data: {"schema_version":1,"pull_number":12648,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"8e3f6a0c5d2a3d5dc861eef8019a0456f5a5655f","timestamp_iso":"2026-09-02T00:57:18Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"8e3f6a0c5d2a3d5dc861eef8019a0456f5a5655f","new_sha":"f82599ec69257762f3c67b9569c4e6a952e09afb","timestamp_iso":"2026-09-02T00:57:18Z","reason":"review (#12648): add diagram-tokens to the mergify CheckRuns anchor; make the scanner actually reach diagramSvg.ts; drop the .astro contradiction; correct the plugin header","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/8e3f6a0c5d2a3d5dc861eef8019a0456f5a5655f...f82599ec69257762f3c67b9569c4e6a952e09afb"}]} -->
+rebase onto main after #12646 merged; no content change
