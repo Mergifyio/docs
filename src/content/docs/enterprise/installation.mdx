@@ -163,21 +163,32 @@ Redis server provides TLS termination. To connect to such an instance you need t
 
 #### Optional: use Redis with self-signed TLS certificate
 
-Some Redis server providers set it up with self-signed certificates. In that case, to connect to
-such an instance you need to:
+Some Redis server providers set it up with self-signed certificates, or with certificates from their
+own certificate authority. In that case, to connect to such an instance you need to:
 
 - Use `rediss://` instead of `redis://` in the `MERGIFYENGINE_REDIS_URL` environment variable.
 
-- Set `MERGIFYENGINE_REDIS_SSL_VERIFY_MODE_CERT_NONE=1` in your environment variables. Mergify will
-  connect to Redis using encryption but will not verify the server certificate.
+- Add the certificate that signed it, or the server certificate itself when it is self-signed, to
+  the bundle described in [Trusting a Private CA](/enterprise/custom-ca). Managed providers usually
+  publish theirs as a downloadable PEM file. Mergify then verifies the Redis certificate like any
+  other.
+
+:::caution
+  `MERGIFYENGINE_REDIS_SSL_VERIFY_MODE_CERT_NONE=1` is the fallback for when you cannot obtain the
+  certificate at all. Mergify keeps encrypting the connection but stops verifying the server
+  certificate, so it can no longer tell your Redis apart from anything else answering at that
+  address. It also overrides the bundle, so unset it once you hold the certificate.
+:::
 
 ### PostgreSQL
 
 Provision a PostgreSQL instance, create a database/user for Mergify, and ensure the container can
 reach it over the network. Capture the DSN you will pass through
 `MERGIFYENGINE_DATABASE_URL` (for example `postgresql://postgres:password@postgres:5432/postgres`).
-If your provider enforces TLS, configure the connection options accordingly. The first start also
-creates a few extensions in that database, so check the
+If your provider enforces TLS, add the matching `sslmode` to the DSN; a certificate issued by your
+own certificate authority needs `sslmode=verify-full` and the bundle described in
+[Trusting a Private CA](/enterprise/custom-ca). The first start also creates a few extensions in
+that database, so check the
 [PostgreSQL requirements](/enterprise/requirements/#postgresql-requirements) before you lock down
 its privileges.
 
@@ -206,7 +217,9 @@ each authentication mode.
 :::
 
 The example below includes the CI Insights and Test Insights environment variables. Omit them if you
-skipped the previous step.
+skipped the previous step. If any of the services Mergify connects to present certificates that are
+not publicly trusted, see [Trusting a Private CA](/enterprise/custom-ca) for the two options to add
+to this command.
 
 ```sh
 docker run \
