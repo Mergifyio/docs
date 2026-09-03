@@ -128,7 +128,9 @@ docker pull registry.mergify.com/enterprise:@@ENTERPRISE_VERSION@@
 
 > A subscription token is required. Contact Mergify if you do not have one.
 >
-> Ensure Redis (with persistence/TLS if needed) and Postgres are ready.
+> Ensure Redis (with persistence/TLS if needed) and Postgres are ready. If they, or your GitHub
+> Enterprise Server, present certificates that are not publicly trusted, see
+> [Trusting a Private CA](/enterprise/custom-ca).
 
 ```sh
 docker run \
