@@ -1,1 +1,7 @@
-rebase onto main after #12646 merged; no content change
+Revision history for #12649:
+
+rev 3 (rebase) 2026-09-03 16:59 UTC — rebase onto main after #12646 merged; no content change
+rev 2 (content) 2026-09-02 00:57 UTC — review (#12649): widen the code-span delimiters around the dot fence examples in DESIGN.md
+rev 1 (initial) 2026-09-02 00:57 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12649,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"ff56a82e55df0e5cef4cd9b5a0eadd66ee8fb315","timestamp_iso":"2026-09-02T00:57:18Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"ff56a82e55df0e5cef4cd9b5a0eadd66ee8fb315","new_sha":"5c91b2f491e6eac18543b05e0553e6f8573f0cf4","timestamp_iso":"2026-09-02T00:57:18Z","reason":"review (#12649): widen the code-span delimiters around the dot fence examples in DESIGN.md","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/ff56a82e55df0e5cef4cd9b5a0eadd66ee8fb315...5c91b2f491e6eac18543b05e0553e6f8573f0cf4"},{"number":3,"change_type":"rebase","old_sha":"5c91b2f491e6eac18543b05e0553e6f8573f0cf4","new_sha":"4a58808d55bf63f7328df43bb7eb0d4e8c4363d5","timestamp_iso":"2026-09-03T16:59:50Z","reason":"rebase onto main after #12646 merged; no content change","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/5c91b2f491e6eac18543b05e0553e6f8573f0cf4...4a58808d55bf63f7328df43bb7eb0d4e8c4363d5"}]} -->
