@@ -28,8 +28,12 @@ merge action to take place:
 ## Branch Protection Conditions
 
 Mergify automatically reads your GitHub branch protections and rulesets and
-injects them as merge conditions. For example, if you require at least one
-approved review, Mergify injects the `#approved-reviews-by >= 1` condition.
+injects them as merge conditions. For example, a rule requiring an approved
+review injects the
+[`github-review-approved`](/configuration/conditions#github-rulesets-and-branch-protection-attributes)
+condition. That condition reproduces GitHub's own review decision rather than
+counting approvals, so an active "Request changes" from a reviewer other than
+the approver keeps it unsatisfied.
 
 <Image src={branchProtectionConditionsScreenshot} alt="Mergify Branch Protection Condition Injection" />
 
