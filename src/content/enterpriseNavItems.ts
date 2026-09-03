@@ -5,6 +5,7 @@ const enterpriseNavItems: NavItem[] = [
   { title: 'Architecture', path: '/enterprise/architecture', icon: 'lucide:layout-grid' },
   { title: 'Requirements', path: '/enterprise/requirements', icon: 'lucide:clipboard-list' },
   { title: 'Installation', path: '/enterprise/installation', icon: 'lucide:wrench' },
+  { title: 'Private CA', path: '/enterprise/custom-ca', icon: 'lucide:shield-check' },
   {
     title: 'Advanced Features',
     path: '/enterprise/advanced-features',
