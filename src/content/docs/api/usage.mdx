@@ -17,9 +17,9 @@ The API is entirely documented in the [API Reference](/api).
 
 ## Authentication
 
-The Mergify API supports two authentication methods, both using Bearer
-tokens: **Application Keys** (generated from your dashboard)
-and **GitHub Personal Access Tokens**.
+The Mergify API supports three authentication methods, all using Bearer
+tokens: **Application Keys** (generated from your dashboard), **GitHub
+Personal Access Tokens**, and **Mergify User Tokens**.
 
 ### Creating an Application Key
 
@@ -118,13 +118,23 @@ curl -H "Accept: application/json" \
   organizations.
 :::
 
+### Using a Mergify User Token
+
+Mergify also issues user tokens of its own, recognizable by their `mut_`
+prefix and obtained through the OAuth 2.0 device authorization grant. Send one
+as a Bearer token, the same way as the credentials above.
+
+A user token identifies the person it was issued to. It reaches exactly what
+its owner's dashboard session reaches, and nothing on GitHub directly, so
+holding one grants no access its owner does not already have.
+
 :::caution
-  Four endpoints refuse a PAT and need an application key. `GET /application`
-  describes the key it was called with, so it accepts either scope. The `PUT` on
-  `/repos/{owner}/{repository}/commits/{sha}/scopes` and the `PUT` and `POST`
-  on `/repos/{owner}/{repository}/pulls/{number}/scopes` need a `ci` key.
-  Everything else takes a PAT or an `admin` key; each endpoint in the [API
-  Reference](/api) lists the keys it accepts.
+  Four endpoints refuse a PAT and a user token alike, and need an application
+  key. `GET /application` describes the key it was called with, so it accepts either
+  scope. The `PUT` on `/repos/{owner}/{repository}/commits/{sha}/scopes` and the
+  `PUT` and `POST` on `/repos/{owner}/{repository}/pulls/{number}/scopes` need a
+  `ci` key. Everything else takes a PAT, a user token, or an `admin` key; each
+  endpoint in the [API Reference](/api) lists the credentials it accepts.
 :::
 
 ### Revoking an Application Key
