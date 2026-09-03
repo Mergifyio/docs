@@ -19,9 +19,8 @@ import RebaseAdvantage from './_rebase_advantages.mdx';
 <RebaseAdvantage />
 
 :::caution
-  Rebasing fork pull requests using `bot_account` impersonation is
-  deprecated. Use the [`update` command](/commands/update) instead for fork
-  PRs.
+  Rebasing a pull request that comes from a fork is deprecated. Use the
+  [`update` command](/commands/update) on fork pull requests instead.
 :::
 
 ## Syntax
@@ -34,3 +33,21 @@ request:
 ```
 
 <Image src={rebaseScreenshot} alt="Posting '@mergifyio rebase' in GitHub interface"/>
+
+## Impersonation
+
+Mergify pushes the rebased branch as a GitHub user, not as itself. Unless a
+[`bot_account`](/configuration/data-types#bot-account) is configured, that user
+is whoever posted the command, and that account must have signed in to the
+[Mergify dashboard](https://dashboard.mergify.com) at least once. If it has
+not, the command fails with `Mergify can't impersonate`.
+
+A fork's head branch lives in another repository, and Mergify can only
+force-push the rewritten branch there as the impersonated user, which is why
+the command is deprecated for fork pull requests. When the fork is private,
+`rebase` cannot run at all: GitHub does not let an app modify the head branch
+of a pull request opened from a private fork.
+
+The [`update` command](/commands/update) merges the base branch instead of
+rewriting the head branch, and impersonates nobody unless you configure a
+`bot_account`, so it keeps working on pull requests opened from a fork.
