@@ -37,7 +37,7 @@
     "@typescript-eslint/parser": "8.68.0",
     "agentation": "3.0.2",
     "ajv": "8.20.0",
-    "astro": "7.2.7",
+    "astro": "7.2.8",
     "astro-auto-import": "0.6.0",
     "astro-eslint-parser": "3.1.0",
     "astro-expressive-code": "0.44.1",
