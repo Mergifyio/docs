@@ -5100,9 +5100,6 @@
             "AdminApplicationKey": []
           },
           {
-            "CIApplicationKey": []
-          },
-          {
             "MergifyTokenBearerAuth": []
           },
           {
@@ -5528,9 +5525,6 @@
             "AdminApplicationKey": []
           },
           {
-            "CIApplicationKey": []
-          },
-          {
             "MergifyTokenBearerAuth": []
           },
           {
@@ -5616,9 +5610,6 @@
         "security": [
           {
             "AdminApplicationKey": []
-          },
-          {
-            "CIApplicationKey": []
           },
           {
             "MergifyTokenBearerAuth": []
@@ -5778,9 +5769,6 @@
             "AdminApplicationKey": []
           },
           {
-            "CIApplicationKey": []
-          },
-          {
             "MergifyTokenBearerAuth": []
           },
           {
@@ -5906,9 +5894,6 @@
             "AdminApplicationKey": []
           },
           {
-            "CIApplicationKey": []
-          },
-          {
             "MergifyTokenBearerAuth": []
           },
           {
@@ -5994,9 +5979,6 @@
         "security": [
           {
             "AdminApplicationKey": []
-          },
-          {
-            "CIApplicationKey": []
           },
           {
             "MergifyTokenBearerAuth": []
@@ -6096,9 +6078,6 @@
         "security": [
           {
             "AdminApplicationKey": []
-          },
-          {
-            "CIApplicationKey": []
           },
           {
             "MergifyTokenBearerAuth": []
@@ -6465,9 +6444,6 @@
             "AdminApplicationKey": []
           },
           {
-            "CIApplicationKey": []
-          },
-          {
             "MergifyTokenBearerAuth": []
           },
           {
@@ -6553,9 +6529,6 @@
             "AdminApplicationKey": []
           },
           {
-            "CIApplicationKey": []
-          },
-          {
             "MergifyTokenBearerAuth": []
           },
           {
@@ -6637,9 +6610,6 @@
         "security": [
           {
             "AdminApplicationKey": []
-          },
-          {
-            "CIApplicationKey": []
           },
           {
             "MergifyTokenBearerAuth": []
