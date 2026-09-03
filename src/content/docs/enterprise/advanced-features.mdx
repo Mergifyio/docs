@@ -118,6 +118,9 @@ MERGIFYENGINE_CI_TRACES_DONE_BUCKET="<mycompany>-mergify-ci-traces-done"
 MERGIFYENGINE_AWS_ENDPOINT_URL_S3=https://my-s3-domain.example.com:1234/
 ```
 
+A self-hosted endpoint whose certificate is not publicly trusted needs its certificate authority
+too: see [Trusting a Private CA](/enterprise/custom-ca).
+
 #### Option A: IAM role discovery (recommended)
 
 Leave `MERGIFYENGINE_AWS_ACCESS_KEY_ID` and `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY` unset and Mergify
