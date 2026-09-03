@@ -803,26 +803,155 @@ html {
   }
 }
 
-svg.graph {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 1em;
+/* ── Diagrams ────────────────────────────────────────────────────────────────
+   Graphviz copies a `class` attribute straight into the SVG, so the plugin
+   renders shape and layout and nothing else; every colour is resolved here, at
+   paint time, from the role tokens in theme.css. That is what makes dark mode
+   free — the same `:root.theme-dark` block as every other surface, no second
+   render — and what lets a diagram be written without naming a colour.
+
+   Each role carries one accent. These lines turn it into the surface, the
+   border and the label, by mixing it against the page background. A role that
+   resolves to nothing — a typo in a fence — falls back to `external` rather
+   than to an invalid `var()`, which `fill` would inherit as black. */
+.dg,
+.dg * {
+  --dg-accent: var(--dg-a, var(--dg-a-external));
+  --dg-surface: color-mix(in oklab, var(--dg-accent) var(--dg-tint), var(--dg-canvas));
+  --dg-border: color-mix(
+    in oklab,
+    var(--dg-accent) calc(100% - var(--dg-edge-lift)),
+    var(--dg-edge-base)
+  );
+  --dg-label: color-mix(in oklab, var(--dg-accent) var(--dg-ink), var(--dg-ink-base));
+  /* A container is a wash, not a card: mixed at a fraction of a node's tint so
+     a node of the same role still reads as sitting on top of it rather than
+     dissolving into it. */
+  --dg-container: color-mix(in oklab, var(--dg-accent) var(--dg-tint-cluster), var(--dg-canvas));
+}
+
+/* Defaults by element kind. Graphviz puts the role class on the same element as
+   the kind class, so `:where()` drops these to a lower specificity and a role
+   always wins — regardless of the order the rules end up in. */
+.dg :where(.node) {
+  --dg-a: var(--dg-a-external);
+}
+.dg :where(.edge) {
+  --dg-a: var(--dg-a-chrome);
+}
+.dg :where(.cluster) {
+  --dg-a: var(--dg-a-batch);
+}
+
+.dg .chrome {
+  --dg-a: var(--dg-a-chrome);
+}
+.dg .muted {
+  --dg-a: var(--dg-a-muted);
+}
+.dg .batch {
+  --dg-a: var(--dg-a-batch);
+}
+.dg .external {
+  --dg-a: var(--dg-a-external);
+}
+.dg .queued {
+  --dg-a: var(--dg-a-queued);
+}
+.dg .pending {
+  --dg-a: var(--dg-a-pending);
+}
+.dg .merged {
+  --dg-a: var(--dg-a-merged);
+}
+.dg .failed {
+  --dg-a: var(--dg-a-failed);
+}
+.dg .config {
+  --dg-a: var(--dg-a-config);
+}
+.dg .mergify {
+  --dg-a: var(--dg-a-mergify);
+}
+.dg .datastore {
+  --dg-a: var(--dg-a-datastore);
+}
+
+.dg {
+  display: block;
+  margin: 1.75em auto;
+  /* Graphviz's intrinsic `width="NNNpt"` is usually narrower than the prose
+     column, so without a width the diagrams would all shrink. 80% matches what
+     the diagrams shipped at before they were tokenised, and keeps a fence's own
+     inline `max-width` meaningful. */
   width: 80%;
-  background: none !important;
+  max-width: 100%;
+  height: auto;
 }
 
-/* Graphviz draws a background polygon as the first child of g.graph; make it transparent */
-svg.graph > g.graph > polygon {
-  fill: none !important;
-  stroke: none !important;
+/* Graphviz measures text in its own Helvetica tables and the page paints it in
+   Inter. The node margins the plugin injects absorb the ~3% width difference. */
+.dg text {
+  font-family: var(--font-body);
 }
 
-/* The graph-level label (e.g. "Merge Queue") is a <text> directly under g.graph,
-   sitting on the transparent page background. Graphviz bakes it as black, which is
-   unreadable in dark mode. Use the theme text color so it adapts. Cluster and node
-   labels live in their own <g> and keep the colors set in the diagram. */
-svg.graph > g.graph > text {
-  fill: var(--theme-text);
+/* Only direct children are painted: the plugin strips their inline fill and
+   stroke, and leaves anything deeper alone. `:where()` again, so `plain` below
+   wins on specificity rather than on source order. */
+.dg :where(.node) > path,
+.dg :where(.node) > polygon,
+.dg :where(.node) > ellipse {
+  fill: var(--dg-surface);
+  stroke: var(--dg-border);
+}
+/* box3d and note shapes draw their folded edges as polylines. */
+.dg :where(.node) > polyline {
+  fill: none;
+  stroke: var(--dg-border);
+}
+.dg .node > text {
+  fill: var(--dg-label);
+}
+
+.dg :where(.cluster) > path,
+.dg :where(.cluster) > polygon {
+  fill: var(--dg-container);
+  stroke: var(--dg-border);
+}
+.dg .cluster > text {
+  fill: var(--dg-label);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.dg .edge > path {
+  fill: none;
+  stroke: var(--dg-border);
+}
+.dg .edge > polygon,
+.dg .edge > ellipse {
+  fill: var(--dg-border);
+  stroke: var(--dg-border);
+}
+.dg .edge > text {
+  fill: var(--dg-label);
+}
+
+/* The graph-level caption sits directly under g.graph, on the page surface. */
+.dg > .graph > text {
+  fill: var(--dg-title);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* A node marked `plain` is a caption, not a box. Graphviz still emits a filled
+   shape behind a `shape=plaintext` node when it inherited `style=filled`. */
+.dg .plain > path,
+.dg .plain > polygon,
+.dg .plain > ellipse,
+.dg .plain > polyline {
+  fill: none;
+  stroke: none;
 }
 
 hr {

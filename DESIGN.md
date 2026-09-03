@@ -127,8 +127,8 @@ can bypass the semantic layer.
 
 ## Product Accent Colors
 
-Product colors are verbatim from `mergify.com/DESIGN.md`. The docs site reuses the same palette
-without adding new tokens.
+Product colors are verbatim from `mergify.com/DESIGN.md`. The docs site reuses the same palette and
+adds nothing to it; the two extra tokens below are not product colors.
 
 | Product | Dark / Label | Light / Accent | Hex (label) |
 | --- | --- | --- | --- |
@@ -139,9 +139,14 @@ without adding new tokens.
 | Stacks | `--color-coral-700` | `--color-coral-400` | #E53935 |
 | Workflow Automation | `--color-rose-700` | `--color-rose-400` | #E61E71 |
 
-One docs-only addition: `--color-blue-800` (#237caf) for link hover. It is a darker shade of
-`blue-700` and exists only because docs is text-heavy with many cross-references; the marketing
-site uses product colors for links far less often.
+Two docs-only additions:
+
+- `--color-blue-800` (#237caf) for link hover. It is a darker shade of `blue-700` and exists only
+  because docs is text-heavy with many cross-references; the marketing site uses product colors for
+  links far less often.
+- `--color-green-700` (#347d39) for diagrams. Not a product color and never used as one: it is the
+  green nine diagrams had hardcoded before the diagram surface had a palette, promoted so it has a
+  name. It backs the diagram role `merged`.
 
 ### Section-accent body classes
 
