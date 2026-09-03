@@ -39,4 +39,11 @@
   --color-coral-700: #e53935; /* Stacks label */
   --color-rose-400: #f485b3; /* Workflow Automation accent */
   --color-rose-700: #e61e71; /* Workflow Automation label */
+
+  /* Diagram green — the value that was hardcoded in nine diagrams before they
+     had a palette, promoted so it has a name. It is not a product accent: it
+     backs the diagram role "merged" (done, passed). That is not what those nine
+     diagrams used it for — they meant "queued", which remark-graphviz now says
+     on their behalf, so the value moves roles as it gains a name. */
+  --color-green-700: #347d39;
 }
