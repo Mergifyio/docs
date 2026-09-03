@@ -1,0 +1,148 @@
+---
+title: 'Trusting a Private CA'
+description: 'Make an on-premise deployment trust certificates issued by your own certificate authority.'
+---
+
+Mergify checks the TLS certificates it is presented against a set of public certificate authorities
+(CAs). When a server presents a certificate that traces back to none of them, verification fails and
+the connection is refused.
+
+Point the `MERGIFYENGINE_EXTRA_CA_BUNDLE` environment variable at a PEM file and Mergify trusts what
+it holds on top of the public certificate authorities it already ships. It is the trust store for
+every outbound connection the engine opens. You need it when:
+
+- Your GitHub Enterprise Server presents a self-signed certificate, or one issued by your internal
+  PKI. This covers the API calls as well as the `git` clones and pushes the merge queue makes.
+
+- Your Redis, PostgreSQL, or object storage endpoints do the same. Object storage means both Amazon
+  S3 and Google Cloud Storage. Managed providers usually publish their certificate authority as a
+  downloadable PEM file, and that file is what goes here.
+
+- An egress proxy intercepts outbound TLS and re-signs it with a corporate root.
+
+Your certificates are added to the public ones rather than replacing them, so calls to Mergify's own
+[subscription endpoints](/enterprise/requirements/#external-network-access) keep working.
+
+Two dependencies need one more setting before they check anything against the bundle:
+[PostgreSQL](#postgresql-needs-sslmode-too), which verifies no certificate at all by default, and
+[Redis](#redis-and-certificate-verification).
+
+## Prepare the Bundle
+
+The file is a PEM bundle: one or more `-----BEGIN CERTIFICATE-----` blocks in a single file. What
+belongs in it depends on how the server certificate was issued:
+
+- **Issued by a certificate authority**, whether your internal PKI or a managed provider's. Use the
+  root certificate and any intermediates, obtained from whoever runs that authority rather than
+  harvested from the connection you are trying to verify.
+
+- **Self-signed.** The certificate is its own issuer, so there is no separate authority to ask for.
+  Put the server certificate itself in the bundle.
+
+If what you were given is DER-encoded, convert it first:
+
+```sh
+openssl x509 -inform der -in mycompany-ca.crt -out mycompany-ca.pem
+```
+
+## Configure the Engine
+
+Mount the file into the container and name it in the environment. Add these two options to your
+[normal-mode command](/enterprise/installation/#start-mergify-in-normal-mode):
+
+```sh
+-v /etc/pki/mycompany-ca.pem:/etc/mergify/ca.pem:ro \
+-e MERGIFYENGINE_EXTRA_CA_BUNDLE=/etc/mergify/ca.pem \
+```
+
+The container runs as an unprivileged user, so the mounted file has to be readable by it:
+
+```sh
+chmod 644 /etc/pki/mycompany-ca.pem
+```
+
+Mergify loads the bundle while it starts and refuses to boot when the file is missing, unreadable,
+or not valid PEM, so a wrong path is a startup error naming the setting rather than a handshake
+failure hours later.
+
+If you split the deployment across several containers, mount the file into each one and set the
+variable on all of them. Every process reads the bundle for itself.
+
+## PostgreSQL Needs `sslmode` Too
+
+The bundle gives PostgreSQL the certificates to check against, but it does not decide whether they
+get checked. That is `sslmode` in the DSN, and its default, `prefer`, encrypts the connection
+without verifying the certificate at all. Ask for verification explicitly:
+
+```ini
+MERGIFYENGINE_DATABASE_URL=postgresql://postgres:password@db.mycompany.com:5432/postgres?sslmode=verify-full
+```
+
+`verify-full` also requires the certificate to name the host you connect by. When it does not, a
+container alias for instance, use `sslmode=verify-ca`, which checks the certificate against the
+bundle without pinning the hostname. Either way the engine opens the database while it starts, so a
+mismatch is a boot failure rather than something you find later.
+
+A `?sslrootcert=` already in the DSN takes precedence, and PostgreSQL then verifies against that
+file alone.
+
+## Redis and Certificate Verification
+
+Connect with `rediss://` and Mergify verifies the Redis certificate against the bundle like any
+other. A `?ssl_ca_certs=` in `MERGIFYENGINE_REDIS_URL` points Redis at that file instead.
+
+:::caution
+  `MERGIFYENGINE_REDIS_SSL_VERIFY_MODE_CERT_NONE=1` turns Redis certificate verification off
+  entirely and overrides the bundle. The connection stays encrypted, but Mergify can no longer tell
+  your Redis apart from anything else answering at that address. Keep it only while you cannot
+  obtain the certificate, and unset it once you can; Mergify logs a line when both are configured.
+:::
+
+## Verify It Took Effect
+
+Finish the two sections above first. A connectivity check against a PostgreSQL or Redis that is not
+verifying anything reports `ok` without a certificate having been checked.
+
+Restart the container and look for the bundle in the startup logs:
+
+```sh
+docker logs mergify-engine | grep "Extra CA bundle"
+```
+
+Each service logs one line naming the bundle it loaded. If the grep finds nothing, read the logs
+unfiltered before suspecting your `-e` flag: a bundle the engine cannot read or parse stops the
+container before that line, with a different error naming the setting.
+
+Then check that Mergify reaches each dependency:
+
+```sh
+docker exec -u root -it mergify-engine /bin/bash
+mergify-admin connectivity-check
+```
+
+Every configured dependency should report `ok`; `skipped` means it is not configured at all. A check
+that fails on certificate verification means that server's issuer is still missing from the bundle.
+See [Troubleshooting](/enterprise/troubleshooting/#checking-third-party-connectivity) for the full
+output format.
+
+## Rotating the Certificate Authority
+
+The bundle is read once, when the process starts. Replacing the file on disk changes nothing until
+the containers restart.
+
+To rotate without downtime, add the incoming certificate to the bundle alongside the outgoing one,
+restart Mergify, switch your servers over, and only then drop the old certificate and restart again.
+
+## Other Trust Store Variables
+
+`SSL_CERT_FILE` and `SSL_CERT_DIR` replace the public certificate authorities Mergify would
+otherwise use, and `MERGIFYENGINE_EXTRA_CA_BUNDLE` is added on top of whichever you set.
+
+Use `SSL_CERT_FILE` with a PEM bundle. `SSL_CERT_DIR` reaches the GitHub and Redis connections, but
+not the ones that take a single bundle file: PostgreSQL, object storage, Sentry and `git` fall back
+to the public authorities Mergify ships, plus your bundle. Your replacement trust store is then only
+partly in effect, and Mergify logs a line saying so at startup.
+
+`AWS_CA_BUNDLE`, if you already have one set, keeps object storage on that file and the bundle is
+not applied there. `REQUESTS_CA_BUNDLE` and `CURL_CA_BUNDLE` do nothing at all: Mergify clears them
+before it builds any client.

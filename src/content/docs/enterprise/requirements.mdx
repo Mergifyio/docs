@@ -56,6 +56,9 @@ docker run --name some-redis-with-tls -d \
     bitnami/redis
 ```
 
+That example makes Redis present a certificate signed by a CA you created. Give that CA to Mergify
+as described in [Trusting a Private CA](/enterprise/custom-ca), so it can verify the connection.
+
 ## Mergify Requirements
 
 The Mergify container needs at least:
@@ -90,4 +93,6 @@ Two outbound HTTPS calls must be allowed so Mergify can validate and report lice
 - `POST https://subscription.mergify.com/on-premise/report`
 
 Both calls carry your subscription token and are made by the Mergify container itself, so no other
-component needs egress to that host.
+component needs egress to that host. If a proxy intercepts outbound TLS and re-signs it with your
+own certificate authority, Mergify has to trust that authority for these calls to succeed: see
+[Trusting a Private CA](/enterprise/custom-ca).
