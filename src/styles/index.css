@@ -897,10 +897,16 @@ html {
 
 /* Only direct children are painted: the plugin strips their inline fill and
    stroke, and leaves anything deeper alone. `:where()` again, so `plain` below
-   wins on specificity rather than on source order. */
+   wins on specificity rather than on source order.
+
+   `circle` and `rect` are here for the hand-placed diagrams (GitGraph's linear
+   mode, StackMapping) — Graphviz never emits them. Same classes, same roles,
+   same rules: that is what stops a second palette growing beside this one. */
 .dg :where(.node) > path,
 .dg :where(.node) > polygon,
-.dg :where(.node) > ellipse {
+.dg :where(.node) > ellipse,
+.dg :where(.node) > circle,
+.dg :where(.node) > rect {
   fill: var(--dg-surface);
   stroke: var(--dg-border);
 }
@@ -924,7 +930,8 @@ html {
   letter-spacing: 0.02em;
 }
 
-.dg .edge > path {
+.dg .edge > path,
+.dg .edge > line {
   fill: none;
   stroke: var(--dg-border);
 }
@@ -949,9 +956,25 @@ html {
 .dg .plain > path,
 .dg .plain > polygon,
 .dg .plain > ellipse,
-.dg .plain > polyline {
+.dg .plain > polyline,
+.dg .plain > circle,
+.dg .plain > rect {
   fill: none;
   stroke: none;
+}
+
+/* The hand-placed diagrams are drawn at a fixed size and read best at it: they
+   carry no intrinsic width for `width: 80%` to work against. */
+.dg-linear,
+.dg-commits,
+.dg-mapping {
+  width: 100%;
+}
+.dg-commits {
+  max-width: 560px;
+}
+.dg-mapping {
+  max-width: 720px;
 }
 
 hr {

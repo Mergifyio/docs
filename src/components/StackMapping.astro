@@ -1,7 +1,12 @@
 ---
+import type { DiagramRole } from '~/util/diagramSvg';
+
 /**
  * Three-column diagram showing how local commits map to remote branches and GitHub PRs.
  * Used on the Stacks concepts page to illustrate the mental model.
+ *
+ * Hand-placed SVG, but on the same palette as every other diagram: each column
+ * names a role and `.dg` in index.css resolves it. See DESIGN.md for the roles.
  */
 
 interface Entry {
@@ -16,7 +21,7 @@ interface Props {
 
 const { entries } = Astro.props;
 
-const COL_W = 160;
+const MIN_COL_W = 160;
 const COL_GAP = 50;
 const ROW_H = 44;
 const HEAD_H = 28;
@@ -24,24 +29,38 @@ const PAD = 16;
 const R = 6;
 const FONT = 11;
 const HEAD_FONT = 10;
+const CHAR_W = 6.2;
+const LABEL_PAD = 20;
 const ARROW_GAP = 8;
 
-// `color` fills the boxes (needs to stay dark enough for white labels in both
-// themes); `headColor` is the column header. The neutral gray header would be
-// too faint on the dark surface, so it tracks --theme-diagram-edge via
-// currentColor instead.
-const cols = [
-  { label: 'Local Commits', color: '#347D39', headColor: '#347D39', x: PAD },
-  {
-    label: 'Remote Branches',
-    color: '#6B7280',
-    headColor: 'currentColor',
-    x: PAD + COL_W + COL_GAP,
-  },
-  { label: 'GitHub PRs', color: '#2563EB', headColor: '#2563EB', x: PAD + 2 * (COL_W + COL_GAP) },
+/**
+ * A column is as wide as its longest value. Fixed-width columns clipped a
+ * generated branch name — invisibly, while the label was white on a solid fill,
+ * and plainly once the label became dark text on a tint.
+ */
+function columnWidth(values: string[], header: string): number {
+  const longest = Math.max(
+    header.length * (HEAD_FONT / FONT) * CHAR_W,
+    ...values.map((v) => v.length * CHAR_W)
+  );
+  return Math.max(MIN_COL_W, Math.ceil(longest + LABEL_PAD));
+}
+
+const columns: { label: string; role: DiagramRole; values: string[] }[] = [
+  { label: 'Local Commits', role: 'queued', values: entries.map((e) => e.commit) },
+  { label: 'Remote Branches', role: 'external', values: entries.map((e) => e.branch) },
+  { label: 'GitHub PRs', role: 'config', values: entries.map((e) => e.pr) },
 ];
 
-const totalW = cols[2].x + COL_W + PAD;
+let nextX = PAD;
+const cols = columns.map((col) => {
+  const w = columnWidth(col.values, col.label);
+  const x = nextX;
+  nextX += w + COL_GAP;
+  return { ...col, w, x };
+});
+
+const totalW = cols[2].x + cols[2].w + PAD;
 const totalH = HEAD_H + entries.length * ROW_H + PAD;
 
 function boxY(i: number) {
@@ -54,22 +73,22 @@ const BOX_H = ROW_H - 12;
 <svg
   viewBox={`0 0 ${totalW} ${totalH}`}
   xmlns="http://www.w3.org/2000/svg"
-  class="stack-mapping"
+  class="dg dg-mapping"
   role="img"
   aria-label="Diagram showing how local commits map to remote branches and GitHub PRs"
 >
   {/* Column headers */}
   {cols.map((col) => (
-    <text
-      x={col.x + COL_W / 2}
-      y={HEAD_H - 10}
-      text-anchor="middle"
-      fill={col.headColor}
-      font-size={HEAD_FONT}
-      font-weight="600"
-      text-transform="uppercase"
-      letter-spacing="0.5"
-    >{col.label}</text>
+    <g class={`node ${col.role} plain`}>
+      <text
+        x={col.x + col.w / 2}
+        y={HEAD_H - 10}
+        text-anchor="middle"
+        font-size={HEAD_FONT}
+        font-weight="600"
+        letter-spacing="0.5"
+      >{col.label}</text>
+    </g>
   ))}
 
   {/* Rows */}
@@ -82,20 +101,18 @@ const BOX_H = ROW_H - 12;
       <g>
         {/* Boxes */}
         {cols.map((col, j) => (
-          <g>
+          <g class={`node ${col.role}`}>
             <rect
               x={col.x}
               y={y}
-              width={COL_W}
+              width={col.w}
               height={BOX_H}
               rx={R}
-              fill={col.color}
             />
             <text
-              x={col.x + COL_W / 2}
+              x={col.x + col.w / 2}
               y={cy + 4}
               text-anchor="middle"
-              fill="white"
               font-size={FONT}
               font-weight="500"
             >{values[j]}</text>
@@ -104,21 +121,19 @@ const BOX_H = ROW_H - 12;
 
         {/* Arrows between columns */}
         {[0, 1].map((j) => {
-          const x1 = cols[j].x + COL_W + ARROW_GAP;
+          const x1 = cols[j].x + cols[j].w + ARROW_GAP;
           const x2 = cols[j + 1].x - ARROW_GAP;
           return (
-            <g>
+            <g class="edge muted">
               <line
                 x1={x1}
                 y1={cy}
                 x2={x2 - 6}
                 y2={cy}
-                stroke="#9CA3AF"
                 stroke-width="1.5"
               />
               <polygon
                 points={`${x2},${cy} ${x2 - 7},${cy - 3.5} ${x2 - 7},${cy + 3.5}`}
-                fill="#9CA3AF"
               />
             </g>
           );
@@ -127,16 +142,3 @@ const BOX_H = ROW_H - 12;
     );
   })}
 </svg>
-
-<style>
-  .stack-mapping {
-    display: block;
-    margin: 1.5em auto;
-    max-width: 620px;
-    width: 100%;
-    height: auto;
-    /* Drives `currentColor` for the neutral column header. */
-    color: var(--theme-diagram-edge);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-</style>

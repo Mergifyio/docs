@@ -46,15 +46,15 @@ branch becomes a PR that targets the branch below it:
 
 <GitGraph
   nodes={[
-    { id: "m1", label: "M", color: "gray" },
-    { id: "m2", label: "", color: "gray" },
-    { id: "a1", label: "A", color: "green" },
-    { id: "a2", label: "A'", color: "green" },
-    { id: "a3", label: "", color: "green" },
-    { id: "b1", label: "B", color: "blue" },
-    { id: "b2", label: "", color: "blue" },
-    { id: "c1", label: "C", color: "amber" },
-    { id: "c2", label: "C'", color: "amber" },
+    { id: "m1", label: "M", role: "external" },
+    { id: "m2", label: "", role: "external" },
+    { id: "a1", label: "A", role: "queued" },
+    { id: "a2", label: "A'", role: "queued" },
+    { id: "a3", label: "", role: "queued" },
+    { id: "b1", label: "B", role: "config" },
+    { id: "b2", label: "", role: "config" },
+    { id: "c1", label: "C", role: "pending" },
+    { id: "c2", label: "C'", role: "pending" },
   ]}
   edges={[
     { from: "m1", to: "m2", label: "main" },
