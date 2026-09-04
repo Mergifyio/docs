@@ -29,7 +29,7 @@ commits, the PR grows, and so does the review burden.
 
 <GitGraph
   commits={["A", "B", "C", "D", "E"]}
-  prs={[{ label: "PR #1", commits: [0, 4], color: "red" }]}
+  prs={[{ label: "PR #1", commits: [0, 4], role: "failed" }]}
 />
 
 Developers face a bad choice: ship one giant PR that no one can review
@@ -44,7 +44,7 @@ automatically chained in dependency order.
 
 <GitGraph
   commits={["A", "B", "C", "D", "E"]}
-  commitColor="green"
+  commitRole="queued"
   prs={[
     { label: "PR #1", commits: 0 },
     { label: "PR #2", commits: 1 },
