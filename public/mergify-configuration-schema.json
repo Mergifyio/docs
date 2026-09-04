@@ -1892,7 +1892,7 @@
         },
         "queue_controls_comment": {
           "default": true,
-          "description": "When enabled, Mergify renders task-list checkboxes in the Merge Queue status comment so developers can queue or requeue a pull request by clicking a box instead of typing `@mergifyio queue`.",
+          "description": "When enabled, Mergify renders task-list checkboxes a developer can tick instead of typing `@mergifyio queue`. The two controls live in different comments.\n- `Queue this pull request`: a comment of its own, posted before the pull request is queued.\n- `Requeue this pull request`: part of the Merge Queue status comment, after the pull request has left the queue, unless the queue merged it.\n",
           "title": "Queue Controls Comment",
           "type": "boolean"
         }
@@ -3234,7 +3234,7 @@
           ]
         },
         "deployment-success": {
-          "description": "The list of deployments that successfully passed for the pull request.",
+          "description": "The list of environments successfully deployed for the pull request. A deployment published by a GitHub App is also matched by its qualified `@<github-app-slug>/<environment>` form.",
           "items": {
             "type": "string"
           },
@@ -3260,7 +3260,7 @@
           ]
         },
         "deployment-failure": {
-          "description": "The list of deployments that failed for the pull request.",
+          "description": "The list of environments whose deployment failed for the pull request. A deployment published by a GitHub App is also matched by its qualified `@<github-app-slug>/<environment>` form.",
           "items": {
             "type": "string"
           },
