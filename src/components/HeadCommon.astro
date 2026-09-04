@@ -28,6 +28,11 @@ const { activePageGroupIds = [] } = Astro.props as Props;
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
+<!-- Machine-readable entry points, for agents and API tooling that crawl the docs
+     rather than the dashboard. `service-desc` is the IANA relation for "the
+     description of this site's API" (RFC 8631). -->
+<link rel="service-desc" type="application/json" href="/openapi.json" />
+<link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
 
 <!-- Include plausible scripts -->
 <link rel="preconnect" href="https://plausible.io" />
