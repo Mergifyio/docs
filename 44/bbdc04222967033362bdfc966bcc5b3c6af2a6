@@ -1,0 +1,7 @@
+Revision history for #12595:
+
+rev 3 (rebase) 2026-08-28 15:09 UTC
+rev 2 (content) 2026-08-28 14:37 UTC — Serve the spec as a Buffer per review on #12595, so 'same bytes' is literal
+rev 1 (initial) 2026-08-28 14:37 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12595,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"d8b4503ae2f841a11cf33ea1f1e41aba79b050d1","timestamp_iso":"2026-08-28T14:37:25Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"d8b4503ae2f841a11cf33ea1f1e41aba79b050d1","new_sha":"c8af4a606b241af159f017e97661630fb17ee449","timestamp_iso":"2026-08-28T14:37:25Z","reason":"Serve the spec as a Buffer per review on #12595, so 'same bytes' is literal","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/d8b4503ae2f841a11cf33ea1f1e41aba79b050d1...c8af4a606b241af159f017e97661630fb17ee449"},{"number":3,"change_type":"rebase","old_sha":"c8af4a606b241af159f017e97661630fb17ee449","new_sha":"eb8bd0ccafe03a1462cfb562a17607c60175f61e","timestamp_iso":"2026-08-28T15:09:03Z","reason":"","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/c8af4a606b241af159f017e97661630fb17ee449...eb8bd0ccafe03a1462cfb562a17607c60175f61e"}]} -->
