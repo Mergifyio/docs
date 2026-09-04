@@ -104,11 +104,6 @@
   --theme-border-color: var(--theme-border);
   --theme-shade-subtle: var(--color-gray-200);
 
-  /* Diagrams — neutral chrome (edges, arrowheads, connector labels, cluster
-     borders) for the git-graph and graphviz diagrams. Dark mode brightens it
-     so structural lines and captions stay legible over the dark surface. */
-  --theme-diagram-edge: var(--color-gray-700);
-
   /* Diagrams — role accents. A diagram names a role, never a colour; this is
      the whole palette, one line per role. The paint rules that consume them
      are the `.dg` block in index.css. */
@@ -204,9 +199,6 @@
   --theme-divider: var(--color-gray-800);
   --theme-border-color: var(--theme-border);
   --theme-shade-subtle: var(--color-gray-700);
-
-  /* Diagrams — brighten the neutral chrome so edges and labels read on dark. */
-  --theme-diagram-edge: var(--color-gray-400);
 
   /* Diagrams — every dark value for a diagram lives here and nowhere else.
      The product accents are untouched: what changes is how much of one is

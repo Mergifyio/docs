@@ -36,11 +36,11 @@ commits falls back to squash or rebase instead.
 
 <GitGraph
   nodes={[
-    { id: "A", label: "A", color: "gray" },
-    { id: "B", label: "B", color: "gray" },
-    { id: "C", label: "C", color: "green" },
-    { id: "D", label: "D", color: "green" },
-    { id: "M", label: "M", color: "blue" },
+    { id: "A", label: "A", role: "external" },
+    { id: "B", label: "B", role: "external" },
+    { id: "C", label: "C", role: "queued" },
+    { id: "D", label: "D", role: "queued" },
+    { id: "M", label: "M", role: "merged" },
   ]}
   edges={[
     { from: "A", to: "B" },
@@ -74,11 +74,11 @@ Squashes all PR commits into a single commit on the base branch.
 
 <GitGraph
   nodes={[
-    { id: "A", label: "A", color: "gray" },
-    { id: "B", label: "B", color: "gray" },
-    { id: "S", label: "S", color: "amber" },
-    { id: "C", label: "C", color: "green", ghost: true },
-    { id: "D", label: "D", color: "green", ghost: true },
+    { id: "A", label: "A", role: "external" },
+    { id: "B", label: "B", role: "external" },
+    { id: "S", label: "S", role: "pending" },
+    { id: "C", label: "C", role: "queued", ghost: true },
+    { id: "D", label: "D", role: "queued", ghost: true },
   ]}
   edges={[
     { from: "A", to: "B" },
@@ -108,12 +108,12 @@ SHAs.
 
 <GitGraph
   nodes={[
-    { id: "A", label: "A", color: "gray" },
-    { id: "B", label: "B", color: "gray" },
-    { id: "C", label: "C", color: "green", ghost: true },
-    { id: "D", label: "D", color: "green", ghost: true },
-    { id: "Cp", label: "C'", color: "amber" },
-    { id: "Dp", label: "D'", color: "amber" },
+    { id: "A", label: "A", role: "external" },
+    { id: "B", label: "B", role: "external" },
+    { id: "C", label: "C", role: "queued", ghost: true },
+    { id: "D", label: "D", role: "queued", ghost: true },
+    { id: "Cp", label: "C'", role: "pending" },
+    { id: "Dp", label: "D'", role: "pending" },
   ]}
   edges={[
     { from: "A", to: "B" },
@@ -166,10 +166,10 @@ preserves are the SHAs of the PR branch at merge time.
 
 <GitGraph
   nodes={[
-    { id: "A", label: "A", color: "gray" },
-    { id: "B", label: "B", color: "gray" },
-    { id: "C", label: "C", color: "green" },
-    { id: "D", label: "D", color: "green" },
+    { id: "A", label: "A", role: "external" },
+    { id: "B", label: "B", role: "external" },
+    { id: "C", label: "C", role: "queued" },
+    { id: "D", label: "D", role: "queued" },
   ]}
   edges={[
     { from: "A", to: "B" },
@@ -274,11 +274,11 @@ Merge Queue` as its body.
 
 <GitGraph
   nodes={[
-    { id: "A", label: "A", color: "gray" },
-    { id: "B", label: "B", color: "gray" },
-    { id: "D1", label: "D1", color: "green" },
-    { id: "D2", label: "D2", color: "green" },
-    { id: "M", label: "M", color: "blue" },
+    { id: "A", label: "A", role: "external" },
+    { id: "B", label: "B", role: "external" },
+    { id: "D1", label: "D1", role: "queued" },
+    { id: "D2", label: "D2", role: "queued" },
+    { id: "M", label: "M", role: "merged" },
   ]}
   edges={[
     { from: "A", to: "B" },
