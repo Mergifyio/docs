@@ -39,27 +39,9 @@ export const DIAGRAM_ROLES = [
 
 export type DiagramRole = (typeof DIAGRAM_ROLES)[number];
 
-/**
- * The classes Graphviz puts on an element itself. Anything else on the element
- * came from the source, and means the author named the element's role.
- */
-const STRUCTURAL_CLASSES = new Set<string>(['graph', 'node', 'edge', 'cluster']);
-
-/** The paint a shape carries, for a caller that infers a role from it. */
-export interface ShapePaint {
-  fill?: string;
-  stroke?: string;
-}
-
 interface FinishOptions {
   /** Classes for the `<svg>`, after `dg`. */
   classes?: string[];
-  /**
-   * Transitional hook: name the role of an element that does not carry one,
-   * from the paint Graphviz gave it. Only called for elements whose source
-   * named no class of their own.
-   */
-  roleFor?: (kind: DiagramKind, paint: ShapePaint) => DiagramRole | undefined;
 }
 
 /** The shapes Graphviz draws directly inside each kind of group. */
@@ -75,7 +57,7 @@ const classesOf = (value: string | undefined): string[] =>
 /**
  * Turn a rendered Graphviz SVG into a themeable `.dg` diagram, in place.
  */
-export function finishDiagramSvg($: CheerioAPI, { classes = [], roleFor }: FinishOptions = {}) {
+export function finishDiagramSvg($: CheerioAPI, { classes = [] }: FinishOptions = {}) {
   // Graphviz paints an opaque canvas as the first child of the graph group
   // whenever the source sets its own `bgcolor`. Drop it so the page shows
   // through — otherwise the diagram carries a light rectangle into dark mode.
@@ -89,23 +71,15 @@ export function finishDiagramSvg($: CheerioAPI, { classes = [], roleFor }: Finis
       const $group = $(element);
       const existing = classesOf($group.attr('class'));
       const $shape = $group.children(SHAPES[kind]).first();
-      const paint: ShapePaint = { fill: $shape.attr('fill'), stroke: $shape.attr('stroke') };
-
-      const extra: string[] = [];
 
       // Graphviz draws no border for `shape=plaintext` / `shape=none`, so a
-      // shape with no stroke is a caption rather than a box — even when the
-      // node inherited `style=filled` and so came out with a fill behind it.
-      // A shape that asks for a fill and `color=none` is read the same way;
-      // use `penwidth=0` to keep the fill.
-      if (paint.stroke === 'none' && !existing.includes('plain')) extra.push('plain');
-
-      if (roleFor && !existing.some((name) => !STRUCTURAL_CLASSES.has(name))) {
-        const role = roleFor(kind, paint);
-        if (role) extra.push(role);
+      // shape with no stroke is a caption rather than a box — even when it
+      // inherited `style=filled` and so came out with a fill behind it. A shape
+      // that asks for a fill and `color=none` is read the same way; use
+      // `penwidth=0` to keep the fill.
+      if ($shape.attr('stroke') === 'none' && !existing.includes('plain')) {
+        $group.attr('class', [...existing, 'plain'].join(' '));
       }
-
-      if (extra.length > 0) $group.attr('class', [...existing, ...extra].join(' '));
 
       // Only direct children are painted by `.dg` in index.css; anything deeper
       // keeps whatever Graphviz gave it.

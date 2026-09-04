@@ -24,134 +24,34 @@ expensive.
 
 ## How It Works
 
-```dot class="graph"
-strict digraph {
-    fontname="Inter, system-ui, sans-serif";
-    rankdir="TB";
-    bgcolor="#FAFBFC";
+```dot class="flow"
+digraph {
+  label="Two-step continuous integration";
+  node [width=2.2];
 
-    // Global node and edge styling
-    node [
-        style="filled,rounded",
-        shape=rect,
-        fontcolor="black",
-        fontname="Inter, system-ui, sans-serif",
-        fontsize=12,
-        margin=0.2,
-        penwidth=2,
-        width=2.5,
-        height=0.8
-    ];
+  open [label="Pull request opened\nor updated", class="queued"];
+  preliminary [label="Preliminary tests\n(unit tests, linting)", class="pending"];
+  preliminary_ok [label="Tests passed\nready for the queue", class="merged"];
+  preliminary_fail [label="Tests failed\nneeds fixes", class="failed"];
+  queue_req [label="Queue command\n(@mergifyio queue)", class="queued"];
+  queued [label="Pull request queued", shape=oval, class="queued"];
+  premerge [label="Pre-merge tests\n(integration, performance)", class="pending"];
+  premerge_ok [label="All tests passed\nready to merge", class="merged"];
+  premerge_fail [label="Pre-merge failed\nremoved from the queue", class="failed"];
+  merged [label="Merged to main", class="merged"];
 
-    edge [
-        color="#7C3AED",
-        arrowhead=normal,
-        fontname="Inter, system-ui, sans-serif",
-        fontsize=10,
-        penwidth=2
-    ];
+  open -> preliminary;
+  preliminary -> preliminary_ok [class="merged"];
+  preliminary -> preliminary_fail [class="failed"];
+  preliminary_ok -> queue_req;
+  queue_req -> queued;
+  queued -> premerge;
+  premerge -> premerge_ok [class="merged"];
+  premerge -> premerge_fail [class="failed"];
+  premerge_ok -> merged [class="merged"];
 
-    // Start state
-    open [
-        label="🔄 PR opened or updated",
-        fillcolor="#EDE9FE",
-        color="#8B5CF6",
-        fontcolor="#5B21B6"
-    ];
-
-    // Preliminary tests phase
-    preliminary [
-        label="🧪 Preliminary tests\n(Unit tests, linting)",
-        fillcolor="#FFF4ED",
-        color="#FF8A3D",
-        fontcolor="#C2410C"
-    ]
-
-    // Success/failure branches for preliminary tests
-    subgraph cluster_preliminary_results {
-        style="invis";
-        preliminary_ok [
-            label="✅ Tests passed\n(Ready for queue)",
-            fillcolor="#D1FAE5",
-            color="#10B981",
-            fontcolor="#065F46"
-        ]
-
-        preliminary_fail [
-            label="❌ Tests failed\n(Needs fixes)",
-            fillcolor="#FEE2E2",
-            color="#EF4444",
-            fontcolor="#991B1B"
-        ]
-    }
-
-    // Queue action
-    queue_req [
-        label="📝 Queue command\n(@mergifyio queue)",
-        fillcolor="#F3E8FF",
-        color="#A855F7",
-        fontcolor="#6B21A8"
-    ]
-
-    // Queue state
-    queued [
-        label="⏳ PR queued",
-        shape=ellipse,
-        fillcolor="#FFF4ED",
-        color="#FF8A3D",
-        fontcolor="#C2410C",
-        width=2,
-        height=1
-    ];
-
-    // Pre-merge tests phase
-    premerge [
-        label="🔬 Pre-merge tests\n(Integration, performance)",
-        fillcolor="#FFF4ED",
-        color="#FF8A3D",
-        fontcolor="#C2410C"
-    ]
-
-    // Success/failure branches for pre-merge tests
-    subgraph cluster_premerge_results {
-        style="invis";
-        premerge_ok [
-            label="✅ All tests passed\n(Ready to merge)",
-            fillcolor="#D1FAE5",
-            color="#10B981",
-            fontcolor="#065F46"
-        ]
-
-        premerge_fail [
-            label="❌ Pre-merge failed\n(Removed from queue)",
-            fillcolor="#FEE2E2",
-            color="#EF4444",
-            fontcolor="#991B1B"
-        ]
-    }
-
-    // Final merge
-    merged [
-        label="🎉 Merged to main",
-        fillcolor="#DDD6FE",
-        color="#7C3AED",
-        fontcolor="#5B21B6"
-    ]
-
-    // Flow connections - main path
-    open -> preliminary;
-    preliminary -> preliminary_ok [color="#10B981", penwidth=3];
-    preliminary -> preliminary_fail [color="#EF4444", penwidth=3];
-    preliminary_ok -> queue_req;
-    queue_req -> queued;
-    queued -> premerge;
-    premerge -> premerge_ok [color="#10B981", penwidth=3];
-    premerge -> premerge_fail [color="#EF4444", penwidth=3];
-    premerge_ok -> merged [color="#7C3AED", penwidth=3];
-
-    // Rank constraints for better layout
-    {rank=same; preliminary_ok, preliminary_fail}
-    {rank=same; premerge_ok, premerge_fail}
+  { rank=same; preliminary_ok; preliminary_fail; }
+  { rank=same; premerge_ok; premerge_fail; }
 }
 ```
 
