@@ -1,0 +1,7 @@
+Revision history for #12647:
+
+rev 3 (rebase) 2026-09-03 16:59 UTC — rebase onto main after #12646 merged — the squashed phase-1 commit made this branch conflict; no content change
+rev 2 (content) 2026-09-02 00:57 UTC — review (#12647): type roleFor and the legacy tables as DiagramRole; unit-test the shared SVG post-processor
+rev 1 (initial) 2026-09-02 00:57 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12647,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"204561e65921703f49450604ca9c43473b13d104","timestamp_iso":"2026-09-02T00:57:18Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"204561e65921703f49450604ca9c43473b13d104","new_sha":"e2b246dc7610a9f15c6f0d31fe518c92b2f4ca83","timestamp_iso":"2026-09-02T00:57:18Z","reason":"review (#12647): type roleFor and the legacy tables as DiagramRole; unit-test the shared SVG post-processor","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/204561e65921703f49450604ca9c43473b13d104...e2b246dc7610a9f15c6f0d31fe518c92b2f4ca83"},{"number":3,"change_type":"rebase","old_sha":"e2b246dc7610a9f15c6f0d31fe518c92b2f4ca83","new_sha":"b01084942704597d83075c1b63071997b1688c6f","timestamp_iso":"2026-09-03T16:59:50Z","reason":"rebase onto main after #12646 merged — the squashed phase-1 commit made this branch conflict; no content change","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/e2b246dc7610a9f15c6f0d31fe518c92b2f4ca83...b01084942704597d83075c1b63071997b1688c6f"}]} -->
