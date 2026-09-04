@@ -200,7 +200,7 @@ Before the merge, your stack looks like this:
 
 <GitGraph
   commits={["A", "B", "C"]}
-  commitColor="green"
+  commitRole="queued"
   prs={[
     { label: "PR #1", commits: 0, annotation: "base: main" },
     { label: "PR #2", commits: 1, annotation: "base: PR #1" },
@@ -212,7 +212,7 @@ After PR #1 merges, commit A lands on `main`. The remaining PRs re-chain:
 
 <GitGraph
   commits={["B", "C"]}
-  commitColor="green"
+  commitRole="queued"
   prs={[
     { label: "PR #2", commits: 0, annotation: "base: main" },
     { label: "PR #3", commits: 1, annotation: "base: PR #2" },
