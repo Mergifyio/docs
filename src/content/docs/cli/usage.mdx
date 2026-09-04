@@ -80,13 +80,95 @@ installed as the `mergify_cli_version` output:
 
 ## Authentication
 
-The CLI needs an authentication token to interact with your repositories.
-Depending on the command, this can be a GitHub token or a Mergify API token.
+The CLI talks to two APIs, and they take different credentials:
 
-Most commands that need one resolve it in the same order: the `--token`
-option, then the `MERGIFY_TOKEN` environment variable, then `GITHUB_TOKEN`.
-Stacks commands fall back once more to `gh auth token`. There is no global
-`--token` on `mergify` itself, so pass it to the subcommand:
+- The **Mergify API** backs `mergify queue`, `mergify events`, `mergify freeze`,
+  `mergify ci`, `mergify tests`, and `mergify config simulate`.
+  (`mergify config validate` needs no credential: it fetches the public schema
+  and checks your file locally.)
+
+- The **GitHub API** backs [Stacks](/stacks), which creates and updates pull
+  requests on GitHub directly.
+
+`mergify auth login` covers the Mergify half. Stacks still needs a GitHub token
+of its own.
+
+### Sign in to Mergify
+
+```bash
+mergify auth login
+```
+
+The CLI prints a URL and a short code. Open the URL, type the code in, give the
+token a name so you recognize the machine later, and authorize. The CLI picks up
+its credential and stores it. This is an [OAuth 2.0 device authorization
+grant](https://www.rfc-editor.org/rfc/rfc8628), so nothing listens on a local
+port and the browser does not have to be on the same machine. It works over SSH
+and inside containers.
+
+What you get is a [Mergify user token](/api/usage#using-a-mergify-user-token).
+It identifies you, reaches exactly what your dashboard session reaches, and is
+never sent to GitHub.
+
+The CLI stores it in your operating system's credential store: Keychain on
+macOS, the Secret Service on Linux, Credential Manager on Windows. Where none is
+available, on a headless container for instance, it falls back to a file in
+your configuration directory, restricted to your user. On a container image or
+a shared runner, treat that file as the secret it is.
+
+`mergify auth status` reports whether this machine holds a credential:
+
+```bash
+mergify auth status
+```
+
+`mergify auth logout` revokes it on the server, not just on this machine:
+
+```bash
+mergify auth logout
+```
+
+You can also list and revoke your tokens under **Settings > Developer > CLI
+Tokens** in the [dashboard](https://dashboard.mergify.com). That list is
+personal, not per-organization: it shows the same tokens whichever organization
+you have selected. A token lasts a year, and you can hold 20 at a time. At that
+ceiling the approval page refuses the new login and tells you to revoke one, so
+watch the browser rather than the terminal if a sign-in never completes.
+
+#### On-premise installations
+
+All three commands take `--api-url`, and so does every other command that calls
+the Mergify API:
+
+```bash
+mergify auth login --api-url https://mergify.example.com
+```
+
+Credentials are stored per API URL, so one machine can hold a login for the
+hosted service and one for an [on-premise installation](/enterprise) at the same
+time. That also means the URL has to match afterwards. A command that resolves a
+different API URL does not find the credential you stored, and falls through to
+the next source in the list below. Set `MERGIFY_API_URL` once instead of passing
+`--api-url` every time:
+
+```bash
+export MERGIFY_API_URL=https://mergify.example.com
+```
+
+`mergify auth logout` and `mergify auth status` are per URL too, so signing out
+of one installation leaves the other's credential in place.
+
+### How Mergify API commands find a token
+
+Commands that call the Mergify API resolve a credential in this order:
+
+1. The `--token` option on the command.
+2. The `MERGIFY_TOKEN` environment variable.
+3. The credential stored by `mergify auth login`, for that API URL.
+4. `GITHUB_TOKEN`. Deprecated.
+5. `gh auth token`, from the GitHub CLI. Deprecated.
+
+There is no global `--token` on `mergify` itself, so pass it to the subcommand:
 
 ```bash
 mergify <command> --token your_token_here
@@ -95,14 +177,55 @@ mergify <command> --token your_token_here
 Each command's entry in the [CLI reference](/cli) lists the options it accepts,
 `--token` included.
 
-### GitHub token
+The stored credential deliberately outranks `GITHUB_TOKEN`, so a `GITHUB_TOKEN`
+left exported in a shell cannot quietly override the account you signed in as.
+`--token` and `MERGIFY_TOKEN` stay above it, so a CI job that sets either keeps
+working unchanged.
 
-Stacks commands act on pull requests through the GitHub API and need a GitHub
-token specifically. If you have the [GitHub CLI](https://cli.github.com/)
-(`gh`) installed and authenticated, the Mergify CLI uses its token
-automatically. No extra configuration needed.
+:::caution
+  Letting the CLI authenticate to the Mergify API with a GitHub token is
+  deprecated. Both `GITHUB_TOKEN` and the `gh auth token` fallback still work,
+  and the CLI warns when it uses one. Run `mergify auth login` instead, or set
+  `MERGIFY_TOKEN` to an application key. This says nothing about Stacks, which
+  needs a GitHub token and reads it exactly as before.
+:::
 
-Otherwise, create a [personal access
+### Application keys for CI
+
+`mergify auth login` is interactive, which makes it the wrong tool for a CI job.
+Unattended runs use an application key instead. Create one from your
+[dashboard](https://dashboard.mergify.com) and set it as `MERGIFY_TOKEN`:
+
+```bash
+export MERGIFY_TOKEN=your_token_here
+```
+
+An application key carries either the `admin` scope or the `ci` scope, and
+belongs to a GitHub account rather than to a single repository. See
+[Application Key Scopes](/api/usage#application-key-scopes) for what each one
+covers. `mergify ci junit-process` (and the deprecated `mergify ci junit-upload`)
+and `mergify ci scopes-send` post to endpoints that accept nothing but a `ci`
+key, so those commands need one specifically. A user token from
+`mergify auth login` does not work for them.
+
+### GitHub token for Stacks
+
+Stacks commands act on pull requests through the GitHub API, so they need a
+GitHub token specifically. `mergify auth login` does not cover them, and a
+Mergify application key does not work here either.
+
+They resolve that token on their own, in this order:
+
+1. The `--token` option on the command.
+2. The `MERGIFY_TOKEN` environment variable.
+3. `GITHUB_TOKEN`.
+4. `gh auth token`, from the GitHub CLI.
+
+Nothing here is deprecated: a GitHub token is what the GitHub API takes.
+
+If you have the [GitHub CLI](https://cli.github.com/) (`gh`) installed and
+authenticated, Stacks picks up its token automatically. Nothing else to
+configure. Otherwise, create a [personal access
 token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 and set it as an environment variable:
 
@@ -116,26 +239,6 @@ export GITHUB_TOKEN=your_token_here
   application key, pass `--token` to your Stacks commands, or keep that key
   out of `MERGIFY_TOKEN`.
 :::
-
-### Mergify token
-
-Commands that call the Mergify API, such as `mergify queue`, `mergify events`,
-`mergify freeze`, and `mergify ci`, accept a Mergify application key. Create
-one from your [dashboard](https://dashboard.mergify.com) and set it as
-`MERGIFY_TOKEN`:
-
-```bash
-export MERGIFY_TOKEN=your_token_here
-```
-
-An application key carries either the `admin` scope or the `ci` scope, and
-belongs to a GitHub account rather than to a single repository. See
-[Application Key Scopes](/api/usage#application-key-scopes) for what each one
-covers. The Mergify API also accepts a GitHub personal access token, so one
-GitHub token serves most commands. Two exceptions need a `ci` application key.
-`mergify ci junit-process` (and the deprecated `mergify ci junit-upload`) never
-falls back to `GITHUB_TOKEN`. `mergify ci scopes-send` reads `GITHUB_TOKEN`, but
-posts to an endpoint that rejects anything other than a `ci` key.
 
 ## Exit Codes
 

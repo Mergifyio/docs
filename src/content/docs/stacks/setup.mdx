@@ -46,11 +46,22 @@ CI Insights, config validation, and scheduled freezes. See
 ## 3. Configure GitHub
 
 Stacks creates and updates pull requests through the GitHub API, so it needs a
-GitHub token: a Mergify [application key](/api/usage) does not work here. Point
-`MERGIFY_TOKEN` or `GITHUB_TOKEN` at one, or install the
-[GitHub CLI](https://cli.github.com/) and run `gh auth login`. The CLI tries
-them in that order. See [Authentication](/cli/usage#authentication) for where
-each token comes from.
+GitHub token. Neither a Mergify [application key](/api/usage) nor
+`mergify auth login` helps here: those authenticate to the Mergify API, which
+Stacks never calls.
+
+The simplest option is the [GitHub CLI](https://cli.github.com/). Install it,
+run `gh auth login`, and Stacks picks up its token on its own. To manage the
+token yourself instead, export it as `GITHUB_TOKEN`. See
+[GitHub token for Stacks](/cli/usage#github-token-for-stacks) for the order
+Stacks tries them in.
+
+:::caution
+  Stacks reads `MERGIFY_TOKEN` before either of those. If you have set it to a
+  Mergify application key, as the CI Insights and Merge Queue Scopes pages tell
+  you to, Stacks picks that key up and GitHub rejects it. Pass `--token` to your
+  Stacks commands, or keep the application key out of `MERGIFY_TOKEN`.
+:::
 
 Enable "[Automatically delete head branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)"
 in your GitHub repository settings (Settings > General > Pull Requests). When
