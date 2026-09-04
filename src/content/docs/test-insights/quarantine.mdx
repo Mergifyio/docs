@@ -12,7 +12,7 @@ This helps you keep your CI green while maintaining full visibility into test re
 ## How Quarantine Works
 
 When you quarantine a test in the Mergify dashboard, its future executions will continue to be collected by
-[CI Insights](/ci-insights/), but your CI will ignore failures.
+[Test Insights](/test-insights/), but your CI will ignore failures.
 
 This avoids pipeline disruption while still surfacing issues in the UI and keeping historical data intact.
 
@@ -24,7 +24,7 @@ To ensure the correct setup, refer to [the documentation for your test framework
 ### From the Mergify Dashboard
 
 The [Mitigation page](https://dashboard.mergify.com/test-insights/mitigation) on the dashboard contains the list of
-tests that were retrieved from the CI Insights integration.
+tests that were retrieved from the Test Insights integration.
 From there, you can add or remove a test from quarantine.
 
 ### From the Mergify CLI
