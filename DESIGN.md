@@ -17,6 +17,8 @@ source files listed below; the code is the source of truth.
 | Typography utility classes | [`src/styles/typography.css`](./src/styles/typography.css) |
 | Global content rules + section-accent system | [`src/styles/index.css`](./src/styles/index.css) |
 | Product accent colors (canonical source) | [`mergify.com/DESIGN.md`](../mergify.com/DESIGN.md) — "Product Accent Colors" section |
+| Diagram roles + paint rules | [`src/styles/index.css`](./src/styles/index.css) — the `.dg` block |
+| Diagram SVG post-processing | [`src/util/diagramSvg.ts`](./src/util/diagramSvg.ts) |
 | Reusable Astro components | [`src/components/`](./src/components/) |
 | Page layout templates | [`src/layouts/`](./src/layouts/) |
 | Icons (Phosphor bold + custom SVGs) | Inline `?raw` imports; no icon component abstraction yet |
@@ -210,6 +212,90 @@ surrounding surface contrast changes instead.
 4. Document the new token in this file under the appropriate section.
 5. Consume the semantic token — never the primitive — in components.
 
+## Diagrams
+
+Diagrams were the one surface that escaped this document, and it showed: 63 distinct colors across
+18 pages, only 10 of which existed anywhere in `tokens.css`, in four unrelated dialects, with a
+dark mode that was a hardcoded list of six strings a build-time plugin matched against. This
+section exists so it does not happen again, and `pnpm check:diagram-tokens` enforces the one rule
+that matters.
+
+**A diagram never names a color.** It names a *role*, and the page resolves the color at paint
+time. Graphviz copies a `class` attribute verbatim into the SVG, so a role survives the render and
+CSS can do the rest — which is why dark mode needs no second render and no second palette.
+
+### Roles
+
+| Role | What it means |
+| --- | --- |
+| `queued` | in the queue, waiting its turn |
+| `pending` | running now — validating, testing |
+| `merged` | merged, passed, done |
+| `failed` | failed, dequeued, cascaded out |
+| `config` | configuration and inputs |
+| `mergify` | a component we run |
+| `datastore` | Postgres, Redis, storage |
+| `external` | GitHub, CI, third parties — not us |
+| `batch` | a grouping container |
+| `muted` | skipped, dashed, de-emphasized |
+| `chrome` | edges, arrowheads, captions |
+
+`plain` is not a role: it marks an element as a caption rather than a box, and combines with one
+(`class="merged plain"`). The plugin infers it for a shape Graphviz drew with no border, so
+`shape=plaintext` needs nothing.
+
+`queued` and `mergify` deliberately share the Merge Queue teal. Same color, two names, because
+"waiting in the queue" and "a service we run" are the same idea on two different kinds of diagram,
+and a role name that lies is worse than a duplicated accent. Adding a role costs three lines: an
+accent in `theme.css` (both blocks), a `.dg .<role>` rule in `index.css`, and an entry in
+`DIAGRAM_ROLES` in `src/util/diagramSvg.ts`.
+
+### Diagram kinds
+
+A fence opts into a layout with its class — `` ```dot class="queue" `` — which sets direction and
+spacing, never color. A fence that names none lays itself out.
+
+| Kind | For |
+| --- | --- |
+| `queue` | left-to-right pipelines: queues, batches, CI fan-out |
+| `flow` | top-to-bottom state machines and decision trees |
+| `arch` | boxes and wires, orthogonal routing, wide labels |
+
+### How a role becomes a color
+
+Each role carries one accent. `index.css` mixes it against the page background to produce a
+surface, a border and a label, so a diagram tints toward whatever surface it sits on. Dark mode
+changes only how much (`--dg-tint`, `--dg-ink`, `--dg-edge-lift`) and the neutrals — never the
+product accents, per "Product palette does not flip" above. Borders do lift toward white on dark:
+that is a value *derived* from an accent, not a flipped accent, and a `--color-green-700` outline
+on the dark page surface is otherwise too dim to read.
+
+A container is mixed at a fraction of a node's tint (`--dg-tint-cluster`) so a node of the same
+role reads as sitting on top of it rather than dissolving into it.
+
+### The four surfaces
+
+All four emit the same `node` / `edge` / `cluster` groups and the same role classes, and all four
+are painted by the `.dg` block in `index.css`:
+
+- `` ```dot `` fences, rendered by `plugins/remark-graphviz.ts`
+- `<GitGraph>` graph mode, also Graphviz
+- `<GitGraph>` linear mode, hand-placed SVG
+- `<StackMapping>`, hand-placed SVG
+
+`src/util/diagramSvg.ts` holds what the two Graphviz surfaces share. Before this, each had its own
+`COLORS` map and its own dark-mode string-replace, which is how they drifted apart.
+
+### Writing one
+
+- Name a role, never a color. `PR1 [class="queued"];`, not `PR1 [fillcolor="#347D39"];`
+- Keep cluster labels short. Graphviz sizes a container to fit the label it measured in Helvetica,
+  and the page paints it in Inter at weight 600 — roughly 4% wider. Node labels have margin to
+  absorb the drift; cluster labels do not.
+- Do not set `fontsize`, `nodesep` or `ranksep` unless the diagram genuinely needs it. Every fence
+  gets a shared set of defaults, and a fence that overrides them stops matching its neighbours.
+- `none` and `transparent` are shape, not color, and the lint knows the difference.
+
 ## Typography
 
 Two font families:
@@ -334,7 +420,8 @@ These rules apply when writing or generating component, style, or page code.
   `var(--color-*)` primitives are only allowed inside `tokens.css` and `theme.css`.
 - **Inline SVG `fill`/`stroke`**: the only place raw hex is permitted outside `tokens.css`. Use
   `currentColor` wherever possible; fall back to a `var(--color-*)` primitive only when the SVG
-  must carry its own color independent of the theme.
+  must carry its own color independent of the theme. **Diagrams are not covered by this
+  exemption** — they name a role and CSS resolves it; see "Diagrams" above.
 - **Typography**: use the utility classes (`heading-section`, `text-subtitle`, etc.) on custom
   pages. Do not compose ad-hoc `font-size` / `font-weight` / `letter-spacing` combos from scratch.
 - **Dark mode**: never add a `:root.theme-dark` block inside a component-scoped `<style>`. Use
@@ -350,6 +437,10 @@ These rules apply when writing or generating component, style, or page code.
 - **Per-component `:root.theme-dark` rules** — all dark remaps live in `theme.css`.
 - **Ad-hoc heading CSS** — no `h2 { font-size: 1.5rem; font-weight: 500; }` rules scattered
   across component files. Use the typography utilities.
+- **A color in a diagram** — no `fillcolor`, `color`, `fontcolor` or `bgcolor` in a Graphviz
+  fence, and no hex in a diagram component. Name a role. `pnpm check:diagram-tokens` fails CI on
+  this, because a hardcoded diagram color renders fine in light mode and wrong in dark, which is
+  how 63 of them accumulated without anyone noticing.
 
 ### Self-correction list
 
@@ -363,6 +454,8 @@ If you generate any of the following, **fix it immediately**:
 - `:root.theme-dark { … }` inside a `<style>` block in a component → move the logic to a semantic
   token in `theme.css`.
 - `font-size: 1.5rem; font-weight: 500;` heading ad-hoc combo → use `heading-section` class.
+- A color attribute inside a `` ```dot `` fence → replace it with the role that says what the
+  element *is* (see the role table under "Diagrams").
 
 No exceptions unless the user explicitly overrides.
 

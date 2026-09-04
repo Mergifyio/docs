@@ -104,11 +104,11 @@
   --theme-border-color: var(--theme-border);
   --theme-shade-subtle: var(--color-gray-200);
 
-  /* Diagrams — role accents. A diagram names a role, never a colour; this is
-     the whole palette, one line per role. The paint rules that consume them
-     are the `.dg` block in index.css. */
+  /* Diagrams — role accents. A diagram names a role, never a color; this is
+     the whole palette, one line per role. The paint rules that consume them are
+     the `.dg` block in index.css. See DESIGN.md "Diagrams". */
   --dg-a-chrome: var(--color-gray-700); /* edges, arrowheads, captions */
-  --dg-a-muted: var(--color-gray-400); /* skipped, dashed, de-emphasised */
+  --dg-a-muted: var(--color-gray-400); /* skipped, dashed, de-emphasized */
   --dg-a-batch: var(--color-gray-500); /* a grouping container */
   --dg-a-external: var(--color-gray-500); /* GitHub, CI — not us */
   --dg-a-queued: var(--color-teal-700); /* in the queue, waiting its turn */
@@ -160,7 +160,7 @@
 
   /* Navbar — content surface (white in light) so it reads as a distinct
      elevated zone over the body bg. Dark mode aliases --theme-bg-content
-     to --theme-bg, so this is unchanged from the previous behaviour there. */
+     to --theme-bg, so this is unchanged from the previous behavior there. */
   --theme-navbar-bg: var(--theme-bg-content);
 
   /* Glow */
