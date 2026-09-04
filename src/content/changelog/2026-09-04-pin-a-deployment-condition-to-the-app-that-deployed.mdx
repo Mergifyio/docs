@@ -1,0 +1,13 @@
+---
+title: "Pin a deployment condition to the app that deployed"
+date: 2026-09-04
+tags:
+  - Rules
+description: "`deployment-success` and `deployment-failure` now accept the qualified `@<github-app-slug>/<environment>` form, so a rule can require an environment be deployed by one specific app."
+---
+
+Anyone with the `deployments: write` permission on a repository can post a deployment status for any environment name, and two apps can deploy the same environment. Until now `deployment-success = staging` matched whichever one reported most recently, whoever that was.
+
+Both `deployment-success` and `deployment-failure` now take the same `@<github-app-slug>/<environment>` form the `check-*` attributes already accept, so you can pin a condition to the deployer: `deployment-success = @netlify/staging` matches the staging deployment Netlify published and nothing else. The bare form keeps matching a deployment from any source, so existing configurations do not change.
+
+Mergify's own merge protections gate uses the qualified form too when the reporting method is `deployments`, so it can no longer be satisfied by a deployment status someone else posted.
