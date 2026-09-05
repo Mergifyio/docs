@@ -246,8 +246,8 @@ importers:
         specifier: 3.0.3
         version: 3.0.3
       linkinator:
-        specifier: 8.0.4
-        version: 8.0.4
+        specifier: 8.1.0
+        version: 8.1.0
       mdast-util-from-markdown:
         specifier: 2.0.3
         version: 2.0.3(supports-color@9.4.0)
@@ -3304,8 +3304,8 @@ packages:
     resolution: {integrity: sha512-wM1+Z03eypVAVUCE7QdSqpVIvelbOakn1M0bPDoA4SGWPx3sNDVUiMo3L6To6WWGClB7VyXnhQ4Sn7gxiJbE6A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  linkinator@8.0.4:
-    resolution: {integrity: sha512-ZXRkx7zdg2slGNZFm3WTmwIepq+kMbcx++iZ4kZM/tec6PT4qopLvxgLK7uIHJLDoD79swrWK2aynj5tJZZ6xA==}
+  linkinator@8.1.0:
+    resolution: {integrity: sha512-3AeucoHrnlsbxPinqP1w0bsVvit2ESRSFEhFoHAsJf8CNjvmNGny/f/AgtYQXVmz+x9qn+a74DlPX06yYbSRXg==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -4325,6 +4325,10 @@ packages:
     resolution: {integrity: sha512-42tBVwLWnaQvW5zc4HbZrTuWccECCZfBi92FDuwtqxasH+JbPB3/FOKb1m222K42R4WxuxzzMsTswfzgtSu64Q==}
     engines: {node: '>=11.0.0'}
 
+  saxes@6.0.0:
+    resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
+    engines: {node: '>=v12.22.7'}
+
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
@@ -5141,6 +5145,9 @@ packages:
   xml-naming@0.3.0:
     resolution: {integrity: sha512-ghig2TBE/H11aOVgmahA3MhimvkBr6JIYknH/Dhdk10nXwdbIqBJsbfMxpvFPG8bAw77gN29aQWvKpmVoPlvPQ==}
     engines: {node: '>=16.0.0'}
+
+  xmlchars@2.2.0:
+    resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
 
   xxhash-wasm@1.1.0:
     resolution: {integrity: sha512-147y/6YNh+tlp6nd/2pWq38i9h6mz/EuQ6njIrmW8D1BS5nCqs0P6DG+m6zTGnNz5I+uhZ0SHxBs9BsPrwcKDA==}
@@ -8667,7 +8674,7 @@ snapshots:
 
   lines-and-columns@2.0.4: {}
 
-  linkinator@8.0.4:
+  linkinator@8.1.0:
     dependencies:
       chalk: 6.0.0
       escape-html: 1.0.3
@@ -8677,6 +8684,7 @@ snapshots:
       marked-gfm-heading-id: 4.1.4(marked@18.0.11)
       meow: 14.1.0
       mime: 4.1.0
+      saxes: 6.0.0
       srcset: 5.0.3
       undici: 8.10.0
 
@@ -10428,6 +10436,10 @@ snapshots:
 
   sax@1.6.1: {}
 
+  saxes@6.0.0:
+    dependencies:
+      xmlchars: 2.2.0
+
   scheduler@0.27.0: {}
 
   semver@6.3.1: {}
@@ -11349,6 +11361,8 @@ snapshots:
       powershell-utils: 0.1.0
 
   xml-naming@0.3.0: {}
+
+  xmlchars@2.2.0: {}
 
   xxhash-wasm@1.1.0: {}
 
