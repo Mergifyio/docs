@@ -4,6 +4,7 @@
     "includes": [
       "**/*",
       "!.astro/*",
+      "!.wrangler/**",
       "!src/@types/*",
       "!public/api-schemas.json",
       "!public/cli-schema.json",
