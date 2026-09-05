@@ -240,6 +240,18 @@
 		text-overflow: ellipsis;
 	}
 
+	/* Shown only on rows whose title did not match, so the row can say why it
+	   is in the list. One line, clipped — the preview pane carries the detail. */
+	.result-excerpt {
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--theme-text-muted);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin: 0;
+	}
+
 	/* ----- Highlight ----- */
 	mark {
 		color: var(--theme-link);
