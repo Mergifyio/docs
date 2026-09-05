@@ -23,6 +23,34 @@ function formatSlugToTitle(slug: string): string {
     .join(' ');
 }
 
+/**
+ * How squarely a title answers the query. Higher wins; 0 means the title did
+ * not match at all and only the body did.
+ *
+ *   3  every term is a whole word in the title   "bazel" → "Scopes with Bazel"
+ *   2  every term starts a word                  "config" → "Configuration"
+ *   1  every term appears somewhere              "direct" → "Directly"
+ *   0  no title match
+ *
+ * The tiers exist to separate the first case from the last: matching inside a
+ * longer word is what put "Using TestNG Directly" above the Direct Merge page.
+ */
+function titleMatchRank(title: string, query: string): number {
+  const terms = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length >= 2);
+  if (terms.length === 0) return 0;
+
+  const haystack = title.toLowerCase();
+  const words = haystack.split(/[^a-z0-9]+/).filter(Boolean);
+
+  if (terms.every((term) => words.includes(term))) return 3;
+  if (terms.every((term) => words.some((w) => w.startsWith(term)))) return 2;
+  if (terms.every((term) => haystack.includes(term))) return 1;
+  return 0;
+}
+
 function buildBreadcrumb(url: string, headingPath?: string): string {
   const path = url.split('#')[0].replace(/^\/|\/$/g, '');
   const urlParts = path ? path.split('/').filter(Boolean).map(formatSlugToTitle) : [];
@@ -158,22 +186,49 @@ function usePagefindSearch(query: string, open: boolean) {
       const loaded = await Promise.all(response.results.slice(0, 30).map((r) => r.data()));
       if (cancelled) return;
 
-      const seen = new Set<string>();
-      const entries: SearchEntry[] = [];
+      // One row per page, in Pagefind's order. The index holds a record per
+      // page and a record per heading, so a page can occupy several results.
+      const groups = new Map<string, typeof loaded>();
       for (const page of loaded) {
         const pageUrl = page.url.split('#')[0];
-        if (seen.has(pageUrl)) continue;
-        seen.add(pageUrl);
+        const group = groups.get(pageUrl);
+        if (group) group.push(page);
+        else groups.set(pageUrl, [page]);
+      }
+
+      const entries: SearchEntry[] = [];
+      for (const [pageUrl, records] of groups) {
+        // Which record represents the page. Taking the best-ranked one meant a
+        // heading always spoke for its page, because a section record is short
+        // and dense where the page record is long and diluted — so "bazel"
+        // answered with "Detecting Scopes with bazel-diff" and dropped the
+        // reader past the setup step the page opens with.
+        //
+        // When the query names the page, the page answers. When it names
+        // something inside the page ("barrier files" on the Scopes page), the
+        // page's own title does not match and the heading still wins, which is
+        // the behaviour worth keeping.
+        const pageRecord = records.find((r) => !r.url.includes('#'));
+        const primary =
+          pageRecord && titleMatchRank(pageRecord.meta.title, query) > 0 ? pageRecord : records[0];
+
         entries.push({
-          id: page.id,
-          url: page.url,
-          title: page.meta.title,
-          excerpt: page.excerpt,
-          pageTitle: page.meta.pageTitle || page.meta.title,
+          id: primary.id,
+          url: primary.url,
+          title: primary.meta.title,
+          excerpt: primary.excerpt,
+          pageTitle: primary.meta.pageTitle || primary.meta.title,
           pageUrl,
-          breadcrumb: buildBreadcrumb(page.url, page.meta.headingPath),
+          breadcrumb: buildBreadcrumb(primary.url, primary.meta.headingPath),
         });
       }
+
+      // Lift whole-word title matches above incidental ones. Pagefind scores
+      // "Using TestNG Directly" over the Direct Merge page for "direct merge",
+      // because "Direct" sits inside "Directly" — a match no reader typing
+      // those two words meant. Array.sort is stable, so results that tie keep
+      // the relevance order Pagefind gave them.
+      entries.sort((a, b) => titleMatchRank(b.title, query) - titleMatchRank(a.title, query));
 
       setResults(entries);
       setLoading(false);
