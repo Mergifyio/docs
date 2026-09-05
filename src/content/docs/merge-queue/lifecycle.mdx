@@ -215,10 +215,13 @@ queue.
 You can set `checks_timeout` in three ways:
 
 - **`auto`** (the default): Mergify computes the timeout from the queue's own
-  recent CI runtime, using the 95th-percentile duration of successful runs plus
-  a safety margin. The value adapts as your CI gets faster or slower, so you don't
-  have to guess one. Until the queue has gathered enough CI history, `auto`
-  applies no timeout.
+  recent CI runtime, using the 95th-percentile duration of successful runs with
+  a safety margin. Only first attempts count: a run that was
+  [retried](#automatic-ci-retries) after a failure, or that tested a
+  [batch split](/merge-queue/batches#handling-batch-failure-or-timeout), measures
+  recovery work rather than a normal run, so Mergify leaves it out. The value
+  adapts as your CI gets faster or slower, so you don't have to guess one. Until
+  the queue has gathered enough CI history, `auto` applies no timeout.
 
 - **A fixed [duration](/configuration/data-types#duration)**, such as `30 min`
   or `2 hours`. The timeout cannot be shorter than 60 seconds.
@@ -238,7 +241,9 @@ queue_rules:
   already set an explicit duration, or `null`, keep their configured behavior.
 
   Because `auto` applies no timeout until a queue has built up CI history, set an
-  explicit duration if you want a guaranteed timeout on a brand-new queue.
+  explicit duration if you want a guaranteed timeout on a brand-new queue. The
+  same holds for a queue whose recent runs were mostly retries or batch splits,
+  since those don't count toward that history.
 :::
 
 When a pull request is dequeued because its checks timed out, Mergify states how
