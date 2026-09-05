@@ -1,0 +1,116 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+/**
+ * Schema.org JSON-LD describing who Mergify is and what the current page is.
+ *
+ * Search engines and agents both use this for entity resolution — "who publishes
+ * these docs, how do I contact them, what product is this about" — which is
+ * otherwise only inferable from prose. Emitted as a single `@graph` so the
+ * Organization node is declared once and referenced by the others.
+ */
+
+export interface Props {
+  content: CollectionEntry<'docs'>['data'];
+  canonicalURL: URL;
+}
+
+const { content, canonicalURL } = Astro.props;
+const site = Astro.site?.origin ?? 'https://docs.mergify.com';
+const isHomepage = canonicalURL.pathname === '/';
+
+const organization = {
+  '@type': 'Organization',
+  '@id': 'https://mergify.com/#organization',
+  name: 'Mergify',
+  url: 'https://mergify.com/',
+  description:
+    'Mergify is a merge queue and CI optimization platform for engineering teams on GitHub.',
+  email: 'support@mergify.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '15 rue Pierre Lauzeral',
+    postalCode: '31400',
+    addressLocality: 'Toulouse',
+    addressCountry: 'FR',
+  },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: 'support@mergify.com',
+      url: `${site}/support/`,
+    },
+    {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: 'sales@mergify.com',
+      url: 'https://mergify.com/pricing',
+    },
+  ],
+  // Identity profiles, for entity reconciliation. Deliberately not derived from
+  // `Footer/footer.ts`: that list is what we want people to click, and includes
+  // the Slack invite, which is a join link rather than a page that identifies
+  // Mergify. GitHub is spelled in the org's canonical casing here — both
+  // resolve, but `sameAs` is a claim about identity.
+  sameAs: [
+    'https://github.com/Mergifyio',
+    'https://twitter.com/mergifyio',
+    'https://www.linkedin.com/company/mergify/',
+    'https://www.youtube.com/@mergifyio',
+  ],
+};
+
+const softwareApplication = {
+  '@type': 'SoftwareApplication',
+  '@id': 'https://mergify.com/#software',
+  name: 'Mergify',
+  applicationCategory: 'DeveloperApplication',
+  applicationSubCategory: 'Continuous Integration',
+  operatingSystem: 'Web-based (SaaS)',
+  url: 'https://mergify.com/',
+  description:
+    'Merge queue, CI Insights, Test Insights, Merge Protections and stacked pull requests for teams developing on GitHub.',
+  publisher: { '@id': organization['@id'] },
+  offers: {
+    '@type': 'Offer',
+    url: 'https://mergify.com/pricing',
+    category: 'SaaS subscription',
+  },
+};
+
+const page = isHomepage
+  ? {
+      '@type': 'WebSite',
+      '@id': `${site}/#website`,
+      name: 'Mergify Documentation',
+      url: `${site}/`,
+      description: content.description,
+      inLanguage: 'en',
+      publisher: { '@id': organization['@id'] },
+      about: { '@id': softwareApplication['@id'] },
+    }
+  : {
+      '@type': 'TechArticle',
+      '@id': `${canonicalURL.href}#article`,
+      headline: content.title,
+      description: content.description,
+      url: canonicalURL.href,
+      inLanguage: 'en',
+      isPartOf: { '@id': `${site}/#website` },
+      publisher: { '@id': organization['@id'] },
+      about: { '@id': softwareApplication['@id'] },
+    };
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [organization, softwareApplication, page],
+};
+
+// `JSON.stringify` does not escape `<`, so a page whose title or description
+// contained `</script>` would close this tag early and put the rest of the
+// frontmatter into the document as markup.
+const json = JSON.stringify(graph).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" is:inline set:html={json} />
