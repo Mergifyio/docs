@@ -181,9 +181,16 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
           // the rendered SVG. mdast has no in-place conversion, so the node
           // itself is retyped — asserting the string into `Code['type']` would
           // claim `'html'` is `'code'` and leave the node lying about itself.
+          //
+          // The SVG ships inside `.dg-wrap`, the diagram counterpart to the
+          // `.table-wrap` tables already use. A diagram is authored around
+          // 600pt wide with 13px labels; letting it shrink to a phone's column
+          // scales that text to about 6px, so below the breakpoint in
+          // `index.css` the wrapper scrolls and the diagram keeps its intrinsic
+          // size instead. Above it, the wrapper is inert.
           const htmlNode = node as unknown as mdast.Html;
           htmlNode.type = `html`;
-          htmlNode.value = $.html(`svg`);
+          htmlNode.value = `<div class="dg-wrap">${$.html(`svg`)}</div>`;
         } catch (error) {
           // The fence survives as a code block rather than taking the build
           // down, so name it loudly: a diagram silently becoming a wall of DOT
