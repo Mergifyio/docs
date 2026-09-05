@@ -51,8 +51,10 @@ const isMuted = (name: string) => MAINTENANCE_GROUPS.has(name);
       <div class="cli-auth-summary">
         <p>
           The Mergify CLI brings the merge queue, stacked pull requests, and CI
-          Insights to your terminal and your pipelines. It reuses your existing
-          <code>gh</code> login, so most commands work the moment it's installed.
+          Insights to your terminal and your pipelines. Run
+          <code>mergify auth login</code> once and most commands work; Stacks
+          additionally needs a GitHub token, from <code>GITHUB_TOKEN</code> or
+          from a <code>gh</code> login if you have one.
         </p>
         <p>
           New to the CLI? <a href="/cli/usage">Install it and set up authentication</a>.

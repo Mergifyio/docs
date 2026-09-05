@@ -49,7 +49,7 @@ of them is useful:
    `brew install mergifyio/tap/mergify-cli`. For Linux, Windows, and CI
    runners, see the [CLI installation guide](/cli/usage).
 
-2. A token is available to it. See [Authentication](#authentication) below.
+2. It is authenticated. See [Authentication](#authentication) below.
 
 These skills only work in a terminal agent that can run the binary, such as
 Claude Code, Codex, or Cursor. A browser-only chat cannot run it, so the skills
@@ -88,28 +88,49 @@ Check the result with `npx skills list`.
 
 ## Authentication
 
-The CLI resolves a token in this order: the `--token` option on the command,
-then `MERGIFY_TOKEN`, then `GITHUB_TOKEN`. Stacks commands fall back once more
-to `gh auth token`. Set an environment variable rather than passing `--token`,
-so the agent does not have to put a secret on a command line:
+Most of what the skills do goes through the Mergify API. Sign in once and every
+skill inherits the credential:
+
+```bash
+mergify auth login
+```
+
+That stores a [Mergify user token](/api/usage#using-a-mergify-user-token)
+outside the agent's reach, so no secret has to go on a command line or into the
+project. Where the operating system has no credential store, which is the usual
+case in a container, the CLI writes a restricted file in your configuration
+directory instead. See [Authentication](/cli/usage#authentication) for both
+paths.
+
+Stacks is the exception. It creates and updates pull requests through the GitHub
+API, so it needs a GitHub token of its own. Install the
+[GitHub CLI](https://cli.github.com/), run `gh auth login`, and Stacks commands
+pick up its token on their own.
+
+:::caution
+  Letting the CLI authenticate to the Mergify API with a GitHub token is
+  deprecated. `GITHUB_TOKEN` and the `gh auth token` fallback still work, and
+  the CLI warns when it uses one, but run `mergify auth login` instead. Stacks
+  is unaffected: it needs a GitHub token either way.
+:::
+
+**A Mergify application key** is the alternative when the agent runs unattended
+and cannot complete an interactive sign-in. Create one from your
+[dashboard](https://dashboard.mergify.com) and export it, so the agent does not
+have to put a secret on a command line:
 
 ```bash
 export MERGIFY_TOKEN=your_token_here
 ```
 
-Which token to use depends on what you want the agent to do.
+An `admin` key covers queue status, the Activity Log, and freezes; CI Insights
+uploads and Merge Queue Scopes need a `ci` key instead. No single key covers
+both, so pick the one that matches what you want the agent to do.
 
-**A GitHub token** covers everything except CI result uploads and setting
-[Merge Queue Scopes](/merge-queue/scopes), which need a `ci` application key.
-Stacks needs one specifically, because it creates and updates pull requests
-through the GitHub API, and the Mergify API accepts a GitHub personal access
-token too. If you already have the [GitHub CLI](https://cli.github.com/)
-installed and authenticated, Stacks commands pick up its token on their own and
-you can skip this.
-
-**A Mergify application key** covers the commands that call the Mergify API:
-queue status, Activity Log, freezes, and CI Insights uploads. Create one from
-your [dashboard](https://dashboard.mergify.com). It will not work for Stacks.
+An application key does not work for Stacks. An unattended agent that pushes
+stacks needs a GitHub token in `GITHUB_TOKEN`, which is not deprecated: the
+deprecation above is only about using a GitHub token to reach the Mergify
+API.
 
 Application keys come with either the `admin` scope or the `ci` scope, and
 neither is read-only. `admin` covers the API except result uploads and Merge
