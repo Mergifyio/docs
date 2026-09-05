@@ -19,10 +19,15 @@ const productIconName = parseProductIcon(navItem.icon);
 ---
 
 <li class="nav-link">
-	<a href={navItem.path} aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`} title={navItem.title}>
+	<a
+		href={navItem.path}
+		aria-current={`${isHomepageMatch || isPageMatch ? 'page' : 'false'}`}
+		title={navItem.badge ? `${navItem.title} (${navItem.badge})` : navItem.title}
+	>
 		{showIcon && productIconName && <ProductIcon name={productIconName} class="left-icon" />}
 		{showIcon && !productIconName && navItem.icon && <Icon name={navItem.icon} class="left-icon" />}
 		<span class="nav-link-text" set:html={navItem.title} />
+		{navItem.badge && <span class="nav-link-badge">{navItem.badge}</span>}
 	</a>
 </li>
 <style>
@@ -75,5 +80,39 @@ const productIconName = parseProductIcon(navItem.icon);
 	.nav-link-text {
 		overflow: hidden;
 		text-overflow: ellipsis;
+		min-width: 0;
+	}
+
+	/* The pill sits after the label and wraps under it when the row is too
+	   narrow to hold both.
+	   The deepest nav rows leave 152px beside the icon. "Post Check" (76px) and
+	   the pill (62px) share that comfortably; "Delete Head Branch" (133px) never
+	   could, and truncating the label to make room reads as a different page.
+	   Wrapping decides per row instead of per label, so it keeps holding if a
+	   label is renamed or the sidebar is resized — and the label is never
+	   shortened to protect the pill. */
+	.nav-link a:has(.nav-link-badge) {
+		flex-wrap: wrap;
+		row-gap: 3px;
+	}
+
+	.nav-link-badge {
+		flex: none;
+		font-size: 9px;
+		font-weight: 500;
+		line-height: 1.4;
+		letter-spacing: 0.02em;
+		padding: 0 4px;
+		border-radius: 4px;
+		/* Secondary, not muted: at 10px on the offset background, muted lands at
+		   4.39:1 — just under the 4.5:1 AA floor for text this size. */
+		color: var(--theme-text-secondary);
+		background-color: var(--theme-bg-offset);
+		border: 1px solid var(--theme-divider);
+		white-space: nowrap;
+	}
+
+	.nav-link a[aria-current='page'] .nav-link-badge {
+		color: var(--theme-text);
 	}
 </style>
