@@ -6,6 +6,16 @@ export type NavItem = {
   children?: NavItem[];
   id?: string;
   icon?: string;
+  /**
+   * Short status word rendered as a pill after the label, e.g. `Deprecated`.
+   *
+   * Status belongs here rather than inside `title`: the sidebar row is narrow,
+   * so a title carrying its own "(Deprecated)" suffix was the part that ellipsed
+   * away — leaving "GitHub Actions (Deprec…" next to the live GitHub Actions
+   * page. As its own element the pill is never the thing that gets cut: it sits
+   * after the label where there is room and wraps beneath it where there is not.
+   */
+  badge?: string;
 };
 
 const navItems: NavItem[] = [
@@ -69,7 +79,7 @@ const navItems: NavItem[] = [
       { title: 'Two-Step CI', path: '/merge-queue/two-step', icon: 'lucide:arrow-right-left' },
       { title: 'Deployment', path: '/merge-queue/deploy', icon: 'lucide:rocket' },
       {
-        title: 'GitHub Rulesets Compatibility',
+        title: 'GitHub Rulesets',
         path: '/merge-queue/github-rulesets',
         icon: 'simple-icons:github',
       },
@@ -252,7 +262,8 @@ const navItems: NavItem[] = [
           { title: 'Copy', path: '/workflow/actions/copy', icon: 'lucide:share-2' },
           { title: 'Comment', path: '/workflow/actions/comment', icon: 'lucide:message-square' },
           {
-            title: 'Delete Head Branch (Deprecated)',
+            title: 'Delete Head Branch',
+            badge: 'Deprecated',
             path: '/workflow/actions/delete_head_branch',
             icon: 'lucide:scissors',
           },
@@ -267,14 +278,16 @@ const navItems: NavItem[] = [
             icon: 'octicon:git-pull-request-draft-16',
           },
           {
-            title: 'GitHub Actions (Deprecated)',
+            title: 'GitHub Actions',
+            badge: 'Deprecated',
             path: '/workflow/actions/github_actions',
             icon: 'simple-icons:githubactions',
           },
           { title: 'Label', path: '/workflow/actions/label', icon: 'lucide:badge-check' },
           { title: 'Merge', path: '/workflow/actions/merge', icon: 'octicon:git-merge-16' },
           {
-            title: 'Post Check (Deprecated)',
+            title: 'Post Check',
+            badge: 'Deprecated',
             path: '/workflow/actions/post_check',
             icon: 'lucide:circle-check',
           },
