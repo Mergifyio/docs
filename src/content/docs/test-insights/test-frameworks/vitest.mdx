@@ -107,17 +107,11 @@ flaky tests, and review test trends.
 | `MERGIFY_TOKEN` | API authentication token | **Required** |
 | `MERGIFY_API_URL` | API endpoint location | `https://api.mergify.com` |
 | `VITEST_MERGIFY_ENABLE` | Force-enable outside CI | `false` |
-| `VITEST_MERGIFY_DEBUG` | Print spans to console | `false` |
+| `MERGIFY_CI_DEBUG` | Print spans to console instead of uploading | `false` |
 | `MERGIFY_TRACEPARENT` | W3C distributed trace context | Optional |
-| `MERGIFY_TEST_JOB_NAME` | Test job name identifier | Optional |
 
 :::tip
   The reporter auto-activates in CI environments (detected via the `CI`
   environment variable). To enable it outside CI, set
   `VITEST_MERGIFY_ENABLE=true`.
-:::
-
-:::tip
-  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights,
-  especially when running multiple test suites or using a matrix strategy.
 :::
