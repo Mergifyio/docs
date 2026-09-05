@@ -24,6 +24,22 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/**
+ * Does the title itself contain a query term?
+ *
+ * Rows whose title matched need no further explanation — the highlight is the
+ * explanation. Rows that matched somewhere in the body used to render with no
+ * highlight anywhere and no snippet, so half a result list could look unrelated
+ * to what was typed. Those rows get Pagefind's excerpt; the rest stay compact.
+ */
+function titleMatchesQuery(title: string, query: string): boolean {
+  const haystack = title.toLowerCase();
+  return query
+    .split(/\s+/)
+    .filter((t) => t.length >= 2)
+    .some((t) => haystack.includes(t.toLowerCase()));
+}
+
 /** Map URL prefix to a known section key. Returns empty string for paths
  * that don't match any product section; CSS then uses the default accent. */
 const SECTION_KEYS = [
@@ -51,6 +67,7 @@ interface PageResultProps {
 
 function PageResult({ entry, query, onHover, onNavigate, active }: PageResultProps) {
   const section = getSectionFromUrl(entry.url);
+  const showExcerpt = Boolean(entry.excerpt) && !titleMatchesQuery(entry.title, query);
   return (
     <a
       className={`page-result${active ? ' active' : ''}`}
@@ -66,6 +83,11 @@ function PageResult({ entry, query, onHover, onNavigate, active }: PageResultPro
           dangerouslySetInnerHTML={{ __html: highlightTerms(entry.title, query) }}
         />
         {entry.breadcrumb && <p className="result-description">{entry.breadcrumb}</p>}
+        {showExcerpt && (
+          // Pagefind returns the excerpt with its own <mark> tags around the
+          // matched terms, so it is rendered rather than re-highlighted.
+          <p className="result-excerpt" dangerouslySetInnerHTML={{ __html: entry.excerpt }} />
+        )}
       </div>
       {active && <Icon icon="lucide:corner-down-left" />}
     </a>
