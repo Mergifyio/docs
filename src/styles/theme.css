@@ -4,7 +4,13 @@
 :root {
   --theme-navbar-height: 5rem;
   --theme-mobile-toc-height: 4rem;
-  --theme-left-sidebar-width: 17rem;
+  /* 18rem, not 17rem: the deepest nav rows (Workflow Automation → Actions →
+     an action page) are indented twice, and at 17rem they left 152px beside the
+     icon — enough for a label, not for a label plus a status pill, so
+     "GitHub Actions" pushed its "Deprecated" pill onto a second line. The extra
+     12px lets every badged label but "Delete Head Branch" keep its pill inline.
+     Costs the content column 12px; the right rail is unchanged at 18rem. */
+  --theme-left-sidebar-width: 18rem;
   --theme-right-sidebar-width: 18rem;
   /*
 		Minimum visual horizontal spacing from the edges of the viewport,
