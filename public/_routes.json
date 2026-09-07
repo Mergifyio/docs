@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/_astro/*",
+    "/pagefind/*",
+    "/open-graph/*",
+    "/favicon.ico",
+    "/favicon.svg",
+    "/robots.txt",
+    "/sitemap-index.xml",
+    "/sitemap-0.xml",
+    "/llms.txt",
+    "/openapi.json",
+    "/api-schemas.json",
+    "/cli-schema.json",
+    "/mergify-configuration-schema.json",
+    "/make-scrollable-code-focusable.js",
+    "/sw.js",
+    "/mergify-count-contributors.py",
+    "/mergify-github-app-logo.png"
+  ]
+}
