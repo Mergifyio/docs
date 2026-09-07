@@ -18,6 +18,12 @@ const isHiddenPath = (path: string): boolean => {
  *   - properties (inline code terms) → weight 5
  *   - body text → weight 1 (default)
  *   - changelog body → weight 0.5 (demoted)
+ *   - changelog title → weight 2 (demoted)
+ *
+ * The changelog title is demoted alongside its body. Demoting only the body
+ * left every entry's headline at full title weight, which is how a changelog
+ * post outranked the documentation page it was announcing: searching "queue
+ * modes" put two changelog entries above every page but one.
  *
  * The `data-pagefind-meta` attributes let us pass custom metadata (pageTitle)
  * that the search client can read from `result.meta`.
@@ -32,6 +38,7 @@ function buildRecordHtml(opts: {
 }): string {
   const { title, body, properties, pageTitle, headingPath, isChangelog } = opts;
   const bodyWeight = isChangelog ? '0.5' : '1';
+  const titleWeight = isChangelog ? '2' : '7';
 
   const propsHtml =
     properties.length > 0
@@ -44,12 +51,17 @@ function buildRecordHtml(opts: {
     metaParts.push(`headingPath:${escapeAttr(headingPath.join(' > '))}`);
   const metaAttr = metaParts.length > 0 ? ` data-pagefind-meta="${metaParts.join(', ')}"` : '';
 
+  // Properties sit after the body, not before it. Pagefind builds a result's
+  // excerpt from a window around the match, so a bare list of config keywords
+  // wedged between the title and the prose became the excerpt for a great many
+  // results. Behind the body it still matches exactly as before, and only wins
+  // the excerpt when the match really is in a keyword and nowhere else.
   return [
     '<html lang="en">',
     `<body${metaAttr}>`,
-    `<h1 data-pagefind-weight="7">${escapeHtml(title)}</h1>`,
-    propsHtml,
+    `<h1 data-pagefind-weight="${titleWeight}">${escapeHtml(title)}</h1>`,
     `<div data-pagefind-weight="${bodyWeight}">${escapeHtml(body)}</div>`,
+    propsHtml,
     '</body></html>',
   ].join('');
 }
@@ -106,26 +118,48 @@ export function PagefindIndex(): AstroIntegration {
             $('meta[property="og:description"]').attr('content') ||
             '';
 
-          // Page-level record (intro content before first heading)
           const intro = extractIntro(main, $);
-          const introBody = [intro.text, pageDescription].filter(Boolean).join(' ');
-          if (introBody) {
-            const properties = extractProperties(intro.html, $);
-            const recordHtml = buildRecordHtml({
-              title: pageTitle,
-              body: introBody,
-              properties,
-              isChangelog,
-            });
-            await index.addHTMLFile({
-              url: `/${baseUrl}/`,
-              content: recordHtml,
-            });
-            recordCount++;
-          }
+          const sections = extractSections(main, $);
+
+          // Page-level record.
+          //
+          // Its body is the whole page, not just the intro. Built from the
+          // intro alone it was always the thinnest record for its own page, so
+          // any section record outscored it — and the client, which keeps one
+          // result per URL, then dropped it. That is why searching a build
+          // tool never returned that tool's page: "bazel" resolved to
+          // "Detecting Scopes with bazel-diff" and landed the reader past the
+          // "Configuring Manual Scopes" step the page opens with.
+          //
+          // Giving it the full text lets relevance decide instead of record
+          // size. A page-wide query ("bazel") matches this record across its
+          // whole length and wins; a section-specific query ("barrier files")
+          // still goes to that section, because a short record dense in those
+          // terms outscores a long one where they are diluted.
+          const pageBody = [intro.text, pageDescription, ...sections.map((s) => s.text)]
+            .filter(Boolean)
+            .join(' ');
+          const pageProperties = [
+            ...new Set([
+              ...extractProperties(intro.html, $),
+              ...sections.flatMap((s) => extractProperties(s.html, $)),
+            ]),
+          ];
+          // No `if (pageBody)` guard: a page whose body came out empty used to
+          // be missing from the index entirely rather than merely ranking low.
+          const pageRecordHtml = buildRecordHtml({
+            title: pageTitle,
+            body: pageBody,
+            properties: pageProperties,
+            isChangelog,
+          });
+          await index.addHTMLFile({
+            url: `/${baseUrl}/`,
+            content: pageRecordHtml,
+          });
+          recordCount++;
 
           // Heading-level records
-          const sections = extractSections(main, $);
           for (const section of sections) {
             const properties = extractProperties(section.html, $);
             const recordHtml = buildRecordHtml({
@@ -207,6 +241,37 @@ function extractIntro(main: any, $: any): { text: string; html: string } {
   return { text: textParts.join(' '), html: htmlParts.join('\n') };
 }
 
+/**
+ * Decorations that live inside a heading element and are not part of its name.
+ *
+ * `CliCommand.astro` and `Endpoint.astro` put a literal "#" permalink (and, on
+ * CLI commands, a "deprecated" pill) inside the `<h2>` itself, so reading the
+ * heading's text verbatim indexed titles like `mergify ci scopes-send #` and
+ * `List a test's executions #` — which is exactly how they rendered in the
+ * results list. MDX headings put their anchor next to the heading rather than
+ * inside it, so they were never affected.
+ */
+const HEADING_DECORATIONS = [
+  '.cli-anchor',
+  '.endpoint-anchor',
+  '.cli-deprecated-badge',
+  '.header-link',
+  '.anchor-icon',
+  '.sr-only',
+].join(', ');
+
+/** The heading's own name, with permalinks and status pills removed. */
+function headingText($el: any): string {
+  const clone = $el.clone();
+  clone.find(HEADING_DECORATIONS).remove();
+  // Belt and braces for any future permalink this list does not know about.
+  return clone
+    .text()
+    .replace(/\s*#\s*$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function extractSections(main: any, $: any): Section[] {
   const sections: Section[] = [];
   const allHeadings = main.find('h2, h3, h4').toArray();
@@ -218,8 +283,8 @@ function extractSections(main: any, $: any): Section[] {
     const id = $el.attr('id');
     if (!id || id === 'on-this-page-heading') continue;
 
-    const headingText = $el.text().trim();
-    if (!headingText) continue;
+    const heading = headingText($el);
+    if (!heading) continue;
 
     const tag = el.tagName.toLowerCase();
     const level = Number.parseInt(tag.replace('h', ''), 10);
@@ -229,12 +294,15 @@ function extractSections(main: any, $: any): Section[] {
     while (headingStack.length > 0 && headingStack[headingStack.length - 1].level >= level) {
       headingStack.pop();
     }
-    headingStack.push({ text: headingText, level });
+    headingStack.push({ text: heading, level });
 
     const $wrapper = $el.parent();
     const $startElement = $wrapper.hasClass('heading-wrapper') ? $wrapper : $el;
 
-    const textParts: string[] = [headingText];
+    // The heading is not repeated into the body: the <h1> already carries it at
+    // title weight, and repeating it made every excerpt open by restating the
+    // result's own title back at the reader.
+    const textParts: string[] = [];
     const htmlParts: string[] = [$.html($startElement)];
     let $current = $startElement.next();
     while ($current.length) {
@@ -252,7 +320,7 @@ function extractSections(main: any, $: any): Section[] {
 
     sections.push({
       anchor: id,
-      heading: headingText,
+      heading,
       text: textParts.join(' '),
       html: htmlParts.join('\n'),
       headingPath: headingStack.map((h) => h.text),
