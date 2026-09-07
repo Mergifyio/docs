@@ -326,6 +326,37 @@ rejected at configuration validation time. Branch-protection-synthesised
 conditions and legacy GitHub commit statuses carry no GitHub App identity
 and remain reachable only via the bare form.
 
+## Qualifying Deployments by GitHub App
+
+`deployment-success` and `deployment-failure` take the same qualified form,
+with a deployment environment in place of the check name:
+
+`@<github-app-slug>/<environment>`
+
+Anyone with the `deployments: write` permission on the repository can post a
+deployment status for any environment name, and two apps can deploy the same
+environment. The bare form matches whichever one reported most recently, so pin
+the app when who deployed is part of what the rule is about:
+
+```yaml
+pull_request_rules:
+  - name: comment once staging is live
+    conditions:
+      # The staging deployment published by Netlify, not one posted by hand.
+      - deployment-success = @netlify/staging
+    actions:
+      comment:
+        message: Staging is live.
+```
+
+The bare form keeps matching a deployment from any source, so existing
+configurations do not need to change.
+
+A deployment status carries an app identity only when a GitHub App posted it
+with its own installation token. One created by a person is reachable only
+through the bare form, and so is one recorded before Mergify started keeping
+the identity.
+
 ## Matching Cancelled Checks
 
 The `check-cancelled` attribute matches checks that report a `cancelled`
