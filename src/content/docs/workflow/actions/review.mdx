@@ -10,6 +10,25 @@ This can be particularly useful in situations where you want to automatically
 approve pull requests that meet certain criteria, or to request changes on a
 pull request when a particular check fails.
 
+## How Reviews Are Posted
+
+Mergify applies these rules when it posts a review:
+
+- Mergify skips a review whose type and body already match one it posted on the
+  pull request. It posts the review again if it has posted the opposite type
+  since: an `APPROVE` after a `REQUEST_CHANGES`, or the reverse.
+
+- That comparison only covers reviews posted under the same account, so
+  changing `bot_account` makes Mergify post an otherwise identical review again
+  under the new one.
+
+- On a merged pull request, only `COMMENT` is posted. `APPROVE` and
+  `REQUEST_CHANGES` are ignored, and the action still reports a success — a
+  green check there is not proof that a review was posted.
+
+- A `REQUEST_CHANGES` or `COMMENT` review with no `message` is posted with a
+  default body. Set `message` to choose the wording yourself.
+
 ## Parameters
 
 <ActionOptionsTable def="ReviewActionModel" />
