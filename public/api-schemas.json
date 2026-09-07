@@ -1972,10 +1972,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Merge queue name(s) of the pull requests",
+              "description": "Name of the merge queue(s) for the pull requests",
               "title": "Queue Name"
             },
-            "description": "Merge queue name(s) of the pull requests"
+            "description": "Name of the merge queue(s) for the pull requests"
           },
           {
             "name": "priority_rule_name",
@@ -2157,10 +2157,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Merge queue name(s) of the pull requests",
+              "description": "Name of the merge queue(s) for the pull requests",
               "title": "Queue Name"
             },
-            "description": "Merge queue name(s) of the pull requests"
+            "description": "Name of the merge queue(s) for the pull requests"
           },
           {
             "name": "priority_rule_name",
