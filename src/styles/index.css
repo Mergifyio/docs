@@ -895,6 +895,36 @@ html {
   font-family: var(--font-body);
 }
 
+/* The wrapper `remark-graphviz.ts` puts around every rendered fence. On a wide
+   viewport it does nothing: the diagram already fits, and `.dg` keeps the 80%
+   width above. */
+.dg-wrap {
+  margin: 1.75em 0;
+}
+.dg-wrap > .dg {
+  margin-block: 0;
+}
+
+/* Below the prose column's own comfortable width, stop scaling and start
+   scrolling. A diagram authored at ~600pt carries 13px labels; squeezed into a
+   360px column those render near 6px, which is a picture of a diagram rather
+   than a diagram. Tables on the same page already solve this with `.table-wrap`,
+   so this is the gesture readers have here — not a new one. */
+@media (max-width: 700px) {
+  .dg-wrap {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .dg-wrap > .dg {
+    /* `width: auto` hands the SVG back its intrinsic `width="NNNpt"`, so the
+       labels return to the size they were drawn at. `min-width: 100%` keeps a
+       diagram narrower than the column from collapsing to the left. */
+    width: auto;
+    max-width: none;
+    min-width: 100%;
+  }
+}
+
 /* Only direct children are painted: the plugin strips their inline fill and
    stroke, and leaves anything deeper alone. `:where()` again, so `plain` below
    wins on specificity rather than on source order.

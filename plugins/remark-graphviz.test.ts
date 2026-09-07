@@ -31,7 +31,17 @@ function classesOf(svg: string, id: string): string[] {
 describe('remarkGraphvizPlugin', () => {
   it('renders a fence to an SVG carrying the dg class plus the fence classes', async () => {
     const svg = await render('digraph { A -> B; }', 'class="queue"');
-    expect(svg).toMatch(/^<svg[^>]*class="dg queue"/);
+    expect(svg).toMatch(/<svg[^>]*class="dg queue"/);
+  });
+
+  it('wraps the SVG so a narrow viewport can scroll it instead of shrinking it', async () => {
+    // Without the wrapper, `.dg`'s width rule scales a ~600pt diagram down to a
+    // phone's column and takes its 13px labels to about 6px with it. The
+    // media query in index.css hangs off this element, so its absence is not a
+    // cosmetic regression — it is the diagram becoming unreadable on mobile.
+    const svg = await render('digraph { A -> B; }');
+    expect(svg).toMatch(/^<div class="dg-wrap"><svg\b/);
+    expect(svg).toMatch(/<\/svg><\/div>$/);
   });
 
   it('leaves no colour in the output at all', async () => {
