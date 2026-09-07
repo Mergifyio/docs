@@ -43,10 +43,14 @@ known incompatibilities, and how to configure bypass actors, see
 
 ## Pull Request Dependencies
 
-You can specify dependencies between pull requests from the same repository,
-or from other repositories with Mergify installed within your organization.
-Mergify waits for the linked pull requests to be merged before merging any pull
-request with a `Depends-On:` header.
+You can specify dependencies between pull requests from the same repository, or
+from another repository that has Mergify installed and belongs to the same
+repository owner, whether that owner is a user or an organization. Mergify waits
+for the linked pull requests to be merged before merging any pull request with a
+`Depends-On:` header. A reference Mergify cannot resolve blocks the merge rather
+than waiting on it, and it stays blocked until you fix the reference. That
+includes a reference pointing at another owner's repository, at a repository
+without Mergify, or at a pull request that does not exist.
 
 To use this feature, add the `Depends-On:` header to the body of your pull
 request:
