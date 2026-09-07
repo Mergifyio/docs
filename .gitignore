@@ -6,6 +6,9 @@ node_modules
 .astro/
 dist
 
+# Local Cloudflare Pages runtime (`wrangler pages dev`) build artifacts
+.wrangler/
+
 # Statically generated images at build time, don't push them
 /static/og-images
 

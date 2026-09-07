@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { OPEN_GRAPH } from '../config';
+import { getMarkdownPath } from '../util/getMarkdownPath';
 import { getOgImageUrl } from '../util/getOgImageUrl';
 
 export interface Props {
@@ -9,6 +10,7 @@ export interface Props {
 }
 
 const { content, canonicalURL } = Astro.props;
+const markdownURL = new URL(getMarkdownPath(canonicalURL.pathname), canonicalURL);
 const ogImageUrl = getOgImageUrl(canonicalURL.pathname);
 const imageSrc = ogImageUrl;
 const canonicalImageSrc = imageSrc ? new URL(imageSrc, Astro.site) : undefined;
@@ -20,6 +22,9 @@ const siteDescription =
 
 <!-- Page Metadata -->
 <link rel="canonical" href={canonicalURL} />
+<!-- The Markdown source of this page. Also reachable by requesting this very URL
+     with `Accept: text/markdown` — see `functions/_middleware.ts`. -->
+<link rel="alternate" type="text/markdown" href={markdownURL} title="Markdown source" />
 
 <!-- OpenGraph Tags -->
 <meta property="og:title" content={content.title ?? 'Mergify Documentation'} />
