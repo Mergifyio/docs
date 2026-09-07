@@ -47,7 +47,7 @@ success_conditions:
 ```yaml
 name: Sensitive Code Review
 if:
-  - files ~= "^(secrets/|encryption/|auth/)"
+  - files ~= ^(secrets/|encryption/|auth/)
 success_conditions:
   - label = security-reviewed
 ```
