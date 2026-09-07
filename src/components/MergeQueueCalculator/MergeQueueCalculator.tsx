@@ -57,7 +57,12 @@ function MergeQueueCalculator() {
 
     let calculatedSpeculativeChecks = prPerHour / (60 / checkTimeWithFailure) / calculatedBatchSize;
     if (calculatedBatchSize === 1) calculatedSpeculativeChecks *= ciUsagePct / 100;
-    calculatedSpeculativeChecks = Math.ceil(calculatedSpeculativeChecks);
+    // The result is presented as a max_parallel_checks value to apply, and the
+    // configuration schema caps that at 128. A long CI time at a high merge rate
+    // pushes the raw figure well past it, so clamp rather than recommend a value
+    // Mergify would reject. batch_size shares the same ceiling but cannot reach
+    // it: ciUsagePct bottoms out at 1, so ceil(100 / ciUsagePct) tops out at 100.
+    calculatedSpeculativeChecks = Math.min(128, Math.ceil(calculatedSpeculativeChecks));
 
     const calculatedThroughput =
       (calculatedBatchSize * calculatedSpeculativeChecks) / (ciTime / 60);
