@@ -13,9 +13,17 @@ import { getActivePageGroupIds } from '../util/activePageGroupIds';
 
 export interface Props {
   content: CollectionEntry<'docs'>['data'];
+  /**
+   * Whether this page has anything to put in the right rail. When false the
+   * aside is not rendered and the column it reserves is given back, instead of
+   * an empty 18rem rail holding the main column short. Passed explicitly rather
+   * than read from `Astro.slots.has()`, which reports a slot as present even
+   * when the expression filling it evaluated to nothing.
+   */
+  hasRightSidebar?: boolean;
 }
 
-const { content } = Astro.props;
+const { content, hasRightSidebar = true } = Astro.props;
 const url = Astro.url;
 const currentPage = url.pathname;
 const activePageGroupIds = getActivePageGroupIds(currentPage);
@@ -140,6 +148,23 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 					display: flex;
 					flex-direction: column;
 				}
+
+				/* No secondary sidebar on this page: give the column back rather
+				   than leaving a reserved, empty rail.
+
+				   `margin-inline-start` has to come back to the sidebar width
+				   here. The left sidebar is `position: fixed`, so nothing in
+				   flow clears it — above 50em the column's own margin does the
+				   job, but at this breakpoint that margin drops to a 3rem
+				   gutter because #right-sidebar, a flex item that precedes
+				   #main-content in the DOM, reserves the width instead and is
+				   then shifted right by `left: 100%`. Remove that rail and the
+				   column has to reserve the width itself, exactly as
+				   .main-column-footer already does for living outside .layout. */
+				.layout.no-right-sidebar .main-column {
+					margin-inline-start: var(--theme-left-sidebar-width);
+					margin-inline-end: 0;
+				}
 			}
 		</style>
 	</head>
@@ -154,15 +179,17 @@ const canonicalURL = new URL(Astro.url.pathname.replace(/([^/])$/, '$1/'), Astro
 	}}>
 		<Header currentPage={currentPage} transition:animate="none" />
 		<div id="mobile-sidebar-backdrop" aria-hidden="true"></div>
-		<main class="layout">
+		<main class:list={['layout', !hasRightSidebar && 'no-right-sidebar']}>
 			<aside id="left-sidebar" class="sidebar" transition:animate="none">
 				<slot name="primary-sidebar">
 					<LeftSidebar currentPage={currentPage} activePageGroupIds={activePageGroupIds} />
 				</slot>
 			</aside>
-			<aside id="right-sidebar" class="sidebar" transition:animate={fade({ duration: '150ms' })}>
-				<slot name="secondary-sidebar" />
-			</aside>
+			{hasRightSidebar && (
+				<aside id="right-sidebar" class="sidebar" transition:animate={fade({ duration: '150ms' })}>
+					<slot name="secondary-sidebar" />
+				</aside>
+			)}
 			<div id="main-content" class="main-column" transition:animate={fade({ duration: '150ms' })}>
 				<slot />
 			</div>

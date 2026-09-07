@@ -20,10 +20,18 @@ export interface Props {
 }
 
 const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro.props;
+
+// `generateToc` always prepends an "Overview" entry pointing at `#overview`,
+// and that id lives on the <h1> PageContent renders. A page with
+// `suppressTitle` emits no <h1>, so the entry has nothing to scroll to — which
+// is how the homepage shipped a one-item table of contents whose only link was
+// dead. Such a page gets no right rail at all; BaseLayout then reclaims the
+// column rather than reserving width for an empty aside.
+const hasToc = Boolean(headings) && !content.suppressTitle;
 ---
 
-<BaseLayout {...Astro.props}>
-	<RightSidebar slot="secondary-sidebar" headings={headings} />
+<BaseLayout {...Astro.props} hasRightSidebar={hasToc}>
+	{hasToc && <RightSidebar slot="secondary-sidebar" headings={headings} />}
 	<PageContent {...{ content }}>
 		{
 			Astro.url.pathname !== '/' && (
@@ -64,8 +72,12 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 			Astro.url.pathname !== '/' && (
 				<Fragment slot="after-content">
 					{/* PageFeedback also lives in the right sidebar (visible ≥82em).
-					    Hide this footer copy on wide viewports so it doesn't double up. */}
-					<div class="article-page-feedback">
+					    Hide this footer copy on wide viewports so it doesn't double up —
+					    but only where that rail is actually rendered. Changelog pages set
+					    `suppressTitle` and pass no headings, so they have no rail to carry
+					    it, and hiding the footer copy there left them with no feedback
+					    widget at all above 82em. */}
+					<div class:list={['article-page-feedback', !hasToc && 'is-only-copy']}>
 						<PageFeedback />
 					</div>
 					{showMarkdownActions && <PageMeta pathname={Astro.url.pathname} />}
@@ -79,7 +91,7 @@ const { content, headings, breadcrumbTitle, showMarkdownActions = true } = Astro
 	/* The right sidebar (≥82em) hosts a PageFeedback widget. To avoid showing
 	   the same widget twice on wide viewports, hide the article-footer copy. */
 	@media (min-width: 82em) {
-		.article-page-feedback {
+		.article-page-feedback:not(.is-only-copy) {
 			display: none;
 		}
 	}
