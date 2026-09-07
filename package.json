@@ -40,7 +40,7 @@
     "astro": "7.2.10",
     "astro-auto-import": "0.6.0",
     "astro-eslint-parser": "3.1.0",
-    "astro-expressive-code": "0.44.1",
+    "astro-expressive-code": "0.44.2",
     "astro-og-canvas": "0.13.0",
     "canvaskit-wasm": "0.42.0",
     "eslint": "10.9.1",
