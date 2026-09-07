@@ -26,54 +26,42 @@ full control over data flows.
 ## High-level diagram
 
 <div class="enterprise-graph" data-graph-zoom>
-  ```dot class="graph"
-  digraph Architecture {
-    rankdir=TB;
-    graph [label="Mergify Enterprise – High-Level Architecture", labelloc=t, fontsize=26, pad=1.2, nodesep=1.4, ranksep=1.9, splines=ortho, fontname="Helvetica"];
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=18, fillcolor="#F6F8FB", color="#C6D4F3", fontcolor="#1F2937", margin="0.45,0.35", width=3.4];
-
-    edge [color="#8892BF", arrowsize=0.9, fontsize=16, fontname="Helvetica"];
+  ```dot class="arch"
+  digraph {
+    label="Mergify Enterprise — high-level architecture";
 
     subgraph cluster_customer {
-      label="Customer Infrastructure";
-      style="rounded,filled";
-      color="#E1E8FF";
-      fillcolor="#FDFEFF";
+      class="batch";
+      label="Customer infrastructure";
 
-      User [shape=plaintext label="👤 User", fontname="Helvetica", fontsize=18];
-      ReverseProxy [label="Reverse proxy\n(HTTPS exposed)", fillcolor="#FFF3D6", color="#E5C17C"];
+      User [label="User", class="external"];
+      ReverseProxy [label="Reverse proxy\n(HTTPS exposed)", class="config"];
 
       subgraph cluster_onprem {
-        label="Mergify On-Premise";
-        style="rounded,filled";
-        color="#D8F1FF";
-        fillcolor="#F4FBFF";
-
-        Dashboard [label="Dashboard & API\n(port 5000)", fillcolor="#E6F0FF", color="#A7C4FF"];
-        Workers [label="Mergify workers", fillcolor="#E6F0FF", color="#A7C4FF"];
+        class="mergify";
+        label="Mergify on-premise";
+        Dashboard [label="Dashboard & API\n(port 5000)", class="mergify"];
+        Workers [label="Mergify workers", class="mergify"];
       }
 
-      PostgreSQL [label="PostgreSQL database", fillcolor="#E4F5ED", color="#7BC9A9"];
-      Redis [label="Redis cluster", fillcolor="#FCE3E8", color="#F18AA0"];
+      PostgreSQL [label="PostgreSQL database", class="datastore"];
+      Redis [label="Redis cluster", class="datastore"];
     }
 
-    GitHub [shape=box3d label="GitHub", color="#24292E", fontcolor="#24292E", style=filled, fillcolor="#FFFFFF", fontsize=18];
-    Subscription [label="Mergify Subscription API", fillcolor="#F0ECFE", color="#B9A0FF", fontsize=18];
+    GitHub [label="GitHub", class="external"];
+    Subscription [label="Mergify Subscription API", class="mergify"];
 
     GitHub -> ReverseProxy [label="GitHub events"];
-    ReverseProxy -> Dashboard [label="Forwarded events"];
-    Dashboard -> Workers [label="Queue jobs via Redis"];
-
+    ReverseProxy -> Dashboard [label="forwarded events"];
+    Dashboard -> Workers [label="queue jobs via Redis"];
     Dashboard -> PostgreSQL;
     Dashboard -> Redis;
     Workers -> PostgreSQL;
     Workers -> Redis;
-
     Workers -> GitHub [label="API requests to GitHub", dir=both];
-    ReverseProxy -> User [dir=both label="UI access"];
-    GitHub -> User [label="Developers", dir=both];
-
-    Workers -> Subscription [label="Subscription lookup"];
+    ReverseProxy -> User [label="UI access", dir=both];
+    GitHub -> User [label="developers", dir=both];
+    Workers -> Subscription [label="subscription lookup", class="muted", style=dashed];
   }
   ```
 </div>
