@@ -6,8 +6,6 @@ description: Understand how Mergify fair billing works.
 import DownloadLink from '../../components/DownloadLink.astro';
 import { Image } from "astro:assets"
 import PlanScreenshot from "../images/billing/plan.png"
-import InvoicePreviousPeriod from "../images/billing/invoice-previous-period.png"
-import InvoiceNextPeriod from "../images/billing/invoice-next-period.png"
 
 This page explains how Mergify's contributor-based billing works and how to
 read your invoice.
@@ -146,33 +144,40 @@ adjusts your bill in real-time. On your invoice, you might see line items
 labeled "remaining" and "unused time." These adjustments occur whenever there's
 a change in your user count.
 
-For instance, if the system identifies a change in your user count, it will
-credit you for the number of users you previously paid for, prorated by day. It
-then charges for the updated user count for the remaining days of the billing
-cycle.
-
-In the following example, the initial bill was for 76 users. As this grew to
-77, the system credited the $1,360.92 previously paid. It then charges
-$1,378.83, leading to an increase of $17.91 to account for the additional user
-for the rest of the month.
-
-<figure>
-  <Image src={InvoicePreviousPeriod} alt="Invoice for previous period"/>
-  <figcaption>Invoice lines detailing adjustments from the previous period.</figcaption>
-</figure>
+When your user count changes, the system credits you for the users you had
+already paid for, prorated to the day, then charges for the new count over the
+days left in the period. Both lines appear on the invoice, so only the
+difference between them changes your total.
 
 ### 2. **Upcoming Period Charge**
 
-The latter part of the invoice projects your charges for the next billing
-cycle, such as from Jul 14th to Aug 14th. This charge is based on the current
-number of contributors. If there's a change in this user count during this
-period, the subsequent invoice will account for this, similar to the real-time
-adjustment mentioned earlier.
+The rest of the invoice charges the period that is about to start, based on
+your user count on the day it is issued. If that count changes during the
+period, the next invoice carries the same kind of adjustment.
 
-<figure>
-  <Image src={InvoiceNextPeriod} alt="Invoice for next period"/>
-  <figcaption>Invoice lines for the upcoming billing period.</figcaption>
-</figure>
+### A Worked Example
+
+Take a subscription of 20 users billed on the 14th of each month, at $10 per
+user per month. Two users are added on July 29th, 16 days before the period
+ends. The invoice issued on August 14th then reads:
+
+| Line | Period | Amount |
+|---|---|---|
+| Unused time on 20 users | Jul 29 – Aug 14 | -$103.23 |
+| Remaining time on 22 users | Jul 29 – Aug 14 | $113.55 |
+| 22 users | Aug 14 – Sep 14 | $220.00 |
+| **Total** | | **$230.32** |
+
+The first two lines are the real-time user adjustment: the 16 unused days of
+the old count are refunded, and the same 16 days are re-charged at the new
+count. The difference, $10.32, is what the two added users cost for the part of
+the period they were there. The third line is the upcoming period at the count
+you now have.
+
+:::note
+  The figures above are illustrative, and the $10 per-user price is made up.
+  Your own invoice uses the rate on your plan.
+:::
 
 ### 3. **Final Invoice After Cancellation**
 
