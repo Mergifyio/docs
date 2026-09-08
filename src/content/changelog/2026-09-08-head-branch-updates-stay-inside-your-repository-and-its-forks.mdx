@@ -1,0 +1,13 @@
+---
+title: "Head branch updates stay inside your repository and its forks"
+date: 2026-09-08
+tags:
+  - Workflow Automation
+description: "The update, rebase and squash actions now refuse to write a head branch that lives in a repository yours was forked from."
+---
+
+The `update`, `rebase` and `squash` actions and commands write a pull request's head branch. On a cross-repository pull request that branch belongs to another repository, and Mergify now checks which one before writing it: the head branch must live in your repository or in a fork of it.
+
+This closes a case where a pull request opened the other way round, from a fork with the fork as base and the upstream as head, had Mergify push to the upstream's own branches with the fork's credentials.
+
+Two narrow flows change as a result, both only for a repository that is itself a fork of another one. It can no longer update a head branch in a fork it cannot read, such as a private fork outside its Mergify installation. And it can no longer update a head branch in a fork more than one level below it, since only the head repository's immediate parent and the root of its fork network are compared. In both cases Mergify reports why on the pull request instead of pushing, and a pull request in that shape is refused at queue entry rather than dequeued later.

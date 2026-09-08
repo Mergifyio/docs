@@ -1,0 +1,28 @@
+---
+title: "Datadog integration: four merge queue metrics are being retired"
+date: 2026-09-08
+tags:
+  - Deprecations
+  - Integrations
+description: "The operational Datadog metrics are retired in favour of the mergify.queue.* set shipped in July. Two have a renamed counterpart, two have none."
+---
+
+The Datadog integration published two sets of metrics side by side. The older set is now retired in favour of the `mergify.queue.*` metrics shipped in July, which cover queue throughput, health and performance, and come with a ready-made dashboard.
+
+## What stops being published
+
+- `mergify.merge_queue_length`
+- `mergify.queue_checks_outcome`
+- `mergify.time_to_merge`, along with its `.mean`, `.median`, `.95percentile`, `.99percentile`, `.min` and `.max` variants
+- `mergify.scheduled_freeze`
+## What to use instead
+
+Two of them have a close counterpart under a new name:
+
+Both carry a different Datadog metric type, so a dashboard widget needs adjusting rather than a simple rename.
+
+The time-to-merge percentiles and `mergify.scheduled_freeze` have no direct replacement.
+
+## What to check on your side
+
+If you built dashboards or monitors on any of these names, they will report no data once this ships.
