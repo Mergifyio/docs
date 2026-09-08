@@ -1,1 +1,6 @@
-Review: the fork-rebase impersonation fallback is the command sender for a command-triggered rebase, and the pull request author otherwise. The callout named only the author.
+Revision history for #12718:
+
+rev 2 (content) 2026-09-08 12:38 UTC — Review: the fork-rebase impersonation fallback is the command sender for a command-triggered rebase, and the pull request author otherwise. The callout named only the author.
+rev 1 (initial) 2026-09-08 12:38 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12718,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"0ebd0f97830afa41745aee07c966ec4315fe9998","timestamp_iso":"2026-09-08T12:38:58Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"0ebd0f97830afa41745aee07c966ec4315fe9998","new_sha":"00e4c2f9fad9b450baf5e4fbcc8fb4a926842196","timestamp_iso":"2026-09-08T12:38:58Z","reason":"Review: the fork-rebase impersonation fallback is the command sender for a command-triggered rebase, and the pull request author otherwise. The callout named only the author.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/0ebd0f97830afa41745aee07c966ec4315fe9998...00e4c2f9fad9b450baf5e4fbcc8fb4a926842196"}]} -->
