@@ -1,0 +1,1 @@
+Review: the fork-rebase impersonation fallback is the command sender for a command-triggered rebase, and the pull request author otherwise. The callout named only the author.
