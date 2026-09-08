@@ -5176,7 +5176,7 @@
               ],
               "type": "string",
               "description": "Sort field",
-              "default": "executions_count",
+              "default": "test_name",
               "title": "Sort"
             },
             "description": "Sort field"
@@ -5192,7 +5192,7 @@
               ],
               "type": "string",
               "description": "Sort direction",
-              "default": "desc",
+              "default": "asc",
               "title": "Direction"
             },
             "description": "Sort direction"
