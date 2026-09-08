@@ -5160,44 +5160,6 @@
             "description": "Filter by test name. Pass multiple times to combine matches. Supports glob patterns (`*`, `?`). Omit to return all test identities."
           },
           {
-            "name": "sort",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "enum": [
-                "executions_count",
-                "test_name",
-                "pipeline_name",
-                "job_name",
-                "health_status",
-                "health_confidence",
-                "failed_executions_impact",
-                "failed_executions_ratio"
-              ],
-              "type": "string",
-              "description": "Sort field",
-              "default": "test_name",
-              "title": "Sort"
-            },
-            "description": "Sort field"
-          },
-          {
-            "name": "direction",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "enum": [
-                "asc",
-                "desc"
-              ],
-              "type": "string",
-              "description": "Sort direction",
-              "default": "asc",
-              "title": "Direction"
-            },
-            "description": "Sort direction"
-          },
-          {
             "name": "test_name_exclude",
             "in": "query",
             "required": false,
@@ -5484,6 +5446,44 @@
               "title": "Per Page"
             },
             "description": "The number of items per page"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "executions_count",
+                "test_name",
+                "pipeline_name",
+                "job_name",
+                "health_status",
+                "health_confidence",
+                "failed_executions_impact",
+                "failed_executions_ratio"
+              ],
+              "type": "string",
+              "description": "Sort field",
+              "default": "test_name",
+              "title": "Sort"
+            },
+            "description": "Sort field"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string",
+              "description": "Sort direction",
+              "default": "asc",
+              "title": "Direction"
+            },
+            "description": "Sort direction"
           }
         ],
         "responses": {
@@ -6128,6 +6128,38 @@
             "description": "The name of the repository"
           },
           {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages",
+              "title": "Cursor"
+            },
+            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "The number of items per page",
+              "default": 10,
+              "title": "Per Page"
+            },
+            "description": "The number of items per page"
+          },
+          {
             "name": "sort",
             "in": "query",
             "required": false,
@@ -6159,38 +6191,6 @@
               "title": "Direction"
             },
             "description": "Sort direction"
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages",
-              "title": "Cursor"
-            },
-            "description": "The opaque cursor of the current page. Must be extracted from RFC 5988 pagination links to get the previous/next pages"
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "maximum": 100,
-              "minimum": 1,
-              "description": "The number of items per page",
-              "default": 10,
-              "title": "Per Page"
-            },
-            "description": "The number of items per page"
           },
           {
             "name": "start",
