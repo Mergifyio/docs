@@ -41,7 +41,7 @@
     "astro-auto-import": "0.6.0",
     "astro-eslint-parser": "3.1.0",
     "astro-expressive-code": "0.44.2",
-    "astro-og-canvas": "0.13.0",
+    "astro-og-canvas": "0.13.1",
     "canvaskit-wasm": "0.42.0",
     "eslint": "10.9.1",
     "eslint-mdx": "3.8.1",
