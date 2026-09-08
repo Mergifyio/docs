@@ -1,0 +1,1 @@
+rebase onto main, then fix the test #12690 broke: it wraps every rendered fence in .dg-wrap, so this commit's made-up-kind assertion could no longer anchor at ^<svg
