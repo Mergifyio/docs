@@ -31,4 +31,11 @@ branch, and only the author can unblock it, by enabling the setting or updating
 the branch themselves. GitHub documents it under [allowing changes to a pull
 request branch created from a fork][gh-fork-edits].
 
+Mergify also checks which repository that head branch lives in, and writes the
+branch only when it belongs to your repository or to a fork of it. Apart from a
+head repository that has been deleted, this can only refuse a write when your
+own repository is itself a fork: any other repository is the root of its own
+fork network, so every head it sees descends from it. See [the `update`
+action](/workflow/actions/update#fork-pull-requests) for the cases it refuses.
+
 [gh-fork-edits]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork

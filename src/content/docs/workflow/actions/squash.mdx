@@ -12,6 +12,9 @@ When you add this action to a rule, Mergify will squash all the commits from
 the pull request into one commit, making the history of your project cleaner
 and easier to read.
 
+Squashing writes the pull request's head branch, so the [restrictions on writing
+a fork's branch](/workflow/actions/update#fork-pull-requests) apply here too.
+
 ## Parameters
 
 <ActionOptionsTable def="SquashActionModel" />
