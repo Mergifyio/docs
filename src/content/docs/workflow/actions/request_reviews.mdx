@@ -16,6 +16,20 @@ certain pull requests.
   reports the action as neutral.
 :::
 
+## Who Gets Requested
+
+Mergify never requests a review from the pull request author, even when the
+author is named in `users`. It also skips anyone already involved: a user or
+team that has a pending review request, and any user who has approved,
+requested changes, or commented in a review on the pull request, even if that
+review was later dismissed. As with the
+[review conditions](/configuration/conditions#attributes-list), only reviewers
+with `admin`, `write` or `maintain` permission on the repository count here.
+
+With `random_count`, those already-involved candidates count toward the
+target rather than being replaced. If `random_count` is `3` and two people from
+your lists have already reviewed, Mergify picks one more.
+
 ## Parameters
 
 <ActionOptionsTable def="RequestReviewsActionModel" />
