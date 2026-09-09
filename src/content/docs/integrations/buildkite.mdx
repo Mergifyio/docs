@@ -123,8 +123,9 @@ steps:
     command: .buildkite/dynamic-pipeline.sh | buildkite-agent pipeline upload
 ```
 
-The plugin reads your [application key](/api/usage) from `MERGIFY_TOKEN` in
-the agent's environment. Detection is local, so the meta-data this step writes,
+The plugin reads your application key from `MERGIFY_TOKEN` in the agent's
+environment. It needs the [`ci` scope](/api/usage#application-key-scopes); an
+`admin` key is rejected. Detection is local, so the meta-data this step writes,
 and the step skipping below that reads it, work without a token. What a missing
 token costs is the upload: the plugin logs a warning and sends nothing, so the
 merge queue never sees the scopes.
