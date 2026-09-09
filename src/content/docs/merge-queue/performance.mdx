@@ -174,45 +174,35 @@ batches of up to 3 PRs each in parallel. Given 7 queued PRs and a 10-minute
 CI pipeline, the first 6 merge in 10 minutes instead of the hour required for
 sequential validation.
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    label="Merge Queue"
+```dot class="queue"
+digraph {
+  label="Merge queue";
 
-    node [style=filled, shape=circle, fontcolor="white", fontname="sans-serif"];
-    edge [color="#374151", arrowhead=none, fontname="sans-serif", arrowhead=normal];
+  subgraph cluster_batch2 {
+    class="batch";
+    label="Batch 2";
 
-    subgraph cluster_batch_1 {
-        style="rounded,filled";
-        color="#1CB893";
-        fillcolor="#1CB893";
-        fontcolor="#000000";
-        node [style=filled, color="black", fillcolor="#347D39", fontcolor="white"];
-        PR3 -> PR4;
-        PR4 -> PR5;
-        PR5 -> PR6;
-        label = "Batch 2";
-
-        subgraph cluster_batch_0 {
-            style="rounded,filled";
-            color="#1CB893";
-            fillcolor="#1CB893";
-            fontcolor="#000000";
-            node [style=filled, color="black", fillcolor="#347D39", fontcolor="white"];
-            PR1 -> PR2;
-            PR2 -> PR3;
-            label = "Batch 1";
-        }
+    subgraph cluster_batch1 {
+      class="batch";
+      label="Batch 1";
+      PR1 [class="queued"];
+      PR2 [class="queued"];
+      PR3 [class="queued"];
+      PR1 -> PR2 -> PR3;
     }
 
-    PR6 -> PR7;
-    PR7 -> PR8;
-    PR8 [label="…", fillcolor="#347D39"];
+    PR4 [class="queued"];
+    PR5 [class="queued"];
+    PR6 [class="queued"];
+    PR3 -> PR4 -> PR5 -> PR6;
+  }
 
-    CI [label="Continuous\nIntegration", fixedsize=false, style="filled", fillcolor="#111827", fontcolor=white, shape=rectangle]
-    edge [arrowhead=none, style=dashed, arrowtail=normal, color="#9CA3AF", dir=both, fontcolor="#9CA3AF", fontsize="6pt"];
-    PR3 -> CI;
-    PR6 -> CI;
+  PR7 [class="queued"];
+  PR8 [label="…", class="queued"];
+  PR6 -> PR7 -> PR8;
+
+  CI [label="Continuous\nintegration", class="external"];
+  PR3 -> CI [class="muted", style=dashed, dir=both, arrowhead=none, arrowtail=normal];
+  PR6 -> CI [class="muted", style=dashed, dir=both, arrowhead=none, arrowtail=normal];
 }
 ```
