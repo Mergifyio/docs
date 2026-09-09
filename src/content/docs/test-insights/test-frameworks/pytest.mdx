@@ -7,6 +7,7 @@ import pytestLogo from "../../../images/ci-insights/pytest/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
+import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 <IntegrationLogo src={pytestLogo} alt="Pytest logo" />
 
@@ -104,9 +105,6 @@ steps:
 
 The plugin collects your test results and sends them to Test Insights.
 
-Check the Test Insights dashboard afterward to view execution metrics, detect
-flaky tests, and review test trends.
-
 ## Using with Tox
 
 If you’re using [Tox](https://tox.wiki/) to manage test environments, you can
@@ -176,6 +174,13 @@ steps:
 ```
 
 :::tip
-Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights, especially when
-running multiple Tox environments or using a matrix.
+  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights,
+  especially when running multiple Tox environments or using a matrix.
 :::
+
+## Verify and Review in Test Insights
+
+After pushing these changes, your next CI run reports its pytest results
+automatically.
+
+<ReviewInTestInsights />

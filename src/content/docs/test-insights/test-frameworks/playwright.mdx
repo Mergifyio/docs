@@ -7,6 +7,7 @@ import playwrightLogo from "../../../images/ci-insights/playwright/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
+import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 <IntegrationLogo src={playwrightLogo} alt="Playwright logo" />
 
@@ -126,9 +127,6 @@ steps:
 The reporter automatically collects your test results and sends them to Test
 Insights.
 
-Check the Test Insights dashboard afterward to view execution metrics, detect
-flaky tests, and review test trends.
-
 ## Multi-Project (Cross-Browser) Runs
 
 If your `playwright.config.ts` defines multiple
@@ -153,6 +151,13 @@ env:
 
 This option is opt-in (off by default) to preserve the history of tests that
 already report without a project prefix.
+
+## Verify and Review in Test Insights
+
+After pushing these changes, your next CI run reports its Playwright results
+automatically.
+
+<ReviewInTestInsights />
 
 ## Environment Variables
 
