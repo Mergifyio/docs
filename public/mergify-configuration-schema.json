@@ -4324,7 +4324,7 @@
             }
           ],
           "default": null,
-          "description": "Method to use to update the pull request with its base branch when the check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nWhen `null`, defaults to `merge` except if `merge_method` is `fast-forward` then it defaults to `rebase`.",
+          "description": "Method to use to update the pull request with its base branch when the check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch. When the queue\n  runs its checks in place, a pull request coming from a fork cannot be rebased\n  on behalf of an `update_bot_account` and is refused -- see that option for\n  the remedy. Without an\n  `update_bot_account`, the rebase goes through GitHub's API as Mergify, which\n  works on a fork -- except for one that changes GitHub Actions workflows or\n  was opened by another App's bot, which GitHub lets Mergify queue in place\n  only *with* an `update_bot_account`. Such a queue has to run its checks on a\n  draft pull request instead.\n\nWhen `null`, defaults to `merge` except if `merge_method` is `fast-forward` then it defaults to `rebase`.",
           "title": "Update Method"
         },
         "commit_message_template": {
@@ -4401,7 +4401,7 @@
             }
           ],
           "default": null,
-          "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. If no `update_bot_account` is set, Mergify uses the pull request author instead. The user account **must** have already been logged in Mergify dashboard once. This option overrides the value defined in the queue rules section of the configuration.",
+          "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. With no `update_bot_account`, the update goes through GitHub's API as Mergify and impersonates nobody. The user account **must** have already been logged in Mergify dashboard once. This option overrides the value defined in the queue rules section of the configuration.\n\n**Warning:** With `update_method: rebase` and checks run in place, a pull request coming from a fork cannot be rebased on behalf of this account: GitHub refuses an OAuth token on its rebase API for a fork, so it would mean impersonating the account to force-push the contributor's branch. Those pull requests are refused when they are queued. Unset this option to rebase them through GitHub's API as Mergify instead -- except for a fork pull request that changes GitHub Actions workflows or was opened by another App's bot, which GitHub lets Mergify queue in place only *with* an `update_bot_account`, so such a queue has to run its checks on a draft pull request. Or set `update_method: merge` on a queue that does not merge with `fast-forward`: such a queue lands by moving the base branch onto this one, so a merge commit is what it exists to keep off it, and it has to run its checks on a draft pull request instead.",
           "title": "Update Bot Account"
         },
         "name": {
@@ -4596,7 +4596,7 @@
             }
           ],
           "default": null,
-          "description": "Method to use to update the pull request with its base branch when the check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch.\n\nWhen `null`, defaults to `merge` except if `merge_method` is `fast-forward` then it defaults to `rebase`.",
+          "description": "Method to use to update the pull request with its base branch when the check is done in place.\nPossible values:\n\n- `merge` to merge the base branch into the pull request.\n- `rebase` to rebase the pull request against its base branch. When the queue\n  runs its checks in place, a pull request coming from a fork cannot be rebased\n  on behalf of an `update_bot_account` and is refused -- see that option for\n  the remedy. Without an\n  `update_bot_account`, the rebase goes through GitHub's API as Mergify, which\n  works on a fork -- except for one that changes GitHub Actions workflows or\n  was opened by another App's bot, which GitHub lets Mergify queue in place\n  only *with* an `update_bot_account`. Such a queue has to run its checks on a\n  draft pull request instead.\n\nWhen `null`, defaults to `merge` except if `merge_method` is `fast-forward` then it defaults to `rebase`.",
           "title": "Update Method"
         },
         "commit_message_template": {
@@ -4673,7 +4673,7 @@
             }
           ],
           "default": null,
-          "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. If no `update_bot_account` is set, Mergify uses the pull request author instead. The user account **must** have already been logged in Mergify dashboard once. This option overrides the value defined in the queue rules section of the configuration.",
+          "description": "For certain actions, such as rebasing branches, Mergify has to impersonate a GitHub user. You can specify the account to use with this option. With no `update_bot_account`, the update goes through GitHub's API as Mergify and impersonates nobody. The user account **must** have already been logged in Mergify dashboard once. This option overrides the value defined in the queue rules section of the configuration.\n\n**Warning:** With `update_method: rebase` and checks run in place, a pull request coming from a fork cannot be rebased on behalf of this account: GitHub refuses an OAuth token on its rebase API for a fork, so it would mean impersonating the account to force-push the contributor's branch. Those pull requests are refused when they are queued. Unset this option to rebase them through GitHub's API as Mergify instead -- except for a fork pull request that changes GitHub Actions workflows or was opened by another App's bot, which GitHub lets Mergify queue in place only *with* an `update_bot_account`, so such a queue has to run its checks on a draft pull request. Or set `update_method: merge` on a queue that does not merge with `fast-forward`: such a queue lands by moving the base branch onto this one, so a merge commit is what it exists to keep off it, and it has to run its checks on a draft pull request instead.",
           "title": "Update Bot Account"
         }
       },
