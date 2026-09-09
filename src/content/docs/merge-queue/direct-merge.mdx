@@ -27,51 +27,34 @@ two merges that touched `api` and `docs`. Nothing PR #42 depends on has changed,
 still describes the merge and the queue skips straight to merging it. Had the queue landed nothing
 at all in the meantime, the first question alone would have been enough.
 
-```dot class="graph"
-strict digraph {
-  rankdir="TB";
-  label="Direct Merge — what the queue checks before skipping CI";
-  labelloc="t";
-  nodesep=0.55;
-  ranksep=0.6;
+```dot class="flow"
+digraph {
+  label="Direct merge — what the queue checks before skipping CI";
   splines=polyline;
 
-  node [shape=box, style="rounded,filled", margin="0.28,0.18"];
-  edge [penwidth=1.4];
-
   subgraph cluster_base {
-    style="rounded";
-    color="#1CB893";
-    label="Merged while PR #42 waited";
-
-    M1 [label="queue merge\nscope: api", fillcolor="#6B7280", color="#4B5563", width=2.6];
-    M2 [label="queue merge\nscope: docs", fillcolor="#6B7280", color="#4B5563", width=2.6];
+    class="batch";
+    label="Merged while #42 waited";
+    M1 [label="queue merge\nscope: api", class="muted"];
+    M2 [label="queue merge\nscope: docs", class="muted"];
     M1 -> M2;
   }
 
-  DELTA [shape=oval, margin="0.3,0.16", fillcolor="#1CB893", fontcolor="#063C2C",
-         color="#0B7A5C", label="Base delta scopes\napi, docs"];
+  DELTA [label="Base delta scopes\napi, docs", shape=oval, class="config"];
+  PR [label="PR #42, first in its lane\nscope: frontend, CI already green", class="queued"];
 
-  PR [label="PR #42, first in its lane\nscope: frontend, CI already green",
-      fillcolor="#347D39", color="#165B33"];
+  Q1 [label="Behind the\nbase branch?", shape=diamond, margin="0.14,0.06", class="pending"];
+  Q2 [label="Any scope\nin common?", shape=diamond, margin="0.14,0.06", class="pending"];
 
-  Q1 [shape=diamond, margin="0.14,0.06", fillcolor="#FFF4ED", color="#FF8A3D",
-      fontcolor="#C2410C", label="Behind the\nbase branch?"];
-
-  Q2 [shape=diamond, margin="0.14,0.06", fillcolor="#FFF4ED", color="#FF8A3D",
-      fontcolor="#C2410C", label="Any scope\nin common?"];
-
-  DIRECT [label="Direct merge\nno batch pull request, no queue CI",
-          fillcolor="#347D39", color="#165B33"];
-  QUEUE [label="Batch pull request\nfull queue CI run",
-         fillcolor="#6B7280", color="#4B5563"];
+  DIRECT [label="Direct merge\nno batch pull request, no queue CI", class="merged"];
+  QUEUE [label="Batch pull request\nfull queue CI run", class="muted"];
 
   M2 -> DELTA;
   PR -> Q1;
-  Q1 -> DIRECT [label="  no", color="#10B981", penwidth=2.5];
+  Q1 -> DIRECT [label="  no", class="merged"];
   Q1 -> Q2 [label="  yes"];
   DELTA -> Q2;
-  Q2 -> DIRECT [label="  no", color="#10B981", penwidth=2.5];
+  Q2 -> DIRECT [label="  no", class="merged"];
   Q2 -> QUEUE [label="  yes"];
 
   { rank=same; Q2; DELTA; }

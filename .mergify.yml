@@ -30,6 +30,7 @@ merge_protections:
           - check-success = lint
           - check-success = build
           - check-success = test
+          - check-success = diagram-tokens
           - or:
               - label = ignore-broken-links
               - check-success = test-broken-links
