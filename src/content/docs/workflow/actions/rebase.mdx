@@ -17,10 +17,12 @@ up-to-date with the latest changes from the base branch.
 :::
 
 :::caution
-  Support for the `rebase` action with `bot_account` on fork pull requests is
-  **deprecated** and will be removed in a future release. If you use this
-  configuration on
-  repositories that receive PRs from forks, switch to the
+  Support for rebasing pull requests that come from a fork is **deprecated**
+  and will be removed in a future release. This is not limited to
+  configurations that set `bot_account`: rebasing always impersonates a GitHub
+  user, and when `bot_account` is unset Mergify falls back to the sender of the
+  `rebase` command, or to the pull request author when a rule triggered the
+  rebase. If your repository receives pull requests from forks, switch to the
   [`update` action](/workflow/actions/update) instead.
 :::
 
@@ -43,22 +45,15 @@ a fork's branch](/workflow/actions/update#fork-pull-requests) apply here too.
 
 ## Examples
 
-### Autosquash Fixup Commits
+### Rebase on Label
 
-:::caution
-  The `autosquash` option is **deprecated** and will be removed in a future
-  release. Avoid relying on it in new configurations.
-:::
-
-Rebase a pull request and fold in any `fixup!`, `squash!`, or `amend!` commits
-once it is ready to merge.
+Rebase a pull request when it gets the `ready-to-merge` label.
 
 ```yaml
 pull_request_rules:
-  - name: autosquash fixup commits
+  - name: rebase when ready to merge
     conditions:
       - label = ready-to-merge
     actions:
       rebase:
-        autosquash: true
 ```
