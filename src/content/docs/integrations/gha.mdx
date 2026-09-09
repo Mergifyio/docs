@@ -131,9 +131,12 @@ strict digraph {
 ### Example workflow
 
 :::caution
-  The `scopes` action requires a pull request context. If your workflow also
-  triggers on `push` events, guard the scopes job with
-  `if: ${{ github.event_name == 'pull_request' }}` to avoid failures.
+  On a `pull_request` event the `scopes` action works out the base and head to
+  diff on its own. Any other event has no pull request to take them from, so
+  either pass an explicit `base`, or guard the job with
+  `if: ${{ github.event_name == 'pull_request' }}` and skip it. Sending the
+  scopes to Mergify is a no-op outside a pull request either way: on other
+  events the action only writes its `scopes` output.
 :::
 
 ```yaml
@@ -156,6 +159,7 @@ jobs:
         uses: Mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
         with:
           action: scopes
+          token: ${{ secrets.MERGIFY_TOKEN }}
 
   frontend-tests:
     needs: detect-scopes
@@ -204,6 +208,15 @@ In this workflow:
   CI coverage, even if some jobs were skipped. Keep `detect-scopes` in its
   `needs`: without it, a failed scope detection skips every test job and
   `ci-gate` still reports success.
+
+The `token` on `detect-scopes` is a Mergify application key with the [`ci`
+scope](/api/usage#application-key-scopes), stored as a repository secret; an
+`admin` key is rejected. It lets the action send the scopes it detected back to
+Mergify, which is how [Merge Queue Scopes](/merge-queue/scopes) know what a
+queued pull request affects. `wait-jobs` needs no token. For pull requests
+opened by Dependabot, add the same secret to your [Dependabot
+secrets](/integrations/dependabot#configuring-mergify_token-for-dependabot) as
+well.
 
 Mergify also publishes annotations that can be seen in your GitHub Actions jobs
 summary.
