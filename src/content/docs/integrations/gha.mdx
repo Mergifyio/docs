@@ -98,31 +98,23 @@ A GitHub Actions workflow driven by scopes has three parts:
 3. **Publish a final status** (for example with a `ci-gate` job) if you want one
    check that reflects all the jobs that ran.
 
-```dot class="graph"
-strict digraph {
-  fontname="sans-serif";
-  rankdir="LR";
-  nodesep=0.9;
-  ranksep=1.1;
-  splines=polyline;
+```dot class="queue"
+digraph {
+  PR [label="Pull request\nchanges", class="queued"];
+  Config [label="Scopes config\n(.mergify.yml)", class="config"];
+  Detect [label="detect-scopes job\n(gha-mergify-ci)", class="pending"];
 
-  node [shape=box, style="rounded,filled", fontname="sans-serif", margin="0.35,0.2", color="#165B33", fillcolor="#347D39", fontcolor="white"];
-  edge [fontname="sans-serif", color="#374151", penwidth=1.2, arrowhead=normal];
-
-  PR [label="Pull request\nchanges"];
-  Config [fillcolor="#1CB893", color="#0B7A5C", fontcolor="#063C2C", label="Scopes config\n(.mergify.yml)"];
-  Detect [fillcolor="#2563EB", color="#1E40AF", label="detect-scopes job\n(gha-mergify-ci)"];
-
-  Frontend [label="frontend-tests\n(run)"];
-  API [fillcolor="#6B7280", color="#4B5563", label="api-tests\n(skipped)"];
-  Docs [label="docs-tests\n(run)"];
-  Gate [fillcolor="#111827", color="#0B1120", label="ci-gate\n(optional)"];
+  Frontend [label="frontend-tests\n(run)", class="queued"];
+  Docs [label="docs-tests\n(run)", class="queued"];
+  API [label="api-tests\n(skipped)", class="muted"];
 
   PR -> Detect;
   Config -> Detect;
   Detect -> Frontend [label="scope: frontend"];
   Detect -> Docs [label="scope: docs"];
-  Detect -> API [style=dashed, color="#9CA3AF", fontcolor="#9CA3AF", label="scope: api (false)"];
+  Detect -> API [label="scope: api (false)", class="muted", style=dashed];
+
+  Gate [label="ci-gate\n(optional)", class="external"];
   Frontend -> Gate;
   Docs -> Gate;
 }
