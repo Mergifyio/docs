@@ -44,7 +44,7 @@ describe('remarkGraphvizPlugin', () => {
     expect(svg).toMatch(/<\/svg><\/div>$/);
   });
 
-  it('leaves no colour in the output at all', async () => {
+  it('leaves no color in the output at all', async () => {
     const svg = await render(`digraph {
       node [style=filled, fillcolor="#347D39", fontcolor="white"];
       subgraph cluster_b { fillcolor="#1CB893"; style="rounded,filled"; label="Batch"; A; }
@@ -57,7 +57,7 @@ describe('remarkGraphvizPlugin', () => {
 
   it('passes the role a fence names straight through to the SVG', async () => {
     // The whole system rests on this: Graphviz copies `class` verbatim, so the
-    // plugin never has to resolve a colour and CSS can do it at paint time.
+    // plugin never has to resolve a color and CSS can do it at paint time.
     const svg = await render(`digraph {
       A [class="failed"];
       subgraph cluster_b { class="batch"; label="Batch"; A; }
@@ -118,7 +118,7 @@ describe('remarkGraphvizPlugin', () => {
     expect(square).toMatch(/<g id="node1"[^>]*>\s*<title>A<\/title>\s*<polygon/);
   });
 
-  it('strips the alpha Graphviz emits alongside a colour', async () => {
+  it('strips the alpha Graphviz emits alongside a color', async () => {
     const svg = await render(`digraph {
       node [style=filled];
       A [fillcolor="#347d3980"];
