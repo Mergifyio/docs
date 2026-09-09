@@ -16,8 +16,8 @@ Mergify configuration as code, alongside the rest of your infrastructure.
 1. The [Mergify GitHub App](/integrations/github) is installed on your
    repositories.
 
-2. A Mergify application key or a GitHub personal access token. See
-   [Authentication](#authentication) below.
+2. A Mergify application key with the `admin` scope, or a GitHub personal
+   access token. See [Authentication](#authentication) below.
 
 ## Installation
 
@@ -52,6 +52,12 @@ terraform init
 The provider authenticates against the [Mergify API](/api) with a bearer
 token. Both Mergify application keys and GitHub personal access tokens
 are accepted.
+
+An application key must hold the `admin`
+[scope](/api/usage#application-key-scopes). A `ci` key only reaches the
+CI-facing endpoints, so the endpoints behind the resources below reject it with
+`403`. That is easy to hit, because `MERGIFY_TOKEN` is also the variable a CI
+pipeline carries its `ci` key in.
 
 Tokens are read from, in priority order:
 
