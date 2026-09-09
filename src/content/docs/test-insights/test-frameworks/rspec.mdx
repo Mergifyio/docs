@@ -7,6 +7,7 @@ import rspecLogo from "../../../images/ci-insights/rspec/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
+import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 <IntegrationLogo src={rspecLogo} alt="RSpec logo" />
 
@@ -84,8 +85,12 @@ steps:
 
 The gem automatically collects your test results and sends them to Test Insights.
 
-Check the Test Insights dashboard afterward to view execution metrics, detect
-flaky tests, and review test trends.
+## Verify and Review in Test Insights
+
+After pushing these changes, your next CI run reports its RSpec results
+automatically.
+
+<ReviewInTestInsights />
 
 ## Environment Variables
 
@@ -99,11 +104,11 @@ flaky tests, and review test trends.
 | `MERGIFY_TEST_JOB_NAME` | Test job name identifier | Optional |
 
 :::tip
-The gem auto-activates in CI environments (detected via the `CI` environment
-variable). To enable it outside CI, set `RSPEC_MERGIFY_ENABLE=true`.
+  The gem auto-activates in CI environments (detected via the `CI` environment
+  variable). To enable it outside CI, set `RSPEC_MERGIFY_ENABLE=true`.
 :::
 
 :::tip
-Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights, especially
-when running multiple test suites or using a matrix strategy.
+  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights,
+  especially when running multiple test suites or using a matrix strategy.
 :::
