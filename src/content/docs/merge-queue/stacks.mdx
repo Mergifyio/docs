@@ -131,25 +131,18 @@ immediate parent branch. Without this, PR2 would be queued against PR1's head
 branch and could never reach `main`, so the queue would have nothing to merge
 into.
 
-```dot class="graph" style="max-width: 320px; height: auto; display: block; margin: 1.5em auto"
-strict digraph {
-    fontname="sans-serif";
-    fontsize=10;
-    rankdir="LR";
-    nodesep=0.2;
-    ranksep=0.4;
+```dot class="queue" style="max-width: 320px"
+digraph {
+  node [shape=circle, width=0.5, height=0.5, fixedsize=true];
 
-    node [style=filled, fontname="sans-serif", fontcolor="white", fontsize=10, shape=circle, width=0.45, height=0.45, fixedsize=true];
-    edge [fontname="sans-serif", fontsize=9, color="#5B21B6", fontcolor="#5B21B6"];
+  PR1 [class="queued"];
+  PR2 [class="queued"];
+  PR3 [class="queued"];
+  main [label="main", shape=box, fixedsize=false, class="external"];
 
-    PR1 [fillcolor="#347D39"];
-    PR2 [fillcolor="#347D39"];
-    PR3 [fillcolor="#347D39"];
-    main [label="main", shape=rectangle, fillcolor="#111827", width=0.7, height=0.4, fixedsize=false];
-
-    PR1 -> main;
-    PR2 -> main;
-    PR3 -> main;
+  PR1 -> main;
+  PR2 -> main;
+  PR3 -> main;
 }
 ```
 
@@ -175,28 +168,23 @@ checks, a stack longer than `batch_size` (or a stack sharing its scope group
 with higher-priority unrelated PRs) lands across consecutive batches. Order
 is preserved either way.
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    label="Merge Queue with batch_size: 5"
+```dot class="queue"
+digraph {
+  label="Merge queue with batch_size: 5";
+  node [shape=circle, width=0.5, height=0.5, fixedsize=true];
 
-    node [style=filled, shape=circle, fontcolor="white", fontname="sans-serif"];
-    edge [color="#374151", arrowhead=normal, fontname="sans-serif"];
+  subgraph cluster_batch1 {
+    class="batch";
+    label="Batch 1 — the stack kept together";
+    PR1 [class="queued"];
+    PR2 [class="queued"];
+    PR3 [class="queued"];
+    PR4 [class="queued"];
+    PR1 -> PR2 -> PR3 -> PR4;
+  }
 
-    subgraph cluster_batch_0 {
-        style="rounded,filled";
-        color="#1CB893";
-        fillcolor="#1CB893";
-        fontcolor="#000000";
-        node [fillcolor="#347D39"];
-        PR1 -> PR2 -> PR3 -> PR_other;
-        PR_other [label="PR4"];
-        label = "Batch 1 (stack PR1→PR2→PR3 kept together)";
-    }
-
-    PR_other -> PR5;
-    PR5 [label="…", fillcolor="#347D39"];
+  PR5 [label="…", class="queued"];
+  PR4 -> PR5;
 }
 ```
 
@@ -213,22 +201,20 @@ still in the queue is dequeued automatically with the reason
 `StackPredecessorDequeued`. This stops the queue from validating PRs whose
 dependency just broke. There's no point checking PR3 if PR1 just failed.
 
-```dot class="graph"
-strict digraph {
-    fontname="sans-serif";
-    rankdir="LR";
-    label=""
+```dot class="queue"
+digraph {
+  ranksep=1.0;
+  // Not fixedsize: these labels are two lines, so let the circle grow to them.
+  node [shape=circle];
 
-    node [style=filled, shape=circle, fontname="sans-serif"];
+  PR1 [label="PR1\n(failed)", class="failed"];
+  PR2 [label="PR2\n(cascaded)", class="muted"];
+  PR3 [label="PR3\n(cascaded)", class="muted"];
+  PR4 [class="queued"];
 
-    PR1 [fillcolor="#DC2626", fontcolor="white", label="PR1\n(failed)"];
-    PR2 [fillcolor="#9CA3AF", fontcolor="white", label="PR2\n(cascaded)"];
-    PR3 [fillcolor="#9CA3AF", fontcolor="white", label="PR3\n(cascaded)"];
-    PR4 [fillcolor="#347D39", fontcolor="white"];
-
-    PR1 -> PR2 [label="dequeue", color="#DC2626", fontcolor="#DC2626", fontsize="9"];
-    PR2 -> PR3 [label="dequeue", color="#DC2626", fontcolor="#DC2626", fontsize="9"];
-    PR3 -> PR4 [style="dashed", color="#9CA3AF"];
+  PR1 -> PR2 [label="dequeue", class="failed"];
+  PR2 -> PR3 [label="dequeue", class="failed"];
+  PR3 -> PR4 [style=dashed, class="muted"];
 }
 ```
 
