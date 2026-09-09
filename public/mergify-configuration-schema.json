@@ -4293,9 +4293,13 @@
           "title": "Merge Method"
         },
         "autosquash": {
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "`autosquash` has been removed and this option is now ignored: the merge queue no longer squashes commits beginning with `squash!`, `fixup!` or `amend!` when it updates a pull request in place. Remove it from your configuration.",
+            "deprecated_summary_saas_mode": "`autosquash` has been removed and this option is now ignored: the merge queue no longer squashes commits beginning with `squash!`, `fixup!` or `amend!` when it updates a pull request in place. Remove it from your configuration."
+          },
           "default": false,
           "deprecated": true,
-          "description": "This option is relevant only if you do in place checks and if you use the `rebase` option of the update_method. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`.",
+          "description": "Deprecated: the merge queue no longer squashes commits beginning with `squash!`, `fixup!` or `amend!` when it updates a pull request in place. The option is still accepted so configurations that set it keep validating; remove it from your configuration.",
           "title": "Autosquash",
           "type": "boolean"
         },
@@ -4561,9 +4565,13 @@
           "title": "Merge Method"
         },
         "autosquash": {
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "`autosquash` has been removed and this option is now ignored: the merge queue no longer squashes commits beginning with `squash!`, `fixup!` or `amend!` when it updates a pull request in place. Remove it from your configuration.",
+            "deprecated_summary_saas_mode": "`autosquash` has been removed and this option is now ignored: the merge queue no longer squashes commits beginning with `squash!`, `fixup!` or `amend!` when it updates a pull request in place. Remove it from your configuration."
+          },
           "default": false,
           "deprecated": true,
-          "description": "This option is relevant only if you do in place checks and if you use the `rebase` option of the update_method. It will automatically squash your commits beginning by `squash!`, `fixup!` or `amend!`, just like the option with the same name when doing a `git rebase`.",
+          "description": "Deprecated: the merge queue no longer squashes commits beginning with `squash!`, `fixup!` or `amend!` when it updates a pull request in place. The option is still accepted so configurations that set it keep validating; remove it from your configuration.",
           "title": "Autosquash",
           "type": "boolean"
         },
@@ -4706,9 +4714,13 @@
           "title": "Bot Account"
         },
         "autosquash": {
+          "configuration_deprecated_attribute": {
+            "deprecated_summary_ghes_mode": "`autosquash` has been removed and this option is now ignored: the `rebase` action no longer squashes commits beginning with `squash!`, `fixup!` or `amend!`. Remove it from your configuration.",
+            "deprecated_summary_saas_mode": "`autosquash` has been removed and this option is now ignored: the `rebase` action no longer squashes commits beginning with `squash!`, `fixup!` or `amend!`. Remove it from your configuration."
+          },
           "default": false,
           "deprecated": true,
-          "description": "When set to `true`, commits starting with `fixup!`, `squash!` and `amend!` are squashed during the rebase.",
+          "description": "Deprecated: the `rebase` action no longer squashes commits beginning with `squash!`, `fixup!` or `amend!`. The option is still accepted so configurations that set it keep validating; remove it from your configuration.",
           "title": "Autosquash",
           "type": "boolean"
         }

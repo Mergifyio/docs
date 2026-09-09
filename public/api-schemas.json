@@ -531,7 +531,7 @@
                               "merge_method": "merge",
                               "update_bot_account": "",
                               "update_method": "rebase",
-                              "autosquash": true
+                              "autosquash": false
                             }
                           },
                           "speculative_check_pull_request": {
