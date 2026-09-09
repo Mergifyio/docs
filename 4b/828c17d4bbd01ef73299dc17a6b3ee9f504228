@@ -1,0 +1,6 @@
+Revision history for #12719:
+
+rev 2 (content) 2026-09-08 12:38 UTC — Review: say that the merged-pull-request case still reports a success, so a green check is not read as proof a review was posted.
+rev 1 (initial) 2026-09-08 12:38 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12719,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"cbc7596bbfaf01a6a62dccfdd93f25c6dc480b76","timestamp_iso":"2026-09-08T12:38:58Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"cbc7596bbfaf01a6a62dccfdd93f25c6dc480b76","new_sha":"8fcbd1c5633dd35283cd911fc2726cbff6220210","timestamp_iso":"2026-09-08T12:38:58Z","reason":"Review: say that the merged-pull-request case still reports a success, so a green check is not read as proof a review was posted.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/cbc7596bbfaf01a6a62dccfdd93f25c6dc480b76...8fcbd1c5633dd35283cd911fc2726cbff6220210"}]} -->
