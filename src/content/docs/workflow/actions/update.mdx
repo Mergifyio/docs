@@ -31,6 +31,29 @@ not in a merge queue
 ([`queue-position = -1`](/configuration/conditions#attributes-list)), and is
 behind its base branch (`#commits-behind > 0`).
 
+## Fork Pull Requests
+
+This action writes the pull request's head branch. On a pull request opened
+from another repository, Mergify writes that branch only when it belongs to
+your repository or to a fork of it, and reports why on the pull request when it
+does not. A queue that uses [in-place
+checks](/merge-queue/batches#in-place-checks-no-batch-prs) writes that branch
+too, and runs the same check when a pull request asks to be queued, so such a
+pull request is refused when it enters the queue rather than dequeued later.
+
+That comparison can only refuse a write when your own repository is itself a
+fork: any other repository is the root of its own fork network, so every head
+it sees descends from it. On a fork, Mergify refuses a head branch that lives
+in the repository yours was forked from, in a sibling fork, or in a fork more
+than one level below yours, since it compares only the head repository's
+immediate parent and the root of its fork network. It also refuses a head
+branch in a repository it cannot read, such as a private fork outside your
+Mergify installation.
+
+A head branch whose repository has been deleted is refused on any repository,
+fork or not, since nothing is left to say which repository that branch belongs
+to.
+
 ## Parameters
 
 <ActionOptionsTable def="UpdateActionModel" />
