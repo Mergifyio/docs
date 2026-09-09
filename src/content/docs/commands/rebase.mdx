@@ -48,6 +48,11 @@ the command is deprecated for fork pull requests. When the fork is private,
 `rebase` cannot run at all: GitHub does not let an app modify the head branch
 of a pull request opened from a private fork.
 
+Mergify also checks which repository the head branch lives in, and writes the
+branch only when it belongs to your repository or to a fork of it. See [the
+`update` action](/workflow/actions/update#fork-pull-requests) for the cases it
+refuses.
+
 The [`update` command](/commands/update) merges the base branch instead of
 rewriting the head branch, and impersonates nobody unless you configure a
 `bot_account`, so it keeps working on pull requests opened from a fork.

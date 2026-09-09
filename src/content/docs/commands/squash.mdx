@@ -44,3 +44,8 @@ a GitHub user rather than as itself. Unless a
 is whoever posted the command, and that account must have signed in to the
 [Mergify dashboard](https://dashboard.mergify.com) at least once. If it has
 not, the command fails with `Mergify can't impersonate`.
+
+Mergify also checks which repository that head branch lives in, and writes the
+branch only when it belongs to your repository or to a fork of it. See [the
+`update` action](/workflow/actions/update#fork-pull-requests) for the cases it
+refuses.
