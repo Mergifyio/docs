@@ -6,18 +6,18 @@ type CheerioAPI = ReturnType<typeof load>;
  * Shared post-processing for the two Graphviz surfaces on the site: the `dot`
  * fences (`plugins/remark-graphviz.ts`) and the `<GitGraph>` component.
  *
- * Both used to strip the canvas and rewrite colours their own way, with their
+ * Both used to strip the canvas and rewrite colors their own way, with their
  * own list of hex strings, which is how they drifted apart. Neither handles
- * colour now: this drops the canvas, strips the inline paint, and leaves the
+ * color now: this drops the canvas, strips the inline paint, and leaves the
  * `class` attribute Graphviz copied out of the source for the `.dg` rules in
- * `index.css` to resolve at paint time.
+ * `index.css` to resolve at paint time. See DESIGN.md "Diagrams".
  */
 
 /** The kinds of element `.dg` paints, and the Graphviz group class for each. */
 export type DiagramKind = 'node' | 'edge' | 'cluster';
 
 /**
- * Roles a diagram may name. `plain` is a shape marker rather than a colour: it
+ * Roles a diagram may name. `plain` is a shape marker rather than a color: it
  * says the element is a caption, not a box.
  *
  * Every role here has a `.dg .<role>` rule in `index.css` pointing at a
