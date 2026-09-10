@@ -44,7 +44,7 @@ merge_protections:
       - label != hotfix
     success_conditions:
       - or: &DefaultReviewCond
-          - "#approved-reviews-by >= 2"
+          - "#approved-reviews-by >= 1"
           - author = dependabot[bot]
           - author = renovate[bot]
           # mergify-ci-bot needs no approval for the deterministic syncers, but
@@ -57,22 +57,7 @@ merge_protections:
     if:
       - label = hotfix
     success_conditions:
-      - or:
-          - or: &HotfixReviewCond
-              # Author is engineering manager, we allow with one review
-              - and:
-                  - author=@eng-mgr
-                  - "#approved-reviews-by>=1"
-              - and:
-                  - author=@devs
-                  # in any other case, we allow if approve by engineering manager
-                  # or anyone if it's a regular fix/revert
-                  - or:
-                      - approved-reviews-by=@eng-mgr
-                      - and:
-                          - title~=^(revert|fix)
-                          - "#approved-reviews-by>=1"
-          - or: *DefaultReviewCond
+      - or: *DefaultReviewCond
 
       # yamllint disable-line rule:line-length
       - body ~= (Fix|Related).* (INC-\d+|https:\/\/github\.com\/Mergifyio\/docs\/security\/dependabot\/\d+)
@@ -116,8 +101,8 @@ pull_request_rules:
     conditions:
       - -author=dependabot[bot]
       - -author=renovate[bot]
-      # Bots are not routed for review, except the docs agent, which now needs
-      # two approvals like anyone else. Gated on -draft so the ten drafts a
+      # Bots are not routed for review, except the docs agent, which needs
+      # approval like anyone else. Gated on -draft so the ten drafts a
       # Monday audit opens do not each ping the team before a human wants them.
       - or:
           - -author=mergify-ci-bot
@@ -129,13 +114,8 @@ pull_request_rules:
       - and: *CheckRuns
       - "#changes-requested-reviews-by=0"
       - review-requested!=@devs
-      - and:
-          - or:
-              - label!=hotfix
-              - not:
-                  or: *HotfixReviewCond
-          - not:
-              or: *DefaultReviewCond
+      - not:
+          or: *DefaultReviewCond
     actions:
       request_reviews:
         teams:
