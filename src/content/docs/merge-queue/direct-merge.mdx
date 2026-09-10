@@ -108,8 +108,6 @@ request and a full CI run.
 - **The queue does not use [two-step CI](/merge-queue/two-step).** Two-step CI defers the heavy
   suite to the queue on purpose, so the pull request's own CI is not the full signal.
 
-- **`autosquash` is off.** Rewriting the commits changes what was tested.
-
 - **The merge method is not [`merge-batch`](/merge-queue/merge-strategies#merge-batch).** It merges
   the batch pull request itself, so there has to be one.
 

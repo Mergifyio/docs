@@ -158,10 +158,12 @@ rebase update occurs, the commit SHAs on the PR will change; what fast-forward
 preserves are the SHAs of the PR branch at merge time.
 
 :::caution
-  When using `update_bot_account` with fast-forward inplace mode, support for
-  fork pull requests is deprecated. See the
-  [update method deprecation note](#combining-merge-and-update-methods) for
-  details and migration options.
+  Combining fast-forward inplace mode with an `update_bot_account` makes
+  Mergify refuse pull requests coming from a fork when they are queued.
+  `update_method: merge` is not a way out here: a fast-forward queue lands by
+  moving the base branch onto the pull request's head, and it exists to keep
+  merge commits out of that history. See [Combining Merge and Update
+  Methods](#combining-merge-and-update-methods) for what to do instead.
 :::
 
 <GitGraph
@@ -364,10 +366,25 @@ The `update_method` option controls how Mergify updates PR branches when they
 fall behind the base branch. Combining `merge_method` with `update_method`
 gives you additional control over your history shape.
 
-:::note
-  Support for fork pull requests with `update_method: rebase` combined with
-  `update_bot_account` is deprecated. If your repository
-  receives fork PRs, use `update_method: merge` instead.
+:::caution
+  Mergify refuses a pull request coming from a fork at queue entry if the queue
+  [runs its checks in place](/merge-queue/batches#in-place-checks-no-batch-prs)
+  with `update_method: rebase` and an `update_bot_account`. GitHub refuses an
+  OAuth token on its rebase API for a fork, so rebasing on behalf of a user
+  would mean impersonating that user to force-push the contributor's branch,
+  and Mergify does not do that.
+
+  Unset `update_bot_account` to keep queueing pull requests from forks: with no
+  account to impersonate, the update rebases through GitHub's API as Mergify.
+  On a queue that does not merge with `fast-forward`, `update_method: merge`
+  works too, and merges the base branch into the pull request rather than
+  rebasing it.
+
+  One kind of pull request from a fork goes the other way: for one that
+  changes GitHub Actions workflows, or that another GitHub App's bot opened,
+  GitHub lets Mergify update in place only *with* an `update_bot_account`. A
+  queue that receives those has to run its checks on a
+  [draft pull request](/merge-queue/batches) instead.
 :::
 
 ### Semi-Linear History (Rebase + Merge Commit)
