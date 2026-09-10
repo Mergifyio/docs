@@ -5,7 +5,7 @@ const fence = (body) => ['```dot class="queue"', body, '```'].join('\n');
 const rulesOf = (text, opts) => scanText(text, opts).map((f) => f.rule);
 
 describe('scanText', () => {
-  it('catches a colour written inside a diagram', () => {
+  it('catches a color written inside a diagram', () => {
     expect(rulesOf(fence('A [fillcolor="#347D39"];'))).toEqual([
       'graphviz-color-attr',
       'diagram-hex',
@@ -18,7 +18,7 @@ describe('scanText', () => {
       'graphviz-color-attr',
       'diagram-hex',
     ]);
-    // A named colour carries no hex, and is just as unreachable by the tokens.
+    // A named color carries no hex, and is just as unreachable by the tokens.
     expect(rulesOf(fence('A [fontcolor=white];'))).toEqual(['graphviz-color-attr']);
   });
 
@@ -39,7 +39,7 @@ describe('scanText', () => {
     ).toEqual([]);
   });
 
-  it('treats none and transparent as shape, not colour', () => {
+  it('treats none and transparent as shape, not color', () => {
     // These say "draw nothing", which is the one thing a role cannot express.
     expect(rulesOf(fence('graph [bgcolor="transparent"];'))).toEqual([]);
     expect(rulesOf(fence('A [color=none];'))).toEqual([]);
@@ -53,10 +53,10 @@ describe('scanText', () => {
     expect(rulesOf(fence('PR1 [label="PR #101\\nScopes: frontend"];'))).toEqual([]);
   });
 
-  it('ignores colours outside a diagram', () => {
-    // A docs page is mostly prose and code samples, where a colour is content.
+  it('ignores colors outside a diagram', () => {
+    // A docs page is mostly prose and code samples, where a color is content.
     const page = [
-      'Set the badge colour with `color="#347D39"` in your config.',
+      'Set the badge color with `color="#347D39"` in your config.',
       '',
       '```css',
       '.badge { color: #347d39; }',
@@ -78,7 +78,7 @@ describe('scanText', () => {
   it('honours an allow directive on the line above', () => {
     expect(
       rulesOf(
-        fence(`// diagram-tokens: allow diagram-hex — this diagram is about the colour
+        fence(`// diagram-tokens: allow diagram-hex — this diagram is about the color
 A [label="#347D39"];`)
       )
     ).toEqual([]);
@@ -86,7 +86,7 @@ A [label="#347D39"];`)
 });
 
 describe('the docs themselves', () => {
-  it('has no diagram that names a colour', () => {
+  it('has no diagram that names a color', () => {
     const findings = [...iterFiles(['src/content/docs', 'src/components'])].flatMap(scanFile);
     expect(findings).toEqual([]);
   });
