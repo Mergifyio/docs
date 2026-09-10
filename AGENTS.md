@@ -50,6 +50,7 @@ pnpm test              # Run Vitest unit tests
 # Safety
 pnpm check:internal-leaks  # Scan docs for leaked internal information
 pnpm check:diagram-tokens  # Scan diagrams for hardcoded colors
+pnpm check:orphaned-images  # Scan for images nothing references
 ```
 
 ## Key Directories

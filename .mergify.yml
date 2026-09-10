@@ -32,6 +32,7 @@ merge_protections:
           - check-success = test
           - check-success = diagram-tokens
           - check-success = test-broken-links
+          - check-success = orphaned-images
           - or:
               - check-success=Cloudflare Pages
               # fork can't have the preview build
