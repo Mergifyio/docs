@@ -4,6 +4,7 @@ description: Configure merge queue scopes using your preferred monorepo tooling.
 ---
 
 import BuildkiteTokenNote from '~/components/BuildkiteTokenNote.astro';
+import CITabs from '~/components/CITabs.astro';
 import ScopesDetection from '~/components/ScopesDetection.astro';
 
 If you're using monorepo tools that have built-in
@@ -29,6 +30,8 @@ queue_rules:
 
 Use your monorepo tool to determine affected projects and upload them to
 Mergify.
+
+<CITabs>
 
 ### GitHub Actions
 
@@ -140,3 +143,5 @@ PROJECTS=$(my_monorepo_command_to_get_impacted_projects "$BASE" "$HEAD") || exit
 printf '%s\n' "$PROJECTS" \
   | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json`}
 />
+
+</CITabs>
