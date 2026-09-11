@@ -29,6 +29,11 @@
       "description": "config:best-practices pulls in security:minimumReleaseAgeNpm, which sets npm to 3 days via a packageRule. packageRules beat top-level config, so the 7 day cooldown carried over from .github/dependabot.yml has to be re-asserted here or npm silently runs at 3 days. Same rule as the monorepo.",
       "matchDatasources": ["npm"],
       "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "TypeScript 7 (the native/Corsa compiler) does not ship the programmatic API astro check relies on, so astro check fails outright on install with a TS7 compiler: 'The TypeScript module loaded ... does not expose the programmatic API that astro check relies on.' astro check is the only thing type-checking .astro files, so it stays on rather than being dropped from lint. Tracked upstream at https://github.com/withastro/roadmap/discussions/1321; lift this once astro/@astrojs/language-server support it.",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7.0.0"
     }
   ]
 }
