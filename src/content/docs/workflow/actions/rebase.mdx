@@ -33,8 +33,7 @@ the action. A pull request is rebased only when it is open, has no conflict, is
 not in a merge queue
 ([`queue-position = -1`](/configuration/conditions#attributes-list)), and is
 either behind its base branch (`#commits-behind > 0`) or does not have a linear
-history (`-linear-history`). With `autosquash` enabled, holding more than one
-commit (`#commits > 1`) is a third way to satisfy that either/or requirement.
+history (`-linear-history`).
 
 Rebasing writes the pull request's head branch, so the [restrictions on writing
 a fork's branch](/workflow/actions/update#fork-pull-requests) apply here too.
