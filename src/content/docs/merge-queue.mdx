@@ -8,88 +8,17 @@ import Button from '~/components/Button.astro';
 import AcademyCallout from '~/components/AcademyCallout.astro';
 import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
 import Docset from '~/components/DocsetGrid/Docset.astro';
+import MetricStrip from '~/components/MetricStrip.astro';
+import Verdict from '~/components/Verdict.astro';
 
-export const Yes = ({children}) => (
-  <span style={{color: 'var(--color-teal-700)', fontWeight: '600'}}>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
-      style={{verticalAlign: 'middle', marginRight: '4px'}} aria-hidden="true">
-      <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>
-    {children}
-  </span>
-);
-
-export const No = ({children}) => (
-  <span style={{color: 'var(--color-coral-700)', fontWeight: '600'}}>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
-      style={{verticalAlign: 'middle', marginRight: '4px'}} aria-hidden="true">
-      <line x1="18" y1="6" x2="6" y2="18"></line>
-      <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-    {children}
-  </span>
-);
-
-<div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '1rem',
-  margin: '1.5rem 0'
-}}>
-  <div style={{
-    flex: '1 1 200px',
-    padding: '1rem 1.25rem',
-    borderRadius: '8px',
-    background: 'color-mix(in srgb, var(--color-teal-400) 25%, transparent)',
-    borderLeft: '4px solid var(--color-teal-700)'
-  }}>
-    <div style={{
-      fontSize: '1.5rem',
-      fontWeight: 'bold',
-      color: 'var(--color-teal-700)'
-    }}>3-5x</div>
-    <div style={{
-      fontSize: '0.9rem',
-      color: 'var(--theme-text-secondary)'
-    }}>merge throughput</div>
-  </div>
-  <div style={{
-    flex: '1 1 200px',
-    padding: '1rem 1.25rem',
-    borderRadius: '8px',
-    background: 'color-mix(in srgb, var(--color-teal-400) 25%, transparent)',
-    borderLeft: '4px solid var(--color-teal-700)'
-  }}>
-    <div style={{
-      fontSize: '1.5rem',
-      fontWeight: 'bold',
-      color: 'var(--color-teal-700)'
-    }}>60-90%</div>
-    <div style={{
-      fontSize: '0.9rem',
-      color: 'var(--theme-text-secondary)'
-    }}>CI cost reduction</div>
-  </div>
-  <div style={{
-    flex: '1 1 200px',
-    padding: '1rem 1.25rem',
-    borderRadius: '8px',
-    background: 'color-mix(in srgb, var(--color-teal-400) 25%, transparent)',
-    borderLeft: '4px solid var(--color-teal-700)'
-  }}>
-    <div style={{
-      fontSize: '1.5rem',
-      fontWeight: 'bold',
-      color: 'var(--color-teal-700)'
-    }}>Zero</div>
-    <div style={{
-      fontSize: '0.9rem',
-      color: 'var(--theme-text-secondary)'
-    }}>broken builds</div>
-  </div>
-</div>
+<MetricStrip
+  label="Merge Queue impact at a glance"
+  metrics={[
+    { value: '3-5×', label: 'faster merge throughput' },
+    { value: '60-90%', label: 'CI cost reduction' },
+    { value: '0', label: 'broken builds' },
+  ]}
+/>
 
 Stop wasting engineering time on merge conflicts and broken main branches.
 Mergify's merge queue tests every PR against the latest code before merging,
@@ -190,14 +119,14 @@ which services a PR affects and only batches compatible changes together.
 
 | Capability | GitHub Native | Mergify |
 |------------|---------------|---------|
-| Parallel speculative checks | <Yes>Up to 100</Yes> | <Yes>Up to 128</Yes> |
-| Batch multiple PRs | <No /> | <Yes>Configurable size + CI optimization</Yes> |
-| Priority queues | <No /> | <Yes>Label or rule-based</Yes> |
-| Monorepo scopes | <No /> | <Yes>Path-based queues + Bazel/Nx integration</Yes> |
-| Two-step CI | <No /> | <Yes>Draft CI + merge CI</Yes> |
-| Pause/freeze queue | <No /> | <Yes>API + dashboard</Yes> |
-| Cross-repo queues | <No /> | <Yes>Coordinate dependent repos</Yes> |
-| Queue analytics | <No /> | <Yes>Wait times, throughput, failures</Yes> |
+| Parallel speculative checks | <Verdict yes={true}>Up to 100</Verdict> | <Verdict yes={true}>Up to 128</Verdict> |
+| Batch multiple PRs | <Verdict yes={false} /> | <Verdict yes={true}>Configurable size + CI optimization</Verdict> |
+| Priority queues | <Verdict yes={false} /> | <Verdict yes={true}>Label or rule-based</Verdict> |
+| Monorepo scopes | <Verdict yes={false} /> | <Verdict yes={true}>Path-based queues + Bazel/Nx integration</Verdict> |
+| Two-step CI | <Verdict yes={false} /> | <Verdict yes={true}>Draft CI + merge CI</Verdict> |
+| Pause/freeze queue | <Verdict yes={false} /> | <Verdict yes={true}>API + dashboard</Verdict> |
+| Cross-repo queues | <Verdict yes={false} /> | <Verdict yes={true}>Coordinate dependent repos</Verdict> |
+| Queue analytics | <Verdict yes={false} /> | <Verdict yes={true}>Wait times, throughput, failures</Verdict> |
 
 ## Learn More
 
