@@ -819,33 +819,42 @@ html {
 }
 .dg .muted {
   --dg-a: var(--dg-a-muted);
+  --dg-edge-lift: var(--dg-lift-muted);
 }
 .dg .batch {
   --dg-a: var(--dg-a-batch);
 }
 .dg .external {
   --dg-a: var(--dg-a-external);
+  --dg-edge-lift: var(--dg-lift-external);
 }
 .dg .queued {
   --dg-a: var(--dg-a-queued);
+  --dg-edge-lift: var(--dg-lift-queued);
 }
 .dg .pending {
   --dg-a: var(--dg-a-pending);
+  --dg-edge-lift: var(--dg-lift-pending);
 }
 .dg .merged {
   --dg-a: var(--dg-a-merged);
+  --dg-edge-lift: var(--dg-lift-merged);
 }
 .dg .failed {
   --dg-a: var(--dg-a-failed);
+  --dg-edge-lift: var(--dg-lift-failed);
 }
 .dg .config {
   --dg-a: var(--dg-a-config);
+  --dg-edge-lift: var(--dg-lift-config);
 }
 .dg .mergify {
   --dg-a: var(--dg-a-mergify);
+  --dg-edge-lift: var(--dg-lift-mergify);
 }
 .dg .datastore {
   --dg-a: var(--dg-a-datastore);
+  --dg-edge-lift: var(--dg-lift-datastore);
 }
 
 .dg {
