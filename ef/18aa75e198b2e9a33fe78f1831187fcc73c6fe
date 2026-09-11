@@ -1,0 +1,1 @@
+Fixed the Gate/gate check-name mismatch Copilot flagged (dropped the name: override); expanded the commit message to document the hotfix-exemption trade-off it also found, and the label-removal caveat's other direction.
