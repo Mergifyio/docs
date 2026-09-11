@@ -1,1 +1,6 @@
-review: make orphaned-images check-run mandatory by adding it to the CheckRuns anchor in .mergify.yml
+Revision history for #12771:
+
+rev 2 (content) 2026-09-11 07:38 UTC — review: make orphaned-images check-run mandatory by adding it to the CheckRuns anchor in .mergify.yml
+rev 1 (initial) 2026-09-11 07:38 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12771,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"9c3f2e20415fd4ae3ecb6f77e444132956ad60b2","timestamp_iso":"2026-09-11T07:38:15Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"9c3f2e20415fd4ae3ecb6f77e444132956ad60b2","new_sha":"e91307500d4186d35193c802792691bf2db51b37","timestamp_iso":"2026-09-11T07:38:15Z","reason":"review: make orphaned-images check-run mandatory by adding it to the CheckRuns anchor in .mergify.yml","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/9c3f2e20415fd4ae3ecb6f77e444132956ad60b2...e91307500d4186d35193c802792691bf2db51b37"}]} -->
