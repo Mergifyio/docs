@@ -10,6 +10,7 @@ import CommunityButton from '~/components/CommunityButton.astro';
 import Docset from '~/components/DocsetGrid/Docset.astro';
 import DocsetGrid from '~/components/DocsetGrid/DocsetGrid.astro';
 import mergeQueueHero from './images/merge-queue-hero.jpg';
+import MetricStrip from '~/components/MetricStrip.astro';
 
 <div id="home">
   {/* ---------------- HERO ---------------- */}
@@ -44,20 +45,14 @@ import mergeQueueHero from './images/merge-queue-hero.jpg';
 
   {/* ---------------- METRICS STRIP ---------------- */}
 
-  <section class="home-metrics-strip" aria-label="Mergify impact at a glance">
-    <div class="home-metric">
-      <div class="home-metric-value">3-5×</div>
-      <div class="home-metric-label">faster merge throughput</div>
-    </div>
-    <div class="home-metric">
-      <div class="home-metric-value">60-90%</div>
-      <div class="home-metric-label">CI cost reduction</div>
-    </div>
-    <div class="home-metric">
-      <div class="home-metric-value">0</div>
-      <div class="home-metric-label">broken builds</div>
-    </div>
-  </section>
+  <MetricStrip
+    label="Mergify impact at a glance"
+    metrics={[
+      { value: '3-5×', label: 'faster merge throughput' },
+      { value: '60-90%', label: 'CI cost reduction' },
+      { value: '0', label: 'broken builds' },
+    ]}
+  />
 
   {/* -------------- PROBLEM CARDS -------------- */}
 
