@@ -1,1 +1,6 @@
-Fixed the Gate/gate check-name mismatch Copilot flagged (dropped the name: override); expanded the commit message to document the hotfix-exemption trade-off it also found, and the label-removal caveat's other direction.
+Revision history for #12784:
+
+rev 2 (content) 2026-09-11 12:02 UTC — Fixed the Gate/gate check-name mismatch Copilot flagged (dropped the name: override); expanded the commit message to document the hotfix-exemption trade-off it also found, and the label-removal caveat's other direction.
+rev 1 (initial) 2026-09-11 12:02 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12784,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"2ad3ce24cf261a9e8d8f85cb24306a65d3d91360","timestamp_iso":"2026-09-11T12:02:46Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"2ad3ce24cf261a9e8d8f85cb24306a65d3d91360","new_sha":"ef18aa75e198b2e9a33fe78f1831187fcc73c6fe","timestamp_iso":"2026-09-11T12:02:46Z","reason":"Fixed the Gate/gate check-name mismatch Copilot flagged (dropped the name: override); expanded the commit message to document the hotfix-exemption trade-off it also found, and the label-removal caveat's other direction.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/2ad3ce24cf261a9e8d8f85cb24306a65d3d91360...ef18aa75e198b2e9a33fe78f1831187fcc73c6fe"}]} -->
