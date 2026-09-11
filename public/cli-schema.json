@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.8.31.1",
+    "version": "2026.9.10.1",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
@@ -45,7 +45,7 @@
     {
       "code": 8,
       "name": "ConfigurationError",
-      "description": "Configuration file missing, unparseable, or failing validation."
+      "description": "Configuration or credentials missing, unparseable, or failing validation."
     }
   ],
   "command": {
@@ -125,6 +125,89 @@
       }
     ],
     "commands": [
+      {
+        "name": "auth",
+        "path": [
+          "mergify",
+          "auth"
+        ],
+        "about": "Sign in to Mergify, and manage the stored credential",
+        "longAbout": "Sign in to Mergify, and manage the stored credential.\n\n`mergify auth login` runs an OAuth device flow against the Mergify API and stores the per-user token it mints, so the commands that talk to Mergify need no token in your environment.",
+        "usage": "mergify auth [OPTIONS] <COMMAND>",
+        "aliases": [],
+        "subcommandRequired": true,
+        "source": "native",
+        "args": [
+          {
+            "id": "api_url",
+            "kind": "option",
+            "short": "u",
+            "long": "api-url",
+            "valueNames": [
+              "API_URL"
+            ],
+            "help": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "longHelp": "Mergify API URL. Falls back to ``MERGIFY_API_URL`` env var, then to the default",
+            "required": false,
+            "global": true,
+            "default": null,
+            "possibleValues": [],
+            "numArgs": "1",
+            "env": null,
+            "valueHint": null
+          }
+        ],
+        "commands": [
+          {
+            "name": "login",
+            "path": [
+              "mergify",
+              "auth",
+              "login"
+            ],
+            "about": "Sign in to Mergify and store the credential",
+            "longAbout": "Sign in to Mergify and store the credential.\n\nPrints a URL and a code: open the one, enter the other, and approve. The credential lands in your OS keychain, or in a `0600` file when the machine has no keychain to offer.",
+            "usage": "mergify auth login [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [],
+            "commands": []
+          },
+          {
+            "name": "logout",
+            "path": [
+              "mergify",
+              "auth",
+              "logout"
+            ],
+            "about": "Revoke the stored credential and forget it",
+            "longAbout": "Revoke the stored credential and forget it.\n\nTells the Mergify API to revoke the token as well as deleting the local copy, so a machine you are handing back stops being signed in everywhere.",
+            "usage": "mergify auth logout [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [],
+            "commands": []
+          },
+          {
+            "name": "status",
+            "path": [
+              "mergify",
+              "auth",
+              "status"
+            ],
+            "about": "Show whether this machine is signed in to Mergify",
+            "longAbout": "Show whether this machine is signed in to Mergify.\n\nNames the account, where the credential is stored, and when it runs out. Checks the credential against the API rather than trusting the local copy, so one revoked from the dashboard is reported as invalid.",
+            "usage": "mergify auth status [OPTIONS]",
+            "aliases": [],
+            "subcommandRequired": false,
+            "source": "native",
+            "args": [],
+            "commands": []
+          }
+        ]
+      },
       {
         "name": "config",
         "path": [
@@ -414,6 +497,24 @@
                 "default": "false",
                 "possibleValues": [],
                 "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              },
+              {
+                "id": "head_sha",
+                "kind": "option",
+                "short": null,
+                "long": "head-sha",
+                "valueNames": [
+                  "HEAD_SHA"
+                ],
+                "help": "Head SHA the scopes were computed for, as 40 hexadecimal characters, so a result computed for an older head is not taken for the current one. When omitted it is detected from the CI environment: under GitHub Actions from the event payload (``.pull_request.head.sha`` in ``GITHUB_EVENT_PATH``), under Buildkite from ``BUILDKITE_COMMIT``. Pass the pull request's head, not the revision the job checked out — on a ``pull_request`` event those differ",
+                "longHelp": "Head SHA the scopes were computed for, as 40 hexadecimal characters, so a result computed for an older head is not taken for the current one. When omitted it is detected from the CI environment: under GitHub Actions from the event payload (``.pull_request.head.sha`` in ``GITHUB_EVENT_PATH``), under Buildkite from ``BUILDKITE_COMMIT``. Pass the pull request's head, not the revision the job checked out — on a ``pull_request`` event those differ",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
                 "env": null,
                 "valueHint": null
               }
@@ -956,8 +1057,8 @@
                 "valueNames": [
                   "TOKEN"
                 ],
-                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
+                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -1203,8 +1304,8 @@
                     "valueNames": [
                       "TOKEN"
                     ],
-                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
+                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
                     "required": false,
                     "global": false,
                     "default": null,
@@ -1309,8 +1410,8 @@
                     "valueNames": [
                       "TOKEN"
                     ],
-                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
+                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
                     "required": false,
                     "global": false,
                     "default": null,
