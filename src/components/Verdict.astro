@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/**
+ * A yes/no mark with its text, for comparison tables.
+ *
+ * These were two `export const` arrow functions inside `merge-queue.mdx`, each
+ * with a hand-written inline `<svg>` and its colour set from a `--color-*`
+ * primitive in a `style` attribute. That made the hub the last content file
+ * reaching for primitives directly, and the icons duplicated marks the site
+ * already has in its icon set.
+ *
+ * The colour stays a product primitive rather than a `--theme-*` token: yes and
+ * no are a semantic pair with no semantic token behind them, and DESIGN.md
+ * allows a primitive inside a component for exactly this case. The point of
+ * moving it here is that the content file no longer carries it.
+ */
+interface Props {
+  /** `true` renders the affirmative mark, `false` the negative one. */
+  yes: boolean;
+}
+
+const { yes } = Astro.props;
+---
+
+<span class:list={['verdict', yes ? 'is-yes' : 'is-no']}>
+  <Icon name={yes ? 'lucide:check' : 'lucide:x'} class="verdict-mark" aria-hidden="true" />
+  <slot />
+</span>
+
+<style>
+  .verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+  }
+
+  .verdict-mark {
+    width: 1em;
+    height: 1em;
+    flex: none;
+    stroke-width: 3;
+  }
+
+  .is-yes {
+    color: var(--color-teal-700);
+  }
+
+  .is-no {
+    color: var(--color-coral-700);
+  }
+</style>

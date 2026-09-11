@@ -599,35 +599,6 @@ a.current-header-link {
   display: block;
 }
 
-/* METRICS STRIP */
-.home-metrics-strip {
-  background: var(--theme-bg);
-  border: 1px solid var(--theme-border-subtle);
-  border-radius: 12px;
-  padding-block: 2rem;
-  padding-inline: var(--min-spacing-inline);
-  margin-bottom: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-.home-metric {
-  text-align: center;
-  min-width: 8rem;
-}
-.home-metric-value {
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: var(--theme-text);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-.home-metric-label {
-  font-size: 0.875rem;
-  color: var(--theme-text-muted);
-  margin-top: 0.25rem;
-}
-
 /* PROBLEM CARDS */
 .home-problems {
   padding-block: 3rem 2rem;

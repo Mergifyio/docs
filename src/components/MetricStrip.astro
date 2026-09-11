@@ -1,0 +1,79 @@
+---
+/**
+ * A row of headline figures — "3-5×, faster merge throughput".
+ *
+ * The homepage and the Merge Queue hub carry the same three numbers, and until
+ * this component they drew them two different ways: the homepage through
+ * `.home-metrics-strip` in `index.css`, the hub through nested `<div>`s with
+ * inline styles in the MDX itself. The inline copy hardcoded its padding,
+ * radius and font sizes, set its numerals at weight 700 where the type scale's
+ * 1.5rem step is 500, and reached for `--color-teal-*` primitives directly —
+ * the only content file on the site that did. Being inline, it also could not
+ * pick up the dark-mode remap the way every other surface does, so the same
+ * claim looked like a different kind of object depending on which page you
+ * came from.
+ *
+ * One component, semantic tokens, one treatment.
+ */
+interface Metric {
+  /** The figure itself: "3-5×", "60-90%", "0". */
+  value: string;
+  /** What it measures, in lower case: "faster merge throughput". */
+  label: string;
+}
+
+interface Props {
+  metrics: Metric[];
+  /** Names the group for screen readers, since the figures alone carry no context. */
+  label?: string;
+}
+
+const { metrics, label = 'Impact at a glance' } = Astro.props;
+---
+
+<section class="metric-strip" aria-label={label}>
+  {
+    metrics.map((m) => (
+      <div class="metric">
+        <div class="metric-value">{m.value}</div>
+        <div class="metric-label">{m.label}</div>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .metric-strip {
+    background: var(--theme-bg);
+    border: 1px solid var(--theme-border-subtle);
+    border-radius: 12px;
+    padding-block: 2rem;
+    padding-inline: var(--min-spacing-inline);
+    margin-block: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .metric {
+    text-align: center;
+    min-width: 8rem;
+  }
+
+  /* 1.5rem at 500 is the type scale's `heading-section` step. The inline
+     version this replaces used 700, which is why the hub's numerals read
+     heavier than the homepage's. */
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--theme-text);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .metric-label {
+    font-size: 0.875rem;
+    color: var(--theme-text-muted);
+    margin-top: 0.25rem;
+  }
+</style>
