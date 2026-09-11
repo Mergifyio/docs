@@ -6,124 +6,20 @@ shared:
       body: pr-body
     merge_method: squash
 
+commands:
+  defaults:
+    restrictions:
+      conditions: []
+
 priority_rules:
   - name: hotfix
     priority: high
     conditions:
       - label = hotfix
-
     allow_checks_interruption: true
-  - name: automated updates
-    priority: low
-    conditions:
-      - or:
-          - author = mergify-ci-bot
-          - author = dependabot[bot]
-          - author = renovate[bot]
-
-merge_protections:
-  - name: 🤖 Continuous Integration
-    if:
-      - label != hotfix
-    success_conditions:
-      - and: &CheckRuns
-          - check-success = lint
-          - check-success = build
-          - check-success = test
-          - check-success = diagram-tokens
-          - or:
-              - label = ignore-broken-links
-              - check-success = test-broken-links
-          - or:
-              - check-success=Cloudflare Pages
-              # fork can't have the preview build
-              - "-head-repo-full-name~=^Mergifyio/"
-
-  - name: 👀 Review Requirements
-    if:
-      - label != hotfix
-    success_conditions:
-      - or: &DefaultReviewCond
-          - "#approved-reviews-by >= 1"
-          - author = dependabot[bot]
-          - author = renovate[bot]
-          # mergify-ci-bot needs no approval for the deterministic syncers, but
-          # the docs agent writes prose under docs-agent/* and gets no free pass.
-          - and:
-              - author = mergify-ci-bot
-              - "-head ~= ^docs-agent/"
-
-  - name: 🧑‍🚒 Hotfix Review Requirements
-    if:
-      - label = hotfix
-    success_conditions:
-      - or: *DefaultReviewCond
-
-      # yamllint disable-line rule:line-length
-      - body ~= (Fix|Related).* (INC-\d+|https:\/\/github\.com\/Mergifyio\/docs\/security\/dependabot\/\d+)
 
 queue_rules:
-  - name: hotfix
-    <<: *DefaultQueueOptions
-    queue_conditions:
-      - label = hotfix
-    merge_conditions:
-      - and: *CheckRuns
-
   - name: default
     <<: *DefaultQueueOptions
-    queue_conditions:
-      # docs-agent branches are excluded from the automated updates lane below,
-      # so they have to land here or they would match no queue at all.
-      - or:
-          - and:
-              - author != mergify-ci-bot
-              - author != dependabot[bot]
-              - author != renovate[bot]
-          - head ~= ^docs-agent/
-    merge_conditions:
-      - schedule=Mon-Fri 09:00-17:30[Europe/Paris]
-
-  - name: automated updates
-    <<: *DefaultQueueOptions
-    merge_method: fast-forward
-    queue_conditions:
-      - or:
-          - author = mergify-ci-bot
-          - author = dependabot[bot]
-          - author = renovate[bot]
-      - "-head ~= ^docs-agent/"
-    batch_size: 10
-    batch_max_wait_time: 5min
-
-pull_request_rules:
-  - name: request review
-    conditions:
-      - -author=dependabot[bot]
-      - -author=renovate[bot]
-      # Bots are not routed for review, except the docs agent, which needs
-      # approval like anyone else. Gated on -draft so the ten drafts a
-      # Monday audit opens do not each ping the team before a human wants them.
-      - or:
-          - -author=mergify-ci-bot
-          - and:
-              - head ~= ^docs-agent/
-              - -draft
-      - -merged
-      - -closed
-      - and: *CheckRuns
-      - "#changes-requested-reviews-by=0"
-      - review-requested!=@devs
-      - not:
-          or: *DefaultReviewCond
-    actions:
-      request_reviews:
-        teams:
-          - devs
-
-merge_queue:
-  max_parallel_checks: 5
-
-merge_protections_settings:
-  reporting_method: deployments
-  auto_merge_conditions: true
+    queue_conditions: []
+    merge_conditions: []
