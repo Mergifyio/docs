@@ -133,8 +133,28 @@
   --dg-tint-cluster: 4%; /* accent -> container surface */
   --dg-ink: 38%; /* accent -> label */
   --dg-ink-base: var(--color-gray-900);
-  --dg-edge-lift: 0%; /* accent -> border */
-  --dg-edge-base: var(--color-white);
+  --dg-edge-lift: 0%; /* accent -> border, unless a role overrides below */
+  --dg-edge-base: var(--color-gray-700);
+
+  /* Per-role border lift.
+     One global lift cannot give every role the same outline weight: the
+     accents differ in luminance, so a uniform mix preserves their spread —
+     and preserves it in opposite orders in the two themes. Teal was the
+     faintest outline in light and the boldest in dark, grey and green the
+     reverse, so the same diagram emphasised different shapes depending on
+     the theme. These land every role at ~4.2:1 against its own fill in both
+     themes. `chrome` and `batch` keep the global lift: chrome paints edges,
+     not node outlines, and batch outlines a cluster whose fill is
+     --dg-container rather than --dg-surface. */
+  --dg-lift-external: 9%;
+  --dg-lift-queued: 48%;
+  --dg-lift-pending: 45%;
+  --dg-lift-merged: 3%;
+  --dg-lift-failed: 22%;
+  --dg-lift-config: 46%;
+  --dg-lift-muted: 47%;
+  --dg-lift-datastore: 0%;
+  --dg-lift-mergify: 48%;
   --dg-title: var(--theme-text-secondary);
 
   /* Links + accents */
@@ -218,6 +238,22 @@
   --dg-ink: 30%;
   --dg-ink-base: var(--color-gray-50);
   --dg-edge-lift: 18%;
+  /* Stated explicitly: light darkens the border toward gray-700, so dark
+     must name its own direction rather than inherit that. */
+  --dg-edge-base: var(--color-white);
+
+  /* Per-role border lift — see the light block for why these are per role.
+     Light darkens the accent toward --dg-edge-base; dark lightens it toward
+     white. Same target, opposite direction. */
+  --dg-lift-external: 30%;
+  --dg-lift-queued: 4%;
+  --dg-lift-pending: 9%;
+  --dg-lift-merged: 31%;
+  --dg-lift-failed: 26%;
+  --dg-lift-config: 7%;
+  --dg-lift-muted: 39%;
+  --dg-lift-datastore: 32%;
+  --dg-lift-mergify: 4%;
 
   /* Links + accents */
   --theme-link: var(--color-blue-400);
