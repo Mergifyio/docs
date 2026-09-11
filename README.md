@@ -223,3 +223,4 @@ Add the following to your agent's MCP configuration:
 - **Linter:** ESLint 9
 - **Tests:** Vitest
 - **Deployment:** Cloudflare Pages
+
