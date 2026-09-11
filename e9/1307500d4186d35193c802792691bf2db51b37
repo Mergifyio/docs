@@ -1,0 +1,1 @@
+review: make orphaned-images check-run mandatory by adding it to the CheckRuns anchor in .mergify.yml
