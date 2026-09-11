@@ -599,6 +599,65 @@ a.current-header-link {
   display: block;
 }
 
+/* CI TABS
+   Built at runtime by `CITabs.astro`, so these cannot be component-scoped:
+   Astro tree-shakes a scoped selector that matches nothing in the template. */
+.ci-tabs {
+  margin-block: 1.5rem;
+}
+
+/* A segmented control rather than a row of underlined words: the tab strip has
+   to read as one control with one option chosen, not as a set of links. */
+.ci-tablist {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+  background: var(--theme-bg-offset);
+  margin-bottom: 1.5rem;
+}
+
+.ci-tab {
+  appearance: none;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  padding: 0.4rem 0.85rem;
+  font: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--theme-text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.12s,
+    color 0.12s;
+}
+
+.ci-tab:hover {
+  color: var(--theme-text);
+}
+
+.ci-tab.is-active {
+  background: var(--theme-bg-content);
+  color: var(--theme-text);
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.ci-tab:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: -2px;
+}
+
+/* Without the script the region is exactly what it was: every section
+   visible, in order. */
+.ci-tabs:not([data-ready="true"]) .ci-tablist {
+  display: none;
+}
+
 /* PROBLEM CARDS */
 .home-problems {
   padding-block: 3rem 2rem;

@@ -4,6 +4,7 @@ description: Configure merge queue scopes from the Pants dependency graph, inclu
 ---
 
 import BuildkiteTokenNote from '~/components/BuildkiteTokenNote.astro';
+import CITabs from '~/components/CITabs.astro';
 import ScopesDetection from '~/components/ScopesDetection.astro';
 
 [Pants](https://www.pantsbuild.org/) builds a dependency graph of your repository by reading your
@@ -74,6 +75,8 @@ A target [parametrized](https://www.pantsbuild.org/stable/docs/using-pants/key-c
 over two fields is addressed `lib/multi@interpreter_constraints=py39,resolve=alt`, and the comma in
 it splits into two meaningless scopes wherever the list is uploaded as comma-separated values.
 Directories also keep the list stable when a target is renamed or split.
+
+<CITabs>
 
 ### GitHub Actions
 
@@ -209,8 +212,8 @@ pipeline that reports no scopes.
 <BuildkiteTokenNote />
 
 The plugin's `scopes-upload` action sends the scope list on its own. To also flag a pull request as
-[impacting every scope](#changes-pants-attributes-to-no-target), upload with the Mergify CLI as
-shown below instead.
+[impacting every scope](#changes-pants-attributes-to-no-target), upload with the Mergify CLI
+instead, as the Any CI tab shows.
 
 ### Any CI (Mergify CLI)
 
@@ -242,6 +245,8 @@ printf '%s\n' "$FILES" \
   | jq -R -s --argjson all "$ALL_SCOPES" \
       '{scopes: split("\n") | map(select(length > 0)), all_scopes: $all}' > scopes.json`}
 />
+
+</CITabs>
 
 ## What Pants reports for each kind of change
 
@@ -285,5 +290,5 @@ Two of them are worth handling, because both change how every target builds:
 Neither can be expressed as a scope list, so report them as a
 [barrier](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope) instead. The queue
 serializes around a pull request flagged with `all_scopes`, which is what a change to the build
-configuration needs. The GitHub Actions and Mergify CLI recipes above set the flag from a path
+configuration needs. The GitHub Actions and Any CI recipes set the flag from a path
 match on the changed files, so keep that pattern in sync with your `build_file_prelude_globs`.

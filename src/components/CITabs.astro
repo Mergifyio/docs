@@ -1,0 +1,192 @@
+---
+/**
+ * Turn a run of `###` sections into a tab set, client-side.
+ *
+ * The scopes pages document the same pipeline three times — GitHub Actions,
+ * Buildkite, Any CI — stacked one after another. A reader runs one of the three
+ * and scrolls past the other two: `/merge-queue/scopes/bazel/` renders about
+ * 11,800px tall, and most of that is a pipeline the reader will never use.
+ *
+ * The markup stays exactly as it was. The component wraps the region, and a
+ * script promotes each `###` inside it to a tab at runtime, so:
+ *
+ *   - With JavaScript off, or before the script runs, the page is what it has
+ *     always been: three headings and their content, in order. Nothing is
+ *     hidden by CSS, so a fallback reader never loses a pipeline.
+ *   - Pagefind indexes the built HTML, so every section is still searchable —
+ *     hiding happens after the index is written.
+ *   - A deep link into a hidden panel still works. `#buildkite` from a search
+ *     result, a cross-page link, or the right-hand table of contents opens that
+ *     panel and scrolls to it, on load and on hashchange.
+ *
+ * The chosen tab is remembered across pages, because someone reading the Bazel
+ * page on Buildkite is reading the Nx page on Buildkite too.
+ */
+---
+
+<div class="ci-tabs" data-ci-tabs>
+  <slot />
+</div>
+
+<script>
+  const STORE = 'mergify-docs-ci-tab';
+
+  function initTabs(root: HTMLElement) {
+    if (root.dataset.ready === 'true') return;
+
+    // MDX wraps each heading in `.heading-wrapper`; the `<h3>` carries the id.
+    const blocks = [...root.children].filter(
+      (el): el is HTMLElement => el instanceof HTMLElement
+    );
+    type Panel = { id: string; label: string; nodes: HTMLElement[] };
+    const panels: Panel[] = [];
+
+    for (const el of blocks) {
+      const heading = el.matches('h3') ? el : el.querySelector(':scope > h3');
+      if (heading instanceof HTMLElement && heading.id) {
+        panels.push({
+          id: heading.id,
+          // The anchor link and its screen-reader text live inside the heading.
+          label: (heading.textContent ?? '').replace(/Section titled.*/, '').trim(),
+          nodes: [el],
+        });
+      } else if (panels.length > 0) {
+        panels[panels.length - 1].nodes.push(el);
+      }
+    }
+
+    // One section is not a tab set, and neither is none.
+    if (panels.length < 2) return;
+
+    const list = document.createElement('div');
+    list.className = 'ci-tablist';
+    list.setAttribute('role', 'tablist');
+
+    const wrappers = panels.map((panel) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'ci-tabpanel';
+      wrap.id = `panel-${panel.id}`;
+      wrap.setAttribute('role', 'tabpanel');
+      wrap.setAttribute('aria-labelledby', `tab-${panel.id}`);
+      panel.nodes[0].before(wrap);
+      for (const node of panel.nodes) wrap.append(node);
+      return wrap;
+    });
+
+    const buttons = panels.map((panel, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ci-tab';
+      btn.id = `tab-${panel.id}`;
+      btn.textContent = panel.label;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-controls', `panel-${panel.id}`);
+      btn.addEventListener('click', () => {
+        select(i);
+        try {
+          localStorage.setItem(STORE, panel.label);
+        } catch {
+          /* private mode: the choice just does not persist */
+        }
+      });
+      // Left/right arrows move between tabs, as a tablist is expected to.
+      btn.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        const next = (i + d + panels.length) % panels.length;
+        select(next);
+        buttons[next].focus();
+      });
+      list.append(btn);
+      return btn;
+    });
+
+    function select(index: number) {
+      panels.forEach((_, i) => {
+        const on = i === index;
+        wrappers[i].hidden = !on;
+        buttons[i].setAttribute('aria-selected', String(on));
+        buttons[i].tabIndex = on ? 0 : -1;
+        buttons[i].classList.toggle('is-active', on);
+      });
+    }
+
+    root.prepend(list);
+    root.dataset.ready = 'true';
+    // Reachable from the document-level click handler below, which cannot see
+    // this closure. Selecting this way deliberately skips the localStorage
+    // write: following a link is not choosing a default.
+    (root as HTMLElement & { __ciSelect?: (i: number) => void }).__ciSelect = select;
+
+    /** The panel a hash points into, whether it names the panel or something inside it. */
+    function panelForHash(): number {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (!id) return -1;
+      const direct = panels.findIndex((p) => p.id === id);
+      if (direct !== -1) return direct;
+      const target = document.getElementById(id);
+      return target ? wrappers.findIndex((w) => w.contains(target)) : -1;
+    }
+
+    let stored = -1;
+    try {
+      const label = localStorage.getItem(STORE);
+      stored = label ? panels.findIndex((p) => p.label === label) : -1;
+    } catch {
+      /* ignore */
+    }
+
+    const fromHash = panelForHash();
+    select(fromHash !== -1 ? fromHash : stored !== -1 ? stored : 0);
+
+    // A link to a heading inside a hidden panel has to open that panel before
+    // anything can scroll to it. `hashchange` alone is not enough: Astro's
+    // ClientRouter intercepts same-page anchor clicks and moves the URL with
+    // pushState, which fires no hashchange at all — which is exactly how the
+    // right-hand table of contents ended up doing nothing. The capture-phase
+    // click below runs before the router or the browser acts on the link, so
+    // the panel is already open by the time either tries to scroll.
+    window.addEventListener('hashchange', () => {
+      const i = panelForHash();
+      if (i === -1) return;
+      select(i);
+      document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+    });
+
+    if (fromHash !== -1) {
+      document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+    }
+  }
+
+  /** Open whichever panel holds `id`, if it is currently hidden. */
+  function revealPanelFor(id: string) {
+    const target = document.getElementById(id);
+    const panel = target?.closest<HTMLElement>('.ci-tabpanel');
+    if (!panel || !panel.hidden) return;
+    const root = panel.closest<HTMLElement & { __ciSelect?: (i: number) => void }>('[data-ci-tabs]');
+    if (!root?.__ciSelect) return;
+    root.__ciSelect([...root.querySelectorAll('.ci-tabpanel')].indexOf(panel));
+  }
+
+  document.addEventListener(
+    'click',
+    (e) => {
+      const link = (e.target as Element | null)?.closest?.('a[href^="#"]');
+      const href = link?.getAttribute('href');
+      if (!href || href.length < 2) return;
+      revealPanelFor(decodeURIComponent(href.slice(1)));
+    },
+    true
+  );
+
+  function initAll() {
+    document
+      .querySelectorAll<HTMLElement>('[data-ci-tabs]')
+      .forEach((root) => initTabs(root));
+  }
+
+  initAll();
+  // Astro's client router swaps the DOM without a reload.
+  document.addEventListener('astro:page-load', initAll);
+</script>

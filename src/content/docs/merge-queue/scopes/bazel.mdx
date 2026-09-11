@@ -4,6 +4,7 @@ description: Compute merge queue scopes from Bazel's dependency graph with bazel
 ---
 
 import BuildkiteTokenNote from '~/components/BuildkiteTokenNote.astro';
+import CITabs from '~/components/CITabs.astro';
 import ScopesDetection from '~/components/ScopesDetection.astro';
 import Youtube from '~/components/Youtube.astro';
 
@@ -91,7 +92,7 @@ bazel-diff compares two revisions, so the job that computes scopes needs three t
   base, then the head.
 
 The detection itself is three bazel-diff commands, run against the merge-queue-aware `$BASE` and
-`$HEAD` revisions each pipeline below resolves:
+`$HEAD` revisions each pipeline resolves for itself:
 
 ```bash
 curl -fsSL -o /tmp/bazel-diff.jar \
@@ -169,7 +170,7 @@ bazel run @bazel-diff//cli:bazel-diff -- generate-hashes --workspacePath "$(pwd)
 ```
 
 That is the install bazel-diff recommends, and it is the better one for running the tool by hand.
-The pipelines below use the released JAR regardless, for one reason: they check out two revisions of
+Every pipeline here uses the released JAR regardless, for one reason: they check out two revisions of
 your workspace, and `bazel run @bazel-diff//...` resolves against whichever `MODULE.bazel` is checked
 out at the time. At `$BASE` that is the file as it stood then, which may pin a different version or
 not declare bazel-diff at all. That covers every base older than the commit adding the dependency,
@@ -178,7 +179,7 @@ at both revisions, which is how bazel-diff's own two-revision examples invoke it
 
 ### Verifying the download
 
-The pipelines below download a JAR over the network and run it with the same privileges as the rest
+Each pipeline downloads a JAR over the network and runs it with the same privileges as the rest
 of the job, so the first command names exactly what runs: the URL points at a version instead of
 `latest`, and `sha256sum -c` checks the bytes behind it. Recompute the digest when you bump the
 version:
@@ -208,6 +209,8 @@ workflow, so the signing identity is that workflow rather than the bazel-diff re
   `sha256sum` comes from GNU coreutils and is not installed on macOS. On a macOS agent, use
   `shasum -a 256 -c -` in place of `sha256sum -c -`.
 :::
+
+<CITabs>
 
 ### GitHub Actions
 
@@ -375,6 +378,8 @@ java -jar /tmp/bazel-diff.jar get-impacted-targets \
 awk -F: '/^\/\// { print $1 }' /tmp/impacted.txt | sort -u \
   | jq -R -s '{scopes: split("\n") | map(select(length > 0))}' > scopes.json`}
 />
+
+</CITabs>
 
 ## Reducing the cost
 
