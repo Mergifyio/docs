@@ -175,3 +175,41 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm check:links
+
+  gate:
+    # No `name:` override: the required check must match this job id, `gate`,
+    # exactly — a display-name override here would report as `Gate` and the
+    # ruleset required check would never be satisfied.
+    # Every other job is a `needs:`, which is SKIPPED (not failed) the moment
+    # one of them fails — a skipped check reports nothing to a required-check
+    # ruleset, so a red build would otherwise show the ruleset a clean gate.
+    # `always()` makes this job run regardless, and scripts/check-ci-gate.mjs
+    # turns any non-success dependency into an explicit failure. See that
+    # script for the `ignore-broken-links` label exception.
+    if: always()
+    needs:
+      - actionlint
+      - lint
+      - test
+      - config-examples
+      - internal-leaks
+      - diagram-tokens
+      - build
+      - test-broken-links
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Setup Node 🔧
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version-file: .node-version
+
+      # No dependencies needed: the checker is plain Node. Its own unit tests
+      # run in the `test` job.
+      - name: Require every job to have succeeded
+        env:
+          NEEDS_CONTEXT: ${{ toJson(needs) }}
+          PR_LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+        run: node scripts/check-ci-gate.mjs

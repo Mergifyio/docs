@@ -22,23 +22,6 @@ priority_rules:
           - author = renovate[bot]
 
 merge_protections:
-  - name: 🤖 Continuous Integration
-    if:
-      - label != hotfix
-    success_conditions:
-      - and: &CheckRuns
-          - check-success = lint
-          - check-success = build
-          - check-success = test
-          - check-success = diagram-tokens
-          - or:
-              - label = ignore-broken-links
-              - check-success = test-broken-links
-          - or:
-              - check-success=Cloudflare Pages
-              # fork can't have the preview build
-              - "-head-repo-full-name~=^Mergifyio/"
-
   - name: 👀 Review Requirements
     if:
       - label != hotfix
@@ -68,7 +51,23 @@ queue_rules:
     queue_conditions:
       - label = hotfix
     merge_conditions:
-      - and: *CheckRuns
+      # `&CheckRuns` used to also gate a general `🤖 Continuous Integration`
+      # merge_protection; that block is gone (a `gate` job + ruleset required
+      # check replaces it — see ci.yaml), but the hotfix queue and the
+      # request-review rule below still need this list, so its definition
+      # moved here rather than disappearing with it.
+      - and: &CheckRuns
+          - check-success = lint
+          - check-success = build
+          - check-success = test
+          - check-success = diagram-tokens
+          - or:
+              - label = ignore-broken-links
+              - check-success = test-broken-links
+          - or:
+              - check-success=Cloudflare Pages
+              # fork can't have the preview build
+              - "-head-repo-full-name~=^Mergifyio/"
 
   - name: default
     <<: *DefaultQueueOptions
