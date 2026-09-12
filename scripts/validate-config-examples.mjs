@@ -162,6 +162,40 @@ export function* iterMdx(targets) {
   }
 }
 
+// Mergify hands the value of a `~=` (regex) or `*=` (glob) condition to the
+// pattern engine verbatim — unlike `=`, it does not strip surrounding quotes.
+// YAML in turn only strips quotes that *open* a scalar, so `- files ~= "^ui/"`
+// reaches Mergify with its quotes attached and compiles a pattern expecting a
+// literal `"` before a start-of-string anchor: it can never match, and the rule
+// silently does nothing. Neither language complains, and the schema sees a
+// well-formed string, so this is invisible to the validation above.
+// The fix is to quote the whole condition (`"files ~= ^ui/"`) or nothing at all.
+const QUOTED_PATTERN_RE = /(?:~=|\*=)\s*(["'])(?:(?!\1).)*\1\s*$/;
+const LIST_ITEM_RE = /^\s*-\s+(\S.*)$/;
+
+/** Find conditions whose pattern is quoted inside an unquoted YAML scalar. */
+export function findQuotedPatterns(blocks) {
+  const failures = [];
+  for (const b of blocks) {
+    b.code.split('\n').forEach((ln, idx) => {
+      const item = ln.match(LIST_ITEM_RE);
+      if (!item) return;
+      const scalar = item[1];
+      // A scalar the author quoted is YAML's to unquote, so the pattern is clean.
+      if (scalar.startsWith('"') || scalar.startsWith("'")) return;
+      if (!QUOTED_PATTERN_RE.test(scalar)) return;
+      failures.push({
+        file: b.file,
+        line: b.line + 1 + idx,
+        msg:
+          `quoted pattern in \`${scalar.trim()}\` — the quotes are part of the ` +
+          'pattern and it will never match; quote the whole condition or nothing',
+      });
+    });
+  }
+  return failures;
+}
+
 /** Compile the Mergify config schema into a structural-only validator. */
 export function createValidator(schemaPath = SCHEMA_PATH) {
   const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
@@ -212,7 +246,9 @@ function main(argv) {
     return 0;
   }
 
-  const failures = validateBlocks(blocks);
+  // Quoted patterns are checked in every YAML block, not just the complete
+  // configs: most conditions in the docs live in fragments showing a single rule.
+  const failures = [...validateBlocks(blocks), ...findQuotedPatterns(blocks)];
   const configs = blocks.filter((b) => b.classification === 'mergify-config');
   const skipped = blocks.filter((b) => b.classification === 'skipped').length;
   console.log(
@@ -223,12 +259,14 @@ function main(argv) {
     console.log('All config examples are valid.');
     return 0;
   }
-  console.error(`\n${failures.length} invalid config example(s):\n`);
+  console.error(`\n${failures.length} problem(s) in config examples:\n`);
   for (const f of failures) console.error(`  ${f.file}:${f.line} — ${f.msg}`);
   console.error(
-    '\nFix the snippet, or if it is an intentional fragment add a `# partial` ' +
-      'comment / `...` placeholder, or mark a deliberately-invalid block with an ' +
-      'MDX comment: {/* validate-config-examples: skip — why */}'
+    '\nFix the snippet. A quoted pattern is fixed by moving the quotes to the ' +
+      'whole condition, or dropping them. For a schema error on an intentional ' +
+      'fragment, add a `# partial` comment / `...` placeholder, or mark a ' +
+      'deliberately-invalid block with an MDX comment: ' +
+      '{/* validate-config-examples: skip — why */}'
   );
   return 1;
 }
