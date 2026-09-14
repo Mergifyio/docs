@@ -147,14 +147,24 @@ every 12 hours on weekdays.
   test's identity, so the scheduled step has to report the same job name as the
   step running those tests on your pull requests. Otherwise the two sets of
   results count as two different tests. By default that name is the step label.
-  Set `MERGIFY_TEST_JOB_NAME` in the step's `env` to report a different one:
+  Set the plugin's `job_name` option to report a different one:
 
   ```yaml
   steps:
     - label: "Flaky test detection"
-      env:
-        MERGIFY_TEST_JOB_NAME: "Run tests"
+      command: <your test command>
+      plugins:
+        - mergifyio/mergify-ci#@@BUILDKITE_PLUGIN_VERSION@@:
+            action: junit-process
+            report_path: "reports/*.xml"
+            job_name: "Run tests"
   ```
+
+  The plugin exports `MERGIFY_TEST_JOB_NAME` itself before it uploads, from
+  `job_name` if you set it and from the step label otherwise, so a value put in
+  the step's `env` is overwritten. That variable is still the way to rename the
+  job when you upload without the plugin, from a framework with a native
+  Mergify integration.
 
 ## Test Framework Configuration
 
