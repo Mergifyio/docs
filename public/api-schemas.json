@@ -4840,7 +4840,7 @@
           "pull_requests"
         ],
         "summary": "Set the scopes for a pull request",
-        "description": "Set the scopes for a pull request.\n\nThis addresses the scopes by pull request number alone, so the report cannot say\nwhich revision it was computed for, and the last one to arrive wins whatever\nhead that was. Prefer `PUT /repos/{owner}/{repository}/commits/{sha}/scopes`,\nwhich names the revision.",
+        "description": "Set the scopes for a pull request.\n\nThis addresses the scopes by pull request number alone, so the report cannot say\nwhich revision it was computed for, and the last one to arrive wins whatever\nhead that was. Prefer `PUT /repos/{owner}/{repository}/commits/{sha}/scopes`,\nwhich names the revision.\n\nA scope name may hold anything except a NUL byte or an unpaired UTF-16\nsurrogate, neither of which Postgres can store, and is limited to 1024\ncharacters; a report carries at most 10000 of them. A report that breaks any of\nthese is refused in full with a 422 and nothing is stored, so the pull request\nkeeps whatever was reported for it last.",
         "operationId": "put_ci_scopes_repos__owner___repository__pulls__number__scopes_put",
         "security": [
           {
@@ -5009,7 +5009,7 @@
           "pull_requests"
         ],
         "summary": "Set the scopes for a commit",
-        "description": "Set the scopes a commit impacts.\n\nPrefer this over the pull request variant. Scopes computed for one revision do\nnot describe another, so naming the revision lets a report be matched against the\nhead a pull request actually has. A report for a revision a pull request has\nalready moved past can no longer overwrite what its current head reported; a\nreport *is* still applied to every **open** pull request whose head it currently\nis, which is the normal case.\n\nA report replaces the previous one for that revision in full: `all_scopes`\ndefaults to `false`, so omitting it clears a barrier previously reported for the\nsame commit. Send the complete result of your scope computation every time.\n\nSend the pull request's head SHA (`github.event.pull_request.head.sha`). That is\nnot always the revision your job checked out: on a `pull_request` event the\ndefault checkout is a merge commit, and a report keyed on that SHA matches no\npull request head.",
+        "description": "Set the scopes a commit impacts.\n\nPrefer this over the pull request variant. Scopes computed for one revision do\nnot describe another, so naming the revision lets a report be matched against the\nhead a pull request actually has. A report for a revision a pull request has\nalready moved past can no longer overwrite what its current head reported; a\nreport *is* still applied to every **open** pull request whose head it currently\nis, which is the normal case.\n\nA report replaces the previous one for that revision in full: `all_scopes`\ndefaults to `false`, so omitting it clears a barrier previously reported for the\nsame commit. Send the complete result of your scope computation every time.\n\nSend the pull request's head SHA (`github.event.pull_request.head.sha`). That is\nnot always the revision your job checked out: on a `pull_request` event the\ndefault checkout is a merge commit, and a report keyed on that SHA matches no\npull request head.\n\nA scope name may hold anything except a NUL byte or an unpaired UTF-16\nsurrogate, neither of which Postgres can store, and is limited to 1024\ncharacters; a report carries at most 10000 of them. A report that breaks any of\nthese is refused in full with a 422 and nothing is stored, so the pull request\nkeeps whatever was reported for it last.",
         "operationId": "put_commit_scopes_repos__owner___repository__commits__sha__scopes_put",
         "security": [
           {
@@ -18936,9 +18936,11 @@
         "properties": {
           "scopes": {
             "items": {
-              "type": "string"
+              "type": "string",
+              "maxLength": 1024
             },
             "type": "array",
+            "maxItems": 10000,
             "uniqueItems": true,
             "title": "Scopes"
           },
