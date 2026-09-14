@@ -208,6 +208,11 @@ and `mergify ci scopes-send` post to endpoints that accept nothing but a `ci`
 key, so those commands need one specifically. A user token from
 `mergify auth login` does not work for them.
 
+The `mergify tests` commands go the other way. Apart from
+`mergify tests quarantines list`, the endpoints behind them refuse a `ci` key
+and answer `403`, so they need an `admin` key, a GitHub personal access token,
+or a user token.
+
 ### GitHub token for Stacks
 
 Stacks commands act on pull requests through the GitHub API, so they need a
