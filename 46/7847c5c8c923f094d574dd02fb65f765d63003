@@ -1,0 +1,1 @@
+Julien's self-review: labels as a CI escape hatch are an anti-pattern; split the ignore-broken-links removal into its own preceding PR so this gate no longer needs to reimplement the label logic
