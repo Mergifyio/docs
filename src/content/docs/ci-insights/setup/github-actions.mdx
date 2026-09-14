@@ -132,7 +132,7 @@ jobs:
             # npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
           done
 
-      # Upload all test results to CI Insights
+      # Upload all test results to Test Insights
       - name: Upload test results
         if: always()
         uses: mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
@@ -176,6 +176,6 @@ jobs:
 
 ### Key Environment Variables
 
-- `MERGIFY_TOKEN`: Application key with `ci` scope for uploading test results to CI Insights
+- `MERGIFY_TOKEN`: Application key with `ci` scope for uploading test results to Test Insights
 - `RUN_COUNT`: Number of times to execute each test within a single job
-- `MERGIFY_TEST_JOB_NAME`: Override for the job name reported to CI Insights
+- `MERGIFY_TEST_JOB_NAME`: Override for the job name reported with your test results
