@@ -224,18 +224,18 @@ does not unblock it.
 Queue branches are prefixed with `mergify/merge-queue/`, customizable via
 `queue_branch_prefix` in
 [`queue_rules`](/configuration/file-format/#queue-rules). The error Mergify
-reports also names a `tmp-` variant of that prefix, so exclude both when you
-narrow a ruleset pattern.
+reports names the queue branch that was refused, so you know which pattern to
+narrow.
 
 **Resolution:**
 
 - **Preferred:** add Mergify as a bypass actor on the ruleset with the
   `exempt` bypass mode.
 
-- **Alternative:** narrow the ruleset pattern so it excludes both
-  `mergify/merge-queue/*` and `tmp-mergify/merge-queue/*`. If you customized
+- **Alternative:** narrow the ruleset pattern so it excludes
+  `mergify/merge-queue/*`. If you customized
   [`queue_branch_prefix`](/configuration/file-format/#queue-rules), substitute
-  your prefix and its `tmp-` counterpart.
+  your prefix.
 
 :::note
   Mergify also periodically deletes leftover queue branches that match these
