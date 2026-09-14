@@ -196,10 +196,12 @@ next batch picks up where the previous one stopped.
 
 ### Cascade Dequeue
 
-If any PR in a queued stack fails validation or is dequeued, every successor
-still in the queue is dequeued automatically with the reason
-`StackPredecessorDequeued`. This stops the queue from validating PRs whose
-dependency just broke. There's no point checking PR3 if PR1 just failed.
+When a PR is taken out of a queued stack with
+[`@mergifyio dequeue`](/commands/dequeue), from the dashboard, or through the
+API, every successor still in the queue is dequeued with it, under the
+[`stack-predecessor-dequeued`](/configuration/data-types#queue-dequeue-reason)
+dequeue reason. This stops the queue from validating PRs whose dependency just
+disappeared. There's no point checking PR3 if PR1 has left the queue.
 
 ```dot class="queue"
 digraph {
@@ -207,7 +209,7 @@ digraph {
   // Not fixedsize: these labels are two lines, so let the circle grow to them.
   node [shape=circle];
 
-  PR1 [label="PR1\n(failed)", class="failed"];
+  PR1 [label="PR1\n(dequeued)", class="failed"];
   PR2 [label="PR2\n(cascaded)", class="muted"];
   PR3 [label="PR3\n(cascaded)", class="muted"];
   PR4 [class="queued"];
@@ -218,7 +220,7 @@ digraph {
 }
 ```
 
-After fixing the broken PR, re-queue the stack from the top with
+Once the PR you pulled out is ready again, re-queue the stack from the top with
 `@mergifyio queue`. Propagation re-enqueues the predecessors as needed.
 
 :::note
