@@ -96,8 +96,10 @@ Scopes can be attached to pull requests automatically or manually:
 
 - **Manual upload:** Use the [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci)
   GitHub Action, the [REST API](/api/pull-requests), or the `mergify ci scopes-send` CLI to push scopes
-  computed by your own tooling (Nx, Bazel, Pants, Turborepo, etc.). Examples are available in the build
-  tool guides under [Scopes integrations](/merge-queue/scopes).
+  computed by your own tooling. There is a build tool guide for [Nx](/merge-queue/scopes/nx),
+  [Bazel](/merge-queue/scopes/bazel), [Pants](/merge-queue/scopes/pants) and
+  [Turborepo](/merge-queue/scopes/turborepo), plus one for
+  [any other build tool](/merge-queue/scopes/others).
 
 ## Configuration schema
 
@@ -139,7 +141,12 @@ queue_rules:
 
 - `scopes.capacities`: optional map of scope name to the number of speculative checks that scope may
   run at the same time, used to limit per-scope concurrency in parallel or isolated mode. See [Limiting
-  concurrency per scope](/merge-queue/queue-modes#limiting-concurrency-per-scope).
+  concurrency per scope](/merge-queue/queue-modes#limiting-concurrency-per-scope). Its keys must be
+  at least two characters and match `^[A-Za-z0-9_-]+$`, the same constraint the `files` source puts
+  on the scope names you declare under it. Uploaded scope names carry no such constraint, so a scope
+  name that contains anything else, such as a Bazel package label like `//lib/core` or a scoped
+  package name like `@acme/web`, cannot have a `capacities` entry. Use `scopes.default_capacity` to
+  bound those.
 
 - `scopes.default_capacity`: optional capacity applied to every scope that has no `capacities` entry
   of its own, so scope sets that change from one pull request to the next stay bounded without you

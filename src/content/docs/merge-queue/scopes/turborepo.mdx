@@ -148,3 +148,11 @@ printf '%s' "$DRY" \
 />
 
 </CITabs>
+
+Whichever recipe you use, the scopes it uploads are the package names `turbo` reports under
+`.packages`, and a scoped name such as `@acme/web` is not a name
+[`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) accepts: its keys must
+match `^[A-Za-z0-9_-]+$`. Uploaded scope names carry no such constraint, so the package name works
+everywhere else in the queue. To bound how many speculative checks these scopes run at once, use
+[`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list), which applies
+to every scope the queue observes rather than to names you list.
