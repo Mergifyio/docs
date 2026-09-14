@@ -42,9 +42,17 @@ Application keys have two scopes, picked when you create the key:
 - `admin`: the whole API, except uploading results and setting [Merge Queue
   Scopes](/merge-queue/scopes), which need a `ci` key.
 
-- `ci`: uploading CI and test results, setting Merge Queue Scopes, reading Test
-  Insights data, and [quarantining](/test-insights/quarantine) or
-  unquarantining tests.
+- `ci`: uploading CI and test results, setting Merge Queue Scopes, and the reads
+  a job makes while it runs: the list of
+  [quarantined](/test-insights/quarantine) tests, and the
+  [flaky-detection](/ci-insights/flaky-test-detection) and test-selection data
+  the test framework integrations fetch mid-run.
+
+A `ci` key reaches nothing else in Test Insights. Browsing tests, their
+executions and their failures, and adding or removing a quarantine, are answered
+with `403` and need an `admin` key, a GitHub personal access token, or a user
+token. A `ci` key sits in CI configuration, where a build log or a workflow
+file can reach it, so it carries only what an unattended job needs.
 
 A key belongs to a GitHub account, not to a repository or to the person who
 created it. It works on every repository of that account and carries no GitHub

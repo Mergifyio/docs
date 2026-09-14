@@ -123,8 +123,9 @@ have to put a secret on a command line:
 export MERGIFY_TOKEN=your_token_here
 ```
 
-An `admin` key covers queue status, the Activity Log, and freezes; CI Insights
-uploads and Merge Queue Scopes need a `ci` key instead. No single key covers
+An `admin` key covers queue status, the Activity Log, freezes, and browsing or
+quarantining tests; CI Insights uploads and Merge Queue Scopes need a `ci` key
+instead. No single key covers
 both, so pick the one that matches what you want the agent to do.
 
 An application key does not work for Stacks. An unattended agent that pushes
