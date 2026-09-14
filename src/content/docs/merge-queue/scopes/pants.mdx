@@ -76,6 +76,13 @@ over two fields is addressed `lib/multi@interpreter_constraints=py39,resolve=alt
 it splits into two meaningless scopes wherever the list is uploaded as comma-separated values.
 Directories also keep the list stable when a target is renamed or split.
 
+Directories do share one limit with target addresses:
+[`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) keys must match
+`^[A-Za-z0-9_-]+$`, which neither `lib/util` nor `//` does, so neither can be given a capacity of
+its own. Uploaded scope names are unconstrained, so they work everywhere else. Bound them with
+[`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list), which applies
+to every scope the queue observes rather than to names you list.
+
 <CITabs>
 
 ### GitHub Actions
