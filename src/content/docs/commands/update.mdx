@@ -21,7 +21,7 @@ take care of it.
 `update` merges the base branch into the pull request rather than rewriting its
 head branch, and it impersonates nobody unless you configure a
 [`bot_account`](/configuration/data-types#bot-account). Use it on pull requests
-opened from a fork, where [`rebase`](/commands/rebase) is deprecated.
+opened from a fork, where [`rebase`](/commands/rebase) refuses to run.
 
 The merge commit still lands on the pull request's head branch, which on a fork
 belongs to the author's repository. When the base repository is public, the
