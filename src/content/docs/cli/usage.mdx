@@ -91,7 +91,8 @@ The CLI talks to two APIs, and they take different credentials:
   requests on GitHub directly.
 
 `mergify auth login` covers the Mergify half. Stacks still needs a GitHub token
-of its own.
+of its own. The [`auth` command reference](/cli/auth) lists the options each
+`mergify auth` command takes.
 
 ### Sign in to Mergify
 
@@ -259,4 +260,4 @@ apart from an API failure without parsing the output:
 | `5` | `GitHubApiError` | GitHub API request failed. |
 | `6` | `MergifyApiError` | Mergify API request failed. |
 | `7` | `InvalidState` | CLI invariant violated (e.g. command run outside a valid context). |
-| `8` | `ConfigurationError` | Configuration file missing, unparseable, or failing validation. |
+| `8` | `ConfigurationError` | Configuration or credentials missing, unparseable, or failing validation. |
