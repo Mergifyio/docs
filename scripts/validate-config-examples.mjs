@@ -5,8 +5,9 @@
  * silently misleading users.
  *
  * It scans MDX files for ```yaml / ```yml code fences, classifies each block,
- * and validates the ones that are complete Mergify configs against
- * `public/mergify-configuration-schema.json` (the same schema the docs site
+ * and validates the ones that are complete Mergify configs — plus the standalone
+ * merge protection rules, which are wrapped back into a `merge_protections` list
+ * first — against `public/mergify-configuration-schema.json` (the same schema the docs site
  * serves and that `mergify config validate` fetches — but read from disk so a
  * PR is checked against its own schema, offline, with no network round-trip).
  *
@@ -57,6 +58,15 @@ const MERGIFY_TOP_KEYS = new Set([
 // Signals that a YAML block is a GitHub Actions / CI workflow, not Mergify config.
 const CI_SIGNALS = ['runs-on:', 'uses:', 'jobs:', 'steps:'];
 
+// A merge protection rule is often shown on its own, as one item of the
+// `merge_protections` list with the list marker stripped. `if` is the only rule
+// key in the whole schema that no other rule kind has, so `name` + `if`
+// identifies one unambiguously — and wrapping it back into a list makes it
+// validatable like any other config. Deliberately not keyed on
+// `success_conditions`: a rule that misspells it is exactly what this should
+// catch, and the schema requires it.
+const MERGE_PROTECTION_RULE_KEYS = ['name', 'if'];
+
 const FENCE_RE = /^([ \t]*)(`{3,}|~{3,})([^\n`]*)$/;
 const PARTIAL_MARKER_RE = /^\s*#\s*partial\b/i;
 const TOP_KEY_RE = /^([A-Za-z_][\w-]*):/;
@@ -89,6 +99,10 @@ export function classify(code) {
     if (m) topKeys.add(m[1]);
   }
   for (const k of topKeys) if (MERGIFY_TOP_KEYS.has(k)) return 'mergify-config';
+
+  if (MERGE_PROTECTION_RULE_KEYS.every((k) => topKeys.has(k))) {
+    return 'merge-protection-rule';
+  }
 
   // No unindented top-level key at all -> a fragment (e.g. a single rule shown
   // inline). Not independently validatable.
@@ -173,11 +187,14 @@ export function createValidator(schemaPath = SCHEMA_PATH) {
   return ajv.compile(schema);
 }
 
-/** Validate the `mergify-config` blocks; returns [{file, line, msg}, ...]. */
+/** The classifications that get validated against the schema. */
+export const VALIDATED_CLASSIFICATIONS = ['mergify-config', 'merge-protection-rule'];
+
+/** Validate the schema-checkable blocks; returns [{file, line, msg}, ...]. */
 export function validateBlocks(blocks, validate = createValidator()) {
   const failures = [];
   for (const b of blocks) {
-    if (b.classification !== 'mergify-config') continue;
+    if (!VALIDATED_CLASSIFICATIONS.includes(b.classification)) continue;
     let doc;
     try {
       doc = yaml.load(b.code);
@@ -189,6 +206,7 @@ export function validateBlocks(blocks, validate = createValidator()) {
       });
       continue;
     }
+    if (b.classification === 'merge-protection-rule') doc = { merge_protections: [doc] };
     if (validate(doc)) continue;
     const detail = (validate.errors || [])
       .slice(0, 3)
@@ -213,7 +231,7 @@ function main(argv) {
   }
 
   const failures = validateBlocks(blocks);
-  const configs = blocks.filter((b) => b.classification === 'mergify-config');
+  const configs = blocks.filter((b) => VALIDATED_CLASSIFICATIONS.includes(b.classification));
   const skipped = blocks.filter((b) => b.classification === 'skipped').length;
   console.log(
     `Checked ${configs.length} Mergify config example(s) ` +
