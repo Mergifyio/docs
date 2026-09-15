@@ -17,13 +17,18 @@ up-to-date with the latest changes from the base branch.
 :::
 
 :::caution
-  Support for rebasing pull requests that come from a fork is **deprecated**
-  and will be removed in a future release. This is not limited to
-  configurations that set `bot_account`: rebasing always impersonates a GitHub
-  user, and when `bot_account` is unset Mergify falls back to the sender of the
-  `rebase` command, or to the pull request author when a rule triggered the
-  rebase. If your repository receives pull requests from forks, switch to the
-  [`update` action](/workflow/actions/update) instead.
+  This action does not rebase a pull request opened from a fork. It always
+  rebases as a GitHub user, and GitHub refuses an OAuth token on its rebase API
+  for a fork, so doing it would mean impersonating that user to force-push the
+  contributor's branch. The action reports that the pull request was opened
+  from a fork and cannot be rebased, and does nothing, whether or not
+  [`bot_account`](/configuration/data-types#bot-account) is set.
+
+  Use the [`update` action](/workflow/actions/update) on those instead: it
+  merges the base branch into the pull request, and impersonates nobody unless
+  you set its own `bot_account`. It only acts when the pull request is behind
+  its base branch, so a branch that needs a linear history has to be rebased by
+  its author.
 :::
 
 ## Rebase Requirements
@@ -35,8 +40,24 @@ not in a merge queue
 either behind its base branch (`#commits-behind > 0`) or does not have a linear
 history (`-linear-history`).
 
-Rebasing writes the pull request's head branch, so the [restrictions on writing
-a fork's branch](/workflow/actions/update#fork-pull-requests) apply here too.
+A pull request opened from another repository whose head branch Mergify cannot
+write at all, such as one whose fork has been deleted, is refused for that
+reason rather than the one above, and the check run says so. [The `update`
+action](/workflow/actions/update#fork-pull-requests) covers those cases, which
+refuse `update` too.
+
+## Impersonation
+
+Rebasing always acts as a GitHub user. With no `bot_account` set, that user is
+the pull request author, or whoever posted the [`@mergifyio rebase`
+command](/commands/rebase) when a command triggered the rebase. The account must
+have signed in to the [Mergify dashboard](https://dashboard.mergify.com) at
+least once.
+
+That account cannot be a bot: Mergify cannot impersonate an account owned by
+another GitHub App. The action fails whenever the account it falls back to is
+one, whether a GitHub App opened the pull request, such as a dependency update
+bot, or posted the command. Set `bot_account` to a user account to rebase those.
 
 ## Parameters
 
