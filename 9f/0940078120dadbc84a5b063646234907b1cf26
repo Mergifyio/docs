@@ -1,0 +1,1 @@
+Reviewer asked to use Mergifyio/gha-mergify-ci: the gate now calls its wait-jobs action (pinned v25) instead of scripts/check-ci-gate.mjs, which is removed with its test; rebased onto main after #12801 merged
