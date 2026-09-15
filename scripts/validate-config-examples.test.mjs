@@ -5,6 +5,7 @@ import {
   classify,
   createValidator,
   extractFromFile,
+  findQuotedPatterns,
   iterMdx,
   validateBlocks,
 } from './validate-config-examples.mjs';
@@ -75,11 +76,36 @@ describe('validateBlocks', () => {
   });
 });
 
+describe('findQuotedPatterns', () => {
+  const block = (code) => [{ file: 'x.mdx', line: 10, classification: 'partial', code }];
+
+  it('flags a regex or glob wrapped in quotes inside an unquoted scalar', () => {
+    const failures = findQuotedPatterns(
+      block('success_conditions:\n  - files ~= "^ui/"\n  - files *= \'src/**\'\n')
+    );
+    expect(failures).toHaveLength(2);
+    expect(failures[0].line).toBe(12);
+    expect(failures[0].msg).toMatch(/never match/);
+  });
+
+  it('leaves a condition the author quoted as a whole alone', () => {
+    expect(findQuotedPatterns(block('conditions:\n  - "files ~= ^ui/"\n'))).toHaveLength(0);
+    expect(findQuotedPatterns(block("conditions:\n  - 'title ~= ^(feat|fix):'\n"))).toHaveLength(0);
+  });
+
+  it('leaves quotes that are genuinely part of a pattern alone', () => {
+    expect(
+      findQuotedPatterns(block('conditions:\n  - title ~= ^Release "v[0-9]+"$\n'))
+    ).toHaveLength(0);
+    expect(findQuotedPatterns(block('conditions:\n  - title = "release day"\n'))).toHaveLength(0);
+  });
+});
+
 describe('docs config examples', () => {
   it('all embedded Mergify config examples are valid', () => {
     const blocks = [];
     for (const file of iterMdx(['src/content/docs'])) blocks.push(...extractFromFile(file));
-    const failures = validateBlocks(blocks);
+    const failures = [...validateBlocks(blocks), ...findQuotedPatterns(blocks)];
     if (failures.length) {
       const detail = failures.map((f) => `${f.file}:${f.line} — ${f.msg}`).join('\n');
       throw new Error(`Invalid config examples found:\n${detail}`);
