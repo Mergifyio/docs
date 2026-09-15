@@ -1,0 +1,1 @@
+Rebased onto main after #12770 merged; resolved the .mergify.yml conflict with #12801 (kept its plain check-success = test-broken-links, plus orphaned-images). Also deletes billing/plan.png, orphaned on main by #12764 — the check's first real catch, and without it this commit lands red.
