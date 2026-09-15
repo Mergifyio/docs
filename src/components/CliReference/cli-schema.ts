@@ -275,6 +275,7 @@ export const GROUP_DESCRIPTIONS: Record<string, string> = {
  * — a group without an entry (e.g. `self-update`) simply omits the link.
  */
 export const GROUP_BACKLINKS: Record<string, { text: string; href: string }> = {
+  auth: { text: 'CLI authentication', href: '/cli/usage#authentication' },
   queue: { text: 'Merge queue monitoring', href: '/merge-queue/monitoring' },
   stack: { text: 'Stacked pull requests', href: '/stacks' },
   ci: { text: 'CI Insights', href: '/ci-insights' },
