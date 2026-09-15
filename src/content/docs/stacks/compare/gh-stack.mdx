@@ -112,11 +112,10 @@ queue, which is more limited. Mergify's Merge Queue also lands
 keeping their members together and in order, so you can use GitHub's stacking
 UI and Mergify's queue at the same time.
 
-**Collaboration support.** `mergify stack checkout` lets a teammate pick up
-your stack locally and push changes. `mergify stack sync` pulls remote changes
-back down, so commits made by bots or review suggestions are incorporated
-automatically. With gh-stack's force-push model, coordinating on the same stack
-is harder.
+**Collaboration support.** `mergify stack checkout` lets a teammate pick up your
+stack locally and push changes. It takes the stack's remote branch name or the
+URL of any pull request in it. With gh-stack's force-push model, coordinating on
+the same stack is harder.
 
 **Merge works today.** Stacked PRs land through the Merge Queue as each
 dependency merges. gh-stack's `merge` command is listed in the docs but not
