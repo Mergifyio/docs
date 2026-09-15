@@ -28,8 +28,14 @@ this behaviour using the `ignore_conflicts` option.
 
 The `backport` action takes a list of branches to which the changes from the
 merged pull request will be backported. The branch names should be specified as
-strings. Use `regexes` instead of `branches` to pick the destination branches by
-pattern rather than naming each one.
+strings.
+
+`regexes` picks destination branches by
+[pattern](/configuration/data-types#regular-expressions) instead of naming each
+one. Patterns are matched against the branches that exist in the repository, and
+each one is anchored at the start of a branch name only, so `release-1` also
+matches `release-10`. Setting both `branches` and `regexes` backports to the
+branches you named plus the branches your patterns matched.
 
 <ActionOptionsTable def="BackportActionModel" />
 

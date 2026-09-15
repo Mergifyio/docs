@@ -67,10 +67,16 @@ parameters in the [Actions catalog](/workflow/actions).
 
 ## Combining Rules
 
-Rules are evaluated independently: Mergify checks each one against the pull
-request, and every rule whose conditions match runs its actions. Order the rules
-however reads best, since matching does not stop at the first hit. For when an
-action re-runs versus stays put, see
+Mergify checks every rule against the pull request, and matching does not stop at
+the first hit: each rule whose conditions match runs its actions.
+
+Rule order still decides one thing. `close`, `delete_head_branch`, `merge`,
+`queue`, `rebase`, `squash` and `update` refuse to run twice in the same
+evaluation. When two matching rules both carry one of them, the rule listed
+first in the file runs it, and the later rule's check reports that another
+action of that kind already ran. Put the rule you want to win above the others.
+
+For when an action re-runs versus stays put, see
 [how rules are evaluated](/workflow#how-rules-are-evaluated).
 
 ## Disabling a Rule
