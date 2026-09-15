@@ -5,12 +5,20 @@ description: Dismiss previous reviews on a pull request.
 
 import ActionOptionsTable from '../../../../components/Tables/ActionOptionsTable';
 
-The `dismiss_reviews` action allows Mergify to automatically dismiss approved
-or changes requested reviews when new commits are pushed to the pull request.
+The `dismiss_reviews` action allows Mergify to automatically dismiss approving
+reviews, reviews requesting changes, or both.
 
 ## Parameters
 
 <ActionOptionsTable def="DismissReviewsActionModel" />
+
+`when` decides what counts as a trigger. With the default `synchronize`, the
+action only dismisses when someone pushes new commits, and it dismisses only
+the reviews submitted before that push. A push Mergify itself made, such as an
+[`update`](/workflow/actions/update) or a [`rebase`](/workflow/actions/rebase),
+is not a trigger and leaves every review in place. Set `when` to `always` to
+dismiss every time the rule's conditions match, whether or not the commits
+changed.
 
 ## Examples
 
