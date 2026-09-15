@@ -79,3 +79,9 @@ configuration and reports the result as a `Configuration changed` check. This
 protection requires that check to succeed, so a pull request whose
 configuration Mergify cannot validate does not merge. A pull request that
 leaves the configuration file alone is not affected.
+
+A pull request that deletes the configuration file rather than editing it never
+gets a `Configuration changed` check. It reports under `Configuration has been
+deleted` instead, which Mergify posts as a success, and that check satisfies
+this protection too. Removing the configuration is an accepted outcome, not a
+failure.
