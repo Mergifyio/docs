@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@actions/core": "3.0.1",
-    "@astrojs/mdx": "7.0.8",
+    "@astrojs/mdx": "8.0.0",
     "@astrojs/sitemap": "3.7.4",
     "@astrojs/ts-plugin": "1.10.11",
     "@babel/core": "8.0.1",
