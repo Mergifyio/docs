@@ -319,9 +319,8 @@ Mergify identifies a leftover queue branch by its name alone. A branch is
 deleted only when **both** of the following are true:
 
 - Its name is the
-  [`queue_branch_prefix`](/configuration/file-format/#queue-rules), optionally
-  prefixed with `tmp-`, followed by exactly 10 hexadecimal characters
-  (`0`–`9`, `a`–`f`).
+  [`queue_branch_prefix`](/configuration/file-format/#queue-rules), followed by
+  exactly 10 hexadecimal characters (`0`–`9`, `a`–`f`).
 
 - It is not in use by an active queue.
 
@@ -330,9 +329,8 @@ With the default prefix, a matching branch looks like
 `mergify-`, it looks like `mergify-a76b1f3d25`. A CI retry generates a fresh
 name of the same shape, with no extra suffix.
 
-Mergify no longer creates `tmp-` branches; a queue branch is pushed straight to
-its final name. The prefix is still matched so that branches left behind by
-older versions get cleaned up.
+Only that shape is matched. A queue branch is pushed straight to its final
+name, and a branch whose name merely starts with your prefix is left alone.
 
 :::caution
   Matching is by name only: Mergify does not track which branches it created.
