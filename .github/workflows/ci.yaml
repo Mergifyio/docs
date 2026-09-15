@@ -192,3 +192,35 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm check:links
+
+  gate:
+    # No `name:` override: the required check must match this job id, `gate`,
+    # exactly — a display-name override here would report as `Gate` and the
+    # ruleset required check would never be satisfied.
+    # Every other job is a `needs:`, which is SKIPPED (not failed) the moment
+    # one of them fails — a skipped check reports nothing to a required-check
+    # ruleset, so a red build would otherwise show the ruleset a clean gate.
+    # `always()` makes this job run regardless, and wait-jobs turns any failed
+    # or cancelled dependency into an explicit failure.
+    if: always()
+    needs:
+      - actionlint
+      - lint
+      - test
+      - config-examples
+      - internal-leaks
+      - diagram-tokens
+      - orphaned-images
+      - build
+      - test-broken-links
+    runs-on: ubuntu-24.04
+    steps:
+      # wait-jobs accepts a SKIPPED dependency as well as a successful one. That
+      # is safe only while no job above carries an `if:`: today a job is skipped
+      # solely because a job it needs failed, and that failure already turns
+      # the gate red. A job that can skip itself would pass the gate unseen.
+      - name: Require every job to have succeeded
+        uses: Mergifyio/gha-mergify-ci@5e8176734bc525c7fd8b2e812f0fa47246f601b7  # v25
+        with:
+          action: wait-jobs
+          jobs: ${{ toJSON(needs) }}
