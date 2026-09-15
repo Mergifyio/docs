@@ -24,6 +24,14 @@ describe('classify', () => {
     expect(classify('# partial\nconditions:\n  - base=main\n')).toBe('partial');
   });
 
+  it('recognizes a standalone merge protection rule', () => {
+    expect(classify('name: r\nif:\n  - base = main\nsuccess_conditions:\n  - label = ok\n')).toBe(
+      'merge-protection-rule'
+    );
+    // A complete config wins: the rule is already inside `merge_protections`.
+    expect(classify('merge_protections:\n  - name: r\n    if: []\n')).toBe('mergify-config');
+  });
+
   it('detects GitHub Actions workflows', () => {
     expect(classify('on:\n  push:\njobs:\n  build:\n    runs-on: ubuntu-latest\n')).toBe(
       'github-actions'
@@ -58,6 +66,25 @@ describe('validateBlocks', () => {
       },
     ];
     expect(validateBlocks(blocks, validate)).toHaveLength(0);
+  });
+
+  it('validates a standalone merge protection rule as a list item', () => {
+    const rule = (body) => [
+      { file: 'x.mdx', line: 1, classification: 'merge-protection-rule', code: body },
+    ];
+    expect(
+      validateBlocks(
+        rule('name: r\nif:\n  - base = main\nsuccess_conditions:\n  - label = ok\n'),
+        validate
+      )
+    ).toHaveLength(0);
+
+    const misspelled = validateBlocks(
+      rule('name: r\nif:\n  - base = main\nsucess_conditions:\n  - label = ok\n'),
+      validate
+    );
+    expect(misspelled).toHaveLength(1);
+    expect(misspelled[0].msg).toMatch(/success_conditions/);
   });
 
   it('flags YAML that does not parse (unquoted template needing quotes)', () => {
