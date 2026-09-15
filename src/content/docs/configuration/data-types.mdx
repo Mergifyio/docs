@@ -406,7 +406,12 @@ A GitHub login. You can also use `{{ author }}` (the pull request author) and
 ### Bot account
 
 A GitHub login Mergify impersonates to perform an action. You can also use the
-`{{ author }}` variable to act as the pull request author. Used by the
+`{{ author }}` variable to act as the pull request author.
+
+It has to be a user account. Mergify cannot impersonate an account owned by
+another GitHub App, so an action fails when the login it resolves to is a bot,
+including when no `bot_account` is set and it falls back to the pull request
+author or to whoever posted a command. Used by the
 `bot_account` field of the [`backport`](/workflow/actions/backport),
 [`comment`](/workflow/actions/comment), [`copy`](/workflow/actions/copy),
 [`edit`](/workflow/actions/edit), [`rebase`](/workflow/actions/rebase),
