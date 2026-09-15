@@ -129,9 +129,15 @@ instead. No single key covers
 both, so pick the one that matches what you want the agent to do.
 
 An application key does not work for Stacks. An unattended agent that pushes
-stacks needs a GitHub token in `GITHUB_TOKEN`, which is not deprecated: the
-deprecation above is only about using a GitHub token to reach the Mergify
-API.
+stacks needs a GitHub token, which is not deprecated: the deprecation above is
+only about using a GitHub token to reach the Mergify API. Exporting
+`GITHUB_TOKEN` is not enough on its own, though. Stacks commands read `--token`,
+then `MERGIFY_TOKEN`, then `GITHUB_TOKEN`, so an agent that already has an
+application key in `MERGIFY_TOKEN` hands that key to GitHub and the push fails.
+Pass the GitHub token as `--token` on the Stacks commands, or keep the
+application key out of `MERGIFY_TOKEN`. See
+[GitHub token for Stacks](/cli/usage#github-token-for-stacks) for the full
+resolution order.
 
 Application keys come with either the `admin` scope or the `ci` scope, and
 neither is read-only. `admin` covers the API except result uploads and Merge
