@@ -2627,7 +2627,8 @@
                 "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
                 "BATCH_SCOPES_CHANGED",
                 "BATCH_AHEAD_BRANCH_EDITED",
-                "CHECKS_INTERRUPTED"
+                "CHECKS_INTERRUPTED",
+                "GITHUB_WORKFLOWS_PERMISSION_MISSING"
               ],
               "type": "string"
             },
@@ -2768,6 +2769,9 @@
             },
             {
               "description": "A required check was cancelled before producing a result, so the queue conditions cannot be satisfied. The check says nothing about the pull request; requeueing runs it again."
+            },
+            {
+              "description": "GitHub refused to write the pull request's changes under `.github/workflows/` because Mergify lacks the `workflows` permission."
             }
           ],
           "x-mergify-has-data-type": true,

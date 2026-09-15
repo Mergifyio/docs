@@ -12888,7 +12888,8 @@
                   "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
                   "BATCH_SCOPES_CHANGED",
                   "BATCH_AHEAD_BRANCH_EDITED",
-                  "CHECKS_INTERRUPTED"
+                  "CHECKS_INTERRUPTED",
+                  "GITHUB_WORKFLOWS_PERMISSION_MISSING"
                 ]
               },
               {
@@ -13892,7 +13893,8 @@
                   "GITHUB_STACKED_PULL_REQUEST_MERGE_UNSUPPORTED",
                   "BATCH_SCOPES_CHANGED",
                   "BATCH_AHEAD_BRANCH_EDITED",
-                  "CHECKS_INTERRUPTED"
+                  "CHECKS_INTERRUPTED",
+                  "GITHUB_WORKFLOWS_PERMISSION_MISSING"
                 ]
               },
               {
@@ -18085,6 +18087,12 @@
             "type": "integer",
             "title": "Github Stacked Pull Request Merge Unsupported",
             "description": "The pull request is a GitHub-native stacked pull request, which GitHub does not allow merging through the API, and was dequeued",
+            "default": 0
+          },
+          "GITHUB_WORKFLOWS_PERMISSION_MISSING": {
+            "type": "integer",
+            "title": "Github Workflows Permission Missing",
+            "description": "GitHub refused to write the pull request's workflow changes because Mergify lacks the `workflows` permission, and it was dequeued",
             "default": 0
           }
         },
