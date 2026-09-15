@@ -16,7 +16,8 @@ hand.
 
 Each editing command accepts a commit as either a short SHA or a
 [Change-Id](/stacks/concepts#change-id) prefix. Most of them also support
-`--dry-run` (`-n`) to print the plan without touching your branch.
+`--dry-run` (`-n`) to print the plan without touching your branch. The
+[`stack` CLI reference](/cli/stack) has the full argument list for each one.
 
 `mergify stack push` rebases your branch on its base branch before pushing, but
 only while no PR in the stack carries an approval. Once a reviewer has
