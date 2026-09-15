@@ -95,8 +95,8 @@ hard-to-review PR:
 
 [Merge Queue](/merge-queue) understands stacks natively. A single
 `@mergifyio queue` on the top PR enqueues the whole stack in order; the queue
-keeps stacked PRs together when batching and cascades dequeues if any
-predecessor fails. See [Stacked PRs in the Merge Queue](/merge-queue/stacks)
+keeps stacked PRs together when batching, and dequeuing a PR also dequeues
+the PRs above it. See [Stacked PRs in the Merge Queue](/merge-queue/stacks)
 for the full mechanics.
 
 ## Comparing with Alternatives

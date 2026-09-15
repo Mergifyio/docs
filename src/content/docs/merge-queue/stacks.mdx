@@ -15,8 +15,8 @@ builds on the one below it. It handles both kinds of stack.
 
 - **[Mergify Stacks](#mergify-stacks)**, created with `mergify stack push`.
   The queue treats the whole chain as a unit: it propagates the queue command
-  up the stack, keeps stacked PRs together when batching, and cascades
-  failures so the rest of the stack stops cleanly when something breaks.
+  up the stack, keeps stacked PRs together when batching, and dequeues the
+  PRs above any PR you take out of the queue.
 
 ## GitHub-Native Stacked Pull Requests
 
