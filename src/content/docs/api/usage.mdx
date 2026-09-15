@@ -165,7 +165,12 @@ for navigating between pages.
 
 **Query parameters:**
 
-- `per_page`: Number of items per page (1–100, default: 10)
+- `per_page`: Number of items per page, from 1 to 100. Most paginated endpoints
+  default to 10. On others, pagination is opt-in: they have no default and
+  return the whole list in a single response until you pass `per_page`. Where
+  pagination is opt-in, the endpoint's entry in the
+  [API Reference](/api) says so.
+
 - `cursor`: Opaque cursor for the current page. Extract this from the `Link` header; do not construct it manually.
 
 **Link header example:**
