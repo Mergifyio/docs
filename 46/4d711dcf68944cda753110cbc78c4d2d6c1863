@@ -1,0 +1,1 @@
+rebase onto main after it added the orphaned-images job: resolved the .mergify.yml conflict by keeping the merge_protection removal, carried orphaned-images into the moved &CheckRuns anchor and into gate's needs, and updated the job counts in the message
