@@ -390,7 +390,15 @@ const navItems: NavItem[] = [
     path: '/integrations',
     children: [
       { title: 'GitHub', path: '/integrations/github', icon: 'simple-icons:github' },
-      { title: 'GitHub Actions', path: '/integrations/gha', icon: 'simple-icons:githubactions' },
+      {
+        title: 'GitHub Actions',
+        path: '/integrations/gha',
+        icon: 'simple-icons:githubactions',
+        children: [
+          { title: 'Overview', path: '/integrations/gha', icon: 'lucide:lightbulb' },
+          { title: 'Action Reference', path: '/integrations/gha/reference', icon: 'lucide:list' },
+        ],
+      },
       { title: 'Buildkite', path: '/integrations/buildkite', icon: 'simple-icons:buildkite' },
       { title: 'Jenkins', path: '/integrations/jenkins', icon: 'simple-icons:jenkins' },
       {

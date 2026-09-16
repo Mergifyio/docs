@@ -1,0 +1,126 @@
+---
+import { helpToHtml } from '~/components/CliReference/cli-schema';
+import GhaActionLinks from '~/components/GhaReference/GhaActionLinks.astro';
+import GhaDescription from '~/components/GhaReference/GhaDescription.astro';
+import {
+  anchors,
+  GHA_ACTION_REPOSITORY,
+  loadGhaAction,
+} from '~/components/GhaReference/gha-action';
+import MainLayout from '~/layouts/MainLayout.astro';
+import '~/styles/cli-reference.css';
+import '~/styles/gha-reference.css';
+
+// Generated from src/data/gha-mergify-ci-action.yml, the action's own
+// action.yml at the pinned release, the way /cli is generated from
+// cli-schema.json. Nothing on this page restates the action's contract, and
+// loadGhaAction refuses a file taken at any release but the pinned one.
+const reference = loadGhaAction();
+const { version } = reference;
+const repositoryUrl = `https://github.com/${GHA_ACTION_REPOSITORY}`;
+const sourceUrl = `${repositoryUrl}/blob/${version}/action.yml`;
+
+const inputsOf = (action: string) =>
+  reference.inputs.filter((input) => input.actions.includes(action)).map((input) => input.name);
+const outputsOf = (action: string) =>
+  reference.outputs
+    .filter((output) => output.actions.includes(action))
+    .map((output) => output.name);
+
+const headings = [
+  { depth: 2, slug: 'actions', text: 'Actions' },
+  ...reference.actions.map((a) => ({ depth: 3, slug: anchors.action(a.name), text: a.name })),
+  { depth: 2, slug: 'inputs', text: 'Inputs' },
+  ...reference.inputs.map((i) => ({ depth: 3, slug: anchors.input(i.name), text: i.name })),
+  { depth: 2, slug: 'outputs', text: 'Outputs' },
+  ...reference.outputs.map((o) => ({ depth: 3, slug: anchors.output(o.name), text: o.name })),
+];
+
+const content = {
+  title: 'GitHub Action Reference',
+  description: `Every input and output of the ${GHA_ACTION_REPOSITORY} GitHub Action, by action.`,
+};
+---
+
+<MainLayout content={content} headings={headings} showMarkdownActions={false}>
+  <div class="cli-reference">
+    <div class="cli-intro">
+      <div class="cli-binary">
+        <span class="cli-label">Step</span>
+        <code>uses: {GHA_ACTION_REPOSITORY}@{version}</code>
+      </div>
+      <div class="cli-auth-summary">
+        <p>
+          One action, several jobs: the <a href={`#${anchors.input('action')}`}><code>action</code></a>
+          input picks what a step does, and every input and output below lists the actions that
+          use it. This page is generated from the action's
+          <a href={sourceUrl}><code>action.yml</code></a> at {version}.
+        </p>
+        <p>
+          For workflows that put it to work, see the
+          <a href="/integrations/gha">GitHub Actions integration</a>,
+          <a href="/ci-insights/setup/github-actions">CI Insights on GitHub Actions</a> and
+          <a href="/merge-queue/scopes">Merge Queue Scopes</a>.
+        </p>
+      </div>
+    </div>
+
+    <h2 id="actions">Actions</h2>
+    <div class="cli-command">
+      <div class="cli-args">
+        {
+          reference.actions.map((action) => (
+            <div class="cli-arg" id={anchors.action(action.name)}>
+              <h3 class="cli-arg-signature">
+                <code class="cli-arg-name">action: {action.name}</code>
+              </h3>
+              {action.summary && <p class="cli-arg-description" set:html={helpToHtml(action.summary)} />}
+              <GhaActionLinks label="Inputs" names={inputsOf(action.name)} anchor={anchors.input} />
+              <GhaActionLinks label="Outputs" names={outputsOf(action.name)} anchor={anchors.output} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <h2 id="inputs">Inputs</h2>
+    <div class="cli-command">
+      <div class="cli-args">
+        {
+          reference.inputs.map((input) => (
+            <div class="cli-arg" id={anchors.input(input.name)}>
+              <h3 class="cli-arg-signature">
+                <code class="cli-arg-name">{input.name}</code>
+                {input.required && <span class="cli-required-badge">required</span>}
+              </h3>
+              <GhaDescription text={input.description} />
+              {input.default !== null && (
+                <p class="cli-arg-meta">
+                  Default: <code>{input.default}</code>
+                </p>
+              )}
+              <GhaActionLinks label="Used by" names={input.actions} anchor={anchors.action} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <h2 id="outputs">Outputs</h2>
+    <div class="cli-command">
+      <div class="cli-args">
+        {
+          reference.outputs.map((output) => (
+            <div class="cli-arg" id={anchors.output(output.name)}>
+              <h3 class="cli-arg-signature">
+                <code class="cli-arg-name">{output.name}</code>
+              </h3>
+              <GhaDescription text={output.description} />
+              <GhaActionLinks label="Set by" names={output.actions} anchor={anchors.action} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</MainLayout>

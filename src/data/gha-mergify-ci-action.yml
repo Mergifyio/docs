@@ -1,0 +1,213 @@
+# Mergifyio/gha-mergify-ci action.yml at v25, git blob cd9551ff7646b6136ab3fec68272d48bbd9ac9dd
+name: gha-mergify-ci
+description: The Mergify CI integration with GitHub Actions
+author: Mergify
+branding:
+  icon: at-sign
+  color: blue
+inputs:
+  action:
+    description: |
+      The Mergify CI action:
+      * junit-process: process JUnit XML files with Mergify CI Insights (Upload and Quarantine)
+      * scopes: detect and upload pull requests scopes to Mergify Merge Queue
+      * scopes-git-refs: return the base/head git references of the pull request in Merge Queue context
+      * scopes-upload: upload pull requests scopes to Mergify Merge Queue
+      * wait-jobs: wait for specified jobs to complete before proceeding
+    # Backward compat
+    default: junit-process
+  token:
+    description: Mergify CI token
+  mergify_api_url:
+    description: URL of the Mergify API
+    default: https://api.mergify.com
+  job_name:
+    description: |
+      Override the job name, must be used in case of matrix job to avoid
+      having the same name for all jobs
+  report_path:
+    description: Path of the files to upload
+  scopes:
+    description: Comma separated list of scopes to upload
+  all_scopes:
+    description: |
+      Declare that the pull request impacts all scopes (actions: scopes,
+      scopes-upload). The Merge Queue treats such a pull request as a
+      barrier: it conflicts with every scope, so it is never batched or
+      merged in parallel with other pull requests. Typical use: a
+      build-system or CI configuration change where enumerating every
+      impacted scope is brittle.
+    default: "false"
+  mergify_config_path:
+    description: Path to the Mergify configuration file
+  base:
+    description: |
+      Base git reference for scope detection (action: scopes). Overrides the
+      automatic push/pull-request detection. Leave unset to auto-detect.
+  head:
+    description: |
+      Head git reference for scope detection (action: scopes). Defaults to
+      HEAD. Leave unset to auto-detect.
+  test_step_outcome:
+    description: |
+      Outcome of the test runner step (e.g. steps.<id>.outcome).
+      Pass this to detect silent failures where the test runner crashed
+      but the JUnit report appears clean.
+      Values: 'success', 'failure', 'cancelled', 'skipped', or omit entirely.
+      'skipped' is treated the same as omitting this input.
+  jobs:
+    description: List of jobs to wait for completion
+  mergify_cli_version:
+    description: |
+      Version of mergify-cli to install. Use `latest` to install the latest
+      released version without pinning. Leave unset to use the version pinned
+      by Mergifyio/setup-cli.
+outputs:
+  test_results_upload:
+    description: |
+      Outcome of the JUnit test-results upload to Mergify Test Insights
+      (action: junit-process): 'success', 'rejected' (the API refused the
+      upload, e.g. a token without CI Insights access — no test data was
+      recorded) or 'failed' (transient upload error). Empty when the
+      junit-process step did not run or the installed mergify-cli predates
+      this output.
+    value: ${{ steps.junit-process.outputs.test_results_upload }}
+  scopes:
+    description: stringified JSON mapping with names of all scopes matching any of the changed files
+    value: ${{ steps.scopes-detection.outputs.scopes }}
+  base:
+    description: The Merge Queue-aware base SHA of the pull request
+    value: ${{ steps.git-refs-detection.outputs.base || steps.scopes-detection.outputs.base }}
+  head:
+    description: The Merge Queue-aware head SHA of the pull request
+    value: ${{ steps.git-refs-detection.outputs.head || steps.scopes-detection.outputs.head }}
+runs:
+  using: composite
+  steps:
+    - name: Inputs checks
+      shell: bash
+      if: |
+        inputs.action != 'junit-process' &&
+        inputs.action != 'scopes' &&
+        inputs.action != 'wait-jobs' &&
+        inputs.action != 'scopes-git-refs' &&
+        inputs.action != 'scopes-upload'
+      env:
+        ACTION: ${{ inputs.action }}
+      run: |
+        echo "Unsupported action: $ACTION"
+        echo "Valid actions are: junit-process, scopes, scopes-git-refs, scopes-upload, wait-jobs"
+        exit 1
+
+    # Install the Mergify CLI through the shared setup-cli action. The version
+    # pin lives in Mergifyio/setup-cli (Renovate-managed there), so an unset
+    # mergify_cli_version must fall through to setup-cli's own default instead of
+    # being forwarded as an empty string, which setup-cli reads as "latest".
+    # Hence two variants: forward an explicit value, or call with no version.
+    - name: Setup Mergify CLI 🔧
+      if: inputs.mergify_cli_version != ''
+      uses: Mergifyio/setup-cli@dc99f07e699b94b39e5495c24596372813eadcbc # v1.3.0
+      with:
+        mergify_cli_version: ${{ inputs.mergify_cli_version }}
+
+    - name: Setup Mergify CLI (pinned default) 🔧
+      if: inputs.mergify_cli_version == ''
+      uses: Mergifyio/setup-cli@dc99f07e699b94b39e5495c24596372813eadcbc # v1.3.0
+
+    - shell: bash
+      id: junit-process
+      if: inputs.action == 'junit-process'
+      env:
+        MERGIFY_API_URL: ${{ inputs.mergify_api_url }}
+        MERGIFY_TOKEN: ${{ inputs.token }}
+        MERGIFY_JOB_NAME: ${{ inputs.job_name }}
+        MERGIFY_TEST_EXIT_CODE: >-
+          ${{ inputs.test_step_outcome == 'success' && '0'
+          || (inputs.test_step_outcome == 'failure'
+          || inputs.test_step_outcome == 'cancelled') && '1'
+          || '' }}
+        FILES: ${{ inputs.report_path }}
+      run: |
+        set -x -e
+        if [ -z "$FILES" ]; then
+          echo "::error::report_path is required for action: junit-process"
+          exit 1
+        fi
+        mergify ci junit-process -- "$FILES"
+
+    - name: Detect head sha and base sha
+      if: inputs.action == 'scopes-git-refs' || inputs.action == 'scopes-upload'
+      id: git-refs-detection
+      shell: bash
+      env:
+        MERGIFY_CONFIG_PATH: ${{ inputs.mergify_config_path }}
+      run: mergify ci git-refs
+
+    - name: Detect scopes, head sha and base sha
+      if: inputs.action == 'scopes'
+      id: scopes-detection
+      shell: bash
+      env:
+        MERGIFY_CONFIG_PATH: ${{ inputs.mergify_config_path }}
+        BASE: ${{ inputs.base }}
+        HEAD: ${{ inputs.head }}
+      run: |
+        args=(--write "$RUNNER_TEMP/mergify-scopes.json")
+        [ -n "$BASE" ] && args+=(--base "$BASE")
+        [ -n "$HEAD" ] && args+=(--head "$HEAD")
+        mergify ci scopes "${args[@]}"
+
+    - name: Upload scopes to Mergify API
+      shell: bash
+      if: github.event.pull_request && inputs.action == 'scopes-upload'
+      env:
+        MERGIFY_CONFIG_PATH: ${{ inputs.mergify_config_path }}
+        SCOPES: ${{ inputs.scopes }}
+        BASE: ${{ steps.git-refs-detection.outputs.base }}
+        HEAD: ${{ steps.git-refs-detection.outputs.head }}
+      run: |
+        set -euo pipefail
+        FILE="$RUNNER_TEMP/mergify-scopes.json"
+        # Convert comma-separated SCOPES into a JSON array, trimming entry
+        # whitespace; an empty input yields [] (an all_scopes pull request
+        # may carry no concrete scope)
+        SCOPES_JSON=$(jq -R -s 'rtrimstr("\n") | split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0))' <<< "$SCOPES")
+        jq -n \
+          --arg base "$BASE" \
+          --arg head "$HEAD" \
+          --argjson scopes "$SCOPES_JSON" \
+          '{base_ref: $base, head_ref: $head, scopes: $scopes}' > "$FILE"
+
+        echo "Created scopes file:"
+        cat "$FILE"
+
+    - name: Warn if token is unset for scopes upload
+      shell: bash
+      if: |
+        !inputs.token &&
+        (inputs.action == 'scopes' ||
+         (inputs.action == 'scopes-upload' && github.event.pull_request))
+      run: echo "::warning::Mergify token is not set, scopes will not be sent to Mergify API"
+
+    - name: Upload scopes to Mergify API
+      shell: bash
+      if: |
+        inputs.token &&
+        (inputs.action == 'scopes' ||
+         (inputs.action == 'scopes-upload' && github.event.pull_request))
+      env:
+        MERGIFY_TOKEN: ${{ inputs.token }}
+        MERGIFY_API_URL: ${{ inputs.mergify_api_url }}
+        MERGIFY_CONFIG_PATH: ${{ inputs.mergify_config_path }}
+        ALL_SCOPES: ${{ inputs.all_scopes }}
+      run: |
+        args=(--scopes-json "$RUNNER_TEMP/mergify-scopes.json")
+        [ "$ALL_SCOPES" = "true" ] && args+=(--all)
+        mergify ci scopes-send "${args[@]}"
+
+    - name: Wait jobs
+      if: inputs.action == 'wait-jobs'
+      uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # release/v1
+      with:
+        allowed-skips: ${{ inputs.jobs }}
+        jobs: ${{ inputs.jobs }}

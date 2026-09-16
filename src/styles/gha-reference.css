@@ -1,0 +1,34 @@
+/* ---------------------------------------------------------------------------
+   GitHub Action reference — /integrations/gha/reference.
+
+   Built on the CLI reference's rows and badges (cli-reference.css); this only
+   adds what an action.yml description and a row-level deep link need.
+   --------------------------------------------------------------------------- */
+
+/* Each row is a link target (#input-base); land it below the navbar and mark it. */
+.cli-reference .cli-arg[id] {
+  scroll-margin-top: calc(var(--theme-navbar-height) + 1rem);
+}
+
+/* A row's signature is its h3, so the table of contents and a screen reader's
+   heading list both reach it; undo the page-level h3 sizing to keep the row. */
+#main-content .cli-reference h3.cli-arg-signature {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: normal;
+}
+
+.cli-reference .cli-arg:target .cli-arg-name {
+  color: var(--theme-link);
+}
+
+/* The `action` input describes its values as a bullet list. */
+.gha-description-list {
+  padding-left: 1.25rem;
+}
+
+.gha-description-list li {
+  margin: 0.1rem 0;
+}

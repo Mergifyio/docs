@@ -1,0 +1,29 @@
+---
+/**
+ * An `action.yml` description, as paragraphs and bullet lists. The text comes
+ * from the vendored action, never from this site.
+ */
+import { descriptionBlocks } from './gha-action';
+
+interface Props {
+  text: string | null;
+  class?: string;
+}
+
+const { text, class: className = 'cli-arg-description' } = Astro.props;
+const blocks = text ? descriptionBlocks(text) : [];
+---
+
+{
+  blocks.map((block) =>
+    block.kind === 'paragraph' ? (
+      <p class={className} set:html={block.html} />
+    ) : (
+      <ul class={`${className} gha-description-list`}>
+        {block.items.map((item) => (
+          <li set:html={item} />
+        ))}
+      </ul>
+    )
+  )
+}
