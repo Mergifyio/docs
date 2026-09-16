@@ -1,6 +1,6 @@
 ---
 title: Integrating Buildkite with Mergify
-description: Run CI Insights, Monorepo CI, and Merge Queue Scopes on Buildkite.
+description: Run CI Insights, Job Selection, and Merge Queue Scopes on Buildkite.
 ---
 
 import buildkiteLogo from "../../images/integrations/buildkite/logo.svg"
@@ -11,7 +11,7 @@ import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
 [Buildkite](https://buildkite.com/) is a CI/CD tool with pipeline orchestration
 and self-hosted runners. Mergify has native integrations for Buildkite covering
-CI Insights, Monorepo CI, and Merge Queue Scopes. Any Buildkite status check
+CI Insights, Job Selection, and Merge Queue Scopes. Any Buildkite status check
 reported to GitHub can also be referenced from your Mergify
 [conditions](/configuration/conditions) via `check-success`.
 
@@ -32,7 +32,7 @@ reported to GitHub can also be referenced from your Mergify
 - **[CI Insights](/ci-insights/setup/buildkite)**: collect Buildkite job
   metrics, detect flaky tests, and get Slack notifications for CI failures.
 
-- **[Monorepo CI](#monorepo-ci)**: skip unaffected steps on pull requests to cut
+- **[Job Selection](#job-selection)**: skip unaffected steps on pull requests to cut
   CI spend in monorepos.
 
 - **[Merge Queue Scopes](/merge-queue/scopes/others)**: run only the jobs
@@ -41,9 +41,12 @@ reported to GitHub can also be referenced from your Mergify
   [Nx](/merge-queue/scopes/nx), and
   [Turborepo](/merge-queue/scopes/turborepo) are available.
 
-## Monorepo CI
+{/* Keeps links to the section's former name, Monorepo CI, landing here. */}
+<span id="monorepo-ci"></span>
 
-Monorepo CI is [scopes](/merge-queue/scopes) applied to your pipelines. The same
+## Job Selection
+
+Job Selection is [scopes](/merge-queue/scopes) applied to your pipelines. The same
 `scopes` block that lets the merge queue batch by scope also tells your pipeline
 which steps have work to do, so a pull request that only touches the frontend
 does not pay for the API and docs test suites.
@@ -54,7 +57,7 @@ scopes already do that on their own. See
 [Merge Queue Scopes](/merge-queue/scopes).
 
 Running GitHub Actions instead? The
-[GitHub Actions integration](/integrations/gha#monorepo-ci) covers the same
+[GitHub Actions integration](/integrations/gha#job-selection) covers the same
 ground. Scopes themselves are CI-agnostic, so for any other provider
 [let us know](mailto:support@mergify.com) and see
 [Merge Queue Scopes](/merge-queue/scopes/others).
