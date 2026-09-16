@@ -23,7 +23,7 @@
   "devDependencies": {
     "@actions/core": "3.0.1",
     "@astrojs/markdown-remark": "7.3.1",
-    "@astrojs/mdx": "8.0.0",
+    "@astrojs/mdx": "8.0.1",
     "@astrojs/sitemap": "3.7.4",
     "@astrojs/ts-plugin": "1.10.11",
     "@babel/core": "8.0.1",
@@ -40,7 +40,7 @@
     "@typescript-eslint/parser": "8.70.0",
     "agentation": "3.0.2",
     "ajv": "8.20.0",
-    "astro": "7.3.1",
+    "astro": "7.3.2",
     "astro-auto-import": "0.6.0",
     "astro-eslint-parser": "3.1.0",
     "astro-expressive-code": "0.44.2",
