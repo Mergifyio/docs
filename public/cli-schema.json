@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.9.10.1",
+    "version": "2026.9.16.1",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
@@ -166,12 +166,29 @@
               "login"
             ],
             "about": "Sign in to Mergify and store the credential",
-            "longAbout": "Sign in to Mergify and store the credential.\n\nPrints a URL and a code: open the one, enter the other, and approve. The credential lands in your OS keychain, or in a `0600` file when the machine has no keychain to offer.",
+            "longAbout": "Sign in to Mergify and store the credential.\n\nOpens the approval page in your browser and prints the URL and the code as well, so a machine with no browser can sign in from the same command. The credential lands in your OS keychain, or in a `0600` file when the machine has no keychain to offer.",
             "usage": "mergify auth login [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
             "source": "native",
-            "args": [],
+            "args": [
+              {
+                "id": "no_browser",
+                "kind": "flag",
+                "short": null,
+                "long": "no-browser",
+                "valueNames": [],
+                "help": "Do not open a browser; only print the URL to open",
+                "longHelp": "Do not open a browser; only print the URL to open",
+                "required": false,
+                "global": false,
+                "default": "false",
+                "possibleValues": [],
+                "numArgs": "0",
+                "env": null,
+                "valueHint": null
+              }
+            ],
             "commands": []
           },
           {
@@ -297,8 +314,8 @@
                 "valueNames": [
                   "TOKEN"
                 ],
-                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
+                "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -402,8 +419,8 @@
                 "valueNames": [
                   "TOKEN"
                 ],
-                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                "help": "Mergify application key. Falls back to ``MERGIFY_TOKEN``, then ``GITHUB_TOKEN`` and ``gh auth token`` — both deprecated for the Mergify API. The CI endpoints require an application key, so the credential ``mergify auth login`` stores is not used here",
+                "longHelp": "Mergify application key. Falls back to ``MERGIFY_TOKEN``, then ``GITHUB_TOKEN`` and ``gh auth token`` — both deprecated for the Mergify API. The CI endpoints require an application key, so the credential ``mergify auth login`` stores is not used here",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -1057,8 +1074,8 @@
                 "valueNames": [
                   "TOKEN"
                 ],
-                "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
-                "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
+                "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API. Needs an `admin` application key or a user credential (`mergify auth login` or a GitHub PAT): a `ci` key is answered with 403",
+                "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API. Needs an `admin` application key or a user credential (`mergify auth login` or a GitHub PAT): a `ci` key is answered with 403",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -1304,8 +1321,8 @@
                     "valueNames": [
                       "TOKEN"
                     ],
-                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
-                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
+                    "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API. Needs an `admin` application key or a user credential (`mergify auth login` or a GitHub PAT): a `ci` key is answered with 403",
+                    "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API. Needs an `admin` application key or a user credential (`mergify auth login` or a GitHub PAT): a `ci` key is answered with 403",
                     "required": false,
                     "global": false,
                     "default": null,
@@ -1410,8 +1427,8 @@
                     "valueNames": [
                       "TOKEN"
                     ],
-                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
-                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars. Needs an `admin` application key or a GitHub PAT: a `ci` key is answered with 403",
+                    "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API. Needs an `admin` application key or a user credential (`mergify auth login` or a GitHub PAT): a `ci` key is answered with 403",
+                    "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API. Needs an `admin` application key or a user credential (`mergify auth login` or a GitHub PAT): a `ci` key is answered with 403",
                     "required": false,
                     "global": false,
                     "default": null,
@@ -1516,8 +1533,8 @@
                     "valueNames": [
                       "TOKEN"
                     ],
-                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
+                    "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
                     "required": false,
                     "global": false,
                     "default": null,
@@ -1604,8 +1621,8 @@
                     "valueNames": [
                       "TOKEN"
                     ],
-                    "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-                    "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+                    "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
+                    "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
                     "required": false,
                     "global": false,
                     "default": null,
@@ -1676,8 +1693,8 @@
             "valueNames": [
               "TOKEN"
             ],
-            "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-            "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
+            "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
             "required": false,
             "global": true,
             "default": null,
@@ -1916,8 +1933,8 @@
             "valueNames": [
               "TOKEN"
             ],
-            "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-            "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
+            "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
             "required": false,
             "global": false,
             "default": null,
@@ -2074,8 +2091,8 @@
             "valueNames": [
               "TOKEN"
             ],
-            "help": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
-            "longHelp": "Mergify or GitHub token. Falls back to ``MERGIFY_TOKEN`` and then ``GITHUB_TOKEN`` env vars",
+            "help": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
+            "longHelp": "Mergify token. Falls back to ``MERGIFY_TOKEN``, then the credential ``mergify auth login`` stored for this API URL, then ``GITHUB_TOKEN`` and ``gh auth token`` — the last two are deprecated for the Mergify API",
             "required": false,
             "global": true,
             "default": null,
@@ -3596,12 +3613,12 @@
                 "id": "github_native",
                 "kind": "option",
                 "short": null,
-                "long": "github-native",
+                "long": "no-github-native",
                 "valueNames": [
                   "GITHUB_NATIVE"
                 ],
-                "help": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header). Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
-                "longHelp": "Also register the stack with GitHub's native Stacks API, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header). Experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`false` when unset)",
+                "help": "Don't register the stack with GitHub's native Stacks API. By default, `mergify stack push` registers it, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header) — experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`true` when unset)",
+                "longHelp": "Don't register the stack with GitHub's native Stacks API. By default, `mergify stack push` registers it, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header) — experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`true` when unset)",
                 "required": false,
                 "global": false,
                 "default": null,
