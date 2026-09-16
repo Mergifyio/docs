@@ -1,0 +1,6 @@
+Revision history for #12858:
+
+rev 2 (content) 2026-09-16 12:35 UTC — Guard against drift: the vendored action.yml carries a tag + git blob stamp, and the build and tests fail when the tag is not the pinned version or the body was edited. The version sync only bumps version.json, so without this a v26 sync PR would merge green over v25's inputs.
+rev 1 (initial) 2026-09-16 12:35 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12858,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"d151e961dfa680302e43ea5ed0567fa4ca448955","timestamp_iso":"2026-09-16T12:35:48Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"d151e961dfa680302e43ea5ed0567fa4ca448955","new_sha":"61542cf6c13d2ddac02ba6a501723cf5bf861578","timestamp_iso":"2026-09-16T12:35:48Z","reason":"Guard against drift: the vendored action.yml carries a tag + git blob stamp, and the build and tests fail when the tag is not the pinned version or the body was edited. The version sync only bumps version.json, so without this a v26 sync PR would merge green over v25's inputs.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/d151e961dfa680302e43ea5ed0567fa4ca448955...61542cf6c13d2ddac02ba6a501723cf5bf861578"}]} -->
