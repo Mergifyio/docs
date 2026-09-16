@@ -5,6 +5,7 @@ import type * as unified from 'unified';
 import { remove } from 'unist-util-remove';
 import { visit } from 'unist-util-visit';
 import { makeComponentNode } from './utils/makeComponentNode';
+import { unifiedProcessorOf } from './utils/unifiedProcessorOf';
 
 const AsideTagname = 'AutoImportedAside';
 export const asideAutoImport: Record<string, [string, string][]> = {
@@ -80,12 +81,11 @@ export function astroAsides(): AstroIntegration {
   return {
     name: '@astrojs/asides',
     hooks: {
-      'astro:config:setup': ({ updateConfig }) => {
-        updateConfig({
-          markdown: {
-            remarkPlugins: [remarkDirective, remarkAsides()],
-          },
-        });
+      'astro:config:setup': ({ config }) => {
+        unifiedProcessorOf(config, '@astrojs/asides').options.remarkPlugins.push(
+          remarkDirective,
+          remarkAsides()
+        );
       },
     },
   };

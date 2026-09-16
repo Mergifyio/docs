@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
-import { RemarkPlugin } from '@astrojs/markdown-remark';
+import { RemarkPlugin, unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -93,33 +93,38 @@ export default defineConfig({
     ],
   },
   markdown: {
-    // Override with our own config
-    smartypants: false,
-    remarkPlugins: [
-      remarkBuildkiteVersionPlugin(),
-      remarkEnterpriseVersionPlugin(),
-      remarkGhaMergifyCiVersionPlugin(),
-      remarkGraphvizPlugin(),
-      [
-        remarkSmartypants as RemarkPlugin,
-        {
-          dashes: false,
-        },
+    // Every plugin below is a remark/rehype plugin, so this needs the unified
+    // processor rather than Astro 7's default Sätteri one, which runs none of
+    // them. MDX inherits this processor.
+    processor: unified({
+      // Override with our own config
+      smartypants: false,
+      remarkPlugins: [
+        remarkBuildkiteVersionPlugin(),
+        remarkEnterpriseVersionPlugin(),
+        remarkGhaMergifyCiVersionPlugin(),
+        remarkGraphvizPlugin(),
+        [
+          remarkSmartypants as RemarkPlugin,
+          {
+            dashes: false,
+          },
+        ],
       ],
-    ],
 
-    rehypePlugins: [
-      rehypeSlug,
-      // This adds links to headings
-      [rehypeAutolinkHeadings, autolinkConfig],
-      // Tweak GFM task list syntax
-      rehypeTasklistEnhancer(),
-      // Wrap markdown tables in a scrollable container
-      rehypeWrapTables(),
-      // Collapse static parts of the hast to html
+      rehypePlugins: [
+        rehypeSlug,
+        // This adds links to headings
+        [rehypeAutolinkHeadings, autolinkConfig],
+        // Tweak GFM task list syntax
+        rehypeTasklistEnhancer(),
+        // Wrap markdown tables in a scrollable container
+        rehypeWrapTables(),
+        // Collapse static parts of the hast to html
 
-      /** Issue with graphviz where inline styles get transformed: `font-size` => `fontsize` whch breaks rendered graphs SVG */
-      rehypeOptimizeStatic,
-    ],
+        /** Issue with graphviz where inline styles get transformed: `font-size` => `fontsize` whch breaks rendered graphs SVG */
+        rehypeOptimizeStatic,
+      ],
+    }),
   },
 });

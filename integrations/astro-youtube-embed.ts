@@ -5,6 +5,7 @@ import type * as unified from 'unified';
 import { remove } from 'unist-util-remove';
 import { visit } from 'unist-util-visit';
 import { makeComponentNode } from './utils/makeComponentNode';
+import { unifiedProcessorOf } from './utils/unifiedProcessorOf';
 
 const YoutubeTagname = 'AutoImportedYoutube';
 export const youtubeAutoImport: Record<string, [string, string][]> = {
@@ -60,12 +61,11 @@ export function astroYoutubeEmbeds(): AstroIntegration {
   return {
     name: '@astrojs/youtube-embed',
     hooks: {
-      'astro:config:setup': ({ updateConfig }) => {
-        updateConfig({
-          markdown: {
-            remarkPlugins: [remarkDirective, remarkYoutubeEmbed()],
-          },
-        });
+      'astro:config:setup': ({ config }) => {
+        unifiedProcessorOf(config, '@astrojs/youtube-embed').options.remarkPlugins.push(
+          remarkDirective,
+          remarkYoutubeEmbed()
+        );
       },
     },
   };
