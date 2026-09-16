@@ -1,0 +1,1 @@
+Guard against drift: the vendored action.yml carries a tag + git blob stamp, and the build and tests fail when the tag is not the pinned version or the body was edited. The version sync only bumps version.json, so without this a v26 sync PR would merge green over v25's inputs.
