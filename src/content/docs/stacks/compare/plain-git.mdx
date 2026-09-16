@@ -113,7 +113,7 @@ itself.
 
 **Merge Queue integration.** Stacks are queued as a unit:
 [`@mergifyio queue`](/commands/queue) on the top PR enqueues the whole chain
-bottom-up, and a failure cascades cleanly to the rest. See
+bottom-up, and dequeuing a PR also dequeues the PRs above it. See
 [Stacked PRs in the Merge Queue](/merge-queue/stacks).
 
 ## Coming From a Custom Script
