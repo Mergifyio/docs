@@ -3418,8 +3418,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -3439,17 +3442,20 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Merge queue name(s) of the pull requests",
+              "description": "Name of the merge queue(s) for the pull requests",
               "title": "Queue Name"
             },
-            "description": "Merge queue name(s) of the pull requests"
+            "description": "Name of the merge queue(s) for the pull requests"
           },
           {
             "name": "start_at",
@@ -3573,8 +3579,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -3594,17 +3603,20 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Merge queue rule name(s) of the pull requests",
+              "description": "Name of the merge queue(s) for the pull requests",
               "title": "Queue Name"
             },
-            "description": "Merge queue rule name(s) of the pull requests"
+            "description": "Name of the merge queue(s) for the pull requests"
           },
           {
             "name": "priority_rule_name",
@@ -3615,8 +3627,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -3749,8 +3764,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
@@ -3770,17 +3788,20 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Merge queue rule name(s) of the pull requests",
+              "description": "Name of the merge queue(s) for the pull requests",
               "title": "Queue Name"
             },
-            "description": "Merge queue rule name(s) of the pull requests"
+            "description": "Name of the merge queue(s) for the pull requests"
           },
           {
             "name": "priority_rule_name",
@@ -3791,8 +3812,11 @@
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
-                  }
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
