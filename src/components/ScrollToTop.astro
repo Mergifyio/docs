@@ -1,5 +1,10 @@
 <!--
-  Floating "scroll to top" button that appears after scrolling down.
+  Floating "scroll to top" button. It appears once the reader is well down the
+  page and heading back up, and hides again as soon as they scroll down: a
+  button that is fixed to the bottom-right corner sits on top of whatever the
+  content column puts there — the right edge of a wide diagram, a screenshot —
+  for as long as it is visible, so it is visible only while it is likely to be
+  wanted.
 -->
 <button
   id="scroll-to-top"
@@ -64,9 +69,14 @@
     if (!btn) return;
 
     const threshold = 400;
+    let lastY = window.scrollY;
 
     const update = () => {
-      if (window.scrollY > threshold) {
+      const y = window.scrollY;
+      // Scrolling up, and far enough down that "top" is a real trip.
+      const wanted = y > threshold && y < lastY;
+      lastY = y;
+      if (wanted) {
         btn.setAttribute('data-visible', '');
       } else {
         btn.removeAttribute('data-visible');
@@ -74,7 +84,6 @@
     };
 
     window.addEventListener('scroll', update, { passive: true });
-    update();
 
     btn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
