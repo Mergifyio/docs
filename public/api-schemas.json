@@ -13215,6 +13215,48 @@
             "type": "string",
             "format": "uuid",
             "title": "Session Id"
+          },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id",
+            "description": "The sub-batch this event concerns. Correlate the checks_not_started events emitted for one failed sub-batch on this id. Null on events persisted before this field was added."
+          },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
+          },
+          "sub_batch_pr_numbers": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer",
+                  "maximum": 9.223372036854776e+18,
+                  "minimum": 0.0
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sub Batch Pr Numbers",
+            "description": "The pull request numbers of the whole failed sub-batch, so a collapsed row can name every affected pull request and not just the one this per-pull-request event carries. Null on events persisted before this field was added."
           }
         },
         "type": "object",
@@ -13224,7 +13266,10 @@
           "queue_name",
           "queued_at",
           "reason",
-          "session_id"
+          "session_id",
+          "batch_id",
+          "batch_name",
+          "sub_batch_pr_numbers"
         ],
         "title": "EventQueueChecksNotStartedMetadata"
       },
