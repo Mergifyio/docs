@@ -174,9 +174,8 @@ batches of up to 3 PRs each in parallel. Given 7 queued PRs and a 10-minute
 CI pipeline, the first 6 merge in 10 minutes instead of the hour required for
 sequential validation.
 
-```dot class="queue"
+```dot class="queue" title="Speculative checks: batch 2 is tested on top of batch 1 while batch 1 is still validating"
 digraph {
-  label="Merge queue";
 
   subgraph cluster_batch2 {
     class="batch";

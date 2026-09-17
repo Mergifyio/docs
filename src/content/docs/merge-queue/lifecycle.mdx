@@ -37,9 +37,8 @@ Once a pull request meets the specified queue conditions, it is added to the
 end of the merge queue. However, [priority rules](/merge-queue/priority) can be
 used to alter its position in the queue.
 
-```dot class="flow"
+```dot class="flow" title="A pull request's states in the merge queue, and what moves it between them"
 digraph {
-  label="Pull request lifecycle";
   node [width=1.8];
 
   Dequeued [class="external"];

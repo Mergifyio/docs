@@ -51,9 +51,8 @@ queue_rules:
     batch_size: 3
 ```
 
-```dot class="queue"
+```dot class="queue" title="A batch of three pull requests is tested together, ahead of the rest of the queue"
 digraph {
-  label="Merge queue";
 
   subgraph cluster_batch1 {
     class="batch";
@@ -222,9 +221,8 @@ Because of this, a pull request further down the queue may join an earlier batch
 when it is similar to what is already there, while a closer but unrelated pull
 request waits for the next batch:
 
-```dot class="queue"
+```dot class="queue" title="batch_size: 2 — pull requests that touch the same area are grouped together"
 digraph {
-  label="batch_size: 2 — similar pull requests grouped together";
   edge [style=invis];
 
   subgraph cluster_batch1 {

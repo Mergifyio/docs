@@ -119,6 +119,7 @@
   --dg-a-external: var(--color-gray-500); /* GitHub, CI — not us */
   --dg-a-queued: var(--color-teal-700); /* in the queue, waiting its turn */
   --dg-a-pending: var(--color-orange-700); /* running now, validating */
+  --dg-a-flagged: var(--color-orange-700); /* a verdict to act on: flaky, suspect */
   --dg-a-merged: var(--color-green-700); /* merged, passed, done */
   --dg-a-failed: var(--color-coral-700); /* failed, dequeued, cascaded out */
   --dg-a-config: var(--color-blue-700); /* configuration and inputs */
@@ -149,6 +150,7 @@
   --dg-lift-external: 9%;
   --dg-lift-queued: 48%;
   --dg-lift-pending: 45%;
+  --dg-lift-flagged: 45%;
   --dg-lift-merged: 3%;
   --dg-lift-failed: 22%;
   --dg-lift-config: 46%;
@@ -248,6 +250,7 @@
   --dg-lift-external: 30%;
   --dg-lift-queued: 4%;
   --dg-lift-pending: 9%;
+  --dg-lift-flagged: 9%;
   --dg-lift-merged: 31%;
   --dg-lift-failed: 26%;
   --dg-lift-config: 7%;

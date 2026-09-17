@@ -36,12 +36,36 @@ describe('remarkGraphvizPlugin', () => {
 
   it('wraps the SVG so a narrow viewport can scroll it instead of shrinking it', async () => {
     // Without the wrapper, `.dg`'s width rule scales a ~600pt diagram down to a
-    // phone's column and takes its 13px labels to about 6px with it. The
+    // phone's column and takes its 14px labels to about 6px with it. The
     // media query in index.css hangs off this element, so its absence is not a
     // cosmetic regression — it is the diagram becoming unreadable on mobile.
+    // `DiagramZoom.astro` hangs off it too.
     const svg = await render('digraph { A -> B; }');
-    expect(svg).toMatch(/^<div class="dg-wrap"><svg\b/);
-    expect(svg).toMatch(/<\/svg><\/div>$/);
+    expect(svg).toMatch(/^<figure class="dg-wrap"><svg\b/);
+    expect(svg).toMatch(/<\/svg><\/figure>$/);
+  });
+
+  it('turns the title a fence names into a figcaption, not a Graphviz label', async () => {
+    // A graph-level `label` is drawn by Graphviz at whatever scale the diagram
+    // ends up at, and a long one widens the whole drawing. The fence names the
+    // title instead and it ships as HTML under the figure, in the page's type.
+    const svg = await render('digraph { A -> B; }', 'class="queue" title="A &amp; B <in> order"');
+    expect(svg).toMatch(/<\/svg><figcaption>A &amp; B &lt;in&gt; order<\/figcaption><\/figure>$/);
+    expect(svg).not.toMatch(/<svg[^>]*\stitle=/);
+    expect(svg).toMatch(/<svg[^>]*class="dg queue"/);
+  });
+
+  it('sizes the root in pixels so labels paint at the size they were drawn at', async () => {
+    // Graphviz writes `width="NNNpt"`; a browser paints a point at 1.33px and
+    // `.dg` used to scale the whole thing to 80% of the column on top. Dropping
+    // the unit makes one point one pixel, so a 14pt label is a 14px label on
+    // every diagram — the CSS then only ever shrinks one that is too wide.
+    const svg = await render('digraph { A -> B; }');
+    const m = /<svg[^>]*\swidth="([^"]+)"[^>]*\sheight="([^"]+)"/.exec(svg);
+    expect(m).not.toBeNull();
+    expect(m![1]).toMatch(/^[\d.]+$/);
+    expect(m![2]).toMatch(/^[\d.]+$/);
+    expect(svg).toMatch(/font-size="14(?:\.00)?"/);
   });
 
   it('leaves no color in the output at all', async () => {
