@@ -91,7 +91,9 @@ scopes:
 A GitHub Actions workflow driven by scopes has three parts:
 
 1. **Detect scopes** using the
-   [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) action.
+   [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) action. Its
+   inputs and outputs are listed in the
+   [action reference](/integrations/gha/reference).
 
 2. **Reuse the scope outputs** to conditionally run jobs.
 
@@ -125,10 +127,10 @@ digraph {
 :::caution
   On a `pull_request` event the `scopes` action works out the base and head to
   diff on its own. Any other event has no pull request to take them from, so
-  either pass an explicit `base`, or guard the job with
-  `if: ${{ github.event_name == 'pull_request' }}` and skip it. Sending the
-  scopes to Mergify is a no-op outside a pull request either way: on other
-  events the action only writes its `scopes` output.
+  either pass an explicit [`base`](/integrations/gha/reference#input-base), or
+  guard the job with `if: ${{ github.event_name == 'pull_request' }}` and skip
+  it. Sending the scopes to Mergify is a no-op outside a pull request either
+  way: on other events the action only writes its `scopes` output.
 :::
 
 ```yaml
