@@ -288,9 +288,9 @@ To disambiguate, prefix the check name with `@<github-app-slug>/`:
 - `<check-name>` is the check name exactly as GitHub reports it.
 
 The qualified form is supported on every `check-*` attribute that takes a
-check name: `check-success`, `check-success-or-neutral`, `check-failure`,
-`check-neutral`, `check-skipped`, `check-cancelled`, `check-timed-out`,
-`check-pending`, and `check-stale`.
+check name: `check-success`, `check-failure`, `check-neutral`,
+`check-skipped`, `check-cancelled`, `check-timed-out`, `check-pending`, and
+`check-stale`.
 
 The bare form keeps its original meaning and continues to match a check from
 any app, so existing configurations do not need to change. Prefer the qualified
