@@ -27,38 +27,41 @@ two merges that touched `api` and `docs`. Nothing PR #42 depends on has changed,
 still describes the merge and the queue skips straight to merging it. Had the queue landed nothing
 at all in the meantime, the first question alone would have been enough.
 
-```dot class="flow"
+```dot class="flow" title="Direct merge — what the queue checks before skipping CI"
 digraph {
-  label="Direct merge — what the queue checks before skipping CI";
   splines=polyline;
+
+  // The decision path is declared first so it takes the left of the drawing,
+  // and the "no" branches fall straight down it. What merged meanwhile sits
+  // to the right and feeds the second question from the side, so nothing
+  // crosses.
+  PR [label="PR #42, first in its lane\nscope: frontend, CI already green", class="queued"];
+  Q1 [label="Behind the\nbase branch?", shape=diamond, margin="0.14,0.06", class="pending"];
+  Q2 [label="Any scope\nin common?", shape=diamond, margin="0.14,0.06", class="pending"];
+  DIRECT [label="Direct merge\nno batch pull request, no queue CI", class="merged"];
+  QUEUE [label="Batch pull request\nfull queue CI run", class="muted"];
 
   subgraph cluster_base {
     class="batch";
     label="Merged while #42 waited";
-    M1 [label="queue merge\nscope: api", class="muted"];
-    M2 [label="queue merge\nscope: docs", class="muted"];
+    // Wide enough for the label above: a cluster is sized to its content,
+    // and the label is painted wider than Graphviz measured it.
+    M1 [label="queue merge\nscope: api", width=2.5, class="muted"];
+    M2 [label="queue merge\nscope: docs", width=2.5, class="muted"];
     M1 -> M2;
   }
-
   DELTA [label="Base delta scopes\napi, docs", shape=oval, class="config"];
-  PR [label="PR #42, first in its lane\nscope: frontend, CI already green", class="queued"];
 
-  Q1 [label="Behind the\nbase branch?", shape=diamond, margin="0.14,0.06", class="pending"];
-  Q2 [label="Any scope\nin common?", shape=diamond, margin="0.14,0.06", class="pending"];
-
-  DIRECT [label="Direct merge\nno batch pull request, no queue CI", class="merged"];
-  QUEUE [label="Batch pull request\nfull queue CI run", class="muted"];
-
-  M2 -> DELTA;
   PR -> Q1;
   Q1 -> DIRECT [label="  no", class="merged"];
   Q1 -> Q2 [label="  yes"];
+  M2 -> DELTA;
   DELTA -> Q2;
   Q2 -> DIRECT [label="  no", class="merged"];
   Q2 -> QUEUE [label="  yes"];
 
-  { rank=same; Q2; DELTA; }
-  { rank=same; DIRECT; QUEUE; }
+  // Direct merge on the left, under the "no" branches; the batch on the right.
+  { rank=same; DIRECT -> QUEUE [style=invis]; }
 }
 ```
 

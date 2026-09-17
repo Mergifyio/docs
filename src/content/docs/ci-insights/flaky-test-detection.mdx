@@ -30,9 +30,8 @@ Below is a simplified visualization of repeated runs on one commit: two
 executions of the same tests on the exact same commit (same SHA1) produce
 different results.
 
-```dot class="queue"
+```dot class="queue" title="Two runs of one test on three commits: the runs that disagree flag the test as flaky"
 digraph {
-  label="Two runs of one test, on three commits";
   rankdir=LR;
 
   subgraph cluster_commit1 {
@@ -42,7 +41,7 @@ digraph {
   }
   run1 [label="Run #1 — tests pass", class="merged"];
   run2 [label="Run #2 — tests fail", class="failed"];
-  detector [label="Flagged as flaky", shape=note, class="pending"];
+  detector [label="Flagged as flaky", shape=note, class="flagged"];
   commit1 -> run1 [label="  run 1"];
   commit1 -> run2 [label="  run 2"];
   { rank=same; run1; run2; }

@@ -1,0 +1,204 @@
+<!--
+  Click-to-enlarge for rendered diagrams.
+
+  A diagram wider than the prose column is shrunk to fit by `.dg` in
+  `index.css`, and its labels shrink with it. This marks the wrapper of any
+  diagram that had to shrink (`data-zoomable`) and opens it at full size in an
+  overlay on click. A diagram that already fits is left alone: nothing to
+  enlarge, no cursor, no promise.
+
+  Include once in the base layout, next to ImageZoom.
+-->
+<style is:global>
+  .diagram-zoom-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease;
+  }
+
+  .diagram-zoom-overlay[data-active] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .diagram-zoom-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    cursor: zoom-out;
+  }
+
+  .diagram-zoom-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 2.5rem 1.5rem 1.5rem;
+    border-radius: 0.75rem;
+    background: var(--theme-bg-content);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+  }
+
+  .diagram-zoom-overlay[data-active] .diagram-zoom-content {
+    transform: scale(1);
+  }
+
+  /* The copy inside the overlay is shown at the size it was laid out at — that
+     is the whole point — and scrolls when the viewport is smaller than that. */
+  .diagram-zoom-scroll {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .diagram-zoom-scroll > .dg {
+    width: auto;
+    max-width: none;
+    margin: 0;
+  }
+
+  .diagram-zoom-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--theme-text-muted);
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .diagram-zoom-close:hover {
+    background: var(--theme-bg-hover);
+    color: var(--theme-text);
+  }
+
+  .diagram-zoom-close:focus-visible {
+    outline: 2px solid var(--theme-link);
+    outline-offset: 2px;
+  }
+</style>
+
+<div class="diagram-zoom-overlay" id="diagram-zoom-overlay" aria-hidden="true">
+  <div class="diagram-zoom-backdrop"></div>
+  <div class="diagram-zoom-content" role="dialog" aria-modal="true" aria-label="Enlarged diagram">
+    <button class="diagram-zoom-close" type="button" aria-label="Close diagram">
+      <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06z"/>
+      </svg>
+    </button>
+    <div class="diagram-zoom-scroll"></div>
+  </div>
+</div>
+
+<script>
+  // Document-level handlers are registered exactly once; every DOM lookup
+  // happens inside a handler so View Transition swaps never leave a stale ref.
+  if (!(window as any).__diagramZoomInitialized__) {
+    (window as any).__diagramZoomInitialized__ = true;
+
+    const ZOOMABLE = 'data-zoomable';
+    const HINT = 'Click to enlarge';
+
+    const getOverlay = () => document.getElementById('diagram-zoom-overlay');
+
+    /**
+     * A wrapper is zoomable when the diagram inside it is painted narrower
+     * than it was laid out at. The plugin writes the layout width on the root
+     * `<svg>` in pixels, so the comparison is direct; the slack absorbs
+     * sub-pixel rounding.
+     */
+    function markZoomable() {
+      for (const svg of document.querySelectorAll<SVGSVGElement>('.dg-wrap > svg.dg')) {
+        const wrap = svg.parentElement;
+        if (!wrap) continue;
+        const intrinsic = Number.parseFloat(svg.getAttribute('width') ?? '');
+        const painted = svg.getBoundingClientRect().width;
+        if (intrinsic && painted < intrinsic - 4) {
+          wrap.setAttribute(ZOOMABLE, '');
+          wrap.setAttribute('title', HINT);
+        } else {
+          wrap.removeAttribute(ZOOMABLE);
+          if (wrap.getAttribute('title') === HINT) wrap.removeAttribute('title');
+        }
+      }
+    }
+
+    function openZoom(svg: SVGSVGElement) {
+      const overlay = getOverlay();
+      const target = overlay?.querySelector('.diagram-zoom-scroll');
+      if (!overlay || !target) return;
+      target.replaceChildren(svg.cloneNode(true));
+      overlay.setAttribute('data-active', '');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      overlay.querySelector<HTMLButtonElement>('.diagram-zoom-close')?.focus();
+    }
+
+    function closeZoom() {
+      const overlay = getOverlay();
+      if (!overlay) return;
+      overlay.removeAttribute('data-active');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+
+      const wrap = target.closest<HTMLElement>(`.dg-wrap[${ZOOMABLE}]`);
+      if (wrap) {
+        const svg = wrap.querySelector<SVGSVGElement>('svg.dg');
+        if (svg) openZoom(svg);
+        return;
+      }
+
+      const overlay = getOverlay();
+      if (overlay?.hasAttribute('data-active')) {
+        if (
+          target.closest('.diagram-zoom-close') ||
+          target.classList.contains('diagram-zoom-backdrop')
+        ) {
+          closeZoom();
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && getOverlay()?.hasAttribute('data-active')) closeZoom();
+    });
+
+    let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(markZoomable, 100);
+    });
+
+    // Fonts arrive after first paint and can move a diagram's painted width
+    // by a pixel or two; measure once they are in.
+    document.fonts?.ready.then(markZoomable);
+    document.addEventListener('astro:page-load', markZoomable);
+    document.addEventListener('astro:before-swap', () => {
+      document.body.style.overflow = '';
+    });
+    markZoomable();
+  }
+</script>

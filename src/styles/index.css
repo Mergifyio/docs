@@ -895,6 +895,10 @@ html {
   --dg-a: var(--dg-a-pending);
   --dg-edge-lift: var(--dg-lift-pending);
 }
+.dg .flagged {
+  --dg-a: var(--dg-a-flagged);
+  --dg-edge-lift: var(--dg-lift-flagged);
+}
 .dg .merged {
   --dg-a: var(--dg-a-merged);
   --dg-edge-lift: var(--dg-lift-merged);
@@ -919,11 +923,15 @@ html {
 .dg {
   display: block;
   margin: 1.75em auto;
-  /* Graphviz's intrinsic `width="NNNpt"` is usually narrower than the prose
-     column, so without a width the diagrams would all shrink. 80% matches what
-     the diagrams shipped at before they were tokenised, and keeps a fence's own
-     inline `max-width` meaningful. */
-  width: 80%;
+  /* A diagram lands on the page at the size it was laid out at: the plugin
+     hands the root `<svg>` a pixel width equal to its Graphviz point width, so
+     every node label paints at the same 14px and every edge label at 11px,
+     whatever the diagram's shape. The page only ever shrinks one that is
+     wider than the column — and then `DiagramZoom.astro` offers it at full
+     size on click. Before this the rule was `width: 80%`, which made type size
+     a side effect of aspect ratio: a three-box diagram painted its labels at
+     21px and a wide one at 8px, on the same page. */
+  width: auto;
   max-width: 100%;
   height: auto;
 }
@@ -935,10 +943,26 @@ html {
 }
 
 /* The wrapper `remark-graphviz.ts` puts around every rendered fence. On a wide
-   viewport it does nothing: the diagram already fits, and `.dg` keeps the 80%
-   width above. */
+   viewport it only centres the diagram; `DiagramZoom.astro` marks it
+   `data-zoomable` when the diagram inside had to shrink to fit the column. */
 .dg-wrap {
   margin: 1.75em 0;
+}
+.dg-wrap[data-zoomable] {
+  cursor: zoom-in;
+}
+
+/* The title a fence names. It used to be a Graphviz `label` inside the SVG,
+   which scaled with the drawing — 11px on one diagram, 32px on the next — and
+   widened the drawing to fit itself. As a figcaption it is set once, in the
+   page's type, and wraps. */
+.dg-wrap > figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--theme-text-muted);
+  text-wrap: balance;
 }
 .dg-wrap > .dg {
   margin-block: 0;
@@ -955,12 +979,11 @@ html {
     overscroll-behavior-x: contain;
   }
   .dg-wrap > .dg {
-    /* `width: auto` hands the SVG back its intrinsic `width="NNNpt"`, so the
-       labels return to the size they were drawn at. `min-width: 100%` keeps a
-       diagram narrower than the column from collapsing to the left. */
+    /* `max-width: none` hands the SVG back its intrinsic width, so the labels
+       stay at the size they were drawn at and the wrapper scrolls. A diagram
+       narrower than the column stays centred by the `auto` margins above. */
     width: auto;
     max-width: none;
-    min-width: 100%;
   }
 }
 
@@ -1015,7 +1038,8 @@ html {
   fill: var(--dg-label);
 }
 
-/* The graph-level caption sits directly under g.graph, on the page surface. */
+/* A graph-level label a fence still draws itself sits directly under g.graph,
+   on the page surface. Prefer `title="…"` on the fence: see `.dg-wrap > figcaption`. */
 .dg > .graph > text {
   fill: var(--dg-title);
   font-weight: 600;
@@ -1034,14 +1058,8 @@ html {
   stroke: none;
 }
 
-/* An architecture diagram is the widest kind there is, and the one whose labels
-   suffer most from being scaled down. Give it the whole column. */
-.dg.arch {
-  width: 100%;
-}
-
-/* The hand-placed diagrams are drawn at a fixed size and read best at it: they
-   carry no intrinsic width for `width: 80%` to work against. */
+/* The hand-placed diagrams are drawn to a viewBox with no intrinsic width, so
+   they fill the column up to the size each was designed at. */
 .dg-linear,
 .dg-commits,
 .dg-mapping {

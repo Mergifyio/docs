@@ -131,14 +131,12 @@ immediate parent branch. Without this, PR2 would be queued against PR1's head
 branch and could never reach `main`, so the queue would have nothing to merge
 into.
 
-```dot class="queue" style="max-width: 320px"
+```dot class="queue" title="Every pull request in a stack is queued against main, not against its parent branch"
 digraph {
-  node [shape=circle, width=0.5, height=0.5, fixedsize=true];
-
   PR1 [class="queued"];
   PR2 [class="queued"];
   PR3 [class="queued"];
-  main [label="main", shape=box, fixedsize=false, class="external"];
+  main [label="main", class="external"];
 
   PR1 -> main;
   PR2 -> main;
@@ -168,11 +166,8 @@ checks, a stack longer than `batch_size` (or a stack sharing its scope group
 with higher-priority unrelated PRs) lands across consecutive batches. Order
 is preserved either way.
 
-```dot class="queue"
+```dot class="queue" title="Merge queue with batch_size: 5 — the whole stack lands in one batch"
 digraph {
-  label="Merge queue with batch_size: 5";
-  node [shape=circle, width=0.5, height=0.5, fixedsize=true];
-
   subgraph cluster_batch1 {
     class="batch";
     label="Batch 1 — the stack kept together";
@@ -203,12 +198,8 @@ API, every successor still in the queue is dequeued with it, under the
 dequeue reason. This stops the queue from validating PRs whose dependency just
 disappeared. There's no point checking PR3 if PR1 has left the queue.
 
-```dot class="queue"
+```dot class="queue" title="Cascade dequeue: dequeuing PR1 also dequeues PR2 and PR3; PR4 stays in the queue"
 digraph {
-  ranksep=1.0;
-  // Not fixedsize: these labels are two lines, so let the circle grow to them.
-  node [shape=circle];
-
   PR1 [label="PR1\n(dequeued)", class="failed"];
   PR2 [label="PR2\n(cascaded)", class="muted"];
   PR3 [label="PR3\n(cascaded)", class="muted"];

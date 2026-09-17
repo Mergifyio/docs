@@ -229,24 +229,36 @@ CSS can do the rest — which is why dark mode needs no second render and no sec
 | Role | What it means |
 | --- | --- |
 | `queued` | in the queue, waiting its turn |
-| `pending` | running now — validating, testing |
+| `pending` | running now — validating, testing, a CI job in flight |
+| `flagged` | a verdict to act on — flaky, suspect |
 | `merged` | merged, passed, done |
 | `failed` | failed, dequeued, cascaded out |
-| `config` | configuration and inputs |
+| `config` | configuration and inputs — a scope, a `.mergify.yml`, a test name |
 | `mergify` | a component we run |
 | `datastore` | Postgres, Redis, storage |
-| `external` | GitHub, CI, third parties — not us |
+| `external` | GitHub, CI, third parties, a pull request event — not us |
 | `batch` | a grouping container |
-| `muted` | skipped, dashed, de-emphasized |
+| `muted` | skipped, dashed, de-emphasized — not "waiting", that is `queued` |
 | `chrome` | edges, arrowheads, captions |
+
+A role names what an element *is right now*, and the same thing keeps the same role from one
+diagram to the next. Two consequences that were easy to get wrong:
+
+- A batch under test is `pending` and a batch behind it is `queued`, on every diagram. On the
+  queue-modes page that contrast *is* the content: serial mode paints one orange batch with teal
+  ones behind it, parallel mode paints three orange ones side by side. Painting every batch
+  teal on one diagram and orange on the next reads as "colour means mode".
+- A pull request is a rounded box and a commit is a circle. The stacks page draws both, so it
+  cannot borrow the circle for a PR on one diagram and the box on the next.
 
 `plain` is not a role: it marks an element as a caption rather than a box, and combines with one
 (`class="merged plain"`). The plugin infers it for a shape Graphviz drew with no border, so
 `shape=plaintext` needs nothing.
 
-`queued` and `mergify` deliberately share the Merge Queue teal. Same color, two names, because
-"waiting in the queue" and "a service we run" are the same idea on two different kinds of diagram,
-and a role name that lies is worse than a duplicated accent. Adding a role costs three lines: an
+`queued` and `mergify` deliberately share the Merge Queue teal, and `pending` and `flagged` share
+the orange. Same color, two names, because "waiting in the queue" and "a service we run" are the
+same idea on two different kinds of diagram, "in flight" and "needs a look" are both attention, and
+a role name that lies is worse than a duplicated accent. Adding a role costs three lines: an
 accent in `theme.css` (both blocks), a `.dg .<role>` rule in `index.css`, and an entry in
 `DIAGRAM_ROLES` in `src/util/diagramSvg.ts`.
 
@@ -289,6 +301,14 @@ are painted by the `.dg` block in `index.css`:
 ### Writing one
 
 - Name a role, never a color. `PR1 [class="queued"];`, not `PR1 [fillcolor="#347D39"];`
+- Title the fence, not the graph: `` ```dot class="queue" title="Serial mode — one queue" ``. The
+  plugin ships it as a `<figcaption>` under the figure, set in the page's type, so every caption
+  on the site is the same size and a long one wraps. A graph-level `label` is drawn by Graphviz
+  at whatever scale the diagram ends up at and widens the drawing to fit itself.
+- Say what the picture shows, in a sentence. "Merge queue" tells the reader nothing they cannot
+  see; "batch 2 is tested on top of batch 1 while batch 1 is still validating" is why the
+  diagram is there. A caption is the one place the colours get explained, so when a role carries
+  the point — orange is being tested, teal waits — say so.
 - Keep cluster labels short. Graphviz sizes a container to fit the label it measured in Helvetica,
   and the page paints it in Inter at weight 600 — roughly 4% wider. Node labels have margin to
   absorb the drift; cluster labels do not.

@@ -100,14 +100,14 @@ A GitHub Actions workflow driven by scopes has three parts:
 3. **Publish a final status** (for example with a `ci-gate` job) if you want one
    check that reflects all the jobs that ran.
 
-```dot class="queue"
+```dot class="queue" title="detect-scopes runs first, and each test job runs only when its scope changed"
 digraph {
-  PR [label="Pull request\nchanges", class="queued"];
+  PR [label="Pull request\nchanges", class="external"];
   Config [label="Scopes config\n(.mergify.yml)", class="config"];
   Detect [label="detect-scopes job\n(gha-mergify-ci)", class="pending"];
 
-  Frontend [label="frontend-tests\n(run)", class="queued"];
-  Docs [label="docs-tests\n(run)", class="queued"];
+  Frontend [label="frontend-tests\n(run)", class="pending"];
+  Docs [label="docs-tests\n(run)", class="pending"];
   API [label="api-tests\n(skipped)", class="muted"];
 
   PR -> Detect;

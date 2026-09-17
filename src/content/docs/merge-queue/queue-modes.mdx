@@ -38,10 +38,9 @@ is tested on top of the one before it, forming a single ordered pipeline. This g
 correctness: each pull request is validated against the exact state it will merge into. The
 trade-off is that unrelated changes still wait for each other.
 
-```dot class="queue"
+```dot class="queue" title="Serial mode — one queue: batch 1 is being tested, batches 2 and 3 wait behind it"
 digraph {
-  label="Serial mode — a single queue";
-  PR1 [label="Batch 1\nPR #1 (api)", class="queued"];
+  PR1 [label="Batch 1\nPR #1 (api)", class="pending"];
   PR2 [label="Batch 2\nPR #2 (frontend)", class="queued"];
   PR3 [label="Batch 3\nPR #3 (docs)", class="queued"];
   PR1 -> PR2 -> PR3;
@@ -84,9 +83,8 @@ together so they are tested as a group, preventing semantic conflicts.
 
 Batches that share no scope run at the same time:
 
-```dot class="flow"
+```dot class="flow" title="Parallel mode — batches with no scope in common are tested at the same time"
 digraph {
-  label="Parallel mode — independent scope queues";
   edge [style=invis];
 
   subgraph cluster_running {
@@ -103,12 +101,11 @@ digraph {
 When scopes **do** overlap, Mergify preserves ordering within that scope to guarantee the changes are
 tested together:
 
-```dot class="queue"
+```dot class="queue" title="Parallel mode — batch 2 shares the api scope with batch 1, so it waits; batch 3 proceeds on its own"
 digraph {
-  label="Parallel mode — overlapping scopes create dependencies";
-  PR1 [label="Batch 1\nPR #1 (api)", class="queued"];
+  PR1 [label="Batch 1\nPR #1 (api)", class="pending"];
   PR4 [label="Batch 2\nPR #4 (api, frontend)", class="queued"];
-  PR3 [label="Batch 3\nPR #3 (docs)", class="queued"];
+  PR3 [label="Batch 3\nPR #3 (docs)", class="pending"];
 
   PR1 -> PR4 [label="same scope: api"];
   { rank=same; PR1; PR3; }
@@ -264,9 +261,8 @@ Take the configuration above (`max_parallel_checks: 5`, `frontend: 2`, `backend:
 uncapped) and suppose the queue is ready to test three `frontend` batches, three `backend` batches,
 and two `docs` batches. The slots might fill like this:
 
-```dot class="flow"
+```dot class="flow" title="Per-scope capacity — ceiling 5, frontend 2, backend 2, docs uncapped"
 digraph {
-  label="Per-scope capacity — ceiling 5, frontend 2, backend 2, docs uncapped";
   edge [style=invis];
 
   subgraph cluster_running {
@@ -281,11 +277,11 @@ digraph {
   }
 
   subgraph cluster_waiting {
-    class="muted";
+    class="batch";
     label="Waiting";
-    F3 [label="frontend #3\nfrontend full", class="muted"];
-    B3 [label="backend #3\nbackend full", class="muted"];
-    D2 [label="docs #2\nceiling full", class="muted"];
+    F3 [label="frontend #3\nfrontend full", class="queued"];
+    B3 [label="backend #3\nbackend full", class="queued"];
+    D2 [label="docs #2\nceiling full", class="queued"];
     { rank=same; F3; B3; D2; }
   }
 }
@@ -385,9 +381,8 @@ Parallel mode keeps dependencies between batches that share a scope. **Isolated 
 entirely: every batch is a self-contained unit that is tested and merged on its own, with no parent
 batch and no child batch. A failure in one batch never blocks any other.
 
-```dot class="flow"
+```dot class="flow" title="Isolated mode — every batch is tested on its own, with no dependency on any other"
 digraph {
-  label="Isolated mode — every batch independent";
   edge [style=invis];
 
   subgraph cluster_running {

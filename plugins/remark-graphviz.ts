@@ -40,17 +40,30 @@ const VALID_LANGUAGES = ['dot', 'circo', 'neato'];
 const METRICS_FONT = 'Helvetica';
 
 /**
+ * Label sizes, in Graphviz points. The plugin hands the SVG a pixel width equal
+ * to its point width (see `toPixels`), so a point here is a CSS pixel on the
+ * page: a node label paints at 14px and an edge label at 11px on every
+ * diagram, whatever its overall size. Before this, a diagram's type size was a
+ * side effect of its aspect ratio — the page scaled every SVG to the same
+ * width, so a three-box diagram painted its labels at 21px and a wide one at
+ * 8px, on the same page.
+ */
+const LABEL_PT = 14;
+const EDGE_PT = 11;
+
+/**
  * Injected into every fence, immediately after the opening brace, so anything
- * the author writes afterwards overrides it. `labelloc="t"` puts a graph-level
- * caption above the figure, where a figure caption belongs; Graphviz's own
- * default is below.
+ * the author writes afterwards overrides it. A diagram's title is not drawn
+ * by Graphviz at all: the fence names it (`title="…"`) and it ships as an HTML
+ * `<figcaption>` under the figure, so every caption on the site is set in the
+ * same type and a long one wraps instead of widening the drawing.
  */
 const BASE = `
   graph [bgcolor="transparent", style="rounded", fontname="${METRICS_FONT}",
-         fontsize=13, labelloc="t", pad="0.12", nodesep=0.45, ranksep=0.55];
-  node  [fontname="${METRICS_FONT}", fontsize=13, shape=box,
+         fontsize=${LABEL_PT}, pad="0.12", nodesep=0.45, ranksep=0.55];
+  node  [fontname="${METRICS_FONT}", fontsize=${LABEL_PT}, shape=box,
          style="rounded,filled", penwidth=1.4, margin="0.24,0.15", height=0.42];
-  edge  [fontname="${METRICS_FONT}", fontsize=10, penwidth=1.3, arrowsize=0.7];
+  edge  [fontname="${METRICS_FONT}", fontsize=${EDGE_PT}, penwidth=1.3, arrowsize=0.7];
 `;
 
 /**
@@ -83,6 +96,28 @@ function injectDefaults(source: string, classes: string[]): string {
   return `${source.slice(0, brace + 1)}\n${defaults}\n${source.slice(brace + 1)}`;
 }
 
+/**
+ * Graphviz sizes the root `<svg>` in points (`width="508pt"`), and a browser
+ * paints a point at 1.33px. Dropping the unit makes one Graphviz point one CSS
+ * pixel, so the diagram lands on the page at the size it was laid out at and
+ * its labels at `LABEL_PT` — the `.dg` rule in `index.css` only ever shrinks
+ * it from there, never scales it up.
+ */
+function toPixels($: ReturnType<typeof load>) {
+  for (const dimension of ['width', 'height'] as const) {
+    const value = $('svg').attr(dimension);
+    if (value?.endsWith('pt')) $('svg').attr(dimension, value.slice(0, -2));
+  }
+}
+
+/** The `<figcaption>` for a fence that names a title; nothing for one that does not. */
+function caption(title: string | undefined): string {
+  if (!title) return '';
+  const $ = load('<figcaption></figcaption>', null, false);
+  $('figcaption').text(title);
+  return $.html();
+}
+
 export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
   const transformer: unified.Transformer<mdast.Root> = async (tree) => {
     const codeNodes: { node: mdast.Code; lang: string; attrString: string | undefined }[] = [];
@@ -102,6 +137,10 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
         try {
           const attrs = attrString ? load(`<element ${attrString}></element>`)(`element`) : null;
           const classes = (attrs?.attr('class') ?? '').split(/\s+/).filter(Boolean);
+          // The caption is the figure's, not the SVG's: it must not land on
+          // the `<svg>` as a tooltip.
+          const title = attrs?.attr('title')?.trim();
+          attrs?.removeAttr('title');
 
           const svgString = viz.renderString(injectDefaults(node.value, classes), {
             format: 'svg',
@@ -114,6 +153,7 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
           const fenceAttrs = attrs?.attr();
           if (fenceAttrs) $(`svg`).attr(fenceAttrs);
           finishDiagramSvg($, { classes });
+          toPixels($);
 
           // Rewrite the fence in place: it stops being a code block and becomes
           // the rendered SVG. mdast has no in-place conversion, so the node
@@ -121,14 +161,14 @@ export function remarkGraphvizPlugin(): unified.Plugin<[], mdast.Root> {
           // claim `'html'` is `'code'` and leave the node lying about itself.
           //
           // The SVG ships inside `.dg-wrap`, the diagram counterpart to the
-          // `.table-wrap` tables already use. A diagram is authored around
-          // 600pt wide with 13px labels; letting it shrink to a phone's column
-          // scales that text to about 6px, so below the breakpoint in
-          // `index.css` the wrapper scrolls and the diagram keeps its intrinsic
-          // size instead. Above it, the wrapper is inert.
+          // `.table-wrap` tables already use. On a wide viewport a diagram
+          // wider than the column shrinks to fit, and `DiagramZoom.astro`
+          // marks the wrapper so a click opens it at full size. Below the
+          // breakpoint in `index.css` the wrapper scrolls instead and the
+          // diagram keeps its intrinsic size.
           const htmlNode = node as unknown as mdast.Html;
           htmlNode.type = `html`;
-          htmlNode.value = `<div class="dg-wrap">${$.html(`svg`)}</div>`;
+          htmlNode.value = `<figure class="dg-wrap">${$.html(`svg`)}${caption(title)}</figure>`;
         } catch (error) {
           // The fence survives as a code block rather than taking the build
           // down, so name it loudly: a diagram silently becoming a wall of DOT
