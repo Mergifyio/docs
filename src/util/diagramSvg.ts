@@ -30,6 +30,7 @@ export const DIAGRAM_ROLES = [
   'external',
   'queued',
   'pending',
+  'flagged',
   'merged',
   'failed',
   'config',

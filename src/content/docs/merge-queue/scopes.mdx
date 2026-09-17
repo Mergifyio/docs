@@ -28,9 +28,8 @@ prioritizes the combination that shares the most scopes in common. Pull requests
 scope are tested together first, while unrelated changes stay in the queue until a compatible batch
 is available or Mergify needs them to fill the requested batch size.
 
-```dot class="queue"
+```dot class="queue" title="Scope-aware batch selection: the three pull requests that share frontend and api form the batch; the tooling change waits"
 digraph {
-  label="Scope-aware batch selection";
   edge [arrowhead=none];
 
   subgraph cluster_preferred {

@@ -25,156 +25,40 @@ full control over data flows.
 
 ## High-level diagram
 
-<div class="enterprise-graph" data-graph-zoom>
-  ```dot class="arch"
-  digraph {
-    label="Mergify Enterprise — high-level architecture";
+```dot class="arch" title="Mergify Enterprise — high-level architecture"
+digraph {
 
-    subgraph cluster_customer {
-      class="batch";
-      label="Customer infrastructure";
+  subgraph cluster_customer {
+    class="batch";
+    label="Customer infrastructure";
 
-      User [label="User", class="external"];
-      ReverseProxy [label="Reverse proxy\n(HTTPS exposed)", class="config"];
+    User [label="User", class="external"];
+    ReverseProxy [label="Reverse proxy\n(HTTPS exposed)", class="config"];
 
-      subgraph cluster_onprem {
-        class="mergify";
-        label="Mergify on-premise";
-        Dashboard [label="Dashboard & API\n(port 5000)", class="mergify"];
-        Workers [label="Mergify workers", class="mergify"];
-      }
-
-      PostgreSQL [label="PostgreSQL database", class="datastore"];
-      Redis [label="Redis cluster", class="datastore"];
+    subgraph cluster_onprem {
+      class="mergify";
+      label="Mergify on-premise";
+      Dashboard [label="Dashboard & API\n(port 5000)", class="mergify"];
+      Workers [label="Mergify workers", class="mergify"];
     }
 
-    GitHub [label="GitHub", class="external"];
-    Subscription [label="Mergify Subscription API", class="mergify"];
-
-    GitHub -> ReverseProxy [label="GitHub events"];
-    ReverseProxy -> Dashboard [label="forwarded events"];
-    Dashboard -> Workers [label="queue jobs via Redis"];
-    Dashboard -> PostgreSQL;
-    Dashboard -> Redis;
-    Workers -> PostgreSQL;
-    Workers -> Redis;
-    Workers -> GitHub [label="API requests to GitHub", dir=both];
-    ReverseProxy -> User [label="UI access", dir=both];
-    GitHub -> User [label="developers", dir=both];
-    Workers -> Subscription [label="subscription lookup", class="muted", style=dashed];
+    PostgreSQL [label="PostgreSQL database", class="datastore"];
+    Redis [label="Redis cluster", class="datastore"];
   }
-  ```
-</div>
 
-<script>
-  {`
-                                          (function () {
-                                          const initGraphZoom = () => {
-                                            const container = document.querySelector('[data-graph-zoom]');
-                                            if (!container || container.dataset.graphZoomReady === 'true') return;
+  GitHub [label="GitHub", class="external"];
+  Subscription [label="Mergify Subscription API", class="mergify"];
 
-                                            const overlay = document.createElement('div');
-                                            overlay.className = 'graph-zoom-overlay';
-                                            overlay.innerHTML =
-                                              '<div class="graph-zoom-backdrop"></div>' +
-                                              '<div class="graph-zoom-content" role="dialog" aria-modal="true" aria-label="Zoomed diagram">' +
-                                              '<button class="graph-zoom-close" aria-label="Close diagram">×</button>' +
-                                              '<div class="graph-zoom-scroll"></div>' +
-                                              '</div>';
-
-                                            const closeOverlay = () => overlay.classList.remove('is-visible');
-
-                                            overlay.querySelector('.graph-zoom-close')?.addEventListener('click', closeOverlay);
-                                            overlay.querySelector('.graph-zoom-backdrop')?.addEventListener('click', closeOverlay);
-
-                                            document.body.appendChild(overlay);
-
-                                            container.addEventListener('click', () => {
-                                              const svg = container.querySelector('svg');
-                                              if (!svg) return;
-                                              const target = overlay.querySelector('.graph-zoom-scroll');
-                                              if (!target) return;
-                                              target.innerHTML = svg.outerHTML;
-                                              overlay.classList.add('is-visible');
-                                            });
-
-                                            container.dataset.graphZoomReady = 'true';
-                                          };
-
-                                          if (typeof window !== 'undefined') {
-                                            if (document.readyState === 'loading') {
-                                              document.addEventListener('DOMContentLoaded', initGraphZoom, { once: true });
-                                            } else {
-                                              initGraphZoom();
-                                            }
-                                          }
-                                          })();
-                                          `}
-</script>
-
-<style>
-  {`
-                                          .enterprise-graph {
-                                          cursor: zoom-in;
-                                          }
-
-                                          .graph-zoom-overlay {
-                                          position: fixed;
-                                          inset: 0;
-                                          display: flex;
-                                          align-items: center;
-                                          justify-content: center;
-                                          background: transparent;
-                                          opacity: 0;
-                                          pointer-events: none;
-                                          transition: opacity 0.25s ease;
-                                          z-index: 1000;
-                                          }
-
-                                          .graph-zoom-overlay.is-visible {
-                                          opacity: 1;
-                                          pointer-events: auto;
-                                          }
-
-                                          .graph-zoom-backdrop {
-                                          position: absolute;
-                                          inset: 0;
-                                          background: rgba(12, 17, 34, 0.55);
-                                          }
-
-                                          .graph-zoom-content {
-                                          position: relative;
-                                          background: var(--theme-bg);
-                                          border-radius: 0.75rem;
-                                          max-width: min(100%, 1100px);
-                                          max-height: 90vh;
-                                          width: min(90vw, 1100px);
-                                          padding: 1rem 1rem 1.5rem;
-                                          box-shadow: 0 1.5rem 4rem rgba(15, 18, 45, 0.35);
-                                          display: flex;
-                                          flex-direction: column;
-                                          }
-
-                                          .graph-zoom-close {
-                                          position: absolute;
-                                          top: 0.5rem;
-                                          right: 0.5rem;
-                                          background: none;
-                                          border: none;
-                                          font-size: 1.5rem;
-                                          line-height: 1;
-                                          cursor: pointer;
-                                          color: var(--theme-text-muted);
-                                          }
-
-                                          .graph-zoom-scroll {
-                                          overflow: auto;
-                                          flex: 1;
-                                          }
-
-                                          .graph-zoom-scroll svg {
-                                          width: 100%;
-                                          height: auto;
-                                          }
-                                          `}
-</style>
+  GitHub -> ReverseProxy [label="GitHub events"];
+  ReverseProxy -> Dashboard [label="forwarded events"];
+  Dashboard -> Workers [label="queue jobs via Redis"];
+  Dashboard -> PostgreSQL;
+  Dashboard -> Redis;
+  Workers -> PostgreSQL;
+  Workers -> Redis;
+  Workers -> GitHub [label="API requests to GitHub", dir=both];
+  ReverseProxy -> User [label="UI access", dir=both];
+  GitHub -> User [label="developers", dir=both];
+  Workers -> Subscription [label="subscription lookup", class="muted", style=dashed];
+}
+```

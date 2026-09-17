@@ -24,12 +24,11 @@ expensive.
 
 ## How It Works
 
-```dot class="flow"
+```dot class="flow" title="Two-step CI: cheap checks before the queue, the expensive ones inside it"
 digraph {
-  label="Two-step continuous integration";
   node [width=2.2];
 
-  open [label="Pull request opened\nor updated", class="queued"];
+  open [label="Pull request opened\nor updated", class="external"];
   preliminary [label="Preliminary tests\n(unit tests, linting)", class="pending"];
   preliminary_ok [label="Tests passed\nready for the queue", class="merged"];
   preliminary_fail [label="Tests failed\nneeds fixes", class="failed"];

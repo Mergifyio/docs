@@ -181,10 +181,10 @@ function main(argv) {
   console.error(
     '\nName a role instead, and let the page resolve the color:\n' +
       '  PR1 [class="queued"];   not   PR1 [fillcolor="#347D39"];\n' +
-      'The roles are queued, pending, merged, failed, config, mergify,\n' +
-      'datastore, external, batch, muted and chrome; `plain` marks a caption\n' +
-      'rather than a box. See DESIGN.md "Diagrams". If a color is genuinely\n' +
-      'the subject rather than the styling, allow it on the line above:\n' +
+      'The roles are queued, pending, flagged, merged, failed, config,\n' +
+      'mergify, datastore, external, batch, muted and chrome; `plain` marks\n' +
+      'a caption rather than a box. See DESIGN.md "Diagrams". If a color is\n' +
+      'genuinely the subject rather than the styling, allow it on the line above:\n' +
       '  // diagram-tokens: allow <rule-id>[, <rule-id>...] — why'
   );
   return 1;
