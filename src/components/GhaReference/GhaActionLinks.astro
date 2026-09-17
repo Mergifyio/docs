@@ -1,0 +1,29 @@
+---
+/**
+ * A labelled row of links into the reference, e.g. "Actions: scopes
+ * scopes-upload". Renders nothing for an empty list.
+ */
+interface Props {
+  label: string;
+  names: string[];
+  anchor: (name: string) => string;
+}
+
+const { label, names, anchor } = Astro.props;
+---
+
+{
+  names.length > 0 && (
+    <p class="cli-arg-enum">
+      {label}:{' '}
+      {names.map((name, i) => (
+        <>
+          {i > 0 && ' '}
+          <a href={`#${anchor(name)}`}>
+            <code>{name}</code>
+          </a>
+        </>
+      ))}
+    </p>
+  )
+}
