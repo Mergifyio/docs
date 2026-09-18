@@ -100,6 +100,21 @@ Scopes can be attached to pull requests automatically or manually:
   [Turborepo](/merge-queue/scopes/turborepo), plus one for
   [any other build tool](/merge-queue/scopes/others).
 
+### Limits on an upload
+
+An upload sent through the [REST API](/api/pull-requests) or the [Mergify CLI](/cli/usage) has to
+stay within these limits:
+
+- A scope name is at most 1024 characters.
+- A scope name cannot contain a NUL byte or an unpaired UTF-16 surrogate.
+- An upload carries at most 10,000 scopes.
+
+An upload that breaks any of them is refused in full with a `422`, and nothing is stored: the pull
+request keeps whatever was uploaded for it last, which is the stale result of an earlier run rather
+than no result at all. If your detection tooling can emit a generated name (a path from a build
+graph, for example), cap its length on your side, so an over-long name fails the job that produced
+it instead of leaving the queue to batch on the previous run's scopes.
+
 ## Configuration schema
 
 Declare scopes at the top level of your `.mergify.yml` file:
