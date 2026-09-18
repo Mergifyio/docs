@@ -60,15 +60,17 @@ This is the most comprehensive check as it:
 
 **If this fails:** The error usually points to the specific file/line with the issue.
 
-### Step 5: Link Validation (Optional)
+### Step 5: Link Validation
 
-For thorough validation, check for broken links:
+Check every internal link and `#anchor` on the site:
 
 ```bash
-./scripts/detect-broken-links.sh
+pnpm check:links
 ```
 
-**Note:** This requires a successful build to run against.
+**Note:** This crawls the `dist/` produced by Step 4, so run it after a
+successful build. It is a required CI job (`test-broken-links`), not an
+optional extra.
 
 ## Output Format
 
@@ -83,7 +85,7 @@ Report results as:
 | Quality (check) | PASS/FAIL | Details if failed |
 | Tests | PASS/FAIL | X tests, Y passed |
 | Build | PASS/FAIL | Details if failed |
-| Links | PASS/FAIL/SKIPPED | Details if failed |
+| Links | PASS/FAIL | Details if failed |
 
 ### Issues Found
 - [ ] Issue 1: Description and fix
@@ -101,7 +103,7 @@ All checks passed / X issues need attention before merge.
 | `pnpm check` | Astro + ESLint + Biome |
 | `pnpm test` | Unit tests |
 | `pnpm build` | Full production build |
-| `./scripts/detect-broken-links.sh` | Internal/external links |
+| `pnpm check:links` | Internal links and `#anchors` (needs `pnpm build`) |
 
 ## When to Run
 
