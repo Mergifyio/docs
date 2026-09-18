@@ -112,6 +112,36 @@ So `removed-files ~= ^critical/` matches a pull request that moves a file out of
 `#files` is GitHub's own changed-file count, which counts a renamed file **once**. It
 therefore does not equal the length of `files` on a pull request containing a rename.
 
+#### The 3,000-File Limit
+
+GitHub stops listing a pull request's changed files past 3,000 of them, no matter
+how many pages Mergify requests. See [List pull requests
+files](https://docs.github.com/en/rest/pulls/pulls#list-pull-requests-files).
+
+Past that point `files`, `added-files`, `modified-files` and `removed-files` are
+evaluated on a truncated list, and so is `scope` when your scopes come from [file
+patterns](/merge-queue/scopes/file-patterns). Nothing marks the list as incomplete:
+a path GitHub did not list reads exactly like a path the pull request never
+touched. So `files ~= ^critical/` may not match a pull request that changed
+`critical/guard.txt`, and a `-files ~= ^critical/` gate may be satisfied by one.
+
+`github-code-owner-review-satisfied` and `github-require-review-from-specific-teams`
+read the same list, so above the cap a file whose owners GitHub did not list stops
+requiring their review.
+
+`#files` is the exception, because GitHub reports the count on the pull request
+itself instead of by listing. Compare it against the cap to decide how a rule
+behaves when the list may be short. A gate that must not pass on an incomplete
+list takes it as another condition:
+
+```yaml
+- "#files <= 3000"
+- -files ~= ^critical/
+```
+
+A rule that must fire anyway, such as one labelling changes for review, needs the
+opposite: `or` its file condition with `"#files > 3000"`.
+
 ### GitHub Rulesets and Branch Protection Attributes
 
 Mergify derives these attributes from the GitHub rulesets and branch protection
