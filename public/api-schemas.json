@@ -988,7 +988,15 @@
                 },
                 "example": {
                   "message": "The configuration is valid",
-                  "deprecations": []
+                  "deprecations": [],
+                  "unused_sections": [
+                    {
+                      "section": "pull_request_rules",
+                      "product": "workflow_automation",
+                      "product_name": "Workflow Automation",
+                      "product_url": "https://dashboard.mergify.com/workflow-automation?login=Mergifyio&repository=mergify-engine"
+                    }
+                  ]
                 }
               }
             }
@@ -18611,12 +18619,28 @@
             "type": "array",
             "title": "Deprecations",
             "description": "Deprecation notices detected in the configuration"
+          },
+          "unused_sections": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/UnusedSectionInfo"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unused Sections",
+            "description": "Sections of the configuration that are never evaluated, because the product that reads them is not enabled on this repository. `null` when the repository's products could not be determined: nothing is claimed in either direction then, and an empty list is not what that state looks like."
           }
         },
         "type": "object",
         "required": [
           "message",
-          "deprecations"
+          "deprecations",
+          "unused_sections"
         ],
         "title": "RepositoryConfigurationSimulatorResponse"
       },
@@ -19663,6 +19687,43 @@
           "median"
         ],
         "title": "TimeToMergeResponse"
+      },
+      "UnusedSectionInfo": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section",
+            "description": "Top-level section of the configuration that is never evaluated"
+          },
+          "product": {
+            "type": "string",
+            "enum": [
+              "workflow_automation",
+              "merge_queue",
+              "merge_protections"
+            ],
+            "title": "Product",
+            "description": "The product that would evaluate this section"
+          },
+          "product_name": {
+            "type": "string",
+            "title": "Product Name",
+            "description": "Human-readable name of that product"
+          },
+          "product_url": {
+            "type": "string",
+            "title": "Product Url",
+            "description": "Where to enable that product for this repository, on the dashboard"
+          }
+        },
+        "type": "object",
+        "required": [
+          "section",
+          "product",
+          "product_name",
+          "product_url"
+        ],
+        "title": "UnusedSectionInfo"
       },
       "UpdateScheduledFreezePayload": {
         "properties": {
