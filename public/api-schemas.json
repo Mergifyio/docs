@@ -685,10 +685,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -704,10 +704,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -1314,10 +1314,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `received_to - 1 day`.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `received_to - 1 day`.",
               "title": "Received From"
             },
-            "description": "Start of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `received_to - 1 day`."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `received_to - 1 day`."
           },
           {
             "name": "received_to",
@@ -1333,10 +1333,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `now`.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `now`.",
               "title": "Received To"
             },
-            "description": "End of the time range (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z). Defaults to `now`."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `now`."
           },
           {
             "name": "cursor",
@@ -1712,10 +1712,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range (ISO 8601 with timezone). Defaults to `received_to - 1 day`.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `received_to - 1 day`.",
               "title": "Received From"
             },
-            "description": "Start of the time range (ISO 8601 with timezone). Defaults to `received_to - 1 day`."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `received_to - 1 day`."
           },
           {
             "name": "received_to",
@@ -1731,10 +1731,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range (ISO 8601 with timezone). Defaults to `now`.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `now`.",
               "title": "Received To"
             },
-            "description": "End of the time range (ISO 8601 with timezone). Defaults to `now`."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `now`."
           }
         ],
         "responses": {
@@ -1826,10 +1826,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Retrieve the time to merge at this timestamp (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z)",
+              "description": "Retrieve the time to merge at this timestamp: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused.",
               "title": "At"
             },
-            "description": "Retrieve the time to merge at this timestamp (ISO 8601 with timezone, e.g. 2024-01-01T00:00:00Z)"
+            "description": "Retrieve the time to merge at this timestamp: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused."
           },
           {
             "name": "branch",
@@ -2015,10 +2015,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -2034,10 +2034,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -2200,10 +2200,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -2219,10 +2219,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -2385,10 +2385,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -2404,10 +2404,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -2570,10 +2570,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -2589,10 +2589,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -2755,10 +2755,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -2774,10 +2774,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -2940,10 +2940,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -2959,10 +2959,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -3125,10 +3125,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -3144,10 +3144,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -3310,10 +3310,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -3329,10 +3329,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -3471,10 +3471,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -3490,10 +3490,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -3656,10 +3656,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -3675,10 +3675,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -3841,10 +3841,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -3860,10 +3860,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -3954,10 +3954,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -3973,10 +3973,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -4139,10 +4139,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -4158,10 +4158,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -4324,10 +4324,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -4343,10 +4343,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -4509,10 +4509,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -4528,10 +4528,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -4694,10 +4694,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -4713,10 +4713,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -4807,10 +4807,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats until this date, default 1 day before end_at",
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
               "title": "Start At"
             },
-            "description": "Get the stats until this date, default 1 day before end_at"
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
           },
           {
             "name": "end_at",
@@ -4826,10 +4826,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Get the stats from this date, default now",
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
               "title": "End At"
             },
-            "description": "Get the stats from this date, default now"
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
           }
         ],
         "responses": {
@@ -5712,10 +5712,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
               "title": "Start"
             },
-            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
           },
           {
             "name": "end",
@@ -5731,10 +5731,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
               "title": "End"
             },
-            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
           }
         ],
         "responses": {
@@ -5854,10 +5854,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
               "title": "Start"
             },
-            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
           },
           {
             "name": "end",
@@ -5873,10 +5873,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
               "title": "End"
             },
-            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
           }
         ],
         "responses": {
@@ -6230,10 +6230,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
               "title": "Start"
             },
-            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
           },
           {
             "name": "end",
@@ -6249,10 +6249,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
               "title": "End"
             },
-            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
           }
         ],
         "responses": {
@@ -6900,10 +6900,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
               "title": "Start"
             },
-            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
           },
           {
             "name": "end",
@@ -6919,10 +6919,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
               "title": "End"
             },
-            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
           }
         ],
         "responses": {
@@ -7069,10 +7069,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range. Defaults to `end - 1 day` when omitted.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
               "title": "Start"
             },
-            "description": "Start of the time range. Defaults to `end - 1 day` when omitted."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
           },
           {
             "name": "end",
@@ -7088,10 +7088,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
               "title": "End"
             },
-            "description": "End of the time range. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
           }
         ],
         "responses": {
