@@ -128,8 +128,9 @@ curl -H "Accept: application/json" \
 ### Using a Mergify User Token
 
 Mergify also issues user tokens of its own, recognizable by their `mut_`
-prefix and obtained through the OAuth 2.0 device authorization grant. Send one
-as a Bearer token, the same way as the credentials above.
+prefix and obtained through the OAuth 2.0 device authorization grant. Run
+[`mergify auth login`](/cli/usage#authentication) to get one. Send it as a
+Bearer token, the same way as the credentials above.
 
 A user token identifies the person it was issued to. It reaches exactly what
 its owner's dashboard session reaches, and nothing on GitHub directly, so
