@@ -47,4 +47,22 @@ export default {
    */
   concurrency: 10,
   retryErrors: true,
+
+  /**
+   * Validate the `#anchor` half of every link too, not just the page it points
+   * at. Without this a link to a heading that was renamed or deleted scans as
+   * green, because the page still answers 200 — the failure mode the bash
+   * script this check replaced also had, since it stripped the fragment before
+   * looking anything up. Anchors have never been checked here; now they are.
+   *
+   * Only our own anchors get checked: `skip: [EXTERNAL_LINK]` drops off-site
+   * links before linkinator ever looks at their fragments, so nobody else's
+   * heading rename can turn CI red.
+   *
+   * Unlike the retry knobs above, this one does apply from config: meow
+   * declares it `{ type: 'boolean' }` under `booleanDefault: undefined`, so an
+   * unpassed `--check-fragments` is stripped from the merge instead of
+   * overriding us with `false`.
+   */
+  checkFragments: true,
 };
