@@ -24,55 +24,51 @@ them to **Test Insights** using your CI workflow.
 
 ## Generate a JUnit Report with Rust Tests
 
-Rust's built-in test framework doesn't natively output JUnit XML reports, but
-you can use third-party tools to convert the test output to JUnit format.
+Rust's built-in test framework doesn't output JUnit XML reports. You can either
+run your tests through `cargo-nextest`, which writes JUnit XML itself, or keep
+`cargo test` and convert its output with `cargo2junit`.
+
+### Using cargo-nextest
+
+`cargo-nextest` is a test runner that writes JUnit XML natively. It has no
+command-line flag for it: you enable JUnit output per profile in your
+`.config/nextest.toml`.
+
+```bash
+cargo install cargo-nextest
+```
+
+Add a `junit` section to the profile you use in CI:
+
+```toml
+# .config/nextest.toml
+[profile.ci.junit]
+path = "junit.xml"
+```
+
+Then run that profile:
+
+```bash
+cargo nextest run --profile ci
+```
+
+The `path` is relative to the profile's output directory, so this writes
+`target/nextest/ci/junit.xml`.
 
 ### Using cargo2junit
 
-Install `cargo2junit` which converts Rust test output to JUnit XML:
+`cargo2junit` converts cargo's JSON test output into JUnit XML.
 
 ```bash
 cargo install cargo2junit
 ```
 
-Then run your tests and pipe the output:
+It reads that JSON on standard input, so `cargo test` has to be asked for JSON
+rather than its usual human-readable output. That option is nightly-only, but
+`RUSTC_BOOTSTRAP=1` unlocks it on a stable toolchain:
 
 ```bash
-cargo test -- --nocapture 2>&1 | cargo2junit > junit.xml
-```
-
-### Using cargo-nextest
-
-`cargo-nextest` is a modern test runner that supports JUnit output natively:
-
-```bash
-cargo install cargo-nextest
-```
-
-Run tests with JUnit output:
-
-```bash
-cargo nextest run --message-format junit > junit.xml
-```
-
-### Using custom test script
-
-You can also create a simple script that runs tests and converts output:
-
-```bash
-#!/bin/bash
-cargo test --message-format json 2>&1 | tee test-results.json
-# Convert JSON to JUnit XML using a tool like jq or custom script
-# This approach requires additional tooling
-```
-
-### Using GitHub Actions with cargo-nextest
-
-For the most reliable results, we recommend using `cargo-nextest`:
-
-```bash
-cargo install cargo-nextest
-cargo nextest run --message-format junit --output-file junit.xml
+RUSTC_BOOTSTRAP=1 cargo test -- -Z unstable-options --format json --report-time | cargo2junit > junit.xml
 ```
 
 ## Update Your CI Workflow
@@ -93,32 +89,32 @@ For example, in your workflow file:
 - name: Run Rust Tests and Generate JUnit Report
   id: tests
   continue-on-error: true
-  run: cargo nextest run --message-format junit --output-file junit.xml
+  run: cargo nextest run --profile ci
 ```
 
-<MergifyCIUploadStep reportPath="junit.xml" />
+<MergifyCIUploadStep reportPath="target/nextest/ci/junit.xml" />
+<MergifyCIUploadStepMatrix reportPath="target/nextest/ci/junit.xml" />
 
-Alternative approach using cargo2junit:
+Alternative approach using `cargo2junit`, which writes wherever you redirect it:
 
 ```yaml
 - name: Install cargo2junit
-  uses: taiki-e/install-action@cargo2junit
+  run: cargo install cargo2junit
 
 - name: Run Rust Tests and Generate JUnit Report
   id: tests
   continue-on-error: true
-  run: cargo test -- --nocapture 2>&1 | cargo2junit > junit.xml
+  run: RUSTC_BOOTSTRAP=1 cargo test -- -Z unstable-options --format json --report-time | cargo2junit > junit.xml
 ```
 
 <MergifyCIUploadStep reportPath="junit.xml" />
-<MergifyCIUploadStepMatrix reportPath="junit.xml" />
 
 <GhaMergifyCiQuarantineSetup />
 
 ### Buildkite
 
-<BuildkiteCIUploadStep reportPath="junit.xml" />
-<BuildkiteCIUploadStepMatrix reportPath="junit.xml" />
+<BuildkiteCIUploadStep reportPath="target/nextest/ci/junit.xml" />
+<BuildkiteCIUploadStepMatrix reportPath="target/nextest/ci/junit.xml" />
 
 <BuildkiteTokenNote />
 
@@ -126,14 +122,14 @@ Alternative approach using cargo2junit:
 
 ### Any CI (Mergify CLI)
 
-<MergifyCliUploadStep reportPath="junit.xml" testCommand="cargo test -- --nocapture 2>&1 | cargo2junit > junit.xml" />
+<MergifyCliUploadStep reportPath="target/nextest/ci/junit.xml" testCommand="cargo nextest run --profile ci" />
 
 ## Verify and Review in Test Insights
 
 After pushing these changes:
 
 1. Your GitHub Actions workflow will execute your Rust tests.
-2. A JUnit report (junit.xml) is generated.
+2. A JUnit report is generated at `target/nextest/ci/junit.xml`, or wherever you redirect `cargo2junit`.
 3. The Mergify CI action uploads the report to Test Insights.
 
 <ReviewInTestInsights />
