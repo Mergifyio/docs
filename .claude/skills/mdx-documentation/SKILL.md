@@ -239,4 +239,4 @@ See the [configuration reference](/configuration/file-format) for more options.
 
 - Review content with project code style guidelines
 - Run `pnpm build` to verify MDX compiles correctly
-- Check broken links with `./scripts/detect-broken-links.sh`
+- Check links and anchors with `pnpm check:links` (after `pnpm build`)

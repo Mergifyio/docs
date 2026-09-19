@@ -45,7 +45,7 @@ pnpm format:check      # Check formatting without modifying
 
 # Testing
 pnpm test              # Run Vitest unit tests
-./scripts/detect-broken-links.sh  # Check for broken links
+pnpm check:links       # Check links and anchors (run pnpm build first)
 
 # Safety
 pnpm check:internal-leaks  # Scan docs for leaked internal information
