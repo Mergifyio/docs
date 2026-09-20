@@ -52,6 +52,12 @@ describe('the exported config', () => {
     expect(config.skip).toEqual([EXTERNAL_LINK]);
   });
 
+  // Anchors are only checked because this is set: a link to a renamed heading
+  // scans green otherwise, since the page it points at still answers 200.
+  it('checks fragments, or renamed anchors ship unnoticed', () => {
+    expect(config.checkFragments).toBe(true);
+  });
+
   // meow declares defaults for these two, and a flag holding a default is
   // never stripped from the merge, so a value set here would never apply.
   it('omits the retry knobs that config cannot actually set', () => {
