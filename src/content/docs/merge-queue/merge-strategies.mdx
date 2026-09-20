@@ -314,6 +314,14 @@ Merge Queue` as its body.
 
 ## Editing the Batch Branch
 
+:::danger
+  `allow_queue_branch_edit` is **deprecated** and will be removed in a future
+  release. There is no replacement: move the work now done on a batch branch
+  onto the pull requests themselves. Once the option is gone, an edited batch
+  branch dequeues the pull requests embarked in it and reports the edit as a
+  failure, which is what a queue that leaves the option unset already does.
+:::
+
 By default, if anything other than Mergify pushes a commit to the branch of a
 [batch PR](/merge-queue/batches), Mergify dequeues the pull requests embarked in
 it and reports the failure. Setting `allow_queue_branch_edit: true` on a queue
