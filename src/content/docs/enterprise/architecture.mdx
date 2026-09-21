@@ -7,8 +7,12 @@ Mergify Enterprise runs a dedicated automation engine that ingests repository
 events, evaluates your rules, and orchestrates merge actions from inside your
 infrastructure. GitHub supplies the event feed and API surface. The
 decision making, state handling, and workflow execution all happen within your
-environment (aside from the optional Subscription API lookup), so you maintain
-full control over data flows.
+environment, so you maintain full control over data flows. The one exception is
+the subscription lookup: the engine does not start without a subscription token,
+and it checks that token against Mergify's hosted Subscription API. The two
+calls listed under
+[external network access](/enterprise/requirements/#external-network-access)
+must be reachable.
 
 ## Key actors
 
@@ -59,6 +63,6 @@ digraph {
   Workers -> GitHub [label="API requests to GitHub", dir=both];
   ReverseProxy -> User [label="UI access", dir=both];
   GitHub -> User [label="developers", dir=both];
-  Workers -> Subscription [label="subscription lookup", class="muted", style=dashed];
+  Workers -> Subscription [label="subscription lookup"];
 }
 ```
