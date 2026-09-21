@@ -35,7 +35,7 @@ GitHub outages. Your instance or cluster must provide:
 - Redis 6.2+
 - 200 concurrent connections
 - 250 MB of durable storage
-- At least 16 logical databases
+- Single logical database (the one `MERGIFYENGINE_REDIS_URL` selects)
 - TLS endpoint
 - Persistence enabled (AOF every second)
 
