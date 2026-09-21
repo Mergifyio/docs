@@ -1,0 +1,20 @@
+---
+version: '8.5.0'
+---
+
+Four groups of configuration options are deprecated in this release. They still work, and
+replacing them now avoids the removals in 8.7.0 and 8.9.0:
+
+- `queue_rules` → `speculative_checks` becomes `max_parallel_checks` in the new
+  top-level `merge_queue` section, which caps parallel checks across every queue.
+
+- The options set on the `queue` action move to the `queue_rules` section.
+
+- `queue_rules` → `allow_checks_interruption` and
+  `disallow_checks_interruption_from_queues` move to `allow_checks_interruption`
+  on a top-level `priority_rules` entry.
+
+- `merge` → `allow_merging_configuration_change`.
+
+Nothing has to change at upgrade time. A repository still using them keeps
+working on this release.

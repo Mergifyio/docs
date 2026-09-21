@@ -1,0 +1,16 @@
+---
+version: '8.0.0'
+actionRequired: true
+---
+
+The `require_branch_protection` queue rule option is replaced by
+`branch_protection_injection_mode`. Update any repository that still sets it before
+you upgrade: `require_branch_protection: false` becomes
+`branch_protection_injection_mode: merge`, and `true` becomes
+`branch_protection_injection_mode: queue`.
+
+Coming from a release before 7.7.0, upgrade to 7.7.0 first and leave it running for
+at least ten days before moving on. 7.7.0 moved event logs from Redis to
+PostgreSQL, and that transition needs those ten days to complete; upgrading sooner
+loses the event log history it has not transferred yet. An installation that has been on
+7.7.0 for longer than that can upgrade directly.

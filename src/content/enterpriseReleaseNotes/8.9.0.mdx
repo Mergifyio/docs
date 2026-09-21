@@ -1,0 +1,24 @@
+---
+version: '8.9.0'
+actionRequired: true
+---
+
+The rest of the options deprecated in 8.5.0 are removed. Update any repository
+that still sets them before you upgrade:
+
+- `queue_rules` → `speculative_checks`. Use `max_parallel_checks` in the
+  `merge_queue` section.
+
+- On the `queue` action: `merge_method`, `method`, `update_method`,
+  `update_bot_account`, `merge_bot_account` and `commit_message_template`. All
+  move to `queue_rules`.
+
+- On the `queue` action: `allow_merging_configuration_change`. Removed outright.
+
+Queue rules also lose the implicit priority they took from the order they appear
+in the configuration file. [Priority rules](/merge-queue/priority) cover how a
+pull request's priority in the queue is set now.
+
+To catch the next one of these before it merges, Mergify comments on a pull
+request that adds deprecated configuration, and removes the comment once the pull
+request stops adding it.

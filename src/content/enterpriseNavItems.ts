@@ -13,6 +13,7 @@ const enterpriseNavItems: NavItem[] = [
   },
   { title: 'Troubleshooting', path: '/enterprise/troubleshooting', icon: 'lucide:life-buoy' },
   { title: 'Maintenance', path: '/enterprise/maintenance', icon: 'lucide:toolbox' },
+  { title: 'Releases', path: '/enterprise/releases', icon: 'lucide:tag' },
 ];
 
 export default enterpriseNavItems;

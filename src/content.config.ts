@@ -38,4 +38,29 @@ const changelog = defineCollection({
   }),
 });
 
-export const collections = { docs, changelog };
+/*
+  Upgrade notes for one on-premise release, written by hand.
+
+  The release list itself comes from `src/data/enterprise-releases.json`, which is
+  synced automatically, and the changes a release carries are derived from the
+  changelog. This collection only holds what neither of those can know: what an
+  operator has to do. Most releases need no file — see the README beside this
+  collection's directory.
+*/
+const enterpriseReleaseNotes = defineCollection({
+  loader: glob({
+    pattern: '**/[^_]*.mdx',
+    base: './src/content/enterpriseReleaseNotes',
+    generateId: ({ entry }) => entry.replace(/\.mdx$/, ''),
+  }),
+  schema: z.object({
+    /* The release these notes describe, exactly as it appears in enterprise-releases.json. */
+    version: z.string(),
+    /* Set when upgrading needs a deliberate step: a renamed variable to carry
+       over, a removed option to drop, an order to follow. Renders a marker beside
+       the version so the release stands out to somebody scanning the list. */
+    actionRequired: z.boolean().default(false),
+  }),
+});
+
+export const collections = { docs, changelog, enterpriseReleaseNotes };

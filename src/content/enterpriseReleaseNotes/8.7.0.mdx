@@ -1,0 +1,18 @@
+---
+version: '8.7.0'
+actionRequired: true
+---
+
+Three of the options deprecated in 8.5.0 are removed here. Update any repository
+that still sets them before you upgrade:
+
+- `merge` → `allow_merging_configuration_change`. Removed outright.
+
+- `queue` → `autosquash`. Set `autosquash` in `queue_rules` instead.
+
+- `queue_rules` → `allow_checks_interruption`. Set `allow_checks_interruption` on
+  a top-level [`priority_rules`](/merge-queue/priority) entry instead.
+
+Two more are now fully deprecated ahead of their own removal, both replaced by the
+top-level [`priority_rules`](/merge-queue/priority) section: `priority_rules`
+inside `queue_rules`, and `disallow_checks_interruption_from_queues`.

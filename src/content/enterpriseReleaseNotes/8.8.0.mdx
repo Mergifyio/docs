@@ -1,0 +1,21 @@
+---
+version: '8.8.0'
+actionRequired: true
+---
+
+[`max_parallel_checks`](/merge-queue/performance#parallel-checks) now defaults to `5`
+instead of `1`. A repository that never set it goes from one speculative check at a
+time to five, which multiplies the CI load Mergify can generate. Set it explicitly in
+the `merge_queue` section if your runners are sized for the old default.
+
+Trace storage for [CI Insights](/ci-insights) gained an S3 backend, selected with
+`MERGIFYENGINE_CI_TRACES_BACKEND` (`gcs` or `s3`) alongside
+`MERGIFYENGINE_AWS_ACCESS_KEY_ID`, `MERGIFYENGINE_AWS_SECRET_ACCESS_KEY`,
+`MERGIFYENGINE_AWS_REGION_NAME`, `MERGIFYENGINE_AWS_ACCOUNT_ID` and
+`MERGIFYENGINE_AWS_ENDPOINT_URL_S3`.
+
+The two bucket variables lost their `GCS_` infix now that either backend can use
+them. `MERGIFYENGINE_CI_TRACES_INCOMING_GCS_BUCKET` became
+`MERGIFYENGINE_CI_TRACES_INCOMING_BUCKET`, and `..._DONE_GCS_BUCKET` became
+`..._DONE_BUCKET`. The old names are still accepted, so an existing installation needs
+no change.

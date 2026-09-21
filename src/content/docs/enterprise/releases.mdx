@@ -1,0 +1,62 @@
+---
+title: 'Mergify Enterprise Releases'
+description: 'Every on-premise release, what it changes, and what an upgrade asks of you.'
+---
+
+import EnterpriseReleases from '../../../components/enterprise/EnterpriseReleases.astro'
+
+Mergify Enterprise ships as one versioned image. A release carries the whole
+product, so there is a single version to move rather than one per component.
+
+Every release is listed below, newest first, with what has to happen before the new
+image starts and what changed once it has. The [changelog](/changelog/) answers a
+different question: it records each change on the day it reaches the hosted service,
+which runs continuously and has no version.
+
+## What a version number tells you
+
+Releases follow [semantic versioning](https://semver.org/):
+
+- **`MAJOR`**: the only releases that may break something you depend on. Read the
+  notes before upgrading.
+
+- **`MINOR`**: new features, backward compatible.
+
+- **`PATCH`**: bug fixes, backported into a release line that is already out.
+  Where a `.0` was never published, the first tag of that line is a patch number
+  and carries the line's changes too.
+
+## Upgrading
+
+Pull the new tag and
+[restart the container](/enterprise/installation#start-mergify-in-normal-mode):
+
+```sh
+docker pull registry.mergify.com/enterprise:@@ENTERPRISE_VERSION@@
+```
+
+The container applies any pending schema migration on startup, so PostgreSQL has to
+be reachable before it starts. [Maintenance](/enterprise/maintenance) covers taking
+a backup first and rolling back to the version you recorded.
+
+Moving several versions at once is fine, but read every release between the one you
+are on and the one you are going to. A release that needs a deliberate step is marked
+**Action required** beside its version, and those steps are cumulative: a
+configuration option removed two minors ago is still removed.
+
+A release that is not marked needs no more than the pull and restart above.
+
+:::note
+  Check the version you have deployed before working out which entries apply:
+  nothing on this page reflects what a given installation is running.
+  `docker images | grep enterprise` prints the tag in use.
+:::
+
+## Releases
+
+Releases are listed by version, not by date, so a patch backported into an older
+line appears below the release that superseded it even though it was cut later.
+A change announced on the [changelog](/changelog/) after the most recent release here
+has not reached a release yet, unless it was backported into a patch.
+
+<EnterpriseReleases />
