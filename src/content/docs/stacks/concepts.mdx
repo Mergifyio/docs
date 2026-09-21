@@ -118,8 +118,9 @@ chain:
 | B (second) | `.../add-user-data-model--a1b2c3d4` | `.../add-registration-endpoint--d4e5f6a7` |
 | C (third) | `.../add-registration-endpoint--d4e5f6a7` | `.../add-registration-tests--b7c8d9e0` |
 
-Stacks also adds a `Depends-On: #NNN` reference in each PR description and
-posts a stack comment on every PR listing the full chain:
+Stacks posts a stack comment on every PR listing the full chain, and, when the
+push does not register the stack with GitHub's own stacking API, adds a
+`Depends-On: #NNN` reference in each PR description:
 
 <Image src={StackComment} alt="Stack comment showing all PRs in the chain" style={{ maxWidth: '66%' }} />
 
@@ -131,13 +132,14 @@ The `Depends-On: #NNN` marker isn't only for humans. The
 [Merge Queue](/merge-queue/stacks) also uses it to recognize a stack and queue
 it as a unit. Without the branch chain, the `Depends-On:` marker, and head
 branches in the repository the stack targets, the queue treats each PR
-independently. `mergify stack push` satisfies all three, which is why a stack
-is pushed to the repository itself rather than to a fork.
+independently. `mergify stack push --no-github-native` satisfies all three,
+which is why a stack is pushed to the repository itself rather than to a fork.
 
-A stack registered with GitHub's own stacking API by
-[`--github-native`](/stacks/setup#configuration) is the exception. GitHub holds
-the ordering there, so the descriptions carry no `Depends-On:` marker and the
-queue recognizes the PRs as a
+A stack registered with GitHub's own stacking API is the exception, and
+`mergify stack push` registers one unless you pass
+[`--no-github-native`](/stacks/setup#configuration). GitHub holds the ordering
+there, so the descriptions carry no `Depends-On:` marker and the queue
+recognizes the PRs as a
 [GitHub-native stack](/merge-queue/stacks#github-native-stacked-pull-requests)
 instead. Every member can be queued, and they land one at a time from the
 bottom up rather than the chain moving as a unit.

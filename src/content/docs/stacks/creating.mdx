@@ -79,6 +79,12 @@ What happens behind the scenes:
 
 4. **Posts a stack comment** on every PR showing the full stack
 
+5. **Registers the stack** with GitHub's stacking API, so GitHub shows it as a
+   stack of its own and holds the ordering. Pass
+   [`--no-github-native`](/stacks/setup#configuration) to push without this and
+   get a `Depends-On:` chain the
+   [Merge Queue](/merge-queue/stacks#mergify-stacks) moves as a unit instead
+
 The full flow, from setup to push:
 
 <Image src={setupNewPush} alt="Terminal showing mergify stack setup, new, and push" />
