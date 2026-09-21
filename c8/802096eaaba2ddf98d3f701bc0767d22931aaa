@@ -1,0 +1,1 @@
+address review: label releases from the version number rather than from whether they open a line (8.10.1 read as Minor), scan the release-notes collection in the leak test, and stop the 8.2.0 note implying Slack is usable before 8.6.0
