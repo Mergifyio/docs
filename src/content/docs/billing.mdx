@@ -119,8 +119,9 @@ On some plans the third column is headed **Collaborators** instead. It counts
 everyone with access to a repository, rather than only the people who
 contributed to it.
 
-Both counts are links. The repository count opens the list of repositories using
-that product, and the contributor count opens the list of people counted for it.
+Both counts are clickable: the repository count takes you to your repositories
+list, and the contributor count opens the list of people counted for that
+product.
 
 :::note
   This is not available for on-premise plans.
@@ -140,22 +141,20 @@ Cancellation](#3-final-invoice-after-cancellation) below).
 
 ## Understanding Your Invoice
 
-Our billing system aims for fairness, but its dynamic nature may result in
-invoices that can be complex to understand at first glance. A regular invoice
-comprises two main sections. Cancelling your subscription produces one more
-invoice, which works differently and is covered last.
+A single invoice usually mixes two things: an adjustment for the period that
+just ended, and the charge for the period that is starting. The adjustment is
+there because the number of contributors Mergify counts can change any day.
+Cancelling your subscription produces one more invoice, which works differently
+and is covered last.
 
 ### 1. **Real-time User Adjustment**
 
-Our system continually monitors the number of users in your repositories and
-adjusts your bill in real-time. On your invoice, you might see line items
-labeled "remaining" and "unused time." These adjustments occur whenever there's
-a change in your user count.
-
-When your user count changes, the system credits you for the users you had
-already paid for, prorated to the day, then charges for the new count over the
-days left in the period. Both lines appear on the invoice, so only the
-difference between them changes your total.
+Mergify keeps the number of seats on your subscription in step with the number
+of contributors it counts. Every time that count changes, the adjustment is
+prorated: you are credited for the seats you had already paid for over the rest
+of the period, then charged for the new count over those same days. Both lines
+show up on your next invoice, labeled "unused time" and "remaining time" by our
+payment provider, so only the difference between them changes your total.
 
 ### 2. **Upcoming Period Charge**
 
@@ -165,26 +164,27 @@ period, the next invoice carries the same kind of adjustment.
 
 ### A Worked Example
 
-Take a subscription of 20 users billed on the 14th of each month, at $10 per
-user per month. Two users are added on July 29th, 16 days before the period
-ends. The invoice issued on August 14th then reads:
+Say `example-org` is billed on the 1st of each month at $10 per user per month
+and has 20 contributors. Two more contributors push commits on April 16th,
+halfway through the period. The invoice issued on May 1st then reads:
 
 | Line | Period | Amount |
 |---|---|---|
-| Unused time on 20 users | Jul 29 – Aug 14 | -$103.23 |
-| Remaining time on 22 users | Jul 29 – Aug 14 | $113.55 |
-| 22 users | Aug 14 – Sep 14 | $220.00 |
-| **Total** | | **$230.32** |
+| Unused time on 20 users | Apr 16 – May 1 | -$100.00 |
+| Remaining time on 22 users | Apr 16 – May 1 | $110.00 |
+| 22 users | May 1 – Jun 1 | $220.00 |
+| **Total** | | **$230.00** |
 
-The first two lines are the real-time user adjustment: the 16 unused days of
-the old count are refunded, and the same 16 days are re-charged at the new
-count. The difference, $10.32, is what the two added users cost for the part of
-the period they were there. The third line is the upcoming period at the count
-you now have.
+The first two lines are the real-time user adjustment: half of April is
+credited back at the old count, and the same half is re-charged at the new one.
+The $10 difference is what the two extra contributors cost for the time they
+were counted. The third line is the upcoming period, at the count you have on
+the day the invoice is issued.
 
 :::note
-  The figures above are illustrative, and the $10 per-user price is made up.
-  Your own invoice uses the rate on your plan.
+  `example-org`, the 20 contributors, and the $10 per-user rate are all made up
+  to keep the arithmetic easy to follow. Your own invoice uses the rate on your
+  plan, and your billing dates come from your own subscription.
 :::
 
 ### 3. **Final Invoice After Cancellation**
