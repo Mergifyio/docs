@@ -1,0 +1,14 @@
+---
+version: '8.6.0'
+---
+
+`MERGIFYENGINE_REDIS_URL` now configures Redis with a single URL, and is what
+[Installation](/enterprise/installation) and [Requirements](/enterprise/requirements)
+describe. An installation that set the per-use Redis environment variables instead
+keeps working; there is nothing to change at upgrade time.
+
+Two more optional environment variables arrive with it: `MERGIFYENGINE_GCS_CREDENTIALS` for
+Google Cloud Storage and `MERGIFYENGINE_SLACK_SIGNING_SECRET` for Slack request
+signing. The latter completes the Slack integration, which is supported from this
+release on: set it alongside the client ID and secret added in 8.2.0.
+[Advanced Features](/enterprise/advanced-features) covers both new variables.

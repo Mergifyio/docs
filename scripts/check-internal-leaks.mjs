@@ -14,7 +14,7 @@
  * `proofread-leaks` skill's job. A clean run here is not a clean bill of health.
  *
  * Usage:
- *   node scripts/check-internal-leaks.mjs [paths...]   # scan (default: src/content/docs)
+ *   node scripts/check-internal-leaks.mjs [paths...]   # scan (default: the published collections)
  *   node scripts/check-internal-leaks.mjs --json [paths...]
  *
  * False positives are expected to be rare enough to handle one at a time. To
@@ -31,7 +31,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), '..', '..');
-const DEFAULT_TARGETS = ['src/content/docs'];
+// Every collection whose prose reaches docs.mergify.com. The enterprise release
+// notes are written from internal release material, which is exactly the
+// provenance this scan exists to keep out of a published page.
+export const DEFAULT_TARGETS = ['src/content/docs', 'src/content/enterpriseReleaseNotes'];
 const SCANNED_EXTENSIONS = ['.mdx', '.md'];
 
 /**

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { iterFiles, scanFile, scanText } from './check-internal-leaks.mjs';
+import { DEFAULT_TARGETS, iterFiles, scanFile, scanText } from './check-internal-leaks.mjs';
 
 const rulesOf = (text) => scanText(text).map((f) => f.rule);
 
@@ -94,10 +94,18 @@ describe('scanText', () => {
 });
 
 describe('published docs', () => {
+  // Pinned rather than derived: the scan below walks whatever `DEFAULT_TARGETS`
+  // holds, so dropping a collection from it would leave that collection
+  // unscanned and this file green. The published surface is the thing under
+  // test, so it is named here.
+  it('scans every collection that reaches docs.mergify.com', () => {
+    expect(DEFAULT_TARGETS).toEqual(['src/content/docs', 'src/content/enterpriseReleaseNotes']);
+  });
+
   it('contain no internal information', () => {
     const findings = [];
     let scanned = 0;
-    for (const file of iterFiles(['src/content/docs'])) {
+    for (const file of iterFiles(DEFAULT_TARGETS)) {
       scanned += 1;
       findings.push(...scanFile(file));
     }
