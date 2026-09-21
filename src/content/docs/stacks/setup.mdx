@@ -134,7 +134,7 @@ These optional Git config settings let you customize Stacks behavior:
 |---------|---------|-------------|
 | `mergify-cli.stack-branch-prefix` | `stack/{username}` | Set the prefix for remote branch names |
 | `mergify-cli.stack-create-as-draft` | `false` | Create PRs as drafts by default |
-| `mergify-cli.stack-github-native` | `false` | Also register the stack with GitHub's stacking API |
+| `mergify-cli.stack-github-native` | `true` | Register the stack with GitHub's stacking API |
 | `mergify-cli.stack-keep-pr-title-body` | `false` | Don't overwrite PR title/body on updates |
 | `mergify-cli.stack-revision-history` | `true` | Keep a revision-history comment on each PR |
 
@@ -145,7 +145,7 @@ git config mergify-cli.stack-create-as-draft true
 ```
 
 `mergify stack push` has a flag for each of these (`--branch-prefix`,
-`--draft`, `--github-native`, `--keep-pull-request-title-and-body` and
+`--draft`, `--no-github-native`, `--keep-pull-request-title-and-body` and
 `--no-revision-history`) to override the setting for a single push.
 
 `--branch-prefix` is also accepted by `mergify stack list`,
@@ -156,10 +156,15 @@ The [`stack` CLI reference](/cli/stack) lists every command in the group with
 its full set of flags and defaults.
 
 :::note
-  `mergify-cli.stack-github-native` is experimental. On top of the usual push,
-  it registers the stack with GitHub's own stacking API, so GitHub shows the
-  pull requests as a stack of its own. If that API isn't available, Stacks
-  skips the registration silently and the push goes through as usual.
+  `mergify-cli.stack-github-native` defaults to `true`. On top of the usual
+  push, it registers the stack with GitHub's own stacking API, so GitHub shows
+  the pull requests as a stack of its own and holds their order. A registered
+  stack carries no `Depends-On:` marker in its pull request descriptions; the
+  [Merge Queue](/merge-queue/stacks#github-native-stacked-pull-requests)
+  recognizes it and lands its members one at a time. The registration is
+  experimental: if that API isn't available, Stacks skips it silently and the
+  push goes through as usual. Pass `--no-github-native`, or set the Git config
+  to `false`, to push without it.
 :::
 
 ## Next Steps

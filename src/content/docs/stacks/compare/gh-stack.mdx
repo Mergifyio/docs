@@ -84,7 +84,7 @@ between them with `gh stack up` and `gh stack down`.
 | Draft PRs | `mergify stack push --draft` | `gh stack submit --draft` |
 | Merge Queue | [Native Mergify integration](/merge-queue) | GitHub's built-in merge queue |
 | Merge a stack | Bottom-up via Merge Queue | `gh stack merge` (not yet implemented) |
-| Stack visualization | Stack comment + browser-extension panel, or `--github-native` | Native GitHub UI stack map |
+| Stack visualization | Stack comment, browser-extension panel, GitHub's stack map | Native GitHub UI stack map |
 | Branch naming | Auto-generated ([configurable](/stacks/concepts#branch-mapping)) | Developer-chosen or auto-numbered |
 | Navigate between PRs | N/A (single branch) | `gh stack up` / `down` / `top` / `bottom` |
 | Unstack | Not needed (standard Git branches) | `gh stack unstack` |
@@ -128,9 +128,9 @@ interface. Mergify posts a stack comment on each PR and, with the
 [browser extension](/browser-extensions) installed, renders the
 stack and its revision history as an in-PR panel. Neither of those is a
 built-in GitHub UI element.
-[`mergify stack push --github-native`](/stacks/setup#configuration) registers
-the stack with GitHub's own stacking API, so GitHub displays it as a stack, but
-that flag is experimental and is skipped where the API is not available.
+[`mergify stack push`](/stacks/setup#configuration) registers the stack with
+GitHub's own stacking API by default, so GitHub displays it as a stack. That
+registration is experimental and is skipped where the API is not available.
 
 ## Other Considerations
 
