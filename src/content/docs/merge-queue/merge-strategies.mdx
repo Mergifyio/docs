@@ -319,6 +319,14 @@ By default, if anything other than Mergify pushes a commit to the branch of a
 it and reports the failure. Setting `allow_queue_branch_edit: true` on a queue
 rule tells Mergify to trust the branch instead and keep going.
 
+:::caution
+  `allow_queue_branch_edit` is deprecated and will be removed in a future
+  release, with no replacement. Once it is gone, every queue behaves the way a
+  queue that leaves the option unset behaves today: an edited batch branch
+  dequeues the pull requests it carries and the edit is reported as a failure.
+  Move the work you do on a batch branch onto the pull requests themselves.
+:::
+
 That option requires `merge_method: merge-batch` or `merge_method: fast-forward`.
 Those are the only two methods that merge the batch branch itself, so they are
 the only ones that can land a commit pushed to it. With `merge`, `squash` or
