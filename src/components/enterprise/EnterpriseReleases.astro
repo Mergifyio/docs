@@ -1,0 +1,217 @@
+---
+import { getCollection, render } from 'astro:content';
+import enterpriseReleasesData from '~/data/enterprise-releases.json';
+import { renderInlineMarkdown, sortChangelog } from '~/util/changelog';
+import {
+  buildReleaseTimeline,
+  type EnterpriseRelease,
+  formatReleaseDate,
+  formatReleaseDateISO,
+  isUpgradeRelevant,
+  type ReleaseKind,
+  selectWindowEntries,
+} from '~/util/enterpriseReleases';
+
+/*
+  The whole page: one entry per release, newest first.
+
+  Three sources are joined here and each answers a different question — which
+  releases exist (the synced tag list), what an operator has to do (the hand-written
+  notes collection), and what the release carries (the changelog, windowed by tag
+  date). `src/util/enterpriseReleases.ts` documents why the window is derived
+  rather than recorded.
+*/
+
+/* Releases before 8.0.0 predate the current on-premise image and are not listed. */
+const MIN_MAJOR = 8;
+
+const timeline = buildReleaseTimeline(enterpriseReleasesData as EnterpriseRelease[], {
+  minMajor: MIN_MAJOR,
+});
+
+const changelogEntries = sortChangelog(await getCollection('changelog'));
+
+const notesByVersion = new Map(
+  (await getCollection('enterpriseReleaseNotes')).map((entry) => [entry.data.version, entry])
+);
+
+const releases = await Promise.all(
+  timeline.map(async (release) => {
+    const notes = notesByVersion.get(release.version);
+    const windowEntries = selectWindowEntries(
+      changelogEntries.map((entry) => ({ entry, date: entry.data.date })),
+      release.changeWindow
+    ).map((item) => item.entry);
+
+    return {
+      ...release,
+      actionRequired: notes?.data.actionRequired ?? false,
+      Notes: notes ? (await render(notes)).Content : null,
+      /* Deprecations and removals go above the feature list: they are the reason
+         somebody reads a release's entry at all. */
+      deprecations: windowEntries.filter((entry) => isUpgradeRelevant(entry.data)),
+      others: windowEntries.filter((entry) => !isUpgradeRelevant(entry.data)),
+    };
+  })
+);
+
+const KIND_LABEL: Record<ReleaseKind, string> = {
+  major: 'Major',
+  minor: 'Minor',
+  patch: 'Patch',
+};
+
+const anchorFor = (version: string) => `v${version.replaceAll('.', '-')}`;
+---
+
+{releases.map((release) => {
+  const { Notes } = release;
+  const changeCount = release.deprecations.length + release.others.length;
+  return (
+    <section class="release">
+      <h3 id={anchorFor(release.version)} class="release-heading">
+        <span class="release-version">{release.version}</span>
+        <span class="release-meta">
+          <time datetime={formatReleaseDateISO(release.releasedAt)}>
+            {formatReleaseDate(release.releasedAt)}
+          </time>
+          <span class="release-kind">{KIND_LABEL[release.kind]}</span>
+          {release.actionRequired && <span class="release-flag">Action required</span>}
+        </span>
+      </h3>
+
+      {Notes && (
+        <div class="release-notes">
+          <Notes />
+        </div>
+      )}
+
+      {release.deprecations.length > 0 && (
+        <>
+          <h4 class="release-subheading">Deprecations and removals</h4>
+          <ul class="release-changes">
+            {release.deprecations.map((entry) => (
+              <li>
+                <a
+                  href={`/changelog/${entry.id}/`}
+                  set:html={renderInlineMarkdown(entry.data.title)}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {release.others.length > 0 && (
+        <details class="release-details">
+          <summary>
+            {release.others.length === 1
+              ? '1 other change in this release'
+              : `${release.others.length} other changes in this release`}
+          </summary>
+          <ul class="release-changes">
+            {release.others.map((entry) => (
+              <li>
+                <a
+                  href={`/changelog/${entry.id}/`}
+                  set:html={renderInlineMarkdown(entry.data.title)}
+                />
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
+      {changeCount === 0 && !Notes && (
+        <p class="release-empty">
+          {release.changeWindow === null
+            ? 'Bug fixes backported into this release line.'
+            : 'No user-visible change was announced for this release.'}
+        </p>
+      )}
+    </section>
+  );
+})}
+
+<style>
+  .release {
+    border-top: 1px solid var(--theme-border);
+    padding-top: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  /*
+    The heading carries the version and the metadata on one line so a reader
+    scrolling through the list sees the date and the flag without stopping. The
+    version keeps heading weight; everything beside it drops to body size.
+  */
+  .release-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.875rem;
+    margin-bottom: 1rem;
+    scroll-margin-top: 6rem;
+  }
+  .release-version {
+    font-variant-numeric: tabular-nums;
+  }
+  .release-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    color: var(--theme-text-secondary);
+  }
+  .release-kind,
+  .release-flag {
+    border: 1px solid var(--theme-border);
+    border-radius: 999px;
+    padding: 0.0625rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  .release-flag {
+    border-color: var(--theme-text-secondary);
+    color: var(--theme-text);
+    font-weight: 500;
+  }
+
+  .release-notes {
+    margin-top: 0;
+  }
+
+  .release-subheading {
+    margin-top: 1.5rem;
+  }
+  /* The heading already sets the gap when nothing precedes this. */
+  .release-heading + .release-subheading {
+    margin-top: 0;
+  }
+
+  .release-changes {
+    margin-top: 0.5rem;
+  }
+
+  .release-details {
+    margin-top: 1.25rem;
+    border: 1px solid var(--theme-border-subtle);
+    border-radius: 8px;
+    padding: 0.625rem 1rem;
+    background: var(--theme-bg-offset);
+  }
+  .release-details summary {
+    cursor: pointer;
+    color: var(--theme-text-secondary);
+    font-size: 0.875rem;
+  }
+  .release-details[open] summary {
+    margin-bottom: 0.5rem;
+  }
+
+  .release-empty {
+    color: var(--theme-text-secondary);
+  }
+</style>

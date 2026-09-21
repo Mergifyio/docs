@@ -1,0 +1,10 @@
+---
+version: '8.1.0'
+---
+
+Application keys are now issued as UUIDs. Existing keys keep working; anything
+that checks the shape of a key before sending it has to accept the new form.
+
+The `queue_checks_outcome` statistics endpoints are deprecated in favor of
+`/v1/repos/{owner}/{repository}/stats/merge_queue_checks_outcome`, which breaks
+the same outcomes down further.
