@@ -238,7 +238,7 @@ from the map, so it stays uncapped: only the global ceiling applies to it.
 
 #### How capacities relate to the global ceiling
 
-`max_parallel_checks` is the **global ceiling**: the most speculative checks a train will ever run at
+`max_parallel_checks` is the **global ceiling**: the most speculative checks a queue will ever run at
 once. Each `scopes.capacities` entry is a **sub-limit inside that ceiling, not an extra budget on
 top of it**:
 
@@ -355,7 +355,7 @@ membership is computed.
 
 :::note
   Strict branch protection (*Require branches to be up to date before merging*) clamps the whole
-  train to one check at a time, so each scope's effective capacity becomes 1 and `capacities` has no
+  queue to one check at a time, so each scope's effective capacity becomes 1 and `capacities` has no
   further effect. See [Require Branches to Be Up to
   Date](/merge-queue/github-rulesets#require-branches-to-be-up-to-date).
 :::
