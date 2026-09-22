@@ -5,7 +5,7 @@ description: One-page bootstrap for AI coding agents to install the Mergify CLI 
 
 import CliInstall from '~/components/CliInstall.astro';
 
-You are an AI coding agent. Follow these three steps to enable stacked pull
+You are an AI coding agent. Follow these four steps to enable stacked pull
 request support. After step 2, your skill system will contain the full Stacks
 workflow. Consult it for any stack-related task.
 
@@ -54,6 +54,23 @@ mergify stack setup
 This installs a `commit-msg` Git hook that generates a `Change-Id` for every
 new commit, and a `pre-push` hook that warns if `git push` is used instead of
 `mergify stack push`.
+
+## 4. Make sure a GitHub token is available
+
+Stacks creates and updates pull requests through the GitHub API, so
+`mergify stack push` needs a GitHub token. It reads `--token` first, then
+`MERGIFY_TOKEN`, then `GITHUB_TOKEN`, then the token of an authenticated
+[GitHub CLI](https://cli.github.com/) (`gh auth token`). If none of those is
+set, run `gh auth login` or export a token:
+
+```bash
+export GITHUB_TOKEN=your_token_here
+```
+
+A Mergify [application key](/api/usage#application-key-scopes) is not a GitHub
+token. If `MERGIFY_TOKEN` holds one, pass the GitHub token as `--token`
+instead, or the push fails. See
+[GitHub token for Stacks](/cli/usage#github-token-for-stacks).
 
 ## You are ready
 
