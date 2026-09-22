@@ -39,8 +39,9 @@ Upon successful creation, the dashboard will provide you with an API key.
 
 Application keys have two scopes, picked when you create the key:
 
-- `admin`: the whole API, except uploading results and setting [Merge Queue
-  Scopes](/merge-queue/scopes), which need a `ci` key.
+- `admin`: the whole API, except uploading results, setting [Merge Queue
+  Scopes](/merge-queue/scopes), and the mid-run flaky-detection and
+  test-selection reads below, which need a `ci` key.
 
 - `ci`: uploading CI and test results, setting Merge Queue Scopes, and the reads
   a job makes while it runs: the list of
@@ -205,7 +206,7 @@ of a request.
 | `200` | OK | The request succeeded. |
 | `201` | Created | The resource was created. |
 | `204` | No Content | The request succeeded and the response has no body. |
-| `403` | Forbidden | Authentication is valid but you do not have permission to access this resource. |
+| `403` | Forbidden | The credential was refused, or is valid but lacks permission for this resource. |
 | `404` | Not Found | The requested resource does not exist. |
 | `409` | Conflict | The request conflicts with the current state of the resource. |
 | `422` | Unprocessable Entity | The request body or parameters are invalid. |
