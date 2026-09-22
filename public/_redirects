@@ -92,14 +92,14 @@
 /test-insights/cli /cli/tests 301
 /test-insights/cli/ /cli/tests 301
 
-/monorepo-ci /integrations/gha#monorepo-ci 301
-/monorepo-ci/ /integrations/gha#monorepo-ci 301
+/monorepo-ci /integrations/gha#job-selection 301
+/monorepo-ci/ /integrations/gha#job-selection 301
 /monorepo-ci.md /integrations/gha.md 301
-/monorepo-ci/github-actions /integrations/gha#monorepo-ci 301
-/monorepo-ci/github-actions/ /integrations/gha#monorepo-ci 301
+/monorepo-ci/github-actions /integrations/gha#job-selection 301
+/monorepo-ci/github-actions/ /integrations/gha#job-selection 301
 /monorepo-ci/github-actions.md /integrations/gha.md 301
-/monorepo-ci/buildkite /integrations/buildkite#monorepo-ci 301
-/monorepo-ci/buildkite/ /integrations/buildkite#monorepo-ci 301
+/monorepo-ci/buildkite /integrations/buildkite#job-selection 301
+/monorepo-ci/buildkite/ /integrations/buildkite#job-selection 301
 /monorepo-ci/buildkite.md /integrations/buildkite.md 301
 
 # `/developers` is the path people and crawlers guess for a developer portal.
