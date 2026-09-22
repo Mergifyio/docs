@@ -1075,9 +1075,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "maximum": 9223372036854775807,
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
@@ -1120,8 +1119,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
@@ -1144,8 +1143,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
@@ -1294,9 +1293,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "maximum": 9223372036854775807,
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
@@ -1473,9 +1471,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "maximum": 9223372036854775807,
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
@@ -1518,8 +1515,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
@@ -1542,8 +1539,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
@@ -1692,9 +1689,8 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "integer",
-                    "maximum": 9223372036854775807,
-                    "minimum": 1,
-                    "exclusiveMaximum": 2147483647
+                    "maximum": 2147483647,
+                    "minimum": 1
                   }
                 },
                 {
