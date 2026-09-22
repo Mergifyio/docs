@@ -12,3 +12,28 @@ shouldn't be merged or needs further revision before merging.
 ```text
 @Mergifyio dequeue
 ```
+
+## What It Cancels
+
+A [`queue` command](/commands/queue) leaves a pull request in one of two states,
+and `dequeue` covers both:
+
+- **In the queue.** Mergify takes the pull request out and reports that it has
+  been removed from the queue.
+
+- **Waiting to enter it.** A `queue` command stays pending until the pull
+  request matches a queue's `queue_conditions`. `dequeue` cancels that pending
+  command, so the pull request is not queued later when the conditions
+  eventually match.
+
+When neither applies, Mergify answers that the pull request is not queued and
+does nothing else.
+
+A dequeued pull request never rejoins the queue on its own. Run
+[`@mergifyio queue`](/commands/queue) again once it's ready, as described in
+[Requeuing a Pull Request in the Merge
+Queue](/merge-queue/lifecycle#requeuing-a-pull-request-in-the-merge-queue).
+
+Dequeuing a pull request that others are stacked on top of also removes the ones
+above it that are still in the queue. See [cascade
+dequeue](/merge-queue/stacks#cascade-dequeue).
