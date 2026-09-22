@@ -224,6 +224,26 @@ in the "Checks" tab of your pull request.
 If there are any issues with your configuration file, you will receive a
 detailed description of the problem and guidance on how to fix it.
 
+### Sections That Are Never Used
+
+Each product reads its own sections of the configuration, and it only reads them
+where that product is enabled on the repository. A configuration that defines
+`pull_request_rules` without [Workflow Automation](/workflow/), `queue_rules`,
+`priority_rules` or `merge_queue` without the [Merge Queue](/merge-queue), or
+`merge_protections` without [Merge Protections](/merge-protections/) is valid,
+and those sections are never evaluated.
+
+The configuration check run stays green, since the file really is valid, and it
+reports which sections will not be used and which product each one is waiting
+on, with a link to enable it. The [simulate command](#simulate) reports the same
+thing, so you can see it before pushing.
+
+No other top-level section is gated on a product this way, so none of them is
+ever reported. `scopes`, `shared`, `extends`, `commands_restrictions` and
+`defaults` are read whatever is enabled, even where what they configure belongs
+to one product, and so is `merge_protections_settings`, some of which applies
+outside Merge Protections.
+
 ### Validate Locally With Pre-Commit
 
 To catch issues before pushing, you can validate your configuration locally
