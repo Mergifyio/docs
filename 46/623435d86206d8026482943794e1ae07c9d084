@@ -1,0 +1,6 @@
+Revision history for #12860:
+
+rev 2 (rebase) 2026-09-16 13:48 UTC — rebase onto main to pick up the build fix from #12859 (main was failing build/lint)
+rev 1 (initial) 2026-09-16 13:48 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12860,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"304623c5fdb2d1f70bc19da593060ff276140aad","timestamp_iso":"2026-09-16T13:48:22Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"304623c5fdb2d1f70bc19da593060ff276140aad","new_sha":"8805e54898e7a83d8dd95605702649c799cf6d5b","timestamp_iso":"2026-09-16T13:48:22Z","reason":"rebase onto main to pick up the build fix from #12859 (main was failing build/lint)","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/304623c5fdb2d1f70bc19da593060ff276140aad...8805e54898e7a83d8dd95605702649c799cf6d5b"}]} -->
