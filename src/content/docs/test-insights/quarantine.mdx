@@ -19,6 +19,28 @@ This avoids pipeline disruption while still surfacing issues in the UI and keepi
 Quarantined tests must still be uploaded appropriately using one of the supported CI integrations.
 To ensure the correct setup, refer to [the documentation for your test framework](/test-insights#test-framework-configuration).
 
+## When Mergify Quarantines a Test Itself
+
+Mergify can also quarantine a test on its own, from the health status
+[Detection](/test-insights/detection) assigns it. You enable this
+[auto-quarantine](/test-insights/mitigation#auto-quarantine) per repository from
+the Mitigation page. It does not act on that status as soon as a test looks
+unhealthy: it waits until there is enough evidence behind the verdict.
+
+Three things have to hold. The test needs a reasonable number of recent
+executions to judge, it has to have been running long enough to have a pattern
+at all (a test whose whole history fits inside the last few minutes reads as one
+bad CI event rather than a flaky test), and a meaningful share of its runs has to
+have failed. That last floor is why a single failure among thousands of green runs
+never quarantines anything, however reproducible the rest of the pattern looks.
+
+A test that has not run for a while keeps whatever health status it last had,
+but Mergify stops spending [reruns](/test-insights/detection#rerunning-unhealthy-tests)
+on it, since no recent run backs that verdict any more.
+
+Until a test clears those bars, its status still shows on the dashboard and you
+can quarantine it yourself; Mergify will not do it for you.
+
 ## Adding and removing tests from quarantine
 
 ### From the Mergify Dashboard
