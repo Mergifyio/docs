@@ -322,6 +322,65 @@ bypass configuration is needed.
 See [Merge Strategies: Merge Batch](/merge-queue/merge-strategies#merge-batch)
 for more details.
 
+### Resolving Conflicts With `.gitattributes`
+
+With `fast-forward` or `merge-batch`, the commit Mergify builds for the batch
+is the one that lands, so Mergify merges the pull requests into it the way
+your repository says files should be merged: it follows the `merge=`
+attributes in the `.gitattributes` of your **base branch**. A pull request
+that edits `.gitattributes` has no effect on its own batch; the file that
+counts is the one already on the branch it merges into.
+
+This lets a conflict on a file nobody really contends over, like a changelog
+or a generated file, resolve itself instead of removing a pull request from
+the batch:
+
+```text
+CHANGELOG.md        merge=union
+src/generated/**    merge=prefer-theirs
+```
+
+Mergify understands these values:
+
+| Attribute | What happens when two pull requests change the file |
+|---|---|
+| `merge=union` | Both sides' lines are kept. Where they conflict, both versions are included, one after the other. |
+| `merge=prefer-ours` | A normal merge. Lines that conflict are taken from the batch built so far; every other change from both sides is kept. |
+| `merge=prefer-theirs` | A normal merge. Lines that conflict are taken from the pull request being added; every other change from both sides is kept. |
+| `merge=ours` | The whole file is kept as it is in the batch built so far. The added pull request's changes to that file are discarded, including lines that did not conflict. |
+| `merge=theirs` | The whole file is taken from the pull request being added. Changes to that file from pull requests already in the batch, or merged into the base branch after the pull request was created, are discarded. |
+
+Any other driver name is ignored and the file merges as usual.
+
+:::caution[`ours` is not your branch]
+  On your laptop, `ours` is the branch you are on. In a batch, Mergify adds
+  the pull requests one at a time, so `ours` is **the batch built so far** and
+  `theirs` is **the pull request being added**. When two pull requests in a
+  batch change a file marked `merge=ours`, the one that entered the queue
+  first wins and the other one's change to that file is dropped, without a
+  conflict or a marker.
+
+  The batch built so far starts from your base branch. So for the first pull
+  request of a batch, `merge=theirs` also drops changes to that file that
+  landed on the base branch after the pull request was created.
+
+  If you want a conflict decided in one direction without losing anyone's
+  other changes, use `prefer-ours` or `prefer-theirs` instead.
+:::
+
+The attributes work in both directions. A path marked `binary` or `-merge`
+tells Git never to merge it, so two pull requests that edit different lines
+of such a file conflict in the batch even though a plain merge would have
+combined them.
+
+Two limits to know about:
+
+- A file deleted by one pull request and modified by another always
+  conflicts. Git decides that case before any `merge=` attribute is
+  consulted.
+- With any other `merge_method`, each pull request is merged on its own by
+  GitHub, so `merge=` attributes do not apply to the queue.
+
 ## Handling Batch Failure or Timeout
 
 When a batch fails, or when its
