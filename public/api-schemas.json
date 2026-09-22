@@ -994,7 +994,7 @@
                       "section": "pull_request_rules",
                       "product": "workflow_automation",
                       "product_name": "Workflow Automation",
-                      "product_url": "https://dashboard.mergify.com/workflow-automation?login=Mergifyio&repository=mergify-engine"
+                      "product_url": "https://dashboard.mergify.com/orgs/Mergifyio/repos/mergify-engine/workflow-automation"
                     }
                   ]
                 }
