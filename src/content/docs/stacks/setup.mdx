@@ -65,8 +65,10 @@ Stacks tries them in.
 
 Enable "[Automatically delete head branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)"
 in your GitHub repository settings (Settings > General > Pull Requests). When
-a stacked PR merges, this cleans up its remote branch automatically, which is
-also what lets GitHub retarget the next PR in the chain onto `main`. See
+a stacked PR merges, this cleans up its remote branch automatically. For a
+stack pushed with [`--no-github-native`](#configuration), that deletion is also
+what makes GitHub retarget the next PR in the chain onto `main`. GitHub does
+that itself for a stack registered with its stacking API. See
 [Merging Stacked PRs](/stacks/reviewing#merging-stacked-prs).
 
 <Image src={deleteHeadBranches} alt="GitHub setting: Automatically delete head branches" style={{ maxWidth: '66%' }} />
