@@ -82,8 +82,8 @@ What happens behind the scenes:
 5. **Registers the stack** with GitHub's stacking API, so GitHub shows it as a
    stack of its own and holds the ordering. Pass
    [`--no-github-native`](/stacks/setup#configuration) to push without this and
-   get a `Depends-On:` chain the
-   [Merge Queue](/merge-queue/stacks#mergify-stacks) moves as a unit instead
+   get a [`Depends-On:` chain](/merge-queue/stacks#mergify-stacks) instead,
+   which the [Merge Queue](/merge-queue/stacks) moves as a unit just the same
 
 The full flow, from setup to push:
 
