@@ -35,8 +35,15 @@ title no longer matches, Mergify removes it.
 
 Mergify evaluates the *state* of a pull request rather than individual events. It
 checks the current status of a pull request and acts based on the conditions you
-defined. This behavior is known as "edge triggering": an action only re-runs for
-a pull request when its state flips back from unmatched to matched.
+defined. This behavior is known as "edge triggering": once an action has run,
+Mergify does not run it again while the rule keeps matching. It runs a second
+time only after the pull request stops matching the rule and then matches again.
+
+Not every action works that way. `assign`, `dismiss_reviews`, `edit`, `label`,
+`post_check`, `rebase`, `request_reviews`, `review`, `squash`, and `update` run
+on every evaluation instead, which is how they hold a pull request in the state
+a rule describes. The rule above relies on that: if someone removes the `WIP`
+label while the title still matches, Mergify puts it back.
 
 :::note
   Mergify never evaluates rules for pull request drafts it creates while
