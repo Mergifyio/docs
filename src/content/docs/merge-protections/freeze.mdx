@@ -22,20 +22,22 @@ Use freezes to coordinate:
 In the dashboard under `Merge Protections` → `Scheduled Freezes`:
 1. Click `Schedule a Freeze`
 
-2. Fill in `Freeze Reason`, which is required and names the freeze wherever
-   Mergify reports it
+2. Fill in the reason at the top of the editor. It is required, and it names
+   the freeze wherever Mergify reports it
 
-3. Under `Schedule`, set `From` and `To`, and the timezone they are expressed
-   in
+3. Under `Schedule`, set `Starts` and `Ends`, and the `Timezone` they are read
+   in. Leave `Ends` empty for a freeze that lasts until you remove it
 
-4. Add `Matching Conditions`: by default the freeze applies to every pull
-   request, but you can limit its scope with this field
+4. Under `Scope`, add the [conditions](/configuration/conditions) a pull
+   request must match to be blocked. Leave it empty to freeze every pull
+   request on the repository
 
-5. Add `Exclude Conditions`: a pull request that matches all of them is allowed
-   through the freeze, so specific pull requests (like hotfixes) can still
-   merge while everything else is blocked
+5. Under `Exceptions`, add the conditions that let a pull request through the
+   freeze, so specific pull requests (like hotfixes) can still merge while
+   everything else is blocked
 
-6. Save; active freezes appear in the list
+6. Click `Save Freeze`; the freeze appears in the list under `Upcoming` until
+   it starts
 
 <Image src={newScheduleFreezeScreen} alt="New Scheduled Freeze" />
 
@@ -53,8 +55,10 @@ until the freeze ends.
 
 ## Manual Instant Freeze
 
-Use the `Freeze Merges Now` action for immediate blocking. You can later
-unfreeze manually.
+Use the `Freeze Now` action for immediate blocking. It opens the same editor
+without a start date: pull requests matching `Scope` are blocked the moment you
+save. Set an end date and the freeze lifts itself, or leave it empty and remove
+the freeze when you are done.
 
 ## Recurring Merge Windows
 
@@ -85,8 +89,8 @@ are combined with a logical AND: a pull request escapes the freeze only when it
 matches all of them. Exclude conditions `label=hotfix` and `label=urgent` let
 through pull requests carrying both labels, not those carrying only one.
 
-Set exclude conditions when you create or edit a freeze, either in the
-dashboard or from the CLI with the `-e` flag (see [Creating a
+Set exclude conditions when you create or edit a freeze, in the dashboard's
+`Exceptions` section or from the CLI with the `-e` flag (see [Creating a
 Freeze](#creating-a-freeze) below). For example, exclude pull requests labeled
 `hotfix` so urgent fixes can still merge during the freeze.
 
