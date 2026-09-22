@@ -1,77 +1,45 @@
 ---
 title: Stacked Pull Requests
-description: "How the Merge Queue lands GitHub-native stacked pull requests and Mergify Stacks: bottom-up landing, auto-propagation, stack-aware batching, and cascade dequeue."
+description: "How the Merge Queue lands stacked pull requests: queue propagation, stack-aware batching, cascade dequeue, and partial landings."
 ---
 
 import GitGraph from '~/components/GitGraph.astro';
 
 The Merge Queue lands stacked pull requests: chains where each pull request
-builds on the one below it. It handles both kinds of stack.
+builds on the one below it. It recognizes two kinds of stack, and once they are
+in the queue it treats them the same way: a comment on the top member queues
+the whole chain, the members keep their order and ride in the same batch when
+it has room for them, and pulling one out pulls out everything above it.
 
-- **[GitHub-native stacked pull
-  requests](#github-native-stacked-pull-requests)**, created with
-  [gh-stack](/stacks/compare/gh-stack) or by a plain `mergify stack push`.
-  Every member can be queued, and members land one at a time from the bottom
-  up.
+## The Two Kinds of Stack
 
-- **[Mergify Stacks](#mergify-stacks)**, created with
-  `mergify stack push --no-github-native`. The queue treats the whole chain as
-  a unit: it propagates the queue command up the stack, keeps stacked PRs
-  together when batching, and dequeues the PRs above any PR you take out of
-  the queue.
+They differ in how the chain is created and how the queue recognizes it.
 
-## GitHub-Native Stacked Pull Requests
+### GitHub-Native Stacked Pull Requests
 
 GitHub has its own stacking model. You reach it with
 [gh-stack](/stacks/compare/gh-stack), its stacking extension for the `gh`
-CLI, or with `mergify stack push`, which registers the stack with GitHub's
-stacking API unless you pass `--no-github-native`. Each member is a separate
-branch targeting the branch below it.
+CLI, or with [`mergify stack push`](/stacks/creating), which registers the
+stack with GitHub's stacking API unless you pass
+[`--no-github-native`](/stacks/setup#configuration). Each member is a separate
+branch targeting the branch below it, and GitHub itself holds the ordering, so
+the pull request bodies carry no marker.
 
 GitHub has no auto-merge for stacked pull requests, so without a queue each
 member is merged by hand as the one below it lands.
-
-### Queueing Members
-
-Every member of a GitHub-native stack can be queued. Comment
-[`@mergifyio queue`](/commands/queue) on each pull request you want to land.
-Mergify enqueues them all, keeps same-stack members together in the queue,
-and enforces their order on admission, so a member is never validated ahead
-of the members below it.
-
-:::note
-  Queue propagation is a Mergify Stacks feature. Queueing the top member of a
-  GitHub-native stack does not enqueue its predecessors, so comment on each
-  member you want to land.
-:::
-
-### How the Stack Lands
-
-Members land one at a time, from the bottom up. When the lowest open member
-merges, GitHub restacks the rest of the chain onto the base branch and the
-next member becomes the one to land. Merged members stay in the stack on
-GitHub, so the stack never shrinks.
-
-Because members land one at a time, a stack can be partly landed while the
-rest is still in flight. If a member fails, the members that already merged
-below it stay merged.
-
-### Requirements
 
 Mergify must be a bypass actor with the `exempt` bypass mode on every GitHub
 ruleset that applies to the base branch. With any other bypass mode, the
 Merge Queue refuses the pull request. See [GitHub Rulesets
 Compatibility](/merge-queue/github-rulesets#bypass-actors) for how to set it.
+This requirement is specific to GitHub-native stacks.
 
-## Mergify Stacks
+### Mergify Stacks
 
 [Mergify Stacks](/stacks) are created with
 `mergify stack push --no-github-native`, which maps each commit on a single
-branch to its own pull request. The queue treats such a stack as one unit.
-
-### How a Stack Is Detected
-
-The queue recognizes a stack only when **all** of these hold at every step:
+branch to its own pull request. There is no stack object on GitHub's side, so
+the queue recognizes the chain only when **all** of these hold at every step:
 
 - The PRs are physically chained: each PR's base branch is the previous PR's
   head branch.
@@ -82,17 +50,10 @@ The queue recognizes a stack only when **all** of these hold at every step:
 - Every PR's head branch lives in the repository the stack targets, not in a
   fork.
 
-This is exactly what [`mergify stack push`](/stacks/creating) with
-[`--no-github-native`](/stacks/setup#configuration) produces. PRs chained only
-by branch refs (for example, GitFlow promotion chains like `dev` → `staging` →
-`prod`) are **not** treated as a stack. Without the `Depends-On:` marker, the
-queue keeps each PR's literal base ref and queues them independently.
-
-`mergify stack push` registers the stack with GitHub's stacking API unless you
-pass `--no-github-native`. A registered stack carries no `Depends-On:` marker
-either, because that API holds the ordering instead, so those PRs are
-recognized as a [GitHub-native stack](#github-native-stacked-pull-requests) and
-land the way that section describes, one member at a time.
+PRs chained only by branch refs (for example, GitFlow promotion chains like
+`dev` → `staging` → `prod`) are **not** treated as a stack. Without the
+`Depends-On:` marker, the queue keeps each PR's literal base ref and queues
+them independently.
 
 The last condition is why a stack cannot be opened from a fork. The first two
 signals compare branch *names*, which only mean something inside one
@@ -110,12 +71,11 @@ A PR opened from a fork keeps its own base ref and is queued on its own.
   ]}
 />
 
-### Queueing a Whole Stack at Once
+## Queueing a Whole Stack at Once
 
 Run [`@mergifyio queue`](/commands/queue) on the **top** PR of a stack and the
 queue command propagates synthetically to every predecessor. The whole stack
-enters the queue from a single comment. You don't need to comment on each
-PR.
+enters the queue from a single comment. You don't need to comment on each PR.
 
 For a stack `PR1 → PR2 → PR3`, commenting `@mergifyio queue` on PR3 enqueues
 PR1, PR2, and PR3 in the right order. While PR3 waits for its predecessors to
@@ -123,13 +83,16 @@ join the queue, its Summary check lists one pending `depends-on=` condition
 per predecessor, each tagged `[stack]`. That's the queue holding PR3 back
 until PR1 and PR2 are queued ahead of it.
 
+Propagation reaches predecessors only. Commenting on PR2 enqueues PR1 and PR2 and
+leaves PR3 where it is, so queue the highest member you want to land.
+
 :::tip
   This works the same with [Auto-Merge](/merge-protections/auto-merge):
   approve the top PR with Auto-Merge enabled and the entire stack flows into
   the queue as soon as `queue_conditions` are met.
 :::
 
-### Stack-Aware Base
+## Stack-Aware Base
 
 Every stacked PR is queued against the **stack root** (e.g. `main`), not its
 immediate parent branch. Without this, PR2 would be queued against PR1's head
@@ -152,7 +115,7 @@ digraph {
 You don't configure this. It's automatic for any PR detected as part of a
 stack.
 
-### Stack-Aware Batching
+## Stack-Aware Batching
 
 The queue treats a stack as an ordered chain when assembling
 [batches](/merge-queue/batches). Two guarantees hold:
@@ -194,7 +157,7 @@ across consecutive batches bottom-first: the first batch validates the deepest
 PRs that fit, and once they merge they drop out of the predecessor set, so the
 next batch picks up where the previous one stopped.
 
-### Cascade Dequeue
+## Cascade Dequeue
 
 When a PR is taken out of a queued stack with
 [`@mergifyio dequeue`](/commands/dequeue), from the dashboard, or through the
@@ -224,7 +187,51 @@ Once the PR you pulled out is ready again, re-queue the stack from the top with
   merged successfully (lower in the stack) are untouched.
 :::
 
-### Limits
+## How a Stack Lands
+
+Members land from the bottom up. A batch that holds the whole stack lands every
+member of it, in order, and merged members stay in a GitHub-native stack, so
+that stack never shrinks.
+
+A stack can also be partly landed while the rest is still in flight: you queued
+only part of it, it is longer than `batch_size`, or a member above the ones that
+merged failed. Whatever the reason, the members that already merged stay merged.
+
+### After a Partial Landing
+
+The members still open are **not rebased** off the commits that just landed.
+For a GitHub-native stack, GitHub retargets the next member onto the stack's
+base branch and stops there. For Mergify Stacks, GitHub retargets the
+next member when the merged head branch is deleted, which is what
+[automatic head-branch deletion](/stacks/setup#3-configure-github) is for.
+Either way, nothing rewrites the remaining branches.
+
+So each remaining member still carries its predecessor's pre-landing commits.
+When the queue squashes or rebases, what landed on the base branch has new
+SHAs, so the member still shows that change in its diff and conflicts wherever
+the two touch the same lines. A member already in the queue when its
+predecessor landed can fail its merge for that reason; one queued afterwards is
+taken back out of the queue for conflicting with its base branch. With `merge_method: merge` the
+original commits land unchanged and the remaining members merge cleanly.
+
+Rebase the remaining members before queueing them again:
+
+- **Mergify Stacks**: run [`mergify stack sync`](/stacks/updating#after-a-pr-merges)
+  to drop the merged commits and rebase the rest, then `mergify stack push`.
+
+- **GitHub-native stacks**: run `gh stack sync`, or rebase each remaining
+  branch on the base branch by hand.
+
+Then comment `@mergifyio queue` on the top member again. Propagation puts the
+rest of the chain back in the queue.
+
+:::tip
+  Give `batch_size` room for the stacks you usually open. When a whole stack
+  fits in one batch and its checks pass, it lands in a single pass and nothing
+  is left to rebase.
+:::
+
+## Limits
 
 - **Maximum stack depth: 20.** Stacks deeper than 20 PRs aren't recognized as
   a stack by the queue and fall back to per-PR queueing.

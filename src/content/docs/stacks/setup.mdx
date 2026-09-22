@@ -163,7 +163,8 @@ its full set of flags and defaults.
   the pull requests as a stack of its own and holds their order. A registered
   stack carries no `Depends-On:` marker in its pull request descriptions; the
   [Merge Queue](/merge-queue/stacks#github-native-stacked-pull-requests)
-  recognizes it and lands its members one at a time. The registration is
+  recognizes it and lands its members bottom-up, the same way it lands a
+  `Depends-On:` chain. The registration is
   experimental: if that API isn't available, Stacks skips it silently and the
   push goes through as usual. Pass `--no-github-native`, or set the Git config
   to `false`, to push without it.
