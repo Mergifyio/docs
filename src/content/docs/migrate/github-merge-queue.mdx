@@ -9,7 +9,7 @@ import IntegrationLogo from "../../../components/IntegrationLogo.astro"
 
 GitHub's native Merge Queue ensures each PR is tested against the latest base
 before merging. Migrating to Mergify keeps that guarantee while adding
-fine‑grained policies, batching strategies, real CI efficiency insights, and
+fine-grained policies, batching strategies, real CI efficiency insights, and
 queue observability (latency, throughput, bottlenecks) in one system.
 
 This guide shows a minimal, incremental migration: no rewrites, and you keep
@@ -18,7 +18,7 @@ your branch protections and required checks exactly as they are.
 :::tip[Need help?]
 
 We've migrated many teams from GitHub Merge Queue. [Reach
-out](mailto:support@mergify.com) and we’ll review your GitHub configuration and
+out](mailto:support@mergify.com) and we'll review your GitHub configuration and
 propose an equivalent Mergify setup, plus quick wins (batching, priorities,
 etc).
 
@@ -36,7 +36,7 @@ Choose Mergify if you need any of:
 
 - Explicit priorities (interactive hotfix elevation)
 
-- Parallel speculative checks (reduce head‑of‑line blocking)
+- Parallel speculative checks (reduce head-of-line blocking)
 
 - Batching by size, with automatic splitting when a batch fails
 
@@ -65,7 +65,7 @@ configuration is needed. Mergify automatically injects your ruleset or branch
 protections into the queue system. Type [`@mergifyio
 queue`](/commands/queue) to queue a pull request.
 
-This reproduces the same invariant: every PR merged only after re‑validation on
+This reproduces the same invariant: every PR merged only after re-validation on
 the latest `main`.
 
 :::caution
@@ -123,7 +123,7 @@ The [Statistics page](/merge-queue/monitoring) reports on the queue:
 - **Average CI Runtime**, for how long the checks the queue triggers take
 
 Use this data to tune batch size, break down monolithic checks, or add
-[two‑step CI](/merge-queue/two-step) (fast + full) to shorten average cycle time.
+[two-step CI](/merge-queue/two-step) (fast + full) to shorten average cycle time.
 
 ## Incremental migration strategy
 
@@ -134,7 +134,7 @@ Use this data to tune batch size, break down monolithic checks, or add
    carrying the `merge_queue` rule, so Mergify can merge while GitHub's queue
    stays active for everyone else
 
-3. Queue a low‑risk PR using `@mergifyio queue`
+3. Queue a low-risk PR using `@mergifyio queue`
 
 4. Compare timing & merge behavior
 
@@ -161,5 +161,5 @@ and what to do about each.
 **Do I lose the merge squash/rebase options?** No. Configure `merge_method` per
 rule; you can still vary merge strategies across PR subsets.
 
-**Is there vendor lock‑in?** Config is a single YAML file; removal falls back
+**Is there vendor lock-in?** Config is a single YAML file; removal falls back
 to native GitHub behavior immediately.
