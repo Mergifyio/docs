@@ -76,6 +76,23 @@ queue, allowing Mergify to retry validation.
   initial queuing and re-queuing.
 :::
 
+## Running the Command Twice
+
+A `queue` command stays pending until the pull request matches a queue's
+`queue_conditions`, so a second one can arrive while the first is still waiting.
+What happens then depends on the queue name:
+
+- **The same name, or neither command naming one**: the second command is
+  ignored, and Mergify answers that it is already running from a previous
+  command.
+
+- **A different name**: the pending command is cancelled and the new one takes
+  over. If the pull request had already entered a queue, the switch takes it out
+  of that one first.
+
+To call off a pending `queue` command rather than replace it, use the
+[`dequeue` command](/commands/dequeue).
+
 ## Queueing with a Checkbox
 
 If you'd rather not type a command, Mergify can post a checkbox you can tick to
