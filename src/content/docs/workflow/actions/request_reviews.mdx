@@ -25,6 +25,10 @@ requested changes, or commented in a review on the pull request, even if that
 review was later dismissed. As with the
 [review conditions](/configuration/conditions#attributes-list), only reviewers
 with `admin`, `write` or `maintain` permission on the repository count here.
+That check applies to people: a review left by a GitHub App counts regardless of
+the permission the app holds. GitHub Copilot is the exception in the other
+direction, since Mergify ignores its reviews wherever reviews are counted, so a
+Copilot review never marks a pull request as already reviewed.
 
 With `random_count`, those already-involved candidates count toward the
 target rather than being replaced. If `random_count` is `3` and two people from
