@@ -86,6 +86,14 @@ extends: shared-config
   - Visibility is checked every time the configuration is loaded. Making your
     repository more visible, or the source repository less visible, breaks your
     configuration even though no configuration file changed.
+
+  - When a pull request points `extends` at a repository your committed
+    configuration does not already extend, Mergify resolves it only if the
+    change comes from a branch of your repository or from an author with write
+    access to it. Otherwise it declines, and the [configuration
+    check](/configuration/file-format#validation) reports that the new
+    configuration could not be validated. The target the committed
+    configuration already extends always resolves.
 :::
 
 The configuration from the specified repository will be loaded and applied
