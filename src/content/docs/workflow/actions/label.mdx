@@ -10,6 +10,12 @@ import prConflictScreenshot from "../../../images/workflow/actions/label/conflic
 The `label` action allows Mergify to automatically add or remove labels from a
 pull request based on the conditions specified in your rules.
 
+A label named in `add` or `toggle` that does not exist in the repository yet is
+created with a randomly picked color. Create it yourself first if you want to
+choose its color and description. Mergify only adds labels the pull request does
+not already carry, and only removes ones it does, so a rule whose conditions
+keep matching does not keep calling GitHub.
+
 :::caution
   **Avoid rule pairs that flip the same label.** If one rule adds a label and
   another removes it, and both rules' conditions keep matching after each
