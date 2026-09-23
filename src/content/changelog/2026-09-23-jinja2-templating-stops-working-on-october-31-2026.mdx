@@ -1,0 +1,14 @@
+---
+title: "Jinja2 templating stops working on October 31, 2026"
+date: 2026-09-23
+tags:
+  - Deprecations
+  - Rules
+description: "Jinja2 expressions in your Mergify configuration stop working on October 31, 2026; plain {{ variable }} placeholders keep working."
+---
+
+Jinja2 templating in your Mergify configuration stops working on **October 31, 2026**. Filters, loops, `{% if %}` blocks and other expressions will no longer be evaluated in comment, review and close messages, in copy and backport titles, bodies and assignees, in bot accounts, or in GitHub Actions workflow inputs. Plain `{{ variable }}` placeholders drawn from each field's allowed variables keep working, as does a bare `{{ author }}` in a rule condition.
+
+Templating goes away in two more places on that date: label names, and rule conditions — where a value such as `commits[*].commit_message~=^Merge branch '{{ base }}'` is rendered for each pull request today.
+
+The Summary check of your pull requests now names every place your configuration still relies on it, with the date. Two settings deprecated earlier, `commit_message_template` and the `post_check` action, keep their own announced removal date of September 30, 2026.

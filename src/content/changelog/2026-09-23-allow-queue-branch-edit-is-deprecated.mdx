@@ -1,0 +1,11 @@
+---
+title: "`allow_queue_branch_edit` is deprecated"
+date: 2026-09-23
+tags:
+  - Merge Queue
+description: "The `allow_queue_branch_edit` queue rule option is deprecated and will be removed after December 31, 2026."
+---
+
+The `allow_queue_branch_edit` queue rule option, which lets a merge queue trust commits pushed to a batch branch by something other than Mergify, is deprecated with no replacement and will be removed after December 31, 2026.
+
+If your configuration sets this option, move any work you're doing on the batch branch onto the pull requests themselves before then. Once the option is removed, an edited batch branch will dequeue the pull requests it carries and report the edit as a failure — the same thing that already happens today if you leave the option unset.
