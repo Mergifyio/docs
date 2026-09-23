@@ -7,7 +7,11 @@ Mergify ships Agent Skills that teach an AI coding agent how to use the
 Mergify CLI: how to read the merge queue, how to find out why a pull request
 was dequeued, what belongs in a `.mergify.yml`, how to push a stack. They live
 in the [`Mergifyio/mergify-cli`](https://github.com/Mergifyio/mergify-cli)
-repository under `skills/`, are Apache-2.0, and ship as one bundle.
+repository under `skills/`, are Apache-2.0, and ship as one bundle. For Codex,
+they're published as the
+[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b)
+in the OpenAI plugin directory; every agent, Codex included, can also install
+them through skills.sh.
 
 :::caution
   The skills drive the `mergify` command. They are instructions for using the
@@ -67,10 +71,23 @@ The `claude-plugins-official` marketplace ships with Claude Code, so there is
 nothing to add first. You can also run `/plugin` on its own, open **Discover**,
 and search for `mergify`.
 
-### Codex and other skills.sh agents
+### Codex
 
-[skills.sh](https://skills.sh) installs the same bundle into Codex, Cursor,
-Cline, Copilot, and dozens of other agents:
+Codex and ChatGPT share one plugin directory, but the
+[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b)
+in it currently only works from Codex — the skills shell out to `mergify`,
+which ChatGPT itself cannot run. Open the plugin directory from Codex and
+search it for Mergify:
+
+```text
+codex /plugins
+```
+
+### Cursor, Cline, Copilot, and other skills.sh agents
+
+[skills.sh](https://skills.sh) installs the same bundle into Cursor, Cline,
+Copilot, and dozens of other agents (Codex included, if you'd rather install
+it this way than through the plugin directory above):
 
 ```bash
 npx skills add Mergifyio/mergify-cli
@@ -81,7 +98,7 @@ looks for them. To pick the target yourself, or to install once for every
 project instead of only the current one:
 
 ```bash
-npx skills add Mergifyio/mergify-cli --agent codex --global
+npx skills add Mergifyio/mergify-cli --agent cursor --global
 ```
 
 Check the result with `npx skills list`.
