@@ -9643,7 +9643,7 @@
               "trusted"
             ],
             "title": "Check Type",
-            "description": "The type of queue check: `in_place` (checks run on the pull request itself), `draft_pr` (checks run on a Mergify draft pull request), or `trusted` (no fresh queue check ran; the pull request was merged trusting its own green CI because the base commits it was missing did not affect its scopes)."
+            "description": "The type of queue check: `in_place` (checks run on the pull request itself), `draft_pr` (checks run on a Mergify draft pull request), or `trusted` (no queue CI run is required: the merge relies on the pull request's own green CI, either because it already contains the base branch tip or because the base commits it is missing do not affect its scopes \u2014 the latter is Direct Merge, see https://docs.mergify.com/merge-queue/direct-merge)."
           },
           "pull_request_number": {
             "type": "integer",
@@ -16765,7 +16765,7 @@
               "trusted"
             ],
             "title": "Check Type",
-            "description": "The type of queue check: `in_place` (checks run on the pull request itself), `draft_pr` (checks run on a Mergify draft pull request), or `trusted` (no fresh queue check ran; the pull request was merged trusting its own green CI because the base commits it was missing did not affect its scopes)."
+            "description": "The type of queue check: `in_place` (checks run on the pull request itself), `draft_pr` (checks run on a Mergify draft pull request), or `trusted` (no queue CI run is required: the merge relies on the pull request's own green CI, either because it already contains the base branch tip or because the base commits it is missing do not affect its scopes \u2014 the latter is Direct Merge, see https://docs.mergify.com/merge-queue/direct-merge)."
           },
           "queue_pull_request_number": {
             "type": "integer",
