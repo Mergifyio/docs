@@ -35,7 +35,7 @@ reported to GitHub can also be referenced from your Mergify
 - **[Job Selection](#job-selection)**: skip unaffected steps on pull requests to cut
   CI spend in monorepos.
 
-- **[Merge Queue Scopes](/merge-queue/scopes/others)**: run only the jobs
+- **[Merge Queue Scopes](/merge-queue/scopes)**: run only the jobs
   affected by a batch when processing the merge queue. Examples for
   [Bazel](/merge-queue/scopes/bazel),
   [Nx](/merge-queue/scopes/nx), and
@@ -60,7 +60,7 @@ Running GitHub Actions instead? The
 [GitHub Actions integration](/integrations/gha#job-selection) covers the same
 ground. Scopes themselves are CI-agnostic, so for any other provider
 [let us know](mailto:support@mergify.com) and see
-[Merge Queue Scopes](/merge-queue/scopes/others).
+[other build tools](/merge-queue/scopes/others).
 
 ### Declare your scopes
 
@@ -203,7 +203,8 @@ In this pipeline:
 - The `detect-scopes` step calls the `mergifyio/mergify-ci` plugin with the
   `scopes` action, which inspects the pull request diff and stores a JSON map of
   scopes (`"true"` or `"false"`) as Buildkite meta-data under the key
-  `mergify-ci.scopes`.
+  `mergify-ci.scopes`. It also annotates the build with the scopes it found, so
+  they are readable on the build page without opening the step log.
 
 - The dynamic pipeline script reads the scopes meta-data and only emits the
   steps for scopes that are `"true"`, so unaffected steps are skipped entirely.
