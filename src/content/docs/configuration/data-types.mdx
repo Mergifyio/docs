@@ -427,7 +427,12 @@ merge queue `draft_bot_account`, `merge_bot_account` and `update_bot_account`.
 
 :::note
   Jinja2 is deprecated for fields that support [variable
-  substitution](#variable-substitution).
+  substitution](#variable-substitution). Accounts that installed Mergify
+  recently never had it at all: their configuration is read as if Jinja2 did
+  not exist, so anything beyond the variables a field lists is ordinary text
+  there, accepted when the configuration is validated and then rendered
+  verbatim. This applies to the hosted service only; on a self-hosted
+  installation Jinja2 still renders whenever the account was created.
 :::
 
 The template data type is a regular string that is rendered using the [Jinja2
