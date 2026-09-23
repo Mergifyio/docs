@@ -19,7 +19,7 @@ shape, with trade-offs between linearity, SHA preservation, and throughput.
 | `squash` | Linear | 1 new commit per PR | No | Full |
 | `rebase` | Linear | Recreated copies of each commit | No | Full |
 | `fast-forward` | Linear | Original commits moved to base | Yes | Serial only |
-| `merge-batch` | Non-linear | Batch branch commits + 1 merge commit per batch | No | Full |
+| `merge-batch` | Non-linear | Original commits + 1 merge commit per PR + 1 per batch | Yes | Full |
 
 ## Merge
 
@@ -270,22 +270,29 @@ commit, instead of merging the original pull requests individually.
 
 This is similar to `fast-forward` in that the batch PR itself is merged, but
 uses the GitHub pull request merge API rather than advancing the git ref
-directly. The resulting merge commit is titled after the pull requests included
-in the batch (for example, `Merged #42, #43, #44`), with `Merged by Mergify
-Merge Queue` as its body.
+directly. The merge commit that lands on the base branch is titled after the
+pull requests included in the batch (for example, `Merged #42, #43, #44`), with
+`Merged by Mergify Merge Queue` as its body. The merges inside the batch branch
+carry a title of their own, `Merge of #42`, one per pull request.
 
 <GitGraph
   nodes={[
     { id: "A", label: "A", role: "external" },
     { id: "B", label: "B", role: "external" },
-    { id: "D1", label: "D1", role: "queued" },
-    { id: "D2", label: "D2", role: "queued" },
+    { id: "C1", label: "C1", role: "queued" },
+    { id: "C2", label: "C2", role: "queued" },
+    { id: "D1", label: "D1", role: "batch" },
+    { id: "D2", label: "D2", role: "batch" },
     { id: "M", label: "M", role: "merged" },
   ]}
   edges={[
     { from: "A", to: "B" },
+    { from: "B", to: "C1" },
+    { from: "B", to: "C2" },
     { from: "B", to: "D1", label: "batch PR" },
+    { from: "C1", to: "D1", label: "Merge of #42" },
     { from: "D1", to: "D2" },
+    { from: "C2", to: "D2", label: "Merge of #43" },
     { from: "B", to: "M" },
     { from: "D2", to: "M", label: "merge commit" },
   ]}
@@ -295,10 +302,13 @@ Merge Queue` as its body.
 - **History:** non-linear; a single merge commit per batch appears on the base
   branch
 
-- **Merge commits:** yes; one merge commit per batch, not per PR
+- **Merge commits:** yes; one per batch on the base branch, plus one per PR
+  inside the batch branch
 
-- **SHAs preserved:** no; the batch merge commit is new, and the original PR
-  commit SHAs are not preserved because the batch PR contains recreated commits
+- **SHAs preserved:** yes; Mergify builds the batch branch by merging each
+  embarked pull request's head into it, so that head commit becomes the second
+  parent of a `Merge of #42` commit instead of a copy. Only the merge commits
+  are new
 
 - **Requires `batch_size > 1`**: this method is designed for batch merging and
   cannot be used with single PRs
@@ -437,10 +447,10 @@ from the original PR branch.
 | I want... | `merge` | `squash` | `rebase` | `fast-forward` | `merge-batch` |
 |---|:---:|:---:|:---:|:---:|:---:|
 | Linear history | | ✔ | ✔ | ✔ | |
-| Preserved commit SHAs | ✔ | | | ✔ | |
+| Preserved commit SHAs | ✔ | | | ✔ | ✔ |
 | One commit per PR | | ✔ | | | |
-| One commit per batch | | | | | ✔ |
-| Individual PR commits visible | ✔ | | ✔ | ✔ | |
-| See PR boundaries in `git log` | ✔ | | | | |
+| One merge commit per batch on the base branch | | | | | ✔ |
+| Individual PR commits visible | ✔ | | ✔ | ✔ | ✔ |
+| See PR boundaries in `git log` | ✔ | | | | ✔ |
 | [Batches](/merge-queue/batches) and [parallel checks](/merge-queue/performance#parallel-checks) | ✔ | ✔ | ✔ | | ✔ |
 | Single deployment per batch | | | | ✔ | ✔ |
