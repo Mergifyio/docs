@@ -1,0 +1,1 @@
+address review: freeze caution now covers reporting_method: deployments and says Mergify evaluates the freeze while GitHub enforces it
