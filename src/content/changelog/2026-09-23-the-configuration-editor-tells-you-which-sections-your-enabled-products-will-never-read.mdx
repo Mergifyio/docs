@@ -1,0 +1,20 @@
+---
+title: "The configuration editor tells you which sections your enabled products will never read"
+date: 2026-09-23
+tags:
+  - Workflow Automation
+  - Merge Protections
+  - Merge Queue
+description: "The Summary panel of the configuration editor, the Configuration changed check on a configuration pull request, and mergify config simulate now warn when a section of .mergify.yml (pull_request_rules, merge_protections, queue_rules) is never evaluated because the product that runs it is not activated on the repository — with a link to activate it."
+---
+
+A repository can activate Merge Queue without Workflow Automation or Merge Protections. Until now, a `pull_request_rules` or `merge_protections` section written in that repository's `.mergify.yml` was silently ignored: the configuration was reported as valid, and nothing said the rules were not running.
+
+Mergify now tells you, wherever it validates the configuration:
+
+- In the dashboard's **configuration editor**, the Summary panel still shows "The configuration is valid" — the configuration *is* valid — and, right below it, an "Unused Configuration Sections" warning naming each section that will not be used, the product it needs, and a link to activate that product on the repository. It appears as soon as the editor loads.
+- On a pull request that changes `.mergify.yml`, the **Configuration changed** check keeps its green conclusion and says "The new Mergify configuration is valid, but some sections will not be used", with the same detail in its body.
+- In **`mergify config simulate <pull request URL>`**, the same warning is printed at the end of the simulation.
+The warning disappears on its own once the product is activated or the section removed.
+
+Pull requests: [https://github.com/Mergifyio/monorepo/pull/40761](https://github.com/Mergifyio/monorepo/pull/40761) (dashboard) — [https://github.com/Mergifyio/monorepo/pull/40760](https://github.com/Mergifyio/monorepo/pull/40760) (engine)

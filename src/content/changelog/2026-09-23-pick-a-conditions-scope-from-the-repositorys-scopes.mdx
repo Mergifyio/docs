@@ -1,0 +1,14 @@
+---
+title: "Pick a condition's scope from the repository's scopes"
+date: 2026-09-23
+tags:
+  - Merge Queue
+  - Merge Protections
+description: "In the dashboard's condition editor, a condition on scope now offers the scopes declared in the repository's configuration instead of a free text field; a scope that is not declared stays editable and is discreetly marked."
+---
+
+When you write a condition on `scope` in the dashboard — in a queue rule, a merge protection, a priority or a command restriction — the value is now picked from the scopes declared in your repository's configuration (`scopes.source.files`, or the `capacities` keys for a manual source) instead of being typed by hand. On the Queue Configuration page, scopes you have declared but not yet committed are offered too.
+
+A scope that is not in the list is kept and stays editable; when the repository's scopes come from files — so no pull request can ever carry an undeclared name — it is discreetly marked so a typo or a retired scope is easy to spot. Other operators (`~=`, `*=`) keep the free text field, and the YAML editor's completion offers the same names.
+
+Pull request: [https://github.com/Mergifyio/monorepo/pull/40964](https://github.com/Mergifyio/monorepo/pull/40964)
