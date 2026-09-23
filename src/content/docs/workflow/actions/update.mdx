@@ -54,6 +54,14 @@ A head branch whose repository has been deleted is refused on any repository,
 fork or not, since nothing is left to say which repository that branch belongs
 to.
 
+The update action checks one more thing, and checks it before any of the above.
+When your repository is public, Mergify refuses to update a pull request from a
+fork whose author has not ticked GitHub's ["Allow edits from
+maintainers"](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork)
+box, and the check run asks them to tick it. The box is not required when your
+repository is private. A queue using in-place checks requires it whatever the
+visibility, when a pull request asks to be queued.
+
 ## Parameters
 
 <ActionOptionsTable def="UpdateActionModel" />
