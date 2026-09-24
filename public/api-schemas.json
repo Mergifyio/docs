@@ -5633,7 +5633,7 @@
           "test_insights"
         ],
         "summary": "Get a single test stat as a time series",
-        "description": "Return one of the test stats bucketed over the requested time range, with a summary value over the full window. Binning adapts to the requested window (1h, 4h, 1d, 2d).",
+        "description": "Return one of the test stats over the requested window, one point per UTC day, with a summary value over the full window.",
         "operationId": "ci-test-stats",
         "security": [
           {
@@ -5703,6 +5703,17 @@
             "description": "The name of the repository"
           },
           {
+            "name": "window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TimeWindow",
+              "description": "Period to cover: the last 7 or 30 UTC days, today included.",
+              "default": "30d"
+            },
+            "description": "Period to cover: the last 7 or 30 UTC days, today included."
+          },
+          {
             "name": "start",
             "in": "query",
             "required": false,
@@ -5716,10 +5727,12 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
+              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
+              "deprecated": true,
               "title": "Start"
             },
-            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
+            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
+            "deprecated": true
           },
           {
             "name": "end",
@@ -5735,10 +5748,12 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
+              "deprecated": true,
               "title": "End"
             },
-            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
+            "deprecated": true
           }
         ],
         "responses": {
@@ -5790,7 +5805,7 @@
           "test_insights"
         ],
         "summary": "Get a test's health transitions over time",
-        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window: the edges of the series, not the full series. Each point is the verdict the test's health badge would have shown at that moment. It is computed from every run up to that point, over the same history the health badge reads. A window ending now therefore ends on the badge shown today; a window ending in the past ends on the badge as it read back then. Points are sampled per time bucket (binning adapts to the window), so a transition is timestamped to a bucket boundary rather than to an individual run.",
+        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window: the edges of the series, not the full series. Each point is the verdict the test's health badge would have shown at that moment. It is computed from every run up to that point, over the same history the health badge reads. A window ends now, so it ends on the badge shown today. Points are sampled per UTC day, so a transition is timestamped to a day boundary rather than to an individual run.",
         "operationId": "ci-test-health-transitions",
         "security": [
           {
@@ -5845,6 +5860,17 @@
             "description": "The name of the repository"
           },
           {
+            "name": "window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TimeWindow",
+              "description": "Period to cover: the last 7 or 30 UTC days, today included.",
+              "default": "30d"
+            },
+            "description": "Period to cover: the last 7 or 30 UTC days, today included."
+          },
+          {
             "name": "start",
             "in": "query",
             "required": false,
@@ -5858,10 +5884,12 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
+              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
+              "deprecated": true,
               "title": "Start"
             },
-            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
+            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
+            "deprecated": true
           },
           {
             "name": "end",
@@ -5877,10 +5905,12 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
+              "deprecated": true,
               "title": "End"
             },
-            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
+            "deprecated": true
           }
         ],
         "responses": {
@@ -6221,6 +6251,17 @@
             "description": "Sort direction"
           },
           {
+            "name": "window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TimeWindow",
+              "description": "Period to cover: the last 7 or 30 UTC days, today included.",
+              "default": "30d"
+            },
+            "description": "Period to cover: the last 7 or 30 UTC days, today included."
+          },
+          {
             "name": "start",
             "in": "query",
             "required": false,
@@ -6234,10 +6275,12 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
+              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
+              "deprecated": true,
               "title": "Start"
             },
-            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
+            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
+            "deprecated": true
           },
           {
             "name": "end",
@@ -6253,10 +6296,12 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
+              "deprecated": true,
               "title": "End"
             },
-            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
+            "deprecated": true
           }
         ],
         "responses": {
@@ -16220,7 +16265,7 @@
             },
             "type": "array",
             "title": "Transitions",
-            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the earliest classification observed in the window. Health is classified per time bucket (binning adapts to the window: 1h, 4h, 1d, 2d), so timestamps land on bucket boundaries, not individual runs."
+            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the earliest classification observed in the window. Health is classified per UTC day, so timestamps land on day boundaries, not individual runs."
           },
           "first_activity_at": {
             "anyOf": [
@@ -19768,6 +19813,14 @@
           "median"
         ],
         "title": "TimeToMergeResponse"
+      },
+      "TimeWindow": {
+        "type": "string",
+        "enum": [
+          "7d",
+          "30d"
+        ],
+        "title": "TimeWindow"
       },
       "UnusedSectionInfo": {
         "properties": {

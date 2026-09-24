@@ -4962,6 +4962,37 @@
     },
     "Scopes": {
       "additionalProperties": false,
+      "else": {
+        "properties": {
+          "capacities": {
+            "propertyNames": {
+              "anyOf": [
+                {
+                  "minLength": 2,
+                  "pattern": "^[A-Za-z0-9_-]+$",
+                  "type": "string"
+                },
+                {
+                  "pattern": "[\\*\\?\\[\\{]"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "source": {
+            "required": [
+              "manual"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "source"
+        ]
+      },
       "properties": {
         "source": {
           "anyOf": [
@@ -5000,17 +5031,14 @@
           "type": "string"
         },
         "capacities": {
-          "description": "How many speculative checks each scope may run at the same time, as a map of scope name to capacity. Works for any `source` (file globs or the manual scopes API just decide membership; capacity is declared here). A scope listed here runs against its own independent budget; a PR in several capped scopes consumes one slot from each. PRs whose scopes are all absent from this map share the repo-wide `merge_queue.max_parallel_checks` pool, unless `default_capacity` gives every scope a budget. Strict branch protection still forces an effective capacity of 1.",
-          "patternProperties": {
-            "^[A-Za-z0-9_-]+$": {
-              "maximum": 128,
-              "minimum": 1,
-              "type": "integer"
-            }
+          "additionalProperties": {
+            "maximum": 128,
+            "minimum": 1,
+            "type": "integer"
           },
+          "description": "How many speculative checks each scope may run at the same time, as a map of scope name to capacity. Works for any `source` (file globs or the manual scopes API just decide membership; capacity is declared here). With a `manual` source a key may be any scope name the scopes API accepts, such as `//lib/core` or `@acme/web`; with any other source a key that is not a pattern must be a valid scope name. A key containing `*`, `?`, `[` or `{` is a glob pattern with the syntax of `files` filters, such as `@acme/*` or `//lib/**`: `*` and `?` stay within one `/`-separated segment and only a whole `**` segment crosses them, so `//lib/**` matches the packages below `//lib` but not `//lib` itself. In YAML, quote any key starting with `@`, `*`, `?`, `[` or `{`. A pattern gives every scope it matches its own budget, not one budget shared by all of them. A key equal to a scope's name wins over any pattern; when several patterns match a scope, the smallest capacity applies; `default_capacity` only covers scopes no key matches. A PR in several capped scopes consumes one slot from each. PRs whose scopes match no key share the repo-wide `merge_queue.max_parallel_checks` pool, unless `default_capacity` gives every scope a budget. Strict branch protection still forces an effective capacity of 1.",
           "propertyNames": {
-            "minLength": 2,
-            "pattern": "^[A-Za-z0-9_-]+$"
+            "maxLength": 1024
           },
           "title": "Capacities",
           "type": "object"
@@ -5027,7 +5055,7 @@
             }
           ],
           "default": null,
-          "description": "How many speculative checks a scope without an explicit `capacities` entry may run at the same time. Applies to every scope observed on queued pull requests, so dynamic scope sets (e.g. sent by a monorepo build tool through the manual scopes API) get a per-scope budget without enumerating names; an explicit `capacities` entry still wins for its scope. `merge_queue.max_parallel_checks` remains the global ceiling on the total. When unset, scopes without a `capacities` entry are unlimited, and pull requests with no scopes always draw from the repo-wide pool. Strict branch protection still forces an effective capacity of 1.",
+          "description": "How many speculative checks a scope that no `capacities` key matches may run at the same time. Applies to every scope observed on queued pull requests, so dynamic scope sets (e.g. sent by a monorepo build tool through the manual scopes API) get a per-scope budget without enumerating names; a matching `capacities` key or pattern still wins for its scope. `merge_queue.max_parallel_checks` remains the global ceiling on the total. When unset, scopes no `capacities` key matches are unlimited, and pull requests with no scopes always draw from the repo-wide pool. Strict branch protection still forces an effective capacity of 1.",
           "title": "Default Capacity"
         }
       },
