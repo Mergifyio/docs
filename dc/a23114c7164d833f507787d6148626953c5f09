@@ -1,1 +1,6 @@
-add the Generated with Claude Code footer to the PR body (missed on first push)
+Revision history for #12985:
+
+rev 2 (rebase) 2026-09-24 09:47 UTC — add the Generated with Claude Code footer to the PR body (missed on first push)
+rev 1 (initial) 2026-09-24 09:47 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12985,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"9dc8128c73dbb5782a589ae805551cb5cc2a7fd8","timestamp_iso":"2026-09-24T09:47:46Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"rebase","old_sha":"9dc8128c73dbb5782a589ae805551cb5cc2a7fd8","new_sha":"dca23114c7164d833f507787d6148626953c5f09","timestamp_iso":"2026-09-24T09:47:46Z","reason":"add the Generated with Claude Code footer to the PR body (missed on first push)","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/9dc8128c73dbb5782a589ae805551cb5cc2a7fd8...dca23114c7164d833f507787d6148626953c5f09"}]} -->
