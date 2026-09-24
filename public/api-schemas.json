@@ -530,8 +530,7 @@
                               "merge_bot_account": "",
                               "merge_method": "merge",
                               "update_bot_account": "",
-                              "update_method": "rebase",
-                              "autosquash": false
+                              "update_method": "rebase"
                             }
                           },
                           "speculative_check_pull_request": {
@@ -577,8 +576,7 @@
                               "merge_bot_account": "",
                               "merge_method": "merge",
                               "update_bot_account": "",
-                              "update_method": "rebase",
-                              "autosquash": false
+                              "update_method": "rebase"
                             }
                           },
                           "speculative_check_pull_request": {
