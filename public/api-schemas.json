@@ -13180,7 +13180,7 @@
             "title": "Type"
           },
           "metadata": {
-            "$ref": "#/components/schemas/EventQueueChecksNotStartedMetadata"
+            "$ref": "#/components/schemas/EventQueueChecksPostponedMetadata"
           },
           "attempt": {
             "anyOf": [
@@ -13207,9 +13207,89 @@
           "type",
           "metadata"
         ],
-        "title": "EventQueueChecksNotStarted"
+        "title": "EventQueueChecksNotStarted",
+        "description": "Deprecated: superseded by `EventQueueChecksPostponed`.\n\nOnly rows persisted before the rename carry this type; nothing emits it."
       },
-      "EventQueueChecksNotStartedMetadata": {
+      "EventQueueChecksPostponed": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/EventOutcome"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.queue.checks_postponed",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventQueueChecksPostponedMetadata"
+          },
+          "attempt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attempt",
+            "description": "1-based number of this draft-creation failure within the pull request's current queue stay (`metadata.session_id`): 1 on the first failure, incrementing on each automatic retry. Authoritative \u2014 it reflects every stored failure of the stay, independent of the requested time window or page, so a repeatedly-stuck pull request reads its true count. Null/absent on events that predate this field or when the count could not be derived."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "outcome",
+          "type",
+          "metadata"
+        ],
+        "title": "EventQueueChecksPostponed"
+      },
+      "EventQueueChecksPostponedMetadata": {
         "properties": {
           "branch": {
             "type": "string",
@@ -13255,7 +13335,7 @@
               }
             ],
             "title": "Batch Id",
-            "description": "The sub-batch this event concerns. Correlate the checks_not_started events emitted for one failed sub-batch on this id. Null on events persisted before this field was added."
+            "description": "The sub-batch this event concerns. Correlate the checks_postponed events emitted for one failed sub-batch on this id. Null on events persisted before this field was added."
           },
           "batch_name": {
             "anyOf": [
@@ -13299,7 +13379,7 @@
           "batch_name",
           "sub_batch_pr_numbers"
         ],
-        "title": "EventQueueChecksNotStartedMetadata"
+        "title": "EventQueueChecksPostponedMetadata"
       },
       "EventQueueChecksStart": {
         "properties": {
@@ -15400,6 +15480,7 @@
           "action.queue.checks.change",
           "action.queue.checks_end",
           "action.queue.checks_not_started",
+          "action.queue.checks_postponed",
           "action.queue.checks_start",
           "action.queue.conflict_deferred",
           "action.queue.enter",
@@ -15563,6 +15644,9 @@
                   "$ref": "#/components/schemas/EventQueueChecksNotStarted"
                 },
                 {
+                  "$ref": "#/components/schemas/EventQueueChecksPostponed"
+                },
+                {
                   "$ref": "#/components/schemas/EventQueueConflictDeferred"
                 },
                 {
@@ -15672,6 +15756,7 @@
                   "action.queue.checks.change": "#/components/schemas/EventQueueChecksChange",
                   "action.queue.checks_end": "#/components/schemas/EventQueueChecksEnd",
                   "action.queue.checks_not_started": "#/components/schemas/EventQueueChecksNotStarted",
+                  "action.queue.checks_postponed": "#/components/schemas/EventQueueChecksPostponed",
                   "action.queue.checks_start": "#/components/schemas/EventQueueChecksStart",
                   "action.queue.conflict_deferred": "#/components/schemas/EventQueueConflictDeferred",
                   "action.queue.enter": "#/components/schemas/EventQueueEnter",
@@ -20235,6 +20320,21 @@
             },
             "type": "array",
             "title": "Pull Request Numbers"
+          },
+          "direct_merge_impacted_base_scopes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direct Merge Impacted Base Scopes",
+            "description": "The scopes the base branch moved in while this pull request was queued, when the merge skipped its queue CI run and trusted the pull request's own checks because none of those commits touch what it touches. Null when a check ran, when the pull request already contained the base tip and so had nothing to re-check, and on events persisted before this field existed."
           }
         },
         "type": "object",
@@ -20246,7 +20346,8 @@
           "checks_started_at",
           "checks_ended_at",
           "unsuccessful_checks",
-          "pull_request_numbers"
+          "pull_request_numbers",
+          "direct_merge_impacted_base_scopes"
         ],
         "title": "SpeculativeCheckPullRequest"
       },
