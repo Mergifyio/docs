@@ -1,0 +1,1 @@
+Dropped the gha-mergify-ci-version.json customManager per Copilot's review finding: it can't stand alone because ci-bot's workflow also re-vendors action.yml in the same commit, which Renovate can't do. Confirmed with Julien (kelso mailbox) and kept only the buildkite-plugin manager here.
