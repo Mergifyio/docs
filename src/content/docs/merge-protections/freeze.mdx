@@ -53,6 +53,16 @@ When the [merge queue](/merge-queue) is enabled, the freeze is reported in that
 check but is not what decides its conclusion. The queue holds the merge back
 until the freeze ends.
 
+:::caution
+  Mergify evaluates the freeze, but only GitHub can stop a merge made outside
+  Mergify. Unless your branch requires `Mergify Merge Protections` to succeed
+  (as a check, or as a deployment if you set `reporting_method: deployments`),
+  someone can still merge a pull request straight from the GitHub UI while the
+  freeze is active. See [Make the Check
+  Required](/merge-protections/setup#make-the-check-required) to close that
+  gap.
+:::
+
 ## Manual Instant Freeze
 
 Use the `Freeze Now` action for immediate blocking. It opens the same editor
