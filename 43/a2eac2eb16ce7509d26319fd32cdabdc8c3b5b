@@ -1,0 +1,6 @@
+Revision history for #12967:
+
+rev 2 (content) 2026-09-23 18:09 UTC — address review: freeze caution now covers reporting_method: deployments and says Mergify evaluates the freeze while GitHub enforces it
+rev 1 (initial) 2026-09-23 18:09 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":12967,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"8b0f78e3f683d0feddf99e1682ba31cf041cd0c3","timestamp_iso":"2026-09-23T18:09:15Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"8b0f78e3f683d0feddf99e1682ba31cf041cd0c3","new_sha":"858ae29fa56b00a5cb93a6ce7ada08ed47c89131","timestamp_iso":"2026-09-23T18:09:15Z","reason":"address review: freeze caution now covers reporting_method: deployments and says Mergify evaluates the freeze while GitHub enforces it","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/8b0f78e3f683d0feddf99e1682ba31cf041cd0c3...858ae29fa56b00a5cb93a6ce7ada08ed47c89131"}]} -->
