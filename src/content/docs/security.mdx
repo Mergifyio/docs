@@ -246,7 +246,13 @@ function properly.
     <tr>
       <td>Repository: Workflows</td>
       <td>Read and write</td>
-      <td>Used to read workflows and merge pull requests modifying workflows.</td>
+      <td>
+        Used to read workflows and to write a pull request's changes under
+        <code>.github/workflows/</code>: merging that pull request, updating its
+        branch, or copying it to another branch with the <code>backport</code> or
+        <code>copy</code> action. Without this permission, GitHub refuses the
+        write and Mergify reports the missing permission.
+      </td>
     </tr>
     <tr>
       <td>Organization: Administration</td>
