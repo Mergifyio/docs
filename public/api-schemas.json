@@ -1387,7 +1387,7 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that resolves a default time window pins that window into them, so following a link keeps the window this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that defaults `start`/`end` pins the resolved bounds into them, so following a link keeps the range this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
@@ -5710,48 +5710,6 @@
               "default": "30d"
             },
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "Start"
-            },
-            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-            "deprecated": true
-          },
-          {
-            "name": "end",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "End"
-            },
-            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-            "deprecated": true
           }
         ],
         "responses": {
@@ -5867,48 +5825,6 @@
               "default": "30d"
             },
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "Start"
-            },
-            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-            "deprecated": true
-          },
-          {
-            "name": "end",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "End"
-            },
-            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-            "deprecated": true
           }
         ],
         "responses": {
@@ -6258,48 +6174,6 @@
               "default": "30d"
             },
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "Start"
-            },
-            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-            "deprecated": true
-          },
-          {
-            "name": "end",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "End"
-            },
-            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-            "deprecated": true
           }
         ],
         "responses": {
@@ -6481,7 +6355,7 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that resolves a default time window pins that window into them, so following a link keeps the window this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that defaults `start`/`end` pins the resolved bounds into them, so following a link keeps the range this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
