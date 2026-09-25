@@ -17,13 +17,30 @@ merge action to take place:
 
 - Mergify always respects the [branch protection settings](#branch-protection-conditions)
 
+- Mergify always respects your [Merge Protections](/merge-protections), when
+  they are enabled on the repository
+
 - Mergify always respects [pull request dependencies](#pull-request-dependencies)
 
 - Mergify always respects the [merge date](#merge-date)
 
-- Mergify allows merging pull requests that modify its configuration file by
-  default. But Mergify will always check whether these changes are
-  valid, to avoid merging broken configurations.
+- Mergify merges pull requests that modify its own configuration file, but only
+  once its [configuration check](/configuration/file-format#validation) has
+  passed, so a broken configuration is never merged
+
+- With `method: fast-forward`, Mergify also waits for the pull request to be up
+  to date with its base branch (`#commits-behind = 0`), since a fast-forward
+  merge cannot move the base branch otherwise
+
+:::note
+  A [scheduled freeze](/merge-protections/freeze) decides the `Mergify Merge
+  Protections` check only when the [merge queue](/merge-queue) is disabled.
+  When the merge queue is enabled, the freeze is reported in that check but
+  enforced by the queue itself, so the check can pass while a freeze is
+  running and the `merge` action goes ahead. Queue the pull request with the
+  [`queue` action](/workflow/actions/queue) instead if you want the freeze to
+  hold it back.
+:::
 
 ## Branch Protection Conditions
 
