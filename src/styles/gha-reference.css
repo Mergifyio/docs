@@ -32,3 +32,14 @@
 .gha-description-list li {
   margin: 0.1rem 0;
 }
+
+/* "Required by: junit-process" and an action's "Required inputs" row: the
+   label carries the CLI reference's required badge treatment, so a required
+   input reads the same on both generated reference pages. */
+.gha-required .gha-links-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-orange-700);
+}

@@ -7,15 +7,16 @@ interface Props {
   label: string;
   names: string[];
   anchor: (name: string) => string;
+  class?: string;
 }
 
-const { label, names, anchor } = Astro.props;
+const { label, names, anchor, class: className } = Astro.props;
 ---
 
 {
   names.length > 0 && (
-    <p class="cli-arg-enum">
-      {label}:{' '}
+    <p class:list={['cli-arg-enum', className]}>
+      <span class="gha-links-label">{label}:</span>{' '}
       {names.map((name, i) => (
         <>
           {i > 0 && ' '}

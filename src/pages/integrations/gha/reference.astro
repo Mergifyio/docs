@@ -22,6 +22,13 @@ const sourceUrl = `${repositoryUrl}/blob/${version}/action.yml`;
 
 const inputsOf = (action: string) =>
   reference.inputs.filter((input) => input.actions.includes(action)).map((input) => input.name);
+const requiredInputsOf = (action: string) =>
+  reference.inputs.filter((input) => input.requiredBy.includes(action)).map((input) => input.name);
+const optionalInputsOf = (action: string) =>
+  inputsOf(action).filter((name) => !requiredInputsOf(action).includes(name));
+/** Required by every action that reads it: a badge on the row says so once. */
+const requiredEverywhere = (input: (typeof reference.inputs)[number]) =>
+  input.requiredBy.length > 0 && input.requiredBy.length === input.actions.length;
 const outputsOf = (action: string) =>
   reference.outputs
     .filter((output) => output.actions.includes(action))
@@ -75,7 +82,23 @@ const content = {
                 <code class="cli-arg-name">action: {action.name}</code>
               </h3>
               {action.summary && <p class="cli-arg-description" set:html={helpToHtml(action.summary)} />}
-              <GhaActionLinks label="Inputs" names={inputsOf(action.name)} anchor={anchors.input} />
+              {requiredInputsOf(action.name).length > 0 ? (
+                <>
+                  <GhaActionLinks
+                    label="Required inputs"
+                    names={requiredInputsOf(action.name)}
+                    anchor={anchors.input}
+                    class="gha-required"
+                  />
+                  <GhaActionLinks
+                    label="Optional inputs"
+                    names={optionalInputsOf(action.name)}
+                    anchor={anchors.input}
+                  />
+                </>
+              ) : (
+                <GhaActionLinks label="Inputs" names={inputsOf(action.name)} anchor={anchors.input} />
+              )}
               <GhaActionLinks label="Outputs" names={outputsOf(action.name)} anchor={anchors.output} />
             </div>
           ))
@@ -91,9 +114,17 @@ const content = {
             <div class="cli-arg" id={anchors.input(input.name)}>
               <h3 class="cli-arg-signature">
                 <code class="cli-arg-name">{input.name}</code>
-                {input.required && <span class="cli-required-badge">required</span>}
+                {requiredEverywhere(input) && <span class="cli-required-badge">required</span>}
               </h3>
               <GhaDescription text={input.description} />
+              {!requiredEverywhere(input) && (
+                <GhaActionLinks
+                  label="Required by"
+                  names={input.requiredBy}
+                  anchor={anchors.action}
+                  class="gha-required"
+                />
+              )}
               {input.default !== null && (
                 <p class="cli-arg-meta">
                   Default: <code>{input.default}</code>
