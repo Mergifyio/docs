@@ -29,6 +29,22 @@
       "description": "config:best-practices pulls in security:minimumReleaseAgeNpm, which sets npm to 3 days via a packageRule. packageRules beat top-level config, so the 7 day cooldown carried over from .github/dependabot.yml has to be re-asserted here or npm silently runs at 3 days. Same rule as the monorepo.",
       "matchDatasources": ["npm"],
       "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "This is our own release, so the 7 day cooldown above only delays us bumping our own tags. Same 0 day treatment mergify-ci-buildkite-plugin's own renovate.json gives Mergifyio/mergify-cli, just without a hold at all since nothing external needs to catch up first.",
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["Mergifyio/mergify-ci-buildkite-plugin"],
+      "minimumReleaseAge": "0 days"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "buildkite-plugin-version-sync.yml (ci-bot) copies the latest mergify-ci-buildkite-plugin release tag into this file today; let Renovate bump it directly instead.",
+      "managerFilePatterns": ["/^src/data/buildkite-plugin-version\\.json$/"],
+      "matchStrings": ["\"version\": \"(?<currentValue>.*)\""],
+      "depNameTemplate": "Mergifyio/mergify-ci-buildkite-plugin",
+      "datasourceTemplate": "github-tags"
     }
   ]
 }
