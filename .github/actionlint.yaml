@@ -1,0 +1,8 @@
+# actionlint validates `runs-on:` against the GitHub-hosted labels it ships
+# with plus the ones declared here. No actionlint release knows the Ubuntu
+# 26.04 hosted images yet (GA 2026-09-17), so without this file every job in
+# ci.yaml would fail the actionlint job with `label "ubuntu-26.04" is unknown`.
+# Drop an entry once the pinned actionlint lists it natively.
+self-hosted-runner:
+  labels:
+    - ubuntu-26.04
