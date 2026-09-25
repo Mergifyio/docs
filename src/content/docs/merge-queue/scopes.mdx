@@ -155,15 +155,16 @@ queue_rules:
 
 - `scopes.capacities`: optional map of scope name to the number of speculative checks that scope may
   run at the same time, used to limit per-scope concurrency in parallel or isolated mode. See [Limiting
-  concurrency per scope](/merge-queue/queue-modes#limiting-concurrency-per-scope). Its keys must be
-  at least two characters and match `^[A-Za-z0-9_-]+$`, the same constraint the `files` source puts
-  on the scope names you declare under it. Uploaded scope names carry no such constraint, so a scope
-  name that contains anything else, such as a Bazel package label like `//lib/core` or a scoped
-  package name like `@acme/web`, cannot have a `capacities` entry. Use `scopes.default_capacity` to
-  bound those.
+  concurrency per scope](/merge-queue/queue-modes#limiting-concurrency-per-scope). A key holding `*`,
+  `?`, `[` or `{` is a glob over scope names, with the syntax of the [glob
+  patterns](/configuration/data-types#globs) a `files` source uses; any other key names one scope
+  exactly. With a `manual` source an exact key may be any name the scopes API accepts, such as a
+  Bazel package label like `//lib/core` or a scoped package name like `@acme/web`. Under any other
+  source it must be at least two characters and match `^[A-Za-z0-9_-]+$`, the same constraint the
+  `files` source puts on the scope names you declare under it.
 
-- `scopes.default_capacity`: optional capacity applied to every scope that has no `capacities` entry
-  of its own, so scope sets that change from one pull request to the next stay bounded without you
+- `scopes.default_capacity`: optional capacity applied to every scope that no `capacities` key
+  matches, so scope sets that change from one pull request to the next stay bounded without you
   listing each one. See [Capping scopes you did not
   list](/merge-queue/queue-modes#capping-scopes-you-did-not-list).
 

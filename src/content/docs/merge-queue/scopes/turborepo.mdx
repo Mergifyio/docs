@@ -150,9 +150,11 @@ printf '%s' "$DRY" \
 </CITabs>
 
 Whichever recipe you use, the scopes it uploads are the package names `turbo` reports under
-`.packages`, and a scoped name such as `@acme/web` is not a name
-[`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) accepts: its keys must
-match `^[A-Za-z0-9_-]+$`. Uploaded scope names carry no such constraint, so the package name works
-everywhere else in the queue. To bound how many speculative checks these scopes run at once, use
-[`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list), which applies
-to every scope the queue observes rather than to names you list.
+`.packages`, and a scoped name such as `@acme/web` can be given a capacity of its own:
+[`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) takes any name the
+scopes API accepts when the source is `manual`. Quote it in YAML, since a key starting with `@` is
+not a plain scalar. A key holding `*`, `?`, `[` or `{` is [a glob over scope
+names](/merge-queue/queue-modes#naming-scopes-with-patterns) instead, so `'@acme/*'` gives every
+`@acme/` package its own budget. To bound the rest,
+[`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list) applies to
+every scope no key matches.

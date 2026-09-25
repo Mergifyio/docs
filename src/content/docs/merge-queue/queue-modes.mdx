@@ -236,6 +236,35 @@ scopes:
 Here `frontend` and `backend` are each limited to 2 concurrent speculative checks. `docs` is absent
 from the map, so it stays uncapped: only the global ceiling applies to it.
 
+#### Naming scopes with patterns
+
+A key holding `*`, `?`, `[` or `{` is a glob over scope names rather than one name, with the syntax
+of [`files` filters](/configuration/data-types#globs): `*` and `?` stay inside one `/`-separated
+segment, and only a whole `**` segment crosses them. So `//lib/**` matches the packages below
+`//lib` but not `//lib` itself. A pattern gives **every scope it matches its own budget**, not one
+budget the matches share.
+
+```yaml
+scopes:
+  source:
+    manual:
+  capacities:
+    '@acme/*': 2
+    '@acme/payments': 1
+```
+
+Quote any key starting with `@`, `*`, `?`, `[` or `{`: YAML does not read those as plain scalars.
+
+A key naming a scope exactly wins over any pattern, so `@acme/payments` is held to one check while
+its siblings get two. When several patterns match a scope and no key names it, the smallest capacity
+applies, so the result never depends on key order, which a YAML mapping does not define anyway.
+
+What an exact key may say depends on [`scopes.source`](/merge-queue/scopes). With a `manual` source
+it can be any name the scopes API accepts, including a Bazel label like `//lib/core` or a scoped
+package name like `@acme/web`. Under any other source it must be a scope name the `files` source
+could declare: at least two characters, matching `^[A-Za-z0-9_-]+$`. A key outside that is rejected
+rather than ignored, since it would cap a scope that can never exist.
+
 #### How capacities relate to the global ceiling
 
 `max_parallel_checks` is the **global ceiling**: the most speculative checks a queue will ever run at
@@ -247,7 +276,7 @@ top of it**:
 
 - It starts only when the global ceiling has room **and** each of its capped scopes has room.
 
-- A scope that isn't listed in `capacities` is unlimited; it draws on the global ceiling alone.
+- A scope that no `capacities` key matches is unlimited; it draws on the global ceiling alone.
   [`default_capacity`](#capping-scopes-you-did-not-list) changes that.
 
 Because every check always takes a global slot, the total running at once **never exceeds
@@ -302,7 +331,7 @@ can differ from one cycle to the next. As soon as a running check finishes, its 
 
 #### Capping scopes you did not list
 
-`scopes.default_capacity` sets the limit for every scope you didn't list in `capacities`. Naming each
+`scopes.default_capacity` sets the limit for every scope no `capacities` key matches. Naming each
 scope works when you have a handful of them, but not when they come from a build system: an
 [Nx](/merge-queue/scopes/nx) or [Bazel](/merge-queue/scopes/bazel) graph names hundreds of projects,
 and the set changes with every pull request that adds one.
@@ -321,8 +350,8 @@ scopes:
 ```
 
 Here `e2e` is held to one speculative check at a time, and every other scope a queued pull request
-carries gets three. An explicit `capacities` entry always wins for its own scope, so you only name
-the scopes that need something other than the default.
+carries gets three. Any matching `capacities` key wins for its scope, so you only name the scopes
+that need something other than the default.
 
 The default applies to the scopes Mergify sees on the pull requests currently queued, which is what
 lets it cover names you never wrote down. Pull requests carrying no scope at all are unaffected: they
