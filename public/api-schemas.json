@@ -11849,6 +11849,96 @@
         ],
         "title": "EventLabel"
       },
+      "EventLabelLoopStopped": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/EventOutcome"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.label.loop_stopped",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventLabelLoopStoppedMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "outcome",
+          "type",
+          "metadata"
+        ],
+        "title": "EventLabelLoopStopped"
+      },
+      "EventLabelLoopStoppedMetadata": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "The label Mergify stopped adding and removing on the pull request."
+          },
+          "rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rules",
+            "description": "The pull request rules that kept adding and removing the label, undoing each other."
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "rules"
+        ],
+        "title": "EventLabelLoopStoppedMetadata"
+      },
       "EventLabelMetadata": {
         "properties": {
           "added": {
@@ -15435,6 +15525,7 @@
           "action.edit",
           "action.github_actions",
           "action.label",
+          "action.label.loop_stopped",
           "action.merge",
           "action.post_check",
           "action.queue.batch_bisection_end",
@@ -15582,6 +15673,9 @@
                   "$ref": "#/components/schemas/EventLabel"
                 },
                 {
+                  "$ref": "#/components/schemas/EventLabelLoopStopped"
+                },
+                {
                   "$ref": "#/components/schemas/EventMerge"
                 },
                 {
@@ -15707,6 +15801,7 @@
                   "action.edit": "#/components/schemas/EventEdit",
                   "action.github_actions": "#/components/schemas/EventGithubActions",
                   "action.label": "#/components/schemas/EventLabel",
+                  "action.label.loop_stopped": "#/components/schemas/EventLabelLoopStopped",
                   "action.merge": "#/components/schemas/EventMerge",
                   "action.post_check": "#/components/schemas/EventPostCheck",
                   "action.queue.batch_bisection_end": "#/components/schemas/EventQueueBatchBisectionEnd",
