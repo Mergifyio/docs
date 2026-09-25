@@ -164,10 +164,9 @@ its full set of flags and defaults.
   stack carries no `Depends-On:` marker in its pull request descriptions; the
   [Merge Queue](/merge-queue/stacks#github-native-stacked-pull-requests)
   recognizes it and lands its members bottom-up, the same way it lands a
-  `Depends-On:` chain. The registration is
-  experimental: if that API isn't available, Stacks skips it silently and the
-  push goes through as usual. Pass `--no-github-native`, or set the Git config
-  to `false`, to push without it.
+  `Depends-On:` chain. Stacks skips the registration silently where that API
+  isn't available, and the push goes through as usual. Pass
+  `--no-github-native`, or set the Git config to `false`, to push without it.
 :::
 
 ## Next Steps
