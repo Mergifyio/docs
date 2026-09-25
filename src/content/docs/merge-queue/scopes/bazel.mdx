@@ -131,12 +131,14 @@ A few details worth knowing:
   and print the whole label instead if you want that finer grain, keeping the `/^\/\//` filter so
   external labels stay out.
 
-- Whichever grain you pick, a Bazel label is not a name
-  [`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) accepts: its keys
-  must match `^[A-Za-z0-9_-]+$`, and `//lib/core` does not. Uploaded scope names are unconstrained,
-  so the label works everywhere else. To bound how many speculative checks these scopes run at once,
-  use [`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list), which
-  applies to every scope the queue observes rather than to names you list.
+- Whichever grain you pick, the label can be given a capacity of its own:
+  [`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) takes any name the
+  scopes API accepts when the source is `manual`, so `//lib/core: 2` caps that package. A key
+  holding `*`, `?`, `[` or `{` is [a glob over scope
+  names](/merge-queue/queue-modes#naming-scopes-with-patterns) instead, so `//lib/**` gives every
+  package under `//lib` its own budget. To bound the rest,
+  [`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list) applies to
+  every scope no key matches.
 
 - `git checkout --force` is deliberate: `bazel` writes to `MODULE.bazel.lock`, and a plain checkout
   refuses to move over the modified file. Run this on a CI checkout, not a working tree you care

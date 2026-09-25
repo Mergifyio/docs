@@ -76,12 +76,14 @@ over two fields is addressed `lib/multi@interpreter_constraints=py39,resolve=alt
 it splits into two meaningless scopes wherever the list is uploaded as comma-separated values.
 Directories also keep the list stable when a target is renamed or split.
 
-Directories do share one limit with target addresses:
-[`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) keys must match
-`^[A-Za-z0-9_-]+$`, which neither `lib/util` nor `//` does, so neither can be given a capacity of
-its own. Uploaded scope names are unconstrained, so they work everywhere else. Bound them with
-[`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list), which applies
-to every scope the queue observes rather than to names you list.
+Either grain can be given a capacity of its own:
+[`scopes.capacities`](/merge-queue/queue-modes#limiting-concurrency-per-scope) takes any name the
+scopes API accepts when the source is `manual`, so `lib/util: 2` caps that directory and `//` caps
+the build root. A key holding `*`, `?`, `[` or `{` is [a glob over scope
+names](/merge-queue/queue-modes#naming-scopes-with-patterns) instead, so `lib/**` gives every
+directory under `lib` its own budget. To bound the rest,
+[`scopes.default_capacity`](/merge-queue/queue-modes#capping-scopes-you-did-not-list) applies to
+every scope no key matches.
 
 <CITabs>
 
