@@ -1170,10 +1170,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The specific types of events to select",
+              "description": "The specific types of events to select. `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`.",
               "title": "Event Type"
             },
-            "description": "The specific types of events to select"
+            "description": "The specific types of events to select. `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`."
           },
           {
             "name": "not_event_type",
@@ -1191,10 +1191,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include).",
+              "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include). `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`.",
               "title": "Not Event Type"
             },
-            "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include)."
+            "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include). `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`."
           },
           {
             "name": "outcome",
@@ -1387,7 +1387,7 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. To return to the first page, call the endpoint again without a `cursor`.",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that resolves a default time window pins that window into them, so following a link keeps the window this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
@@ -1566,10 +1566,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The specific types of events to select",
+              "description": "The specific types of events to select. `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`.",
               "title": "Event Type"
             },
-            "description": "The specific types of events to select"
+            "description": "The specific types of events to select. `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`."
           },
           {
             "name": "not_event_type",
@@ -1587,10 +1587,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include).",
+              "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include). `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`.",
               "title": "Not Event Type"
             },
-            "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include)."
+            "description": "Exclude events whose type matches any of the given values. Mutually exclusive with `event_type` (positive include). `action.queue.checks_not_started` is accepted as a deprecated alias of `action.queue.checks_postponed`."
           },
           {
             "name": "outcome",
@@ -6481,7 +6481,7 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. To return to the first page, call the endpoint again without a `cursor`.",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that resolves a default time window pins that window into them, so following a link keeps the window this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
@@ -6947,10 +6947,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted; a paginated response carries the resolved value in its `Link` header.",
               "title": "Start"
             },
-            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted; a paginated response carries the resolved value in its `Link` header."
           },
           {
             "name": "end",
@@ -6966,10 +6966,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise; a paginated response carries the resolved value in its `Link` header.",
               "title": "End"
             },
-            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise; a paginated response carries the resolved value in its `Link` header."
           }
         ],
         "responses": {
@@ -7116,10 +7116,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted.",
+              "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted; a paginated response carries the resolved value in its `Link` header.",
               "title": "Start"
             },
-            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted."
+            "description": "Start of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `end - 1 day` when omitted; a paginated response carries the resolved value in its `Link` header."
           },
           {
             "name": "end",
@@ -7135,10 +7135,10 @@
                   "type": "null"
                 }
               ],
-              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise.",
+              "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise; a paginated response carries the resolved value in its `Link` header.",
               "title": "End"
             },
-            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise."
+            "description": "End of the time range: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to `start + 1 day` when only start is provided, or `now` otherwise; a paginated response carries the resolved value in its `Link` header."
           }
         ],
         "responses": {
@@ -13173,86 +13173,6 @@
         ],
         "title": "EventQueueChecksEndMetadata"
       },
-      "EventQueueChecksNotStarted": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "received_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Received At"
-          },
-          "trigger": {
-            "type": "string",
-            "title": "Trigger"
-          },
-          "repository": {
-            "type": "string",
-            "title": "Repository"
-          },
-          "pull_request": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Pull Request"
-          },
-          "base_ref": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Base Ref"
-          },
-          "outcome": {
-            "$ref": "#/components/schemas/EventOutcome"
-          },
-          "type": {
-            "type": "string",
-            "const": "action.queue.checks_not_started",
-            "title": "Type"
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/EventQueueChecksPostponedMetadata"
-          },
-          "attempt": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Attempt",
-            "description": "1-based number of this draft-creation failure within the pull request's current queue stay (`metadata.session_id`): 1 on the first failure, incrementing on each automatic retry. Authoritative \u2014 it reflects every stored failure of the stay, independent of the requested time window or page, so a repeatedly-stuck pull request reads its true count. Null/absent on events that predate this field or when the count could not be derived."
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "received_at",
-          "trigger",
-          "repository",
-          "pull_request",
-          "base_ref",
-          "outcome",
-          "type",
-          "metadata"
-        ],
-        "title": "EventQueueChecksNotStarted",
-        "description": "Deprecated: superseded by `EventQueueChecksPostponed`.\n\nOnly rows persisted before the rename carry this type; nothing emits it."
-      },
       "EventQueueChecksPostponed": {
         "properties": {
           "id": {
@@ -15522,7 +15442,6 @@
           "action.queue.change",
           "action.queue.checks.change",
           "action.queue.checks_end",
-          "action.queue.checks_not_started",
           "action.queue.checks_postponed",
           "action.queue.checks_start",
           "action.queue.conflict_deferred",
@@ -15684,9 +15603,6 @@
                   "$ref": "#/components/schemas/EventQueueChecksEnd"
                 },
                 {
-                  "$ref": "#/components/schemas/EventQueueChecksNotStarted"
-                },
-                {
                   "$ref": "#/components/schemas/EventQueueChecksPostponed"
                 },
                 {
@@ -15798,7 +15714,6 @@
                   "action.queue.change": "#/components/schemas/EventQueueChange",
                   "action.queue.checks.change": "#/components/schemas/EventQueueChecksChange",
                   "action.queue.checks_end": "#/components/schemas/EventQueueChecksEnd",
-                  "action.queue.checks_not_started": "#/components/schemas/EventQueueChecksNotStarted",
                   "action.queue.checks_postponed": "#/components/schemas/EventQueueChecksPostponed",
                   "action.queue.checks_start": "#/components/schemas/EventQueueChecksStart",
                   "action.queue.conflict_deferred": "#/components/schemas/EventQueueConflictDeferred",
