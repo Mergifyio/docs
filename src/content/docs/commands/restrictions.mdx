@@ -97,6 +97,16 @@ commands_restrictions:
           - sender = {{author}}
 ```
 
+To drop a command's default restriction altogether, set its `conditions` to
+`true`. That's shorthand for an empty list of conditions, which nothing can
+fail, so anyone who can comment on the pull request can run the command:
+
+```yaml
+commands_restrictions:
+  refresh:
+    conditions: true
+```
+
 <OptionsTable def="CommandsRestrictionsRulesModel" />
 
 ### Command Restriction Format
