@@ -18,48 +18,36 @@ A ruleset shaped like this works with the merge queue without further tuning.
 The rest of this page explains what each point protects you from.
 
 1. **Add Mergify to the bypass list with the `exempt` bypass mode**, on every
-   ruleset that applies to a branch you queue. `always` also works, except for
-   [GitHub-native stacked pull requests](#github-native-stacked-pull-requests).
-   `pull_requests_only` is never enough: the queue also creates, pushes to, and
-   deletes its own queue branches outside of any pull request. See [Configuring
-   Mergify as a Bypass Actor](#configuring-mergify-as-a-bypass-actor).
+   ruleset that applies to a branch you queue. See [Bypass
+   Actors](#bypass-actors) for what the other two modes leave blocked.
 
-2. **Keep rulesets off the queue branches**, or bypass them as above. Queue
-   branches are prefixed with `mergify/merge-queue/` unless you set
-   [`queue_branch_prefix`](/configuration/file-format/#queue-rules). A
-   `required_signatures`, `deletion`, `creation`, `update`, or
-   `branch_name_pattern` rule covering those branches stalls the queue, each in
-   its own way. See [Branch Name Pattern](#branch-name-pattern), [Required
-   Signatures and Branch Deletion](#required-signatures-and-branch-deletion), and
-   the [compatibility table](#ruleset-rule-compatibility) for `creation` and
-   `update`.
+2. **Keep rulesets off the queue branches** (`mergify/merge-queue/*` unless you
+   set [`queue_branch_prefix`](/configuration/file-format/#queue-rules)), or
+   bypass them as above. See [Required Signatures and Branch
+   Deletion](#required-signatures-and-branch-deletion), [Branch Name
+   Pattern](#branch-name-pattern), and the [compatibility
+   table](#ruleset-rule-compatibility) for `creation` and `update`.
 
-3. **Require at least one approving review, if you require reviews at all.** It
-   is the only configuration where Mergify reads GitHub's own review verdict.
-   At a required approval count of `0`, GitHub blocks without publishing a
-   verdict, so Mergify rebuilds the gate itself. That rebuild has limits:
-   reviewer eligibility is approximated, a code owner that resolves to no GitHub
-   login can never satisfy its file, and approval of the most recent push is not
-   rebuilt at all. See [Review Requirements](#review-requirements).
+3. **Require at least one approving review, if you require reviews at all.** At
+   an approval count of `0`, Mergify has to rebuild the review gate itself, with
+   gaps. See [Review Requirements](#review-requirements).
 
 4. **Leave *Require branches to be up to date before merging* off**, unless you
    use [in-place checks](/merge-queue/batches#in-place-checks-no-batch-prs) or
    the [`fast-forward` merge
-   method](/merge-queue/merge-strategies#fast-forward). The `exempt` bypass mode
-   from point 1 also clears it. See [Require Branches to Be Up to
-   Date](#require-branches-to-be-up-to-date).
+   method](/merge-queue/merge-strategies#fast-forward). See [Require Branches to
+   Be Up to Date](#require-branches-to-be-up-to-date).
 
 5. **Leave GitHub's native `merge_queue` rule off** on the branches you queue
    with Mergify. See [GitHub Native Merge Queue
    Rule](#github-native-merge-queue-rule).
 
 6. **Keep review requirements off the head branches you queue** if you use
-   in-place checks. A bypass actor does not lift that one. See [In-Place Checks
-   and Review Requirements](#in-place-checks-and-review-requirements).
+   in-place checks. See [In-Place Checks and Review
+   Requirements](#in-place-checks-and-review-requirements).
 
-7. **Re-express anything Mergify does not handle as a rule it does handle.** A
-   bypass actor entry covers the whole ruleset, so an ignored rule does not gate
-   a merge the queue performs either. See [Ignored Rule
+7. **Re-express anything Mergify does not handle as a rule it does handle**,
+   usually a CI check behind a `required_status_checks` rule. See [Ignored Rule
    Types](#ignored-rule-types).
 
 ## How Condition Injection Works
@@ -206,17 +194,17 @@ pull request GitHub would have let through, and it never lets one merge that
 GitHub would have blocked. The symptom is a pull request Mergify is still waiting
 on while GitHub reports it as mergeable.
 
-Approval of the most recent push (*Require approval of the most recent reviewable
-push* in the GitHub UI) is the exception. Mergify does not rebuild that one at
-this count, which makes it the only requirement here that a pull request can
-merge without.
-
-| Requirement | Rebuilt by Mergify at count 0 | Residual gap |
+| Requirement | Enforced by Mergify at `0` approvals | Where Mergify differs from GitHub |
 |---|---|---|
-| A blocking review | Yes | Eligibility approximated by a write-access check |
-| Code owner review | Yes | An owner that resolves to no GitHub login can never satisfy the file |
-| Approval of the most recent push | No | A pull request can merge with an unapproved latest push |
-| Reviews from named teams or users | Always, at any count | An unresolvable team or user blocks |
+| A blocking review | Yes | Stricter: reviewer eligibility is approximated by a write-access check |
+| Code owner review | Yes | Stricter: an owner that resolves to no GitHub login can never satisfy its file |
+| Approval of the most recent push | **No** | **Looser: a pull request can merge with an unapproved latest push** |
+
+:::caution
+  Approval of the most recent push is the only review requirement on this page
+  that a pull request can merge without. Require at least one approving review
+  on the rule if the latest push must be approved before a merge.
+:::
 
 **A blocking review.** `github-review-approved` is `false` while a reviewer with
 write access or above has an active *Request changes*. Only each reviewer's most
@@ -238,20 +226,15 @@ say why.
 **Approval of the most recent push.** Mergify does not inject
 `github-require-last-push-approval` when the required approval count is `0`.
 GitHub keeps blocking anyone who cannot bypass the rule, but where Mergify
-bypasses it, as the [bypass actor](#bypass-actors) setup this page recommends, a
-pull request merges with an unapproved latest push. Requiring at least one
-approving review is what makes Mergify honor the option.
+bypasses it, as the [bypass actor](#bypass-actors) setup this page recommends,
+nothing checks the latest push. Requiring at least one approving review is what
+makes Mergify honor the option.
 
-:::caution
-  This is the only requirement on this page that a pull request can merge
-  without. Require at least one approving review on the rule if the latest push
-  must be approved before a merge.
-:::
-
-**Reviews from named teams or users.** This is the rule's **Required reviewers**
-setting. GitHub publishes no status for it at any approval count, so Mergify
-always evaluates `github-require-review-from-specific-teams` itself, as covered
-in [Required Reviewers](#required-reviewers). A team or user ID the ruleset names
+**Reviews from named teams or users.** These are not in the table because the
+approval count never decides them. This is the rule's **Required reviewers**
+setting, and GitHub publishes no status for it at any count, so Mergify always
+evaluates `github-require-review-from-specific-teams` itself, as covered in
+[Required Reviewers](#required-reviewers). A team or user ID the ruleset names
 but Mergify cannot resolve makes the condition `false`, so the misconfiguration
 blocks instead of being skipped.
 
