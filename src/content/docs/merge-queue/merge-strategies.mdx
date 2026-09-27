@@ -238,9 +238,16 @@ queue_rules:
   - name: default
     merge_method: fast-forward
     batch_size: 1
-    merge_conditions:
+    queue_conditions:
       - check-success = ci
 ```
+
+The CI check sits in `queue_conditions` rather than `merge_conditions` on purpose:
+a queue with separate `merge_conditions` is a [two-step
+CI](/merge-queue/two-step) queue, and Mergify runs its checks on a batch pull
+request instead of in place. See [In-place checks (no batch
+PRs)](/merge-queue/batches#in-place-checks-no-batch-prs) for the full list of
+conditions a queue has to meet to check in place.
 
 Batch-PR mode, combining batching with fast-forward merge:
 
