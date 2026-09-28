@@ -1,1 +1,6 @@
-actionlint.yaml: say the self-hosted-runner key is only actionlint's way to declare a label, the runners stay GitHub-hosted (review question)
+Revision history for #13007:
+
+rev 2 (content) 2026-09-28 14:27 UTC — actionlint.yaml: say the self-hosted-runner key is only actionlint's way to declare a label, the runners stay GitHub-hosted (review question)
+rev 1 (initial) 2026-09-28 14:27 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13007,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"70b68dc979a7d996a8858bc376fc91c0681e71d1","timestamp_iso":"2026-09-28T14:27:43Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"70b68dc979a7d996a8858bc376fc91c0681e71d1","new_sha":"253633b3d475d82d72807944c390f502eefc1d68","timestamp_iso":"2026-09-28T14:27:43Z","reason":"actionlint.yaml: say the self-hosted-runner key is only actionlint's way to declare a label, the runners stay GitHub-hosted (review question)","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/70b68dc979a7d996a8858bc376fc91c0681e71d1...253633b3d475d82d72807944c390f502eefc1d68"}]} -->
