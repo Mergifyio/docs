@@ -97,6 +97,24 @@ commands_restrictions:
           - sender = {{author}}
 ```
 
+To drop a command's default restriction altogether, set its `conditions` to
+`true`. That's shorthand for an empty list of conditions. With nothing to check,
+anyone who can comment on the pull request can run the command:
+
+```yaml
+commands_restrictions:
+  refresh:
+    conditions: true
+```
+
+:::caution
+  Setting `conditions` to `true` for `update`, `rebase` or `squash` drops both
+  halves of the default: the permission check and the fork condition above.
+  These commands rewrite the pull request's head branch, and together those two
+  conditions stop someone with only read permission from opening a pull request
+  from one of your own branches and having Mergify rewrite it for them.
+:::
+
 <OptionsTable def="CommandsRestrictionsRulesModel" />
 
 ### Command Restriction Format
