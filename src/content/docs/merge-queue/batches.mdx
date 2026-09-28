@@ -157,9 +157,10 @@ batch failures cheaper to resolve: when a batch fails and has to be
 [split](#handling-batch-failure-or-timeout), related changes stay together and
 unrelated pull requests aren't dragged into someone else's failure.
 
-This is the default merge queue behavior (serial mode). Parallel mode groups
-pull requests strictly by scope instead. See [Queue
-Modes](/merge-queue/queue-modes#parallel-mode).
+This is how the default [serial mode](/merge-queue/queue-modes#serial-mode) and
+[isolated mode](/merge-queue/queue-modes#isolated-mode) both build their
+batches. [Parallel mode](/merge-queue/queue-modes#parallel-mode) is the
+exception: it groups pull requests by their exact set of scopes instead.
 
 Grouping applies these rules in order of precedence: it never overrides
 [priority](/merge-queue/priority) or queue order, it always keeps a
@@ -284,6 +285,11 @@ queue_rules:
     batch_size: 10
     merge_method: fast-forward
 ```
+
+Fast-forward only works in serial mode. [Parallel and isolated
+modes](/merge-queue/queue-modes) merge their batches independently, which
+fast-forward cannot do, so Mergify rejects a configuration that combines them
+rather than failing at merge time.
 
 See [Merge Strategies: Fast-Forward](/merge-queue/merge-strategies#fast-forward)
 for a detailed explanation of how fast-forward works in both inplace and
@@ -774,13 +780,21 @@ queue processing, consider the following points for an optimal setup:
 
 ### Branch Protection Settings
 
-Batches require the branch protection setting *Require branches to be up to
-date before merging* to be disabled. If your team requires a linear history,
-you can set the queue option `merge_method: rebase`.
+The branch protection setting *Require branches to be up to date before
+merging* conflicts with a queue that tests its batches on a temporary batch pull
+request. GitHub enforces the setting against the original pull requests, not
+against the batch that was tested, so it blocks the merge. Disabling the setting
+is the simplest resolution, though not the only one. [In-place
+checks](#in-place-checks-no-batch-prs) build no batch pull request and never hit
+the conflict, but they require `batch_size: 1`, so a queue that batches cannot
+use them.
 
-For details on why and how to resolve this, see [GitHub Rulesets
-Compatibility: Require Branches to Be Up to
-Date](/merge-queue/github-rulesets#require-branches-to-be-up-to-date).
+That setting is not what keeps your history linear: if your team requires a
+linear history, set the queue option `merge_method: rebase`.
+
+See [GitHub Rulesets Compatibility: Require Branches to Be Up to
+Date](/merge-queue/github-rulesets#require-branches-to-be-up-to-date) for why
+the conflict happens and for every resolution.
 
 ### Queued PR Changes
 
