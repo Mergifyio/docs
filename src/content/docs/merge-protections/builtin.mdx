@@ -53,10 +53,12 @@ The merge queue status [API](/api/usage) reports the same list as
 `depends_on_pull_requests`.
 
 The queue shows this only for the pull requests ahead of it in a
-[stack](/merge-queue/stacks) in the same repository. Any other dependency still
-blocks the merge without appearing there, whether it points at a pull request
-in another repository or at one in the same repository that is not part of the
-same stack.
+[stack](/merge-queue/stacks) in the same repository, and only while they are
+still queued: one that has merged or been
+[dequeued](/merge-queue/lifecycle#removing-a-pull-request-from-the-merge-queue)
+leaves the list. Any other dependency still blocks the merge without appearing
+there, whether it points at a pull request in another repository or at one in
+the same repository that is not part of the same stack.
 
 ## Merge-After
 
@@ -70,6 +72,11 @@ Supports the standard [timestamp format](/configuration/data-types#timestamp).
 Useful for coordinated releases or off-peak deploy windows.
 
 <Image src={mergeAfterBody} alt="Using Merge-After in the pull request body on GitHub" />
+
+A value Mergify cannot read as a timestamp blocks the pull request
+indefinitely rather than failing the protection outright. The check reports
+`Merge-After date is invalid` alongside the value it read; fix the header in
+the pull request body to unblock it.
 
 ## Configuration Changed
 
