@@ -735,10 +735,11 @@ temporary batch PRs, only when all of the following are true:
   `queue_conditions`)
 
 Optionally set `update_bot_account` to avoid in-place updates blocked by GitHub
-for security reasons (for example, PRs from forks that modify workflows, or PRs
-opened by other bots). The reverse holds for ordinary PRs from forks: with
-`update_method: rebase`, setting the account makes Mergify refuse them at queue
-entry. See [Combining Merge and Update
+for security reasons (for example, PRs from forks that modify workflows, PRs
+opened by other bots, or PRs that change more files than GitHub lists, where
+Mergify cannot rule out a workflow change). The reverse holds for ordinary PRs
+from forks: with `update_method: rebase`, setting the account makes Mergify
+refuse them at queue entry. See [Combining Merge and Update
 Methods](/merge-queue/merge-strategies#combining-merge-and-update-methods).
 
 ## Skip intermediate results (anti-flake protection)
