@@ -398,10 +398,12 @@ gives you additional control over your history shape.
   works too, and merges the base branch into the pull request rather than
   rebasing it.
 
-  One kind of pull request from a fork goes the other way: for one that
-  changes GitHub Actions workflows, or that another GitHub App's bot opened,
-  GitHub lets Mergify update in place only *with* an `update_bot_account`. A
-  queue that receives those has to run its checks on a
+  Some pull requests from a fork go the other way: for one that changes GitHub
+  Actions workflows, or that another GitHub App's bot opened, GitHub lets
+  Mergify update in place only *with* an `update_bot_account`. The same goes for
+  one that changes more files than GitHub lists, because Mergify cannot rule out
+  a workflow change among the files it cannot see. A queue that receives any of
+  these has to run its checks on a
   [draft pull request](/merge-queue/batches) instead.
 :::
 
