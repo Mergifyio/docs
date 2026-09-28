@@ -350,8 +350,8 @@ importers:
         specifier: 8.70.0
         version: 8.70.0(eslint@10.11.0(supports-color@9.4.0))(supports-color@9.4.0)(typescript@6.0.3)
       agentation:
-        specifier: 3.1.0
-        version: 3.1.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 3.1.1
+        version: 3.1.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ajv:
         specifier: 8.20.0
         version: 8.20.0
@@ -2128,8 +2128,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  agentation@3.1.0:
-    resolution: {integrity: sha512-XF4Qjl2O30zUXAgFNfkt1FmZ3I/+OHJeu0MtZF5ltzKs3j1Sn83/SyX6VkYecx69qwSksZGQsBU6tCFeymTKEw==}
+  agentation@3.1.1:
+    resolution: {integrity: sha512-AaP9/72QLrwpJQegyUaWF2PGNXA4HKh/izLqTFjwOJt3lGODsgKTUJW0HO6CwU5cwa31QxX/7tN63LS4FbQVzQ==}
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
@@ -7189,7 +7189,7 @@ snapshots:
 
   acorn@8.18.0: {}
 
-  agentation@3.1.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  agentation@3.1.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     optionalDependencies:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
