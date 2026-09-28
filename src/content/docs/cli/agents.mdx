@@ -119,6 +119,9 @@ case in a container, the CLI writes a restricted file in your configuration
 directory instead. See [Authentication](/cli/usage#authentication) for both
 paths.
 
+`mergify auth login` opens the approval page in your browser. On a machine
+without one, pass `--no-browser` and open the URL it prints on another machine.
+
 Stacks is the exception. It creates and updates pull requests through the GitHub
 API, so it needs a GitHub token of its own. Install the
 [GitHub CLI](https://cli.github.com/), run `gh auth login`, and Stacks commands

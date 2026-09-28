@@ -100,12 +100,14 @@ of its own. The [`auth` command reference](/cli/auth) lists the options each
 mergify auth login
 ```
 
-The CLI prints a URL and a short code. Open the URL, type the code in, give the
-token a name so you recognize the machine later, and authorize. The CLI picks up
-its credential and stores it. This is an [OAuth 2.0 device authorization
+The CLI opens the approval page in your browser and prints the URL and a short
+code. Type the code in, give the token a name so you recognize the machine
+later, and authorize. The CLI picks up its credential and stores it. This is an
+[OAuth 2.0 device authorization
 grant](https://www.rfc-editor.org/rfc/rfc8628), so nothing listens on a local
-port and the browser does not have to be on the same machine. It works over SSH
-and inside containers.
+port and the browser does not have to be on the same machine. Over SSH or inside
+a container, open the printed URL on a machine that has one. Pass `--no-browser`
+to print the URL without opening a browser.
 
 What you get is a [Mergify user token](/api/usage#using-a-mergify-user-token).
 It identifies you, reaches exactly what your dashboard session reaches, and is
