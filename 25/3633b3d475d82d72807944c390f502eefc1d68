@@ -1,0 +1,1 @@
+actionlint.yaml: say the self-hosted-runner key is only actionlint's way to declare a label, the runners stay GitHub-hosted (review question)
