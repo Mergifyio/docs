@@ -21,10 +21,15 @@ description: 'Legacy process for provisioning the Mergify GitHub App and engine 
    | Homepage URL | `https://mergify.com` |
    | Webhook URL | `https://my-mergify.example.com/event` |
    | Callback URL | `https://my-mergify.example.com/auth/callback` |
+   | Setup URL | `https://my-mergify.example.com/auth/setup` |
    | Webhook secret | Random shared secret (`ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'`) |
 
    - Uncheck **Expire user authorization tokens**.
    - Check **Enable SSL verification**.
+
+   GitHub returns to the Setup URL once the App has been installed, carrying the `setup_action`
+   and `installation_id` parameters the dashboard reads to finish the flow. The installer sets this
+   value too, so an App created by hand matches the one that flow produces.
 
 3. Permissions:
 
