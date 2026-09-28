@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   actionlint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
@@ -26,7 +26,7 @@ jobs:
 
   lint:
     timeout-minutes: 20
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -47,7 +47,7 @@ jobs:
 
   test:
     timeout-minutes: 20
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -68,7 +68,7 @@ jobs:
 
   config-examples:
     timeout-minutes: 10
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -89,7 +89,7 @@ jobs:
 
   internal-leaks:
     timeout-minutes: 5
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -106,7 +106,7 @@ jobs:
 
   diagram-tokens:
     timeout-minutes: 5
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -123,7 +123,7 @@ jobs:
 
   orphaned-images:
     timeout-minutes: 5
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -140,7 +140,7 @@ jobs:
 
   build:
     timeout-minutes: 20
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -167,7 +167,7 @@ jobs:
 
   test-broken-links:
     timeout-minutes: 20
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs: build
     steps:
       - name: Checkout 🛎️
@@ -213,7 +213,7 @@ jobs:
       - orphaned-images
       - build
       - test-broken-links
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       # wait-jobs accepts a SKIPPED dependency as well as a successful one. That
       # is safe only while no job above carries an `if:`: today a job is skipped
