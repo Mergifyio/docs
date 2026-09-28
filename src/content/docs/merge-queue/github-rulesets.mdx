@@ -72,7 +72,9 @@ option on your queue rules:
   both queuing and merging pull requests.
 
 - **`merge`** -- rules are injected as merge conditions, checked after the
-  queue has tested the pull request.
+  queue has tested the pull request. See [Injection Mode `merge` and Required
+  Status Checks](#injection-mode-merge-and-required-status-checks) for when this
+  mode conflicts with a ruleset.
 
 - **`none`** -- rules are not injected at all. This mode requires a
   `merge_bot_account` on the queue rule, since Mergify must merge with
@@ -413,7 +415,35 @@ tested. This setting blocks the merge.
   branch directly and is not affected by this setting.
 
 - **Alternative:** use [in-place checks](/merge-queue/batches#in-place-checks-no-batch-prs),
-  which test PRs on their own branch without creating temporary batch PRs.
+  which test PRs on their own branch without creating temporary batch PRs. Note
+  that in-place checks require `batch_size: 1`, `max_parallel_checks: 1` and
+  serial mode, so this resolution means giving up the batches or parallel checks
+  that caused the conflict rather than keeping them.
+
+### Injection Mode `merge` and Required Status Checks
+
+With [`branch_protection_injection_mode: merge`](#controlling-injection), the
+queue runs the required checks on the batch PR and then merges the original one.
+GitHub enforces the ruleset's `required_status_checks` rule against that original
+pull request, which never carried those checks, so it refuses the merge and the
+queue reports an incompatibility error.
+
+This only arises when the batch PR is not itself what lands. A queue using the
+[`fast-forward`](/merge-queue/merge-strategies#fast-forward) or
+[`merge-batch`](/merge-queue/merge-strategies#merge-batch) merge method merges the
+batch PR, so GitHub enforces the checks against the head that ran them. [In-place
+checks](/merge-queue/batches#in-place-checks-no-batch-prs) are clear too: they
+run on the original pull request, so again the head that lands is the head that
+ran the checks.
+
+**Resolution:**
+
+- **Preferred:** add Mergify as a bypass actor on the ruleset, as the
+  [recommended setup](#recommended-ruleset-setup) already calls for. Every
+  bypass mode clears this one.
+
+- **Alternative:** leave `branch_protection_injection_mode` at its default,
+  `queue`.
 
 ### Review Requirements and Fast-Forward
 
