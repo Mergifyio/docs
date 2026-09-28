@@ -8103,7 +8103,8 @@
                       "pull_requests": []
                     }
                   ],
-                  "waiting_pull_requests": []
+                  "waiting_pull_requests": [],
+                  "automatic_conflict_resolution_unsupported": false
                 }
               }
             }
@@ -17046,6 +17047,11 @@
                 "type": "null"
               }
             ]
+          },
+          "automatic_conflict_resolution_unsupported": {
+            "type": "boolean",
+            "title": "Automatic Conflict Resolution Unsupported",
+            "default": false
           }
         },
         "type": "object",
