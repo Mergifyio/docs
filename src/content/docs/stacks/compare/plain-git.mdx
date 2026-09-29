@@ -124,8 +124,10 @@ incrementally:
 
 <CliInstall steps={['mergify stack setup']} />
 
-Setup installs the `commit-msg` hook that adds Change-Ids and a `pre-push` hook
-that nudges you toward `mergify stack push`. From there:
+Setup installs the `commit-msg` hook that adds Change-Ids, a `pre-push` hook
+that nudges you toward `mergify stack push`, and two hooks that keep a
+Change-Id on commits the first one misses (see
+[Setup](/stacks/setup#4-initialize-your-repository)). From there:
 
 - **Existing commits without Change-Ids** get one when you reword them: run
   `git rebase -i <base>`, mark each commit `reword`, and the hook fills in the
