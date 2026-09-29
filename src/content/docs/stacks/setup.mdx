@@ -88,8 +88,22 @@ This installs:
   is how Stacks tracks the relationship between your local commits and their
   GitHub pull requests.
 
-- A `pre-push` hook that warns you if you accidentally use `git push` instead
-  of `mergify stack push`.
+- A `prepare-commit-msg` hook that keeps the Change-Id when you amend with
+  `git commit --amend -m` or `-F`. A new message passed that way would
+  otherwise replace the old one, trailer included.
+
+- A `post-commit` hook that adds a Change-Id to a commit that still has none,
+  in case the `commit-msg` hook did not run.
+
+- A `pre-push` hook that stops you if you accidentally use `git push` instead
+  of `mergify stack push` on a stack branch. Run `git push --no-verify` to push
+  anyway.
+
+The command also sets two local Git config values, `notes.displayRef` and
+`notes.rewriteRef`, so `git log` shows the
+[notes](/stacks/updating#record-why-you-amended) you attach with
+`mergify stack note`, and a note stays with its commit when you amend or
+rebase it.
 
 ## Verify It Works
 
