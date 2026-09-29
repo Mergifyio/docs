@@ -1,0 +1,11 @@
+---
+title: "Know when a queued pull request merged without landing anything"
+date: 2026-09-29
+tags:
+  - Merge Queue
+description: "The merge queue now flags a pull request that merged without changing the base branch, instead of leaving it looking like it shipped."
+---
+
+When an equivalent change lands ahead of a queued pull request, rebasing drops all of its commits and the merge leaves the base branch untouched — while GitHub still marks the pull request merged and still shows its full diff.
+
+The Merge Queue Status comment now says so. A "Nothing landed" section explains both why the base branch is unchanged and why the Files changed tab still shows the whole diff, so the author no longer goes hunting for a commit that reached no branch.

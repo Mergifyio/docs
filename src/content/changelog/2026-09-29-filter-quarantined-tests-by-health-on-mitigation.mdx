@@ -1,0 +1,13 @@
+---
+title: "Filter quarantined tests by health on Mitigation"
+date: 2026-09-29
+tags:
+  - Test Insights
+description: "Test Insights › Mitigation: filter the quarantined tests by health — find the ones that have recovered and release them from quarantine in one action."
+---
+
+The Mitigation page lists the tests currently in quarantine, and could only be narrowed by test name — so a team wanting to release the tests that have since recovered had to read the Health column row by row.
+
+A Health filter now narrows the list to the tests whose health is healthy, flaky or broken. The filtering happens on the server, so the count follows the filter and pagination walks the filtered set; a quarantined test that has stopped running entirely counts as healthy, since that is exactly the debt a team is trying to clear. Combined with the bulk action on the same page, releasing every recovered test is: filter on healthy, select all, remove.
+
+Pull request: [https://github.com/Mergifyio/monorepo/pull/41350](https://github.com/Mergifyio/monorepo/pull/41350)

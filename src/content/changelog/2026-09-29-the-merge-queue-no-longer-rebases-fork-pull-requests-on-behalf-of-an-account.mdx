@@ -1,0 +1,14 @@
+---
+title: "The merge queue no longer rebases fork pull requests on behalf of an account"
+date: 2026-09-29
+tags:
+  - Merge Queue
+  - Deprecations
+description: "A queue rule that pairs update_method: rebase with update_bot_account now refuses pull requests that come from a fork."
+---
+
+Updating a queued pull request that comes from a fork with `update_method: rebase` and an `update_bot_account` required Mergify to impersonate that account and force-push the fork's branch, because GitHub refuses an OAuth token on its rebase API for a fork. That capability was deprecated for removal on July 1, 2026, and it has now been removed.
+
+Affected pull requests are now refused when they are queued rather than while they are being updated, so one of them never embarks and never holds up the pull requests behind it. The check run names the removal and what to change.
+
+To keep queueing pull requests from forks, unset `update_bot_account` on the queue: with no account to impersonate, the update rebases through GitHub's API as Mergify. On a queue that does not merge with `fast-forward`, `update_method: merge` works too. Queues that run their checks on a draft pull request are not affected, and neither is `update_method: rebase` without an `update_bot_account`.
