@@ -1,5 +1,5 @@
+import configSchema from '../../../public/mergify-configuration-schema.json';
 import { readEnumChoices } from '../../util/enumChoices';
-import configSchema from '../../util/sanitizedConfigSchema';
 
 import { renderMarkdown } from './utils';
 

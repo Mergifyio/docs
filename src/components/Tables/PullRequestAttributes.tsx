@@ -1,5 +1,5 @@
+import configSchema from '../../../public/mergify-configuration-schema.json';
 import { getAttributeDocumentationUrl, getAttributeSource } from '../../util/attributeMetadata';
-import configSchema from '../../util/sanitizedConfigSchema';
 import { getValueType } from './ConfigOptions';
 import { defToIdPrefix } from './OptionsTable';
 // Attributes render with the OptionsTable layout (stacked entries, full-width
