@@ -1,8 +1,7 @@
 import jsonpointer from 'jsonpointer';
-
+import configSchema from '../../public/mergify-configuration-schema.json';
 import { getAttributeDocumentationUrl, getAttributeSource } from './attributeMetadata';
 import { getDataTypeHref, isDataType } from './dataType';
-import configSchema from './sanitizedConfigSchema';
 
 type Schema = typeof configSchema;
 

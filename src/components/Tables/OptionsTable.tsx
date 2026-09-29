@@ -1,6 +1,6 @@
 import * as yaml from 'js-yaml';
 
-import configSchema from '../../util/sanitizedConfigSchema';
+import configSchema from '../../../public/mergify-configuration-schema.json';
 import { extractTemplateVariables } from '../../util/templateVariables';
 import Badge from '../Badge/Badge';
 import {
