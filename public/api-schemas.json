@@ -5597,6 +5597,46 @@
               "title": "Repository"
             },
             "description": "The name of the repository"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -5710,6 +5750,46 @@
               "default": "30d"
             },
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -5825,6 +5905,46 @@
               "default": "30d"
             },
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -5912,6 +6032,46 @@
               "title": "Repository"
             },
             "description": "The name of the repository"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -6011,6 +6171,46 @@
               "title": "Repository"
             },
             "description": "The name of the repository"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
