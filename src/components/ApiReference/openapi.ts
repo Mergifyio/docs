@@ -173,21 +173,6 @@ export function preprocessSchema(schema: OpenAPISpec): OpenAPISpec {
     title: 'MatchingConditionsDict-Limited',
   };
 
-  // Strip hidden fields
-  const hidden = ['autosquash'];
-  const deepRemove = (v: unknown, key: string): void => {
-    if (Array.isArray(v)) {
-      for (const item of v) deepRemove(item, key);
-      return;
-    }
-    if (v && typeof v === 'object') {
-      const obj = v as Record<string, unknown>;
-      if (Object.prototype.hasOwnProperty.call(obj, key)) delete obj[key];
-      for (const k of Object.keys(obj)) deepRemove(obj[k], key);
-    }
-  };
-  for (const field of hidden) deepRemove(s, field);
-
   return s;
 }
 
