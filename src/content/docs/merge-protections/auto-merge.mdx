@@ -165,6 +165,10 @@ merge_protections_settings:
 
 ## Constraints
 
+Merge Protections must be enabled on the repository for
+`auto_merge_conditions` to take effect, with or without the merge queue. See
+[Enabling & Configuring Merge Protections](/merge-protections/setup).
+
 `auto_merge_conditions` and `queue_rules[].autoqueue` cannot be used together.
 A configuration that sets both is rejected, so remove `autoqueue` from your
 queue rules in the same change.
