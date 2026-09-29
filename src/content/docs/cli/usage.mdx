@@ -171,6 +171,14 @@ Commands that call the Mergify API resolve a credential in this order:
 4. `GITHUB_TOKEN`. Deprecated.
 5. `gh auth token`, from the GitHub CLI. Deprecated.
 
+The `mergify ci` commands that call the API are the exception, because the
+endpoints they post to accept nothing but an application key.
+`mergify ci scopes-send` skips step 3: it never reads the credential
+`mergify auth login` stored. The two JUnit upload commands,
+`mergify ci junit-process` and the deprecated `mergify ci junit-upload`, go
+further and read only `--token` and `MERGIFY_TOKEN`, so a job that exports
+`GITHUB_TOKEN` alone leaves them with no credential at all.
+
 There is no global `--token` on `mergify` itself, so pass it to the subcommand:
 
 ```bash
