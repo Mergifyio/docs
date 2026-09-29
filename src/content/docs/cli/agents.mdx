@@ -144,9 +144,10 @@ export MERGIFY_TOKEN=your_token_here
 ```
 
 An `admin` key covers queue status, the Activity Log, freezes, and browsing or
-quarantining tests; CI Insights uploads and Merge Queue Scopes need a `ci` key
-instead. No single key covers
-both, so pick the one that matches what you want the agent to do.
+quarantining tests; CI and test result uploads, Merge Queue Scopes, and the
+mid-run flaky-detection and test-selection reads need a `ci` key instead. No
+single key covers both, so pick the one that matches what you want the agent to
+do.
 
 An application key does not work for Stacks. An unattended agent that pushes
 stacks needs a GitHub token, which is not deprecated: the deprecation above is
@@ -160,10 +161,11 @@ application key out of `MERGIFY_TOKEN`. See
 resolution order.
 
 Application keys come with either the `admin` scope or the `ci` scope, and
-neither is read-only. `admin` covers the API except result uploads and Merge
-Queue Scopes, which need a `ci` key, so one key does not cover every command
-either. A key also belongs to a GitHub account rather than to a single
-repository, so it reaches every repository that account can see. Read
+neither is read-only. `admin` covers the API except CI and test result uploads,
+Merge Queue Scopes, and the mid-run flaky-detection and test-selection reads,
+all of which need a `ci` key, so one key does not cover every command either. A
+key also belongs to a GitHub account rather than to a single repository, so it
+reaches every repository that account can see. Read
 [Application Key Scopes](/api/usage#application-key-scopes) before you hand one
 to an agent.
 
