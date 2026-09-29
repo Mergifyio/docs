@@ -37,6 +37,10 @@ each one is anchored at the start of a branch name only, so `release-1` also
 matches `release-10`. Setting both `branches` and `regexes` backports to the
 branches you named plus the branches your patterns matched.
 
+Mergify skips any login ending in `[bot]` when resolving `assignees`, so a rule
+that assigns `{{ author }}` leaves the backport unassigned if a bot opened the
+original pull request.
+
 <ActionOptionsTable def="BackportActionModel" />
 
 <BackportLimitations />
