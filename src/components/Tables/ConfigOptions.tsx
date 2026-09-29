@@ -1,7 +1,7 @@
 import jsonpointer from 'jsonpointer';
 import React, { ReactElement } from 'react';
 import { getDataTypeHref, isDataType } from '~/util/dataType';
-import configSchema from '~/util/sanitizedConfigSchema';
+import configSchema from '../../../public/mergify-configuration-schema.json';
 import { renderMarkdown } from './utils';
 
 const valueTypeLinks: { [key: string]: string } = {
