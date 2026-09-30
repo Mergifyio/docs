@@ -1050,6 +1050,38 @@
       "title": "CommitMessageFormatModel",
       "type": "object"
     },
+    "ConflictResolverModel": {
+      "additionalProperties": false,
+      "properties": {
+        "paths": {
+          "description": "Glob patterns of the files this resolver applies to, matched against the path from the repository root exactly like `scopes` file patterns. `*` does not cross a `/`, so `*.md` matches only Markdown files at the root, and `docs/*.md` only those directly in `docs/` -- unlike `.gitattributes`, where a pattern with no `/` matches at any depth. `**` matches any number of directories, and `{a,b}` either alternative.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Paths",
+          "type": "array"
+        },
+        "strategy": {
+          "description": "How to merge a matching file when two pull requests of the same batch both change it. The names follow git's merge drivers. `ours` is always what the batch already holds, the base branch plus the pull requests queued ahead, and never the incoming pull request:\n\n- `union`: keep both sides' conflicting lines, ours first. For append-only files such as a changelog.\n- `ours`: keep our whole file and discard the incoming pull request's change to it, even where the two changes did not conflict.\n- `theirs`: take the incoming pull request's whole file and discard ours, even where the two changes did not conflict.\n- `prefer-ours`: merge normally, and keep our side only on the lines that conflict.\n- `prefer-theirs`: merge normally, and keep the incoming pull request's side only on the lines that conflict.\n\nA conflict on any other file still removes the pull request from the batch.",
+          "enum": [
+            "union",
+            "ours",
+            "theirs",
+            "prefer-ours",
+            "prefer-theirs"
+          ],
+          "title": "Strategy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "paths",
+        "strategy"
+      ],
+      "title": "ConflictResolverModel",
+      "type": "object"
+    },
     "CopyActionModel": {
       "additionalProperties": false,
       "properties": {
@@ -4268,6 +4300,14 @@
           "title": "Allow Queue Branch Edit",
           "type": "boolean"
         },
+        "conflict_resolvers": {
+          "description": "Resolve conflicts on the files you name while Mergify builds a batch, instead of removing the pull request that conflicts from it. When several entries match a file, the last one wins.\n\nOnly takes effect when the batch branch Mergify built is what lands: `merge_method` set to `merge-batch` or `fast-forward`, or `queue_branch_merge_method` set to `fast-forward`. Otherwise `merge`, `squash` and `rebase` merge each pull request on its own, so a resolution made while building the batch would never land.",
+          "items": {
+            "$ref": "#/$defs/ConflictResolverModel"
+          },
+          "title": "Conflict Resolvers",
+          "type": "array"
+        },
         "batch_max_failure_resolution_attempts": {
           "anyOf": [
             {
@@ -4532,6 +4572,14 @@
           "description": "Deprecated: this option is being removed after 2026-12-31, and there is no replacement. Move the work now done on a batch branch onto the pull requests themselves. Once the option is gone, an edited batch branch dequeues the pull requests it carries and reports the edit as a failure, which is the behaviour you get today by leaving this unset.\n\nWhen creating a branch for a queue, if the commits of this branch are edited by an entity external to Mergify, Mergify dequeues all pull requests embarked in the branch and report the issue as a failure. If set to `true`, Mergify will allow such modifications and trust the content of the branch. Make sure only Mergify and your external application are allowed to edit these branches.\n\nThis option requires `merge_method` to be `merge-batch` or `fast-forward`. Those two merge the batch branch itself, so a commit pushed to it is part of what lands on the base branch; `merge`, `squash` and `rebase` merge each pull request at its own head, which never includes the edit.\n\nEnabling it therefore means the merged content is the batch branch, including commits that were never reviewed as part of any pull request. That is the contract of this option: it exists for batch-level work (a conflict resolution, a migration reorder, a lockfile regeneration) that belongs to no single pull request.\n\nNote also that under these two merge methods Mergify does not merge the pull requests one by one: GitHub marks each embarked pull request as merged only when its head commit is reachable from the new base branch tip, so a pull request whose head no longer matches what was embarked is not shown as merged even though its content landed.",
           "title": "Allow Queue Branch Edit",
           "type": "boolean"
+        },
+        "conflict_resolvers": {
+          "description": "Resolve conflicts on the files you name while Mergify builds a batch, instead of removing the pull request that conflicts from it. When several entries match a file, the last one wins.\n\nOnly takes effect when the batch branch Mergify built is what lands: `merge_method` set to `merge-batch` or `fast-forward`, or `queue_branch_merge_method` set to `fast-forward`. Otherwise `merge`, `squash` and `rebase` merge each pull request on its own, so a resolution made while building the batch would never land.",
+          "items": {
+            "$ref": "#/$defs/ConflictResolverModel"
+          },
+          "title": "Conflict Resolvers",
+          "type": "array"
         },
         "batch_max_failure_resolution_attempts": {
           "anyOf": [
