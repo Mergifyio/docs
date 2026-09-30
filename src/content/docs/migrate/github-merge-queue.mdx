@@ -55,7 +55,7 @@ Queue features:
 | ------------------- | ------- |
 | Single queue per protected branch | One or more `queue_rules` with conditions |
 | Merge Group (= test head + base) | [Batch](/merge-queue/batches), checked in place or on a draft pull request |
-| Required status checks | `queue_conditions` using `check-success = <name>` |
+| Required status checks | Injected from your ruleset or branch protections, or `check-success` in `queue_conditions` |
 | Strict update before merge | `update_method` (merge/rebase) + automatic refresh |
 
 ## Minimal equivalent configuration
@@ -104,7 +104,11 @@ priority_rules:
     priority: high
 ```
 
-Apply a `hotfix` label; those PRs jump ahead while fairness is preserved.
+Apply a `hotfix` label and those pull requests move ahead of everything still
+waiting. By default they are inserted just after the pull requests whose checks
+are already running, so no CI time is thrown away; set
+[`allow_checks_interruption`](/merge-queue/priority#managing-check-interruptions-based-on-priority)
+to `true` on the rule to cut the line instead.
 
 ## Observability & reporting
 
