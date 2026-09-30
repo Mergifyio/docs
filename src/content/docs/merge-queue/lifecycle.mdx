@@ -433,3 +433,17 @@ how much Mergify posts:
 merge_queue:
   status_comments: outcomes
 ```
+
+### When the Merge Lands Nothing
+
+A merge does not always move the base branch. When an equivalent change landed
+ahead of a queued pull request,
+[rebasing](/merge-queue/merge-strategies#rebase) it drops every one of its
+commits as empty, and the merge leaves the base branch exactly where it was.
+GitHub still marks the pull request merged, and its **Files changed** tab
+still shows the whole diff, because that diff is computed against the merge
+base rather than against the current tip of the base branch.
+
+The status comment for the merge opens with a **Nothing landed** section that
+says both of those things, so the author learns the change shipped nothing
+before reading the rest of the report.
