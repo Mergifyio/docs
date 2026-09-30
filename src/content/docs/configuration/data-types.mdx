@@ -177,9 +177,12 @@ the timestamp is assumed to be in UTC. The supported timezones come from the
 [IANA database](https://www.iana.org/time-zones).
 
 :::caution
-Timestamp attributes support only the ordering operators `>=`, `<=`, `<`, and
-`>`. The `=` and `!=` operators are not available, and timestamps cannot be
-negated with the `-` prefix.
+  The timestamp attributes (`created-at`, `updated-at`, `closed-at`,
+  `merged-at`, `queued-at` and `queue-merge-started-at`) support only the
+  ordering operators `>=`, `<=`, `<` and `>`. `current-datetime` also accepts
+  `=` and `!=`, which compare it against a
+  [timestamp interval](#timestamp-interval). None of them can be negated with
+  the `-` prefix.
 :::
 
 Supported formats:
