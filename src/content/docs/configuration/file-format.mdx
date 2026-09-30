@@ -15,9 +15,9 @@ the data structure schema.
 
 Mergify applies the following rule to find and use its configuration:
 
-- It reads the file named `.mergify.yml`, or, as a fallback,
-  `.mergify/config.yml` or `.github/mergify.yml` from the repository root
-  directory.
+- It reads the first file it finds among `.mergify.yml`, `.mergify.yaml`,
+  `.mergify/config.yml`, `.mergify/config.yaml`, `.github/mergify.yml` and
+  `.github/mergify.yaml`, in that order, from the repository root directory.
 
 - It reads the file from the default repository branch configured on GitHub
   (usually `main`).
@@ -25,6 +25,11 @@ Mergify applies the following rule to find and use its configuration:
 - It can extend the configuration with another configuration file using the
   `extends` keyword; see [Extending Configuration
   Files](/configuration/sharing#extending-configuration-files).
+
+Keep only one of those files in the repository. When a pull request against the
+default branch adds or modifies one of them and that would leave two or more in
+place, Mergify does not evaluate the pull request: it reports a failure listing
+the files it found and which one it reads.
 
 ## File Format
 
@@ -292,9 +297,9 @@ Check your configuration against the Mergify schema:
 mergify config validate
 ```
 
-This catches syntax errors, invalid keys, and type mismatches. It reads
-`.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml` from the
-current directory.
+This catches syntax errors, invalid keys, and type mismatches. It detects the
+configuration file on its own, or reads the path you give it with
+`--config-file`.
 
 ### Simulate
 
