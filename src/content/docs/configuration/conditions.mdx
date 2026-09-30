@@ -322,9 +322,16 @@ queue_rules:
 ```
 
 A value starting with `@` that does not match the `@<slug>/<name>` shape is
-rejected at configuration validation time. Branch-protection-synthesised
-conditions and legacy GitHub commit statuses carry no GitHub App identity
-and remain reachable only via the bare form.
+rejected at configuration validation time.
+
+GitHub reports which app published a check run. A commit status carries no such
+identity, so Mergify attributes it to the account that posted it: a status posted
+by a GitHub App also matches `@<slug>/<name>`, while one posted by a person is
+reachable only through the bare form. Conditions Mergify derives from classic
+branch protection are reachable only through the bare form too.
+A [GitHub ruleset](/merge-queue/github-rulesets) that binds a required status check to
+one app is derived in the qualified form instead, so only that app's check
+satisfies it.
 
 ## Qualifying Deployments by GitHub App
 
