@@ -328,6 +328,95 @@ bypass configuration is needed.
 See [Merge Strategies: Merge Batch](/merge-queue/merge-strategies#merge-batch)
 for more details.
 
+## Resolving Conflicts Between Pull Requests of a Batch
+
+When two pull requests in the same batch change the same lines of a file,
+Mergify cannot combine them, so it removes the later one from the batch and
+that pull request waits for another batch. For files where a conflict is
+harmless, like a changelog or a generated file, use `conflict_resolvers` to
+tell Mergify how to merge them instead:
+
+```yaml
+queue_rules:
+  - name: default
+    batch_size: 10
+    merge_method: merge-batch
+    conflict_resolvers:
+      - paths:
+          - "**/CHANGELOG.md"
+        strategy: union
+      - paths:
+          - "src/generated/**"
+        strategy: prefer-theirs
+```
+
+A conflict on any file you did not list still removes the pull request from
+the batch.
+
+### Strategies
+
+Mergify adds the pull requests of a batch one at a time. `ours` is **the batch
+built so far**: your base branch plus the pull requests added before this one.
+When a batch is built on top of batches still ahead of it in the queue, it
+also holds their pull requests.
+`theirs` is **the pull request being added**.
+
+| Strategy | What happens when two pull requests change the file |
+|---|---|
+| `union` | Both sides' lines are kept. Where they conflict, both versions are included, `ours` first. Meant for append-only files such as a changelog. |
+| `prefer-ours` | A normal merge. Lines that conflict are taken from the batch built so far, and every other change from both sides is kept. |
+| `prefer-theirs` | A normal merge. Lines that conflict are taken from the pull request being added, and every other change from both sides is kept. |
+| `ours` | The whole file is kept as it is in the batch built so far. The added pull request's changes to that file are discarded, **including lines that did not conflict**. |
+| `theirs` | The whole file is taken from the pull request being added. Everything else in the batch built so far is discarded for that file, **including lines that did not conflict**. |
+
+:::caution[`ours` and `theirs` discard work]
+  `ours` and `theirs` replace the whole file, so they drop the other side's
+  change even when a normal merge would have combined the two without a
+  conflict. Nothing marks it: the batch looks clean and the change is gone.
+
+  With `ours`, when two pull requests of a batch change the file, the one
+  that entered the batch first wins. With `theirs`, the last one wins, and
+  for the first pull request of a batch it also drops changes to that file
+  that reached the base branch after the pull request was created.
+
+  On your laptop `ours` is your own branch, which is the opposite reading.
+  If you want a conflict decided in one direction without losing anybody's
+  other changes, use `prefer-ours` or `prefer-theirs`.
+:::
+
+### Matching Files
+
+`paths` uses the same [glob patterns](/configuration/data-types#globs) as
+[scopes file patterns](/merge-queue/scopes/file-patterns), matched against the
+path from the root of the repository. They are **not** `.gitattributes` or
+`.gitignore` patterns:
+
+- `*` does not cross a `/`. `*.md` matches Markdown files at the root only,
+  and `docs/*.md` only those directly in `docs/`. Use `**/*.md` for every
+  Markdown file.
+- `**` matches any number of directories, including none, so
+  `**/CHANGELOG.md` also matches the one at the root. `{a,b}` matches either
+  alternative.
+- A pattern cannot start with `/` or `./` (paths are already relative to the
+  root) or end with `/` (patterns match files; write `dir/**`).
+
+When several entries match a file, the last one wins. Listing the same
+pattern twice is a configuration error.
+
+### Limits
+
+- **Only with `fast-forward` or `merge-batch`.** Resolution applies when the
+  batch branch Mergify built is what lands: `merge_method: fast-forward` or
+  `merge-batch` (see [Merge Strategies](/merge-queue/merge-strategies)). With
+  `merge`, `squash` or `rebase`, each pull request is merged on its own, so a
+  resolution made while building the batch would never land, and
+  `conflict_resolvers` has no effect.
+- **Only conflicts between pull requests.** A pull request that conflicts
+  with its base branch never enters a batch, so it has to be updated as
+  usual.
+- **Not a file deleted on one side and changed on the other.** Git settles
+  that case before any strategy is consulted, so it always conflicts.
+
 ## Handling Batch Failure or Timeout
 
 When a batch fails, or when its
