@@ -45,6 +45,15 @@ guide to getting started:
    know the outcome. This feedback can be especially useful to understand any
    issues or conflicts that might arise from the command.
 
+   The [`queue`](/commands/queue) and [`dequeue`](/commands/dequeue) commands
+   are the exception: their outcome arrives in the [merge queue status
+   comment](/merge-queue/lifecycle#status-comments) rather than in a reply to
+   your comment. Mergify still replies directly when the command leaves the
+   pull request out of the queue: a failure before it enters the queue, or a
+   `dequeue` on a pull request that is not queued. The "Mergify Merge Queue"
+   check run records the outcome either way, including when
+   `merge_queue.status_comments` turns those comments off.
+
 5. **Advanced Commands**: Some commands may accept additional parameters or
    have specific nuances. Always refer back to this documentation to understand
    the complete syntax and behavior.
