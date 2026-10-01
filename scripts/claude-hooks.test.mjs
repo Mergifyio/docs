@@ -1,5 +1,5 @@
 /**
- * End-to-end tests for the `PostToolUse` hooks in `.claude/settings.json`.
+ * End-to-end tests for the command hooks in `.claude/settings.json`.
  *
  * These hooks sat in the config for seven months doing nothing: bash syntax run
  * under `/bin/sh`, a file path read from an environment variable that does not
@@ -9,7 +9,15 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  chmodSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,6 +30,7 @@ const hookDir = join(repoRoot, '.claude', 'hooks');
 const BIOME_FORMAT = join(hookDir, 'post-edit-biome-format.mjs');
 const TYPECHECK = join(hookDir, 'post-edit-typecheck.mjs');
 const MDX_FRONTMATTER = join(hookDir, 'post-edit-mdx-frontmatter.mjs');
+const MAIN_BRANCH_GUARD = join(hookDir, 'pre-edit-main-branch-guard.mjs');
 
 /** A directory inside the repo, so Biome resolves the repo's own config. */
 const tmpDir = mkdtempSync(join(repoRoot, '.claude-hook-test-'));
@@ -211,5 +220,110 @@ describe('post-edit-mdx-frontmatter', () => {
     const result = runHook(MDX_FRONTMATTER, { filePath: 'relative.mdx' });
 
     expect(result.status).toBe(2);
+  });
+});
+
+describe('pre-edit-main-branch-guard', () => {
+  /**
+   * One repository with two checkouts, `onMain` and `onFeature`, plus an
+   * unrelated repository on `main`. The session's project is always the branched
+   * checkout; what varies is where the shell sits and where the file is.
+   */
+  const root = mkdtempSync(join(tmpdir(), 'claude-hook-guard-'));
+  const onMain = join(root, 'docs');
+  const onFeature = join(root, 'docs-feature');
+  const elsewhere = join(root, 'notes');
+
+  /** Global and system config off, so a signing or hook setting cannot break setup. */
+  const gitEnv = { ...process.env, GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_NOSYSTEM: '1' };
+
+  function git(dir, ...args) {
+    const result = spawnSync(
+      'git',
+      ['-C', dir, '-c', 'user.name=test', '-c', 'user.email=test@example.com', ...args],
+      { encoding: 'utf8', env: gitEnv }
+    );
+    if (result.status !== 0) throw new Error(`git ${args.join(' ')}: ${result.stderr}`);
+  }
+
+  function repositoryOnMain(dir) {
+    mkdirSync(dir);
+    git(dir, 'init', '--quiet', '--initial-branch=main');
+    git(dir, 'commit', '--quiet', '--allow-empty', '--message=init');
+    writeFileSync(join(dir, 'page.mdx'), '---\ntitle: x\n---\n');
+  }
+
+  repositoryOnMain(onMain);
+  git(onMain, 'worktree', 'add', '--quiet', '-b', 'feature', onFeature);
+  writeFileSync(join(onFeature, 'page.mdx'), '---\ntitle: x\n---\n');
+  repositoryOnMain(elsewhere);
+
+  afterAll(() => rmSync(root, { recursive: true, force: true }));
+
+  function guard(filePath, { cwd = onFeature } = {}) {
+    const result = spawnSync(process.execPath, [MAIN_BRANCH_GUARD], {
+      input: JSON.stringify({
+        session_id: 'test',
+        cwd,
+        hook_event_name: 'PreToolUse',
+        tool_name: 'Write',
+        tool_input: { file_path: filePath },
+      }),
+      cwd,
+      encoding: 'utf8',
+      env: { ...process.env, CLAUDE_PROJECT_DIR: onFeature },
+    });
+    return { status: result.status, stderr: result.stderr };
+  }
+
+  it('refuses a file in the checkout on main, from a shell in the branched one', () => {
+    const result = guard(join(onMain, 'page.mdx'));
+    expect(result.status).toBe(2);
+    expect(result.stderr).toMatch(/is on main/);
+  });
+
+  it('allows a file in the branched checkout, from a shell in the one on main', () => {
+    expect(guard(join(onFeature, 'page.mdx'), { cwd: onMain }).status).toBe(0);
+  });
+
+  it('resolves a relative path against the project, not the shell', () => {
+    expect(guard('page.mdx', { cwd: onMain }).status).toBe(0);
+  });
+
+  it('judges a file that does not exist yet by its nearest existing directory', () => {
+    expect(guard(join(onMain, 'new', 'dir', 'page.mdx')).status).toBe(2);
+    expect(guard(join(onFeature, 'new', 'dir', 'page.mdx'), { cwd: onMain }).status).toBe(0);
+  });
+
+  it('follows a symlink to the checkout its target is in', () => {
+    const link = join(onFeature, 'linked.mdx');
+    symlinkSync(join(onMain, 'page.mdx'), link);
+    expect(guard(link).status).toBe(2);
+  });
+
+  it('follows a dangling symlink to where the write would create its target', () => {
+    const link = join(onFeature, 'dangling.mdx');
+    symlinkSync(join(onMain, 'not-yet', 'page.mdx'), link);
+    expect(guard(link).status).toBe(2);
+  });
+
+  it('follows a symlinked directory', () => {
+    const link = join(onFeature, 'linked-dir');
+    symlinkSync(onMain, link);
+    expect(guard(join(link, 'page.mdx')).status).toBe(2);
+  });
+
+  it('refuses a symlink loop rather than guessing', () => {
+    const link = join(onFeature, 'loop.mdx');
+    symlinkSync(link, link);
+    expect(guard(link).status).toBe(2);
+  });
+
+  it('leaves another repository on main alone', () => {
+    expect(guard(join(elsewhere, 'page.mdx')).status).toBe(0);
+  });
+
+  it('leaves a file outside any repository alone', () => {
+    expect(guard(join(tmpdir(), 'claude-hook-guard-outside.txt')).status).toBe(0);
   });
 });
