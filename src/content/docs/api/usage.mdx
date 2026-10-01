@@ -210,6 +210,14 @@ To iterate through all pages, follow the `rel="next"` link
 until it is no longer present in the response. To get back to the first page,
 call the endpoint again without a `cursor`.
 
+Each link carries the query parameters of the request it came from, so following
+one keeps the filters you set. On an endpoint whose `start` and `end` default to
+a window ending at the current time, the resolved bounds are pinned into the
+links too: iterating with `rel="next"` keeps serving the window the first page
+was built from, instead of resolving a fresh one against a later clock and
+dropping the oldest items on the way. A bound you passed yourself is echoed back
+as you sent it.
+
 ## Error Handling
 
 The API uses standard HTTP status codes to indicate the success or failure
