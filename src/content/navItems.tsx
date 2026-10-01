@@ -389,6 +389,7 @@ const navItems: NavItem[] = [
     icon: 'lucide:blocks',
     path: '/integrations',
     children: [
+      { title: 'Overview', path: '/integrations', icon: 'lucide:lightbulb' },
       { title: 'GitHub', path: '/integrations/github', icon: 'simple-icons:github' },
       {
         title: 'GitHub Actions',
