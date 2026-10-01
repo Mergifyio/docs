@@ -1,1 +1,6 @@
-Scope the guard to this repository: guarding every repository on main refused edits to a notes repository that lives on main by design.
+Revision history for #13118:
+
+rev 2 (content) 2026-10-01 21:51 UTC — Scope the guard to this repository: guarding every repository on main refused edits to a notes repository that lives on main by design.
+rev 1 (initial) 2026-10-01 21:51 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13118,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"fe74d0e866564768985505329c4cccd6d94c591d","timestamp_iso":"2026-10-01T21:51:28Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"fe74d0e866564768985505329c4cccd6d94c591d","new_sha":"49c7ba459bf3c4b95ede258ab83d2439ac1aaa61","timestamp_iso":"2026-10-01T21:51:28Z","reason":"Scope the guard to this repository: guarding every repository on main refused edits to a notes repository that lives on main by design.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/fe74d0e866564768985505329c4cccd6d94c591d...49c7ba459bf3c4b95ede258ab83d2439ac1aaa61"}]} -->
