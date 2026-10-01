@@ -1,1 +1,6 @@
-address review: rephrase two three-item lists (playwright failing statuses, vitest crash cases) per the docs style rule
+Revision history for #13121:
+
+rev 2 (content) 2026-10-01 22:15 UTC — address review: rephrase two three-item lists (playwright failing statuses, vitest crash cases) per the docs style rule
+rev 1 (initial) 2026-10-01 22:15 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13121,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"ebce1161a65f3a6dfcbe616605ede24419805e20","timestamp_iso":"2026-10-01T22:15:38Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"ebce1161a65f3a6dfcbe616605ede24419805e20","new_sha":"792321c252c4fd6114cca8d622add71175d7b409","timestamp_iso":"2026-10-01T22:15:38Z","reason":"address review: rephrase two three-item lists (playwright failing statuses, vitest crash cases) per the docs style rule","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/ebce1161a65f3a6dfcbe616605ede24419805e20...792321c252c4fd6114cca8d622add71175d7b409"}]} -->
