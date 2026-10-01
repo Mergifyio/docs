@@ -98,6 +98,38 @@ steps:
 The reporter automatically collects your test results and sends them to Test
 Insights.
 
+## Quarantine and Crashed Runs
+
+The reporter applies [quarantine](/test-insights/quarantine) through a test
+runner it installs for you. When a quarantined test fails, that runner records
+it as passed, so it does not change Vitest's exit code. The exit code of your
+test step already accounts for quarantine, so the step needs nothing more:
+
+- Do not add `continue-on-error: true`. The recipes that upload a JUnit report
+  with the `mergifyio/gha-mergify-ci` action need it because the action decides
+  the job's result after the tests. Here nothing does, so it would let every
+  real failure through.
+
+- There is no step `id` to set and no `test_step_outcome` to pass: both belong
+  to that action, which this setup does not use.
+
+:::caution
+  Vitest does not load that runner in
+  [browser mode](https://vitest.dev/guide/browser/), and the reporter does not
+  install it when your configuration sets its own `runner` (it logs a warning
+  instead). In both cases quarantined tests that fail still fail the run.
+:::
+
+A crash cannot pass for a green run either. Quarantine only covers failing
+tests. Errors that Vitest reports outside a test result, such as an unhandled
+error or a test file that fails to load, still make it exit non-zero and fail
+the step, and so does Vitest dying mid-run. The reporter uploads results
+when the test run ends, so a process killed outright before then, such as by
+the out-of-memory killer, sends nothing to Test Insights.
+
+If the reporter cannot fetch the quarantine list, it quarantines nothing for
+that run, and a quarantined test that fails makes the step fail as usual.
+
 ## Verify and Review in Test Insights
 
 After pushing these changes, your next CI run reports its Vitest results
