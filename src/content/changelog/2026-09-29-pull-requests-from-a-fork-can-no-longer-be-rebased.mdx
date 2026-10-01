@@ -11,4 +11,4 @@ Rebasing a pull request that comes from a fork required Mergify to impersonate a
 
 A `rebase` action or an `@mergifyio rebase` command on a pull request from a fork now fails with a check run that explains why. Use the `update` action or the `@mergifyio update` command on those instead: it brings the pull request up to date by merging the base branch into it, and needs no impersonation. If the branch has to keep a linear history, its author has to rebase it themselves.
 
-This applies whether or not `bot_account` is set: the rebase impersonated a user either way, falling back to the pull request author or to whoever sent the command. Rebases with `autosquash: true` are not affected.
+This applies whether or not `bot_account` is set: the rebase impersonated a user either way, falling back to the pull request author or to whoever sent the command.
