@@ -42,7 +42,7 @@
     "ajv": "8.20.0",
     "astro": "7.3.5",
     "astro-auto-import": "0.6.0",
-    "astro-eslint-parser": "3.1.0",
+    "astro-eslint-parser": "3.2.0",
     "astro-expressive-code": "0.44.2",
     "astro-og-canvas": "0.13.2",
     "canvaskit-wasm": "0.42.0",
