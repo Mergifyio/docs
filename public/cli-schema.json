@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.9.16.1",
+    "version": "2026.10.1",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
@@ -247,7 +247,7 @@
               "CONFIG_FILE"
             ],
             "help": "Path to the Mergify configuration file (auto-detected if not provided)",
-            "longHelp": "Path to the Mergify configuration file (auto-detected if not provided)",
+            "longHelp": "Path to the Mergify configuration file.\n\nWhen omitted, the first of these that exists is used: .mergify.yml, .mergify.yaml, .mergify/config.yml, .mergify/config.yaml, .github/mergify.yml, .github/mergify.yaml. A repository carrying more than one gets a warning on stderr naming the file in use and the ones ignored.",
             "required": false,
             "global": true,
             "default": null,
@@ -597,7 +597,7 @@
               "scopes"
             ],
             "about": "Give the list of scopes impacted by changed files",
-            "longAbout": "Give the list of scopes impacted by changed files.\n\nCompute the configured scopes impacted by the files changed between two git references, using your Mergify configuration. Print them, or write them to a file with --write for a later \"mergify ci scopes-send\".",
+            "longAbout": "Give the list of scopes impacted by changed files.\n\nCompute the configured scopes impacted by the files changed between two git references, using your Mergify configuration. On a merge queue draft pull request, return instead the scopes the merge queue decided for the batch, read from its git note, plus the merge queue scope. Print them, or write them to a file with --write for a later \"mergify ci scopes-send\".",
             "usage": "mergify ci scopes [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -611,8 +611,8 @@
                 "valueNames": [
                   "CONFIG"
                 ],
-                "help": "Path to YAML config file. Falls back to the `MERGIFY_CONFIG_PATH` env var, then auto-detects `.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml`",
-                "longHelp": "Path to YAML config file. Falls back to the `MERGIFY_CONFIG_PATH` env var, then auto-detects `.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml`",
+                "help": "Path to YAML config file (auto-detected when omitted)",
+                "longHelp": "Path to YAML config file.\n\nFalls back to the MERGIFY_CONFIG_PATH environment variable, then auto-detects the first of these that exists: .mergify.yml, .mergify.yaml, .mergify/config.yml, .mergify/config.yaml, .github/mergify.yml, .github/mergify.yaml.",
                 "required": false,
                 "global": false,
                 "default": null,
