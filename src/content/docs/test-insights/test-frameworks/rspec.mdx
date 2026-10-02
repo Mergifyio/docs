@@ -85,6 +85,32 @@ steps:
 
 The gem automatically collects your test results and sends them to Test Insights.
 
+## Quarantine and Crashed Runs
+
+The gem applies [quarantine](/test-insights/quarantine) inside the RSpec run.
+When a quarantined example fails, the gem marks it pending with the message
+`Test is quarantined from Mergify Test Insights`, so it does not count as a
+failure and does not change RSpec's exit code. The exit code of your test step
+already accounts for quarantine, so the step needs nothing more:
+
+- Do not add `continue-on-error: true`. The recipes that upload a JUnit report
+  with the `mergifyio/gha-mergify-ci` action need it because the action decides
+  the job's result after the tests. Here nothing does, so it would let every
+  real failure through.
+
+- There is no step `id` to set and no `test_step_outcome` to pass: both belong
+  to that action, which this setup does not use.
+
+A crash cannot pass for a green run either. Quarantine only covers failures
+inside an example: a spec file that fails to load, a failing `before(:suite)`
+or `after(:context)` hook, or RSpec dying mid-run still exits non-zero and fails
+the step. The gem uploads results when the run ends, so a process killed
+outright before then, such as by the out-of-memory killer, sends nothing to
+Test Insights.
+
+If the gem cannot fetch the quarantine list, it quarantines nothing for that
+run, and a quarantined example that fails makes the step fail as usual.
+
 ## Verify and Review in Test Insights
 
 After pushing these changes, your next CI run reports its RSpec results
