@@ -1,1 +1,6 @@
-address review: the registration is not skipped silently — the push reports 'not registered on GitHub' and restores the Depends-On markers
+Revision history for #13152:
+
+rev 2 (content) 2026-10-02 19:30 UTC — address review: the registration is not skipped silently — the push reports 'not registered on GitHub' and restores the Depends-On markers
+rev 1 (initial) 2026-10-02 19:30 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13152,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"e972cda8b7c7a423aeb327e0c6d26f9a881ab0ce","timestamp_iso":"2026-10-02T19:30:41Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"e972cda8b7c7a423aeb327e0c6d26f9a881ab0ce","new_sha":"48dd4367e55b452052b170c5775ec1d482d562a4","timestamp_iso":"2026-10-02T19:30:41Z","reason":"address review: the registration is not skipped silently — the push reports 'not registered on GitHub' and restores the Depends-On markers","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/e972cda8b7c7a423aeb327e0c6d26f9a881ab0ce...48dd4367e55b452052b170c5775ec1d482d562a4"}]} -->
