@@ -215,10 +215,12 @@ opened by Dependabot, add the same secret to your [Dependabot
 secrets](/integrations/dependabot#configuring-mergify_token-for-dependabot) as
 well.
 
-Mergify also publishes annotations that can be seen in your GitHub Actions jobs
-summary.
+Two of these jobs also write to the workflow run's summary page:
+`detect-scopes` lists every scope and whether the pull request matched it, and
+`ci-gate` lists the result of each job it waited for. Here a pull request
+touched the frontend and the docs, so `api-tests` was skipped:
 
-<Image src={ghaSummaryScreenshot} alt="GitHub Actions job summary listing the scopes detected for a pull request" />
+<Image src={ghaSummaryScreenshot} alt="GitHub Actions run summary. The detect-scopes job shows the api scope unmatched and the docs and frontend scopes matched. The ci-gate job reports api-tests skipped and every other job successful." />
 
 ### Protecting the branch with `ci-gate`
 
