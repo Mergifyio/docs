@@ -1,0 +1,1 @@
+address review: the registration is not skipped silently — the push reports 'not registered on GitHub' and restores the Depends-On markers
