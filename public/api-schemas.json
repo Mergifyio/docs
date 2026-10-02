@@ -4192,6 +4192,167 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/ci_runs": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get the CI runs the merge queues started and wasted",
+        "description": "CI runs the merge queues started, and the ones they tore down before a merge with the reason why, by intervals of time. A run is one check the queue started -- a draft pull request, or the queued pull request itself when it is checked in place -- counted once however many pull requests it carries. A merge the queue trusts without running CI is not a run. Divide `started` by the merged pull requests of `queues_merged_count` for the CI runs each merge costs. A draft run carries pull requests of several priority rules, so there is no priority rule filter.",
+        "operationId": "get_ci_runs_repos__owner___repository__stats_ci_runs_get",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Base reference(s) of the pull requests",
+              "title": "Base Ref"
+            },
+            "description": "Base reference(s) of the pull requests"
+          },
+          {
+            "name": "queue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the merge queue(s) for the pull requests",
+              "title": "Queue Name"
+            },
+            "description": "Name of the merge queue(s) for the pull requests"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
+              "title": "Start At"
+            },
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
+              "title": "End At"
+            },
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CIRunsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/stats/failure_rate": {
       "get": {
         "tags": [
@@ -10022,6 +10183,56 @@
           "groups"
         ],
         "title": "CIAverageRuntimeResponse"
+      },
+      "CIRunsGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "started": {
+            "items": {
+              "$ref": "#/components/schemas/StartedCIRunsInInterval"
+            },
+            "type": "array",
+            "title": "Started"
+          },
+          "wasted": {
+            "items": {
+              "$ref": "#/components/schemas/WastedCIRunsInInterval"
+            },
+            "type": "array",
+            "title": "Wasted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "queue_name",
+          "started",
+          "wasted"
+        ],
+        "title": "CIRunsGroupResponse"
+      },
+      "CIRunsResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/CIRunsGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "CIRunsResponse"
       },
       "CIRuntimeGroupResponse": {
         "properties": {
@@ -18190,7 +18401,44 @@
               }
             ],
             "title": "Branch",
-            "description": "Branch name this quarantine applies to. `null` means the test is quarantined on every branch."
+            "description": "Deprecated: use `branch_name`.",
+            "deprecated": true
+          },
+          "branch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch Name",
+            "description": "Branch this quarantine applies to. `null` means the test is quarantined on every branch."
+          },
+          "pipeline_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pipeline Name",
+            "description": "Pipeline this quarantine applies to. `null` means the test is quarantined in every pipeline."
+          },
+          "job_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Name",
+            "description": "Job this quarantine applies to. `null` means the test is quarantined in every job."
           },
           "created_at": {
             "type": "string",
@@ -18202,6 +18450,17 @@
             "$ref": "#/components/schemas/QuarantineSource",
             "description": "How the test got quarantined: `manual` (user action) or `auto` (auto-quarantined).",
             "default": "manual"
+          },
+          "health_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HealthStatus"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Health of the test on the repository's default branch, or `null` when it has no recent runs there."
           },
           "is_recovered": {
             "type": "boolean",
@@ -18216,7 +18475,11 @@
           "test_id",
           "reason",
           "branch",
+          "branch_name",
+          "pipeline_name",
+          "job_name",
           "created_at",
+          "health_status",
           "is_recovered"
         ],
         "title": "QuarantinedTest"
@@ -18246,13 +18509,19 @@
             },
             "type": "array",
             "title": "Quarantined Tests"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Total number of quarantines matching the filters, across all pages."
           }
         },
         "type": "object",
         "required": [
           "size",
           "per_page",
-          "quarantined_tests"
+          "quarantined_tests",
+          "total"
         ],
         "title": "QuarantinedTestsResponse"
       },
@@ -19681,6 +19950,31 @@
         ],
         "title": "SkipIntermediateResultsResponse"
       },
+      "StartedCIRunsInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "started": {
+            "type": "integer",
+            "title": "Started"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "started"
+        ],
+        "title": "StartedCIRunsInInterval"
+      },
       "TestAddedToQuarantineResponse": {
         "properties": {
           "id": {
@@ -20281,6 +20575,36 @@
         },
         "type": "object",
         "title": "UpdateScheduledFreezePayload"
+      },
+      "WastedCIRunsInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "reason",
+          "count"
+        ],
+        "title": "WastedCIRunsInInterval"
       },
       "_QueueStatsBucket": {
         "properties": {
