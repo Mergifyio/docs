@@ -129,8 +129,9 @@ interface. Mergify posts a stack comment on each PR and, with the
 stack and its revision history as an in-PR panel. Neither of those is a
 built-in GitHub UI element.
 [`mergify stack push`](/stacks/setup#configuration) registers the stack with
-GitHub's own stacking API by default, so GitHub displays it as a stack. That
-registration is skipped where the API is not available.
+GitHub's own stacking API by default, so GitHub displays it as a stack. The CLI
+marks that registration as experimental, and skips it silently where the API
+isn't available.
 
 ## Other Considerations
 
