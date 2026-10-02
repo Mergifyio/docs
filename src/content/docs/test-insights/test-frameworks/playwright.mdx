@@ -127,6 +127,33 @@ steps:
 The reporter automatically collects your test results and sends them to Test
 Insights.
 
+## Quarantine and Crashed Runs
+
+The [`test` you import from `@mergifyio/playwright`](#import-test-and-expect-from-mergify)
+applies [test quarantine](/test-insights/quarantine) inside the Playwright run.
+When a quarantined test ends in any failing status, a timeout included, that
+`test` sets the expected status to the outcome, so Playwright counts the result
+as expected and the result does not change Playwright's exit code. The exit
+code of your test step already accounts for quarantine, so the step needs
+nothing more:
+
+- Do not add `continue-on-error: true`. The recipes that upload a JUnit report
+  with the `mergifyio/gha-mergify-ci` action need it because the action decides
+  the job's result after the tests. Here nothing does, so it would let every
+  real failure through.
+
+- There is no step `id` to set and no `test_step_outcome` to pass: both belong
+  to that action, which this setup does not use.
+
+A crash cannot pass for a green run either. If Playwright dies mid-run, it
+exits non-zero and the step fails. The reporter uploads results when the run
+ends, so a process killed outright before then, such as by the out-of-memory
+killer, sends nothing to Test Insights.
+
+If the global setup that `withMergify` adds cannot fetch the quarantine list,
+the run quarantines nothing, and a quarantined test that fails makes the step
+fail as usual.
+
 ## Multi-Project (Cross-Browser) Runs
 
 If your `playwright.config.ts` defines multiple

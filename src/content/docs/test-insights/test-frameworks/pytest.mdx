@@ -105,6 +105,33 @@ steps:
 
 The plugin collects your test results and sends them to Test Insights.
 
+## Quarantine and Crashed Runs
+
+The plugin applies [quarantine](/test-insights/quarantine) inside the pytest
+session. It marks each quarantined test as a non-strict `xfail`, so a
+quarantined test that fails is reported as `xfailed` and does not count against
+pytest's exit code. The exit code of your test step already accounts for
+quarantine, so the step needs nothing more:
+
+- Do not add `continue-on-error: true`. The recipes that upload a JUnit report
+  with the `mergifyio/gha-mergify-ci` action need it because the action decides
+  the job's result after the tests. Here nothing does, so it would let every
+  real failure through.
+
+- There is no step `id` to set and no `test_step_outcome` to pass: both belong
+  to that action, which this setup does not use.
+
+A crash cannot pass for a green run either. If pytest dies mid-run or fails
+outside a test, such as a collection error, it exits non-zero and the step
+fails. The plugin uploads results when the session ends, so a process killed
+outright before then, such as by the out-of-memory killer, sends nothing to
+Test Insights. A run that stops early without the process being killed, such as
+an interrupted session or one cut short by `--maxfail`, still uploads the
+results collected up to that point.
+
+If the plugin cannot fetch the quarantine list, it quarantines nothing for that
+run, and a quarantined test that fails makes the step fail as usual.
+
 ## Using with Tox
 
 If you’re using [Tox](https://tox.wiki/) to manage test environments, you can
