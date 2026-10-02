@@ -6468,8 +6468,12 @@
                   "type": "null"
                 }
               ],
+              "description": "Deprecated: use `branch_name`.",
+              "deprecated": true,
               "title": "Branch"
-            }
+            },
+            "description": "Deprecated: use `branch_name`.",
+            "deprecated": true
           },
           {
             "name": "test_id",
@@ -6503,6 +6507,198 @@
               ],
               "title": "Source"
             }
+          },
+          {
+            "name": "branch_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The branch name to filter on. Quarantines applying to every branch always match.",
+              "title": "Branch Name"
+            },
+            "description": "The branch name to filter on. Quarantines applying to every branch always match."
+          },
+          {
+            "name": "branch_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The branch name to exclude. Quarantines applying to every branch are kept.",
+              "title": "Branch Name Exclude"
+            },
+            "description": "The branch name to exclude. Quarantines applying to every branch are kept."
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to filter on. Quarantines applying to every pipeline always match.",
+              "title": "Pipeline Name"
+            },
+            "description": "The pipeline name to filter on. Quarantines applying to every pipeline always match."
+          },
+          {
+            "name": "pipeline_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to exclude. Quarantines applying to every pipeline are kept.",
+              "title": "Pipeline Name Exclude"
+            },
+            "description": "The pipeline name to exclude. Quarantines applying to every pipeline are kept."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to filter on. Quarantines applying to every job always match.",
+              "title": "Job Name"
+            },
+            "description": "The job name to filter on. Quarantines applying to every job always match."
+          },
+          {
+            "name": "job_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to exclude. Quarantines applying to every job are kept.",
+              "title": "Job Name Exclude"
+            },
+            "description": "The job name to exclude. Quarantines applying to every job are kept."
+          },
+          {
+            "name": "test_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The test name to filter on",
+              "title": "Test Name"
+            },
+            "description": "The test name to filter on"
+          },
+          {
+            "name": "test_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The test name to exclude",
+              "title": "Test Name Exclude"
+            },
+            "description": "The test name to exclude"
           },
           {
             "name": "cursor",
@@ -9129,7 +9325,7 @@
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 10000
+                "maxLength": 255
               },
               {
                 "type": "null"
