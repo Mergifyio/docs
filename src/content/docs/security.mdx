@@ -236,7 +236,11 @@ function properly.
     <tr>
       <td>Repository: Pages</td>
       <td>Read and write</td>
-      <td>Write required to trigger page workflow on merge.</td>
+      <td>
+        Used so that GitHub publishes your Pages site after a merge Mergify performs:
+        without write access, GitHub does not start the Pages workflow for that merge
+        and the site does not update. Mergify makes no Pages API call itself.
+      </td>
     </tr>
     <tr>
       <td>Repository: Pull requests</td>
