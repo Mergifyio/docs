@@ -4,6 +4,8 @@ description: Understand how Mergify fair billing works.
 ---
 
 import DownloadLink from '../../components/DownloadLink.astro';
+import { Image } from 'astro:assets';
+import PlanScreenshot from '../images/billing/plan.png';
 
 This page explains how Mergify's contributor-based billing works and how to
 read your invoice.
@@ -101,21 +103,22 @@ invoiced for 10 extra users over 45 days.
 
 You can check your current usage on the [Plan
 page](https://dashboard.mergify.com/settings/plan) of the Mergify dashboard,
-under **Settings → Plan**. It lists each product you use in a table, with its
-repository count and its number of active contributors:
+under **Settings → Plan**. It lists each product you use, with its repository
+count and its number of active contributors. Products you use for free and
+products on a paid plan are listed in separate tables:
 
-| Product | Repositories | Active contributors |
-|---|---|---|
-| Merge Queue | 10 repositories | 25 contributors |
-| CI Insights | 5 repositories | 15 contributors |
-| Workflow Automation | 10 repositories | 25 contributors |
+<Image
+  src={PlanScreenshot}
+  alt="Settings Plan page with Free and Paid tables listing each product's repository and contributor counts"
+/>
 
-The counts above are examples. If you are a billing manager, the table has an
-**On-demand Usage** column showing what you are billed monthly on top of your
-plan. On a yearly subscription, it also has a **Committed** column showing the
-seats you pre-purchased.
+If you are a billing manager, the paid table has an **On-demand Usage** column
+showing what you are billed monthly on top of your plan. On an annual
+subscription, it also has a **Committed** column showing the seats you
+pre-purchased.
 
-On some plans the third column is headed **Collaborators** instead. It counts
+On some plans the **Active contributors** column is headed **Collaborators**
+instead. It counts
 everyone with access to a repository, rather than only the people who
 contributed to it.
 
@@ -124,7 +127,7 @@ list, and the contributor count opens the list of people counted for that
 product.
 
 :::note
-  This is not available for on-premise plans.
+  The Plan page is not available for on-premise plans.
 :::
 
 ## Switching or Cancelling Plans
