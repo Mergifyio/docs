@@ -1,5 +1,5 @@
 /**
- * Shared plumbing for the `PostToolUse` command hooks declared in
+ * Shared plumbing for the command hooks declared in
  * `.claude/settings.json`.
  *
  * Claude Code passes a hook its payload as JSON on stdin and sets no
