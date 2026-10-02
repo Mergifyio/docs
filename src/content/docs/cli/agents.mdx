@@ -7,11 +7,9 @@ Mergify ships Agent Skills that teach an AI coding agent how to use the
 Mergify CLI: how to read the merge queue, how to find out why a pull request
 was dequeued, what belongs in a `.mergify.yml`, how to push a stack. They live
 in the [`Mergifyio/mergify-cli`](https://github.com/Mergifyio/mergify-cli)
-repository under `skills/`, are Apache-2.0, and ship as one bundle. For Codex,
-they're published as the
-[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b)
-in the OpenAI plugin directory; every agent, Codex included, can also install
-them through skills.sh.
+repository under `skills/`, are Apache-2.0, and ship as one bundle.
+[Install](#install) it in Claude Code, in Codex, or in any agent skills.sh
+supports.
 
 :::caution
   The skills drive the `mergify` command. They are instructions for using the
@@ -61,7 +59,18 @@ do nothing there.
 
 ## Install
 
+The bundle is the same whichever way you install it. Pick the path for your
+agent:
+
+| Agent | Install from |
+|---|---|
+| Claude Code | [Its built-in plugin marketplace](#claude-code) |
+| Codex | [The OpenAI plugin directory](#codex), or [skills.sh](#cursor-cline-copilot-and-other-skillssh-agents) |
+| Cursor, Cline, Copilot, and others | [skills.sh](#cursor-cline-copilot-and-other-skillssh-agents) |
+
 ### Claude Code
+
+Inside Claude Code, enter:
 
 ```text
 /plugin install mergify@claude-plugins-official
@@ -73,29 +82,35 @@ and search for `mergify`.
 
 ### Codex
 
-Codex and ChatGPT share one plugin directory, but the
-[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b)
-in it currently only works from Codex — the skills shell out to `mergify`,
-which ChatGPT itself cannot run. Open the plugin directory from Codex and
-search it for Mergify:
+Inside Codex, enter:
 
 ```text
-codex /plugins
+/plugins
 ```
+
+That opens the plugin directory. Search it for Mergify, install the
+[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b),
+then start a new Codex session so the skills load.
+
+Codex and ChatGPT share one plugin directory, but the listing currently only
+works from Codex: the skills shell out to `mergify`, which ChatGPT itself
+cannot run.
+
+Codex is also a skills.sh agent, so the command in the next section works for
+it too, if you would rather install every agent the same way.
 
 ### Cursor, Cline, Copilot, and other skills.sh agents
 
-[skills.sh](https://skills.sh) installs the same bundle into Cursor, Cline,
-Copilot, and dozens of other agents (Codex included, if you'd rather install
-it this way than through the plugin directory above):
+In your terminal, from the project you want the skills in, run:
 
 ```bash
 npx skills add Mergifyio/mergify-cli
 ```
 
-It detects the agent it is running under and writes the skills where that agent
-looks for them. To pick the target yourself, or to install once for every
-project instead of only the current one:
+[skills.sh](https://skills.sh) installs the same bundle into Cursor, Cline,
+Copilot, Codex, and dozens of other agents. It detects the agent it is running
+under and writes the skills where that agent looks for them. To pick the target
+yourself, or to install once for every project instead of only the current one:
 
 ```bash
 npx skills add Mergifyio/mergify-cli --agent cursor --global
