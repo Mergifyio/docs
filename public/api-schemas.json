@@ -16038,6 +16038,33 @@
         ],
         "title": "FailureRateResponse"
       },
+      "FrozenBatchAhead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "The id of the batch ahead, as `batches` or a bisection's `sub_batches` list it."
+          },
+          "pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "maximum": 9.223372036854776e+18,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Pull Request Numbers",
+            "description": "The pull requests queued in the batch ahead."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "pull_request_numbers"
+        ],
+        "title": "FrozenBatchAhead",
+        "description": "The frozen batch ahead that holds back the batch reporting it."
+      },
       "GetScheduledFreezesResponse": {
         "properties": {
           "scheduled_freezes": {
@@ -17397,6 +17424,17 @@
             ],
             "title": "Queue Pull Request Number",
             "description": "The number of the pull request the batch's checks run on: the batch pull request, or the user's own pull request for in-place checks. None while the batch has no active check pull request (still preparing, or its creation failed)."
+          },
+          "frozen_batch_ahead": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FrozenBatchAhead"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The batch ahead a scheduled freeze holds, and with it this batch: this batch merges only once that one has, however green its own checks are. The batch ahead may still be running its checks. `null` when no frozen batch is ahead, including when this batch is frozen itself, which its pull requests' `is_frozen` reports."
           },
           "sub_batches": {
             "anyOf": [
