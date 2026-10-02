@@ -1072,7 +1072,73 @@
             "prefer-theirs"
           ],
           "title": "Strategy",
-          "type": "string"
+          "type": "string",
+          "x-mergify-enum": [
+            {
+              "description": "Keep both sides' lines where they conflict, the batch's first.",
+              "facts": {
+                "discards": null,
+                "kind": "git-builtin",
+                "options": {},
+                "resolves_binary": false,
+                "suits": [
+                  "append-only"
+                ]
+              }
+            },
+            {
+              "description": "Keep the batch's whole file and discard the incoming pull request's change to it, even where the two did not conflict.",
+              "facts": {
+                "discards": {
+                  "scope": "whole-file",
+                  "side": "theirs"
+                },
+                "kind": "driver",
+                "options": {},
+                "resolves_binary": true,
+                "suits": []
+              }
+            },
+            {
+              "description": "Take the incoming pull request's whole file and discard the batch's, even where the two did not conflict.",
+              "facts": {
+                "discards": {
+                  "scope": "whole-file",
+                  "side": "ours"
+                },
+                "kind": "driver",
+                "options": {},
+                "resolves_binary": true,
+                "suits": []
+              }
+            },
+            {
+              "description": "Merge normally, and keep the batch's side only on the lines that conflict -- its whole file when both sides added the file.",
+              "facts": {
+                "discards": {
+                  "scope": "conflicting-lines",
+                  "side": "theirs"
+                },
+                "kind": "driver",
+                "options": {},
+                "resolves_binary": false,
+                "suits": []
+              }
+            },
+            {
+              "description": "Merge normally, and keep the incoming pull request's side only on the lines that conflict -- its whole file when both sides added the file.",
+              "facts": {
+                "discards": {
+                  "scope": "conflicting-lines",
+                  "side": "ours"
+                },
+                "kind": "driver",
+                "options": {},
+                "resolves_binary": false,
+                "suits": []
+              }
+            }
+          ]
         }
       },
       "required": [
