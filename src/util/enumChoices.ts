@@ -29,6 +29,12 @@ export interface EnumChoice {
   /** May be empty: a value can be published before it is documented. */
   description: string;
   deprecated: boolean;
+  /**
+   * Structured per-value facts, when the schema publishes them alongside the
+   * prose (`x-mergify-enum[i].facts`). Their shape belongs to the field that
+   * publishes them, so each caller reads its own keys defensively.
+   */
+  facts?: Record<string, unknown>;
 }
 
 interface SchemaNode {
@@ -202,6 +208,7 @@ function read(root: unknown, node: unknown, inherited: SchemaNode): EnumChoice[]
             ? fallback
             : '',
       deprecated: positional.deprecated === true,
+      ...(isObject(positional.facts) ? { facts: positional.facts } : {}),
     };
   });
 }
