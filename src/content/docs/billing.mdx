@@ -21,6 +21,11 @@ Here's how it works:
   as reviewing, commenting on, closing, or reopening a pull request, does not
   make someone a contributor.
 
+- Bot accounts are never contributors. A GitHub App or bot user that opens a
+  pull request or pushes to one, such as a dependency updater, is skipped. So
+  are `web-flow`, the account GitHub attributes web-editor commits to, and
+  accounts that have since been deleted. Only real user accounts are counted.
+
 - Each user is counted **only once**, even if they contribute to pull requests
   across multiple repositories.
 
