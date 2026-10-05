@@ -93,18 +93,22 @@ Granting and revoking delegated roles requires the Enterprise plan; see
 operations described above stay with the GitHub organization `Owner`s.
 
 :::note
-  **Onboarding exception: the first trial.** Starting your organization's
-  **first** trial is a self-service action. Any organization member can
-  start it, even without the GitHub `Owner` role, and Mergify automatically
-  grants them the **Billing Admin** role so they can manage the subscription
-  they create from it.
+  **Exception: subscribing.** Subscribing is a self-service action. Any
+  organization member can start a trial or put a product on the
+  organization's subscription, even without the GitHub `Owner` role, and
+  Mergify automatically grants them the **Billing Admin** role so they can
+  manage what they just started. Outside collaborators cannot, because
+  subscribing requires organization membership.
 
-  This is a one-time onboarding bootstrap. It cannot escalate privileges on
-  an established organization: it applies only while the organization has
-  never had a subscription, and once one exists (active or canceled),
-  starting another trial is rejected, so the automatic grant can no longer
-  be triggered. Billing Admin grants billing access only; it grants no
-  repository, queue, or configuration access.
+  This is not confined to an organization's first subscription. A member who
+  adds a product an established organization does not already have is granted
+  the role the same way. Two things do not trigger it: opening a checkout page
+  without completing it, and subscribing to a plan or to a product the
+  organization already has, which is rejected.
+
+  Billing Admin grants billing access only. It grants no repository, queue, or
+  configuration access, and like every delegated role it cannot take a user
+  past what their GitHub role already allows on the underlying repositories.
 :::
 
 Each user can hold any combination of the following roles:
@@ -221,7 +225,11 @@ function properly.
     <tr>
       <td>Repository: Issues</td>
       <td>Read and write</td>
-      <td>Used to close issues on merge.</td>
+      <td>
+        Used to read and write the parts of a pull request that GitHub serves
+        under its Issues API: labels, assignees, comments, and reactions on
+        comments.
+      </td>
     </tr>
     <tr>
       <td>Repository: Metadata</td>
@@ -326,7 +334,7 @@ relevant account or resource. Permissions are inherited from GitHub roles.
   </tbody>
   <tbody>
     <tr>
-      <th colSpan="7" scope="rowgroup">Merge Protection</th>
+      <th colSpan="7" scope="rowgroup">Merge Protections</th>
     </tr>
     <tr>
       <td>View merge protection status</td>
