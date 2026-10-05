@@ -428,6 +428,7 @@ it on a merge queue batch build and it prints the queue metadata as JSON:
 ```json
 {
   "scopes": ["backend", "frontend"],
+  "all_scopes": false,
   "pull_requests": [
     { "number": 123, "scopes": ["backend"] },
     { "number": 124, "scopes": ["frontend"] }
@@ -459,6 +460,13 @@ The fields are:
 
 - `scopes`: the [scopes](/merge-queue/scopes) this batch covers, the union of
   the scopes of its pull requests. Empty when you do not use scopes.
+
+- `all_scopes`: `true` when the batch holds a
+  [barrier](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope)
+  pull request, one that impacts every scope. `scopes` then lists only the
+  scopes its pull requests named, often none, so test every scope. Metadata
+  written by an older Mergify release has no `all_scopes` key: treat a missing
+  key as unknown, not as `false`.
 
 - `pull_requests`: the pull requests the batch is checking, each with its own
   scopes.
