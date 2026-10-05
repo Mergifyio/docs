@@ -11,10 +11,18 @@ CI Insights helps you monitor your pipelines, detect flaky tests and jobs, and i
 your CI efficiency. This guide walks you through enabling CI Insights via
 GitHub and covers basic configuration steps.
 
-> First time here? Follow these 3 steps to see data fast:
-> 1. Install the Mergify GitHub App on a repo with existing CI.
-> 2. Ensure your tests produce a supported format (JUnit XML, pytest, Jest, etc.); pick a framework below if needed.
-> 3. Re-run a workflow (or push a trivial commit), then open CI Insights in the dashboard to view your jobs and tests.
+:::note
+  To start collecting data, install the Mergify GitHub App on a repository with
+  existing CI, then check the **CI Insights** box for that repository on the
+  [Repositories page](/integrations/github#configuring-enabled-products) and
+  confirm with **Save Changes**. Installing the app is not enough on its own:
+  products are enabled one repository at a time, and until CI Insights is
+  enabled on a repository, Mergify records no CI data for it.
+
+  Job data then arrives on the next CI run. Test-level data needs your test
+  framework to upload its results as well. See [Test Framework
+  Configuration](#test-framework-configuration) below.
+:::
 
 ## Understanding CI Insights
 
