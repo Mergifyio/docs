@@ -196,11 +196,14 @@ being tested without the changes it builds on.
 Priority and stacks decide what a batch must contain. Similarity decides the
 rest: which of the remaining equal-priority pull requests fill the slots that
 are still free (up to `batch_size`). Mergify adds them one at a time, ranking
-every waiting candidate by three criteria applied **in order**, each one only
-breaking the ties the previous one leaves open:
+the candidates near the front of the queue by three criteria applied
+**in order**, each one only breaking the ties the previous one leaves open:
 
-1. **[Scopes](/merge-queue/scopes).** The pull requests that share the most
-   scopes with the batch are the strongest match and are grouped together.
+1. **[Scopes](/merge-queue/scopes).** Mergify compares a candidate's scopes
+   against the batch's as a proportion: the scopes the two have in common, out
+   of every scope either side names. A candidate whose scopes match the batch's
+   exactly scores highest, and it outranks one that shares those scopes but
+   names several more of its own.
 
 2. **Changed directories.** When scopes don't separate two candidates, Mergify
    compares the **directories each pull request changes** and prefers the one
@@ -247,6 +250,14 @@ digraph {
 Here the queue order is PR #1, #2, #3, #4. PR #3 changes the same area as PR #1
 (`api/`), so it joins PR #1 in the first batch even though PR #2 was queued
 earlier. PR #2 and PR #4, which touch unrelated areas, fall into the next batch.
+
+Similarity only reaches a short way down the queue. Mergify fills a batch from
+a window at the front of the queue, a little wider than `batch_size` and wider
+still as [`max_parallel_checks`](/merge-queue/performance#parallel-checks)
+grows. A similar pull request sitting further back than that window is not
+pulled forward; it waits for a batch whose window reaches it. This keeps the
+queue close to first-in, first-out, so a pull request with no similar neighbor
+is not deferred batch after batch while better matches are found ahead of it.
 
 :::note
   Grouping only considers the pull requests waiting in the queue when a batch is

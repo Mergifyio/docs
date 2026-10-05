@@ -41,8 +41,9 @@ In this example:
 - Documentation changes get the `docs` scope
 
 :::tip
-  When filling a batch, Mergify picks the queued pull request whose scopes overlap the batch's
-  scopes the most, so changes to the same area of the repository tend to travel together. In
+  When filling a batch, Mergify picks the queued pull request whose scopes are closest to the
+  batch's, meaning the largest share in common out of every scope either side names, so changes to
+  the same area of the repository tend to travel together. In
   [parallel mode](/merge-queue/queue-modes) the grouping is stricter: pull requests are grouped by
   their exact set of scopes, so a pull request scoped to `python-api` alone and one scoped to both
   `python-api` and `frontend` go into different batches.
