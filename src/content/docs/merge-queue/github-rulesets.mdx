@@ -121,9 +121,8 @@ Bypassing and injection are different controls. A bypass mode decides what
 GitHub lets Mergify *do*; injection decides what Mergify *requires* before it
 merges, and the two are set in different places:
 
-- Injection reads every branch protection and ruleset that applies to the
-  target branch, including the ones Mergify can bypass, and turns the supported
-  rules into merge conditions.
+- Injection reads the branch protections and rulesets that apply to the target
+  branch and turns the supported rules into merge conditions.
 
 - [`branch_protection_injection_mode`](/configuration/file-format/#queue-rules)
   controls it, and [Controlling Injection](#controlling-injection) covers its
@@ -135,9 +134,11 @@ scope the ruleset so it no longer targets the branch. That is the one control
 that acts on exactly one rule.
 
 :::caution
-  A bypass mode does not shape your merge conditions. Mergify injects the rules
-  of a ruleset it can bypass like any other, whichever mode you picked, so
-  narrowing the mode keeps nothing in your conditions and only blocks the queue.
+  Narrowing Mergify's bypass mode is not a way to drop a requirement from your
+  merge conditions. The mode decides what GitHub lets Mergify *do*, so narrowing
+  it blocks the queue. When a requirement should not gate your queue, take the
+  rule out of the ruleset or scope the ruleset so it no longer targets the
+  branch.
 :::
 
 ## Review Requirements
@@ -279,8 +280,8 @@ Mergify handles each GitHub ruleset rule type as follows.
 | `required_status_checks` | Injected as conditions | See [below](#require-branches-to-be-up-to-date) |
 | `pull_request` | Injected as conditions | Depends on the approval count. See [above](#review-requirements) |
 | `merge_queue` (GitHub native) | **Incompatible** | See [below](#github-native-merge-queue-rule) |
-| `creation` | Checked when creating batch PRs | May block batch PR creation if Mergify is not a bypass actor |
-| `update` | Checked when updating batch PRs | May block batch PR updates if Mergify is not a bypass actor |
+| `creation` | Checked on queue branch creation | See [below](#required-signatures-and-branch-deletion) |
+| `update` | Checked on queue branch creation | See [below](#required-signatures-and-branch-deletion) |
 | `branch_name_pattern` | Checked on queue branch creation | See [below](#branch-name-pattern) |
 | `required_review_thread_resolution` | Injected as conditions | -- |
 | `required_signatures` | Checked on queue branch push | See [below](#required-signatures-and-branch-deletion) |
@@ -365,8 +366,8 @@ narrow.
 ### Required Signatures and Branch Deletion
 
 Mergify builds each queue branch locally and pushes it, then deletes it once
-the batch is done. Both are raw ref operations, so a ruleset covering the
-queue branch prefixes can stop the queue:
+the batch is done. Neither goes through a pull request, so a ruleset covering
+the queue branch prefixes can stop the queue:
 
 - A `required_signatures` rule rejects the push, because the commits Mergify
   composes locally are unsigned. Every queue attempt then fails on branch
@@ -375,11 +376,17 @@ queue branch prefixes can stop the queue:
 - A `deletion` rule stops Mergify from removing the final queue branch before
   recreating it, which leaves the queue stuck on that batch.
 
+- A `creation`, `update`, or `pull_request` rule refuses the queue branch
+  outright, whatever the rule itself asks for. A `pull_request` rule counts
+  here because the queue branch is pushed, never opened as a pull request of
+  its own, so the rule can never be satisfied on it. Unlike the push and the
+  deletion, any bypass mode clears these three, `pull_requests_only` included.
+
 **Resolution:**
 
 - **Preferred:** add Mergify as a bypass actor on the ruleset with the
   `exempt` or `always` bypass mode. `pull_requests_only` is not enough for
-  either operation.
+  the push or the deletion.
 
 - **Alternative:** narrow the ruleset so it does not cover the queue branch
   prefixes.
