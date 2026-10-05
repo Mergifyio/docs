@@ -150,7 +150,7 @@ These optional Git config settings let you customize Stacks behavior:
 |---------|---------|-------------|
 | `mergify-cli.stack-branch-prefix` | `stack/{username}` | Set the prefix for remote branch names |
 | `mergify-cli.stack-create-as-draft` | `false` | Create PRs as drafts by default |
-| `mergify-cli.stack-github-native` | `true` | Register the stack with GitHub's stacking API (experimental) |
+| `mergify-cli.stack-github-native` | `true` | Register the stack with GitHub's stacking API |
 | `mergify-cli.stack-keep-pr-title-body` | `false` | Don't overwrite PR title/body on updates |
 | `mergify-cli.stack-revision-history` | `true` | Keep a revision-history comment on each PR |
 
@@ -178,10 +178,10 @@ its full set of flags and defaults.
   stack carries no `Depends-On:` marker in its pull request descriptions; the
   [Merge Queue](/merge-queue/stacks#github-native-stacked-pull-requests)
   recognizes it and lands its members bottom-up, the same way it lands a
-  `Depends-On:` chain. The CLI marks the registration itself as experimental,
-  and skips it silently where that API isn't available; the push goes through
-  as usual either way. Pass `--no-github-native`, or set the Git config to
-  `false`, to push a `Depends-On:` chain instead.
+  `Depends-On:` chain. Where that API isn't available, the push reports
+  `not registered on GitHub`, writes the `Depends-On:` markers back, and
+  otherwise goes through as usual. Pass `--no-github-native`, or set the Git
+  config to `false`, to push a `Depends-On:` chain without trying to register.
 :::
 
 ## Next Steps
