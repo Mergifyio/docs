@@ -1,1 +1,6 @@
-address review: drop the HEXPIRE explanation from the requirements page; the release note keeps it
+Revision history for #13208:
+
+rev 2 (content) 2026-10-05 18:09 UTC — address review: drop the HEXPIRE explanation from the requirements page; the release note keeps it
+rev 1 (initial) 2026-10-05 18:09 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13208,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"13478be528021c5389a09afe54f98d8c65fe12b9","timestamp_iso":"2026-10-05T18:09:12Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"13478be528021c5389a09afe54f98d8c65fe12b9","new_sha":"c82ac0bee9c717cbf8e61a29a36906cce958f5cc","timestamp_iso":"2026-10-05T18:09:12Z","reason":"address review: drop the HEXPIRE explanation from the requirements page; the release note keeps it","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/13478be528021c5389a09afe54f98d8c65fe12b9...c82ac0bee9c717cbf8e61a29a36906cce958f5cc"}]} -->
