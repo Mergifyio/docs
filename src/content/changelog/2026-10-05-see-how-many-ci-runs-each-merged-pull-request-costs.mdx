@@ -1,0 +1,11 @@
+---
+title: "See how many CI runs each merged pull request costs"
+date: 2026-10-05
+tags:
+  - Merge Queue
+description: "The Merge Queue Stats page now shows how many CI runs the queue starts for each pull request it merges, and why the runs that led to no merge were thrown away."
+---
+
+The new **CI Runs per Merged PR** widget on the Merge Queue Stats page shows the average number of CI runs the queue starts for each pull request it merges, and the share of those runs that led to no merge, broken down by why they were thrown away: a failure ahead in the queue, a higher-priority pull request, a retried check, and so on. A batch tested once counts as one run however many pull requests it carries, so you can see what `batch_size`, `max_parallel_checks` and speculative checks actually cost you in CI.
+
+The same numbers are available from the statistics API and in Datadog as `mergify.queue.ci_runs.started` and `mergify.queue.ci_runs.wasted`.
