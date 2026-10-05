@@ -185,6 +185,15 @@ everything under `docs/`. When several entries match the same file, the last one
 wins. A conflict on a file no resolver matches holds the pull request exactly as
 described above.
 
+A few pattern shapes carried over from `.gitattributes` are rejected as
+configuration errors rather than quietly matching nothing. A pattern that
+starts with a separator (`/src/**` or `./src/**`) is rejected, since patterns
+are already relative to the repository root, so drop the leading separator. A
+pattern that ends with one (`docs/`) is rejected because patterns match files,
+not directories, so write `docs/**` instead. The separator checks run on each
+brace alternative, so `{/a,b}` is rejected too. An empty pattern is rejected,
+as is one that matches no path at all, such as `{}`.
+
 :::caution
   Resolvers only take effect when the batch branch Mergify built is what lands,
   which means `merge_method` set to `merge-batch` or `fast-forward`. With
