@@ -6002,7 +6002,7 @@
           "test_insights"
         ],
         "summary": "Get a test's health transitions over time",
-        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window: the edges of the series, not the full series. Each point is the verdict the test's health badge would have shown at that moment. It is computed from every run up to that point, over the same history the health badge reads. A window ends now, so it ends on the badge shown today. Points are sampled per UTC day, so a transition is timestamped to a day boundary rather than to an individual run.",
+        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window: the edges of the series, not the full series. The first point is the health where the window opens, at `first_activity_at`; each later one is the run at which the test turned flaky or broken, or recovered. Without a pipeline and job, the worst health across the test's jobs wins at each instant.",
         "operationId": "ci-test-health-transitions",
         "security": [
           {
@@ -6643,15 +6643,21 @@
             "schema": {
               "anyOf": [
                 {
-                  "type": "string",
-                  "format": "uuid"
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
                 }
               ],
+              "description": "The test identifier to filter on",
               "title": "Test Id"
-            }
+            },
+            "description": "The test identifier to filter on"
           },
           {
             "name": "source",
@@ -6862,6 +6868,48 @@
             "description": "The test name to exclude"
           },
           {
+            "name": "health_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HealthStatus"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health status to filter on. Tests with no recent runs are left out.",
+              "title": "Health Status"
+            },
+            "description": "The health status to filter on. Tests with no recent runs are left out."
+          },
+          {
+            "name": "health_status_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HealthStatus"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health status to exclude. Tests with no recent runs are kept.",
+              "title": "Health Status Exclude"
+            },
+            "description": "The health status to exclude. Tests with no recent runs are kept."
+          },
+          {
             "name": "cursor",
             "in": "query",
             "required": false,
@@ -6898,6 +6946,33 @@
               "title": "Per Page"
             },
             "description": "The number of items per page. Omit to receive the full list in a single response; pass a value to opt into RFC 5988 cursor pagination."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/QuarantinesSort",
+              "description": "Sort field",
+              "default": "created_at"
+            },
+            "description": "Sort field"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string",
+              "description": "Sort direction: `asc` for oldest first, `desc` for newest first",
+              "default": "asc",
+              "title": "Direction"
+            },
+            "description": "Sort direction: `asc` for oldest first, `desc` for newest first"
           }
         ],
         "responses": {
@@ -13703,7 +13778,7 @@
               }
             ],
             "title": "Parent Batch Ids",
-            "description": "The batch ids this batch descends from. A batch inherits its parents' check results, so this links a batch back to the ones checked before it. Empty on a first check with no predecessor. Null on events persisted before this field was added."
+            "description": "The batch ids this batch was queued behind, as of this event. A batch inherits its parents' check results, so this links it back to the ones checked before it. A parent may be dropped once its pull requests have merged, so a later event for the same batch can list fewer parents than an earlier one, or none at all. Empty on a first check with no predecessor. Null on events persisted before this field was added."
           },
           "session_id": {
             "type": "string",
@@ -14084,7 +14159,7 @@
               }
             ],
             "title": "Parent Batch Ids",
-            "description": "The batch ids this batch descends from. A batch inherits its parents' check results, so this links a batch back to the ones checked before it. Empty on a first check with no predecessor. Null on events persisted before this field was added."
+            "description": "The batch ids this batch was queued behind, as of this event. A batch inherits its parents' check results, so this links it back to the ones checked before it. A parent may be dropped once its pull requests have merged, so a later event for the same batch can list fewer parents than an earlier one, or none at all. Empty on a first check with no predecessor. Null on events persisted before this field was added."
           },
           "previous_batch_id": {
             "anyOf": [
@@ -16782,7 +16857,7 @@
             },
             "type": "array",
             "title": "Transitions",
-            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the earliest classification observed in the window. Health is classified per UTC day, so timestamps land on day boundaries, not individual runs."
+            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the health at `first_activity_at`. Without a pipeline and job, the worst health across the test's jobs wins at each instant."
           },
           "first_activity_at": {
             "anyOf": [
@@ -16795,7 +16870,7 @@
               }
             ],
             "title": "First Activity At",
-            "description": "Start of the earliest bucket with any executions in the window, or null when the test had no activity. A consumer can treat a `first_activity_at` well after the window start as the test's genuine origin, and one at the window edge as history that predates the retained window."
+            "description": "The test's first run in the window, the window start when it also ran before, or null when it had no activity. A consumer can treat a `first_activity_at` well after the window start as the test's genuine origin, and one at the window edge as history that predates the retained window."
           }
         },
         "type": "object",
@@ -16908,7 +16983,7 @@
             "type": "string",
             "format": "date-time",
             "title": "At",
-            "description": "Bucket boundary at which the test's health changed to `health_status`."
+            "description": "Run at which the test's health changed to `health_status`, or `first_activity_at` for the first point."
           },
           "health_status": {
             "$ref": "#/components/schemas/HealthStatus",
@@ -16924,7 +16999,7 @@
               }
             ],
             "title": "Exception Type",
-            "description": "Exception raised by the first failing run of the episode this transition opens. Always null for a recovery, when no failing run is retained, and on a first point that reports a test already unhealthy when the window opened: that episode began before the window, so its opening run is not among the runs the window covers."
+            "description": "Exception raised by the run that opened this transition. Always null for a recovery, for the first point, when that run passed (a flaky test can turn flaky on a pass), and when the run is no longer retained."
           },
           "pull_request": {
             "anyOf": [
@@ -16935,7 +17010,7 @@
                 "type": "null"
               }
             ],
-            "description": "Pull request whose merge commit introduced the first failing run of the episode this transition opens. Null in three cases: on a recovery, because a test can stop failing without a PR fixing it and no 'fixed by' is attributed; when the failing commit cannot be traced back to a merged pull request; and on a first point whose episode began before the window."
+            "description": "Pull request whose merge commit the run that opened this transition ran on. Null in three cases: on a recovery, because a test can stop failing without a PR fixing it and no 'fixed by' is attributed; when that commit cannot be traced back to a merged pull request; and on the first point."
           }
         },
         "type": "object",
@@ -18460,7 +18535,7 @@
                 "type": "null"
               }
             ],
-            "description": "Health of the test on the repository's default branch, or `null` when it has no recent runs there."
+            "description": "Health of the test, or `null` when it has no recent runs."
           },
           "is_recovered": {
             "type": "boolean",
@@ -18524,6 +18599,10 @@
           "total"
         ],
         "title": "QuarantinedTestsResponse"
+      },
+      "QuarantinesSort": {
+        "type": "string",
+        "const": "created_at"
       },
       "Queue": {
         "properties": {
