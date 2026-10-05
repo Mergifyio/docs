@@ -44,8 +44,8 @@ With scopes, Mergify can:
 
 3. **Optionally, collect scopes in CI** via
    [`gha-mergify-ci`](https://github.com/Mergifyio/gha-mergify-ci) when you compute scopes with a
-   build system (Nx, Bazel, Turborepo) or want to gate expensive tests on the scopes a pull request
-   touches.
+   build system (Nx, Bazel, Turborepo, Pants) or want to gate expensive tests on the scopes a pull
+   request touches.
 
 4. **Get [Direct Merge](/merge-queue/direct-merge)** once a pull request carries scopes, whichever
    way they were attached: when the base branch has moved only in scopes that pull request does not
@@ -77,7 +77,7 @@ of how you compute them.
 ## Next steps
 
 - [Scopes reference](/merge-queue/scopes): schema, file-pattern setup, and tooling guides (Nx, Bazel,
-  Turborepo, custom uploaders).
+  Turborepo, Pants, custom uploaders).
 
 - [Queue Modes](/merge-queue/queue-modes): once scopes are configured, enable parallel mode to
   test and merge pull requests that touch different scopes simultaneously, reducing merge times
