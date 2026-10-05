@@ -52,6 +52,22 @@ Those notifications are useful for:
 - **Release Management**: Monitor critical merges during release periods
 - **Debugging**: Quickly identify when and why queue operations fail
 
+### Notifying Only on Dequeued Pull Requests
+
+The **Queue leave** event fires every time a pull request leaves the queue,
+including when it leaves because it was merged. On a busy queue, merges make up
+most of those messages. To hear only about pull requests that were
+[removed from the queue](/merge-queue/lifecycle#removing-a-pull-request-from-the-merge-queue)
+without being merged, turn on **Skip Merged Pull Requests on Queue
+Leave** for that notification.
+
+The switch appears when **Queue leave** is among the selected events, or when no
+event is selected, since that subscribes to all of them. It is off by default.
+When it is on, a pull request that left the queue merged, whether Mergify merged
+it or someone merged it by hand, does not post a **Queue leave** message to that
+channel. Other events are not affected: select **Merged** if you still want a
+message for each pull request the queue merges.
+
 ## CI Insights Notifications
 
 [Mergify's CI Insights](/ci-insights) can send Slack notifications about CI job
