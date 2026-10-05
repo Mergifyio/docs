@@ -3,7 +3,9 @@ title: 'Manual Installation (Legacy)'
 description: 'Legacy process for provisioning the Mergify GitHub App and engine without the installer.'
 ---
 
-> These steps mirror the older manual workflow. Adapt them into infrastructure-as-code if needed.
+> These steps mirror the older manual workflow, for deployments that create the GitHub App by hand
+> rather than through the installer. The [Installation guide](/enterprise/installation) covers the
+> installer-based path. Adapt either into infrastructure-as-code if needed.
 
 > The `@@ENTERPRISE_VERSION@@` tag below is the most recent Enterprise release at the time this page
 > was built.
@@ -11,7 +13,7 @@ description: 'Legacy process for provisioning the Mergify GitHub App and engine 
 ## 1. Create the GitHub App
 
 1. In your GHES organization settings, open **Developer settings → GitHub Apps** and click
-  **New GitHub App**.
+   **New GitHub App**.
 
 2. Fill the form with:
 
@@ -59,31 +61,31 @@ description: 'Legacy process for provisioning the Mergify GitHub App and engine 
 
 4. Subscribe to events:
 
-  - Branch protection configuration
-  - Branch protection rule
-  - Check run
-  - Check suite
-  - Deployment Status
-  - Issue comment
-  - Member
-  - Membership
-  - Merge group
-  - Organization
-  - Pull request
-  - Pull request review
-  - Pull request review comment
-  - Pull request review thread
-  - Push
-  - Repository
-  - Repository ruleset
-  - Status
-  - Team
-  - Team add
-  - Workflow job
-  - Workflow run
+   - Branch protection configuration
+   - Branch protection rule
+   - Check run
+   - Check suite
+   - Deployment status
+   - Issue comment
+   - Member
+   - Membership
+   - Merge group
+   - Organization
+   - Pull request
+   - Pull request review
+   - Pull request review comment
+   - Pull request review thread
+   - Push
+   - Repository
+   - Repository ruleset
+   - Status
+   - Team
+   - Team add
+   - Workflow job
+   - Workflow run
 
 5. Click **Create GitHub App**, then record the **App ID** and **Client ID**.
-  Generate a **Client secret** and a **Private key** (store the PEM for later base64 encoding).
+   Generate a **Client secret** and a **Private key** (store the PEM for later base64 encoding).
 
 ## 2. Install the App on Your Organization
 
