@@ -132,6 +132,23 @@ results collected up to that point.
 If the plugin cannot fetch the quarantine list, it quarantines nothing for that
 run, and a quarantined test that fails makes the step fail as usual.
 
+## Environment Variables
+
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `MERGIFY_TOKEN` | API authentication token | **Required** |
+| `MERGIFY_API_URL` | API endpoint location | `https://api.mergify.com` |
+| `PYTEST_MERGIFY_ENABLE` | Force-enable outside CI | `false` |
+| `PYTEST_MERGIFY_DEBUG` | Print spans to console | `false` |
+| `MERGIFY_TRACEPARENT` | W3C distributed trace context | Optional |
+| `MERGIFY_TEST_JOB_NAME` | Test job name identifier | Optional |
+
+:::tip
+  The plugin auto-activates in CI environments (detected via the `CI`
+  environment variable). To enable it outside CI, set
+  `PYTEST_MERGIFY_ENABLE=true`.
+:::
+
 ## Using with Tox
 
 If you’re using [Tox](https://tox.wiki/) to manage test environments, you can
