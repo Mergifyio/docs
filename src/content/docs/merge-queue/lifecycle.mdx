@@ -6,6 +6,7 @@ description: Understand the lifecycle of a pull request before and once it enter
 import { Image } from "astro:assets"
 import queueCheckScreenshot from "../../images/merge-queue/lifecycle/mergify-check.png"
 import queueStatusScreenshot from "../../images/merge-queue/setup/queue-status.png"
+import ConflictResolverStrategies from "../../../components/Tables/ConflictResolverStrategies"
 
 This page explains what happens to a pull request (PR) once it enters the
 merge queue, from the moment it's added until it's either merged or removed
@@ -171,13 +172,7 @@ The strategy names follow git's merge drivers. *Ours* is always the batch as it
 already stands — the base branch plus the pull requests ahead — and never the
 pull request being added to it:
 
-| Strategy | What it keeps |
-| --- | --- |
-| `union` | Both sides' conflicting lines, ours first. For append-only files. |
-| `ours` | Our whole file, dropping the incoming change to it, conflict or not. |
-| `theirs` | The incoming pull request's whole file, dropping ours, conflict or not. |
-| `prefer-ours` | A normal merge, keeping our side on the conflicting lines only. |
-| `prefer-theirs` | A normal merge, keeping the incoming side on the conflicting lines only. |
+<ConflictResolverStrategies />
 
 `paths` takes [glob patterns](/configuration/data-types#globs) matched from the
 repository root, so `*.md` covers Markdown files at the root and `docs/**`
