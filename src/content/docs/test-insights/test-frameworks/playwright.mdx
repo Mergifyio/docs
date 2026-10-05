@@ -179,6 +179,43 @@ env:
 This option is opt-in (off by default) to preserve the history of tests that
 already report without a project prefix.
 
+## Matrix and Sharded Runs
+
+The reporter uploads each run's results under your CI job's name. On GitHub
+Actions, that name is the job's identifier (`GITHUB_JOB`), which every leg of
+a matrix shares. The job name is
+[part of a test's identity](/ci-insights/setup/github-actions#configuration-tips)
+in Test Insights, so when the legs run the same tests in different
+environments, their results merge into one test.
+
+Set `MERGIFY_TEST_JOB_NAME` on each leg and include the matrix value, so each
+leg reports under its own name:
+
+```yaml
+jobs:
+  e2e:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      # ...
+      - name: Run Tests 🧪
+        env:
+          MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+          MERGIFY_TEST_JOB_NAME: e2e (${{ matrix.os }})
+        run: npx playwright test
+```
+
+Legs that each run one `--shard` of the suite run different tests, so they can
+share a name. Leave the shard index out of `MERGIFY_TEST_JOB_NAME`: adding or
+removing tests can move a test to another shard, and a name per shard would
+split that test's history. When you shard within an environment matrix, name
+each leg after its environment only, as above.
+
+Setting `MERGIFY_TEST_JOB_NAME` on a job that already reports changes its
+name, so its tests start a new history in Test Insights.
+
 ## Verify and Review in Test Insights
 
 After pushing these changes, your next CI run reports its Playwright results
@@ -196,6 +233,7 @@ automatically.
 | `PLAYWRIGHT_MERGIFY_INCLUDE_PROJECT_IN_TEST_NAME` | Prefix the project name to tests in multi-project runs | `false` |
 | `MERGIFY_CI_DEBUG` | Print spans to console instead of uploading | `false` |
 | `MERGIFY_TRACEPARENT` | W3C distributed trace context | Optional |
+| `MERGIFY_TEST_JOB_NAME` | Name this job reports under; set one per environment, never per shard | CI job name |
 
 :::tip
   The reporter auto-activates in CI environments (detected via the `CI`
