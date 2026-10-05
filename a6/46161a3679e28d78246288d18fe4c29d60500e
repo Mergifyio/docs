@@ -1,0 +1,6 @@
+Revision history for #13146:
+
+rev 2 (content) 2026-10-02 15:43 UTC — fix CI lint: wrap the Image tag so no line exceeds 120 characters
+rev 1 (initial) 2026-10-02 15:43 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13146,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"36d1e8a122a7b860614232dc6739db10aeac615f","timestamp_iso":"2026-10-02T15:43:33Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"36d1e8a122a7b860614232dc6739db10aeac615f","new_sha":"164e3db8ebe8590db50aed6488e91a041c0287be","timestamp_iso":"2026-10-02T15:43:33Z","reason":"fix CI lint: wrap the Image tag so no line exceeds 120 characters","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/36d1e8a122a7b860614232dc6739db10aeac615f...164e3db8ebe8590db50aed6488e91a041c0287be"}]} -->
