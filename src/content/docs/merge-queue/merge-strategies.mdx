@@ -371,11 +371,6 @@ queue_rules:
   tooling can push to these branches.
 :::
 
-If the work you push to a batch branch is resolving a conflict on a known set of
-files, [`conflict_resolvers`](/merge-queue/lifecycle#resolving-some-conflicts-automatically)
-handles those files while Mergify builds the batch, with no push to the branch
-and under the same two merge methods.
-
 An accepted edit also restarts the batches behind the edited one, whenever
 [parallel checks](/merge-queue/performance#parallel-checks) put more than one batch in flight. Each
 of those batches was composed on top of what the batches ahead were expected to merge, so from the
