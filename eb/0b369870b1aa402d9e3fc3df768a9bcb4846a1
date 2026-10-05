@@ -1,0 +1,1 @@
+Table row now says one name per environment, never per shard, matching the sharding guidance above it.
