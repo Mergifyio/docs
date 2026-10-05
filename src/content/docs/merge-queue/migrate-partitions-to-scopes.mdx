@@ -20,7 +20,7 @@ conditions evaluated by Mergify. Scopes improve on this in several ways:
 | | Partition Rules | Scopes |
 |---|---|---|
 | **CI awareness** | None: CI runs everything | Jobs can be skipped when their scope is not affected |
-| **Build tool support** | None | Native support for Nx, Bazel, Turborepo, and custom tooling |
+| **Build tool support** | None | Native support for Nx, Bazel, Turborepo, Pants, and custom tooling |
 | **Batching** | Fixed lanes: PRs routed to one partition | Overlap-aware: PRs sharing scopes batch together |
 | **Parallel mode** | Not compatible | Fully supported: non-overlapping scopes merge simultaneously |
 | **Merge queue scope** | Not available | Special `merge-queue` scope lets you gate expensive tests to queue-only runs |
@@ -49,6 +49,7 @@ needed only when you want to:
 | **Nx** | `nx show projects --affected` using refs from `gha-mergify-ci` |
 | **Turborepo** | `turbo run build --dry=json --filter` using refs from `gha-mergify-ci` |
 | **Bazel** | `bazel query` for affected packages using refs from `gha-mergify-ci` |
+| **Pants** | `pants --changed-diffspec --changed-dependents` using refs from `gha-mergify-ci` |
 
 See the [Scopes reference](/merge-queue/scopes) for detailed setup guides for
 each build tool.
@@ -229,7 +230,7 @@ See [Queue Modes](/merge-queue/queue-modes) for details.
 
 ## Using a Build Tool Instead of File Patterns
 
-If your monorepo uses Nx, Turborepo, or Bazel, you can let the build tool
+If your monorepo uses Nx, Turborepo, Bazel, or Pants, you can let the build tool
 determine affected scopes instead of maintaining file patterns manually.
 
 Switch from `files` to `manual` source:
@@ -288,8 +289,8 @@ detect-scopes:
 ```
 
 See the dedicated guides for [Nx](/merge-queue/scopes/nx),
-[Turborepo](/merge-queue/scopes/turborepo), and
-[Bazel](/merge-queue/scopes/bazel).
+[Turborepo](/merge-queue/scopes/turborepo), [Bazel](/merge-queue/scopes/bazel),
+and [Pants](/merge-queue/scopes/pants).
 
 ## Complete Before & After Example
 
