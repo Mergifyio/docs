@@ -130,6 +130,41 @@ the out-of-memory killer, sends nothing to Test Insights.
 If the reporter cannot fetch the quarantine list, it quarantines nothing for
 that run, and a quarantined test that fails makes the step fail as usual.
 
+## Matrix Runs
+
+The reporter uploads each run's results under your CI job's name. On GitHub
+Actions, that name is the job's identifier (`GITHUB_JOB`), which every leg of
+a matrix shares. The job name is
+[part of a test's identity](/ci-insights/setup/github-actions#configuration-tips)
+in Test Insights, so when the legs run the same suite on several Node.js
+versions, their results merge into one test.
+
+Set `MERGIFY_TEST_JOB_NAME` on each leg and include the matrix value, so each
+leg reports under its own name:
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+    steps:
+      # ...
+      - name: Run Tests 🧪
+        env:
+          MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+          MERGIFY_TEST_JOB_NAME: test (node ${{ matrix.node-version }})
+        run: npm test
+```
+
+If you split the suite with Vitest's `--shard`, leave the shard index out of
+the name: the shards run different tests, and a test can move to another shard
+when tests are added or removed, so a name per shard would split its history.
+
+Setting `MERGIFY_TEST_JOB_NAME` on a job that already reports changes its
+name, so its tests start a new history in Test Insights.
+
 ## Verify and Review in Test Insights
 
 After pushing these changes, your next CI run reports its Vitest results
@@ -146,6 +181,7 @@ automatically.
 | `VITEST_MERGIFY_ENABLE` | Force-enable outside CI | `false` |
 | `MERGIFY_CI_DEBUG` | Print spans to console instead of uploading | `false` |
 | `MERGIFY_TRACEPARENT` | W3C distributed trace context | Optional |
+| `MERGIFY_TEST_JOB_NAME` | Name this job reports under; set one per environment, never per shard | CI job name |
 
 :::tip
   The reporter auto-activates in CI environments (detected via the `CI`
