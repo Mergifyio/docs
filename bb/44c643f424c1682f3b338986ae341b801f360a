@@ -1,0 +1,6 @@
+Revision history for #13225:
+
+rev 2 (content) 2026-10-06 08:00 UTC — follow $ref into unflagged wrapper definitions (with a cycle guard) so a flag reached through a list or union definition is still detected
+rev 1 (initial) 2026-10-06 08:00 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13225,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"5e63a4f6f9d0ff24f6aa94ecf13467fe9ca3d007","timestamp_iso":"2026-10-06T08:00:33Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"5e63a4f6f9d0ff24f6aa94ecf13467fe9ca3d007","new_sha":"ce527a6d652d875e2d8d84769936bbdf4eebe9b9","timestamp_iso":"2026-10-06T08:00:33Z","reason":"follow $ref into unflagged wrapper definitions (with a cycle guard) so a flag reached through a list or union definition is still detected","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/5e63a4f6f9d0ff24f6aa94ecf13467fe9ca3d007...ce527a6d652d875e2d8d84769936bbdf4eebe9b9"}]} -->
