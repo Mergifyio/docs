@@ -16805,7 +16805,14 @@
             "title": "Health Status"
           },
           "last_conclusion": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Last Conclusion"
           },
           "failure_ratio": {
