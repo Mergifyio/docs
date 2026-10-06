@@ -63,10 +63,19 @@ Use the pull request state filter to focus on specific PRs:
 
 ### Understanding confidence on new tests
 
-New tests have limited run data, so their confidence level may be low. A low
-confidence means the health status could change as more data is collected.
-Consider waiting for more runs before drawing conclusions about a test's
-reliability.
+The confidence column reports how much rerun data backs a test's health
+status:
+
+- **High**: enough reruns to trust the health status.
+
+- **Medium**: a limited number of reruns, so the health status may still
+  change.
+
+- **Low**: very few reruns, so treat the health status as preliminary.
+
+A test that was only just added has barely been rerun, so it starts at low
+confidence. Consider waiting for more reruns before drawing conclusions about
+its reliability.
 
 ## Setup
 
