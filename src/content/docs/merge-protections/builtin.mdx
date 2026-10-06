@@ -33,9 +33,11 @@ Rules:
   owns the repository declaring the dependency
 
 - A dependency that is still open blocks the protection until that pull
-  request merges. A circular chain (or a pull request that lists itself) never
-  resolves, so every pull request in the loop stays blocked indefinitely, and
-  none of them merge.
+  request merges. One that was closed without being merged can never be
+  satisfied, so it fails the protection the way an unresolvable reference
+  does. Reopen it or drop the header. A circular chain (or a pull request
+  that lists itself) never resolves, so every pull request in the loop stays
+  blocked indefinitely, and none of them merge.
 
 Use cases:
 - Feature split across multiple repos
