@@ -436,7 +436,10 @@ requests without triggering actions.
 2. Select the repository you want to test.
 3. Open "Config Editor".
 
-<Image src={configEditorScreenshot} alt="Mergify Configuration Editor" />
+<Image
+  src={configEditorScreenshot}
+  alt="Mergify Configuration Editor checking a pull request: one rule matches, one has unmet conditions"
+/>
 
 ### Analyze the Mergify Checks
 
@@ -449,4 +452,7 @@ pull request. To inspect the evaluation:
 
 The report shows which rules were evaluated and whether each condition was met.
 
-<Image src={checkSummaryScreenshot} alt="Mergify Check Summary" />
+<Image
+  src={checkSummaryScreenshot}
+  alt="Mergify Summary check listing one matching rule and one potential rule with its unmet conditions"
+/>
