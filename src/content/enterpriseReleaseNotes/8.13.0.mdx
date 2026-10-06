@@ -1,0 +1,11 @@
+---
+version: '8.13.0'
+actionRequired: true
+---
+
+Redis 7.4 or newer is required. This release starts setting an expiry on individual hash fields
+with `HEXPIRE`, a command Redis added in 7.4. Upgrade Redis before you upgrade Mergify, and if you
+use a managed Redis-compatible service, check that it supports `HEXPIRE`.
+
+Mergify does not check the Redis version when it starts. On an older server it keeps running, but
+the data those expiries cover is never removed, so Redis memory use grows over time.
