@@ -158,11 +158,12 @@ fail as usual.
 
 If your `playwright.config.ts` defines multiple
 [projects](https://playwright.dev/docs/test-projects), such as one per browser
-(`chromium`, `firefox`, `webkit`), the same test runs once per project. By
-default, Test Insights identifies each test by name only, so every project's
-copy of a test shares the same identity and is treated as a single test. A test
-that passes on `chromium` but fails on `webkit` then looks flaky instead of
-consistently broken on one browser.
+(`chromium`, `firefox`, `webkit`), the same test runs once per project. A test
+is identified by its name within the job that ran it, and by default the
+reporter leaves the project out of that name, so every project's copy of a test
+shares one identity and is treated as a single test. A test that passes on `chromium`
+but fails on `webkit` then looks flaky instead of consistently broken on one
+browser.
 
 To keep each project's tests separate, set
 `PLAYWRIGHT_MERGIFY_INCLUDE_PROJECT_IN_TEST_NAME` to `true`. The reporter then
