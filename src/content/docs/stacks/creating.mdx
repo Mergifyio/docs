@@ -77,13 +77,15 @@ What happens behind the scenes:
 
 3. **Opens a PR** for each commit, chained in dependency order
 
-4. **Posts a stack comment** on every PR showing the full stack
+4. **Registers the stack** with GitHub's stacking API, so GitHub shows it as a
+   stack of its own, holds the ordering, and lists the stack's members on each
+   PR page. Pass [`--no-github-native`](/stacks/setup#configuration) to push
+   without this and get a
+   [`Depends-On:` chain](/merge-queue/stacks#mergify-stacks) instead, which the
+   [Merge Queue](/merge-queue/stacks) moves as a unit just the same
 
-5. **Registers the stack** with GitHub's stacking API, so GitHub shows it as a
-   stack of its own and holds the ordering. Pass
-   [`--no-github-native`](/stacks/setup#configuration) to push without this and
-   get a [`Depends-On:` chain](/merge-queue/stacks#mergify-stacks) instead,
-   which the [Merge Queue](/merge-queue/stacks) moves as a unit just the same
+5. **Posts a stack comment** on every PR showing the full stack, if the stack
+   isn't registered
 
 The full flow, from setup to push:
 
@@ -92,7 +94,10 @@ The full flow, from setup to push:
 The result on GitHub: three small, focused PRs instead of one large one. Each PR
 contains exactly one commit's worth of changes.
 
-Each PR includes a stack comment that shows where it sits in the chain:
+GitHub lists a registered stack on each PR page. If the stack isn't
+registered, because you passed `--no-github-native` or the API wasn't
+available, each PR carries a stack comment showing where it sits in the chain
+instead:
 
 <Image src={StackComment} alt="Stack comment showing PR position in the chain" style={{ maxWidth: '66%' }} />
 
