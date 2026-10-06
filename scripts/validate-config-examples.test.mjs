@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -16,6 +17,17 @@ describe('classify', () => {
     expect(classify('queue_rules:\n  - name: default\n')).toBe('mergify-config');
     expect(classify('scopes:\n  source:\n    files: {}\n')).toBe('mergify-config');
     expect(classify('merge_protections_settings:\n  foo: bar\n')).toBe('mergify-config');
+  });
+
+  it('recognizes every top-level key the configuration schema defines', () => {
+    const schema = JSON.parse(
+      fs.readFileSync(path.join(ROOT, 'public/mergify-configuration-schema.json'), 'utf8')
+    );
+    for (const key of Object.keys(schema.properties ?? {})) {
+      expect(classify(`${key}:\n  placeholder: 1\n`), `${key} should mark a Mergify config`).toBe(
+        'mergify-config'
+      );
+    }
   });
 
   it('treats fragments and placeholders as partial', () => {
@@ -85,6 +97,19 @@ describe('validateBlocks', () => {
     );
     expect(misspelled).toHaveLength(1);
     expect(misspelled[0].msg).toMatch(/success_conditions/);
+  });
+
+  it('flags a config whose top-level key misspells a Mergify one', () => {
+    const unknown = (code) => [{ file: 'x.mdx', line: 1, classification: 'unknown', code }];
+
+    // Singular `pull_request_rule:` matches no top key and is not all-indented,
+    // so it classifies `unknown` — a config Mergify rejects, once shipped green.
+    const failures = validateBlocks(unknown('pull_request_rule:\n  - name: r\n'), validate);
+    expect(failures).toHaveLength(1);
+    expect(failures[0].msg).toMatch(/pull_request_rules/);
+
+    // An unknown block that is not Mergify config at all stays silent.
+    expect(validateBlocks(unknown('instances:\n  - host: example\n'), validate)).toHaveLength(0);
   });
 
   it('flags YAML that does not parse (unquoted template needing quotes)', () => {
