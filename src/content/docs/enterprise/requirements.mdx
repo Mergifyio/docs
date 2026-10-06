@@ -32,7 +32,7 @@ these specs is sufficient for proofs of concept.
 Redis persists queued events, cached repository metadata, and recovery data for
 GitHub outages. Your instance or cluster must provide:
 
-- Redis 6.2+
+- Redis 7.4 or newer
 - 200 concurrent connections
 - 250 MB of durable storage
 - Single logical database (the one `MERGIFYENGINE_REDIS_URL` selects)
