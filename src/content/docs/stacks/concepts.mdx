@@ -118,9 +118,11 @@ chain:
 | B (second) | `.../add-user-data-model--a1b2c3d4` | `.../add-registration-endpoint--d4e5f6a7` |
 | C (third) | `.../add-registration-endpoint--d4e5f6a7` | `.../add-registration-tests--b7c8d9e0` |
 
-Stacks posts a stack comment on every PR listing the full chain, and, when the
-push does not register the stack with GitHub's own stacking API, adds a
-`Depends-On: #NNN` reference in each PR description:
+When the push does not register the stack with GitHub's own stacking API,
+Stacks describes the chain itself. It posts a stack comment on every PR
+listing the full chain, and adds a `Depends-On: #NNN` reference to every PR
+description but the bottom one, which targets `main` and so depends on
+nothing:
 
 <Image src={StackComment} alt="Stack comment showing all PRs in the chain" style={{ maxWidth: '66%' }} />
 
@@ -138,11 +140,13 @@ which is why a stack is pushed to the repository itself rather than to a fork.
 A stack registered with GitHub's own stacking API is the exception, and
 `mergify stack push` registers one unless you pass
 [`--no-github-native`](/stacks/setup#configuration). GitHub holds the ordering
-there, so the descriptions carry no `Depends-On:` marker and the queue
+there and lists the stack's members on each pull request page, so the
+descriptions carry no `Depends-On:` marker. The push writes no stack comment
+either, and deletes any comment an earlier push left behind. The queue
 recognizes the PRs as a
 [GitHub-native stack](/merge-queue/stacks#github-native-stacked-pull-requests)
-instead. The queue moves it as a unit all the same: queueing one member
-queues the members below it, and they land from the bottom up.
+instead, and moves it as a unit all the same: queueing one member queues the
+members below it, and they land from the bottom up.
 
 ## Smart Updates
 

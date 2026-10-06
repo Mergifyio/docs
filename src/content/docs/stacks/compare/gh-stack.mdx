@@ -124,13 +124,14 @@ yet implemented.
 ## Where gh-stack Is Stronger
 
 **Native GitHub UI.** gh-stack gets a stack map rendered directly in the PR
-interface. Mergify posts a stack comment on each PR and, with the
-[browser extension](/browser-extensions) installed, renders the
-stack and its revision history as an in-PR panel. Neither of those is a
-built-in GitHub UI element.
+interface. Mergify posts a stack comment on each PR of a stack that isn't
+registered, and with the [browser extension](/browser-extensions) installed it
+renders the stack and its revision history as an in-PR panel. Neither of those
+is a built-in GitHub UI element.
 [`mergify stack push`](/stacks/setup#configuration) registers the stack with
 GitHub's own stacking API by default, so GitHub displays it as a stack. That
-registration is skipped where the API is not available.
+registration is skipped where the API is not available, and `--no-github-native`
+turns it off.
 
 ## Other Considerations
 
