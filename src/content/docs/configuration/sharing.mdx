@@ -120,6 +120,13 @@ pull_request_rules:
     scopes defined in the extended configuration do not apply to the local
     configuration.
 
+  - The [`conflict_resolvers`](/merge-queue/lifecycle#resolving-some-conflicts-automatically)
+    list is inherited whole, and only when the local configuration declares
+    none. Its entries are matched by path rather than by name and the last match
+    wins, so the two lists cannot be appended without the extended one
+    outranking every pattern written locally. Declaring a single resolver
+    locally therefore replaces the extended list rather than adding to it.
+
   - Values in the `defaults`, `commands_restrictions`, `merge_queue`, and
     `merge_protections_settings` keys will be merged and remote default values
     will apply to the local configuration, unless the same value already exists
