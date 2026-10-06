@@ -16,6 +16,19 @@ take care of it.
 @Mergifyio update
 ```
 
+## Requirements
+
+Whatever your configuration says, Mergify adds its own requirements before it
+updates: the pull request has to be open, free of conflict with its base branch,
+not in a merge queue, and behind its base branch. The same requirements apply to
+[the `update` action](/workflow/actions/update).
+
+When one of them does not hold, most often because the pull request is already
+up to date, the command answers that there is nothing to do and stops there.
+Unlike [`queue`](/commands/queue) and [`backport`](/commands/backport), it does
+not wait for the requirements to be met, so run it again once the pull request
+has something to update.
+
 ## Fork Pull Requests
 
 `update` merges the base branch into the pull request rather than rewriting its
