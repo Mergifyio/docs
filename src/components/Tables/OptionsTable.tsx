@@ -1,6 +1,7 @@
 import * as yaml from 'js-yaml';
 
 import configSchema from '../../../public/mergify-configuration-schema.json';
+import { documentedEntries } from '../../util/experimental';
 import { extractTemplateVariables } from '../../util/templateVariables';
 import Badge from '../Badge/Badge';
 import {
@@ -43,7 +44,7 @@ export function OptionsTableBase(
   const idPrefix = def ? `${defToIdPrefix(def)}-` : '';
   return (
     <div className={styles.list}>
-      {Object.entries(options)
+      {documentedEntries(schema, options)
         .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
         .map(([optionKey, definition]) => {
           const valueType = getValueType(schema, definition);
