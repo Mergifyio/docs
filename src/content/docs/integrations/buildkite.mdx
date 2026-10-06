@@ -206,6 +206,13 @@ In this pipeline:
   `mergify-ci.scopes`. It also annotates the build with the scopes it found, so
   they are readable on the build page without opening the step log.
 
+  The `scopes-upload` action reads that key in either of two shapes: the JSON
+  map the `scopes` action writes, where it takes the names whose value is
+  `"true"`; or a comma-separated list of scope names. The per-tool guides, such
+  as [Turborepo](/merge-queue/scopes/turborepo), write the comma-separated form
+  from their own detection step, so the two styles are interchangeable rather
+  than alternatives you have to choose between.
+
 - The dynamic pipeline script reads the scopes meta-data and only emits the
   steps for scopes that are `"true"`, so unaffected steps are skipped entirely.
 
