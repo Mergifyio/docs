@@ -24,6 +24,16 @@ this behaviour using the `ignore_conflicts` option.
   you don't have the required permissions, the action will fail.
 :::
 
+## Backport Requirements
+
+Whatever your conditions are, Mergify adds its own requirement before running
+the action: a pull request is backported only once it is merged. You do not
+need a [`merged`](/configuration/conditions#attributes-list) condition of your
+own, and a rule whose conditions match while the pull request is still open
+waits for the merge instead of running. Unlike
+[`copy`](/workflow/actions/copy), `backport` does not require the pull request
+to be free of conflict with its base branch.
+
 ## Parameters
 
 The `backport` action takes a list of branches to which the changes from the
