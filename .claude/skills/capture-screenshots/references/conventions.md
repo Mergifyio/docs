@@ -95,11 +95,11 @@ every capture URL that way, with `mergify-sandbox` as the org:
 | Repositories | `/orgs/mergify-sandbox/repositories` |
 | CI Insights | `/orgs/mergify-sandbox/ci-insights` |
 | Merge queues | `/orgs/mergify-sandbox/repos/<repo>/queues/status` |
-| Test Insights → Prevention | `/orgs/mergify-sandbox/repos/<repo>/test-insights/prevention` |
-| Test Insights → Detection | `/orgs/mergify-sandbox/repos/<repo>/test-insights/detection` |
-| Test Insights → Mitigation | `/orgs/mergify-sandbox/repos/<repo>/test-insights/mitigation` |
+| Test Engine → Prevention | `/orgs/mergify-sandbox/repos/<repo>/test-insights/prevention` |
+| Test Engine → Detection | `/orgs/mergify-sandbox/repos/<repo>/test-insights/detection` |
+| Test Engine → Mitigation | `/orgs/mergify-sandbox/repos/<repo>/test-insights/mitigation` |
 
-Scope is per feature and it is not guessable from the name: Test Insights sits
+Scope is per feature and it is not guessable from the name: Test Engine sits
 under `/repos/` because its data is keyed by repository, while CI Insights, one
 menu item away, is org-wide and has no `/repos/` segment. Read the path off the
 dashboard rather than assembling one by analogy.

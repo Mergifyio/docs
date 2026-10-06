@@ -37,7 +37,7 @@ paths, real pull request titles. The rule is about the org on screen, not about
 the account you are signed in as — most people capturing a shot have private-repo
 access and cannot drop it, so what keeps a private name out of the frame is
 pointing the capture at the sandbox and keeping it there. It has happened —
-three Test Insights screenshots showing a private repository were served here
+three Test Engine screenshots showing a private repository were served here
 for months, and nothing caught them, because every leak check we run
 reads text and none reads pixels. So the org is not a detail to fix in cropping:
 stage what you need in the sandbox first, then shoot it. The internal Playwright

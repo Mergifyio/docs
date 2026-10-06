@@ -136,7 +136,7 @@ adds nothing to it; the two extra tokens below are not product colors.
 | --- | --- | --- | --- |
 | Merge Queue | `--color-teal-700` | `--color-teal-400` | #1CB893 |
 | CI Insights | `--color-purple-700` | `--color-purple-400` | #4D59E0 |
-| Test Insights | `--color-orange-700` | `--color-orange-400` | #F27B2A |
+| Test Engine | `--color-orange-700` | `--color-orange-400` | #F27B2A |
 | Merge Protections | `--color-blue-700` | `--color-blue-400` | #43A7E5 |
 | Stacks | `--color-coral-700` | `--color-coral-400` | #E53935 |
 | Workflow Automation | `--color-rose-700` | `--color-rose-400` | #E61E71 |
@@ -160,7 +160,7 @@ ToC active-link color and left-sidebar hover highlight.
 | (no class) | General / configuration | `--theme-link` (blue-700) |
 | `section-merge-queue` | Merge Queue | `--color-teal-700` |
 | `section-ci-insights` | CI Insights | `--color-purple-700` |
-| `section-test-insights` | Test Insights | `--color-orange-700` |
+| `section-test-insights` | Test Engine | `--color-orange-700` |
 | `section-merge-protections` | Merge Protections | `--color-blue-700` |
 | `section-stacks` | Stacks | `--color-coral-700` |
 | `section-workflow` | Workflow Automation | `--color-rose-700` |

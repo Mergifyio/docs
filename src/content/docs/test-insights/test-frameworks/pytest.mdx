@@ -11,15 +11,15 @@ import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 <IntegrationLogo src={pytestLogo} alt="Pytest logo" />
 
-This guide explains how to integrate Pytest with Test Insights using the
+This guide explains how to integrate Pytest with Test Engine using the
 `pytest-mergify` plugin. Once installed, test results are automatically
-uploaded to Test Insights without any extra workflow changes.
+uploaded to Test Engine without any extra workflow changes.
 
 ## Installation
 
 You need to install the
 [`pytest-mergify`](https://pypi.python.org/pypi/pytest-mergify) plugin to
-automatically upload your test results to **Test Insights**. This can be done in
+automatically upload your test results to **Test Engine**. This can be done in
 different ways depending on your Python dependency setup. Below are a few
 examples:
 
@@ -103,7 +103,7 @@ steps:
 
 <BuildkiteTokenNote plugin={false} />
 
-The plugin collects your test results and sends them to Test Insights.
+The plugin collects your test results and sends them to Test Engine.
 
 ## Quarantine and Crashed Runs
 
@@ -125,7 +125,7 @@ A crash cannot pass for a green run either. If pytest dies mid-run or fails
 outside a test, such as a collection error, it exits non-zero and the step
 fails. The plugin uploads results when the session ends, so a process killed
 outright before then, such as by the out-of-memory killer, sends nothing to
-Test Insights. A run that stops early without the process being killed, such as
+Test Engine. A run that stops early without the process being killed, such as
 an interrupted session or one cut short by `--maxfail`, still uploads the
 results collected up to that point.
 
@@ -191,7 +191,7 @@ will work for all of them as long as the token is set correctly.
 
 If you’re running multiple Tox environments (e.g., py38, py39, etc.), we
 recommend setting the `MERGIFY_TEST_JOB_NAME` environment variable to identify each
-environment’s report in Test Insights:
+environment’s report in Test Engine:
 
 In your CI workflow:
 
@@ -218,11 +218,11 @@ steps:
 ```
 
 :::tip
-  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights,
+  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Engine,
   especially when running multiple Tox environments or using a matrix.
 :::
 
-## Verify and Review in Test Insights
+## Verify and Review in Test Engine
 
 After pushing these changes, your next CI run reports its pytest results
 automatically.
