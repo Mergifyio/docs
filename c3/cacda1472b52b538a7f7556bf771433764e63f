@@ -1,0 +1,6 @@
+Revision history for #13151:
+
+rev 2 (content) 2026-10-05 18:06 UTC — reshoot on a current bundled plan (Enterprise) and describe the plan as one row
+rev 1 (initial) 2026-10-05 18:06 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13151,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"9a250e3d2ba2ca9170902461bba8c456eb9e8817","timestamp_iso":"2026-10-05T18:06:14Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"9a250e3d2ba2ca9170902461bba8c456eb9e8817","new_sha":"7fbb74d4f637d2be43aecbcd2a1f8d8b6856ff34","timestamp_iso":"2026-10-05T18:06:14Z","reason":"reshoot on a current bundled plan (Enterprise) and describe the plan as one row","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/9a250e3d2ba2ca9170902461bba8c456eb9e8817...7fbb74d4f637d2be43aecbcd2a1f8d8b6856ff34"}]} -->
