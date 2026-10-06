@@ -152,25 +152,28 @@ request that has already left the queue.
 
 ### Resolving Some Conflicts Automatically
 
-Some conflicts have a mechanical answer: a changelog that only ever grows, a
-generated file that is rewritten wholesale. `conflict_resolvers` on a queue rule
-names those files and how to merge them, and Mergify resolves them while
-composing the batch instead of holding the pull request.
+Some conflicts have a mechanical answer: a changelog that only ever grows, or a
+lockfile where two pull requests updated different dependencies. The top-level
+`conflict_resolvers` key names those files and how to merge them, and Mergify
+resolves them while composing the batch instead of holding the pull request.
+You declare it once for the repository, and it applies to every queue rule that
+can use it.
 
 ```yaml
 queue_rules:
   - name: default
     merge_method: merge-batch
     batch_size: 5
-    conflict_resolvers:
-      - paths:
-          - CHANGELOG.md
-        strategy: union
+
+conflict_resolvers:
+  - paths:
+      - CHANGELOG.md
+    strategy: union
 ```
 
-The strategy names follow git's merge drivers. *Ours* is always the batch as it
-already stands — the base branch plus the pull requests ahead — and never the
-pull request being added to it:
+`union`, `ours` and `theirs` take their names from git's merge drivers. *Ours*
+is always the batch as it already stands (the base branch plus the pull
+requests ahead), never the pull request being added to it:
 
 <ConflictResolverStrategies />
 
@@ -190,12 +193,12 @@ brace alternative, so `{/a,b}` is rejected too. An empty pattern is rejected,
 as is one that matches no path at all, such as `{}`.
 
 :::caution
-  Resolvers only take effect when the batch branch Mergify built is what lands,
+  Resolvers only take effect in a queue rule whose batch branch is what lands,
   which means `merge_method` set to `merge-batch` or `fast-forward`. With
   `merge`, `squash` or `rebase`, each pull request is merged at its own head and
   GitHub recomputes that merge, so a resolution made while building the batch
-  would never reach your base branch. The configuration stays valid and nothing
-  is resolved.
+  would never reach your base branch. In those queue rules nothing is resolved,
+  and a conflicting pull request is held as described above.
 :::
 
 :::note

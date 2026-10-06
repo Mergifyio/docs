@@ -86,13 +86,13 @@ describe('strategyRows', () => {
         value: 'later',
         description: '',
         deprecated: false,
-        facts: { discards: { side: 'both', scope: 'hunk' }, suits: ['json'] },
+        facts: { discards: { side: 'both', scope: 'hunk' }, suits: ['cargo-lockfile'] },
       },
     ]);
     expect(known.discards).toBe("The incoming pull request's side of the conflicting lines");
     expect(known.binary).toBe('Yes');
     expect(unknown.discards).toBe('both hunk');
-    expect(unknown.description).toBe('Suited to json.');
+    expect(unknown.description).toBe('Suited to cargo-lockfile.');
     expect(unknown.binary).toBe('');
   });
 

@@ -35,6 +35,10 @@ const SCOPES: Record<string, string> = {
 
 const SUITS: Record<string, string> = {
   'append-only': 'append-only files, such as a changelog',
+  json: 'JSON files, such as a `package.json`',
+  'pnpm-lockfile': 'pnpm lockfiles (`pnpm-lock.yaml`)',
+  'uv-lockfile': 'uv lockfiles (`uv.lock`)',
+  pyproject: '`pyproject.toml` files',
 };
 
 export const KNOWN_VOCABULARY = {
