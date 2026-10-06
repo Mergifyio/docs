@@ -42,10 +42,12 @@ branch to its own pull request. There is no stack object on GitHub's side, so
 the queue recognizes the chain only when **all** of these hold at every step:
 
 - The PRs are physically chained: each PR's base branch is the previous PR's
-  head branch.
+  head branch. The bottom PR has no previous PR and targets the destination
+  branch directly.
 
-- Each PR carries a `Depends-On: #N` marker in its body, declaring its
-  dependency on the previous PR.
+- Each PR above the bottom one carries a `Depends-On: #N` marker in its body,
+  declaring its dependency on the previous PR. The bottom PR depends on
+  nothing, so it carries no marker.
 
 - Every PR's head branch lives in the repository the stack targets, not in a
   fork.
