@@ -1,0 +1,1 @@
+follow $ref into unflagged wrapper definitions (with a cycle guard) so a flag reached through a list or union definition is still detected
