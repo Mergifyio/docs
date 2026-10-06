@@ -1,0 +1,6 @@
+Revision history for #13219:
+
+rev 2 (content) 2026-10-05 22:54 UTC — Table row now says one name per environment, never per shard, matching the sharding guidance above it.
+rev 1 (initial) 2026-10-05 22:54 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13219,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"50b936065e08bfa0628e19c73fb5ccbac5cac6fa","timestamp_iso":"2026-10-05T22:54:01Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"50b936065e08bfa0628e19c73fb5ccbac5cac6fa","new_sha":"eb0b369870b1aa402d9e3fc3df768a9bcb4846a1","timestamp_iso":"2026-10-05T22:54:01Z","reason":"Table row now says one name per environment, never per shard, matching the sharding guidance above it.","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/50b936065e08bfa0628e19c73fb5ccbac5cac6fa...eb0b369870b1aa402d9e3fc3df768a9bcb4846a1"}]} -->
