@@ -92,9 +92,9 @@ That opens the plugin directory. Search it for Mergify, install the
 [Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b),
 then start a new Codex session so the skills load.
 
-Codex and ChatGPT share one plugin directory, but the listing currently only
-works from Codex: the skills shell out to `mergify`, which ChatGPT itself
-cannot run.
+Codex and ChatGPT share one plugin directory, and the listing needs somewhere
+to run the binary: Codex, or ChatGPT desktop with local execution. The skills
+shell out to `mergify`, so a browser-only ChatGPT session cannot use them.
 
 Codex is also a skills.sh agent, so the command in the next section works for
 it too, if you would rather install every agent the same way.
