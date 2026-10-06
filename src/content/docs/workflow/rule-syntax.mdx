@@ -36,6 +36,19 @@ Each condition is built from an attribute (such as `base`, `label`, or
 value. See the [attributes list](/configuration/conditions#attributes-list) and
 [operators list](/configuration/conditions#operators-list) for the full set.
 
+`conditions` is required, so a rule meant to apply to every pull request still
+has to carry it. Leaving the key with no value at all is rejected; write either
+an empty list or `true`, which mean the same thing:
+
+```yaml
+pull_request_rules:
+  - name: comment on every pull request
+    conditions: true
+    actions:
+      comment:
+        message: Thanks for opening this.
+```
+
 To express "any of" or "none of" instead of "all of", group conditions with the
 [`and`, `or`, and `not` operators](/configuration/conditions#combining-conditions-using-logical-operators).
 The same condition syntax also powers [Merge Queue](/merge-queue) and
