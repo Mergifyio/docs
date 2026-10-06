@@ -224,7 +224,10 @@ validation tool. Whenever you push a change to the configuration file, Mergify
 will automatically validate the configuration and report any errors or warnings
 in the "Checks" tab of your pull request.
 
-<Image src={configCheckScreenshot} alt="Mergify configuration check" />
+<Image
+  src={configCheckScreenshot}
+  alt="Configuration changed check: the configuration is valid, but pull_request_rules will not be used"
+/>
 
 If there are any issues with your configuration file, you will receive a
 detailed description of the problem and guidance on how to fix it.
