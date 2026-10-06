@@ -173,11 +173,14 @@ Commands that call the Mergify API resolve a credential in this order:
 
 The `mergify ci` commands that call the API are the exception, because the
 endpoints they post to accept nothing but an application key.
-`mergify ci scopes-send` skips step 3: it never reads the credential
-`mergify auth login` stored. The two JUnit upload commands,
-`mergify ci junit-process` and the deprecated `mergify ci junit-upload`, go
-further and read only `--token` and `MERGIFY_TOKEN`, so a job that exports
-`GITHUB_TOKEN` alone leaves them with no credential at all.
+`mergify ci scopes-send`, `mergify ci junit-process`, and the deprecated
+`mergify ci junit-upload` all skip step 3: they never read the credential
+`mergify auth login` stored, since those endpoints would refuse it anyway. The
+rest of the order stands, so a job that exports `GITHUB_TOKEN` alone still
+reaches step 4. The failure it gets back is the endpoint refusing a GitHub
+token rather than the CLI finding no credential. Set `MERGIFY_TOKEN` to an
+[application key](#application-keys-for-ci), as the warning they print tells
+you to.
 
 There is no global `--token` on `mergify` itself, so pass it to the subcommand:
 
@@ -238,6 +241,14 @@ They resolve that token on their own, in this order:
 4. `gh auth token`, from the GitHub CLI.
 
 Nothing here is deprecated: a GitHub token is what the GitHub API takes.
+
+Every source except `--token` is checked for the `mut_` prefix of a
+[Mergify user token](/api/usage#using-a-mergify-user-token) before it is used.
+GitHub can only answer `401` to one of those, so it is skipped and the next
+source tried. That covers `gh auth token` as well, which echoes `GITHUB_TOKEN`
+when the variable is set. So exporting the credential `mergify auth login`
+stored does not break a Stacks command that has a real GitHub token further
+down the list. A `--token` you pass explicitly is sent as given.
 
 If you have the [GitHub CLI](https://cli.github.com/) (`gh`) installed and
 authenticated, Stacks picks up its token automatically. Nothing else to
