@@ -12,13 +12,16 @@ need to install anything or learn new tools to review them.
 
 ## What You'll See
 
-Each stacked PR contains a single commit's worth of changes. At the top of
-every PR, a stack comment shows the full chain and highlights the current PR:
+Each stacked PR contains a single commit's worth of changes, and every PR tells
+you where in the chain you are. For a stack registered with GitHub's stacking
+API, GitHub lists the stack's members on the pull request page itself. A stack
+pushed with [`--no-github-native`](/stacks/setup#configuration) carries a stack
+comment that does the same job:
 
 <Image src={StackComment} alt="Stack comment showing the current PR in the chain" style={{ maxWidth: '66%' }} />
 
-The comment includes links to every PR in the stack, so you can jump between
-them.
+Either way, the list links to every PR in the stack and marks the one you are
+on, so you can jump between them.
 
 ## How to Review
 
@@ -42,8 +45,8 @@ once.
 
 ### Navigate Between PRs
 
-Use the links in the stack comment to move between PRs. The current PR is
-marked in the list so you always know where you are in the chain.
+Use the links in GitHub's stack list, or in the stack comment, to move between
+PRs. The current PR is marked, so you always know where you are in the chain.
 
 ## Leaving Feedback
 
