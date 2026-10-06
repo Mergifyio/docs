@@ -1,6 +1,7 @@
 import jsonpointer from 'jsonpointer';
 import React, { ReactElement } from 'react';
 import { getDataTypeHref, isDataType } from '~/util/dataType';
+import { documentedEntries } from '~/util/experimental';
 import configSchema from '../../../public/mergify-configuration-schema.json';
 import { renderMarkdown } from './utils';
 
@@ -302,9 +303,8 @@ export function getValueType(schema: object, definition: any): React.ReactElemen
   } else if (definition.type === 'object' && definition.properties) {
     // An inline object shape has no name to show: list its keys, which is what
     // a reader needs to write the value.
-    valueType = (
-      <HighlightCode>{`{${Object.keys(definition.properties).join(', ')}}`}</HighlightCode>
-    );
+    const keys = documentedEntries(schema, definition.properties).map(([key]) => key);
+    valueType = <HighlightCode>{`{${keys.join(', ')}}`}</HighlightCode>;
   } else {
     valueType = <HighlightCode>{definition.type}</HighlightCode>;
   }

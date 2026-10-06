@@ -1,5 +1,6 @@
 import configSchema from '../../../public/mergify-configuration-schema.json';
 import { getAttributeDocumentationUrl, getAttributeSource } from '../../util/attributeMetadata';
+import { documentedEntries } from '../../util/experimental';
 import { getValueType } from './ConfigOptions';
 import { defToIdPrefix } from './OptionsTable';
 // Attributes render with the OptionsTable layout (stacked entries, full-width
@@ -93,7 +94,9 @@ export default function PullRequestAttributes({ staticAttributes, source }: Prop
       })
     ) as Attributes);
 
-  const entries = Object.entries(attributes).sort(([keyA], [keyB]) => (keyA > keyB ? 1 : -1));
+  const entries = documentedEntries(configSchema, attributes).sort(([keyA], [keyB]) =>
+    keyA > keyB ? 1 : -1
+  );
 
   // Only render the operator/modifier metadata once the schema carries it.
   // Until then (or if a sync drops it), fall back to name/type/description.
