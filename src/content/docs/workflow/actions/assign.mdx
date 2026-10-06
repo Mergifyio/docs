@@ -27,9 +27,11 @@ variable to assign the pull request to its author. `users` is the older form of
   access to the repository.
 :::
 
-When GitHub rejects the request outright rather than ignoring a login, the
-rule's check run reports the GitHub error and stays pending while Mergify
-retries on the next evaluation. The action never reports a failure.
+When GitHub rejects the request outright rather than ignoring a login, nothing
+on the pull request says so: `assign` publishes no check run for any of its
+outcomes, and it never reports a failure. It tries again on the [next
+evaluation](/workflow#how-rules-are-evaluated), so a temporary rejection sorts
+itself out and a lasting one leaves the assignee missing with no explanation.
 
 Mergify skips any login ending in `[bot]` when adding assignees, so a rule that
 assigns `{{ author }}` does nothing on a pull request opened by a bot. A login
