@@ -130,4 +130,13 @@ pull_request_rules:
     apply to the local configuration. A rule will not be overwritten by the
     extended configuration if it has the same name in both the extended and
     local configuration.
+
+  - Entries in the
+    [`conflict_resolvers`](/merge-queue/lifecycle#resolving-some-conflicts-automatically)
+    key will be merged, with the extended entries placed before the local ones.
+    The last entry matching a file wins, so a local entry overrides an extended
+    one on every file both match. Set `conflict_resolvers: []` in the local
+    configuration to ignore the extended entries. A configuration error in a
+    local entry is reported at its position in the merged list, after the
+    extended entries.
 :::
