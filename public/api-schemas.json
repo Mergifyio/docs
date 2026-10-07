@@ -21496,7 +21496,7 @@
     },
     {
       "name": "test_insights",
-      "description": "Operations with test insights."
+      "description": "Operations with Test Engine."
     }
   ]
 }
