@@ -45,7 +45,7 @@ function titleMatchesQuery(title: string, query: string): boolean {
 const SECTION_KEYS = [
   'merge-queue',
   'ci-insights',
-  'test-insights',
+  'test-engine',
   'merge-protections',
   'stacks',
   'workflow',

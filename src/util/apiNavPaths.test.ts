@@ -47,7 +47,7 @@ describe('danglingApiNavPaths', () => {
   });
 
   // navItems already ships anchored entries elsewhere
-  // (/test-insights#test-framework-configuration), and the /api pages are the
+  // (/test-engine#test-framework-configuration), and the /api pages are the
   // ones with a heading per endpoint, so anchoring one is the natural next
   // edit. Reading the anchor as part of the slug would fail the deploy build
   // on a link that resolves.
