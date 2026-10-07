@@ -35,6 +35,19 @@ request:
 
 <Image src={rebaseScreenshot} alt="Posting '@mergifyio rebase' in GitHub interface"/>
 
+## Requirements
+
+Whatever your configuration says, Mergify adds its own requirements before it
+rebases: the pull request has to be open, free of conflict with its base branch,
+not in a merge queue, and either behind its base branch or without a linear
+history. The same requirements apply to [the `rebase`
+action](/workflow/actions/rebase).
+
+When one of them does not hold, the command answers that there is nothing to do
+and stops there. Unlike [`queue`](/commands/queue) and
+[`backport`](/commands/backport), it does not wait for the requirements to be
+met, so run it again once the pull request has something to rebase.
+
 ## Impersonation
 
 Mergify pushes the rebased branch as a GitHub user, not as itself. Unless a

@@ -51,6 +51,19 @@ The `copy` command is especially handy for:
 
 - `<target-branch>`: The destination branch within the same repository.
 
+## Requirements
+
+Whatever your configuration says, Mergify adds one requirement before it copies:
+the pull request has to be free of conflict with its base branch. It does not
+have to be merged, so `copy` runs on an open pull request as well as a merged
+one. The same requirement applies to [the `copy`
+action](/workflow/actions/copy).
+
+When the pull request is in conflict, the command answers that there is nothing
+to do and stops there. Unlike [`backport`](/commands/backport), which waits for
+the pull request to be merged, `copy` does not wait for the requirement to be
+met, so resolve the conflict and run it again.
+
 <CopyLimitations />
 
 ## Example
