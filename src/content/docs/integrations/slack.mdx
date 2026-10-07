@@ -1,6 +1,6 @@
 ---
 title: Using Slack with Mergify
-description: Learn how you can send Slack notifications for Merge Queue events, CI Insights, Test Insights quarantine activity, and pull request activities.
+description: Learn how you can send Slack notifications for Merge Queue events, CI Insights, Test Engine quarantine activity, and pull request activities.
 ---
 
 import { Image } from "astro:assets"
@@ -132,20 +132,20 @@ filter empty:
    production deployments or security
 
 4. **Monitor Flaky Tests**: CI Insights notifications cannot filter on flaky
-   tests. Use the Test Insights notifications below, which fire when a test is
+   tests. Use the Test Engine notifications below, which fire when a test is
    quarantined or dequarantined
 
 5. **Team-Specific Filters**: Configure different notification rules for
    different teams based on their responsibilities
 
-## Test Insights Notifications
+## Test Engine Notifications
 
-[Mergify's Test Insights](/test-insights) can post a Slack message whenever a
+Mergify's [Test Engine](/test-insights) can post a Slack message whenever a
 test is [quarantined or dequarantined](/test-insights/quarantine), so your team
 sees mitigation activity as it happens (whether a teammate acted from the
 dashboard or CLI, or Mergify quarantined the test automatically).
 
-Test Insights notifications include:
+Test Engine notifications include:
 - **Test**: The affected test, linked to its details page
 - **Repository**: The repository the test belongs to
 - **Action**: Whether the test was quarantined or dequarantined
@@ -153,18 +153,18 @@ Test Insights notifications include:
 - **Health status**: The test's health at the time of the event
 - **Reason**: Why the test was quarantined (on quarantine events)
 
-To configure Test Insights Slack notifications:
+To configure Test Engine Slack notifications:
 
-1. **Enable Test Insights**: Make sure you have [Test Insights](/test-insights)
+1. **Enable Test Engine**: Make sure you have [Test Engine](/test-insights)
    set up for your repositories
 
 2. **Connect Slack**: In your Mergify dashboard, navigate to **Integrations → Slack**
 
-3. **Add the notification**: On a channel, add a **Test Insights** notification,
+3. **Add the notification**: On a channel, add a **Test Engine** notification,
    then choose the repositories to monitor and which events (quarantine,
    dequarantine) to subscribe to
 
-Test Insights notifications are available on the same plans as the
+Test Engine notifications are available on the same plans as the
 [quarantine feature](/test-insights/quarantine).
 
 ## Pull Request Notifications via GitHub-Slack Integration

@@ -7,7 +7,7 @@ description: >-
   a batch, a freeze, priority ordering), when auditing which pages are missing or
   have stale screenshots, or when asked to build a scenario and screenshot it. Sets
   up state via the sandbox-org skill, captures via the capture-screenshots skill,
-  and tears the scenario down. Defers CI/Test Insights shots (they need real CI
+  and tears the scenario down. Defers CI/Test Engine shots (they need real CI
   data). Composes with capture-screenshots, document-a-feature, docs-gap-analysis.
 ---
 
@@ -99,7 +99,7 @@ and captures it → `capture-screenshots` does the mechanical capture →
   run starts clean.
 - **Poll, don't guess** — `wait-queued` before capturing; a half-formed queue
   makes a misleading shot.
-- **Defer CI / Test Insights** shots for now: they need real CI runs and test
+- **Defer CI / Test Engine** shots for now: they need real CI runs and test
   results, which this sandbox flow does not stage. Focus on merge-queue,
   merge-protections, freeze, and priority states.
 - Stop and ask if the sandbox setup or the queue won't reach the target state
