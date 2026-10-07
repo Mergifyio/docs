@@ -52,7 +52,10 @@ condition. That condition reproduces GitHub's own review decision rather than
 counting approvals, so an active "Request changes" from a reviewer other than
 the approver keeps it unsatisfied.
 
-<Image src={branchProtectionConditionsScreenshot} alt="Mergify Branch Protection Condition Injection" />
+<Image
+  src={branchProtectionConditionsScreenshot}
+  alt="A merge rule in the Mergify Summary check with github-review-approved injected by branch protection"
+/>
 
 For details on how injection works, which ruleset rules are compatible,
 known incompatibilities, and how to configure bypass actors, see
