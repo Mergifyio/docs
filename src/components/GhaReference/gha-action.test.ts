@@ -8,6 +8,7 @@ import {
   loadGhaAction,
   parseGhaAction,
   readVendoredAction,
+  requiredByLine,
 } from './gha-action';
 
 // Loaded inside each test, so a vendored file the stamp check refuses fails
@@ -116,9 +117,12 @@ inputs:
       * two: the second
     default: one
   only_two:
-    description: Read by two
+    description: |
+      Read by two
+      Required by: two, three
   in_condition:
     description: Tested in if only
+    required: true
   unused:
     description: Nobody reads this
 outputs:
@@ -168,6 +172,38 @@ runs:
     expect(action.default).toBe('one');
     expect(action.required).toBe(false);
     expect(parsed.inputs[1].default).toBeNull();
+  });
+
+  test('a Required by line names the requiring actions and leaves the description', () => {
+    const onlyTwo = parsed.inputs[1];
+    expect(onlyTwo.description).toBe('Read by two');
+    // "three" is no action any step runs for, so it is dropped, not published.
+    expect(onlyTwo.requiredBy).toEqual(['two']);
+  });
+
+  test('required: true makes an input required by every action that reads it', () => {
+    const inCondition = parsed.inputs[2];
+    expect(inCondition.required).toBe(true);
+    expect(inCondition.requiredBy).toEqual(['two']);
+  });
+
+  test('an input nothing requires has an empty requiredBy', () => {
+    expect(parsed.inputs[0].requiredBy).toEqual([]);
+  });
+});
+
+describe('requiredByLine', () => {
+  test('strips the line wherever it sits and splits names on commas or spaces', () => {
+    expect(requiredByLine('Path to upload.\nRequired by: junit-process\nMore.')).toEqual({
+      description: 'Path to upload.\nMore.',
+      requiredBy: ['junit-process'],
+    });
+    expect(requiredByLine('required BY:  a,b  c').requiredBy).toEqual(['a', 'b', 'c']);
+  });
+
+  test('leaves a description without the line alone', () => {
+    expect(requiredByLine('Just prose')).toEqual({ description: 'Just prose', requiredBy: [] });
+    expect(requiredByLine(undefined)).toEqual({ description: undefined, requiredBy: [] });
   });
 });
 

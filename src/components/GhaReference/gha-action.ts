@@ -44,6 +44,13 @@ export interface GhaInput {
   required: boolean;
   /** The `action:` values whose steps read this input, in `actions` order. */
   actions: string[];
+  /**
+   * The `action:` values that fail or misbehave without this input, in
+   * `actions` order. `required: true` makes that every reader; otherwise the
+   * description names them on its own `Required by:` line, which is stripped
+   * from the rendered description.
+   */
+  requiredBy: string[];
 }
 
 export interface GhaOutput {
@@ -112,6 +119,30 @@ function actionSummaries(description: string | undefined, names: string[]): Map<
   return summaries;
 }
 
+const REQUIRED_BY = /^\s*Required by:\s*(.+?)\s*$/i;
+
+/**
+ * Split an input description into its prose and the actions its trailing
+ * `Required by: a, b` line names. `action.yml` has one `required` flag per
+ * input, which cannot say "required for `junit-process`, optional for
+ * `scopes`", so a multiplexed action states it in the description instead;
+ * that line is the contract and this only reads it.
+ */
+export function requiredByLine(description: string | undefined): {
+  description: string | undefined;
+  requiredBy: string[];
+} {
+  if (description === undefined) return { description, requiredBy: [] };
+  const requiredBy: string[] = [];
+  const kept: string[] = [];
+  for (const line of description.split('\n')) {
+    const match = line.match(REQUIRED_BY);
+    if (match) requiredBy.push(...match[1].split(/[\s,]+/).filter(Boolean));
+    else kept.push(line);
+  }
+  return { description: kept.join('\n'), requiredBy };
+}
+
 function stringOrNull(value: unknown): string | null {
   if (value === undefined || value === null) return null;
   const text = String(value).trim();
@@ -149,13 +180,21 @@ export function parseGhaAction(source: string, version: string): GhaActionRefere
     }
   }
 
-  const inputs = Object.entries(action.inputs ?? {}).map(([name, spec]) => ({
-    name,
-    description: stringOrNull(spec?.description),
-    default: stringOrNull(spec?.default),
-    required: spec?.required === true,
-    actions: inOrder(names, readers.get(name) ?? new Set()),
-  }));
+  const inputs = Object.entries(action.inputs ?? {}).map(([name, spec]) => {
+    const { description, requiredBy } = requiredByLine(spec?.description);
+    const actions = inOrder(names, readers.get(name) ?? new Set());
+    const required = spec?.required === true;
+    return {
+      name,
+      description: stringOrNull(description),
+      default: stringOrNull(spec?.default),
+      required,
+      actions,
+      // Only an action that reads the input can require it; a name the line
+      // gets wrong is dropped rather than published.
+      requiredBy: required ? actions : inOrder(actions, new Set(requiredBy)),
+    };
+  });
 
   const outputs = Object.entries(action.outputs ?? {}).map(([name, spec]) => {
     const setters = new Set<string>();
