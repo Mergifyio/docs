@@ -145,12 +145,18 @@ test is [quarantined or dequarantined](/test-insights/quarantine), so your team
 sees mitigation activity as it happens (whether a teammate acted from the
 dashboard or CLI, or Mergify quarantined the test automatically).
 
-Test Engine notifications include:
+A Test Engine notification is headed either `Test quarantined` or
+`Test dequarantined`, and contains:
+
 - **Test**: The affected test, linked to its details page
+
 - **Repository**: The repository the test belongs to
-- **Action**: Whether the test was quarantined or dequarantined
-- **Source**: Who acted: a teammate or Mergify's automatic quarantine
+
+- **Quarantined by** (or **Dequarantined by**): Who acted, or
+  `Mergify auto-quarantine` when Mergify quarantined the test itself
+
 - **Health status**: The test's health at the time of the event
+
 - **Reason**: Why the test was quarantined (on quarantine events)
 
 To configure Test Engine Slack notifications:
