@@ -10538,23 +10538,13 @@
         ],
         "title": "ChecksRetriesResponse"
       },
-      "CompositionCompleteness": {
+      "ConflictingPathOutcome": {
         "type": "string",
         "enum": [
-          "complete",
-          "truncated"
-        ],
-        "title": "CompositionCompleteness"
-      },
-      "ConflictResolutionOutcome": {
-        "type": "string",
-        "enum": [
-          "unchanged",
           "resolved",
-          "discarded",
-          "resolved_with_discard"
+          "unresolved"
         ],
-        "title": "ConflictResolutionOutcome"
+        "title": "ConflictingPathOutcome"
       },
       "CreateScheduledQueueFreezePayload": {
         "properties": {
@@ -13344,6 +13334,48 @@
         ],
         "title": "EventQueueBatchComposition"
       },
+      "EventQueueBatchCompositionConflictingPath": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path",
+            "description": "The path, relative to the repository root."
+          },
+          "resolver": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "union",
+                  "ours",
+                  "theirs",
+                  "prefer-ours",
+                  "prefer-theirs",
+                  "json",
+                  "pnpm",
+                  "uv"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolver",
+            "description": "The strategy from the repository's `conflict_resolvers` that applies to this path, as written in the configuration. Null when none applies: no entry covers the path, or the queue's merge method does not use automatic conflict resolution."
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/ConflictingPathOutcome",
+            "description": "What came of the path. `resolved`: the resolver settled it, the way its strategy says. `unresolved`: the path still conflicts, which is what stopped the composition."
+          }
+        },
+        "type": "object",
+        "required": [
+          "path",
+          "resolver",
+          "outcome"
+        ],
+        "title": "EventQueueBatchCompositionConflictingPath"
+      },
       "EventQueueBatchCompositionMergeCommit": {
         "properties": {
           "pull_request_number": {
@@ -13430,49 +13462,29 @@
             "title": "Merge Commits",
             "description": "The merge commit each pull request made on the batch branch, in the order composed. Empty when the composition stopped on a conflict, as nothing was pushed. A pull request the base already contains is not merged, and has none."
           },
-          "empty_reason": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "conflict"
+            ],
+            "title": "Status",
+            "description": "`clean` when every pull request merged into the batch branch. `conflict` when one did not, and the composition stopped there."
+          },
+          "conflicting_paths": {
             "anyOf": [
               {
-                "type": "string",
-                "enum": [
-                  "merge_method_unsupported",
-                  "not_configured",
-                  "nothing_contended"
-                ]
+                "items": {
+                  "$ref": "#/components/schemas/EventQueueBatchCompositionConflictingPath"
+                },
+                "type": "array"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Empty Reason",
-            "description": "Why automatic conflict resolution had nothing to record. `merge_method_unsupported`: this queue's merge method cannot use it. `not_configured`: the repository configures no `conflict_resolvers`. `nothing_contended`: it was active, and no path it governs was changed by both sides. Null when it recorded something, or when every fold it could have recorded went unmeasured (see `status`)."
-          },
-          "status": {
-            "$ref": "#/components/schemas/CompositionCompleteness",
-            "description": "`truncated` when automatic conflict resolution was active and some of the batch's merges went unmeasured -- past the time the report may take, or because the composition stopped on a conflict: `paths` then covers only `measured_pull_request_numbers`. Always `complete` when `empty_reason` says it could not act, as nothing was measured."
-          },
-          "paths_contended": {
-            "type": "integer",
-            "title": "Paths Contended",
-            "description": "How many governed paths both sides changed. A floor, not a total, when `status` is `truncated`."
-          },
-          "measured_pull_request_numbers": {
-            "items": {
-              "type": "integer",
-              "maximum": 9.223372036854776e+18,
-              "minimum": 0.0
-            },
-            "type": "array",
-            "title": "Measured Pull Request Numbers",
-            "description": "The pull requests whose merges into the batch were measured, which the `paths` entries cover. A composition that stopped on a conflict measures the merges before it only."
-          },
-          "paths": {
-            "items": {
-              "$ref": "#/components/schemas/EventQueueBatchCompositionPath"
-            },
-            "type": "array",
-            "title": "Paths",
-            "description": "Every path automatic conflict resolution governed that both sides changed, in the measured merges."
+            "title": "Conflicting Paths",
+            "description": "Every path of the batch's merges that conflicted, or that automatic conflict resolution settled, sorted by path. A path covered by `ours`, `theirs` or `union` is listed wherever both sides changed it, conflicting or not: those strategies act whether the changes overlap or not, and do not record which. A path settled in more than one of the batch's merges is listed once per outcome. Null on events persisted before this field was added."
           }
         },
         "type": "object",
@@ -13484,56 +13496,10 @@
           "pull_request_numbers",
           "own_pull_request_numbers",
           "merge_commits",
-          "empty_reason",
           "status",
-          "paths_contended",
-          "measured_pull_request_numbers",
-          "paths"
+          "conflicting_paths"
         ],
         "title": "EventQueueBatchCompositionMetadata"
-      },
-      "EventQueueBatchCompositionPath": {
-        "properties": {
-          "path": {
-            "type": "string",
-            "title": "Path",
-            "description": "The path, relative to the repository root."
-          },
-          "driver": {
-            "type": "string",
-            "enum": [
-              "union",
-              "ours",
-              "theirs",
-              "prefer-ours",
-              "prefer-theirs",
-              "json",
-              "pnpm",
-              "uv"
-            ],
-            "title": "Driver",
-            "description": "The strategy the repository's `conflict_resolvers` gave this path, as written in the configuration."
-          },
-          "outcome": {
-            "$ref": "#/components/schemas/ConflictResolutionOutcome",
-            "description": "What automatic conflict resolution did to this path. `unchanged`: the result is what a plain merge gives. `resolved`: a plain merge conflicts here, and both sides' content survives. `discarded`: a plain merge completes here cleanly, and the result lost content it would have kept. `resolved_with_discard`: a plain merge conflicts here, and it was settled by dropping one side's content."
-          },
-          "pull_request_number": {
-            "type": "integer",
-            "maximum": 9.223372036854776e+18,
-            "minimum": 0.0,
-            "title": "Pull Request Number",
-            "description": "The pull request being merged into the batch when this path was resolved. Not the one it conflicted with: the batch merges its pull requests one at a time, and never learns which earlier one a path clashed with."
-          }
-        },
-        "type": "object",
-        "required": [
-          "path",
-          "driver",
-          "outcome",
-          "pull_request_number"
-        ],
-        "title": "EventQueueBatchCompositionPath"
       },
       "EventQueueChange": {
         "properties": {
