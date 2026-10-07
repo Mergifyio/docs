@@ -19,8 +19,17 @@ keep matching does not keep calling GitHub.
 :::caution
   **Avoid rule pairs that flip the same label.** If one rule adds a label and
   another removes it, and both rules' conditions keep matching after each
-  flip, the label toggles back and forth indefinitely. Every change
-  re-triggers rule evaluation. Scope your conditions so they become mutually
+  flip, the label toggles back and forth, because every change re-triggers
+  [rule evaluation](/workflow#how-rules-are-evaluated).
+
+  Mergify detects these loops. Once two rules have reversed each other on the
+  same label enough times in quick succession, Mergify stops changing that
+  label on that pull request in either direction, and reports a failing check
+  run naming the label and the rules that were undoing each other. The label
+  then stays as it is and no longer follows the pull request's state until
+  your Mergify configuration changes.
+
+  Do not rely on that backstop. Scope your conditions so they become mutually
   exclusive once the label is applied. For example, guard post-merge cleanup
   rules with the `merged` condition and drop that label from any opposing
   rule's conditions.
