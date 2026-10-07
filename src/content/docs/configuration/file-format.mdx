@@ -56,6 +56,10 @@ a different aspect of Mergify:
 - [`priority_rules`](#priority-rules) configures the [priorities for the Merge
   Queue](/merge-queue/priority);
 
+- [`conflict_resolvers`](/merge-queue/lifecycle#resolving-some-conflicts-automatically)
+  configures which files the Merge Queue resolves conflicts on while it builds a
+  batch;
+
 - [`scopes`](/merge-queue/scopes) configures Merge Queue scopes;
 
 - [`commands_restrictions`](/commands/restrictions) configures who is able to
@@ -237,9 +241,10 @@ detailed description of the problem and guidance on how to fix it.
 Each product reads its own sections of the configuration, and it only reads them
 where that product is enabled on the repository. A configuration that defines
 `pull_request_rules` without [Workflow Automation](/workflow/), `queue_rules`,
-`priority_rules` or `merge_queue` without the [Merge Queue](/merge-queue), or
-`merge_protections` without [Merge Protections](/merge-protections/) is valid,
-and those sections are never evaluated.
+`priority_rules`, `merge_queue` or `conflict_resolvers` without the [Merge
+Queue](/merge-queue), or `merge_protections` without [Merge
+Protections](/merge-protections/) is valid, and those sections are never
+evaluated.
 
 The configuration check run stays green, since the file really is valid, and it
 reports which sections will not be used and which product each one is waiting
