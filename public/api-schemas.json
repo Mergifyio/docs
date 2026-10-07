@@ -7161,8 +7161,8 @@
         "tags": [
           "test_insights"
         ],
-        "summary": "Remove a quarantine",
-        "description": "Remove a quarantine with its id",
+        "summary": "Unquarantine a test",
+        "description": "Unquarantine a test with its quarantine id",
         "operationId": "remove_quarantine_by_id_ci__owner__repositories__repository__quarantines__quarantine_id__delete",
         "security": [
           {
@@ -9511,7 +9511,7 @@
           "unquarantine_when_healthy": {
             "type": "boolean",
             "title": "Unquarantine When Healthy",
-            "description": "Remove the quarantine once the test recovers on the default branch, where Mergify no longer detects it as flaky or broken.",
+            "description": "Unquarantine the test once it recovers on the default branch, where Mergify no longer detects it as flaky or broken.",
             "default": false
           }
         },
@@ -18737,12 +18737,12 @@
           "is_recovered": {
             "type": "boolean",
             "title": "Is Recovered",
-            "description": "True when recent runs of this test are healthy, suggesting the quarantine could be removed."
+            "description": "True when recent runs of this test are healthy, suggesting the test could be unquarantined."
           },
           "unquarantine_when_healthy": {
             "type": "boolean",
             "title": "Unquarantine When Healthy",
-            "description": "True when Mergify removes this quarantine once the test recovers on the default branch."
+            "description": "True when Mergify unquarantines this test once it recovers on the default branch."
           }
         },
         "type": "object",
