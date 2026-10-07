@@ -45,6 +45,12 @@ each one is anchored at the start of a branch name only, so `release-1` also
 matches `release-10`. Setting both `branches` and `regexes` copies to the
 branches you named plus the branches your patterns matched.
 
+Mergify reads at most 1,000 of the repository's branches to match `regexes`. In
+a repository with more than 1,000 branches, the action fails with "Too many
+branches to match regexes against" and copies to none of the branches, not even
+the ones listed in `branches`. The other rules on the pull request keep running.
+In a repository that size, list the destination branches in `branches` instead.
+
 Mergify skips any login ending in `[bot]` when resolving `assignees`, so a rule
 that assigns `{{ author }}` leaves the copy unassigned if a bot opened the
 original pull request.
