@@ -284,7 +284,7 @@ Mergify handles each GitHub ruleset rule type as follows.
 | `update` | Checked on queue branch creation | See [below](#required-signatures-and-branch-deletion) |
 | `branch_name_pattern` | Checked on queue branch creation | See [below](#branch-name-pattern) |
 | `required_review_thread_resolution` | Injected as conditions | -- |
-| `required_signatures` | Checked on queue branch push | See [below](#required-signatures-and-branch-deletion) |
+| `required_signatures` | Compatible on the hosted service | See [below](#required-signatures-and-branch-deletion) |
 | `deletion` | Checked when queue branches are cleaned up | See [below](#required-signatures-and-branch-deletion) |
 | All other rule types | Ignored | See [below](#ignored-rule-types) |
 
@@ -365,13 +365,52 @@ narrow.
 
 ### Required Signatures and Branch Deletion
 
-Mergify builds each queue branch locally and pushes it, then deletes it once
+Mergify builds each queue branch itself and pushes it, then deletes it once
 the batch is done. Neither goes through a pull request, so a ruleset covering
-the queue branch prefixes can stop the queue:
+the queue branch prefixes applies to both.
 
-- A `required_signatures` rule rejects the push, because the commits Mergify
-  composes locally are unsigned. Every queue attempt then fails on branch
-  creation.
+On the hosted service, a `required_signatures` rule on the queue branches works
+without a bypass. Mergify signs the merge commits it adds to a queue branch and
+commits them as `Mergify <commit-signer@mergify.com>`, so GitHub shows them as
+**Verified**. With the [`merge-batch` merge
+method](/merge-queue/merge-strategies#merge-batch), or `fast-forward` in
+[batch-PR mode](/merge-queue/merge-strategies#batch-pr-mode), these commits
+land on your base branch, and a signature rule there accepts them too.
+
+The rule can still refuse a push in these cases:
+
+- **A queued pull request carries unsigned commits.** When Mergify creates a
+  queue branch, GitHub checks the commits that are on no other branch of the
+  repository yet, typically those of a pull request opened from a fork. If one
+  of them is unsigned, GitHub rejects the push and the queue reports the
+  refusal. Have the author sign those commits and push again before requeuing,
+  rather than adding a bypass that would let them past your signature policy.
+
+- **Another Mergify action writes the commits.** The
+  [`squash`](/workflow/actions/squash), [`backport`](/workflow/actions/backport)
+  and [`copy`](/workflow/actions/copy) actions write unsigned commits.
+  `backport` and `copy` push them to new branches under `mergify/`, so a
+  signature rule covering that namespace rejects those pushes. `squash`
+  force-pushes the pull request's own branch as a GitHub user, so a signature
+  rule covering that branch rejects it unless that user can bypass the rule.
+
+- **Mergify runs on-premise.** An [on-premise installation](/enterprise) does
+  not sign its queue commits, so a `required_signatures` rule on the queue
+  branches would reject every push. The queue reports the conflict before it
+  tries to push.
+
+If one of your workflows verifies signatures against its own keyring, for
+example with `git verify-commit` or `git log --format='%G?'`, add Mergify's
+public key from
+[github.com/mergify-commit-signer.gpg](https://github.com/mergify-commit-signer.gpg)
+to it. Keep GitHub's key from
+[github.com/web-flow.gpg](https://github.com/web-flow.gpg) there too: it signs
+the commits GitHub creates for Mergify, such as the merge into your base branch.
+Fetch Mergify's key from that address rather than pinning a copy, since the
+signing key is rotated.
+
+The other rules a ruleset can apply to the queue branches stop the queue
+wherever Mergify runs:
 
 - A `deletion` rule stops Mergify from removing the final queue branch before
   recreating it, which leaves the queue stuck on that batch.
@@ -379,17 +418,22 @@ the queue branch prefixes can stop the queue:
 - A `creation`, `update`, or `pull_request` rule refuses the queue branch
   outright, whatever the rule itself asks for. A `pull_request` rule counts
   here because the queue branch is pushed, never opened as a pull request of
-  its own, so the rule can never be satisfied on it. Unlike the push and the
-  deletion, any bypass mode clears these three, `pull_requests_only` included.
+  its own, so the rule can never be satisfied on it. Unlike an unsigned push
+  and the deletion, any bypass mode clears these three, `pull_requests_only`
+  included.
+
+The resolution below covers these rules, and the unsigned pushes of an
+on-premise installation or of the `backport` and `copy` actions.
 
 **Resolution:**
 
 - **Preferred:** add Mergify as a bypass actor on the ruleset with the
   `exempt` or `always` bypass mode. `pull_requests_only` is not enough for
-  the push or the deletion.
+  an unsigned push or the deletion.
 
 - **Alternative:** narrow the ruleset so it does not cover the queue branch
-  prefixes.
+  prefixes, or the `mergify/` branches the `backport` and `copy` actions
+  create.
 
 ### Require Branches to Be Up to Date
 
