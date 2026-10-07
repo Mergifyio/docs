@@ -140,9 +140,9 @@ filter empty:
 
 ## Test Engine Notifications
 
-Mergify's [Test Engine](/test-insights) can post a Slack message whenever a
-test is [quarantined or dequarantined](/test-insights/quarantine), so your team
-sees mitigation activity as it happens (whether a teammate acted from the
+Mergify's [Test Engine](/test-engine) can post a Slack message whenever a
+test is [quarantined or dequarantined](/test-engine/quarantine), so your team
+sees quarantine activity as it happens (whether a teammate acted from the
 dashboard or CLI, or Mergify quarantined the test automatically).
 
 A Test Engine notification is headed either `Test quarantined` or
@@ -161,7 +161,7 @@ A Test Engine notification is headed either `Test quarantined` or
 
 To configure Test Engine Slack notifications:
 
-1. **Enable Test Engine**: Make sure you have [Test Engine](/test-insights)
+1. **Enable Test Engine**: Make sure you have [Test Engine](/test-engine)
    set up for your repositories
 
 2. **Connect Slack**: In your Mergify dashboard, navigate to **Integrations → Slack**
@@ -171,7 +171,7 @@ To configure Test Engine Slack notifications:
    dequarantine) to subscribe to
 
 Test Engine notifications are available on the same plans as the
-[quarantine feature](/test-insights/quarantine).
+[quarantine feature](/test-engine/quarantine).
 
 ## Pull Request Notifications via GitHub-Slack Integration
 

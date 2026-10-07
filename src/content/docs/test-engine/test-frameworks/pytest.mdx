@@ -7,7 +7,7 @@ import pytestLogo from "../../../images/ci-insights/pytest/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
-import ReviewInTestInsights from "./_review-in-test-insights.mdx"
+import ReviewInTestInsights from "./_review-in-test-engine.mdx"
 
 <IntegrationLogo src={pytestLogo} alt="Pytest logo" />
 
@@ -107,7 +107,7 @@ The plugin collects your test results and sends them to Test Engine.
 
 ## Quarantine and Crashed Runs
 
-The plugin applies [quarantine](/test-insights/quarantine) inside the pytest
+The plugin applies [quarantine](/test-engine/quarantine) inside the pytest
 session. It marks each quarantined test as a non-strict `xfail`, so a
 quarantined test that fails is reported as `xfailed` and does not count against
 pytest's exit code. The exit code of your test step already accounts for

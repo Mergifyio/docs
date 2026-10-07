@@ -17,15 +17,15 @@ problematic tests so they don't block your CI pipeline.
 Test Engine is organized into three phases that follow the natural lifecycle
 of a test reliability problem:
 
-1. **[Prevention](/test-insights/prevention)**: Catch flaky and broken tests
+1. **[Prevention](/test-engine/prevention)**: Catch flaky and broken tests
    on pull requests before they reach your codebase. Mergify reruns tests on
    PRs to detect inconsistent behavior early.
 
-2. **[Detection](/test-insights/detection)**: Identify and prioritize
+2. **[Detection](/test-engine/detection)**: Identify and prioritize
    unhealthy tests across your repositories. See which tests are flaky or
    broken, and focus on the ones with the most impact.
 
-3. **[Mitigation](/test-insights/mitigation)**: Quarantine problematic tests
+3. **[Quarantine](/test-engine/quarantine)**: Isolate problematic tests
    to unblock CI without removing them. Tests keep running, but their failures
    no longer block merges.
 
@@ -47,7 +47,7 @@ known flakiness.
   broken. Based on results from multiple CI runs.
 
 - **Confidence**: How much rerun data backs a test's health status, reported
-  as low, medium, or high. [Prevention](/test-insights/prevention) reports it
+  as low, medium, or high. [Prevention](/test-engine/prevention) reports it
   for the tests a pull request adds. Low confidence means the status could
   still change as the test is rerun.
 
@@ -57,8 +57,8 @@ known flakiness.
 
 - **Default branch scope**: Test health across repositories comes from runs on
   the default branch. Pull request runs feed
-  [Prevention](/test-insights/prevention) instead. See
-  [which runs Detection reports on](/test-insights/detection#which-runs-detection-reports-on).
+  [Prevention](/test-engine/prevention) instead. See
+  [which runs Detection reports on](/test-engine/detection#which-runs-detection-reports-on).
 
 ## Setup
 
@@ -83,105 +83,105 @@ verify your test output.
 <DocsetGrid>
   <Docset
     title="Cypress"
-    path="/test-insights/test-frameworks/cypress"
+    path="/test-engine/test-frameworks/cypress"
     icon="simple-icons:cypress"
   >
     Integrate Cypress with Test Engine.
   </Docset>
   <Docset
     title="Go"
-    path="/test-insights/test-frameworks/golang"
+    path="/test-engine/test-frameworks/golang"
     icon="simple-icons:go"
   >
     Integrate Go with Test Engine.
   </Docset>
   <Docset
     title="Jest"
-    path="/test-insights/test-frameworks/jest"
+    path="/test-engine/test-frameworks/jest"
     icon="simple-icons:jest"
   >
     Integrate Jest with Test Engine.
   </Docset>
   <Docset
     title="JUnit"
-    path="/test-insights/test-frameworks/junit"
+    path="/test-engine/test-frameworks/junit"
     icon="simple-icons:junit5"
   >
     Integrate JUnit with Test Engine.
   </Docset>
   <Docset
     title="Minitest"
-    path="/test-insights/test-frameworks/minitest"
+    path="/test-engine/test-frameworks/minitest"
     icon="simple-icons:ruby"
   >
     Integrate Minitest with Test Engine.
   </Docset>
   <Docset
     title="MSTest"
-    path="/test-insights/test-frameworks/mstest"
+    path="/test-engine/test-frameworks/mstest"
     icon="simple-icons:dotnet"
   >
     Integrate MSTest with Test Engine.
   </Docset>
   <Docset
     title="NUnit"
-    path="/test-insights/test-frameworks/nunit"
+    path="/test-engine/test-frameworks/nunit"
     icon="simple-icons:dotnet"
   >
     Integrate NUnit with Test Engine.
   </Docset>
   <Docset
     title="Pest"
-    path="/test-insights/test-frameworks/pest"
+    path="/test-engine/test-frameworks/pest"
     icon="simple-icons:php"
   >
     Integrate Pest with Test Engine.
   </Docset>
   <Docset
     title="PHPUnit"
-    path="/test-insights/test-frameworks/phpunit"
+    path="/test-engine/test-frameworks/phpunit"
     icon="simple-icons:php"
   >
     Integrate PHPUnit with Test Engine.
   </Docset>
   <Docset
     title="Playwright"
-    path="/test-insights/test-frameworks/playwright"
+    path="/test-engine/test-frameworks/playwright"
     icon="simple-icons:playwright"
   >
     Integrate Playwright with Test Engine.
   </Docset>
   <Docset
     title="Pytest"
-    path="/test-insights/test-frameworks/pytest"
+    path="/test-engine/test-frameworks/pytest"
     icon="simple-icons:pytest"
   >
     Integrate Pytest with Test Engine.
   </Docset>
   <Docset
     title="RSpec"
-    path="/test-insights/test-frameworks/rspec"
+    path="/test-engine/test-frameworks/rspec"
     icon="simple-icons:ruby"
   >
     Integrate RSpec with Test Engine.
   </Docset>
   <Docset
     title="Rust"
-    path="/test-insights/test-frameworks/rust"
+    path="/test-engine/test-frameworks/rust"
     icon="simple-icons:rust"
   >
     Integrate Rust with Test Engine.
   </Docset>
   <Docset
     title="TestNG"
-    path="/test-insights/test-frameworks/testng"
+    path="/test-engine/test-frameworks/testng"
     icon="simple-icons:testinglibrary"
   >
     Integrate TestNG with Test Engine.
   </Docset>
   <Docset
     title="Vitest"
-    path="/test-insights/test-frameworks/vitest"
+    path="/test-engine/test-frameworks/vitest"
     icon="simple-icons:vitest"
   >
     Integrate Vitest with Test Engine.
