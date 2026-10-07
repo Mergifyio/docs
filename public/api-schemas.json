@@ -6036,11 +6036,11 @@
             "in": "query",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/TimeWindow",
-              "description": "Period to cover: the last 7 or 30 UTC days, today included.",
+              "$ref": "#/components/schemas/TestHealthTimeWindow",
+              "description": "Period to cover: the last 7, 30 or 90 UTC days, today included.",
               "default": "30d"
             },
-            "description": "Period to cover: the last 7 or 30 UTC days, today included."
+            "description": "Period to cover: the last 7, 30 or 90 UTC days, today included."
           },
           {
             "name": "pipeline_name",
@@ -9507,6 +9507,12 @@
             ],
             "title": "Branch",
             "description": "Branch name on which the test should be quarantined. If not specified, it will be quarantined on all branches."
+          },
+          "unquarantine_when_healthy": {
+            "type": "boolean",
+            "title": "Unquarantine When Healthy",
+            "description": "Remove the quarantine once the test recovers on the default branch, where Mergify no longer detects it as flaky or broken.",
+            "default": false
           }
         },
         "type": "object",
@@ -9571,6 +9577,10 @@
           "ignore_broken_on_default_branch": {
             "type": "boolean",
             "title": "Ignore Broken On Default Branch"
+          },
+          "unquarantine_when_healthy": {
+            "type": "boolean",
+            "title": "Unquarantine When Healthy"
           }
         },
         "type": "object",
@@ -18762,6 +18772,11 @@
             "type": "boolean",
             "title": "Is Recovered",
             "description": "True when recent runs of this test are healthy, suggesting the quarantine could be removed."
+          },
+          "unquarantine_when_healthy": {
+            "type": "boolean",
+            "title": "Unquarantine When Healthy",
+            "description": "True when Mergify removes this quarantine once the test recovers on the default branch."
           }
         },
         "type": "object",
@@ -18776,7 +18791,8 @@
           "job_name",
           "created_at",
           "health_status",
-          "is_recovered"
+          "is_recovered",
+          "unquarantine_when_healthy"
         ],
         "title": "QuarantinedTest"
       },
@@ -20501,6 +20517,15 @@
           "test_programming_language"
         ],
         "title": "TestFailureEvent"
+      },
+      "TestHealthTimeWindow": {
+        "type": "string",
+        "enum": [
+          "7d",
+          "30d",
+          "90d"
+        ],
+        "title": "TestHealthTimeWindow"
       },
       "TestQuarantineSnapshot": {
         "properties": {
