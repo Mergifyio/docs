@@ -1,9 +1,9 @@
 ---
-title: NUnit Integration with Mergify
-description: Report your test results from NUnit tests to Mergify
+title: MSTest Integration with Mergify
+description: Report your test results from MSTest tests to Mergify
 ---
 
-import CommonTroubleshootingTips from './_common-troubleshooting-tips.mdx'
+import CommonTroubleshootingTips from "./_common-troubleshooting-tips.mdx"
 import GhaMergifyCiQuarantineSetup from "./_gha_mergify_ci_quarantine_setup.mdx"
 import MergifyCIUploadStep from "../../../../components/MergifyCIUploadStep.astro"
 import MergifyCIUploadStepMatrix from "../../../../components/MergifyCIUploadStepMatrix.astro"
@@ -13,15 +13,16 @@ import BuildkiteCIUploadStepMatrix from "../../../../components/BuildkiteCIUploa
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
 import BuildkiteCIQuarantineSetup from "./_buildkite_mergify_ci_quarantine_setup.mdx"
 import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.astro"
-import ReviewInTestInsights from "./_review-in-test-insights.mdx"
+import ReviewInTestInsights from "./_review-in-test-engine.mdx"
 
-This guide shows how to generate JUnit reports from your NUnit tests and upload
+This guide shows how to generate JUnit reports from your MSTest tests and upload
 them to **Test Engine** using your CI workflow.
 
-## Generate a JUnit Report with NUnit
+## Generate a JUnit Report with MSTest
 
-NUnit can generate JUnit-compatible XML reports using the built-in test adapter
-and various loggers available for `dotnet test`.
+MSTest can generate JUnit-compatible XML reports using the built-in logger or
+third-party tools. The `dotnet test` command supports various loggers including
+JUnit format.
 
 ### Using dotnet test with JUnit Logger
 
@@ -42,30 +43,26 @@ dotnet test --logger "junit;LogFilePath=junit.xml"
 subdirectory, set the upload step's `report_path` to the report's path from the
 repository root, such as `tests/MyProject.Tests/junit.xml`.
 
-### Using NUnit Console Runner
+### Using TRX to JUnit Conversion
 
-The NUnit Console Runner supports only two result formats, `nunit3` and
-`nunit2`; there is no built-in JUnit format. To get JUnit XML out of it, pass an
-XSLT that transforms the native `nunit3` output. NUnit publishes one as
-[`nunit3-junit.xslt`](https://github.com/nunit/nunit-transforms/tree/master/nunit3-junit):
+You can also generate TRX files and convert them to JUnit:
 
 ```bash
-nunit3-console.exe your-test.dll "--result=junit.xml;transform=nunit3-junit.xslt"
+dotnet test --logger trx --results-directory ./TestResults
 ```
 
-Quote the whole option: the semicolon separating the file name from the
-transform is a command separator in most shells.
+Then use a tool like `trx2junit` to convert:
 
-If you don't want to maintain an XSLT, run your tests through `dotnet test` with
-the JUnit logger instead, as shown above.
+```bash
+dotnet tool install -g trx2junit
+trx2junit ./TestResults/*.trx
+```
 
-### Using NUnit Test Adapter
+### Using MSTest with Test Results
 
-Add the NUnit test adapter to your test project:
+Add the JUnit logger package to your test project:
 
 ```xml
-<PackageReference Include="NUnit" Version="3.13.3" />
-<PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
 <PackageReference Include="JunitXml.TestLogger" Version="6.1.0" />
 ```
 
@@ -78,37 +75,12 @@ dotnet test --logger junit
 Without a `LogFilePath`, the logger writes into the `TestResults` directory next
 to your test project.
 
-### Using Multiple Test Result Formats
+### Using Multiple Loggers
 
-You can generate multiple formats simultaneously:
-
-```bash
-dotnet test --logger "console;verbosity=detailed" --logger "junit;LogFilePath=junit.xml" --logger "trx;LogFileName=results.trx"
-```
-
-### Using NUnit with Custom Settings
-
-You can also configure test settings in a `.runsettings` file:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<RunSettings>
-  <LoggerRunSettings>
-    <Loggers>
-      <Logger friendlyName="junit" enabled="true">
-        <Configuration>
-          <LogFilePath>junit.xml</LogFilePath>
-        </Configuration>
-      </Logger>
-    </Loggers>
-  </LoggerRunSettings>
-</RunSettings>
-```
-
-Then run:
+You can combine multiple loggers:
 
 ```bash
-dotnet test --settings test.runsettings
+dotnet test --logger "console;verbosity=detailed" --logger "junit;LogFilePath=junit.xml"
 ```
 
 ## Update Your CI Workflow
@@ -123,7 +95,7 @@ Engine using the `mergifyio/gha-mergify-ci` action.
 For example, in your workflow file:
 
 ```yaml
-- name: Run NUnit Tests and Generate JUnit Report
+- name: Run MSTest Tests and Generate JUnit Report
   id: tests
   continue-on-error: true
   run: dotnet test --logger "junit;LogFilePath=junit.xml"
@@ -151,7 +123,7 @@ For example, in your workflow file:
 
 After pushing these changes:
 
-1. Your GitHub Actions workflow will execute your NUnit tests.
+1. Your GitHub Actions workflow will execute your MSTest tests.
 2. A JUnit report (junit.xml) is generated.
 3. The Mergify CI action uploads the report to Test Engine.
 
@@ -160,8 +132,8 @@ After pushing these changes:
 ## Troubleshooting Tips
 
 <ul>
-  <li>Test Adapter: Ensure both NUnit and NUnit3TestAdapter packages are properly referenced in your test project.</li>
-  <li>Logger Package: Make sure the JunitXml.TestLogger package is installed and compatible with your .NET version.</li>
+  <li>Logger Package: Ensure the JunitXml.TestLogger package is added to your test project.</li>
+  <li>.NET Version: Make sure you're using a compatible version of .NET that supports the test loggers.</li>
 
   <CommonTroubleshootingTips />
 </ul>

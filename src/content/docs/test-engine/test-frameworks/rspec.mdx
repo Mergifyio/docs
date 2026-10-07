@@ -7,7 +7,7 @@ import rspecLogo from "../../../images/ci-insights/rspec/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
-import ReviewInTestInsights from "./_review-in-test-insights.mdx"
+import ReviewInTestInsights from "./_review-in-test-engine.mdx"
 
 <IntegrationLogo src={rspecLogo} alt="RSpec logo" />
 
@@ -87,7 +87,7 @@ The gem automatically collects your test results and sends them to Test Engine.
 
 ## Quarantine and Crashed Runs
 
-The gem applies [quarantine](/test-insights/quarantine) inside the RSpec run.
+The gem applies [quarantine](/test-engine/quarantine) inside the RSpec run.
 When a quarantined example fails, the gem marks it pending with the message
 `Test is quarantined from Mergify Test Insights`, so it does not count as a
 failure and does not change RSpec's exit code. The exit code of your test step

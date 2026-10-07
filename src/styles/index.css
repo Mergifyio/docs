@@ -480,7 +480,7 @@ body.section-ci-insights {
   --section-accent: var(--color-purple-700);
   --section-accent-bg: color-mix(in srgb, var(--color-purple-400) 25%, transparent);
 }
-body.section-test-insights {
+body.section-test-engine {
   --section-accent: var(--color-orange-700);
   --section-accent-bg: color-mix(in srgb, var(--color-orange-400) 25%, transparent);
 }

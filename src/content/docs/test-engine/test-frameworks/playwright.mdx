@@ -7,7 +7,7 @@ import playwrightLogo from "../../../images/ci-insights/playwright/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
-import ReviewInTestInsights from "./_review-in-test-insights.mdx"
+import ReviewInTestInsights from "./_review-in-test-engine.mdx"
 
 <IntegrationLogo src={playwrightLogo} alt="Playwright logo" />
 
@@ -76,7 +76,7 @@ test('logs in', async ({ page }) => {
 });
 ```
 
-This import enables [test quarantine](/test-insights/quarantine): when a
+This import enables [test quarantine](/test-engine/quarantine): when a
 quarantined test fails, its outcome is reported as passing so it doesn't block
 your pipeline.
 
@@ -130,7 +130,7 @@ Engine.
 ## Quarantine and Crashed Runs
 
 The [`test` you import from `@mergifyio/playwright`](#import-test-and-expect-from-mergify)
-applies [test quarantine](/test-insights/quarantine) inside the Playwright run.
+applies [test quarantine](/test-engine/quarantine) inside the Playwright run.
 When a quarantined test ends in any failing status, a timeout included, that
 `test` sets the expected status to the outcome, so Playwright counts the result
 as expected and the result does not change Playwright's exit code. The exit
