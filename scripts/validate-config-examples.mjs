@@ -22,6 +22,11 @@
  *   node scripts/validate-config-examples.mjs [paths...]   # validate (default: src/content/docs)
  *   node scripts/validate-config-examples.mjs --json [paths...]  # dump classification as JSON
  *
+ * A block that is none of those is unrecognized and not validatable — except
+ * when its top-level key is one edit away from a Mergify one, which means a
+ * complete config misspelling the key that identifies it. That fails, because
+ * the alternative is a snippet Mergify rejects shipping green.
+ *
  * A block is skipped when it is a partial fragment, a `...` placeholder, a
  * GitHub Actions workflow, or explicitly marked. To mark a complete-looking
  * config that should NOT be validated (e.g. deprecated syntax shown in a
@@ -39,13 +44,16 @@ import * as yaml from 'js-yaml';
 const ROOT = path.resolve(fileURLToPath(import.meta.url), '..', '..');
 const SCHEMA_PATH = path.join(ROOT, 'public', 'mergify-configuration-schema.json');
 
-// Top-level keys that mark a complete Mergify configuration file.
+// Top-level keys that mark a complete Mergify configuration file. Every
+// top-level property the configuration schema defines, plus `partition_rules`,
+// which the schema has dropped but the migration guide still shows.
 const MERGIFY_TOP_KEYS = new Set([
   'queue_rules',
   'pull_request_rules',
   'merge_protections',
   'merge_protections_settings',
   'commands_restrictions',
+  'conflict_resolvers',
   'merge_queue',
   'shared',
   'defaults',
@@ -72,6 +80,55 @@ const PARTIAL_MARKER_RE = /^\s*#\s*partial\b/i;
 const TOP_KEY_RE = /^([A-Za-z_][\w-]*):/;
 // MDX comment directive placed on the line before a fence to skip validation.
 const SKIP_DIRECTIVE_RE = /\{\/\*\s*validate-config-examples:\s*skip\b/i;
+
+/**
+ * True when `a` and `b` are within one single-character edit of each other.
+ * Used only to compare a top-level key against `MERGIFY_TOP_KEYS`, so the
+ * inputs are short and a simple scan beats a full distance matrix.
+ */
+export function withinOneEdit(a, b) {
+  if (a === b) return false;
+  if (Math.abs(a.length - b.length) > 1) return false;
+  const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+  let i = 0;
+  let j = 0;
+  let edited = false;
+  while (i < short.length && j < long.length) {
+    if (short[i] === long[j]) {
+      i += 1;
+      j += 1;
+      continue;
+    }
+    if (edited) return false;
+    edited = true;
+    // Same length means a substitution; otherwise skip one char of the longer.
+    if (short.length === long.length) i += 1;
+    j += 1;
+  }
+  return true;
+}
+
+/**
+ * Top-level keys of an otherwise-unrecognized block that are one edit away from
+ * a key that would have made it a complete Mergify config.
+ *
+ * `classify` has no bucket for "meant to be a Mergify config but misspells the
+ * key that says so": a singular `pull_request_rule:` matches no top key, is not
+ * all-indented, and so lands in `unknown` — which is neither validated nor
+ * reported. The snippet is then a config Mergify rejects, shipped green. This
+ * narrows that silence to the cases worth failing on.
+ */
+export function nearMissTopKeys(code) {
+  const hits = new Set();
+  for (const ln of code.split('\n')) {
+    const m = ln.match(TOP_KEY_RE);
+    if (!m) continue;
+    for (const known of MERGIFY_TOP_KEYS) {
+      if (withinOneEdit(m[1], known)) hits.add(`${m[1]} (did you mean ${known}?)`);
+    }
+  }
+  return [...hits];
+}
 
 export function langOf(info) {
   const token = info.trim().split(/\s+/)[0] || '';
@@ -194,6 +251,17 @@ export const VALIDATED_CLASSIFICATIONS = ['mergify-config', 'merge-protection-ru
 export function validateBlocks(blocks, validate = createValidator()) {
   const failures = [];
   for (const b of blocks) {
+    // An `unknown` block is not validatable, but one whose top-level key merely
+    // misspells a Mergify key is a config that would be rejected, and silence
+    // there is the one outcome this script exists to prevent.
+    if (b.classification === 'unknown') {
+      const near = nearMissTopKeys(b.code);
+      if (near.length) {
+        const msg = `misspelled top-level key: ${near.join(', ')}`;
+        failures.push({ file: b.file, line: b.line, msg });
+      }
+      continue;
+    }
     if (!VALIDATED_CLASSIFICATIONS.includes(b.classification)) continue;
     let doc;
     try {
