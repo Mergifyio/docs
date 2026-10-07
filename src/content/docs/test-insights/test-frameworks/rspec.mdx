@@ -11,15 +11,15 @@ import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 <IntegrationLogo src={rspecLogo} alt="RSpec logo" />
 
-This guide explains how to integrate RSpec with Test Insights using the
+This guide explains how to integrate RSpec with Test Engine using the
 `rspec-mergify` gem. Once installed, test results are automatically uploaded to
-Test Insights without any extra workflow changes.
+Test Engine without any extra workflow changes.
 
 ## Installation
 
 You need to install the
 [`rspec-mergify`](https://rubygems.org/gems/rspec-mergify) gem to automatically
-upload your test results to **Test Insights**.
+upload your test results to **Test Engine**.
 
 ### Gemfile
 
@@ -83,7 +83,7 @@ steps:
 
 <BuildkiteTokenNote plugin={false} />
 
-The gem automatically collects your test results and sends them to Test Insights.
+The gem automatically collects your test results and sends them to Test Engine.
 
 ## Quarantine and Crashed Runs
 
@@ -106,12 +106,12 @@ inside an example: a spec file that fails to load, a failing `before(:suite)`
 or `after(:context)` hook, or RSpec dying mid-run still exits non-zero and fails
 the step. The gem uploads results when the run ends, so a process killed
 outright before then, such as by the out-of-memory killer, sends nothing to
-Test Insights.
+Test Engine.
 
 If the gem cannot fetch the quarantine list, it quarantines nothing for that
 run, and a quarantined example that fails makes the step fail as usual.
 
-## Verify and Review in Test Insights
+## Verify and Review in Test Engine
 
 After pushing these changes, your next CI run reports its RSpec results
 automatically.
@@ -135,6 +135,6 @@ automatically.
 :::
 
 :::tip
-  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Insights,
+  Use `MERGIFY_TEST_JOB_NAME` to make reports clearer in Test Engine,
   especially when running multiple test suites or using a matrix strategy.
 :::
