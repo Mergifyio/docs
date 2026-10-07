@@ -23,7 +23,14 @@ describe('getProductAccent', () => {
     });
   });
 
-  test('maps Test Insights to orange-700', () => {
+  test('maps Test Engine to orange-700', () => {
+    expect(getProductAccent('Test Engine')).toEqual({
+      bar: 'var(--color-orange-700)',
+      text: 'var(--color-orange-700)',
+    });
+  });
+
+  test('maps Test Insights, the former name, to orange-700', () => {
     expect(getProductAccent('Test Insights')).toEqual({
       bar: 'var(--color-orange-700)',
       text: 'var(--color-orange-700)',

@@ -155,6 +155,8 @@ const PRODUCT_ACCENTS: Record<string, ProductAccent> = {
   'Merge Queue': { bar: 'var(--color-teal-700)', text: 'var(--color-teal-700)' },
   'Workflow Automation': { bar: 'var(--color-rose-700)', text: 'var(--color-rose-700)' },
   'CI Insights': { bar: 'var(--color-purple-700)', text: 'var(--color-purple-700)' },
+  'Test Engine': { bar: 'var(--color-orange-700)', text: 'var(--color-orange-700)' },
+  // Test Engine's former name, still carried by the entries written before the rename.
   'Test Insights': { bar: 'var(--color-orange-700)', text: 'var(--color-orange-700)' },
   'Merge Protections': { bar: 'var(--color-blue-700)', text: 'var(--color-blue-700)' },
   Stacks: { bar: 'var(--color-coral-700)', text: 'var(--color-coral-700)' },

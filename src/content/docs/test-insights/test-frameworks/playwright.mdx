@@ -12,8 +12,8 @@ import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 <IntegrationLogo src={playwrightLogo} alt="Playwright logo" />
 
 This guide explains how to integrate [Playwright](https://playwright.dev/) with
-Test Insights using the `@mergifyio/playwright` reporter. Once installed, test
-results are automatically uploaded to Test Insights without any extra workflow
+Test Engine using the `@mergifyio/playwright` reporter. Once installed, test
+results are automatically uploaded to Test Engine without any extra workflow
 changes.
 
 ## Installation
@@ -21,7 +21,7 @@ changes.
 Install the
 [`@mergifyio/playwright`](https://www.npmjs.com/package/@mergifyio/playwright)
 package alongside `@playwright/test` to automatically upload your test results
-to **Test Insights**.
+to **Test Engine**.
 
 ### npm
 
@@ -125,7 +125,7 @@ steps:
 <BuildkiteTokenNote plugin={false} />
 
 The reporter automatically collects your test results and sends them to Test
-Insights.
+Engine.
 
 ## Quarantine and Crashed Runs
 
@@ -148,7 +148,7 @@ nothing more:
 A crash cannot pass for a green run either. If Playwright dies mid-run, it
 exits non-zero and the step fails. The reporter uploads results when the run
 ends, so a process killed outright before then, such as by the out-of-memory
-killer, sends nothing to Test Insights.
+killer, sends nothing to Test Engine.
 
 If the global setup that `withMergify` adds cannot fetch the quarantine list,
 the run quarantines nothing, and a quarantined test that fails makes the step
@@ -168,7 +168,7 @@ browser.
 To keep each project's tests separate, set
 `PLAYWRIGHT_MERGIFY_INCLUDE_PROJECT_IN_TEST_NAME` to `true`. The reporter then
 prefixes each test name with its project, for example
-`[chromium] > login.spec.ts > logs in`, so Test Insights tracks flakiness and
+`[chromium] > login.spec.ts > logs in`, so Test Engine tracks flakiness and
 quarantine per project:
 
 ```yaml
@@ -186,7 +186,7 @@ The reporter uploads each run's results under your CI job's name. On GitHub
 Actions, that name is the job's identifier (`GITHUB_JOB`), which every leg of
 a matrix shares. The job name is
 [part of a test's identity](/ci-insights/setup/github-actions#configuration-tips)
-in Test Insights, so when the legs run the same tests in different
+in Test Engine, so when the legs run the same tests in different
 environments, their results merge into one test.
 
 Set `MERGIFY_TEST_JOB_NAME` on each leg and include the matrix value, so each
@@ -215,9 +215,9 @@ split that test's history. When you shard within an environment matrix, name
 each leg after its environment only, as above.
 
 Setting `MERGIFY_TEST_JOB_NAME` on a job that already reports changes its
-name, so its tests start a new history in Test Insights.
+name, so its tests start a new history in Test Engine.
 
-## Verify and Review in Test Insights
+## Verify and Review in Test Engine
 
 After pushing these changes, your next CI run reports its Playwright results
 automatically.
