@@ -16,7 +16,7 @@ import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.as
 import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 This guide shows how to generate JUnit reports from your TestNG tests and upload
-them to **Test Insights** using your CI workflow.
+them to **Test Engine** using your CI workflow.
 
 ## Generate a JUnit Report with TestNG
 
@@ -88,8 +88,8 @@ java -cp "your-classpath" org.testng.TestNG -listener org.testng.reporters.JUnit
 
 <CIInsightsSetupNote />
 
-After generating the JUnit report, add a step to upload the results to CI
-Insights using the `mergifyio/gha-mergify-ci` action.
+After generating the JUnit report, add a step to upload the results to Test
+Engine using the `mergifyio/gha-mergify-ci` action.
 
 For example, in your workflow file:
 
@@ -142,13 +142,13 @@ For Gradle projects:
 
 <MergifyCliUploadStep reportPath="build/test-results/test/*.xml" testCommand="./gradlew test" />
 
-## Verify and Review in Test Insights
+## Verify and Review in Test Engine
 
 After pushing these changes:
 
 1. Your GitHub Actions workflow will execute your TestNG tests.
 2. JUnit-compatible XML reports are generated.
-3. The Mergify CI action uploads the reports to Test Insights.
+3. The Mergify CI action uploads the reports to Test Engine.
 
 <ReviewInTestInsights />
 

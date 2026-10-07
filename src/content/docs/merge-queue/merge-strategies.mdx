@@ -238,9 +238,16 @@ queue_rules:
   - name: default
     merge_method: fast-forward
     batch_size: 1
-    merge_conditions:
+    queue_conditions:
       - check-success = ci
 ```
+
+The CI check sits in `queue_conditions` rather than `merge_conditions` on purpose:
+a queue with separate `merge_conditions` is a [two-step
+CI](/merge-queue/two-step) queue, and Mergify runs its checks on a batch pull
+request instead of in place. See [In-place checks (no batch
+PRs)](/merge-queue/batches#in-place-checks-no-batch-prs) for the full list of
+conditions a queue has to meet to check in place.
 
 Batch-PR mode, combining batching with fast-forward merge:
 
@@ -364,6 +371,11 @@ queue_rules:
   tooling can push to these branches.
 :::
 
+If the work you push to a batch branch is resolving a conflict on a known set of
+files, [`conflict_resolvers`](/merge-queue/lifecycle#resolving-some-conflicts-automatically)
+handles those files while Mergify builds the batch, with no push to the branch
+and under the same two merge methods.
+
 An accepted edit also restarts the batches behind the edited one, whenever
 [parallel checks](/merge-queue/performance#parallel-checks) put more than one batch in flight. Each
 of those batches was composed on top of what the batches ahead were expected to merge, so from the
@@ -398,10 +410,12 @@ gives you additional control over your history shape.
   works too, and merges the base branch into the pull request rather than
   rebasing it.
 
-  One kind of pull request from a fork goes the other way: for one that
-  changes GitHub Actions workflows, or that another GitHub App's bot opened,
-  GitHub lets Mergify update in place only *with* an `update_bot_account`. A
-  queue that receives those has to run its checks on a
+  Some pull requests from a fork go the other way: for one that changes GitHub
+  Actions workflows, or that another GitHub App's bot opened, GitHub lets
+  Mergify update in place only *with* an `update_bot_account`. The same goes for
+  one that changes more files than GitHub lists, because Mergify cannot rule out
+  a workflow change among the files it cannot see. A queue that receives any of
+  these has to run its checks on a
   [draft pull request](/merge-queue/batches) instead.
 :::
 

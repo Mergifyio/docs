@@ -88,8 +88,22 @@ This installs:
   is how Stacks tracks the relationship between your local commits and their
   GitHub pull requests.
 
-- A `pre-push` hook that warns you if you accidentally use `git push` instead
-  of `mergify stack push`.
+- A `prepare-commit-msg` hook that keeps the Change-Id when you amend with
+  `git commit --amend -m` or `-F`. A new message passed that way would
+  otherwise replace the old one, trailer included.
+
+- A `post-commit` hook that adds a Change-Id to a commit that still has none,
+  in case the `commit-msg` hook did not run.
+
+- A `pre-push` hook that stops you if you accidentally use `git push` instead
+  of `mergify stack push` on a stack branch. Run `git push --no-verify` to push
+  anyway.
+
+The command also sets two local Git config values, `notes.displayRef` and
+`notes.rewriteRef`, so `git log` shows the
+[notes](/stacks/updating#record-why-you-amended) you attach with
+`mergify stack note`, and a note stays with its commit when you amend or
+rebase it.
 
 ## Verify It Works
 
@@ -161,12 +175,16 @@ its full set of flags and defaults.
   `mergify-cli.stack-github-native` defaults to `true`. On top of the usual
   push, it registers the stack with GitHub's own stacking API, so GitHub shows
   the pull requests as a stack of its own and holds their order. A registered
-  stack carries no `Depends-On:` marker in its pull request descriptions; the
+  stack carries neither a `Depends-On:` marker in its pull request
+  descriptions nor a stack comment, because GitHub lists the stack's members
+  itself; the
   [Merge Queue](/merge-queue/stacks#github-native-stacked-pull-requests)
   recognizes it and lands its members bottom-up, the same way it lands a
-  `Depends-On:` chain. Stacks skips the registration silently where that API
-  isn't available, and the push goes through as usual. Pass
-  `--no-github-native`, or set the Git config to `false`, to push without it.
+  `Depends-On:` chain. Where that API isn't available, the push reports
+  `not registered on GitHub`, writes the `Depends-On:` markers back, keeps the
+  stack comment, and otherwise goes through as usual. Pass
+  `--no-github-native`, or set the Git config to `false`, to push a
+  `Depends-On:` chain without trying to register.
 :::
 
 ## Next Steps

@@ -13,7 +13,7 @@ to create and install the GitHub App.
 ## PostgreSQL Requirements
 
 PostgreSQL is where Mergify keeps its persistent state: dashboard logins, encrypted credentials,
-merge queue state, and [CI Insights](/ci-insights) and [Test Insights](/test-insights) data.
+merge queue state, and [CI Insights](/ci-insights) and [Test Engine](/test-insights) data.
 Minimum sizing:
 
 - Version 15 or newer
@@ -32,7 +32,7 @@ these specs is sufficient for proofs of concept.
 Redis persists queued events, cached repository metadata, and recovery data for
 GitHub outages. Your instance or cluster must provide:
 
-- Redis 6.2+
+- Redis 7.4 or newer
 - 200 concurrent connections
 - 250 MB of durable storage
 - Single logical database (the one `MERGIFYENGINE_REDIS_URL` selects)
@@ -75,8 +75,11 @@ and it must sit behind a reverse proxy that:
 - Is exposed publicly with a DNS name over HTTPS
 - Sets the `X-Forwarded-Proto` header
 
-Some features (copy, backport, rebase) write to `/tmp`, so ensure the host or node offers roughly
-10 GB of scratch space for repositories of similar size.
+Mergify clones repositories on disk when the merge queue builds a draft pull request, and for the
+`copy`, `backport`, `rebase` and `squash` actions. Each operation works in a temporary directory of
+its own and removes it when it finishes, so provide roughly 10 GB of scratch space for repositories
+of similar size. Mergify creates them under the container's temporary directory (`/tmp`) unless
+`MERGIFYENGINE_GITTER_WORKDIR` points somewhere else, and the path it names has to exist already.
 
 ## GitHub Server Requirements
 

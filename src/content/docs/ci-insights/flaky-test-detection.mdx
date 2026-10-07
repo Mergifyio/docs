@@ -37,7 +37,7 @@ digraph {
   subgraph cluster_commit1 {
     class="batch";
     label="Commit abc123";
-    commit1 [label="test_something2", shape=oval, class="config"];
+    commit1 [label="test_something", shape=oval, class="config"];
   }
   run1 [label="Run #1 — tests pass", class="merged"];
   run2 [label="Run #2 — tests fail", class="failed"];
@@ -127,7 +127,7 @@ report and flags the tests whose results disagree on a single commit.
 
 ### Where the Results Appear
 
-Test-level results live in [Test Insights](/test-insights), not in CI Insights:
+Test-level results live in [Test Engine](/test-insights), not in CI Insights:
 its [Detection](/test-insights/detection) page lists the flaky and broken tests
 found across your repositories and reports each one's
 [impact](/test-insights/detection#prioritizing-with-impact): the share of its
@@ -155,7 +155,7 @@ When flaky tests are identified:
 
 3. **Improve Test Reliability**: Add proper waits, mocks, or test isolation
 
-4. **Monitor Progress**: Use Test Insights to verify that fixes reduce flakiness
+4. **Monitor Progress**: Use Test Engine to verify that fixes reduce flakiness
    over time
 
 ## Common Causes of Flaky Tests

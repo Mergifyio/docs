@@ -13,9 +13,9 @@ Actions and how to configure repeated test executions for flaky test detection.
 
 ## Enabling CI Insights for GitHub Actions
 
-1. Enable CI Insights on your repositories by visiting the [GitHub Integration
-   page](https://dashboard.mergify.com/integrations/github)
-   ([docs](/integrations/github)).
+1. Enable CI Insights for each repository you want it to cover, on the
+   [Repositories page](https://dashboard.mergify.com/repositories) of the
+   dashboard ([docs](/integrations/github#configuring-enabled-products)).
 
 2. To upload your test results, you'll need to [configure your test
    framework](/test-insights#test-framework-configuration). Before doing so,
@@ -132,7 +132,7 @@ jobs:
             # npm test -- --reporters=default --reporters=jest-junit --outputFile=test-results-$i.xml
           done
 
-      # Upload all test results to Test Insights
+      # Upload all test results to Test Engine
       - name: Upload test results
         if: always()
         uses: mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
@@ -174,8 +174,22 @@ jobs:
   reports the same name. A step's `env` applies to that step alone, so a name
   set on the step that runs your tests never reaches the upload step.
 
+  When the upload goes through `gha-mergify-ci`, the action's `job_name` input
+  sets the name reported with that step's results:
+
+  ```yaml
+  - uses: mergifyio/gha-mergify-ci@@@GHA_MERGIFY_CI_VERSION@@
+    with:
+      token: ${{ secrets.MERGIFY_TOKEN }}
+      report_path: test-results-*.xml
+      job_name: test (${{ matrix.version }})
+  ```
+
+  `job_name` takes precedence over `MERGIFY_TEST_JOB_NAME` when both are set.
+  Leave it out and the name set on the job applies.
+
 ### Key Environment Variables
 
-- `MERGIFY_TOKEN`: Application key with `ci` scope for uploading test results to Test Insights
+- `MERGIFY_TOKEN`: Application key with `ci` scope for uploading test results to Test Engine
 - `RUN_COUNT`: Number of times to execute each test within a single job
 - `MERGIFY_TEST_JOB_NAME`: Override for the job name reported with your test results

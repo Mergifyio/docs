@@ -7,11 +7,9 @@ Mergify ships Agent Skills that teach an AI coding agent how to use the
 Mergify CLI: how to read the merge queue, how to find out why a pull request
 was dequeued, what belongs in a `.mergify.yml`, how to push a stack. They live
 in the [`Mergifyio/mergify-cli`](https://github.com/Mergifyio/mergify-cli)
-repository under `skills/`, are Apache-2.0, and ship as one bundle. For Codex,
-they're published as the
-[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b)
-in the OpenAI plugin directory; every agent, Codex included, can also install
-them through skills.sh.
+repository under `skills/`, are Apache-2.0, and ship as one bundle.
+[Install](#install) it in Claude Code, in Codex, or in any agent skills.sh
+supports.
 
 :::caution
   The skills drive the `mergify` command. They are instructions for using the
@@ -61,7 +59,18 @@ do nothing there.
 
 ## Install
 
+The bundle is the same whichever way you install it. Pick the path for your
+agent:
+
+| Agent | Install from |
+|---|---|
+| Claude Code | [Its built-in plugin marketplace](#claude-code) |
+| Codex | [The OpenAI plugin directory](#codex), or [skills.sh](#cursor-cline-copilot-and-other-skillssh-agents) |
+| Cursor, Cline, Copilot, and others | [skills.sh](#cursor-cline-copilot-and-other-skillssh-agents) |
+
 ### Claude Code
+
+Inside Claude Code, enter:
 
 ```text
 /plugin install mergify@claude-plugins-official
@@ -73,29 +82,35 @@ and search for `mergify`.
 
 ### Codex
 
-Codex and ChatGPT share one plugin directory, but the
-[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b)
-in it currently only works from Codex — the skills shell out to `mergify`,
-which ChatGPT itself cannot run. Open the plugin directory from Codex and
-search it for Mergify:
+Inside Codex, enter:
 
 ```text
-codex /plugins
+/plugins
 ```
+
+That opens the plugin directory. Search it for Mergify, install the
+[Mergify listing](https://chatgpt.com/plugins/plugins_6aabe2c8f7b88191a6962623c8199c7b),
+then start a new Codex session so the skills load.
+
+Codex and ChatGPT share one plugin directory, and the listing needs somewhere
+to run the binary: Codex, or ChatGPT desktop with local execution. The skills
+shell out to `mergify`, so a browser-only ChatGPT session cannot use them.
+
+Codex is also a skills.sh agent, so the command in the next section works for
+it too, if you would rather install every agent the same way.
 
 ### Cursor, Cline, Copilot, and other skills.sh agents
 
-[skills.sh](https://skills.sh) installs the same bundle into Cursor, Cline,
-Copilot, and dozens of other agents (Codex included, if you'd rather install
-it this way than through the plugin directory above):
+In your terminal, from the project you want the skills in, run:
 
 ```bash
 npx skills add Mergifyio/mergify-cli
 ```
 
-It detects the agent it is running under and writes the skills where that agent
-looks for them. To pick the target yourself, or to install once for every
-project instead of only the current one:
+[skills.sh](https://skills.sh) installs the same bundle into Cursor, Cline,
+Copilot, Codex, and dozens of other agents. It detects the agent it is running
+under and writes the skills where that agent looks for them. To pick the target
+yourself, or to install once for every project instead of only the current one:
 
 ```bash
 npx skills add Mergifyio/mergify-cli --agent cursor --global
@@ -119,6 +134,9 @@ case in a container, the CLI writes a restricted file in your configuration
 directory instead. See [Authentication](/cli/usage#authentication) for both
 paths.
 
+`mergify auth login` opens the approval page in your browser. On a machine
+without one, pass `--no-browser` and open the URL it prints on another machine.
+
 Stacks is the exception. It creates and updates pull requests through the GitHub
 API, so it needs a GitHub token of its own. Install the
 [GitHub CLI](https://cli.github.com/), run `gh auth login`, and Stacks commands
@@ -141,9 +159,10 @@ export MERGIFY_TOKEN=your_token_here
 ```
 
 An `admin` key covers queue status, the Activity Log, freezes, and browsing or
-quarantining tests; CI Insights uploads and Merge Queue Scopes need a `ci` key
-instead. No single key covers
-both, so pick the one that matches what you want the agent to do.
+quarantining tests; CI and test result uploads, Merge Queue Scopes, and the
+mid-run flaky-detection and test-selection reads need a `ci` key instead. No
+single key covers both, so pick the one that matches what you want the agent to
+do.
 
 An application key does not work for Stacks. An unattended agent that pushes
 stacks needs a GitHub token, which is not deprecated: the deprecation above is
@@ -157,10 +176,11 @@ application key out of `MERGIFY_TOKEN`. See
 resolution order.
 
 Application keys come with either the `admin` scope or the `ci` scope, and
-neither is read-only. `admin` covers the API except result uploads and Merge
-Queue Scopes, which need a `ci` key, so one key does not cover every command
-either. A key also belongs to a GitHub account rather than to a single
-repository, so it reaches every repository that account can see. Read
+neither is read-only. `admin` covers the API except CI and test result uploads,
+Merge Queue Scopes, and the mid-run flaky-detection and test-selection reads,
+all of which need a `ci` key, so one key does not cover every command either. A
+key also belongs to a GitHub account rather than to a single repository, so it
+reaches every repository that account can see. Read
 [Application Key Scopes](/api/usage#application-key-scopes) before you hand one
 to an agent.
 

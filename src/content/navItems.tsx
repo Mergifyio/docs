@@ -120,7 +120,7 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    title: 'Test Insights',
+    title: 'Test Engine',
     path: '/test-insights',
     icon: 'mergify:test-insights',
     children: [
@@ -357,7 +357,7 @@ const navItems: NavItem[] = [
           { title: 'Activity Log', path: '/api/activity-log' },
           { title: 'Scheduled Freeze', path: '/api/scheduled-freeze' },
           { title: 'CI Insights', path: '/api/ci-insights' },
-          { title: 'Test Insights', path: '/api/test-insights' },
+          { title: 'Test Engine', path: '/api/test-insights' },
         ],
       },
     ],
@@ -389,6 +389,7 @@ const navItems: NavItem[] = [
     icon: 'lucide:blocks',
     path: '/integrations',
     children: [
+      { title: 'Overview', path: '/integrations', icon: 'lucide:lightbulb' },
       { title: 'GitHub', path: '/integrations/github', icon: 'simple-icons:github' },
       {
         title: 'GitHub Actions',

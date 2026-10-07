@@ -6,6 +6,7 @@ description: Understand the lifecycle of a pull request before and once it enter
 import { Image } from "astro:assets"
 import queueCheckScreenshot from "../../images/merge-queue/lifecycle/mergify-check.png"
 import queueStatusScreenshot from "../../images/merge-queue/setup/queue-status.png"
+import ConflictResolverStrategies from "../../../components/Tables/ConflictResolverStrategies"
 
 This page explains what happens to a pull request (PR) once it enters the
 merge queue, from the moment it's added until it's either merged or removed
@@ -147,6 +148,65 @@ request that has already left the queue.
   the [`queued_label`](#queue-labels) and is not given the `dequeued_label`. The
   `checking_label`, if you set one, comes off until the pull request is put back
   into a batch. It is waiting for its turn, so there is nothing to requeue.
+:::
+
+### Resolving Some Conflicts Automatically
+
+Some conflicts have a mechanical answer: a changelog that only ever grows, or a
+lockfile where two pull requests updated different dependencies. The top-level
+`conflict_resolvers` key names those files and how to merge them, and Mergify
+resolves them while composing the batch instead of holding the pull request.
+You declare it once for the repository, and it applies to every queue rule that
+can use it.
+
+```yaml
+queue_rules:
+  - name: default
+    merge_method: merge-batch
+    batch_size: 5
+
+conflict_resolvers:
+  - paths:
+      - CHANGELOG.md
+    strategy: union
+```
+
+`union`, `ours` and `theirs` take their names from git's merge drivers. *Ours*
+is always the batch as it already stands (the base branch plus the pull
+requests ahead), never the pull request being added to it:
+
+<ConflictResolverStrategies />
+
+`paths` takes [glob patterns](/configuration/data-types#globs) matched from the
+repository root, so `*.md` covers Markdown files at the root and `docs/**`
+everything under `docs/`. When several entries match the same file, the last one
+wins. A conflict on a file no resolver matches holds the pull request exactly as
+described above.
+
+A few pattern shapes carried over from `.gitattributes` are rejected as
+configuration errors rather than quietly matching nothing. A pattern that
+starts with a separator (`/src/**` or `./src/**`) is rejected, since patterns
+are already relative to the repository root, so drop the leading separator. A
+pattern that ends with one (`docs/`) is rejected because patterns match files,
+not directories, so write `docs/**` instead. The separator checks run on each
+brace alternative, so `{/a,b}` is rejected too. An empty pattern is rejected,
+as is one that matches no path at all, such as `{}`.
+
+:::caution
+  Resolvers only take effect in a queue rule whose batch branch is what lands,
+  which means `merge_method` set to `merge-batch` or `fast-forward`. With
+  `merge`, `squash` or `rebase`, each pull request is merged at its own head and
+  GitHub recomputes that merge, so a resolution made while building the batch
+  would never reach your base branch. In those queue rules nothing is resolved,
+  and a conflicting pull request is held as described above.
+:::
+
+:::note
+  Your repository's own `.gitattributes` has no effect here. Mergify composes a
+  batch in a bare clone with no working tree, which is the one case where git
+  does not read a committed attributes file, so a `merge=union` already declared
+  there is not applied, and neither is a merge attribute that a queued pull
+  request grants itself. `conflict_resolvers` is the only way in.
 :::
 
 ## Checks Timeout
@@ -433,3 +493,17 @@ how much Mergify posts:
 merge_queue:
   status_comments: outcomes
 ```
+
+### When the Merge Lands Nothing
+
+A merge does not always move the base branch. When an equivalent change landed
+ahead of a queued pull request,
+[rebasing](/merge-queue/merge-strategies#rebase) it drops every one of its
+commits as empty, and the merge leaves the base branch exactly where it was.
+GitHub still marks the pull request merged, and its **Files changed** tab
+still shows the whole diff, because that diff is computed against the merge
+base rather than against the current tip of the base branch.
+
+The status comment for the merge opens with a **Nothing landed** section that
+says both of those things, so the author learns the change shipped nothing
+before reading the rest of the report.

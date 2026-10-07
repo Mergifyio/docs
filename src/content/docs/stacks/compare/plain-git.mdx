@@ -69,7 +69,7 @@ order, in one command.
 | Push only what changed | You decide which branches to push | Smart updates: only changed PRs are touched |
 | After a merge | Re-target next PR, delete merged branch | `mergify stack sync` detects and drops merged commits |
 | Re-targeting on merge | Manual base change per PR | Automatic when the bottom PR lands |
-| Stack overview on the PR | None (or hand-written) | Stack comment + revision history on every PR |
+| Stack overview on the PR | None (or hand-written) | GitHub's stack list or a stack comment, plus revision history |
 | Merge Queue | Per-PR, no stack awareness | [Stack-aware queueing](/merge-queue/stacks) |
 
 ## Where Plain Git Is Enough
@@ -104,10 +104,11 @@ A hand-rolled script keyed on branch names loses that mapping the moment you
 rebase, which is why homegrown wrappers tend to recreate PRs or orphan
 branches.
 
-**Reviewers get context for free.** Every PR carries a stack comment and a
-revision-history timeline showing where it sits in the chain and what changed
-between pushes. A custom script would have to generate and maintain that
-itself.
+**Reviewers get context for free.** Every PR carries a revision-history
+timeline showing what changed between pushes. The chain is there too: GitHub
+lists a registered stack's members on the PR page, and a stack that isn't
+registered gets a stack comment instead. A custom script would have to
+generate and maintain all of that itself.
 
 <Image src={StackComment} alt="Stack comment showing a PR's position in the chain" style={{ maxWidth: '66%' }} />
 
@@ -124,8 +125,10 @@ incrementally:
 
 <CliInstall steps={['mergify stack setup']} />
 
-Setup installs the `commit-msg` hook that adds Change-Ids and a `pre-push` hook
-that nudges you toward `mergify stack push`. From there:
+Setup installs the `commit-msg` hook that adds Change-Ids, a `pre-push` hook
+that nudges you toward `mergify stack push`, and two hooks that keep a
+Change-Id on commits the first one misses (see
+[Setup](/stacks/setup#4-initialize-your-repository)). From there:
 
 - **Existing commits without Change-Ids** get one when you reword them: run
   `git rebase -i <base>`, mark each commit `reword`, and the hook fills in the
@@ -136,10 +139,15 @@ that nudges you toward `mergify stack push`. From there:
   does no extra work.
 
 - **There's an off-ramp.** On GitHub, Stacks creates ordinary branches and PRs,
-  plus the stack and revision-history comments it posts on each PR. None of it
-  is a proprietary format. The only local artifact is the `Change-Id:` trailer
-  in your commit messages. Stop using the CLI and your history is still clean,
-  standard Git; the trailer is just an inert line of text.
+  plus the revision-history comment it posts on each PR, and a stack comment
+  too when the stack isn't registered. None of it is a proprietary format.
+  Locally it leaves four things, all of them plain Git: the `Change-Id:`
+  trailer in your commit messages, the hook files `mergify stack setup` wrote
+  under `.git/hooks`, the `notes.displayRef` and `notes.rewriteRef` values it
+  set in your local Git config, and a `refs/notes/mergify/stack` notes ref
+  carrying the amend notes and revision history. Stop using the CLI and your
+  history is still clean, standard Git; the trailer is an inert line of text,
+  and everything else sits outside the commits.
 
 ## Getting Started
 

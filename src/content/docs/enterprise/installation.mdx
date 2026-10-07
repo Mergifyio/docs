@@ -61,7 +61,7 @@ docker run --rm -d \
   registry.mergify.com/enterprise:@@ENTERPRISE_VERSION@@
 ```
 
-:::note\[Security Note]
+:::note[Security Note]
   The installer can be safely exposed to the internet during this
   procedure. The installer is a static page that will post a form on the GitHub
   website. GitHub will then ask for confirmation about the creation of the
@@ -194,20 +194,20 @@ that database, so check the
 [PostgreSQL requirements](/enterprise/requirements/#postgresql-requirements) before you lock down
 its privileges.
 
-## Optional: Configure CI Insights and Test Insights Object Storage
+## Optional: Configure CI Insights and Test Engine Object Storage
 
-[CI Insights](/ci-insights/setup/github-actions/) and Test Insights let Mergify collect and analyze
+[CI Insights](/ci-insights/setup/github-actions/) and Test Engine let Mergify collect and analyze
 CI test traces. To enable these features, you need to provision object storage buckets and pass the
 corresponding credentials when starting the engine.
 
 :::tip
-  This step is optional. Skip it if you do not plan to use CI Insights or Test Insights.
+  This step is optional. Skip it if you do not plan to use CI Insights or Test Engine.
 :::
 
 Mergify supports both Google Cloud Storage and Amazon S3, with either static credentials or
 automatic discovery through your cloud workload identity (GKE Workload Identity, IRSA, EKS Pod
 Identity, instance profile). See
-[Advanced Features → CI Insights and Test Insights Object Storage](/enterprise/advanced-features/#ci-insights-and-test-insights-object-storage)
+[Advanced Features → CI Insights and Test Engine Object Storage](/enterprise/advanced-features/#ci-insights-and-test-engine-object-storage)
 for bucket requirements, the full list of environment variables, and side-by-side examples for
 each authentication mode.
 
@@ -218,7 +218,7 @@ each authentication mode.
   stage. Contact support if you do not have one.
 :::
 
-The example below includes the CI Insights and Test Insights environment variables. Omit them if you
+The example below includes the CI Insights and Test Engine environment variables. Omit them if you
 skipped the previous step. If any of the services Mergify connects to present certificates that are
 not publicly trusted, see [Trusting a Private CA](/enterprise/custom-ca) for the two options to add
 to this command.

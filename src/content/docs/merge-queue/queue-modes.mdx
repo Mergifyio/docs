@@ -372,7 +372,10 @@ honored even when changes span scopes.
 
 The extreme case is a pull request [flagged with
 `all_scopes`](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope): it consumes one
-slot in every capped scope and acts as a barrier, so nothing runs in parallel with it.
+slot in every capped scope. In parallel mode it is also a barrier, queued behind every batch in
+flight and holding back everything queued after it, so nothing runs alongside it. Isolated mode
+builds no dependencies between batches, so the flag has no effect on ordering: an `all_scopes` pull
+request consumes one slot in every capped scope and nothing more.
 
 #### Source-agnostic
 
@@ -487,11 +490,18 @@ aren't available depending on the mode:
   not require scopes.
 
 - **`fast-forward` merge is not supported.** Because batches merge independently, Mergify needs to
-  rebase them. Use `merge`, `squash`, or `rebase` as your `merge_method`.
+  rebase them. Mergify rejects a configuration that combines the two. Every other `merge_method`
+  works: `merge`, `squash`, `rebase`, and `merge-batch`.
 
 - **`skip_intermediate_results` is not supported in isolated mode.** Isolated batches are fully
   independent, so a passing batch can't vouch for any other. It works in serial and parallel modes,
   where a passing batch vouches for the earlier changes it was tested on top of.
+
+- **A barrier does not serialize an isolated queue.** In parallel mode, a pull request flagged with
+  [`all_scopes`](/merge-queue/scopes#declaring-a-pull-request-impacts-every-scope) waits for every
+  batch in flight and holds back everything queued after it. Isolated mode builds no dependencies
+  between batches, so the flag has no effect on ordering there; the pull request still counts
+  against any [per-scope capacity](#limiting-concurrency-per-scope) you set.
 
 Independently of the mode, `partition_rules` are no longer part of the configuration: use scopes
 instead. See [Migrate from Partition Rules to Scopes](/merge-queue/migrate-partitions-to-scopes).

@@ -51,9 +51,12 @@ Run in the repository root:
 mergify stack setup
 ```
 
-This installs a `commit-msg` Git hook that generates a `Change-Id` for every
-new commit, and a `pre-push` hook that warns if `git push` is used instead of
+This installs the Git hooks Stacks relies on: `commit-msg` generates a
+`Change-Id` for every new commit, `prepare-commit-msg` keeps it through
+`git commit --amend -m`, `post-commit` adds one to a commit that still lacks
+it, and `pre-push` stops a `git push` on a stack branch and points to
 `mergify stack push`.
+See [Setup](/stacks/setup#4-initialize-your-repository) for the full list.
 
 ## 4. Make sure a GitHub token is available
 

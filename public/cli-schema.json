@@ -3,7 +3,7 @@
   "generator": "mergify _internal dump-cli-schema",
   "cli": {
     "name": "mergify",
-    "version": "2026.9.16.1",
+    "version": "2026.10.3",
     "about": "Mergify command-line interface"
   },
   "exitCodes": [
@@ -187,6 +187,24 @@
                 "numArgs": "0",
                 "env": null,
                 "valueHint": null
+              },
+              {
+                "id": "device_name",
+                "kind": "option",
+                "short": null,
+                "long": "device-name",
+                "valueNames": [
+                  "NAME"
+                ],
+                "help": "Name this machine on the approval page instead of sending its hostname. `--device-name=` sends no name at all",
+                "longHelp": "Name this machine on the approval page instead of sending its hostname. `--device-name=` sends no name at all",
+                "required": false,
+                "global": false,
+                "default": null,
+                "possibleValues": [],
+                "numArgs": "1",
+                "env": null,
+                "valueHint": null
               }
             ],
             "commands": []
@@ -247,7 +265,7 @@
               "CONFIG_FILE"
             ],
             "help": "Path to the Mergify configuration file (auto-detected if not provided)",
-            "longHelp": "Path to the Mergify configuration file (auto-detected if not provided)",
+            "longHelp": "Path to the Mergify configuration file.\n\nWhen omitted, the first of these that exists is used: .mergify.yml, .mergify.yaml, .mergify/config.yml, .mergify/config.yaml, .github/mergify.yml, .github/mergify.yaml. A repository carrying more than one gets a warning on stderr naming the file in use and the ones ignored.",
             "required": false,
             "global": true,
             "default": null,
@@ -597,7 +615,7 @@
               "scopes"
             ],
             "about": "Give the list of scopes impacted by changed files",
-            "longAbout": "Give the list of scopes impacted by changed files.\n\nCompute the configured scopes impacted by the files changed between two git references, using your Mergify configuration. Print them, or write them to a file with --write for a later \"mergify ci scopes-send\".",
+            "longAbout": "Give the list of scopes impacted by changed files.\n\nCompute the configured scopes impacted by the files changed between two git references, using your Mergify configuration. On a merge queue draft pull request, return instead the scopes the merge queue decided for the batch, read from its git note, plus the merge queue scope. Print them, or write them to a file with --write for a later \"mergify ci scopes-send\".",
             "usage": "mergify ci scopes [OPTIONS]",
             "aliases": [],
             "subcommandRequired": false,
@@ -611,8 +629,8 @@
                 "valueNames": [
                   "CONFIG"
                 ],
-                "help": "Path to YAML config file. Falls back to the `MERGIFY_CONFIG_PATH` env var, then auto-detects `.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml`",
-                "longHelp": "Path to YAML config file. Falls back to the `MERGIFY_CONFIG_PATH` env var, then auto-detects `.mergify.yml`, `.mergify/config.yml`, or `.github/mergify.yml`",
+                "help": "Path to YAML config file (auto-detected when omitted)",
+                "longHelp": "Path to YAML config file.\n\nFalls back to the MERGIFY_CONFIG_PATH environment variable, then auto-detects the first of these that exists: .mergify.yml, .mergify.yaml, .mergify/config.yml, .mergify/config.yaml, .github/mergify.yml, .github/mergify.yaml.",
                 "required": false,
                 "global": false,
                 "default": null,
@@ -3617,8 +3635,8 @@
                 "valueNames": [
                   "GITHUB_NATIVE"
                 ],
-                "help": "Don't register the stack with GitHub's native Stacks API. By default, `mergify stack push` registers it, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header) — experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`true` when unset)",
-                "longHelp": "Don't register the stack with GitHub's native Stacks API. By default, `mergify stack push` registers it, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header) — experimental, and silently skipped where the API isn't available. Default falls back to git config `mergify-cli.stack-github-native` (`true` when unset)",
+                "help": "Don't register the stack with GitHub's native Stacks API. By default, `mergify stack push` registers it, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header). Where the API isn't available, registration is skipped and the push reports `not registered on GitHub`. Default falls back to git config `mergify-cli.stack-github-native` (`true` when unset)",
+                "longHelp": "Don't register the stack with GitHub's native Stacks API. By default, `mergify stack push` registers it, so GitHub shows it as a stack and holds the ordering (the PR descriptions then carry no `Depends-On:` header). Where the API isn't available, registration is skipped and the push reports `not registered on GitHub`. Default falls back to git config `mergify-cli.stack-github-native` (`true` when unset)",
                 "required": false,
                 "global": false,
                 "default": null,

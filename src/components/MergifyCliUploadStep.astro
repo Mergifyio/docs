@@ -24,8 +24,7 @@ ${testCommand}
 exit_code=$?
 mergify ci junit-process \\
   --test-exit-code "$exit_code" \\
-  ${reportPath}
-exit $exit_code`}
+  ${reportPath}`}
 	lang="bash"
 />
 
@@ -38,6 +37,12 @@ exit $exit_code`}
 	<li>
 		<InlineCode code={`--test-exit-code "$exit_code"`} inline lang="bash" themes={inlineThemes} />: Passes the test runner's exit
 		code so Mergify can detect silent failures where the runner crashed but the JUnit report appears clean.
+	</li>
+	<li>
+		<code>junit-process</code> exits last, so its status becomes the step's. Quarantine depends on
+		that: it exits <code>0</code> when every failure it found is quarantined, and <code>1</code> when
+		one is not. Re-exiting with the test runner's own code would fail the step whatever quarantine
+		decided.
 	</li>
 	<li>
 		On CI systems other than GitHub Actions, also pass

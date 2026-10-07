@@ -30,8 +30,8 @@
   --color-teal-700: #1cb893; /* Merge Queue label */
   --color-purple-400: #858ef4; /* CI Insights accent */
   --color-purple-700: #4d59e0; /* CI Insights label */
-  --color-orange-400: #f9b070; /* Test Insights accent */
-  --color-orange-700: #f27b2a; /* Test Insights label */
+  --color-orange-400: #f9b070; /* Test Engine accent */
+  --color-orange-700: #f27b2a; /* Test Engine label */
   --color-blue-400: #85c9f4; /* Merge Protections accent */
   --color-blue-700: #43a7e5; /* Merge Protections label */
   --color-blue-800: #237caf; /* Link hover (docs-only) */

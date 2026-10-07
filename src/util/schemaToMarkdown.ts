@@ -1,8 +1,8 @@
 import jsonpointer from 'jsonpointer';
-
+import configSchema from '../../public/mergify-configuration-schema.json';
 import { getAttributeDocumentationUrl, getAttributeSource } from './attributeMetadata';
 import { getDataTypeHref, isDataType } from './dataType';
-import configSchema from './sanitizedConfigSchema';
+import { documentedEntries } from './experimental';
 
 type Schema = typeof configSchema;
 
@@ -99,7 +99,8 @@ export function getValueTypeText(schema: Schema, definition: any): string {
   }
 
   if (definition.type === 'object' && definition.properties) {
-    return `\`{${Object.keys(definition.properties).join(', ')}}\``;
+    const keys = documentedEntries(schema, definition.properties).map(([key]) => key);
+    return `\`{${keys.join(', ')}}\``;
   }
 
   return definition.type || '';
@@ -120,7 +121,9 @@ function generateOptionsTable(defName: string): string {
   const def = (configSchema as any).$defs[defName];
   if (!def?.properties) return '';
 
-  const entries = Object.entries<any>(def.properties).sort(([a], [b]) => a.localeCompare(b));
+  const entries = documentedEntries<any>(configSchema, def.properties).sort(([a], [b]) =>
+    a.localeCompare(b)
+  );
 
   const hasDefault = entries.some(([, d]) => d.default !== undefined);
   const hasDeprecated = entries.some(([, d]) => d.deprecated);
@@ -156,7 +159,7 @@ function generateOptionsTable(defName: string): string {
 
 function generatePullRequestAttributesTable(source?: string): string {
   const attributes = (configSchema as any).$defs.PullRequestAttributes.properties;
-  const entries = Object.entries<any>(attributes)
+  const entries = documentedEntries<any>(configSchema, attributes)
     .filter(([, value]) => {
       const attributeSource = getAttributeSource(value);
       return source ? attributeSource === source : attributeSource === undefined;

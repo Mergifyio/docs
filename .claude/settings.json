@@ -10,7 +10,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "# Prevent editing on main branch\n[ \"$(git branch --show-current)\" != \"main\" ] || { echo 'Cannot edit files on the main branch. Create a feature branch first: git checkout -b your-branch-name --track origin/main' >&2; exit 2; }",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-edit-main-branch-guard.mjs\"",
             "timeout": 5
           }
         ]

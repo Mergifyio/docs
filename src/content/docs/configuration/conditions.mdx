@@ -322,9 +322,16 @@ queue_rules:
 ```
 
 A value starting with `@` that does not match the `@<slug>/<name>` shape is
-rejected at configuration validation time. Branch-protection-synthesised
-conditions and legacy GitHub commit statuses carry no GitHub App identity
-and remain reachable only via the bare form.
+rejected at configuration validation time.
+
+GitHub reports which app published a check run. A commit status carries no such
+identity, so Mergify attributes it to the account that posted it: a status posted
+by a GitHub App also matches `@<slug>/<name>`, while one posted by a person is
+reachable only through the bare form. Conditions Mergify derives from classic
+branch protection are reachable only through the bare form too.
+A [GitHub ruleset](/merge-queue/github-rulesets) that binds a required status check to
+one app is derived in the qualified form instead, so only that app's check
+satisfies it.
 
 ## Qualifying Deployments by GitHub App
 
@@ -427,9 +434,12 @@ requests without triggering actions.
 
 1. Navigate to your [Mergify dashboard](https://dashboard.mergify.com).
 2. Select the repository you want to test.
-3. Open "Config Editor" from the sidebar.
+3. Open "Config Editor".
 
-<Image src={configEditorScreenshot} alt="Mergify Configuration Editor" />
+<Image
+  src={configEditorScreenshot}
+  alt="Mergify Configuration Editor checking a pull request: one rule matches, one has unmet conditions"
+/>
 
 ### Analyze the Mergify Checks
 
@@ -442,4 +452,7 @@ pull request. To inspect the evaluation:
 
 The report shows which rules were evaluated and whether each condition was met.
 
-<Image src={checkSummaryScreenshot} alt="Mergify Check Summary" />
+<Image
+  src={checkSummaryScreenshot}
+  alt="Mergify Summary check listing one matching rule and one potential rule with its unmet conditions"
+/>

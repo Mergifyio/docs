@@ -70,7 +70,12 @@ GitHub rulesets and provides the most consistent, automated workflow.
 
    <Image src={bpDashboardScreenshot} alt="Deploy screen from Mergify dashboard"/>
 
-2. Follow the on-screen instructions to configure your GitHub ruleset.
+2. Follow the on-screen instructions to configure your GitHub ruleset. When you
+   set Mergify's bypass mode on that ruleset, choose **Exempt** if you queue
+   [GitHub-native stacked pull requests](/merge-queue/stacks#github-native-stacked-pull-requests):
+   the merge queue refuses them under any other mode, **Always allow** included.
+   See [Bypass Actors](/merge-queue/github-rulesets#bypass-actors) for what each
+   mode covers.
 
 3. Click the verification button to confirm your setup is correct.
 

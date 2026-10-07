@@ -17,14 +17,6 @@ They differ in how the chain is created and how the queue recognizes it.
 
 ### GitHub-Native Stacked Pull Requests
 
-:::note
-  Merging GitHub-native stacks through the Merge Queue is a progressive
-  rollout, not on by default for every organization. [Contact
-  support](/support) to have it turned on for yours; until then, the queue
-  refuses to merge any member of a GitHub-native stack and asks you to merge
-  the stack from the GitHub UI instead.
-:::
-
 GitHub has its own stacking model. You reach it with
 [gh-stack](/stacks/compare/gh-stack), its stacking extension for the `gh`
 CLI, or with [`mergify stack push`](/stacks/creating), which registers the
@@ -50,10 +42,12 @@ branch to its own pull request. There is no stack object on GitHub's side, so
 the queue recognizes the chain only when **all** of these hold at every step:
 
 - The PRs are physically chained: each PR's base branch is the previous PR's
-  head branch.
+  head branch. The bottom PR has no previous PR and targets the destination
+  branch directly.
 
-- Each PR carries a `Depends-On: #N` marker in its body, declaring its
-  dependency on the previous PR.
+- Each PR above the bottom one carries a `Depends-On: #N` marker in its body,
+  declaring its dependency on the previous PR. The bottom PR depends on
+  nothing, so it carries no marker.
 
 - Every PR's head branch lives in the repository the stack targets, not in a
   fork.

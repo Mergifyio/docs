@@ -65,6 +65,7 @@ Jump straight to the feature that matches your pain point:
 |---------|---------|
 | PRs waiting too long in queue | [Parallel checks](/merge-queue/performance#parallel-checks) |
 | CI cost getting out of hand | [Batches](/merge-queue/batches) or [Two-step CI](/merge-queue/two-step) |
+| Paying for CI runs the queue did not need | [Direct Merge](/merge-queue/direct-merge) |
 | Hotfixes blocked behind feature PRs | [Priority rules](/merge-queue/priority) |
 | Monorepo with independent packages | [Scopes](/merge-queue/scopes) and [Monorepo guide](/merge-queue/monorepo) |
 | Want to auto-queue approved PRs | [Auto-Merge](/merge-protections/auto-merge) and [Queue rules](/merge-queue/rules) |
@@ -110,6 +111,7 @@ which services a PR affects and only batches compatible changes together.
 | [Parallel checks](/merge-queue/performance) | Test multiple PRs simultaneously | 3-5x faster merge throughput |
 | [Batches](/merge-queue/batches) | Combine PRs into single CI runs | 50-80% fewer CI runs |
 | [Two-step CI](/merge-queue/two-step) | Run heavy tests only at merge time | Cut CI costs on draft/WIP PRs |
+| [Direct Merge](/merge-queue/direct-merge) | Skip the queue CI run when nothing relevant moved | No CI run at all |
 | [Priority](/merge-queue/priority) | Let urgent PRs jump the queue | Ship hotfixes in minutes |
 | [Scopes](/merge-queue/scopes) | Separate queues for monorepo paths | No cross-service blocking |
 | [Pause](/merge-queue/pause) | Suspend merging during incidents | Instant incident response |
@@ -121,10 +123,10 @@ which services a PR affects and only batches compatible changes together.
 |------------|---------------|---------|
 | Parallel speculative checks | <Verdict yes={true}>Up to 100</Verdict> | <Verdict yes={true}>Up to 128</Verdict> |
 | Batch multiple PRs | <Verdict yes={false} /> | <Verdict yes={true}>Configurable size + CI optimization</Verdict> |
-| Priority queues | <Verdict yes={false} /> | <Verdict yes={true}>Label or rule-based</Verdict> |
+| Priority rules | <Verdict yes={false} /> | <Verdict yes={true}>Label or rule-based</Verdict> |
 | Monorepo scopes | <Verdict yes={false} /> | <Verdict yes={true}>Path-based queues + Bazel/Nx integration</Verdict> |
 | Two-step CI | <Verdict yes={false} /> | <Verdict yes={true}>Draft CI + merge CI</Verdict> |
-| Pause/freeze queue | <Verdict yes={false} /> | <Verdict yes={true}>API + dashboard</Verdict> |
+| Pause/freeze queue | <Verdict yes={false} /> | <Verdict yes={true}>Dashboard, CLI, or API</Verdict> |
 | Cross-repo queues | <Verdict yes={false} /> | <Verdict yes={true}>Coordinate dependent repos</Verdict> |
 | Queue analytics | <Verdict yes={false} /> | <Verdict yes={true}>Wait times, throughput, failures</Verdict> |
 
@@ -147,10 +149,12 @@ which services a PR affects and only batches compatible changes together.
 **Setup & Configuration**
 [Setup guide](/merge-queue/setup) ·
 [Queue rules](/merge-queue/rules) ·
+[Merge strategies](/merge-queue/merge-strategies) ·
 [Freeze conditions](/merge-protections/freeze)
 
 **Performance & Optimization**
 [Performance tuning](/merge-queue/performance) ·
+[Direct Merge](/merge-queue/direct-merge) ·
 [Monitoring](/merge-queue/monitoring) ·
 [Deployment strategies](/merge-queue/deploy)
 

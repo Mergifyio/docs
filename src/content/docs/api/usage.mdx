@@ -23,15 +23,28 @@ Personal Access Tokens**, and **Mergify User Tokens**.
 
 ### Creating an Application Key
 
-To start with the API, you'll first need to create an application
-associated with your organization:
+A key belongs to an organization, so start from the organization you want it to
+reach:
 
-1. Navigate to your [dashboard](https://dashboard.mergify.com).
-2. Proceed to create an Application.
+1. Open the [dashboard](https://dashboard.mergify.com) and select the
+   organization.
+
+2. Go to **Settings → Developer → Application Keys**.
+
+3. Click **Add Key**, name the key, and pick its scope.
+
+4. Click **Create**.
 
 <Image src={applicationKeysCreate} alt="Create application keys" />
 
-Upon successful creation, the dashboard will provide you with an API key.
+The scope selector only appears if you are an admin of the GitHub
+organization. Everyone else creates `ci` keys, and creating, renaming, or
+deleting an `admin` key from an account that is not an org admin fails with
+`403`.
+
+The key appears once, in a banner above the list. Copy it before you leave the
+page: reloading does not bring it back, and there is no way to recover it. If
+you lose one, delete the key and create another.
 
 <Image src={applicationKeysToken} alt="Application key token" />
 
@@ -49,7 +62,7 @@ Application keys have two scopes, picked when you create the key:
   [flaky-detection](/ci-insights/flaky-test-detection) and test-selection data
   the test framework integrations fetch mid-run.
 
-A `ci` key reaches nothing else in Test Insights. Browsing tests, their
+A `ci` key reaches nothing else in [Test Engine](/test-insights). Browsing tests, their
 executions and their failures, and adding or removing a quarantine, are answered
 with `403` and need an `admin` key, a GitHub personal access token, or a user
 token. A `ci` key sits in CI configuration, where a build log or a workflow
@@ -150,13 +163,14 @@ holding one grants no access its owner does not already have.
 
 If, for any reason, you need to revoke an application key:
 
-1. Head to the [dashboard](https://dashboard.mergify.com).
-2. Simply delete the corresponding application.
+1. Open **Settings → Developer → Application Keys** in the
+   [dashboard](https://dashboard.mergify.com).
+
+2. Click the delete icon on the key's row, and confirm.
 
 <Image src={applicationKeysDelete} alt="Delete application key" />
 
-By doing so, the application and its key will be removed, revoking any
-access provided by that key.
+The key is removed, revoking any access it provided.
 
 ## Pagination
 
@@ -195,6 +209,14 @@ both. When neither applies — a result set that fits on a single page — the
 To iterate through all pages, follow the `rel="next"` link
 until it is no longer present in the response. To get back to the first page,
 call the endpoint again without a `cursor`.
+
+Each link carries the query parameters of the request it came from, so following
+one keeps the filters you set. On an endpoint whose `start` and `end` default to
+a window ending at the current time, the resolved bounds are pinned into the
+links too: iterating with `rel="next"` keeps serving the window the first page
+was built from, instead of resolving a fresh one against a later clock and
+dropping the oldest items on the way. A bound you passed yourself is echoed back
+as you sent it.
 
 ## Error Handling
 

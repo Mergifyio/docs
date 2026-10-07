@@ -15,20 +15,31 @@ be installed on your repositories.
 
 ## Configuring Enabled Products
 
-You can configure the products that are enabled on your GitHub repositories by
-clicking on `Integrations` and then on `GitHub / Configure`.
+You enable Mergify products per repository, on the
+**Repositories** page of the dashboard. Open the organization selector at the
+top of the sidebar and pick **Configure repositories**; the GitHub tile on the
+**Integrations** page leads to the same screen.
 
-<Image src={githubIntegScreenshot} alt="GitHub Integration"/>
+<Image
+  src={githubIntegScreenshot}
+  alt="The Repositories page, with the Defaults for New Repositories card above the per-repository product grid"
+/>
 
-First, this screen allows you to define which products are enabled by default
-for new repositories where the Mergify GitHub App is installed.
+The **Defaults for New Repositories** card at the top sets what a repository
+starts with when it is first connected from GitHub. It leaves your existing
+repositories untouched, and it only appears if you hold the GitHub organization
+`Owner` role or the [**Integrations Admin** delegated
+role](/security#delegated-roles).
 
-Then, you can add repositories by clicking on `Add Repository` and installing
-the Mergify GitHub App on them.
+To bring in a repository Mergify cannot see yet, use **Add Repository**, which
+sends you to GitHub to install the Mergify GitHub App on it.
 
 :::note
   Adding a repository requires GitHub admin privileges.
 :::
 
-Finally, you can enable or disable any product for any repositories by checking
-the box and saving the result.
+Below the card, the table has one row per repository and one column per
+product: [Merge Queue](/merge-queue), [Merge Protections](/merge-protections),
+[Workflow Automation](/workflow), and [CI Insights](/ci-insights).
+Check the boxes for the products you want and confirm with **Save Changes**.
+Nothing is applied until you do.

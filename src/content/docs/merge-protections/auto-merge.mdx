@@ -67,7 +67,12 @@ nested `and`, `or`, and `not` operators.
 `auto_merge_conditions` accepts:
 
 - `true`: unconditional auto-merge.
+
 - A list of conditions: conditional auto-merge.
+
+- An empty list (`[]`): unconditional auto-merge, the same as `true`.
+  Auto-merge turns on because the field is set, whatever value it holds, and an
+  empty list restricts nothing.
 
 The schema rejects `false` and any mapping, empty (`{}`) or not. An explicit
 `null` is accepted and means the same as omitting the field: auto-merge stays
@@ -119,9 +124,22 @@ configuration:
   `auto_merge_conditions: true`, since an empty list matches every pull
   request.
 
-When a configuration mixes autoqueued and manual queues, the migration pull
-request includes a YAML comment listing the queues that remain manual-only.
-Those queues stay reachable via the [`@mergifyio queue` command](/commands/queue).
+The migration pull request touches only those two keys: it removes `autoqueue`
+and writes `auto_merge_conditions`, leaving the rest of the file, comments
+included, as you wrote it. If removing `autoqueue` empties the block that held
+it, that empty block goes too, so the diff carries no leftover `queue_rule:`.
+Queues that were already manual stay manual, and stay reachable via the
+[`@mergifyio queue` command](/commands/queue).
+
+Two shapes are not migrated automatically: Mergify leaves `autoqueue` in place
+and says why in the deprecation notice. The first is a repository with Merge
+Protections disabled, because `auto_merge_conditions` only takes effect when
+that product is enabled. [Turn it on](/merge-protections/setup) first; moving
+the key by hand before that stops pull requests from being queued
+automatically. The second is a configuration that pulls queue rules in through
+[`extends`](/configuration/sharing#extending-configuration-files): those rules
+are not in this file, so Mergify cannot rewrite them from here. Set
+`auto_merge_conditions` yourself, then remove `autoqueue`.
 
 Apply the migration in one step: a configuration that sets
 `auto_merge_conditions` while a queue rule still has `autoqueue` is rejected.
@@ -164,6 +182,10 @@ merge_protections_settings:
 ```
 
 ## Constraints
+
+Merge Protections must be enabled on the repository for
+`auto_merge_conditions` to take effect, with or without the merge queue. See
+[Enabling & Configuring Merge Protections](/merge-protections/setup).
 
 `auto_merge_conditions` and `queue_rules[].autoqueue` cannot be used together.
 A configuration that sets both is rejected, so remove `autoqueue` from your

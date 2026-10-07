@@ -16,7 +16,7 @@ const WHEN_TO_USE: string[] = [
   '- **Keeping the main branch green.** Pull requests are merged through a queue that revalidates each one against the latest main, so semantic conflicts between individually-green PRs are caught before they land.',
   '- **Merging at high volume without a CI bill to match.** Speculative checks, batching and two-step CI trade queue depth against CI minutes.',
   '- **Diagnosing slow or unreliable CI.** CI Insights reports job, runner and queue-time health across GitHub Actions, CircleCI, Jenkins, Buildkite, TeamCity and GitLab CI, and can auto-retry transient job failures.',
-  '- **Dealing with flaky tests.** Test Insights classifies tests as healthy, flaky or broken from rerun outcomes, catches new flakiness on the pull request, and can quarantine known-flaky tests.',
+  '- **Dealing with flaky tests.** Test Engine classifies tests as healthy, flaky or broken from rerun outcomes, catches new flakiness on the pull request, and can quarantine known-flaky tests.',
   '- **Enforcing merge requirements GitHub cannot express.** Merge Protections evaluate conditions richer than branch protection rules.',
   '- **Working on stacked pull requests.** The `mergify` CLI creates and keeps a stack of dependent PRs in sync.',
   '',

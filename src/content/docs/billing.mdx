@@ -4,6 +4,8 @@ description: Understand how Mergify fair billing works.
 ---
 
 import DownloadLink from '../../components/DownloadLink.astro';
+import { Image } from 'astro:assets';
+import PlanScreenshot from '../images/billing/plan.png';
 
 This page explains how Mergify's contributor-based billing works and how to
 read your invoice.
@@ -20,6 +22,11 @@ Here's how it works:
   either by opening it or by pushing new commits to it. Other activity, such
   as reviewing, commenting on, closing, or reopening a pull request, does not
   make someone a contributor.
+
+- Bot accounts are never contributors. A GitHub App or bot user that opens a
+  pull request or pushes to one, such as a dependency updater, is skipped. So
+  are `web-flow`, the account GitHub attributes web-editor commits to, and
+  accounts that have since been deleted. Only real user accounts are counted.
 
 - Each user is counted **only once**, even if they contribute to pull requests
   across multiple repositories.
@@ -101,30 +108,33 @@ invoiced for 10 extra users over 45 days.
 
 You can check your current usage on the [Plan
 page](https://dashboard.mergify.com/settings/plan) of the Mergify dashboard,
-under **Settings → Plan**. It lists each product you use in a table, with its
-repository count and its number of active contributors:
+under **Settings → Plan**. The **Paid** table shows your plan as a single row,
+with the number of repositories it covers and its number of active
+contributors. The **Total** row below it counts each contributor once:
 
-| Product | Repositories | Active contributors |
-|---|---|---|
-| Merge Queue | 10 repositories | 25 contributors |
-| CI Insights | 5 repositories | 15 contributors |
-| Workflow Automation | 10 repositories | 25 contributors |
+<Image
+  src={PlanScreenshot}
+  alt="Settings Plan page with a Paid table: an Enterprise row with repository and contributor counts"
+/>
 
-The counts above are examples. If you are a billing manager, the table has an
-**On-demand Usage** column showing what you are billed monthly on top of your
-plan. On a yearly subscription, it also has a **Committed** column showing the
-seats you pre-purchased.
+If you also use products on the free plan, they are listed in a separate
+**Free** table above it.
 
-On some plans the third column is headed **Collaborators** instead. It counts
+If you are a billing manager, the paid table has an **On-demand Usage** column
+showing what you are billed monthly on top of your plan. On an annual
+subscription, it also has a **Committed** column showing the seats you
+pre-purchased.
+
+On some plans the **Active contributors** column is headed **Collaborators**
+instead. It counts
 everyone with access to a repository, rather than only the people who
 contributed to it.
 
 Both counts are clickable: the repository count takes you to your repositories
-list, and the contributor count opens the list of people counted for that
-product.
+list, and the contributor count opens the list of people counted for your plan.
 
 :::note
-  This is not available for on-premise plans.
+  The Plan page is not available for on-premise plans.
 :::
 
 ## Switching or Cancelling Plans

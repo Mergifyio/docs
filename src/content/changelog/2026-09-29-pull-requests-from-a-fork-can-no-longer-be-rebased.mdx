@@ -1,0 +1,14 @@
+---
+title: "Pull requests from a fork can no longer be rebased"
+date: 2026-09-29
+tags:
+  - Workflow Automation
+  - Deprecations
+description: "The rebase action and the @mergifyio rebase command now fail on a pull request that comes from a fork. Use update instead."
+---
+
+Rebasing a pull request that comes from a fork required Mergify to impersonate a GitHub user and force-push the fork's branch, because GitHub refuses an OAuth token on its rebase API for a fork. That capability was deprecated for removal on July 1, 2026, and it has now been removed.
+
+A `rebase` action or an `@mergifyio rebase` command on a pull request from a fork now fails with a check run that explains why. Use the `update` action or the `@mergifyio update` command on those instead: it brings the pull request up to date by merging the base branch into it, and needs no impersonation. If the branch has to keep a linear history, its author has to rebase it themselves.
+
+This applies whether or not `bot_account` is set: the rebase impersonated a user either way, falling back to the pull request author or to whoever sent the command.

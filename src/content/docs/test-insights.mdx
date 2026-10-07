@@ -1,5 +1,5 @@
 ---
-title: Test Insights
+title: Test Engine
 description: Monitor, detect, and manage unreliable tests across your repositories.
 hubAccent: true
 ---
@@ -7,14 +7,14 @@ hubAccent: true
 import Docset from '../../components/DocsetGrid/Docset.astro';
 import DocsetGrid from '../../components/DocsetGrid/DocsetGrid.astro';
 
-Test Insights helps you manage test reliability across the full lifecycle.
-It catches flaky tests on pull requests before they merge, surfaces unhealthy
-tests across your repositories, and lets you quarantine problematic tests so
-they don't block your CI pipeline.
+Test Engine (formerly Test Insights) helps you manage test reliability across
+the full lifecycle. It catches flaky tests on pull requests before they merge,
+surfaces unhealthy tests across your repositories, and lets you quarantine
+problematic tests so they don't block your CI pipeline.
 
 ## How it works
 
-Test Insights is organized into three phases that follow the natural lifecycle
+Test Engine is organized into three phases that follow the natural lifecycle
 of a test reliability problem:
 
 1. **[Prevention](/test-insights/prevention)**: Catch flaky and broken tests
@@ -36,18 +36,20 @@ known flakiness.
 
 ## Key concepts
 
-- **Flaky test**: A test that produces different results on the same commit.
-  For example, passing on one run and failing on the next with identical code.
+- **Flaky test**: A test that passed and failed close together on the same
+  branch, pipeline, and job, so its outcome does not follow from the code
+  alone. A test whose results differ without ever failing stays healthy.
 
-- **Broken test**: A test that fails consistently, with recent runs weighted
-  more heavily.
+- **Broken test**: A test that fails, with no passing run close in time to
+  contradict those failures.
 
 - **Health status**: A test's reliability classification: healthy, flaky, or
   broken. Based on results from multiple CI runs.
 
-- **Confidence**: How much data is available to assess a test's health. Low
-  confidence means the status could still change significantly as more runs
-  are collected.
+- **Confidence**: How much rerun data backs a test's health status, reported
+  as low, medium, or high. [Prevention](/test-insights/prevention) reports it
+  for the tests a pull request adds. Low confidence means the status could
+  still change as the test is rerun.
 
 - **Quarantine**: Isolating a test so its failures are ignored for merge
   decisions. The test still runs and results are still collected, preserving
@@ -60,17 +62,18 @@ known flakiness.
 
 ## Setup
 
-Test Insights is powered by the same CI integration as
+Test Engine is powered by the same CI integration as
 [CI Insights](/ci-insights). To get started, configure your CI system and test
 framework:
 
 - [GitHub Actions setup](/ci-insights/setup/github-actions)
+- [Buildkite setup](/ci-insights/setup/buildkite)
 - [Jenkins setup](/ci-insights/setup/jenkins)
 - [Test framework configuration](#test-framework-configuration)
 
 ## Test Framework Configuration
 
-Test Insights supports many test frameworks and captures test-level data from
+Test Engine supports many test frameworks and captures test-level data from
 them. Each framework requires a quick setup to ensure test results are parsed
 and uploaded properly.
 
@@ -83,104 +86,104 @@ verify your test output.
     path="/test-insights/test-frameworks/cypress"
     icon="simple-icons:cypress"
   >
-    Integrate Cypress with Test Insights.
+    Integrate Cypress with Test Engine.
   </Docset>
   <Docset
     title="Go"
     path="/test-insights/test-frameworks/golang"
     icon="simple-icons:go"
   >
-    Integrate Go with Test Insights.
+    Integrate Go with Test Engine.
   </Docset>
   <Docset
     title="Jest"
     path="/test-insights/test-frameworks/jest"
     icon="simple-icons:jest"
   >
-    Integrate Jest with Test Insights.
+    Integrate Jest with Test Engine.
   </Docset>
   <Docset
     title="JUnit"
     path="/test-insights/test-frameworks/junit"
     icon="simple-icons:junit5"
   >
-    Integrate JUnit with Test Insights.
+    Integrate JUnit with Test Engine.
   </Docset>
   <Docset
     title="Minitest"
     path="/test-insights/test-frameworks/minitest"
     icon="simple-icons:ruby"
   >
-    Integrate Minitest with Test Insights.
+    Integrate Minitest with Test Engine.
   </Docset>
   <Docset
     title="MSTest"
     path="/test-insights/test-frameworks/mstest"
     icon="simple-icons:dotnet"
   >
-    Integrate MSTest with Test Insights.
+    Integrate MSTest with Test Engine.
   </Docset>
   <Docset
     title="NUnit"
     path="/test-insights/test-frameworks/nunit"
     icon="simple-icons:dotnet"
   >
-    Integrate NUnit with Test Insights.
+    Integrate NUnit with Test Engine.
   </Docset>
   <Docset
     title="Pest"
     path="/test-insights/test-frameworks/pest"
     icon="simple-icons:php"
   >
-    Integrate Pest with Test Insights.
+    Integrate Pest with Test Engine.
   </Docset>
   <Docset
     title="PHPUnit"
     path="/test-insights/test-frameworks/phpunit"
     icon="simple-icons:php"
   >
-    Integrate PHPUnit with Test Insights.
+    Integrate PHPUnit with Test Engine.
   </Docset>
   <Docset
     title="Playwright"
     path="/test-insights/test-frameworks/playwright"
     icon="simple-icons:playwright"
   >
-    Integrate Playwright with Test Insights.
+    Integrate Playwright with Test Engine.
   </Docset>
   <Docset
     title="Pytest"
     path="/test-insights/test-frameworks/pytest"
     icon="simple-icons:pytest"
   >
-    Integrate Pytest with Test Insights.
+    Integrate Pytest with Test Engine.
   </Docset>
   <Docset
     title="RSpec"
     path="/test-insights/test-frameworks/rspec"
     icon="simple-icons:ruby"
   >
-    Integrate RSpec with Test Insights.
+    Integrate RSpec with Test Engine.
   </Docset>
   <Docset
     title="Rust"
     path="/test-insights/test-frameworks/rust"
     icon="simple-icons:rust"
   >
-    Integrate Rust with Test Insights.
+    Integrate Rust with Test Engine.
   </Docset>
   <Docset
     title="TestNG"
     path="/test-insights/test-frameworks/testng"
     icon="simple-icons:testinglibrary"
   >
-    Integrate TestNG with Test Insights.
+    Integrate TestNG with Test Engine.
   </Docset>
   <Docset
     title="Vitest"
     path="/test-insights/test-frameworks/vitest"
     icon="simple-icons:vitest"
   >
-    Integrate Vitest with Test Insights.
+    Integrate Vitest with Test Engine.
   </Docset>
 </DocsetGrid>

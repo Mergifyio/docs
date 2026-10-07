@@ -100,12 +100,14 @@ of its own. The [`auth` command reference](/cli/auth) lists the options each
 mergify auth login
 ```
 
-The CLI prints a URL and a short code. Open the URL, type the code in, give the
-token a name so you recognize the machine later, and authorize. The CLI picks up
-its credential and stores it. This is an [OAuth 2.0 device authorization
+The CLI opens the approval page in your browser and prints the URL and a short
+code. Type the code in, give the token a name so you recognize the machine
+later, and authorize. The CLI picks up its credential and stores it. This is an
+[OAuth 2.0 device authorization
 grant](https://www.rfc-editor.org/rfc/rfc8628), so nothing listens on a local
-port and the browser does not have to be on the same machine. It works over SSH
-and inside containers.
+port and the browser does not have to be on the same machine. Over SSH or inside
+a container, open the printed URL on a machine that has one. Pass `--no-browser`
+to print the URL without opening a browser.
 
 What you get is a [Mergify user token](/api/usage#using-a-mergify-user-token).
 It identifies you, reaches exactly what your dashboard session reaches, and is
@@ -169,6 +171,17 @@ Commands that call the Mergify API resolve a credential in this order:
 4. `GITHUB_TOKEN`. Deprecated.
 5. `gh auth token`, from the GitHub CLI. Deprecated.
 
+The `mergify ci` commands that call the API are the exception, because the
+endpoints they post to accept nothing but an application key.
+`mergify ci scopes-send`, `mergify ci junit-process`, and the deprecated
+`mergify ci junit-upload` all skip step 3: they never read the credential
+`mergify auth login` stored, since those endpoints would refuse it anyway. The
+rest of the order stands, so a job that exports `GITHUB_TOKEN` alone still
+reaches step 4. The failure it gets back is the endpoint refusing a GitHub
+token rather than the CLI finding no credential. Set `MERGIFY_TOKEN` to an
+[application key](#application-keys-for-ci), as the warning they print tells
+you to.
+
 There is no global `--token` on `mergify` itself, so pass it to the subcommand:
 
 ```bash
@@ -228,6 +241,14 @@ They resolve that token on their own, in this order:
 4. `gh auth token`, from the GitHub CLI.
 
 Nothing here is deprecated: a GitHub token is what the GitHub API takes.
+
+Every source except `--token` is checked for the `mut_` prefix of a
+[Mergify user token](/api/usage#using-a-mergify-user-token) before it is used.
+GitHub can only answer `401` to one of those, so it is skipped and the next
+source tried. That covers `gh auth token` as well, which echoes `GITHUB_TOKEN`
+when the variable is set. So exporting the credential `mergify auth login`
+stored does not break a Stacks command that has a real GitHub token further
+down the list. A `--token` you pass explicitly is sent as given.
 
 If you have the [GitHub CLI](https://cli.github.com/) (`gh`) installed and
 authenticated, Stacks picks up its token automatically. Nothing else to

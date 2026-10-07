@@ -14,13 +14,13 @@ concurrency:
 jobs:
   deploy:
     timeout-minutes: 5
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Deployment start
         if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         # yamllint disable-line rule:line-length
         # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
-        uses: Mergifyio/gha-slack-notification@21be2b4956fd9e2488a9cf8987722fff24810c20 # main
+        uses: Mergifyio/gha-slack-notification@8de607f24b5da5bd09108b544a9ff36fc600da98 # main
         with:
           type: deploy-start
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOYMENT_WEBHOOK_URL_RELEASES }}

@@ -108,6 +108,10 @@ request and a full CI run.
 - **The pull request is alone at the front of its lane.** Nothing the queue has yet to merge sits
   between it and the base branch.
 
+- **The queue tests in a batch pull request.** A queue running [in-place
+  checks](/merge-queue/batches#in-place-checks-no-batch-prs) tests the pull request on its own
+  branch instead, so there is no batch pull request for Direct Merge to skip.
+
 - **The queue does not use [two-step CI](/merge-queue/two-step).** Two-step CI defers the heavy
   suite to the queue on purpose, so the pull request's own CI is not the full signal.
 
@@ -177,7 +181,8 @@ accurate:
 - **Derive scopes from your build system** where you can. A build graph knows exactly what a change
   affects, so the scope sets come out both correct and narrow. See
   [Bazel](/merge-queue/scopes/bazel), [Nx](/merge-queue/scopes/nx),
-  [Turborepo](/merge-queue/scopes/turborepo) and [other build tools](/merge-queue/scopes/others).
+  [Turborepo](/merge-queue/scopes/turborepo), [Pants](/merge-queue/scopes/pants) and [other build
+  tools](/merge-queue/scopes/others).
 
 - **Keep scopes narrow.** A single `backend` scope covering half the repository intersects almost
   everything. Splitting it into the services it really contains makes far more pull requests

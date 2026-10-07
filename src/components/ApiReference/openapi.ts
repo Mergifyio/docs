@@ -173,21 +173,6 @@ export function preprocessSchema(schema: OpenAPISpec): OpenAPISpec {
     title: 'MatchingConditionsDict-Limited',
   };
 
-  // Strip hidden fields
-  const hidden = ['autosquash'];
-  const deepRemove = (v: unknown, key: string): void => {
-    if (Array.isArray(v)) {
-      for (const item of v) deepRemove(item, key);
-      return;
-    }
-    if (v && typeof v === 'object') {
-      const obj = v as Record<string, unknown>;
-      if (Object.prototype.hasOwnProperty.call(obj, key)) delete obj[key];
-      for (const k of Object.keys(obj)) deepRemove(obj[k], key);
-    }
-  };
-  for (const field of hidden) deepRemove(s, field);
-
   return s;
 }
 
@@ -205,7 +190,7 @@ export const TAG_LABELS: Record<string, string> = {
   merge_queue: 'Merge Queue',
   pull_requests: 'Pull Requests',
   ci_insights: 'CI Insights',
-  test_insights: 'Test Insights',
+  test_insights: 'Test Engine',
 };
 
 // Tag descriptions for sub-page intros
@@ -219,7 +204,7 @@ export const TAG_DESCRIPTIONS: Record<string, string> = {
   merge_queue: 'Control merge queue state — pause, unpause, and inspect status.',
   pull_requests: 'Push scopes and other per-pull-request data to Mergify.',
   ci_insights: 'Access data from CI Insights.',
-  test_insights: 'Access data from Test Insights.',
+  test_insights: 'Access data from Test Engine.',
 };
 
 export function humanizeTag(tag: string): string {

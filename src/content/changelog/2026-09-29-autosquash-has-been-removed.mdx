@@ -1,0 +1,11 @@
+---
+title: "`autosquash` has been removed"
+date: 2026-09-29
+tags:
+  - Deprecations
+description: "Configurations that still set `autosquash` no longer validate."
+---
+
+`autosquash` was deprecated on 2026-01-27 and stopped doing anything on 2026-09-09: since then the merge queue no longer squashes `squash!`/`fixup!`/`amend!` commits when updating a pull request in place, and neither does the `rebase` action.
+
+The option itself is now removed from queue rule and `rebase` action configuration. Any configuration that still sets `autosquash` — in a queue rule, in `defaults`, or on the `rebase` action — will fail validation instead of the key being silently accepted and ignored. Remove it from your Mergify configuration to keep Mergify running on the repository.

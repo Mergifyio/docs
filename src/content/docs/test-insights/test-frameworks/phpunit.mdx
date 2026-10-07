@@ -16,7 +16,7 @@ import MergifyCliUploadStep from "../../../../components/MergifyCliUploadStep.as
 import ReviewInTestInsights from "./_review-in-test-insights.mdx"
 
 This guide shows how to generate JUnit reports from your PHPUnit tests and upload
-them to **Test Insights** using your CI workflow.
+them to **Test Engine** using your CI workflow.
 
 ## Generate a JUnit Report with PHPUnit
 
@@ -79,8 +79,8 @@ composer test
 
 <CIInsightsSetupNote />
 
-After generating the JUnit report, add a step to upload the results to CI
-Insights using the `mergifyio/gha-mergify-ci` action.
+After generating the JUnit report, add a step to upload the results to Test
+Engine using the `mergifyio/gha-mergify-ci` action.
 
 For example, in your workflow file:
 
@@ -109,13 +109,13 @@ For example, in your workflow file:
 
 <MergifyCliUploadStep reportPath="junit.xml" testCommand="./vendor/bin/phpunit --log-junit junit.xml" />
 
-## Verify and Review in Test Insights
+## Verify and Review in Test Engine
 
 After pushing these changes:
 
 1. Your GitHub Actions workflow will execute your PHPUnit tests.
 2. A JUnit report (junit.xml) is generated.
-3. The Mergify CI action uploads the report to Test Insights.
+3. The Mergify CI action uploads the report to Test Engine.
 
 <ReviewInTestInsights />
 

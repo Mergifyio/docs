@@ -60,6 +60,14 @@ queue_rules:
     merge_method: squash
 ```
 
+:::note
+  The `merge_protections` and `merge_protections_settings` sections above need
+  [Merge Protections](/merge-protections/setup) enabled on the repository. With
+  that product off, Mergify does not evaluate the `merge_protections` rules and
+  `auto_merge_conditions` has no effect, so pull requests only reach the queue
+  through the [`@mergifyio queue`](/commands/queue) command.
+:::
+
 Notes:
 - [`auto_merge_conditions`](/merge-protections/auto-merge) is where Bulldozer's
   `trigger` goes: a pull request that matches it is queued without anyone

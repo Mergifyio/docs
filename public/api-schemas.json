@@ -1387,7 +1387,7 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that resolves a default time window pins that window into them, so following a link keeps the window this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that defaults `start`/`end` pins the resolved bounds into them, so following a link keeps the range this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
@@ -4192,6 +4192,167 @@
         }
       }
     },
+    "/repos/{owner}/{repository}/stats/ci_runs": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get the CI runs the merge queues started and wasted",
+        "description": "CI runs the merge queues started, and the ones they tore down before a merge with the reason why, by intervals of time. A run is one check the queue started -- a draft pull request, or the queued pull request itself when it is checked in place -- counted once however many pull requests it carries. A merge the queue trusts without running CI is not a run. Divide `started` by the merged pull requests of `queues_merged_count` for the CI runs each merge costs. A draft run carries pull requests of several priority rules, so there is no priority rule filter.",
+        "operationId": "get_ci_runs_repos__owner___repository__stats_ci_runs_get",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[\\w\\-\\.]+$",
+              "description": "The name of the repository",
+              "title": "Repository"
+            },
+            "description": "The name of the repository"
+          },
+          {
+            "name": "base_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Base reference(s) of the pull requests",
+              "title": "Base Ref"
+            },
+            "description": "Base reference(s) of the pull requests"
+          },
+          {
+            "name": "queue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Name of the merge queue(s) for the pull requests",
+              "title": "Queue Name"
+            },
+            "description": "Name of the merge queue(s) for the pull requests"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`.",
+              "title": "Start At"
+            },
+            "description": "Get the stats from this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to 1 day before `end_at`."
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now.",
+              "title": "End At"
+            },
+            "description": "Get the stats until this date: an ISO 8601 datetime with a UTC offset (e.g. `2024-01-01T00:00:00Z`); a Unix timestamp or a datetime without an offset is refused. Defaults to now."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CIRunsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/repos/{owner}/{repository}/stats/failure_rate": {
       "get": {
         "tags": [
@@ -5348,48 +5509,6 @@
             "description": "The health status to exclude"
           },
           {
-            "name": "health_confidence",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HealthConfidence"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The health confidence to filter on",
-              "title": "Health Confidence"
-            },
-            "description": "The health confidence to filter on"
-          },
-          {
-            "name": "health_confidence_exclude",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HealthConfidence"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The health confidence to exclude",
-              "title": "Health Confidence Exclude"
-            },
-            "description": "The health confidence to exclude"
-          },
-          {
             "name": "failed_executions_impact",
             "in": "query",
             "required": false,
@@ -5442,6 +5561,24 @@
             "description": "The failed executions impact to exclude"
           },
           {
+            "name": "is_quarantined",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only return tests whose branch, pipeline and job a quarantine covers (`true`) or does not (`false`). Omit to return both.",
+              "title": "Is Quarantined"
+            },
+            "description": "Only return tests whose branch, pipeline and job a quarantine covers (`true`) or does not (`false`). Omit to return both."
+          },
+          {
             "name": "cursor",
             "in": "query",
             "required": false,
@@ -5484,7 +5621,6 @@
                 "pipeline_name",
                 "job_name",
                 "health_status",
-                "health_confidence",
                 "failed_executions_impact",
                 "failed_executions_ratio"
               ],
@@ -5597,6 +5733,46 @@
               "title": "Repository"
             },
             "description": "The name of the repository"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -5712,46 +5888,44 @@
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
           },
           {
-            "name": "start",
+            "name": "pipeline_name",
             "in": "query",
             "required": false,
             "schema": {
               "anyOf": [
                 {
                   "type": "string",
-                  "format": "date-time"
+                  "minLength": 1,
+                  "maxLength": 255
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "Start"
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
             },
-            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-            "deprecated": true
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
           },
           {
-            "name": "end",
+            "name": "job_name",
             "in": "query",
             "required": false,
             "schema": {
               "anyOf": [
                 {
                   "type": "string",
-                  "format": "date-time"
+                  "minLength": 1,
+                  "maxLength": 255
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "End"
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
             },
-            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-            "deprecated": true
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -5803,7 +5977,7 @@
           "test_insights"
         ],
         "summary": "Get a test's health transitions over time",
-        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window: the edges of the series, not the full series. Each point is the verdict the test's health badge would have shown at that moment. It is computed from every run up to that point, over the same history the health badge reads. A window ends now, so it ends on the badge shown today. Points are sampled per UTC day, so a transition is timestamped to a day boundary rather than to an individual run.",
+        "description": "Return the moments a test's health (healthy/flaky/broken) changed over the requested window: the edges of the series, not the full series. The first point is the health where the window opens, at `first_activity_at`; each later one is the run at which the test turned flaky or broken, or recovered. Without a pipeline and job, the worst health across the test's jobs wins at each instant.",
         "operationId": "ci-test-health-transitions",
         "security": [
           {
@@ -5869,46 +6043,44 @@
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
           },
           {
-            "name": "start",
+            "name": "pipeline_name",
             "in": "query",
             "required": false,
             "schema": {
               "anyOf": [
                 {
                   "type": "string",
-                  "format": "date-time"
+                  "minLength": 1,
+                  "maxLength": 255
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "Start"
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
             },
-            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-            "deprecated": true
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
           },
           {
-            "name": "end",
+            "name": "job_name",
             "in": "query",
             "required": false,
             "schema": {
               "anyOf": [
                 {
                   "type": "string",
-                  "format": "date-time"
+                  "minLength": 1,
+                  "maxLength": 255
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "End"
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
             },
-            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-            "deprecated": true
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -5996,6 +6168,46 @@
               "title": "Repository"
             },
             "description": "The name of the repository"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -6095,6 +6307,46 @@
               "title": "Repository"
             },
             "description": "The name of the repository"
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline.",
+              "title": "Pipeline Name"
+            },
+            "description": "Only read the test's executions in this pipeline. Omit to read them across every pipeline."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only read the test's executions in this job. Omit to read them across every job.",
+              "title": "Job Name"
+            },
+            "description": "Only read the test's executions in this job. Omit to read them across every job."
           }
         ],
         "responses": {
@@ -6258,48 +6510,6 @@
               "default": "30d"
             },
             "description": "Period to cover: the last 7 or 30 UTC days, today included."
-          },
-          {
-            "name": "start",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "Start"
-            },
-            "description": "Deprecated, use `window`. Start of the time range; when sent, `window` is ignored.",
-            "deprecated": true
-          },
-          {
-            "name": "end",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-              "deprecated": true,
-              "title": "End"
-            },
-            "description": "Deprecated, use `window`. End of the time range; when sent, `window` is ignored.",
-            "deprecated": true
           }
         ],
         "responses": {
@@ -6334,7 +6544,7 @@
           "test_insights"
         ],
         "summary": "List quarantined tests",
-        "description": "List the tests currently quarantined in the repository, ordered by quarantine creation time ascending. A quarantine applies to a specific branch or to all branches when `branch` is `null`.\n\nPagination is opt-in: pass `per_page` (and optionally `cursor`) to receive a bounded page with RFC 5988 navigation links. Omitting `per_page` returns the full list in a single response \u2014 this shortcut exists for backward compatibility and is expected to go away once all callers paginate.",
+        "description": "List the tests currently quarantined in the repository, ordered by `sort` and `direction` (quarantine creation time ascending by default). A quarantine applies to a specific branch or to all branches when `branch` is `null`.\n\nPagination is opt-in: pass `per_page` (and optionally `cursor`) to receive a bounded page with RFC 5988 navigation links. Omitting `per_page` returns the full list in a single response \u2014 this shortcut exists for backward compatibility and is expected to go away once all callers paginate.",
         "operationId": "get_quarantined_tests_with_params_token_auth_ci__owner__repositories__repository__quarantines_get",
         "security": [
           {
@@ -6394,8 +6604,12 @@
                   "type": "null"
                 }
               ],
+              "description": "Deprecated: use `branch_name`.",
+              "deprecated": true,
               "title": "Branch"
-            }
+            },
+            "description": "Deprecated: use `branch_name`.",
+            "deprecated": true
           },
           {
             "name": "test_id",
@@ -6404,15 +6618,21 @@
             "schema": {
               "anyOf": [
                 {
-                  "type": "string",
-                  "format": "uuid"
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "maxItems": 255
                 },
                 {
                   "type": "null"
                 }
               ],
+              "description": "The test identifier to filter on",
               "title": "Test Id"
-            }
+            },
+            "description": "The test identifier to filter on"
           },
           {
             "name": "source",
@@ -6421,14 +6641,253 @@
             "schema": {
               "anyOf": [
                 {
-                  "$ref": "#/components/schemas/QuarantineSource"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuarantineSource"
+                  }
                 },
                 {
                   "type": "null"
                 }
               ],
+              "description": "The sources to filter on.",
               "title": "Source"
-            }
+            },
+            "description": "The sources to filter on."
+          },
+          {
+            "name": "branch_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The branch name to filter on. Quarantines applying to every branch always match.",
+              "title": "Branch Name"
+            },
+            "description": "The branch name to filter on. Quarantines applying to every branch always match."
+          },
+          {
+            "name": "branch_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The branch name to exclude. Quarantines applying to every branch are kept.",
+              "title": "Branch Name Exclude"
+            },
+            "description": "The branch name to exclude. Quarantines applying to every branch are kept."
+          },
+          {
+            "name": "pipeline_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to filter on. Quarantines applying to every pipeline always match.",
+              "title": "Pipeline Name"
+            },
+            "description": "The pipeline name to filter on. Quarantines applying to every pipeline always match."
+          },
+          {
+            "name": "pipeline_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pipeline name to exclude. Quarantines applying to every pipeline are kept.",
+              "title": "Pipeline Name Exclude"
+            },
+            "description": "The pipeline name to exclude. Quarantines applying to every pipeline are kept."
+          },
+          {
+            "name": "job_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to filter on. Quarantines applying to every job always match.",
+              "title": "Job Name"
+            },
+            "description": "The job name to filter on. Quarantines applying to every job always match."
+          },
+          {
+            "name": "job_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The job name to exclude. Quarantines applying to every job are kept.",
+              "title": "Job Name Exclude"
+            },
+            "description": "The job name to exclude. Quarantines applying to every job are kept."
+          },
+          {
+            "name": "test_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The test name to filter on",
+              "title": "Test Name"
+            },
+            "description": "The test name to filter on"
+          },
+          {
+            "name": "test_name_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "maxItems": 255
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The test name to exclude",
+              "title": "Test Name Exclude"
+            },
+            "description": "The test name to exclude"
+          },
+          {
+            "name": "health_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HealthStatus"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health status to filter on. Tests with no recent runs are left out.",
+              "title": "Health Status"
+            },
+            "description": "The health status to filter on. Tests with no recent runs are left out."
+          },
+          {
+            "name": "health_status_exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HealthStatus"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The health status to exclude. Tests with no recent runs are kept.",
+              "title": "Health Status Exclude"
+            },
+            "description": "The health status to exclude. Tests with no recent runs are kept."
           },
           {
             "name": "cursor",
@@ -6467,6 +6926,33 @@
               "title": "Per Page"
             },
             "description": "The number of items per page. Omit to receive the full list in a single response; pass a value to opt into RFC 5988 cursor pagination."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/QuarantinesSort",
+              "description": "Sort field. `test_name` orders by the first 255 characters of the name: names sharing them come back in a stable but arbitrary order.",
+              "default": "created_at"
+            },
+            "description": "Sort field. `test_name` orders by the first 255 characters of the name: names sharing them come back in a stable but arbitrary order."
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string",
+              "description": "Sort direction. Ascending `created_at` is oldest first; ascending `health_status` is broken, flaky, healthy, then tests with no recent runs. `pipeline_name` and `job_name` put quarantines applying to every pipeline or job first.",
+              "default": "asc",
+              "title": "Direction"
+            },
+            "description": "Sort direction. Ascending `created_at` is oldest first; ascending `health_status` is broken, flaky, healthy, then tests with no recent runs. `pipeline_name` and `job_name` put quarantines applying to every pipeline or job first."
           }
         ],
         "responses": {
@@ -6481,7 +6967,7 @@
             },
             "headers": {
               "Link": {
-                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that resolves a default time window pins that window into them, so following a link keeps the window this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
+                "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that defaults `start`/`end` pins the resolved bounds into them, so following a link keeps the range this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
                 "schema": {
                   "type": "string"
@@ -7376,48 +7862,6 @@
             "description": "The pipeline name to exclude"
           },
           {
-            "name": "health_confidence",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HealthConfidence"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The health confidence to filter on",
-              "title": "Health Confidence"
-            },
-            "description": "The health confidence to filter on"
-          },
-          {
-            "name": "health_confidence_exclude",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HealthConfidence"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The health confidence to exclude",
-              "title": "Health Confidence Exclude"
-            },
-            "description": "The health confidence to exclude"
-          },
-          {
             "name": "failed_executions_impact",
             "in": "query",
             "required": false,
@@ -8229,7 +8673,8 @@
                       "pull_requests": []
                     }
                   ],
-                  "waiting_pull_requests": []
+                  "waiting_pull_requests": [],
+                  "automatic_conflict_resolution_unsupported": false
                 }
               }
             }
@@ -9054,7 +9499,7 @@
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 10000
+                "maxLength": 255
               },
               {
                 "type": "null"
@@ -9752,6 +10197,56 @@
         ],
         "title": "CIAverageRuntimeResponse"
       },
+      "CIRunsGroupResponse": {
+        "properties": {
+          "base_ref": {
+            "type": "string",
+            "title": "Base Ref"
+          },
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "started": {
+            "items": {
+              "$ref": "#/components/schemas/StartedCIRunsInInterval"
+            },
+            "type": "array",
+            "title": "Started"
+          },
+          "wasted": {
+            "items": {
+              "$ref": "#/components/schemas/WastedCIRunsInInterval"
+            },
+            "type": "array",
+            "title": "Wasted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base_ref",
+          "queue_name",
+          "started",
+          "wasted"
+        ],
+        "title": "CIRunsGroupResponse"
+      },
+      "CIRunsResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/CIRunsGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "groups"
+        ],
+        "title": "CIRunsResponse"
+      },
       "CIRuntimeGroupResponse": {
         "properties": {
           "base_ref": {
@@ -10033,6 +10528,24 @@
         ],
         "title": "ChecksRetriesResponse"
       },
+      "CompositionCompleteness": {
+        "type": "string",
+        "enum": [
+          "complete",
+          "truncated"
+        ],
+        "title": "CompositionCompleteness"
+      },
+      "ConflictResolutionOutcome": {
+        "type": "string",
+        "enum": [
+          "unchanged",
+          "resolved",
+          "discarded",
+          "resolved_with_discard"
+        ],
+        "title": "ConflictResolutionOutcome"
+      },
       "CreateScheduledQueueFreezePayload": {
         "properties": {
           "reason": {
@@ -10136,7 +10649,8 @@
                 "ci_insights",
                 "merge_protections",
                 "workflow_automation",
-                "merge_queue"
+                "merge_queue",
+                "ci"
               ]
             },
             "type": "array",
@@ -11849,6 +12363,96 @@
         ],
         "title": "EventLabel"
       },
+      "EventLabelLoopStopped": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/EventOutcome"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.label.loop_stopped",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventLabelLoopStoppedMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "outcome",
+          "type",
+          "metadata"
+        ],
+        "title": "EventLabelLoopStopped"
+      },
+      "EventLabelLoopStoppedMetadata": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "The label Mergify stopped adding and removing on the pull request."
+          },
+          "rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rules",
+            "description": "The pull request rules that kept adding and removing the label, undoing each other."
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "rules"
+        ],
+        "title": "EventLabelLoopStoppedMetadata"
+      },
       "EventLabelMetadata": {
         "properties": {
           "added": {
@@ -12150,7 +12754,8 @@
               "ci_insights",
               "merge_protections",
               "workflow_automation",
-              "merge_queue"
+              "merge_queue",
+              "ci"
             ],
             "title": "Product"
           },
@@ -12251,7 +12856,8 @@
               "ci_insights",
               "merge_protections",
               "workflow_automation",
-              "merge_queue"
+              "merge_queue",
+              "ci"
             ],
             "title": "Product"
           },
@@ -12660,6 +13266,264 @@
           "batch_name"
         ],
         "title": "EventQueueBatchBisectionStartMetadata"
+      },
+      "EventQueueBatchComposition": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "trigger": {
+            "type": "string",
+            "title": "Trigger"
+          },
+          "repository": {
+            "type": "string",
+            "title": "Repository"
+          },
+          "pull_request": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pull Request"
+          },
+          "base_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Ref"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/EventOutcome"
+          },
+          "type": {
+            "type": "string",
+            "const": "action.queue.batch_composition",
+            "title": "Type"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EventQueueBatchCompositionMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_at",
+          "trigger",
+          "repository",
+          "pull_request",
+          "base_ref",
+          "outcome",
+          "type",
+          "metadata"
+        ],
+        "title": "EventQueueBatchComposition"
+      },
+      "EventQueueBatchCompositionMergeCommit": {
+        "properties": {
+          "pull_request_number": {
+            "type": "integer",
+            "maximum": 9.223372036854776e+18,
+            "minimum": 0.0,
+            "title": "Pull Request Number",
+            "description": "The pull request this commit merged into the batch."
+          },
+          "sha": {
+            "type": "string",
+            "title": "Sha",
+            "description": "The merge commit, on the batch branch. Its diff against its first parent is what merging the pull request wrote, each path's resolution included."
+          }
+        },
+        "type": "object",
+        "required": [
+          "pull_request_number",
+          "sha"
+        ],
+        "title": "EventQueueBatchCompositionMergeCommit"
+      },
+      "EventQueueBatchCompositionMetadata": {
+        "properties": {
+          "queue_name": {
+            "type": "string",
+            "title": "Queue Name"
+          },
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id",
+            "description": "The batch composed. A batch composed again -- a retried build, a speculative batch re-merging its parents, a bisection child -- emits one event per attempt, each with its own `head_sha`."
+          },
+          "batch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Name",
+            "description": "The display name of the batch this event concerns, the same name the merge queue shows while the batch is queued. Recorded on the event because the name lives only in the live queue state and is unrecoverable once the batch leaves the queue. Null on events persisted before this field was added."
+          },
+          "head_sha": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Head Sha",
+            "description": "The head of the batch branch this attempt composed, which holds one merge commit per pull request -- where each resolution can be seen. Null when the composition stopped on a conflict, and there is no branch."
+          },
+          "pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "maximum": 9.223372036854776e+18,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Pull Request Numbers",
+            "description": "The pull requests the batch branch is composed of, in order -- including those of the batches ahead it is built on, which a speculative batch merges again, and so reports again: `own_pull_request_numbers` tells them apart. Not all of them were necessarily merged: one the base already contains is skipped, and a composition that stops on a conflict never reaches those after it."
+          },
+          "own_pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "maximum": 9.223372036854776e+18,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Own Pull Request Numbers",
+            "description": "The pull requests queued in this batch, without those of the batches ahead it merges again."
+          },
+          "merge_commits": {
+            "items": {
+              "$ref": "#/components/schemas/EventQueueBatchCompositionMergeCommit"
+            },
+            "type": "array",
+            "title": "Merge Commits",
+            "description": "The merge commit each pull request made on the batch branch, in the order composed. Empty when the composition stopped on a conflict, as nothing was pushed. A pull request the base already contains is not merged, and has none."
+          },
+          "empty_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "merge_method_unsupported",
+                  "not_configured",
+                  "nothing_contended"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Empty Reason",
+            "description": "Why automatic conflict resolution had nothing to record. `merge_method_unsupported`: this queue's merge method cannot use it. `not_configured`: the repository configures no `conflict_resolvers`. `nothing_contended`: it was active, and no path it governs was changed by both sides. Null when it recorded something, or when every fold it could have recorded went unmeasured (see `status`)."
+          },
+          "status": {
+            "$ref": "#/components/schemas/CompositionCompleteness",
+            "description": "`truncated` when automatic conflict resolution was active and some of the batch's merges went unmeasured -- past the time the report may take, or because the composition stopped on a conflict: `paths` then covers only `measured_pull_request_numbers`. Always `complete` when `empty_reason` says it could not act, as nothing was measured."
+          },
+          "paths_contended": {
+            "type": "integer",
+            "title": "Paths Contended",
+            "description": "How many governed paths both sides changed. A floor, not a total, when `status` is `truncated`."
+          },
+          "measured_pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "maximum": 9.223372036854776e+18,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Measured Pull Request Numbers",
+            "description": "The pull requests whose merges into the batch were measured, which the `paths` entries cover. A composition that stopped on a conflict measures the merges before it only."
+          },
+          "paths": {
+            "items": {
+              "$ref": "#/components/schemas/EventQueueBatchCompositionPath"
+            },
+            "type": "array",
+            "title": "Paths",
+            "description": "Every path automatic conflict resolution governed that both sides changed, in the measured merges."
+          }
+        },
+        "type": "object",
+        "required": [
+          "queue_name",
+          "batch_id",
+          "batch_name",
+          "head_sha",
+          "pull_request_numbers",
+          "own_pull_request_numbers",
+          "merge_commits",
+          "empty_reason",
+          "status",
+          "paths_contended",
+          "measured_pull_request_numbers",
+          "paths"
+        ],
+        "title": "EventQueueBatchCompositionMetadata"
+      },
+      "EventQueueBatchCompositionPath": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path",
+            "description": "The path, relative to the repository root."
+          },
+          "driver": {
+            "type": "string",
+            "enum": [
+              "union",
+              "ours",
+              "theirs",
+              "prefer-ours",
+              "prefer-theirs",
+              "json",
+              "pnpm",
+              "uv"
+            ],
+            "title": "Driver",
+            "description": "The strategy the repository's `conflict_resolvers` gave this path, as written in the configuration."
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/ConflictResolutionOutcome",
+            "description": "What automatic conflict resolution did to this path. `unchanged`: the result is what a plain merge gives. `resolved`: a plain merge conflicts here, and both sides' content survives. `discarded`: a plain merge completes here cleanly, and the result lost content it would have kept. `resolved_with_discard`: a plain merge conflicts here, and it was settled by dropping one side's content."
+          },
+          "pull_request_number": {
+            "type": "integer",
+            "maximum": 9.223372036854776e+18,
+            "minimum": 0.0,
+            "title": "Pull Request Number",
+            "description": "The pull request being merged into the batch when this path was resolved. Not the one it conflicted with: the batch merges its pull requests one at a time, and never learns which earlier one a path clashed with."
+          }
+        },
+        "type": "object",
+        "required": [
+          "path",
+          "driver",
+          "outcome",
+          "pull_request_number"
+        ],
+        "title": "EventQueueBatchCompositionPath"
       },
       "EventQueueChange": {
         "properties": {
@@ -13131,7 +13995,7 @@
               }
             ],
             "title": "Parent Batch Ids",
-            "description": "The batch ids this batch descends from. A batch inherits its parents' check results, so this links a batch back to the ones checked before it. Empty on a first check with no predecessor. Null on events persisted before this field was added."
+            "description": "The batch ids this batch was queued behind, as of this event. A batch inherits its parents' check results, so this links it back to the ones checked before it. A parent may be dropped once its pull requests have merged, so a later event for the same batch can list fewer parents than an earlier one, or none at all. Empty on a first check with no predecessor. Null on events persisted before this field was added."
           },
           "session_id": {
             "type": "string",
@@ -13512,7 +14376,7 @@
               }
             ],
             "title": "Parent Batch Ids",
-            "description": "The batch ids this batch descends from. A batch inherits its parents' check results, so this links a batch back to the ones checked before it. Empty on a first check with no predecessor. Null on events persisted before this field was added."
+            "description": "The batch ids this batch was queued behind, as of this event. A batch inherits its parents' check results, so this links it back to the ones checked before it. A parent may be dropped once its pull requests have merged, so a later event for the same batch can list fewer parents than an earlier one, or none at all. Empty on a first check with no predecessor. Null on events persisted before this field was added."
           },
           "previous_batch_id": {
             "anyOf": [
@@ -15435,10 +16299,12 @@
           "action.edit",
           "action.github_actions",
           "action.label",
+          "action.label.loop_stopped",
           "action.merge",
           "action.post_check",
           "action.queue.batch_bisection_end",
           "action.queue.batch_bisection_start",
+          "action.queue.batch_composition",
           "action.queue.change",
           "action.queue.checks.change",
           "action.queue.checks_end",
@@ -15582,6 +16448,9 @@
                   "$ref": "#/components/schemas/EventLabel"
                 },
                 {
+                  "$ref": "#/components/schemas/EventLabelLoopStopped"
+                },
+                {
                   "$ref": "#/components/schemas/EventMerge"
                 },
                 {
@@ -15613,6 +16482,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/EventQueueBatchBisectionEnd"
+                },
+                {
+                  "$ref": "#/components/schemas/EventQueueBatchComposition"
                 },
                 {
                   "$ref": "#/components/schemas/EventQueueMerged"
@@ -15707,10 +16579,12 @@
                   "action.edit": "#/components/schemas/EventEdit",
                   "action.github_actions": "#/components/schemas/EventGithubActions",
                   "action.label": "#/components/schemas/EventLabel",
+                  "action.label.loop_stopped": "#/components/schemas/EventLabelLoopStopped",
                   "action.merge": "#/components/schemas/EventMerge",
                   "action.post_check": "#/components/schemas/EventPostCheck",
                   "action.queue.batch_bisection_end": "#/components/schemas/EventQueueBatchBisectionEnd",
                   "action.queue.batch_bisection_start": "#/components/schemas/EventQueueBatchBisectionStart",
+                  "action.queue.batch_composition": "#/components/schemas/EventQueueBatchComposition",
                   "action.queue.change": "#/components/schemas/EventQueueChange",
                   "action.queue.checks.change": "#/components/schemas/EventQueueChecksChange",
                   "action.queue.checks_end": "#/components/schemas/EventQueueChecksEnd",
@@ -15868,6 +16742,33 @@
         ],
         "title": "FailureRateResponse"
       },
+      "FrozenBatchAhead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "The id of the batch ahead, as `batches` or a bisection's `sub_batches` list it."
+          },
+          "pull_request_numbers": {
+            "items": {
+              "type": "integer",
+              "maximum": 9.223372036854776e+18,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "title": "Pull Request Numbers",
+            "description": "The pull requests queued in the batch ahead."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "pull_request_numbers"
+        ],
+        "title": "FrozenBatchAhead",
+        "description": "The frozen batch ahead that holds back the batch reporting it."
+      },
       "GetScheduledFreezesResponse": {
         "properties": {
           "scheduled_freezes": {
@@ -15904,7 +16805,14 @@
             "title": "Health Status"
           },
           "last_conclusion": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Last Conclusion"
           },
           "failure_ratio": {
@@ -16178,7 +17086,7 @@
             },
             "type": "array",
             "title": "Transitions",
-            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the earliest classification observed in the window. Health is classified per UTC day, so timestamps land on day boundaries, not individual runs."
+            "description": "Health changes over the window, oldest first. Consecutive entries always differ; the first entry is the health at `first_activity_at`. Without a pipeline and job, the worst health across the test's jobs wins at each instant."
           },
           "first_activity_at": {
             "anyOf": [
@@ -16191,7 +17099,7 @@
               }
             ],
             "title": "First Activity At",
-            "description": "Start of the earliest bucket with any executions in the window, or null when the test had no activity. A consumer can treat a `first_activity_at` well after the window start as the test's genuine origin, and one at the window edge as history that predates the retained window."
+            "description": "The test's first run in the window, the window start when it also ran before, or null when it had no activity. A consumer can treat a `first_activity_at` well after the window start as the test's genuine origin, and one at the window edge as history that predates the retained window."
           }
         },
         "type": "object",
@@ -16282,14 +17190,6 @@
         ],
         "title": "GitHubAccount"
       },
-      "HealthConfidence": {
-        "type": "string",
-        "enum": [
-          "low",
-          "medium",
-          "high"
-        ]
-      },
       "HealthStatus": {
         "type": "string",
         "enum": [
@@ -16304,7 +17204,7 @@
             "type": "string",
             "format": "date-time",
             "title": "At",
-            "description": "Bucket boundary at which the test's health changed to `health_status`."
+            "description": "Run at which the test's health changed to `health_status`, or `first_activity_at` for the first point."
           },
           "health_status": {
             "$ref": "#/components/schemas/HealthStatus",
@@ -16320,7 +17220,7 @@
               }
             ],
             "title": "Exception Type",
-            "description": "Exception raised by the first failing run of the episode this transition opens. Always null for a recovery, when no failing run is retained, and on a first point that reports a test already unhealthy when the window opened: that episode began before the window, so its opening run is not among the runs the window covers."
+            "description": "Exception raised by the run that opened this transition. Always null for a recovery, for the first point, when that run passed (a flaky test can turn flaky on a pass), and when the run is no longer retained."
           },
           "pull_request": {
             "anyOf": [
@@ -16331,7 +17231,7 @@
                 "type": "null"
               }
             ],
-            "description": "Pull request whose merge commit introduced the first failing run of the episode this transition opens. Null in three cases: on a recovery, because a test can stop failing without a PR fixing it and no 'fixed by' is attributed; when the failing commit cannot be traced back to a merged pull request; and on a first point whose episode began before the window."
+            "description": "Pull request whose merge commit the run that opened this transition ran on. Null in three cases: on a recovery, because a test can stop failing without a PR fixing it and no 'fixed by' is attributed; when that commit cannot be traced back to a merged pull request; and on the first point."
           }
         },
         "type": "object",
@@ -17077,6 +17977,11 @@
                 "type": "null"
               }
             ]
+          },
+          "automatic_conflict_resolution_unsupported": {
+            "type": "boolean",
+            "title": "Automatic Conflict Resolution Unsupported",
+            "default": false
           }
         },
         "type": "object",
@@ -17222,6 +18127,17 @@
             ],
             "title": "Queue Pull Request Number",
             "description": "The number of the pull request the batch's checks run on: the batch pull request, or the user's own pull request for in-place checks. None while the batch has no active check pull request (still preparing, or its creation failed)."
+          },
+          "frozen_batch_ahead": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FrozenBatchAhead"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The batch ahead a scheduled freeze holds, and with it this batch: this batch merges only once that one has, however green its own checks are. The batch ahead may still be running its checks. `null` when no frozen batch is ahead, including when this batch is frozen itself, which its pull requests' `is_frozen` reports."
           },
           "sub_batches": {
             "anyOf": [
@@ -17781,7 +18697,44 @@
               }
             ],
             "title": "Branch",
-            "description": "Branch name this quarantine applies to. `null` means the test is quarantined on every branch."
+            "description": "Deprecated: use `branch_name`.",
+            "deprecated": true
+          },
+          "branch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch Name",
+            "description": "Branch this quarantine applies to. `null` means the test is quarantined on every branch."
+          },
+          "pipeline_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pipeline Name",
+            "description": "Pipeline this quarantine applies to. `null` means the test is quarantined in every pipeline."
+          },
+          "job_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Name",
+            "description": "Job this quarantine applies to. `null` means the test is quarantined in every job."
           },
           "created_at": {
             "type": "string",
@@ -17793,6 +18746,17 @@
             "$ref": "#/components/schemas/QuarantineSource",
             "description": "How the test got quarantined: `manual` (user action) or `auto` (auto-quarantined).",
             "default": "manual"
+          },
+          "health_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HealthStatus"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Health of the test, or `null` when it has no recent runs."
           },
           "is_recovered": {
             "type": "boolean",
@@ -17807,7 +18771,11 @@
           "test_id",
           "reason",
           "branch",
+          "branch_name",
+          "pipeline_name",
+          "job_name",
           "created_at",
+          "health_status",
           "is_recovered"
         ],
         "title": "QuarantinedTest"
@@ -17837,15 +18805,32 @@
             },
             "type": "array",
             "title": "Quarantined Tests"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Total number of quarantines matching the filters, across all pages."
           }
         },
         "type": "object",
         "required": [
           "size",
           "per_page",
-          "quarantined_tests"
+          "quarantined_tests",
+          "total"
         ],
         "title": "QuarantinedTestsResponse"
+      },
+      "QuarantinesSort": {
+        "type": "string",
+        "enum": [
+          "created_at",
+          "test_name",
+          "pipeline_name",
+          "job_name",
+          "health_status",
+          "source"
+        ]
       },
       "Queue": {
         "properties": {
@@ -18631,7 +19616,8 @@
                 "ci_insights",
                 "merge_protections",
                 "workflow_automation",
-                "merge_queue"
+                "merge_queue",
+                "ci"
               ]
             },
             "type": "array",
@@ -19272,6 +20258,31 @@
         ],
         "title": "SkipIntermediateResultsResponse"
       },
+      "StartedCIRunsInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "started": {
+            "type": "integer",
+            "title": "Started"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "started"
+        ],
+        "title": "StartedCIRunsInInterval"
+      },
       "TestAddedToQuarantineResponse": {
         "properties": {
           "id": {
@@ -19549,6 +20560,11 @@
             "title": "Job Name",
             "description": "Name of the job within the pipeline that ran the test."
           },
+          "is_quarantined": {
+            "type": "boolean",
+            "title": "Is Quarantined",
+            "description": "Whether a quarantine covers this test identity: its branch, pipeline and job."
+          },
           "metrics": {
             "$ref": "#/components/schemas/TestSearchResultMetrics",
             "description": "Health metrics of the test identity."
@@ -19560,6 +20576,7 @@
           "test_name",
           "pipeline_name",
           "job_name",
+          "is_quarantined",
           "metrics"
         ],
         "title": "TestSearchResult"
@@ -19569,10 +20586,6 @@
           "health_status": {
             "$ref": "#/components/schemas/HealthStatus",
             "description": "Current health classification of the test: healthy, flaky, or broken."
-          },
-          "health_confidence": {
-            "$ref": "#/components/schemas/HealthConfidence",
-            "description": "Confidence in the health classification, derived from how many times the test has been rerun."
           },
           "failed_executions_impact": {
             "anyOf": [
@@ -19595,7 +20608,6 @@
         "type": "object",
         "required": [
           "health_status",
-          "health_confidence",
           "failed_executions_impact"
         ],
         "title": "TestSearchResultMetrics"
@@ -19872,6 +20884,36 @@
         },
         "type": "object",
         "title": "UpdateScheduledFreezePayload"
+      },
+      "WastedCIRunsInInterval": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "reason",
+          "count"
+        ],
+        "title": "WastedCIRunsInInterval"
       },
       "_QueueStatsBucket": {
         "properties": {

@@ -7,6 +7,10 @@ import { Image } from "astro:assets"
 import scheduleFreezeScreen from "../../images/merge-protections/schedule-freeze.png"
 import newScheduleFreezeScreen from "../../images/merge-protections/new-freeze.png"
 
+A freeze holds back the pull requests it matches until the freeze ends. You
+schedule one ahead of a window where nothing should land, or start one on the
+spot, from the dashboard or the CLI.
+
 ## When to Use a Freeze
 
 Use freezes to coordinate:
@@ -14,6 +18,30 @@ Use freezes to coordinate:
 - High-traffic events where deploy risk must be minimized
 - End-of-quarter / audit windows
 - Incident response (manual immediate freeze)
+
+## What a Freeze Blocks
+
+Without the [merge queue](/merge-queue), an active freeze leaves the
+`Mergify Merge Protections` check pending on every matching pull request, and
+its summary names the freeze holding it back: waiting for that freeze to end,
+or, when the freeze has no end date, waiting for someone to remove it. Pull
+requests matching the freeze's exclude conditions are left alone (see
+[Allowing Exceptions](#allowing-exceptions) below), as are pull requests that
+cannot be merged anyway: drafts, closed ones, and conflicting ones.
+
+When the merge queue is enabled, the freeze is reported in that check but is
+not what decides its conclusion. The queue holds the merge back until the
+freeze ends.
+
+:::caution
+  Mergify evaluates the freeze, but only GitHub can stop a merge made outside
+  Mergify. Unless your branch requires `Mergify Merge Protections` to succeed
+  (as a check, or as a deployment if you set `reporting_method: deployments`),
+  someone can still merge a pull request straight from the GitHub UI while the
+  freeze is active. See [Make the Check
+  Required](/merge-protections/setup#make-the-check-required) to close that
+  gap.
+:::
 
 ## Creating a Scheduled Freeze
 
@@ -40,28 +68,6 @@ In the dashboard under `Merge Protections` → `Scheduled Freezes`:
    it starts
 
 <Image src={newScheduleFreezeScreen} alt="New Scheduled Freeze" />
-
-Without the merge queue, an active freeze leaves the `Mergify Merge
-Protections` check pending on every matching pull request, and its summary
-names the freeze holding it back: waiting for that freeze to end, or, when the
-freeze has no end date, waiting for someone to remove it. Pull requests
-matching the freeze's exclude conditions are left alone (see [Allowing
-Exceptions](#allowing-exceptions) below), as are pull requests that cannot be
-merged anyway: drafts, closed ones, and conflicting ones.
-
-When the [merge queue](/merge-queue) is enabled, the freeze is reported in that
-check but is not what decides its conclusion. The queue holds the merge back
-until the freeze ends.
-
-:::caution
-  Mergify evaluates the freeze, but only GitHub can stop a merge made outside
-  Mergify. Unless your branch requires `Mergify Merge Protections` to succeed
-  (as a check, or as a deployment if you set `reporting_method: deployments`),
-  someone can still merge a pull request straight from the GitHub UI while the
-  freeze is active. See [Make the Check
-  Required](/merge-protections/setup#make-the-check-required) to close that
-  gap.
-:::
 
 ## Manual Instant Freeze
 
