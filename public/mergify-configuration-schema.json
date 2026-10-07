@@ -1926,13 +1926,6 @@
           "title": "Post Comment",
           "type": "boolean"
         },
-        "auto_merge": {
-          "default": false,
-          "deprecated": true,
-          "description": "Automatically merge or queue PRs when all merge protection conditions pass. Deprecated: use auto_merge_conditions.",
-          "title": "Auto Merge",
-          "type": "boolean"
-        },
         "auto_merge_conditions": {
           "anyOf": [
             {
