@@ -135,7 +135,9 @@ repository list stops the metrics in the meantime.
 ## Metrics
 
 Every metric is published every 5 minutes, and each point covers the 5-minute
-window it represents.
+window it represents. A metric with nothing to report for a window is left out
+of that publication rather than sent as a zero. Gaps are normal on a quiet
+queue, and a no-data monitor will fire on one.
 
 ### Tags
 
@@ -147,6 +149,9 @@ Every metric carries these tags:
 | `branch` | The base branch the queued pull requests target |
 | `queue` | Name of the [queue rule](/merge-queue/rules) |
 | `priority_rule` | Name of the matching [priority rule](/merge-queue/priority), when set |
+
+The exception is `priority_rule`: `running_checks.max` and the two `ci_runs.*`
+metrics are not aggregated by priority rule, so they never carry it.
 
 :::caution
   Datadog lowercases tag values on ingestion, and collapses each run of
@@ -176,6 +181,8 @@ any time range. Metrics submitted as **gauge** are peak values within the window
 | `mergify.queue.total_queue_time.count` | count | Queue sessions the sum covers |
 | `mergify.queue.ci_runtime.sum` | count | Total CI runtime, in seconds |
 | `mergify.queue.ci_runtime.count` | count | CI runs the sum covers |
+| `mergify.queue.ci_runs.started` | count | CI runs the queue started |
+| `mergify.queue.ci_runs.wasted` | count | CI runs the queue threw away, tagged with `reason` |
 | `mergify.queue.batch_size.sum` | count | Total pull requests across batches |
 | `mergify.queue.batch_size.count` | count | Batches the sum covers |
 | `mergify.queue.breakdown.ci_runtime.sum` | count | Queued time spent running CI, in seconds |
@@ -188,7 +195,9 @@ Both `outcome` and `exit_reason` are `success` when the pull request merged or
 its checks passed. Otherwise they name the reason the pull request left the
 queue or its checks were aborted, such as `checks_failed` or `pr_dequeued`. The
 [integration's README](https://github.com/DataDog/integrations-extras/blob/master/mergify_oauth/README.md)
-lists every value.
+lists every value. The `reason` on `ci_runs.wasted` is drawn from those same
+abort reasons, and never `success`: a run is only counted there once the queue
+has thrown it away.
 
 `skip_intermediate_results.batches_saved` counts the batches that merged because
 a later batch containing their changes had already passed, so each one is a CI
