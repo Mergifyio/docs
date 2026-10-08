@@ -1,0 +1,4 @@
+Contact: https://hackerone.com/mergify
+Expires: 2027-10-01T00:00:00.000Z
+Policy: https://docs.mergify.com/security/#vulnerability-disclosure
+Preferred-Languages: en
