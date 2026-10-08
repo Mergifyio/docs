@@ -7,7 +7,7 @@ import vitestLogo from "../../../images/ci-insights/vitest/logo.svg"
 import IntegrationLogo from "../../../../components/IntegrationLogo.astro"
 import CIInsightsSetupNote from "../../../../components/CIInsightsSetupNote.astro"
 import BuildkiteTokenNote from "../../../../components/BuildkiteTokenNote.astro"
-import ReviewInTestInsights from "./_review-in-test-insights.mdx"
+import ReviewInTestInsights from "./_review-in-test-engine.mdx"
 
 <IntegrationLogo src={vitestLogo} alt="Vitest logo" />
 
@@ -100,7 +100,7 @@ Engine.
 
 ## Quarantine and Crashed Runs
 
-The reporter applies [quarantine](/test-insights/quarantine) through a test
+The reporter applies [quarantine](/test-engine/quarantine) through a test
 runner it installs for you. When a quarantined test fails, that runner records
 it as passed, so it does not change Vitest's exit code. The exit code of your
 test step already accounts for quarantine, so the step needs nothing more:

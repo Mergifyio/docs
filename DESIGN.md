@@ -160,7 +160,7 @@ ToC active-link color and left-sidebar hover highlight.
 | (no class) | General / configuration | `--theme-link` (blue-700) |
 | `section-merge-queue` | Merge Queue | `--color-teal-700` |
 | `section-ci-insights` | CI Insights | `--color-purple-700` |
-| `section-test-insights` | Test Engine | `--color-orange-700` |
+| `section-test-engine` | Test Engine | `--color-orange-700` |
 | `section-merge-protections` | Merge Protections | `--color-blue-700` |
 | `section-stacks` | Stacks | `--color-coral-700` |
 | `section-workflow` | Workflow Automation | `--color-rose-700` |

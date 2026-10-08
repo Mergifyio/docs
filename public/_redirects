@@ -83,14 +83,24 @@
 /integrations/teamcity/ /integrations/ci-status-checks 301
 /integrations/gitlab /integrations/ci-status-checks 301
 /integrations/gitlab/ /integrations/ci-status-checks 301
-/ci-insights/test-frameworks/* /test-insights/test-frameworks/:splat 301
-/ci-insights/quarantine /test-insights/quarantine 301
-/ci-insights/quarantine/ /test-insights/quarantine 301
+/ci-insights/test-frameworks /test-engine#test-framework-configuration 301
+/ci-insights/test-frameworks/ /test-engine#test-framework-configuration 301
+/ci-insights/test-frameworks/* /test-engine/test-frameworks/:splat 301
+/ci-insights/quarantine /test-engine/quarantine 301
+/ci-insights/quarantine/ /test-engine/quarantine 301
 /merge-queue/parallel-scopes /merge-queue/queue-modes 301
 /merge-queue/parallel-scopes/ /merge-queue/queue-modes 301
 
+# Test Insights is now Test Engine. The exact rules sit above the catch-all so
+# they win over it.
+/test-insights /test-engine 301
+/test-insights/ /test-engine 301
+/test-insights.md /test-engine.md 301
 /test-insights/cli /cli/tests 301
 /test-insights/cli/ /cli/tests 301
+/test-insights/test-frameworks /test-engine#test-framework-configuration 301
+/test-insights/test-frameworks/ /test-engine#test-framework-configuration 301
+/test-insights/* /test-engine/:splat 301
 
 /monorepo-ci /integrations/gha#job-selection 301
 /monorepo-ci/ /integrations/gha#job-selection 301

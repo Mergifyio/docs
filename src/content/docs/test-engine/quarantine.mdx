@@ -9,21 +9,21 @@ will be ignored for the purposes of blocking merges or marking a pipeline as fai
 
 This helps you keep your CI green while maintaining full visibility into test reliability and ongoing issues.
 
-## How Quarantine Works
+## How quarantine works
 
 When you quarantine a test in the Mergify dashboard, its future executions will continue to be collected by
-[Test Engine](/test-insights), but your CI will ignore failures.
+[Test Engine](/test-engine), but your CI will ignore failures.
 
 This avoids pipeline disruption while still surfacing issues in the UI and keeping historical data intact.
 
 Quarantined tests must still be uploaded appropriately using one of the supported CI integrations.
-To ensure the correct setup, refer to [the documentation for your test framework](/test-insights#test-framework-configuration).
+To ensure the correct setup, refer to [the documentation for your test framework](/test-engine#test-framework-configuration).
 
-## When Mergify Quarantines a Test Itself
+## When Mergify quarantines a test itself
 
 Mergify can also quarantine a test on its own, from the health status
-[Detection](/test-insights/detection) assigns it. You enable this
-[auto-quarantine](/test-insights/mitigation#auto-quarantine) per repository from
+[Detection](/test-engine/detection) assigns it. You enable this
+[auto-quarantine](/test-engine/mitigation#auto-quarantine) per repository from
 the Mitigation page. It does not act on that status as soon as a test looks
 unhealthy: it waits until there is enough evidence behind the verdict.
 
@@ -35,7 +35,7 @@ have failed. That last floor is why a single failure among thousands of green ru
 never quarantines anything, however reproducible the rest of the pattern looks.
 
 A test that has not run for a while keeps whatever health status it last had,
-but Mergify stops spending [reruns](/test-insights/detection#rerunning-unhealthy-tests)
+but Mergify stops spending [reruns](/test-engine/detection#rerunning-unhealthy-tests)
 on it, since no recent run backs that verdict any more.
 
 Until a test clears those bars, its status still shows on the dashboard and you
@@ -43,7 +43,7 @@ can quarantine it yourself; Mergify will not do it for you.
 
 ## Adding and removing tests from quarantine
 
-### From the Mergify Dashboard
+### From the Mergify dashboard
 
 The [Mitigation page](https://dashboard.mergify.com/test-insights/mitigation) on the dashboard contains the list of
 tests that Test Engine collected from your CI runs.
@@ -70,7 +70,7 @@ mergify tests quarantines list -r owner/repo
 
 See the [`tests` CLI reference](/cli/tests) for all flags and exit codes.
 
-## Staying Notified
+## Staying notified
 
 Quarantine and dequarantine actions, whether you make them yourself or Mergify
 applies them automatically, are recorded as events you can review on the
