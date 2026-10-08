@@ -268,6 +268,22 @@ For a pull request with labels `(bug, work-in-progress)`:
 - label != bug
 ```
 
+## Which Check Run a Condition Reads
+
+A `check-*` condition reads one run per check name and GitHub App on the pull
+request's head commit, the same run GitHub enforces at merge time. When a check
+ran more than once, Mergify keeps the run from the newest check suite and,
+within that suite, the run created last. A later run replaces an earlier result:
+a success followed by a re-run that fails, or by a second trigger that is still
+in progress, no longer satisfies `check-success`.
+
+A commit status is read the same way: only the latest status posted for a
+context counts.
+
+`check-success` is satisfied by a `success` conclusion only. A run that
+concludes `neutral` or `skipped` is not a success: it matches `check-neutral` or
+`check-skipped` instead.
+
 ## Qualifying Checks by GitHub App
 
 Two GitHub Apps can publish a check with the same name (for example, both a
