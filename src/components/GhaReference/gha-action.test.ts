@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import { describe, expect, test } from 'vitest';
-import ghaMergifyCiVersion from '~/data/gha-mergify-ci-version.json';
 import {
   descriptionBlocks,
   GHA_ACTION_PATH,
@@ -16,19 +15,6 @@ import {
 const input = (name: string) => loadGhaAction().inputs.find((i) => i.name === name);
 const output = (name: string) => loadGhaAction().outputs.find((o) => o.name === name);
 
-// The version sync bumps gha-mergify-ci-version.json without touching the
-// vendored action.yml, so this is what stops its pull request going green with
-// a page that still describes the previous release.
-describe('vendored gha-mergify-ci action is the pinned release', () => {
-  test('its stamp names the version gha-mergify-ci-version.json pins, and its body matches', () => {
-    const vendored = readVendoredAction(
-      fs.readFileSync(GHA_ACTION_PATH, 'utf-8'),
-      ghaMergifyCiVersion.version
-    );
-    expect(vendored.tag).toBe(ghaMergifyCiVersion.version);
-  });
-});
-
 describe('readVendoredAction', () => {
   const body = 'name: example\n';
   const stamped = (tag: string, blob = gitBlobId(body)) =>
@@ -40,31 +26,32 @@ describe('readVendoredAction', () => {
   });
 
   test('returns the body without the stamp', () => {
-    expect(readVendoredAction(stamped('v2'), 'v2')).toEqual({
+    expect(readVendoredAction(stamped('v2'))).toEqual({
       tag: 'v2',
       blob: gitBlobId(body),
       body,
     });
   });
 
-  test('refuses a file taken at another release than the pinned one', () => {
-    expect(() => readVendoredAction(stamped('v1'), 'v2')).toThrow(
-      /pins v2, but .* is the action\.yml of v1/
-    );
-  });
-
   test('refuses a body that is not the stamped blob', () => {
-    expect(() => readVendoredAction(stamped('v2', '0'.repeat(40)), 'v2')).toThrow(
+    expect(() => readVendoredAction(stamped('v2', '0'.repeat(40)))).toThrow(
       /stamped as git blob 0{40} of v2/
     );
   });
 
   test('refuses a file with no stamp', () => {
-    expect(() => readVendoredAction(body, 'v2')).toThrow(/has no .* first line/);
+    expect(() => readVendoredAction(body)).toThrow(/has no .* first line/);
   });
 });
 
 describe('vendored gha-mergify-ci action', () => {
+  // The pin in gha-mergify-ci-version.json moves on its own, so the page names
+  // the release its inputs were read from, not the pinned one.
+  test('is versioned with the tag its stamp names', () => {
+    const vendored = readVendoredAction(fs.readFileSync(GHA_ACTION_PATH, 'utf-8'));
+    expect(loadGhaAction().version).toBe(vendored.tag);
+  });
+
   test('every input and output has a description', () => {
     for (const entry of [...loadGhaAction().inputs, ...loadGhaAction().outputs]) {
       expect(entry.description, `${entry.name} has no description`).not.toBeNull();

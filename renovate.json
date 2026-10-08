@@ -35,6 +35,12 @@
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["Mergifyio/mergify-ci-buildkite-plugin"],
       "minimumReleaseAge": "0 days"
+    },
+    {
+      "description": "Our own release too, so no cooldown, same as the buildkite plugin rule above.",
+      "matchDatasources": ["github-releases"],
+      "matchPackageNames": ["Mergifyio/gha-mergify-ci"],
+      "minimumReleaseAge": "0 days"
     }
   ],
   "customManagers": [
@@ -45,6 +51,14 @@
       "matchStrings": ["\"version\": \"(?<currentValue>.*)\""],
       "depNameTemplate": "Mergifyio/mergify-ci-buildkite-plugin",
       "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "description": "The gha-mergify-ci version the docs examples pin. github-releases rather than github-tags: a tag can exist days before its release is published, and the pin should only move once it is. /integrations/gha/reference does not read this file; it renders the vendored src/data/gha-mergify-ci-action.yml under its own stamped tag.",
+      "managerFilePatterns": ["/^src/data/gha-mergify-ci-version\\.json$/"],
+      "matchStrings": ["\"version\": \"(?<currentValue>.*)\""],
+      "depNameTemplate": "Mergifyio/gha-mergify-ci",
+      "datasourceTemplate": "github-releases"
     }
   ]
 }
