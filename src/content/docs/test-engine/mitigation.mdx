@@ -33,7 +33,7 @@ Quarantine works on any branch, not just the default branch.
 :::note
   Quarantined tests must still be uploaded through one of the supported CI
   integrations. See the
-  [test framework configuration](/test-insights#test-framework-configuration)
+  [test framework configuration](/test-engine#test-framework-configuration)
   for setup details.
 :::
 
@@ -41,11 +41,11 @@ Quarantine works on any branch, not just the default branch.
 
 You can manually add or remove specific tests from quarantine through the
 Mergify dashboard. This is useful when you've identified a problematic test
-through [Detection](/test-insights/detection) and want to stop it from
+through [Detection](/test-engine/detection) and want to stop it from
 blocking your team while you investigate.
 
 For technical details on how quarantine integrates with your CI pipeline,
-see the [Quarantine documentation](/test-insights/quarantine).
+see the [Quarantine documentation](/test-engine/quarantine).
 
 ## Auto-quarantine
 
@@ -63,7 +63,7 @@ page in the dashboard.
 ### Quarantining a test from Detection
 
 When you identify a high-impact flaky or broken test in
-[Detection](/test-insights/detection), you can quarantine it directly to
+[Detection](/test-engine/detection), you can quarantine it directly to
 stop it from blocking merges while you work on a fix.
 
 ### Reviewing quarantined tests
@@ -82,5 +82,5 @@ overhead and keeps your CI pipeline moving.
 
 Mitigation uses the same CI integration as Detection. To ensure quarantine
 works correctly, your CI must be configured to check quarantine status. See
-the [Quarantine documentation](/test-insights/quarantine) for technical setup
+the [Quarantine documentation](/test-engine/quarantine) for technical setup
 details.

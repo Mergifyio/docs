@@ -279,7 +279,7 @@ export const GROUP_BACKLINKS: Record<string, { text: string; href: string }> = {
   queue: { text: 'Merge queue monitoring', href: '/merge-queue/monitoring' },
   stack: { text: 'Stacked pull requests', href: '/stacks' },
   ci: { text: 'CI Insights', href: '/ci-insights' },
-  tests: { text: 'Test quarantine', href: '/test-insights/quarantine' },
+  tests: { text: 'Test quarantine', href: '/test-engine/quarantine' },
   freeze: { text: 'Scheduled freezes', href: '/merge-protections/freeze' },
   config: { text: 'Configuration file', href: '/configuration/file-format' },
 };
