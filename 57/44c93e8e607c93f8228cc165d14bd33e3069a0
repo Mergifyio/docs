@@ -1,0 +1,6 @@
+Revision history for #13305:
+
+rev 2 (content) 2026-10-08 07:16 UTC — rebase onto main after the Test Engine pages moved to /test-engine: the alt-text edit now lands in test-engine/mitigation.mdx; commit scope follows
+rev 1 (initial) 2026-10-08 07:16 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13305,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"ab9e8f59595ee2fd6cba19c9ee65eff9444d61ed","timestamp_iso":"2026-10-08T07:16:33Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"ab9e8f59595ee2fd6cba19c9ee65eff9444d61ed","new_sha":"00674bbee1175106a27e2c79d4cbc03f3d35b05d","timestamp_iso":"2026-10-08T07:16:33Z","reason":"rebase onto main after the Test Engine pages moved to /test-engine: the alt-text edit now lands in test-engine/mitigation.mdx; commit scope follows","replay_sha":"0e376edacffbbcda0ccbb9f3baa05dc672c253d6","compare_url":"https://github.com/Mergifyio/docs/compare/ab9e8f59595ee2fd6cba19c9ee65eff9444d61ed...0e376edacffbbcda0ccbb9f3baa05dc672c253d6"}]} -->
