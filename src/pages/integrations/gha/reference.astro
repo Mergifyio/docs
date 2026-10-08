@@ -12,9 +12,9 @@ import '~/styles/cli-reference.css';
 import '~/styles/gha-reference.css';
 
 // Generated from src/data/gha-mergify-ci-action.yml, the action's own
-// action.yml at the pinned release, the way /cli is generated from
+// action.yml at the release its stamp names, the way /cli is generated from
 // cli-schema.json. Nothing on this page restates the action's contract, and
-// loadGhaAction refuses a file taken at any release but the pinned one.
+// `version` is that stamped release, not the version the other pages pin.
 const reference = loadGhaAction();
 const { version } = reference;
 const repositoryUrl = `https://github.com/${GHA_ACTION_REPOSITORY}`;
