@@ -2,7 +2,6 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import * as yaml from 'js-yaml';
 import { helpToHtml } from '~/components/CliReference/cli-schema';
-import ghaMergifyCiVersion from '~/data/gha-mergify-ci-version.json';
 
 /**
  * The model behind `/integrations/gha/reference`, derived at build time from
@@ -16,10 +15,12 @@ import ghaMergifyCiVersion from '~/data/gha-mergify-ci-version.json';
  * implementation in another repository, tested by nobody. Verbatim, vendoring is
  * a download and every derivation below is covered by this repository's tests.
  *
- * The version sync bumps `gha-mergify-ci-version.json` on its own, and nothing
- * else refreshes this file. So the stamp is checked on every load: a pinned
- * version this file was not taken at fails the build, instead of publishing the
- * old release's inputs under the new release's number.
+ * Renovate bumps `gha-mergify-ci-version.json`, and this file is re-vendored
+ * separately, so the two can name different releases for a while. The page
+ * therefore takes its version from the stamp, never from the pin: it always
+ * names the release its inputs were read from. The stamp is checked on every
+ * load, so a body edited by hand or re-downloaded without re-stamping fails the
+ * build instead of being published under a tag it was not taken at.
  */
 
 export const GHA_ACTION_PATH = 'src/data/gha-mergify-ci-action.yml';
@@ -236,30 +237,24 @@ export function gitBlobId(content: string): string {
 }
 
 /**
- * Split the vendored file into its stamp and body, and refuse it unless it is
- * the `action.yml` of `pinned`. Throws on a missing stamp, a tag other than the
- * pinned version, or a body whose blob is not the one stamped (edited by hand,
- * or re-downloaded without re-stamping).
+ * Split the vendored file into its stamp and body, and refuse it unless the
+ * body is the `action.yml` the stamp names. Throws on a missing stamp, or a
+ * body whose blob is not the one stamped (edited by hand, or re-downloaded
+ * without re-stamping).
  */
-export function readVendoredAction(text: string, pinned: string): VendoredAction {
-  const how = `re-vendor ${GHA_ACTION_PATH} from ${GHA_ACTION_REPOSITORY} at ${pinned}`;
+export function readVendoredAction(text: string): VendoredAction {
   const stamp = text.match(STAMP);
   if (!stamp) {
     throw new Error(
-      `${GHA_ACTION_PATH} has no "# ${GHA_ACTION_REPOSITORY} action.yml at <tag>, git blob <sha>" first line: ${how}`
+      `${GHA_ACTION_PATH} has no "# ${GHA_ACTION_REPOSITORY} action.yml at <tag>, git blob <sha>" first line: re-vendor it from ${GHA_ACTION_REPOSITORY}`
     );
   }
   const [line, tag, blob] = stamp;
-  if (tag !== pinned) {
-    throw new Error(
-      `gha-mergify-ci-version.json pins ${pinned}, but ${GHA_ACTION_PATH} is the action.yml of ${tag}: ${how}`
-    );
-  }
   const body = text.slice(line.length);
   const actual = gitBlobId(body);
   if (actual !== blob) {
     throw new Error(
-      `${GHA_ACTION_PATH} is stamped as git blob ${blob} of ${tag}, but its body is ${actual}: ${how}`
+      `${GHA_ACTION_PATH} is stamped as git blob ${blob} of ${tag}, but its body is ${actual}: re-vendor it from ${GHA_ACTION_REPOSITORY} at ${tag}`
     );
   }
   return { tag, blob, body };
@@ -270,9 +265,8 @@ let cached: GhaActionReference | null = null;
 /** Read, check and memoize the vendored action. cwd is the project root at build time. */
 export function loadGhaAction(): GhaActionReference {
   if (!cached) {
-    const pinned = ghaMergifyCiVersion.version;
-    const { body } = readVendoredAction(fs.readFileSync(GHA_ACTION_PATH, 'utf-8'), pinned);
-    cached = parseGhaAction(body, pinned);
+    const { tag, body } = readVendoredAction(fs.readFileSync(GHA_ACTION_PATH, 'utf-8'));
+    cached = parseGhaAction(body, tag);
   }
   return cached;
 }
