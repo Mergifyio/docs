@@ -1,0 +1,7 @@
+Revision history for #13301:
+
+rev 3 (content) 2026-10-07 16:04 UTC — keep Mitigation: restore /test-engine/mitigation and the Quarantine page as they were, redirect /test-insights/mitigation to /test-engine/mitigation
+rev 2 (content) 2026-10-07 15:18 UTC — redirect /test-engine/mitigation to /test-engine/quarantine too
+rev 1 (initial) 2026-10-07 15:18 UTC
+
+<!-- mergify-revision-data: {"schema_version":1,"pull_number":13301,"entries":[{"number":1,"change_type":"initial","old_sha":null,"new_sha":"fc1ec01cf52638363a7a51b0f4f351437e9bb9d9","timestamp_iso":"2026-10-07T15:18:23Z","reason":"","replay_sha":null,"compare_url":null},{"number":2,"change_type":"content","old_sha":"fc1ec01cf52638363a7a51b0f4f351437e9bb9d9","new_sha":"16b3d40f323fb02e3e84f9f0ab4e33b9d24b5f3a","timestamp_iso":"2026-10-07T15:18:23Z","reason":"redirect /test-engine/mitigation to /test-engine/quarantine too","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/fc1ec01cf52638363a7a51b0f4f351437e9bb9d9...16b3d40f323fb02e3e84f9f0ab4e33b9d24b5f3a"},{"number":3,"change_type":"content","old_sha":"16b3d40f323fb02e3e84f9f0ab4e33b9d24b5f3a","new_sha":"c8316f6fc821ea037bf4a0535406cfb54e45be5d","timestamp_iso":"2026-10-07T16:04:30Z","reason":"keep Mitigation: restore /test-engine/mitigation and the Quarantine page as they were, redirect /test-insights/mitigation to /test-engine/mitigation","replay_sha":null,"compare_url":"https://github.com/Mergifyio/docs/compare/16b3d40f323fb02e3e84f9f0ab4e33b9d24b5f3a...c8316f6fc821ea037bf4a0535406cfb54e45be5d"}]} -->
