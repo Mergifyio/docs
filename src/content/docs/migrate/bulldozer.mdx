@@ -32,7 +32,7 @@ Example Bulldozer snippet:
 ```yaml
 merge:
   trigger:
-    label: ["merge when ready"]
+    labels: ["merge when ready"]
     branch_patterns: ["feature/.*"]
   method: squash
   required_statuses:
@@ -44,14 +44,16 @@ Equivalent Mergify configuration:
 ```yaml title=.mergify.yml
 merge_protections_settings:
   auto_merge_conditions:
-    - label = merge when ready
-    - head ~= ^feature/
+    - or:
+        - label = merge when ready
+        - base ~= ^feature/
 
 merge_protections:
   - name: bulldozer-equivalent
     if:
-      - base = main
-      - head ~= ^feature/
+      - or:
+          - label = merge when ready
+          - base ~= ^feature/
     success_conditions:
       - "check-success = ci/circleci: ete-tests"
 
@@ -76,9 +78,22 @@ Notes:
   [merge protection](/merge-protections) rule. Those reach the queue gated by
   your branch protections and the queue's own `queue_conditions` alone
 
+- Bulldozer merges a pull request that matches any one of its `trigger`
+  entries, so they go under an
+  [`or`](/configuration/conditions#combining-conditions-using-logical-operators).
+  Listed side by side, Mergify conditions must all match, which would queue
+  only labeled pull requests that also target a `feature/` branch
+
+- `branches` and `branch_patterns` match the branch a pull request targets,
+  which Mergify calls `base`. Bulldozer matches each pattern against the whole
+  branch name, while [`~=`](/configuration/conditions#operators-list) matches
+  anywhere in it, so anchor the regex: `feature/.*` becomes `^feature/`, and
+  `branches: ["develop"]` becomes `base = develop`
+
 - Bulldozer's `required_statuses` become `check-success = <name>` conditions
   (or `check-skipped`, `check-neutral`) under `success_conditions`, where they
-  gate both entry to the queue and the merge
+  gate both entry to the queue and the merge. Bulldozer checks them only on
+  pull requests its trigger matches, so the rule's `if` repeats the trigger
 
 - Required labels map to `label = <name>` conditions
 
