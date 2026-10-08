@@ -1054,7 +1054,7 @@
       "additionalProperties": false,
       "properties": {
         "paths": {
-          "description": "Glob patterns of the files this resolver applies to, matched against the path from the repository root exactly like `scopes` file patterns. `*` does not cross a `/`, so `*.md` matches only Markdown files at the root, and `docs/*.md` only those directly in `docs/` -- unlike `.gitattributes`, where a pattern with no `/` matches at any depth. `**` matches any number of directories, and `{a,b}` either alternative.",
+          "description": "Glob patterns of the files this resolver applies to, matched against the path from the repository root exactly like `scopes` file patterns. `*` does not cross a `/`, so `*.md` matches only Markdown files at the root, and `docs/*.md` only those directly in `docs/` -- unlike `.gitattributes`, where a pattern with no `/` matches at any depth. `**` matches any number of directories, and `{a,b}` either alternative. Patterns, unlike a `package-manager` entry's `directories`, which are literal.",
           "items": {
             "type": "string"
           },
@@ -1063,7 +1063,7 @@
           "type": "array"
         },
         "strategy": {
-          "description": "How to merge a matching file when two pull requests of the same batch both change it. `union`, `ours` and `theirs` are git's names, and `ours` is always what the batch already holds, the base branch plus the pull requests queued ahead, and never the incoming pull request:\n\n- `union`: Keep both sides' lines where they conflict, the batch's first.\n- `ours`: Keep the batch's whole file and discard the incoming pull request's change to it, even where the two did not conflict.\n- `theirs`: Take the incoming pull request's whole file and discard the batch's, even where the two did not conflict.\n- `prefer-ours`: Merge normally, and keep the batch's side only on the lines that conflict -- its whole file when both sides added the file.\n- `prefer-theirs`: Merge normally, and keep the incoming pull request's side only on the lines that conflict -- its whole file when both sides added the file.\n- `json`: Merge a JSON file by its structure rather than by line, so changes to different keys or array elements merge even on adjacent lines, and neither side's change is discarded. Two different values for the same key, a change to a key the other side deleted, a key both sides added differently, two insertions at the same place in an array, or two changes to the same array element, even to different fields of it, are a conflict even where git's line merge would have been clean. Where git's line merge is clean and gives the same result, that text is used as is; otherwise the incoming pull request's changes are written into the batch's text as it wrote them, the rest keeps the batch's formatting and key order, and a change written in a style the batch's file does not use is a conflict. A file that is not valid JSON is merged by line as usual.\n- `pnpm`: Merge a `pnpm-lock.yaml` (lockfile version 9) entry by entry, so two pull requests updating two different dependencies merge even where their entries sit side by side, including when both moved peers of the same package. The same dependency updated to two versions, a package updated on one side while the other moved its peers, a dependency one side removed and the other updated, or a merged file whose entries refer to a package version it no longer has, are a conflict, even where git's line merge would have been clean. Pair it with `json` on the `package.json` beside it, which usually conflicts too. A file that is not a version 9 lockfile is merged by line as usual.\n- `uv`: Merge a `uv.lock` and the `pyproject.toml` beside it entry by entry, so two pull requests updating two different dependencies merge in both files even on adjacent lines. A conflict, even where git's line merge would have been clean: the same dependency updated to two versions; a `uv.lock` package one side updated and the other changed, or one side changed while depending on a package the other side updated, since the lockfile records no version constraint to check the two against; and a merged `uv.lock` naming a package it no longer has, or holding one nothing uses. A file written in a shape uv does not write, such as a multi-line string, is merged by line as usual.\n\nA conflict on any other file still removes the pull request from the batch.",
+          "description": "How to merge a matching file when two pull requests of the same batch both change it. `union`, `ours` and `theirs` are git's names, and `ours` is always what the batch already holds, the base branch plus the pull requests queued ahead, and never the incoming pull request:\n\n- `union`: Keep both sides' lines where they conflict, the batch's first.\n- `ours`: Keep the batch's whole file and discard the incoming pull request's change to it, even where the two did not conflict.\n- `theirs`: Take the incoming pull request's whole file and discard the batch's, even where the two did not conflict.\n- `prefer-ours`: Merge normally, and keep the batch's side only on the lines that conflict -- its whole file when both sides added the file.\n- `prefer-theirs`: Merge normally, and keep the incoming pull request's side only on the lines that conflict -- its whole file when both sides added the file.\n- `json`: Merge a JSON file by its structure rather than by line, so changes to different keys or array elements merge even on adjacent lines, and neither side's change is discarded. Two different values for the same key, a change to a key the other side deleted, a key both sides added differently, two insertions at the same place in an array, or two changes to the same array element, even to different fields of it, are a conflict even where git's line merge would have been clean. Where git's line merge is clean and gives the same result, that text is used as is; otherwise the incoming pull request's changes are written into the batch's text as it wrote them, the rest keeps the batch's formatting and key order, and a change written in a style the batch's file does not use is a conflict. A file that is not valid JSON is merged by line as usual.\n- `pnpm`: Merge a `pnpm-lock.yaml` (lockfile version 9) entry by entry, so two pull requests updating two different dependencies merge even where their entries sit side by side, including when both moved peers of the same package. The same dependency updated to two versions, a package updated on one side while the other moved its peers, a dependency one side removed and the other updated, or a merged file whose entries refer to a package version it no longer has, are a conflict, even where git's line merge would have been clean. The `package.json` beside it usually conflicts too: a `package-manager: npm` entry resolves both. A file that is not a version 9 lockfile is merged by line as usual.\n- `uv`: Merge a `uv.lock` and the `pyproject.toml` beside it entry by entry, so two pull requests updating two different dependencies merge in both files even on adjacent lines. A conflict, even where git's line merge would have been clean: the same dependency updated to two versions; a `uv.lock` package one side updated and the other changed, or one side changed while depending on a package the other side updated, since the lockfile records no version constraint to check the two against; and a merged `uv.lock` naming a package it no longer has, or holding one nothing uses. A file written in a shape uv does not write, such as a multi-line string, is merged by line as usual.\n\nA conflict on any other file still removes the pull request from the batch.",
           "enum": [
             "union",
             "ours",
@@ -1160,7 +1160,7 @@
               }
             },
             {
-              "description": "Merge a `pnpm-lock.yaml` (lockfile version 9) entry by entry, so two pull requests updating two different dependencies merge even where their entries sit side by side, including when both moved peers of the same package. The same dependency updated to two versions, a package updated on one side while the other moved its peers, a dependency one side removed and the other updated, or a merged file whose entries refer to a package version it no longer has, are a conflict, even where git's line merge would have been clean. Pair it with `json` on the `package.json` beside it, which usually conflicts too. A file that is not a version 9 lockfile is merged by line as usual.",
+              "description": "Merge a `pnpm-lock.yaml` (lockfile version 9) entry by entry, so two pull requests updating two different dependencies merge even where their entries sit side by side, including when both moved peers of the same package. The same dependency updated to two versions, a package updated on one side while the other moved its peers, a dependency one side removed and the other updated, or a merged file whose entries refer to a package version it no longer has, are a conflict, even where git's line merge would have been clean. The `package.json` beside it usually conflicts too: a `package-manager: npm` entry resolves both. A file that is not a version 9 lockfile is merged by line as usual.",
               "facts": {
                 "discards": null,
                 "kind": "driver",
@@ -2075,6 +2075,35 @@
         "or"
       ],
       "title": "OrCondition",
+      "type": "object"
+    },
+    "PackageManagerResolverModel": {
+      "additionalProperties": false,
+      "properties": {
+        "package-manager": {
+          "description": "The package manager whose manifest and lockfile to resolve, by the name Dependabot gives it, leaving Mergify to pick how each file merges: with a `pnpm-lock.yaml` or a `uv.lock`, dependency by dependency in both, so the lockfile keeps agreeing with the manifest, and a dependency the two pull requests changed differently still conflicts. `npm` covers npm, pnpm and yarn alike, and only a `pnpm-lock.yaml` is resolved today: another lockfile merges as usual. `uv` resolves a `pyproject.toml` and its `uv.lock`.",
+          "enum": [
+            "npm",
+            "uv"
+          ],
+          "title": "Package-Manager",
+          "type": "string"
+        },
+        "directories": {
+          "description": "The directories holding the manifest and its lockfile, from the repository root and starting with `/`: `/` for the root itself. Literal paths, unlike the glob patterns of `paths`.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Directories",
+          "type": "array"
+        }
+      },
+      "required": [
+        "package-manager",
+        "directories"
+      ],
+      "title": "PackageManagerResolverModel",
       "type": "object"
     },
     "PostCheckActionModel": {
@@ -5333,9 +5362,16 @@
       "$ref": "#/$defs/MergeProtections"
     },
     "conflict_resolvers": {
-      "description": "Resolve conflicts on the files you name while Mergify builds a batch, instead of removing the pull request that conflicts from it. When several entries match a file, the last one wins.\n\nDeclared once for the repository, it takes effect in each queue rule whose batch branch is what lands: `merge_method` set to `merge-batch` or `fast-forward`, or `queue_branch_merge_method` set to `fast-forward`. A queue rule merging with `merge`, `squash` or `rebase` merges each pull request on its own, so a resolution made while building the batch would never land: there, a conflicting pull request is removed from the batch as usual.",
+      "description": "Resolve conflicts on the files you name while Mergify builds a batch, instead of removing the pull request that conflicts from it. An entry names its files either as `paths` with the `strategy` to merge them with, or as a `package-manager` with the `directories` holding its manifest and lockfile, for which Mergify picks how each file merges: two pull requests updating two different dependencies then merge into one batch. When several entries match a file, the last one in the list wins, whichever way each names it.\n\nDeclared once for the repository, it takes effect in each queue rule whose batch branch is what lands: `merge_method` set to `merge-batch` or `fast-forward`, or `queue_branch_merge_method` set to `fast-forward`. A queue rule merging with `merge`, `squash` or `rebase` merges each pull request on its own, so a resolution made while building the batch would never land: there, a conflicting pull request is removed from the batch as usual.",
       "items": {
-        "$ref": "#/$defs/ConflictResolverModel"
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ConflictResolverModel"
+          },
+          {
+            "$ref": "#/$defs/PackageManagerResolverModel"
+          }
+        ]
       },
       "title": "Conflict Resolvers",
       "type": "array"
