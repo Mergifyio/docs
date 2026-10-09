@@ -48,7 +48,7 @@ digraph {
   Validating [class="pending"];
   Merged [class="merged"];
 
-  Dequeued -> Queueing [label="  queue command\l  or auto_merge\l"];
+  Dequeued -> Queueing [label="  queue command\l  or auto_merge_conditions\l"];
   Queueing -> Queued [label="  matches\l  queue_conditions\l"];
   Queued -> Validating [label="  reaches the top\l  of the queue\l"];
   Validating -> Merged [label="  matches\l  merge_conditions\l", class="merged"];
@@ -194,11 +194,14 @@ as is one that matches no path at all, such as `{}`.
 
 :::caution
   Resolvers only take effect in a queue rule whose batch branch is what lands,
-  which means `merge_method` set to `merge-batch` or `fast-forward`. With
-  `merge`, `squash` or `rebase`, each pull request is merged at its own head and
-  GitHub recomputes that merge, so a resolution made while building the batch
-  would never reach your base branch. In those queue rules nothing is resolved,
-  and a conflicting pull request is held as described above.
+  which means `merge_method` set to `merge-batch` or `fast-forward`. The
+  deprecated `queue_branch_merge_method: fast-forward` also qualifies, since it
+  takes effect whatever `merge_method` says. With `merge`, `squash` or
+  `rebase` and no `queue_branch_merge_method`, each pull request is merged at
+  its own head and GitHub recomputes that merge, so a resolution made while
+  building the batch would never reach your base branch. In those queue rules
+  nothing is resolved, and a conflicting pull request is held as described
+  above.
 :::
 
 :::note
@@ -208,6 +211,36 @@ as is one that matches no path at all, such as `{}`.
   there is not applied, and neither is a merge attribute that a queued pull
   request grants itself. `conflict_resolvers` is the only way in.
 :::
+
+#### Letting Mergify Pick the Strategy for a Package Manager
+
+Instead of naming both files and a strategy, an entry can name a
+`package-manager` and the `directories` holding its manifest and lockfile, and
+leave Mergify to pick how each file merges:
+
+```yaml
+conflict_resolvers:
+  - package-manager: npm
+    directories:
+      - /
+      - /frontend
+```
+
+A manifest and its lockfile have to agree with each other, and merging them
+separately is how a batch ends up with a lockfile that no longer matches its
+`package.json`. Two pull requests updating different dependencies then merge
+into one batch, in both files, while a dependency both changed differently
+still conflicts.
+
+`package-manager` names the package manager the way Dependabot does. `npm`
+covers npm, pnpm and yarn alike, though only a `pnpm-lock.yaml` is resolved
+today, and any other lockfile is merged by line as usual. `uv` resolves a
+`pyproject.toml` and its `uv.lock`.
+
+Unlike the glob patterns of `paths`, `directories` are literal paths from the
+repository root, each starting with `/` (`/` on its own is the root). Entries
+of both shapes can sit in the same list, and the last one matching a file still
+wins, whichever way each names it.
 
 ## Checks Timeout
 
