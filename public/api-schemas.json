@@ -6544,7 +6544,7 @@
           "test_insights"
         ],
         "summary": "List quarantined tests",
-        "description": "List the tests currently quarantined in the repository, ordered by `sort` and `direction` (quarantine creation time ascending by default). A quarantine applies to a specific branch or to all branches when `branch` is `null`.\n\nPagination is opt-in: pass `per_page` (and optionally `cursor`) to receive a bounded page with RFC 5988 navigation links. Omitting `per_page` returns the full list in a single response \u2014 this shortcut exists for backward compatibility and is expected to go away once all callers paginate.",
+        "description": "List the tests currently quarantined in the repository, ordered by `sort` and `direction` (quarantine creation time ascending by default). A quarantine applies to a specific branch or to all branches when `branch` is `null`.\n\nPass `per_page` (and optionally `cursor`) to receive a bounded page with RFC 5988 navigation links. Omitting `per_page` is deprecated: it returns the full list in a single response, flagged with a `Deprecation` header. A future release will return the first page of 10 quarantines instead.",
         "operationId": "get_quarantined_tests_with_params_token_auth_ci__owner__repositories__repository__quarantines_get",
         "security": [
           {
@@ -6922,10 +6922,10 @@
                   "type": "null"
                 }
               ],
-              "description": "The number of items per page. Omit to receive the full list in a single response; pass a value to opt into RFC 5988 cursor pagination.",
+              "description": "The number of items per page, with RFC 5988 cursor pagination. Omitting it is deprecated: it returns the full list in a single response, and will default to 10 in a future release.",
               "title": "Per Page"
             },
-            "description": "The number of items per page. Omit to receive the full list in a single response; pass a value to opt into RFC 5988 cursor pagination."
+            "description": "The number of items per page, with RFC 5988 cursor pagination. Omitting it is deprecated: it returns the full list in a single response, and will default to 10 in a future release."
           },
           {
             "name": "sort",
@@ -6969,6 +6969,12 @@
               "Link": {
                 "description": "Pagination links (rfc5988). `next` and `prev` are each present only when there is a page to go to, so a response with nothing before or after it carries no `Link` header at all. Each link carries the query parameters of this request; an endpoint that defaults `start`/`end` pins the resolved bounds into them, so following a link keeps the range this page was served over. To return to the first page, call the endpoint again without a `cursor`.",
                 "example": "Link: <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=def&per_page=20>; rel=\"next\",\n  <https://api.mergify.com/v1/repos/Mergifyio/mergify-engine/logs?cursor=abc&per_page=20>; rel=\"prev\"",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Deprecation": {
+                "description": "Set when `per_page` was omitted: the full-list response is deprecated (RFC 9745).",
                 "schema": {
                   "type": "string"
                 }
@@ -8771,7 +8777,14 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The pull request is not found in any merge queue."
+            "description": "`PULL_REQUEST_NOT_QUEUED`: The pull request is not in any merge queue of the repository.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIErrorBody"
+                }
+              }
+            }
           },
           "409": {
             "description": "Conflict"
@@ -8859,7 +8872,14 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The pull request is not found in any merge queue."
+            "description": "`PULL_REQUEST_NOT_QUEUED`: The pull request is not in any merge queue of the repository.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIErrorBody"
+                }
+              }
+            }
           },
           "409": {
             "description": "Conflict"
@@ -8940,7 +8960,14 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The pull request is not found in any merge queue."
+            "description": "`PULL_REQUEST_NOT_QUEUED`: The pull request is not in any merge queue of the repository.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIErrorBody"
+                }
+              }
+            }
           },
           "409": {
             "description": "Conflict"
@@ -9375,10 +9402,634 @@
           }
         }
       }
+    },
+    "/integrations/{owner}/configuration/slack": {
+      "get": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Get the Slack integration configuration",
+        "description": "List the Slack channels connected to the organization, with the notification configurations of every product. A channel is connected from the Mergify dashboard; this API cannot connect one.",
+        "operationId": "get_slack_configuration_integrations__owner__configuration_slack_get",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlackConfigurationResponse"
+                },
+                "example": {
+                  "channels": [
+                    {
+                      "id": "efb5681e-7906-4ee9-843b-42e956052987",
+                      "slack_team_name": "My Slack Team",
+                      "slack_channel": "#notification",
+                      "disabled_at": "2024-01-15T10:30:00Z",
+                      "disabled_reason": "webhook_gone",
+                      "merge_queue_configs": [
+                        {
+                          "id": "cc363671-e816-44a5-ba68-b92391fcdaec",
+                          "repositories": [
+                            {
+                              "id": 123,
+                              "name": "my-repo",
+                              "owner": {
+                                "id": 234,
+                                "login": "me",
+                                "type": "User"
+                              },
+                              "full_name": "me/my-repo"
+                            }
+                          ],
+                          "event_types": [
+                            "scheduled_freeze.create"
+                          ],
+                          "events": [
+                            {
+                              "type": "scheduled_freeze.create",
+                              "outcomes": []
+                            }
+                          ]
+                        }
+                      ],
+                      "ci_insights_configs": [],
+                      "test_quarantine_configs": []
+                    }
+                  ],
+                  "merge_queue_event_possible_outcomes": {
+                    "action.queue.leave": [
+                      "success",
+                      "failure",
+                      "neutral"
+                    ],
+                    "scheduled_freeze.create": [
+                      "neutral"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/integrations/{owner}/configuration/slack/{channel_configuration_id}": {
+      "delete": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Disconnect a Slack channel",
+        "description": "Disconnect a Slack channel from the organization, with every notification configuration it holds",
+        "operationId": "delete_slack_configuration_integrations__owner__configuration_slack__channel_configuration_id__delete",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack channel configuration",
+              "title": "Channel Configuration Id"
+            },
+            "description": "The ID of the Slack channel configuration"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/integrations/{owner}/configuration/slack/{channel_configuration_id}/{product}": {
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Create a Slack notification configuration",
+        "description": "Create a notification configuration for a product on a connected Slack channel. The request body and the response follow the schema of `product`.",
+        "operationId": "create_notification_configuration_integrations__owner__configuration_slack__channel_configuration_id___product__post",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack channel configuration",
+              "title": "Channel Configuration Id"
+            },
+            "description": "The ID of the Slack channel configuration"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "product",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SlackNotificationProduct",
+              "description": "The product the notification configuration is for"
+            },
+            "description": "The product the notification configuration is for"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/MergeQueueNotificationConfigurationPayload"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CiInsightsNotificationConfigurationPayload"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TestQuarantineNotificationConfigurationPayload"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/MergeQueueNotificationConfiguration"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CiInsightsNotificationConfiguration"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TestQuarantineNotificationConfiguration"
+                    }
+                  ],
+                  "title": "Response Create Notification Configuration Integrations  Owner  Configuration Slack  Channel Configuration Id   Product  Post"
+                },
+                "example": {
+                  "id": "cc363671-e816-44a5-ba68-b92391fcdaec",
+                  "repositories": [
+                    {
+                      "id": 123,
+                      "name": "my-repo",
+                      "owner": {
+                        "id": 234,
+                        "login": "me",
+                        "type": "User"
+                      },
+                      "full_name": "me/my-repo"
+                    }
+                  ],
+                  "event_types": [
+                    "scheduled_freeze.create"
+                  ],
+                  "events": [
+                    {
+                      "type": "scheduled_freeze.create",
+                      "outcomes": []
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/integrations/{owner}/configuration/slack/{channel_configuration_id}/{product}/{notification_configuration_id}": {
+      "put": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Update a Slack notification configuration",
+        "description": "Replace a notification configuration of a connected Slack channel. The request body follows the schema of `product`, and a field left out is reset to empty.",
+        "operationId": "update_notification_configuration_integrations__owner__configuration_slack__channel_configuration_id___product___notification_configuration_id__put",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack channel configuration",
+              "title": "Channel Configuration Id"
+            },
+            "description": "The ID of the Slack channel configuration"
+          },
+          {
+            "name": "notification_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack notification configuration",
+              "title": "Notification Configuration Id"
+            },
+            "description": "The ID of the Slack notification configuration"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          },
+          {
+            "name": "product",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SlackNotificationProduct",
+              "description": "The product the notification configuration is for"
+            },
+            "description": "The product the notification configuration is for"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/MergeQueueNotificationConfigurationPayload"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CiInsightsNotificationConfigurationPayload"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TestQuarantineNotificationConfigurationPayload"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Delete a Slack notification configuration",
+        "description": "Delete a notification configuration from a connected Slack channel",
+        "operationId": "delete_notification_configuration_integrations__owner__configuration_slack__channel_configuration_id___product___notification_configuration_id__delete",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack channel configuration",
+              "title": "Channel Configuration Id"
+            },
+            "description": "The ID of the Slack channel configuration"
+          },
+          {
+            "name": "notification_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack notification configuration",
+              "title": "Notification Configuration Id"
+            },
+            "description": "The ID of the Slack notification configuration"
+          },
+          {
+            "name": "product",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SlackNotificationProduct",
+              "description": "The product the notification configuration is for"
+            },
+            "description": "The product the notification configuration is for"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/integrations/{owner}/configuration/slack/{channel_configuration_id}/{product}/{notification_configuration_id}/test": {
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Send a test Slack notification",
+        "description": "Post a clearly-labeled test message to the configured Slack channel to validate delivery",
+        "operationId": "send_test_notification_integrations__owner__configuration_slack__channel_configuration_id___product___notification_configuration_id__test_post",
+        "security": [
+          {
+            "AdminApplicationKey": []
+          },
+          {
+            "MergifyTokenBearerAuth": []
+          },
+          {
+            "GitHubTokenBearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack channel configuration",
+              "title": "Channel Configuration Id"
+            },
+            "description": "The ID of the Slack channel configuration"
+          },
+          {
+            "name": "notification_configuration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ID of the Slack notification configuration",
+              "title": "Notification Configuration Id"
+            },
+            "description": "The ID of the Slack notification configuration"
+          },
+          {
+            "name": "product",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SlackNotificationProduct",
+              "description": "The product the notification configuration is for"
+            },
+            "description": "The product the notification configuration is for"
+          },
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[a-zA-Z0-9\\-]+$",
+              "description": "The owner of the repository",
+              "title": "Owner"
+            },
+            "description": "The owner of the repository"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "402": {
+            "description": "The organization's plan does not include the Slack integration"
+          },
+          "502": {
+            "description": "Slack delivery failed"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "APIErrorBody": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "error_code": {
+            "$ref": "#/components/schemas/ErrorCode"
+          },
+          "documentation_url": {
+            "type": "string",
+            "title": "Documentation Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "APIErrorBody"
+      },
       "ActivityLogAggregateResponse": {
         "properties": {
           "total": {
@@ -10538,6 +11189,131 @@
         ],
         "title": "ChecksRetriesResponse"
       },
+      "CiInsightsNotificationConfiguration": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "The ID of the notification configuration"
+          },
+          "repositories": {
+            "items": {
+              "$ref": "#/components/schemas/SlackNotificationRepository"
+            },
+            "type": "array",
+            "title": "Repositories",
+            "description": "The repositories this configuration notifies about. Empty means every repository of the organization."
+          },
+          "branches": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Branches",
+            "description": "The branches whose CI jobs are reported. Empty means every branch."
+          },
+          "pipeline_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pipeline Names",
+            "description": "The CI pipelines whose jobs are reported. Empty means every pipeline."
+          },
+          "job_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Job Names",
+            "description": "The CI jobs that are reported. Empty means every job."
+          },
+          "conclusions": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "success",
+                "failure",
+                "neutral",
+                "cancelled",
+                "skipped",
+                "timed_out",
+                "action_required"
+              ]
+            },
+            "type": "array",
+            "title": "Conclusions",
+            "description": "The job conclusions that are reported. Empty means every conclusion."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "repositories",
+          "branches",
+          "pipeline_names",
+          "job_names",
+          "conclusions"
+        ],
+        "title": "CiInsightsNotificationConfiguration"
+      },
+      "CiInsightsNotificationConfigurationPayload": {
+        "properties": {
+          "repositories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Repositories",
+            "description": "The names of the organization's repositories to notify about. Empty means every repository of the organization."
+          },
+          "branches": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Branches",
+            "description": "The branches whose CI jobs are reported. Empty means every branch."
+          },
+          "pipeline_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pipeline Names",
+            "description": "The CI pipelines whose jobs are reported. Empty means every pipeline."
+          },
+          "job_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Job Names",
+            "description": "The CI jobs that are reported. Empty means every job."
+          },
+          "conclusions": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "success",
+                "failure",
+                "neutral",
+                "cancelled",
+                "skipped",
+                "timed_out",
+                "action_required"
+              ]
+            },
+            "type": "array",
+            "title": "Conclusions",
+            "description": "The job conclusions that are reported. Empty means every conclusion."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CiInsightsNotificationConfigurationPayload"
+      },
       "ConflictingPathOutcome": {
         "type": "string",
         "enum": [
@@ -10792,6 +11568,23 @@
           "entered"
         ],
         "title": "EnteredInInterval"
+      },
+      "ErrorCode": {
+        "type": "string",
+        "enum": [
+          "GITHUB_ACCOUNT_SUSPENDED",
+          "GITHUB_APP_ACCESS_LOST",
+          "GITHUB_RATE_LIMITED",
+          "GITHUB_UPSTREAM_REQUEST_FORBIDDEN",
+          "GITHUB_UPSTREAM_REQUEST_REJECTED",
+          "GITHUB_UPSTREAM_UNAVAILABLE",
+          "IP_ALLOW_LIST_NOT_CONFIGURED",
+          "NO_LOGIN_IN_PROGRESS",
+          "ORGANIZATION_MEMBERS_ONLY",
+          "PULL_REQUEST_NOT_QUEUED",
+          "RETRY_RULE_NOT_FOUND",
+          "SAML_ENFORCEMENT_NOT_AUTHORIZED"
+        ]
       },
       "Evaluation": {
         "properties": {
@@ -13353,7 +14146,11 @@
                   "prefer-theirs",
                   "json",
                   "pnpm",
-                  "uv"
+                  "uv",
+                  "rails-schema",
+                  "yarn",
+                  "typescript",
+                  "rails-structure"
                 ]
               },
               {
@@ -13800,7 +14597,9 @@
                   "BATCH_SCOPES_CHANGED",
                   "BATCH_AHEAD_BRANCH_EDITED",
                   "CHECKS_INTERRUPTED",
-                  "GITHUB_WORKFLOWS_PERMISSION_MISSING"
+                  "GITHUB_WORKFLOWS_PERMISSION_MISSING",
+                  "BATCH_REBUILT",
+                  "BATCH_AHEAD_REBUILT"
                 ]
               },
               {
@@ -14850,7 +15649,9 @@
                   "BATCH_SCOPES_CHANGED",
                   "BATCH_AHEAD_BRANCH_EDITED",
                   "CHECKS_INTERRUPTED",
-                  "GITHUB_WORKFLOWS_PERMISSION_MISSING"
+                  "GITHUB_WORKFLOWS_PERMISSION_MISSING",
+                  "BATCH_REBUILT",
+                  "BATCH_AHEAD_REBUILT"
                 ]
               },
               {
@@ -16980,12 +17781,25 @@
           "login": {
             "type": "string",
             "title": "Login"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url",
+            "description": "The account's avatar URL, as GitHub reports it. Null when it is not known."
           }
         },
         "type": "object",
         "required": [
           "id",
-          "login"
+          "login",
+          "avatar_url"
         ],
         "title": "GetTestDetailsResponseUser"
       },
@@ -17767,6 +18581,108 @@
         ],
         "title": "MergeQueueMergeabilityCheck"
       },
+      "MergeQueueNotificationConfiguration": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "The ID of the notification configuration"
+          },
+          "repositories": {
+            "items": {
+              "$ref": "#/components/schemas/SlackNotificationRepository"
+            },
+            "type": "array",
+            "title": "Repositories",
+            "description": "The repositories this configuration notifies about. Empty means every repository of the organization."
+          },
+          "event_types": {
+            "items": {
+              "$ref": "#/components/schemas/EventType"
+            },
+            "type": "array",
+            "title": "Event Types",
+            "description": "The merge queue events posted to the channel. Empty means every event."
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/MergeQueueNotificationEvent"
+            },
+            "type": "array",
+            "title": "Events",
+            "description": "The merge queue events posted to the channel, each with the outcomes it posts. Empty means every event."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "repositories",
+          "event_types",
+          "events"
+        ],
+        "title": "MergeQueueNotificationConfiguration"
+      },
+      "MergeQueueNotificationConfigurationPayload": {
+        "properties": {
+          "repositories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Repositories",
+            "description": "The names of the organization's repositories to notify about. Empty means every repository of the organization."
+          },
+          "event_types": {
+            "items": {
+              "$ref": "#/components/schemas/EventType"
+            },
+            "type": "array",
+            "title": "Event Types",
+            "description": "The merge queue events posted to the channel. Empty means every event."
+          },
+          "events": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/MergeQueueNotificationEvent"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Events",
+            "description": "The merge queue events posted to the channel, each with the outcomes it posts. Empty means every event. Replaces `event_types` when set."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "MergeQueueNotificationConfigurationPayload"
+      },
+      "MergeQueueNotificationEvent": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/EventType",
+            "description": "The merge queue event"
+          },
+          "outcomes": {
+            "items": {
+              "$ref": "#/components/schemas/EventOutcome"
+            },
+            "type": "array",
+            "title": "Outcomes",
+            "description": "The outcomes of this event to post, among those it can have. A request may leave it empty for every outcome; a response always lists them."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "title": "MergeQueueNotificationEvent"
+      },
       "MergeQueuePausePayload": {
         "properties": {
           "reason": {
@@ -18194,6 +19110,14 @@
             "type": "array",
             "title": "Scopes"
           },
+          "queue_state_labels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Queue State Labels",
+            "description": "The names of the labels the merge queue configuration has Mergify add for a pull request's queue state (`merge_queue.queued_label`, `merge_queue.checking_label` and `merge_queue.dequeued_label`), rendered for this pull request. The pull request does not necessarily carry all of them: they are listed so a client can tell them apart from its other labels, since this status already reports the queue state they stand for. Empty when none of these options is set."
+          },
           "all_scopes": {
             "anyOf": [
               {
@@ -18322,7 +19246,8 @@
           "priority_alias",
           "priority_rule_name",
           "labels",
-          "scopes"
+          "scopes",
+          "queue_state_labels"
         ],
         "title": "MergeQueueStatusPullRequest"
       },
@@ -18498,12 +19423,25 @@
           "login": {
             "type": "string",
             "title": "Login"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url",
+            "description": "The account's avatar URL, as GitHub reports it. Null when it is not known."
           }
         },
         "type": "object",
         "required": [
           "id",
-          "login"
+          "login",
+          "avatar_url"
         ],
         "title": "PullRequestAuthor"
       },
@@ -18950,6 +19888,12 @@
             "description": "The maximum batch failure resolution attempts has been reached",
             "default": 0
           },
+          "BATCH_REBUILT": {
+            "type": "integer",
+            "title": "Batch Rebuilt",
+            "description": "The batch was torn down to be rebuilt",
+            "default": 0
+          },
           "BATCH_SCOPES_CHANGED": {
             "type": "integer",
             "title": "Batch Scopes Changed",
@@ -19038,6 +19982,12 @@
             "type": "integer",
             "title": "Batch Ahead Branch Edited",
             "description": "The branch of a batch ahead in the queue was edited, so this batch has been recomposed on top of it",
+            "default": 0
+          },
+          "BATCH_AHEAD_REBUILT": {
+            "type": "integer",
+            "title": "Batch Ahead Rebuilt",
+            "description": "A batch ahead in the queue was torn down to be rebuilt",
             "default": 0
           },
           "PR_CHECKS_STOPPED_BECAUSE_MERGE_QUEUE_PAUSE": {
@@ -20240,6 +21190,171 @@
         ],
         "title": "SkipIntermediateResultsResponse"
       },
+      "SlackConfigurationResponse": {
+        "properties": {
+          "channels": {
+            "items": {
+              "$ref": "#/components/schemas/SlackNotificationChannelConfiguration"
+            },
+            "type": "array",
+            "title": "Channels",
+            "description": "The Slack channels connected to the organization"
+          },
+          "merge_queue_event_possible_outcomes": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/EventOutcome"
+              },
+              "type": "array"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/EventType"
+            },
+            "type": "object",
+            "title": "Merge Queue Event Possible Outcomes",
+            "description": "The outcomes each Merge Queue event can have, which a notification can narrow it to."
+          }
+        },
+        "type": "object",
+        "required": [
+          "channels",
+          "merge_queue_event_possible_outcomes"
+        ],
+        "title": "SlackConfigurationResponse"
+      },
+      "SlackNotificationChannelConfiguration": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "The ID of the Slack channel configuration"
+          },
+          "slack_channel": {
+            "type": "string",
+            "title": "Slack Channel",
+            "description": "The Slack channel the notifications are posted to"
+          },
+          "slack_team_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slack Team Name",
+            "description": "The name of the Slack workspace the channel belongs to"
+          },
+          "disabled_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disabled At",
+            "description": "When Mergify stopped being able to post to this channel. Null while the channel receives notifications."
+          },
+          "disabled_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "webhook_gone",
+                  "oauth_revoked"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disabled Reason",
+            "description": "Why Mergify cannot post to this channel anymore. Null while the channel receives notifications."
+          },
+          "merge_queue_configs": {
+            "items": {
+              "$ref": "#/components/schemas/MergeQueueNotificationConfiguration"
+            },
+            "type": "array",
+            "title": "Merge Queue Configs",
+            "description": "The `merge_queue_notification` configurations of the channel"
+          },
+          "ci_insights_configs": {
+            "items": {
+              "$ref": "#/components/schemas/CiInsightsNotificationConfiguration"
+            },
+            "type": "array",
+            "title": "Ci Insights Configs",
+            "description": "The `ci_insights_notification` configurations of the channel"
+          },
+          "test_quarantine_configs": {
+            "items": {
+              "$ref": "#/components/schemas/TestQuarantineNotificationConfiguration"
+            },
+            "type": "array",
+            "title": "Test Quarantine Configs",
+            "description": "The `test_quarantine_notification` configurations of the channel"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slack_channel",
+          "slack_team_name",
+          "disabled_at",
+          "disabled_reason",
+          "merge_queue_configs",
+          "ci_insights_configs",
+          "test_quarantine_configs"
+        ],
+        "title": "SlackNotificationChannelConfiguration"
+      },
+      "SlackNotificationProduct": {
+        "type": "string",
+        "enum": [
+          "merge_queue_notification",
+          "test_quarantine_notification",
+          "ci_insights_notification"
+        ],
+        "title": "SlackNotificationProduct",
+        "description": "The product a Slack notification configuration is for."
+      },
+      "SlackNotificationRepository": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "The ID of the repository"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/GitHubAccount",
+            "description": "The owner of the repository"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of the repository"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name",
+            "description": "The full name of the repository, `owner/name`"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "owner",
+          "name",
+          "full_name"
+        ],
+        "title": "SlackNotificationRepository"
+      },
       "StartedCIRunsInInterval": {
         "properties": {
           "start": {
@@ -20492,6 +21607,70 @@
           "90d"
         ],
         "title": "TestHealthTimeWindow"
+      },
+      "TestQuarantineNotificationConfiguration": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "The ID of the notification configuration"
+          },
+          "repositories": {
+            "items": {
+              "$ref": "#/components/schemas/SlackNotificationRepository"
+            },
+            "type": "array",
+            "title": "Repositories",
+            "description": "The repositories this configuration notifies about. Empty means every repository of the organization."
+          },
+          "event_types": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "test.quarantined",
+                "test.dequarantined"
+              ]
+            },
+            "type": "array",
+            "title": "Event Types",
+            "description": "The test quarantine events posted to the channel. Empty means every event."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "repositories",
+          "event_types"
+        ],
+        "title": "TestQuarantineNotificationConfiguration"
+      },
+      "TestQuarantineNotificationConfigurationPayload": {
+        "properties": {
+          "repositories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Repositories",
+            "description": "The names of the organization's repositories to notify about. Empty means every repository of the organization."
+          },
+          "event_types": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "test.quarantined",
+                "test.dequarantined"
+              ]
+            },
+            "type": "array",
+            "title": "Event Types",
+            "description": "The test quarantine events posted to the channel. Empty means every event."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "TestQuarantineNotificationConfigurationPayload"
       },
       "TestQuarantineSnapshot": {
         "properties": {
@@ -21456,6 +22635,10 @@
     {
       "name": "ci_insights",
       "description": "Operations with ci insights."
+    },
+    {
+      "name": "integrations",
+      "description": "Operation with integrations."
     },
     {
       "name": "merge_queue",
